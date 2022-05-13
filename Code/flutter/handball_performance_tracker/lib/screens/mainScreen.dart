@@ -8,46 +8,45 @@ class mainScreen extends StatefulWidget {
   State<mainScreen> createState() => _mainScreenState();
 }
 
-
-
 class _mainScreenState extends State<mainScreen> {
   List<String> playerNames = [];
   List<TextEditingController> playerNameControllers = [];
   String selectedPlayer = "";
 
-
   @override
   Widget build(BuildContext context) {
-    for (int i = 1; i < 7; i++) {
+    for (int i = 0; i < 7; i++) {
       playerNameControllers.add(TextEditingController());
     }
     return Scaffold(
       appBar: AppBar(title: Text("Title")),
-
       body: Column(
         children: [
-          Expanded(
+          SizedBox(
+            width: 1000,
+            height: 400,
             child: ListView.builder(
-
-                padding: const EdgeInsets.all(8),
+                padding: const EdgeInsets.all(5),
                 itemCount: 7,
                 itemBuilder: (BuildContext context, int index) {
-                return TextField(
-                onTap: () {
-                selectedPlayer = playerNameControllers[index].value.text;
-                print("sel player: " + selectedPlayer);
-                },
-                controller: playerNameControllers[index],
-                );
+                  return TextField(
+                    onTap: () {
+                      selectedPlayer = playerNameControllers[index].value.text;
+                      print("sel player: " + selectedPlayer);
+                    },
+                    controller: playerNameControllers[index],
+                  );
                 }),
           ),
-          Expanded(
+          SizedBox(
+            width: 700,
+            height: 300,
             child: GridView.count(
               primary: false,
               padding: const EdgeInsets.all(20),
-              crossAxisSpacing: 10,
-              mainAxisSpacing: 10,
-              crossAxisCount: 2,
+              crossAxisSpacing: 15,
+              mainAxisSpacing: 15,
+              crossAxisCount: 6,
               children: <Widget>[
                 Button(text: "Tor Position"),
                 Button(text: "Tor 9m"),
@@ -77,7 +76,10 @@ class Button extends StatelessWidget {
         textStyle: const TextStyle(fontSize: 20),
       ),
       onPressed: () {},
-      child: Text(text),
+      child: Text(
+        text,
+        softWrap: false,
+      ),
     );
   }
 }
