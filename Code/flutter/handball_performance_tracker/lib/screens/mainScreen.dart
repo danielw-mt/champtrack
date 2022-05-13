@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:handball_performance_tracker/controllers/mainScreenController.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-
-class mainScreen extends StatelessWidget{
+class mainScreen extends StatelessWidget {
   List<String> playerNames = [];
   String selectedPlayer = "";
 
@@ -71,6 +71,7 @@ class mainScreen extends StatelessWidget{
 }
 
 class Button extends StatelessWidget {
+  FirebaseFirestore db = FirebaseFirestore.instance;
   Button({required this.text, Key? key}) : super(key: key);
 
   final text;
@@ -80,23 +81,31 @@ class Button extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final MainScreenController mainScreenController =
-    Get.find<MainScreenController>();
-    return
-      TextButton(
-            style: TextButton.styleFrom(
-              textStyle: const TextStyle(fontSize: 20),
-            ),
-            onPressed: () {
-              print("Player " +
-                  mainScreenController.selectedPlayer.value +
-                  " performed action " +
-                  text);
-
-            },
-            child: Text(
-              text,
-              softWrap: false,
-            ),
-          );
+        Get.find<MainScreenController>();
+    return TextButton(
+      style: TextButton.styleFrom(
+        textStyle: const TextStyle(fontSize: 20),
+      ),
+      onPressed: () {
+        print("Player " +
+            mainScreenController.selectedPlayer.value +
+            " performed action " +
+            text);
+        final action = <String, String>{
+          mainScreenController.selectedPlayer.value: text
+        };
+        db.collection("actions").add(action).then(
+            (DocumentReference doc) => print("hat funktioniert. ${doc.id}"));
+        db.collection("actions").get().then((event) {
+          for (var doc in event.docs) {
+            print("${doc.id} => ${doc.data()}");
+          }
+        });
+      },
+      child: Text(
+        text,
+        softWrap: false,
+      ),
+    );
   }
 }
