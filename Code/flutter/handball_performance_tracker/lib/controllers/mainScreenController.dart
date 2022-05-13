@@ -2,20 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
 class MainScreenController extends GetxController {
-  // final count = 0.obs;
-  // increment() => count.value++;
+  final selectedPlayer = "".obs;
 
-  List playerNameTextControllers = [
-    TextEditingController(),
-    TextEditingController(),
-    TextEditingController(),
-    TextEditingController(),
-    TextEditingController(),
-    TextEditingController(),
-    TextEditingController()
-  ];
-
-  MainScreenController(){
-    playerNameTextControllers.obs;
+  void performAction(String actionButtonText) {
+    print("test");
   }
 }

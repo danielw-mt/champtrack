@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-// import 'package:get/get.dart';
+import 'package:get/get.dart';
+import 'package:handball_performance_tracker/controllers/mainScreenController.dart';
 
 class mainScreen extends StatefulWidget {
   //const ({Key? key}) : super(key: key);
@@ -15,6 +16,8 @@ class _mainScreenState extends State<mainScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final mainScreenController = Get.put(MainScreenController());
+
     for (int i = 0; i < 7; i++) {
       playerNameControllers.add(TextEditingController());
     }
@@ -31,8 +34,8 @@ class _mainScreenState extends State<mainScreen> {
                 itemBuilder: (BuildContext context, int index) {
                   return TextField(
                     onTap: () {
-                      selectedPlayer = playerNameControllers[index].value.text;
-                      print("sel player: " + selectedPlayer);
+                      mainScreenController.selectedPlayer.value =
+                          playerNameControllers[index].value.text;
                     },
                     controller: playerNameControllers[index],
                   );
@@ -61,24 +64,40 @@ class _mainScreenState extends State<mainScreen> {
       ),
     );
   }
+
+  void toggleAction(buttonText) {
+    if (selectedPlayer != "") {
+      print("Player " + selectedPlayer + " performed action " + buttonText);
+    }
+  }
 }
 
 class Button extends StatelessWidget {
-  const Button({required this.text, Key? key}) : super(key: key);
-  final String text;
+  Button({required this.text, Key? key}) : super(key: key);
+
+  final text;
+  final mainScreenController = Get.find<MainScreenController>();
 
   //Button(String text){this.text = text;}
 
   @override
   Widget build(BuildContext context) {
-    return TextButton(
-      style: TextButton.styleFrom(
-        textStyle: const TextStyle(fontSize: 20),
-      ),
-      onPressed: () {},
-      child: Text(
-        text,
-        softWrap: false,
+    return Obx(
+      () => TextButton(
+        style: TextButton.styleFrom(
+          textStyle: const TextStyle(fontSize: 20),
+        ),
+        onPressed: () {
+          // //print("Player " +
+          //     mainScreenController.selectedPlayer.value +
+          // " performed action " +
+          // text);
+          mainScreenController.performAction("");
+        },
+        child: Text(
+          text,
+          softWrap: false,
+        ),
       ),
     );
   }
