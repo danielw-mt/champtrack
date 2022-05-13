@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import '../controllers/mainScreenController.dart';
+// import 'package:get/get.dart';
 
 class mainScreen extends StatelessWidget {
-  final MainScreenController controller = Get.put(MainScreenController());
+  // final MainScreenController controller = Get.put(MainScreenController());
 
 
   @override
@@ -12,26 +11,18 @@ class mainScreen extends StatelessWidget {
       appBar: AppBar(
        title: Text("Title")
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'You have pushed the button this many times:',
-            ),
-            Obx(() =>
-              Text(
-                '${controller.count.value}',
-                style: Theme.of(context).textTheme.headline4,
-              )
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: controller.increment,
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
+      body: ListView.builder(
+          padding: const EdgeInsets.all(8),
+          itemCount: 7,
+          itemBuilder: (BuildContext context, int index) {
+            return TextField(
+              // controller: controller.playerNameTextControllers[index],
+              decoration: InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: 'Password',
+              ),
+            );
+          }
       ),
     );
   }
