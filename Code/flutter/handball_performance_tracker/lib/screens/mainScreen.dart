@@ -2,25 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:handball_performance_tracker/controllers/mainScreenController.dart';
 
-class mainScreen extends StatefulWidget {
-  //const ({Key? key}) : super(key: key);
 
-  @override
-  State<mainScreen> createState() => _mainScreenState();
-}
-
-class _mainScreenState extends State<mainScreen> {
+class mainScreen extends StatelessWidget{
   List<String> playerNames = [];
-  List<TextEditingController> playerNameControllers = [];
   String selectedPlayer = "";
 
   @override
   Widget build(BuildContext context) {
-    final mainScreenController = Get.put(MainScreenController());
-
+    final MainScreenController mainScreenController =
+        Get.put(MainScreenController());
     for (int i = 0; i < 7; i++) {
-      playerNameControllers.add(TextEditingController());
+      mainScreenController.playerNameControllers.add(TextEditingController());
     }
+
     return Scaffold(
       appBar: AppBar(title: Text("Title")),
       body: Column(
@@ -32,12 +26,16 @@ class _mainScreenState extends State<mainScreen> {
                 padding: const EdgeInsets.all(5),
                 itemCount: 7,
                 itemBuilder: (BuildContext context, int index) {
-                  return TextField(
-                    onTap: () {
-                      mainScreenController.selectedPlayer.value =
-                          playerNameControllers[index].value.text;
-                    },
-                    controller: playerNameControllers[index],
+                  return Obx(
+                    () => TextField(
+                      onTap: () {
+                        mainScreenController.selectedPlayer.value =
+                            mainScreenController
+                                .playerNameControllers[index].value.text;
+                      },
+                      controller:
+                          mainScreenController.playerNameControllers[index],
+                    ),
                   );
                 }),
           ),
@@ -76,29 +74,29 @@ class Button extends StatelessWidget {
   Button({required this.text, Key? key}) : super(key: key);
 
   final text;
-  final mainScreenController = Get.find<MainScreenController>();
 
   //Button(String text){this.text = text;}
 
   @override
   Widget build(BuildContext context) {
-    return Obx(
-      () => TextButton(
-        style: TextButton.styleFrom(
-          textStyle: const TextStyle(fontSize: 20),
-        ),
-        onPressed: () {
-          // //print("Player " +
-          //     mainScreenController.selectedPlayer.value +
-          // " performed action " +
-          // text);
-          mainScreenController.performAction("");
-        },
-        child: Text(
-          text,
-          softWrap: false,
-        ),
-      ),
-    );
+    final MainScreenController mainScreenController =
+    Get.find<MainScreenController>();
+    return
+      TextButton(
+            style: TextButton.styleFrom(
+              textStyle: const TextStyle(fontSize: 20),
+            ),
+            onPressed: () {
+              print("Player " +
+                  mainScreenController.selectedPlayer.value +
+                  " performed action " +
+                  text);
+
+            },
+            child: Text(
+              text,
+              softWrap: false,
+            ),
+          );
   }
 }
