@@ -2,20 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:handball_performance_tracker/controllers/mainScreenController.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import './../widgets/nav_drawer.dart';
 
-class mainScreen extends StatelessWidget {
+class MainScreen extends StatelessWidget {
   List<String> playerNames = [];
   String selectedPlayer = "";
-
+  final MainScreenController mainScreenController =
+      Get.put(MainScreenController());
   @override
   Widget build(BuildContext context) {
-    final MainScreenController mainScreenController =
-        Get.put(MainScreenController());
     for (int i = 0; i < 7; i++) {
       mainScreenController.playerNameControllers.add(TextEditingController());
     }
 
     return Scaffold(
+      drawer: NavDrawer(),
       appBar: AppBar(title: Text("Title")),
       body: Column(
         children: [
