@@ -4,7 +4,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'dart:io';
 import 'config/firebase_options.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'dart:html' as html;
 import 'package:get/get.dart';
 
 void main() async {
@@ -79,10 +78,10 @@ Future<dynamic> _startupCheck() async {
 
   // if connected force synchronization
   try {
-    // final result = await InternetAddress.lookup('example.com');
-    final result = html.window.navigator.connection;
+    final result = await InternetAddress.lookup('example.com');
+    //final result = html.window.navigator.connection;
 
-    if (result!.downlink! > 0) {
+    if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
       FirebaseFirestore db = FirebaseFirestore.instance;
       db.enableNetwork();
       print('connected');
