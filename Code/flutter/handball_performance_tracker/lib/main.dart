@@ -5,24 +5,11 @@ import 'dart:io';
 import 'config/firebase_options.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // await Firebase.initializeApp(
-  //   options: DefaultFirebaseOptions.currentPlatform,
-  // ).then((value) async {
-  //   // check internet connectivity
-  //   try {
-  //     final result = await InternetAddress.lookup('www.google.com');
-  //     if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
-  //       print('connected');
-  //       // pull from firebase to synchronize
-  //       FirebaseFirestore db = FirebaseFirestore.instance;
-  //     }
-  //   } on SocketException catch (_) {
-  //     print('not connected');
-  //   }
   // start app
   runApp(GetMaterialApp(
       title: 'Handball Performance Tracker',
@@ -77,18 +64,17 @@ Future<dynamic> _startupCheck() async {
   );
 
   // if connected force synchronization
-  try {
-    final result = await InternetAddress.lookup('example.com');
-    //final result = html.window.navigator.connection;
-
-    if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
-      FirebaseFirestore db = FirebaseFirestore.instance;
-      db.enableNetwork();
-      print('connected');
-      return "";
-    }
-  } on SocketException catch (_) {
-    print('not connected');
+  var connectivityResult = await (Connectivity().checkConnectivity());
+  if (connectivityResult == ConnectivityResult.mobile ||
+      connectivityResult == ConnectivityResult.wifi) {
+    // I am connected to a mobile network.
+    FirebaseFirestore db = FirebaseFirestore.instance;
+    db.enableNetwork();
+    print('connected');
+    return "";
+  } else {
+    // TODO define behaviour for not connected i.e. wait 5 secs and try again
+    print("not connected");
   }
 }
 
