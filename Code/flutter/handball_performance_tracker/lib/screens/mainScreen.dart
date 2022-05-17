@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:handball_performance_tracker/controllers/mainScreenController.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import './../widgets/nav_drawer.dart';
+import './../widgets/handball_court/goal.dart';
 
 class MainScreen extends StatelessWidget {
   List<String> playerNames = [];
@@ -20,26 +21,55 @@ class MainScreen extends StatelessWidget {
       appBar: AppBar(title: Text("Title")),
       body: Column(
         children: [
-          SizedBox(
-            width: 1000,
-            height: 400,
-            child: ListView.builder(
-                padding: const EdgeInsets.all(5),
-                itemCount: 7,
-                itemBuilder: (BuildContext context, int index) {
-                  return Obx(
-                    () => TextField(
-                      onTap: () {
-                        mainScreenController.selectedPlayer.value =
-                            mainScreenController
-                                .playerNameControllers[index].value.text;
-                      },
-                      controller:
-                          mainScreenController.playerNameControllers[index],
-                    ),
-                  );
-                }),
+          Container(
+            child: Goal(),
+            // child: CustomPaint(
+            //   painter: GoalPainter(),
+            //   child: SizedBox(
+            //     width: 100,
+            //     height: 100,
+            //   ),
+            // ),
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage("assets/background.png"),
+                fit: BoxFit.cover,
+              ),
+
+              // content here */,
+            ),
           ),
+          // Container(
+          //   color: Colors.white,
+          //   child: CustomPaint(
+          //     painter: GoalPainter(),
+          //     child: SizedBox(
+          //       width: 100,
+          //       height: 100,
+          //     ),
+          //   ),
+          // ),
+
+          // SizedBox(
+          //   width: 1000,
+          //   height: 400,
+          //   child: ListView.builder(
+          //       padding: const EdgeInsets.all(5),
+          //       itemCount: 7,
+          //       itemBuilder: (BuildContext context, int index) {
+          //         return Obx(
+          //           () => TextField(
+          //             onTap: () {
+          //               mainScreenController.selectedPlayer.value =
+          //                   mainScreenController
+          //                       .playerNameControllers[index].value.text;
+          //             },
+          //             controller:
+          //                 mainScreenController.playerNameControllers[index],
+          //           ),
+          //         );
+          //       }),
+          // ),
           SizedBox(
             width: 700,
             height: 300,
