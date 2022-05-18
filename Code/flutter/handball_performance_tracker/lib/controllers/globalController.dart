@@ -5,6 +5,4 @@ class GlobalController extends GetxController {
   // settingsscreen
   var selectedPlayer = "".obs;
   var availablePlayers = [].obs;
-
-  void selectPlayer(String) {}
 }
