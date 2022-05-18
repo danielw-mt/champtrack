@@ -21,22 +21,29 @@ class MainScreen extends StatelessWidget {
       appBar: AppBar(title: Text("Title")),
       body: Column(
         children: [
-          Container(
-            child: Goal(),
-            // child: CustomPaint(
-            //   painter: GoalPainter(),
-            //   child: SizedBox(
-            //     width: 100,
-            //     height: 100,
-            //   ),
-            // ),
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage("assets/background.png"),
-                fit: BoxFit.cover,
+          GestureDetector(
+            onTapDown: (TapDownDetails details) =>
+                print(details.globalPosition),
+            child: Container(
+              //child: Goal(),
+              // child: CustomPaint(
+              //   painter: GoalPainter(),
+              //   child: SizedBox(
+              //     width: 100,
+              //     height: 100,
+              //   ),
+              // ),
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage("assets/background.png"),
+                  fit: BoxFit.cover,
+                ),
+                // content here */,
               ),
-
-              // content here */,
+              child: SizedBox(
+                height: 1000,
+                width: 1000,
+              ),
             ),
           ),
           // Container(
