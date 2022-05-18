@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:handball_performance_tracker/controllers/mainScreenController.dart';
+import 'package:handball_performance_tracker/controllers/globalController.dart';
 import './../screens/mainScreen.dart';
 import './../screens/settingsScreen.dart';
 import 'package:get/get.dart';

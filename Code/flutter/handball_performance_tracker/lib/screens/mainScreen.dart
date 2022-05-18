@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:handball_performance_tracker/controllers/mainScreenController.dart';
+import 'package:handball_performance_tracker/controllers/globalController.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import './../widgets/nav_drawer.dart';
 import './../widgets/handball_court/goal.dart';
@@ -8,14 +8,9 @@ import './../widgets/handball_court/goal.dart';
 class MainScreen extends StatelessWidget {
   List<String> playerNames = [];
   String selectedPlayer = "";
-  final MainScreenController mainScreenController =
-      Get.put(MainScreenController());
+  final GlobalController globalController = Get.put(GlobalController());
   @override
   Widget build(BuildContext context) {
-    for (int i = 0; i < 7; i++) {
-      mainScreenController.playerNameControllers.add(TextEditingController());
-    }
-
     return Scaffold(
       drawer: NavDrawer(),
       appBar: AppBar(title: Text("Title")),
@@ -46,37 +41,6 @@ class MainScreen extends StatelessWidget {
               ),
             ),
           ),
-          // Container(
-          //   color: Colors.white,
-          //   child: CustomPaint(
-          //     painter: GoalPainter(),
-          //     child: SizedBox(
-          //       width: 100,
-          //       height: 100,
-          //     ),
-          //   ),
-          // ),
-
-          // SizedBox(
-          //   width: 1000,
-          //   height: 400,
-          //   child: ListView.builder(
-          //       padding: const EdgeInsets.all(5),
-          //       itemCount: 7,
-          //       itemBuilder: (BuildContext context, int index) {
-          //         return Obx(
-          //           () => TextField(
-          //             onTap: () {
-          //               mainScreenController.selectedPlayer.value =
-          //                   mainScreenController
-          //                       .playerNameControllers[index].value.text;
-          //             },
-          //             controller:
-          //                 mainScreenController.playerNameControllers[index],
-          //           ),
-          //         );
-          //       }),
-          // ),
           SizedBox(
             width: 700,
             height: 300,
@@ -118,19 +82,18 @@ class Button extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final MainScreenController mainScreenController =
-        Get.find<MainScreenController>();
+    final GlobalController globalController = Get.find<GlobalController>();
     return TextButton(
       style: TextButton.styleFrom(
         textStyle: const TextStyle(fontSize: 20),
       ),
       onPressed: () {
         print("Player " +
-            mainScreenController.selectedPlayer.value +
+            globalController.selectedPlayer.value +
             " performed action " +
             text);
         final action = <String, String>{
-          mainScreenController.selectedPlayer.value: text
+          globalController.selectedPlayer.value: text
         };
         db.collection("actions").add(action).then(
             (DocumentReference doc) => print("hat funktioniert. ${doc.id}"));

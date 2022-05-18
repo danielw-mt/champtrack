@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import './../widgets/settings_screen/player_dropdown.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({Key? key}) : super(key: key);
@@ -10,7 +11,7 @@ class SettingsScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Page Two'),
       ),
-      body: Center(child: Container()),
+      body: Center(child: PlayerDropdown()),
     );
   }
 }
