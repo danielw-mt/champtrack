@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import './../../controllers/globalController.dart';
 import 'package:get/get.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutterfire_ui/firestore.dart';
 
 class PlayerDropdown extends StatelessWidget {
   GlobalController globalController = Get.find<GlobalController>();
