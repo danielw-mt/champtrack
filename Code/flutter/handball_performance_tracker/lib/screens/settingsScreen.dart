@@ -45,11 +45,27 @@ class SettingsScreen extends GetView<GlobalController> {
                                     .removeAt(index);
                               }),
                           Text(globalController.chosenPlayers[index]),
-                          // TODO implement checkbox logic
-                          Checkbox(
-                            value: false,
-                            onChanged: (value) {},
-                          )
+                          GetBuilder<GlobalController>(
+                              builder: (_) => Checkbox(
+                                    value:
+                                        globalController.startingPlayers[index],
+                                    onChanged: (value) {
+                                      // count how many players are selected as starting players
+                                      var num_starting = globalController
+                                              .startingPlayers
+                                              .where((c) => c == true)
+                                              .toList()
+                                              .length +
+                                          1;
+                                      if (num_starting < 8) {
+                                        globalController
+                                                .startingPlayers[index] =
+                                            !globalController
+                                                .startingPlayers[index];
+                                        globalController.refresh();
+                                      }
+                                    },
+                                  ))
                         ],
                       );
                     }),
