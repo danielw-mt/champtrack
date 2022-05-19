@@ -16,7 +16,7 @@ class MainScreen extends StatelessWidget {
       drawer: NavDrawer(),
       appBar: AppBar(title: Text("Title")),
       body: Column(
-        children: [CoordinateDetector()],
+        children: [CustomField()],
       ),
     );
   }
