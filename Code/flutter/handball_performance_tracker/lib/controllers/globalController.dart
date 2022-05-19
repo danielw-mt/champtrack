@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:stop_watch_timer/stop_watch_timer.dart';
 
 class GlobalController extends GetxController {
   // settingsscreen
@@ -13,4 +14,19 @@ class GlobalController extends GetxController {
     startingPlayers.refresh();
     return startingPlayers[index];
   }
+
+  // Helper screen
+  var stopWatchTimer = StopWatchTimer(
+      mode: StopWatchMode.countUp,
+      //presetMillisecond: StopWatchTimer.getMilliSecFromSecond(3),
+      onChange: (value) => print('onChange $value'),
+      onChangeRawSecond: (value) => print('onChangeRawSecond $value'),
+      onChangeRawMinute: (value) => print('onChangeRawMinute $value'),
+      onStop: () {
+        print('onStop');
+      },
+      onEnded: () {
+        print('onEnded');
+      },
+    ).obs;
 }

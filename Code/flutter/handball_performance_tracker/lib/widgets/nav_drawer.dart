@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:handball_performance_tracker/controllers/globalController.dart';
 import './../screens/mainScreen.dart';
+import './../screens/helperScreen.dart';
 import './../screens/settingsScreen.dart';
 import 'package:get/get.dart';
 
@@ -30,6 +31,11 @@ class NavDrawer extends StatelessWidget {
             onTap: () => {
               if (Get.currentRoute.toString() != "/") {Get.to(MainScreen())}
             },
+          ),
+          ListTile(
+            leading: Icon(Icons.verified_user),
+            title: Text('Helper Screen'),
+            onTap: () => {Get.to(HelperScreen())},
           ),
         ],
       ),
