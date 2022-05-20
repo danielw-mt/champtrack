@@ -5,6 +5,8 @@ import 'package:get/get.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
 class ActionMenu extends GetView<GlobalController> {
+  // menu that allows to add log actions that happen during the game
+
   final GlobalController globalController = Get.find<GlobalController>();
   List<String> attackActions = [
     "Tor",
@@ -25,6 +27,7 @@ class ActionMenu extends GetView<GlobalController> {
   Widget build(BuildContext context) {
     return Column(
       children: [
+        // switch that toggles offense vs defense mode in global state
         GetBuilder<GlobalController>(
             builder: (_) => Switch(
                 value: globalController.attackMode.value,
@@ -33,11 +36,13 @@ class ActionMenu extends GetView<GlobalController> {
                       !globalController.attackMode.value;
                   globalController.refresh();
                 })),
+        // text button that triggers an alert to choose the action
         TextButton(
             onPressed: () {
               Alert(
                       context: context,
                       title: "Select an action",
+                      // alert contains a list of DialogButton objects
                       buttons: globalController.attackMode.value
                           ? buildDialogButtonList(context, attackActions)
                           : buildDialogButtonList(context, defenseActions))
@@ -48,6 +53,7 @@ class ActionMenu extends GetView<GlobalController> {
     );
   }
 
+  /// builds a list of Dialog buttons
   List<DialogButton> buildDialogButtonList(
       BuildContext context, List<String> buttonTexts) {
     List<DialogButton> dialogButtons = [];
@@ -58,6 +64,8 @@ class ActionMenu extends GetView<GlobalController> {
     return dialogButtons;
   }
 
+  /// builds a single dialog button that logs its text (=action) to firestore
+  /// and updates the game state
   DialogButton buildDialogButton(BuildContext context, String buttonText) {
     FirebaseFirestore db = FirebaseFirestore.instance;
 
