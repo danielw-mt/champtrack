@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class Goal extends StatelessWidget {
+  // widget to try out painting a goal using Custompainter
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -18,13 +19,6 @@ class Goal extends StatelessWidget {
     );
   }
 }
-
-// class GoalPaint extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return
-//   }
-// }
 
 class GoalPainter extends CustomPainter {
   @override
