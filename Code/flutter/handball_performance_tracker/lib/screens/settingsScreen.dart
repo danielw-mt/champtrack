@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import './../widgets/settings_screen/player_dropdown.dart';
 import './../widgets/settings_screen/on_field_checkbox.dart';
+import './../widgets/settings_screen/game_start_stop_buttons.dart';
 import './../controllers/globalController.dart';
 
 class SettingsScreen extends GetView<GlobalController> {
@@ -55,7 +56,8 @@ class SettingsScreen extends GetView<GlobalController> {
               );
             }
             return Container();
-          })
+          }),
+          GameStartStopButtons()
         ],
       ),
     );
