@@ -4,7 +4,7 @@ import 'package:handball_performance_tracker/controllers/globalController.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:handball_performance_tracker/widgets/main_screen/field.dart';
 import './../widgets/nav_drawer.dart';
-import 'package:handball_performance_tracker/controllers/fieldSizeParameter.dart'
+import 'package:handball_performance_tracker/utils/fieldSizeParameter.dart'
     as fieldSizeParameter;
 
 class MainScreen extends StatelessWidget {

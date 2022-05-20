@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:handball_performance_tracker/controllers/fieldSizeParameter.dart'
+import 'package:handball_performance_tracker/utils/fieldSizeParameter.dart'
     as fieldSizeParameter;
 
 /* Class to calculate if a click was inside or outside a section.
