@@ -20,7 +20,7 @@ class OnFieldCheckbox extends StatelessWidget {
                 // count how many players are selected as starting players
                 var numOnField =
                     playersOnField.where((c) => c == true).toList().length;
-                if (numOnField < 7) {
+                if (numOnField <= 7) {
                   playersOnField[index] = !playersOnField[index];
                   globalController.refresh();
                 }
