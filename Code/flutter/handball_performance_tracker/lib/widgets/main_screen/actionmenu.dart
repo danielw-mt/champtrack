@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../controllers/globalController.dart';
 import 'package:get/get.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
+import 'playermenu.dart';
 
 List<String> attackActions = [
   "Tor",
@@ -21,7 +22,6 @@ List<String> defenseActions = [
 
 void callActionMenu(BuildContext context) {
   final GlobalController globalController = Get.find<GlobalController>();
-  print(globalController.leftSide.value);
   Alert(
           context: context,
           title: "Select an action",
@@ -32,6 +32,7 @@ void callActionMenu(BuildContext context) {
       .show();
 }
 
+/// @return a list of Dialog buttons
 List<DialogButton> buildDialogButtonList(
     BuildContext context, List<String> buttonTexts) {
   List<DialogButton> dialogButtons = [];
@@ -42,6 +43,9 @@ List<DialogButton> buildDialogButtonList(
   return dialogButtons;
 }
 
+/// @return
+/// builds a single dialog button that logs its text (=action) to firestore
+//  and updates the game state
 DialogButton buildDialogButton(BuildContext context, String buttonText) {
   FirebaseFirestore db = FirebaseFirestore.instance;
   final GlobalController globalController = Get.find<GlobalController>();
@@ -83,6 +87,7 @@ DialogButton buildDialogButton(BuildContext context, String buttonText) {
       onPressed: () {
         logAction();
         Navigator.pop(context);
+        callPlayerMenu(context);
       });
 }
 
@@ -99,10 +104,9 @@ DialogButton buildDialogButton(BuildContext context, String buttonText) {
 //     return Container();
 //   }
 
-//   /// builds a list of Dialog buttons
+//   
   
 
-//   /// builds a single dialog button that logs its text (=action) to firestore
-//   /// and updates the game state
+//   
   
 // }
