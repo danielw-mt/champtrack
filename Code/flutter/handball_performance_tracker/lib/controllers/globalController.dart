@@ -17,16 +17,6 @@ class GlobalController extends GetxController {
 
   // Helper screen
   var stopWatchTimer = StopWatchTimer(
-      mode: StopWatchMode.countUp,
-      //presetMillisecond: StopWatchTimer.getMilliSecFromSecond(3),
-      onChange: (value) => print('onChange $value'),
-      onChangeRawSecond: (value) => print('onChangeRawSecond $value'),
-      onChangeRawMinute: (value) => print('onChangeRawMinute $value'),
-      onStop: () {
-        print('onStop');
-      },
-      onEnded: () {
-        print('onEnded');
-      },
-    ).obs;
+    mode: StopWatchMode.countUp,
+  ).obs;
 }
