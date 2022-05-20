@@ -7,10 +7,13 @@ import 'actionmenu.dart';
 // Class that returns a FieldPainter with a GestureDetecture, i.e. the Painted halffield with the possibility to get coordinates on click.
 class CustomField extends StatelessWidget {
   final GlobalController globalController = Get.find<GlobalController>();
-
+  bool leftSide = true;
+  CustomField({leftSide}) {
+    this.leftSide = leftSide;
+  }
   @override
   Widget build(BuildContext context) {
-    bool leftSide = globalController.leftSide.value;
+    globalController.leftSide.value = this.leftSide;
     return CustomPaint(
       painter: FieldPainter(leftSide),
       // GestureDetector to handle on click or swipe
@@ -34,13 +37,13 @@ class FieldSwitch extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PageView(
-      onPageChanged: (value) {
-        globalController.leftSide.value = !globalController.leftSide.value;
-        globalController.refresh();
-      },
       children: <Widget>[
-        CustomField(),
-        CustomField(),
+        CustomField(
+          leftSide: true,
+        ),
+        CustomField(
+          leftSide: false,
+        ),
       ],
     );
   }
