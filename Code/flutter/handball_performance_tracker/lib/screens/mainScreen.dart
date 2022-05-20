@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:handball_performance_tracker/controllers/globalController.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:handball_performance_tracker/widgets/widget.dart';
+import 'package:handball_performance_tracker/widgets/main_screen/field.dart';
 import './../widgets/nav_drawer.dart';
 import 'package:handball_performance_tracker/controllers/fieldSizeParameter.dart'
     as fieldSizeParameter;
