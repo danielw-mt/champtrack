@@ -6,20 +6,35 @@ class GlobalController extends GetxController {
   // Class for managing global state of the app
   // Refer to https://github.com/jonataslaw/getx/wiki/State-Management
 
+  ////
   // settingsscreen
+  ////
   var selectedPlayer = "".obs;
   var availablePlayers = [].obs;
   var chosenPlayers = [].obs;
   // boolean list of chosen players i.e. true, true, false would mean the first two players start
-  RxList<dynamic> startingPlayers = [].obs;
+  RxList<dynamic> playersOnField = [].obs;
 
   bool getStartingPlayerValue(int index) {
-    startingPlayers.refresh();
-    return startingPlayers[index];
+    playersOnField.refresh();
+    return playersOnField[index];
   }
 
+  ////
   // Helper screen
+  ////
   var stopWatchTimer = StopWatchTimer(
     mode: StopWatchMode.countUp,
   ).obs;
+
+  ////
+  // game tracking
+  ////
+  var gameStarted = false.obs;
+  // used for the game object inserted into db
+  var currentGameId = "".obs;
+  var homeTeamGoals = 0.obs;
+  var guestTeamGoals = 0.obs;
+
+
 }
