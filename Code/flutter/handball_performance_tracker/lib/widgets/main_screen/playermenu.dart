@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import './../../controllers/globalController.dart';
+import '../../controllers/globalController.dart';
 import 'package:get/get.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
@@ -46,20 +46,11 @@ class PlayerMenu extends GetView<GlobalController> {
 
     void logPlayerSelection() async {
       DateTime dateTime = DateTime.now();
-      int unixTime = dateTime.toUtc().millisecondsSinceEpoch;
-      int secondsSinceGameStart =
-          globalController.stopWatchTimer.value.secondTime.value;
-
-      // TODO get most recent game id from DB gamestate or db instead of hardcoding (wait for merge with start stop game)
-      String mostRecentGame = "zqKzCZB5nGPVuF7H3CGe";
-
-      // TODO maybe replace with actual player_id (wait for Anni to finish player model)
+      // TODO replace with actual player_id (wait for Anni to finish player model)
       globalController.actions.last["player_id"] = buttonText;
 
-      // TODO update most recent action in firebase with player id (wait for merge with actionmenu)
-
       // update the firebase document containing the action details with the player id
-      String mostRecentAction = "mostRecentAction";
+      String mostRecentAction = globalController.lastGameActionId.value;
       final gameDocument = db.collection("gameData").doc(mostRecentAction);
       DocumentSnapshot documentSnapshot = await gameDocument.get();
       Map<String, dynamic> documentData =

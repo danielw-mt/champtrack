@@ -22,7 +22,7 @@ class MainScreen extends StatelessWidget {
               // FieldSwitch to swipe between right and left field side. SizedBox around it so there is no rendering error.
               width: fieldSizeParameter.fieldWidth,
               height: fieldSizeParameter.fieldHeight,
-              child: const FieldSwitch()),
+              child: FieldSwitch()),
           TextButton(
               onPressed: () {},
               child: const Text(

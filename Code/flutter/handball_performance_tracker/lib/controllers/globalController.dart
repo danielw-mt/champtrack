@@ -27,15 +27,23 @@ class GlobalController extends GetxController {
     mode: StopWatchMode.countUp,
   ).obs;
 
-
-  var attackMode = false.obs;
-  var actions = [].obs;
-  var lastActionId = "".obs;
   ////
   // game tracking
   ////
+
+  /// True: home team is playing on the left; False: home team is defending
+  var leftSide = true.obs;
+
+  /// Storing game actions
+  var actions = [].obs;
+
+  /// True: game was started; False game did not start yet
   var gameStarted = false.obs;
-  // used for the game object inserted into db
+
+  /// id of last action written to db
+  var lastGameActionId = "".obs;
+
+  /// id of last game object written to db
   var currentGameId = "".obs;
   var homeTeamGoals = 0.obs;
   var guestTeamGoals = 0.obs;
