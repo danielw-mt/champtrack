@@ -6,7 +6,6 @@ import 'package:rflutter_alert/rflutter_alert.dart';
 
 class PlayerMenu extends GetView<GlobalController> {
   // menu that allows to add log actions that happen during the game
-
   final GlobalController globalController = Get.find<GlobalController>();
 
   @override
