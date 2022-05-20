@@ -4,33 +4,35 @@ import 'package:handball_performance_tracker/controllers/globalController.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:handball_performance_tracker/widgets/widget.dart';
 import './../widgets/nav_drawer.dart';
-import './../widgets/handball_court/goal.dart';
+import 'package:handball_performance_tracker/controllers/fieldSizeParameter.dart'
+    as fieldSizeParameter;
 
 class MainScreen extends StatelessWidget {
-  // 
   // screen where the game takes place
+  const MainScreen({Key? key}) : super(key: key);
 
-  List<String> playerNames = [];
-  String selectedPlayer = "";
-  final GlobalController globalController = Get.put(GlobalController());
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: NavDrawer(),
-      appBar: AppBar(title: Text("Title")),
+      appBar: AppBar(title: const Text("Title")),
       body: Column(
-        children: [CustomField()],
+        children: [
+          SizedBox(
+              width: fieldSizeParameter.fieldWidth,
+              height: fieldSizeParameter.fieldHeight,
+              child: const FieldSwitch()),
+          TextButton(
+              onPressed: () {},
+              child: const Text(
+                  "Testbutton")) // just a testbutton to see that it doesn't vanish when swiping from left to right field side
+        ],
       ),
     );
   }
-
-  void toggleAction(buttonText) {
-    if (selectedPlayer != "") {
-      print("Player " + selectedPlayer + " performed action " + buttonText);
-    }
-  }
 }
 
+//Button class not needed yet, but leave it here for later
 class Button extends StatelessWidget {
   FirebaseFirestore db = FirebaseFirestore.instance;
   Button({required this.text, Key? key}) : super(key: key);
