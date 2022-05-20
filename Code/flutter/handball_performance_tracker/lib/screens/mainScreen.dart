@@ -9,7 +9,7 @@ import 'package:handball_performance_tracker/controllers/fieldSizeParameter.dart
 
 class MainScreen extends StatelessWidget {
   // screen where the game takes place
-  const MainScreen({Key? key}) : super(key: key);
+  final GlobalController globalController = Get.put(GlobalController());
 
   @override
   Widget build(BuildContext context) {
