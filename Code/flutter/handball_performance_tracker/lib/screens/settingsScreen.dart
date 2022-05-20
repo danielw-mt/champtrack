@@ -28,6 +28,8 @@ class SettingsScreen extends GetView<GlobalController> {
               FloatingActionButton(
                   child: Icon(Icons.add),
                   onPressed: (() {
+                    var numStarting =
+                        playersOnField.where((c) => c == true).toList().length;
                     chosenPlayers.add(globalController.selectedPlayer.value);
                     playersOnField.add(false);
                   })),

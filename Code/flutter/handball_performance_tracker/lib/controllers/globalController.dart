@@ -20,12 +20,21 @@ class GlobalController extends GetxController {
     return playersOnField[index];
   }
 
-  var gameStarted = false.obs;
-
   ////
   // Helper screen
   ////
   var stopWatchTimer = StopWatchTimer(
     mode: StopWatchMode.countUp,
   ).obs;
+
+  ////
+  // game tracking
+  ////
+  var gameStarted = false.obs;
+  // used for the game object inserted into db
+  var currentGameId = "".obs;
+  var homeTeamGoals = 0.obs;
+  var guestTeamGoals = 0.obs;
+
+
 }
