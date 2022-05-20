@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'screens/mainScreen.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -17,6 +18,8 @@ void main() async {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
+      scrollBehavior:
+          AppScrollBehavior(), // add scrollbehaviour so swiping is possible in web
       home: FutureBuilder<dynamic>(
         future: _startupCheck(),
         builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
@@ -80,4 +83,13 @@ Future<dynamic> _startupCheck() async {
 
 onTimeout() {
   runApp(MaterialApp(title: "Timeout"));
+}
+
+// add scrollbehaviour so swiping is possible in web
+class AppScrollBehavior extends MaterialScrollBehavior {
+  @override
+  Set<PointerDeviceKind> get dragDevices => {
+        PointerDeviceKind.touch,
+        PointerDeviceKind.mouse,
+      };
 }

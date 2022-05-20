@@ -1,1 +1,0 @@
-// Placeholder file if helper method will be implemented
