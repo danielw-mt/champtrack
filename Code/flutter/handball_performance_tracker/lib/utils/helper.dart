@@ -5,11 +5,11 @@ import 'package:handball_performance_tracker/controllers/fieldSizeParameter.dart
 /* Class to calculate if a click was inside or outside a section.
 * 
 * @param  bool leftSide : true if we look at left field side
-*         double xOffset : zero if we look at left field side, field width (max x value) if we look at right field side
+*         num xOffset : zero if we look at left field side, field width (max x value) if we look at right field side
 */
 class SectorCalc {
   bool leftSide = true;
-  late double xOffset;
+  late num xOffset;
 
   SectorCalc(this.leftSide) {
     if (leftSide) {
@@ -20,8 +20,8 @@ class SectorCalc {
   }
 
   calculatePosition(Offset position) {
-    double x = position.dx;
-    double y = position.dy;
+    num x = position.dx;
+    num y = position.dy;
 
     inSector(x, y);
     if (inNineMeterEllipse(x, y)) {
@@ -42,9 +42,9 @@ class SectorCalc {
   * 
   * @return  true if (x,y) is inside and otherwise false.
   */
-  inSixMeterEllipse(double x, double y) {
-    double yCentered = y - fieldSizeParameter.fieldHeight / 2;
-    double xCentered = x - xOffset;
+  inSixMeterEllipse(num x, num y) {
+    num yCentered = y - fieldSizeParameter.fieldHeight / 2;
+    num xCentered = x - xOffset;
     return (xCentered * xCentered) /
                 (fieldSizeParameter.sixMeterRadiusX *
                     fieldSizeParameter.sixMeterRadiusX) +
@@ -58,9 +58,9 @@ class SectorCalc {
   * 
   * @return  true if (x,y) is inside and otherwise false.
   */
-  inNineMeterEllipse(double x, double y) {
-    double yCentered = y - fieldSizeParameter.fieldHeight / 2;
-    double xCentered = x - xOffset;
+  inNineMeterEllipse(num x, num y) {
+    num yCentered = y - fieldSizeParameter.fieldHeight / 2;
+    num xCentered = x - xOffset;
     return (xCentered * xCentered) /
                 (fieldSizeParameter.nineMeterRadiusX *
                     fieldSizeParameter.nineMeterRadiusX) +
@@ -70,29 +70,39 @@ class SectorCalc {
         1;
   }
 
-  /* Calculates if a point (x,y) is below a sector border. 
-  * This function has to be extended when the sector borders are decided!!
+  /* 
+  * Calculates if a point (x,y) is between two sector borders. 
   */
-  inSector(double x, double y) {
-    for (int i = 0; i < fieldSizeParameter.gradients.length; i++) {
-      double gradient;
-      double yIntercept;
+  inSector(num x, num y) {
+    // variables for gradient and intercept of lower line, the first lower line is the bottom horizontal line
+    num lowerGradient = 0;
+    num lowerIntercept = fieldSizeParameter.fieldHeight;
+    // copy list of gradients and intercepts and add zeros, to have the upper section border (upper horizontal line)
+    List gradients = List.from(fieldSizeParameter.gradients);
+    List yIntercepts = List.from(fieldSizeParameter.yIntercepts);
+    gradients.add(0.0);
+    yIntercepts.add(0.0);
+    // go through each line and check if (x,y) is below this line and still above the line below
+    for (int i = 0; i < gradients.length; i++) {
+      num gradient;
+      num yIntercept;
       if (leftSide) {
         // left side
-        gradient = fieldSizeParameter.gradients[i];
-        yIntercept = fieldSizeParameter.yIntercepts[i];
+        gradient = gradients[i];
+        yIntercept = yIntercepts[i];
       } else {
         // right side
-        gradient = -fieldSizeParameter.gradients[i];
-        yIntercept = fieldSizeParameter.yIntercepts[i] - gradient * xOffset;
+        gradient = -gradients[i];
+        yIntercept = yIntercepts[i] - gradient * xOffset;
       }
-
-      bool inSector = gradient * x + yIntercept <= y;
+      // check if (x,y) is below this line and still above the line below
+      bool inSector = (gradient * x + yIntercept <= y) &&
+          (lowerGradient * x + lowerIntercept > y);
       print("is in Sector $i : $inSector");
+      lowerGradient = gradient;
+      lowerIntercept = yIntercept;
     }
-    return fieldSizeParameter.gradients[0] * x +
-            fieldSizeParameter.yIntercepts[0] <=
-        y;
+    return false;
   }
 }
 
@@ -149,9 +159,8 @@ class FieldPainter extends CustomPainter {
       } else {
         // right side
         x2 = 0;
-        double gradient = -fieldSizeParameter.gradients[i];
-        double yIntercept =
-            fieldSizeParameter.yIntercepts[i] - gradient * xOffset;
+        num gradient = -fieldSizeParameter.gradients[i];
+        num yIntercept = fieldSizeParameter.yIntercepts[i] - gradient * xOffset;
         y2 = gradient * x2 + yIntercept;
       }
       canvas.drawLine(Offset(xOffset, fieldSizeParameter.yIntercepts[i]),
