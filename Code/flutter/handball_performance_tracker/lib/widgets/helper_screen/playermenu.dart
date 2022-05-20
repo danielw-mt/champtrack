@@ -40,7 +40,7 @@ class PlayerMenu extends GetView<GlobalController> {
     return dialogButtons;
   }
 
-  /// builds a single dialog button that logs its text (=action) to firestore
+  /// builds a single dialog button that logs its text (=player name) to firestore
   /// and updates the game state
   DialogButton buildDialogButton(BuildContext context, String buttonText) {
     FirebaseFirestore db = FirebaseFirestore.instance;
