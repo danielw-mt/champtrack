@@ -21,7 +21,9 @@ class CustomField extends StatelessWidget {
           // handle coordinates on click
           onTapDown: (TapDownDetails details) {
         callActionMenu(context);
-        SectorCalc(fieldIsLeft).calculatePosition(details.localPosition);
+        String location =
+            SectorCalc(fieldIsLeft).calculatePosition(details.localPosition);
+        globalController.lastLocation.value = location;
       }),
     );
   }

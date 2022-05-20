@@ -21,32 +21,37 @@ List<String> defenseActions = [
 ];
 
 void callActionMenu(BuildContext context) {
-  final GlobalController globalController = Get.find<GlobalController>();
-  // decide whether attack or defense actions should be displayed depending
-  //on what side the team goals is and whether they are attacking or defending
-  bool displayAttackActions = false;
-  bool attackIsLeft = globalController.attackIsLeft.value;
-  bool fieldIsLeft = globalController.fieldIsLeft.value;
-
-  // when our goal is to the right (= attackIsLeft) and the field is left
-  //display attack options
-  if (attackIsLeft && fieldIsLeft) {
-    displayAttackActions = true;
-    // when our goal is to the left (=attack is right) and the field is to the
-    //right display attack options
-  } else if (attackIsLeft == false && fieldIsLeft == false) {
-    displayAttackActions = true;
-  }
   // alert contains a list of DialogButton objects
   Alert(
           context: context,
           title: "Select an action",
           // when displayAttackActions is true display buttonlist with attack
           //options otherwise with defense options
-          buttons: displayAttackActions
+          buttons: determineAttack()
               ? buildDialogButtonList(context, attackActions)
               : buildDialogButtonList(context, defenseActions))
       .show();
+}
+
+///
+bool determineAttack() {
+  final GlobalController globalController = Get.find<GlobalController>();
+  // decide whether attack or defense actions should be displayed depending
+  //on what side the team goals is and whether they are attacking or defending
+  bool attacking = false;
+  bool attackIsLeft = globalController.attackIsLeft.value;
+  bool fieldIsLeft = globalController.fieldIsLeft.value;
+
+  // when our goal is to the right (= attackIsLeft) and the field is left
+  //display attack options
+  if (attackIsLeft && fieldIsLeft) {
+    attacking = true;
+    // when our goal is to the left (=attack is right) and the field is to the
+    //right display attack options
+  } else if (attackIsLeft == false && fieldIsLeft == false) {
+    attacking = true;
+  }
+  return attacking;
 }
 
 /// @return a list of Dialog buttons
@@ -79,13 +84,13 @@ DialogButton buildDialogButton(BuildContext context, String buttonText) {
       "club_id": "-1",
       "game_id": mostRecentGame,
       "player_id": "",
-      "type": globalController.fieldIsLeft.value ? "attack" : "defense",
+      "type": determineAttack() ? "attack" : "defense",
       "action_type": buttonText,
-      "position": "",
+      "throw_location": globalController.lastLocation.value,
       "timestamp": unixTime,
       "relative_time": secondsSinceGameStart
     };
-    globalController.actions.add(buttonText);
+    globalController.actions.add(action);
 
     // add action to firebase
 
@@ -107,19 +112,3 @@ DialogButton buildDialogButton(BuildContext context, String buttonText) {
         callPlayerMenu(context);
       });
 }
-
-// class ActionMenu extends GetView<GlobalController> {
-//   // menu that allows to add log actions that happen during the game
-
-//   final GlobalController globalController = Get.find<GlobalController>();
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Container();
-//   }
-
-//
-
-//
-
-// }

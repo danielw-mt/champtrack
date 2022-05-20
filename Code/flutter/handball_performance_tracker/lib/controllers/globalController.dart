@@ -51,4 +51,6 @@ class GlobalController extends GetxController {
   var currentGameId = "".obs;
   var homeTeamGoals = 0.obs;
   var guestTeamGoals = 0.obs;
+
+  var lastLocation = "".obs;
 }

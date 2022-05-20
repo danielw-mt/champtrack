@@ -33,8 +33,6 @@ DialogButton buildDialogButton(BuildContext context, String buttonText) {
 
   void logPlayerSelection() async {
     DateTime dateTime = DateTime.now();
-    // TODO replace with actual player_id (wait for Anni to finish player model)
-    globalController.actions.last["player_id"] = buttonText;
 
     // update the firebase document containing the action details with the player id
     String mostRecentAction = globalController.lastGameActionId.value;
@@ -43,7 +41,11 @@ DialogButton buildDialogButton(BuildContext context, String buttonText) {
     Map<String, dynamic> documentData =
         documentSnapshot.data() as Map<String, dynamic>;
     documentData["player_id"] = buttonText;
+    globalController.actions.last = documentData;
     await db.collection("gameData").doc(mostRecentAction).update(documentData);
+    globalController.refresh();
+    print("last action saved in database: ");
+    print(globalController.actions.last.toString());
   }
 
   return DialogButton(
