@@ -22,4 +22,6 @@ class GlobalController extends GetxController {
   var stopWatchTimer = StopWatchTimer(
     mode: StopWatchMode.countUp,
   ).obs;
+
+  var actions = [].obs;
 }
