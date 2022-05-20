@@ -6,6 +6,9 @@ import './../widgets/nav_drawer.dart';
 import './../widgets/handball_court/goal.dart';
 
 class MainScreen extends StatelessWidget {
+  // 
+  // screen where the game takes place
+
   List<String> playerNames = [];
   String selectedPlayer = "";
   final GlobalController globalController = Get.put(GlobalController());
@@ -20,20 +23,11 @@ class MainScreen extends StatelessWidget {
             onTapDown: (TapDownDetails details) =>
                 print(details.globalPosition),
             child: Container(
-              //child: Goal(),
-              // child: CustomPaint(
-              //   painter: GoalPainter(),
-              //   child: SizedBox(
-              //     width: 100,
-              //     height: 100,
-              //   ),
-              // ),
               decoration: BoxDecoration(
                 image: DecorationImage(
                   image: AssetImage("assets/background.png"),
                   fit: BoxFit.cover,
                 ),
-                // content here */,
               ),
               child: SizedBox(
                 height: 1000,
@@ -75,10 +69,7 @@ class MainScreen extends StatelessWidget {
 class Button extends StatelessWidget {
   FirebaseFirestore db = FirebaseFirestore.instance;
   Button({required this.text, Key? key}) : super(key: key);
-
   final text;
-
-  //Button(String text){this.text = text;}
 
   @override
   Widget build(BuildContext context) {

@@ -6,6 +6,7 @@ import './../screens/settingsScreen.dart';
 import 'package:get/get.dart';
 
 class NavDrawer extends StatelessWidget {
+  // Navigation widget for Material app. Can be opend from the sidebar
   @override
   Widget build(BuildContext context) {
     return Drawer(

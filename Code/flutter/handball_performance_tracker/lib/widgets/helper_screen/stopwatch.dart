@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 
 class StopWatch extends GetView<GlobalController> {
+  // stop watch widget that allows to the time to be started, stopped, resetted and in-/decremented by 1 sec
   final GlobalController globalController = Get.find<GlobalController>();
 
   @override

@@ -4,6 +4,8 @@ import 'package:get/get.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class PlayerDropdown extends StatelessWidget {
+  // dropdown that pull the available players from the players collection in firestore
+
   GlobalController globalController = Get.find<GlobalController>();
 
   setFirstPlayerName() async {
@@ -11,7 +13,6 @@ class PlayerDropdown extends StatelessWidget {
     FirebaseFirestore.instance
       ..collection("players").get().then((res) {
         print("Successfully completed");
-
         playerName = "" + res.docs.first.get("first_name") + " ";
         playerName = playerName + res.docs.first.get("last_name");
         this.globalController.selectedPlayer.value = playerName;
@@ -22,7 +23,6 @@ class PlayerDropdown extends StatelessWidget {
   Widget build(BuildContext context) {
     setFirstPlayerName();
     List<String> availablePlayers = [];
-    //this.globalController.selectedPlayer.value = " Bialowas";
     var collection = FirebaseFirestore.instance.collection("players");
     final docRef = FirebaseFirestore.instance.collection("players").doc;
 
@@ -49,7 +49,6 @@ class PlayerDropdown extends StatelessWidget {
                 },
                 items: availablePlayers
                     .map<DropdownMenuItem<String>>((String list_value) {
-                  //print(list_value);
                   return DropdownMenuItem<String>(
                     value: list_value,
                     child: Text(list_value),
