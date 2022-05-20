@@ -11,11 +11,11 @@ class GlobalController extends GetxController {
   var availablePlayers = [].obs;
   var chosenPlayers = [].obs;
   // boolean list of chosen players i.e. true, true, false would mean the first two players start
-  RxList<dynamic> startingPlayers = [].obs;
+  RxList<dynamic> playersOnField = [].obs;
 
   bool getStartingPlayerValue(int index) {
-    startingPlayers.refresh();
-    return startingPlayers[index];
+    playersOnField.refresh();
+    return playersOnField[index];
   }
 
   // Helper screen
