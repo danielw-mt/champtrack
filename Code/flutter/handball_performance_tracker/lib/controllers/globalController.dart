@@ -27,6 +27,9 @@ class GlobalController extends GetxController {
     mode: StopWatchMode.countUp,
   ).obs;
 
+  var attackMode = false.obs;
+  var actions = [].obs;
+  var lastActionId = "".obs;
   ////
   // game tracking
   ////
@@ -35,6 +38,4 @@ class GlobalController extends GetxController {
   var currentGameId = "".obs;
   var homeTeamGoals = 0.obs;
   var guestTeamGoals = 0.obs;
-
-
 }
