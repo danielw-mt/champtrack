@@ -19,6 +19,7 @@ class MainScreen extends StatelessWidget {
       body: Column(
         children: [
           SizedBox(
+              // FieldSwitch to swipe between right and left field side. SizedBox around it so there is no rendering error.
               width: fieldSizeParameter.fieldWidth,
               height: fieldSizeParameter.fieldHeight,
               child: const FieldSwitch()),
