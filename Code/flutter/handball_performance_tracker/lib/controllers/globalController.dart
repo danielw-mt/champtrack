@@ -20,6 +20,10 @@ class GlobalController extends GetxController {
     return playersOnField[index];
   }
 
+  /// by default attack is at the left side of the screen
+  /// during half time this can be switched
+  var attackIsLeft = true.obs;
+
   ////
   // Helper screen
   ////
@@ -32,7 +36,7 @@ class GlobalController extends GetxController {
   ////
 
   /// True: home team is playing on the left; False: home team is defending
-  var leftSide = true.obs;
+  var fieldIsLeft = true.obs;
 
   /// Storing game actions
   var actions = [].obs;

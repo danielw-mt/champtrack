@@ -22,11 +22,28 @@ List<String> defenseActions = [
 
 void callActionMenu(BuildContext context) {
   final GlobalController globalController = Get.find<GlobalController>();
+  // decide whether attack or defense actions should be displayed depending
+  //on what side the team goals is and whether they are attacking or defending
+  bool displayAttackActions = false;
+  bool attackIsLeft = globalController.attackIsLeft.value;
+  bool fieldIsLeft = globalController.fieldIsLeft.value;
+
+  // when our goal is to the right (= attackIsLeft) and the field is left
+  //display attack options
+  if (attackIsLeft && fieldIsLeft) {
+    displayAttackActions = true;
+    // when our goal is to the left (=attack is right) and the field is to the
+    //right display attack options
+  } else if (attackIsLeft == false && fieldIsLeft == false) {
+    displayAttackActions = true;
+  }
+  // alert contains a list of DialogButton objects
   Alert(
           context: context,
           title: "Select an action",
-          // alert contains a list of DialogButton objects
-          buttons: globalController.leftSide.value
+          // when displayAttackActions is true display buttonlist with attack
+          //options otherwise with defense options
+          buttons: displayAttackActions
               ? buildDialogButtonList(context, attackActions)
               : buildDialogButtonList(context, defenseActions))
       .show();
@@ -62,7 +79,7 @@ DialogButton buildDialogButton(BuildContext context, String buttonText) {
       "club_id": "-1",
       "game_id": mostRecentGame,
       "player_id": "",
-      "type": globalController.leftSide.value ? "attack" : "defense",
+      "type": globalController.fieldIsLeft.value ? "attack" : "defense",
       "action_type": buttonText,
       "position": "",
       "timestamp": unixTime,
@@ -95,18 +112,14 @@ DialogButton buildDialogButton(BuildContext context, String buttonText) {
 //   // menu that allows to add log actions that happen during the game
 
 //   final GlobalController globalController = Get.find<GlobalController>();
-  
-
-  
 
 //   @override
 //   Widget build(BuildContext context) {
 //     return Container();
 //   }
 
-//   
-  
+//
 
-//   
-  
+//
+
 // }
