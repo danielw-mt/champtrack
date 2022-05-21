@@ -31,6 +31,16 @@ class GlobalController extends GetxController {
     mode: StopWatchMode.countUp,
   ).obs;
 
+  //////
+  /// Main screen
+  //////
+
+  /// text to be displayed in the player menu title
+  var playerMenuText = "Select a player".obs;
+
+  /// last clicked player in the player menu
+  var lastClickedPlayer = "".obs;
+
   ////
   // game tracking
   ////
@@ -38,7 +48,7 @@ class GlobalController extends GetxController {
   /// True: home team is playing on the left; False: home team is defending
   var fieldIsLeft = true.obs;
 
-  /// Storing game actions
+  /// Storing game actions as Map<String, dynamic>
   var actions = [].obs;
 
   /// True: game was started; False game did not start yet
