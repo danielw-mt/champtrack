@@ -69,19 +69,22 @@ DialogButton buildDialogButton(BuildContext context, String buttonText) {
       print("goal player clicked twice");
       // if it was a solo goal the action type has to be updated to "Tor Solo"
       if (wasAssist() == false) {
+        print("solo goal");
         // update data for person that shot the goal
         lastActionData["player_id"] = goalScorer;
-        lastActionData["action_type"] == "Tor solo";
+        lastActionData["action_type"] = "Tor solo";
         await db
             .collection("gameData")
             .doc(mostRecentActionId)
             .update(lastActionData);
+        globalController.actions.last = lastActionData;
         globalController.lastClickedPlayer.value = "";
+        globalController.refresh();
       } else {
         // if it was an assist update data for both
         // person that scored goal
         lastActionData["player_id"] = goalScorer;
-        lastActionData["action_type"] == "Tor solo";
+        lastActionData["action_type"] = "Tor nach Assist";
         await db
             .collection("gameData")
             .doc(mostRecentActionId)
