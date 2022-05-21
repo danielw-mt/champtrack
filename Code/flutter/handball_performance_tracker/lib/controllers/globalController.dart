@@ -22,6 +22,7 @@ class GlobalController extends GetxController {
 
   /// by default attack is at the left side of the screen
   /// during half time this can be switched
+  /// @return rx boolean
   var attackIsLeft = true.obs;
 
   ////
@@ -34,33 +35,49 @@ class GlobalController extends GetxController {
   //////
   /// Main screen
   //////
-
+  
+  /// @return rxString
   /// text to be displayed in the player menu title
   var playerMenuText = "Select a player".obs;
 
-  /// last clicked player in the player menu
+  /// @return rxString
+  /// last clicked player name in the player menu
   var lastClickedPlayer = "".obs;
 
   ////
   // game tracking
   ////
-
+  
+  /// @return rxBool
   /// True: home team is playing on the left; False: home team is defending
   var fieldIsLeft = true.obs;
 
-  /// Storing game actions as Map<String, dynamic>
+  /// @return rx list
+  /// Storing game actions as Map<String, dynamic> inside this list
   var actions = [].obs;
 
+  /// @return rxBool
   /// True: game was started; False game did not start yet
   var gameStarted = false.obs;
 
-  /// id of last action written to db
+  /// @return rxString
+  /// firebase id of last action document written to gameData collection
   var lastGameActionId = "".obs;
 
+  /// @return rxString
   /// id of last game object written to db
   var currentGameId = "".obs;
+
+  /// @return rxInt
+  /// how many goals the user's team scored
   var homeTeamGoals = 0.obs;
+
+  /// @return rxInt
+  /// how many goals the guest's team scored
   var guestTeamGoals = 0.obs;
 
+  /// @return rxString
+  /// location that was saved when clicking on a point in the field 'sector', 
+  /// 'in 6m', 'in 9m'
   var lastLocation = "".obs;
 }
