@@ -21,6 +21,20 @@ List<String> defenseActions = [
 ];
 
 void callActionMenu(BuildContext context) {
+  final GlobalController globalController = Get.find<GlobalController>();
+  // if game is not running give a warning
+  if (globalController.gameStarted.value == false) {
+    Alert(
+      context: context,
+      title: "Error game did not start yet",
+      type: AlertType.error,
+    )
+        // when displayAttackActions is true display buttonlist with attack
+        //options otherwise with defense options
+
+        .show();
+    return;
+  }
   // alert contains a list of DialogButton objects
   Alert(
           context: context,
