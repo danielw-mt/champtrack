@@ -1,23 +1,30 @@
 import 'package:flutter/material.dart';
-import 'package:handball_performance_tracker/widgets/main_screen/field_helper.dart';
+import 'package:handball_performance_tracker/utils/main_screen_field_helper.dart';
+import '../../controllers/globalController.dart';
+import 'package:get/get.dart';
+import 'actionmenu.dart';
 
 // Class that returns a FieldPainter with a GestureDetecture, i.e. the Painted halffield with the possibility to get coordinates on click.
 class CustomField extends StatelessWidget {
-  const CustomField({Key? key, required this.leftSide}) : super(key: key);
-
-  // Parameter to determine if right or left field side is shown
-  final bool leftSide;
-
+  final GlobalController globalController = Get.find<GlobalController>();
+  bool fieldIsLeft = true;
+  CustomField({required fieldIsLeft}) {
+    this.fieldIsLeft = fieldIsLeft;
+  }
   @override
   Widget build(BuildContext context) {
+    globalController.fieldIsLeft.value = this.fieldIsLeft;
     return CustomPaint(
-      painter: FieldPainter(leftSide),
+      painter: FieldPainter(fieldIsLeft),
       // GestureDetector to handle on click or swipe
       child: GestureDetector(
-        // handle coordinates on click
-        onTapDown: (TapDownDetails details) =>
-            SectorCalc(leftSide).calculatePosition(details.localPosition),
-      ),
+          // handle coordinates on click
+          onTapDown: (TapDownDetails details) {
+        callActionMenu(context);
+        String location =
+            SectorCalc(fieldIsLeft).calculatePosition(details.localPosition);
+        globalController.lastLocation.value = location;
+      }),
     );
   }
 }
@@ -27,17 +34,17 @@ class CustomField extends StatelessWidget {
 * @return   Returns a Pageview with left field side and right field side as children.
 */
 class FieldSwitch extends StatelessWidget {
-  const FieldSwitch({Key? key}) : super(key: key);
+  final GlobalController globalController = Get.find<GlobalController>();
 
   @override
   Widget build(BuildContext context) {
     return PageView(
       children: <Widget>[
-        const CustomField(
-          leftSide: true,
+        CustomField(
+          fieldIsLeft: true,
         ),
-        const CustomField(
-          leftSide: false,
+        CustomField(
+          fieldIsLeft: false,
         ),
       ],
     );

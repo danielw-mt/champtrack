@@ -51,7 +51,7 @@ class GameStartStopButtons extends StatelessWidget {
               context: context,
               title: "Warning",
               type: AlertType.error,
-              desc: "You have tried to start the game without enough players")
+              desc: "You can only start the game with 7 players on the field")
           .show();
       return;
     }

@@ -171,6 +171,8 @@ class StopWatch extends GetView<GlobalController> {
                                 onPressed: () async {
                                   int currentTime =
                                       stopWatchTimer.rawTime.value;
+                                  // make sure the timer can't go negative
+                                  if (currentTime <= 1000) return;
                                   stopWatchTimer.clearPresetTime();
                                   if (stopWatchTimer.isRunning) {
                                     stopWatchTimer.onExecute
