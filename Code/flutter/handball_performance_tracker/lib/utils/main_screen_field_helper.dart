@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:handball_performance_tracker/controllers/fieldSizeParameter.dart'
+import 'package:handball_performance_tracker/utils/fieldSizeParameter.dart'
     as fieldSizeParameter;
 
 /* Class to calculate if a click was inside or outside a section.
@@ -19,23 +19,13 @@ class SectorCalc {
     }
   }
 
-  calculatePosition(Offset position) {
+  String calculatePosition(Offset position) {
     num x = position.dx;
     num y = position.dy;
 
-    inSector(x, y);
-    if (inNineMeterEllipse(x, y)) {
-      print("in 9m!");
-    } else {
-      print("not in 9m!");
-    }
-
-    if (inSixMeterEllipse(x, y)) {
-      print("in 6m!");
-    } else {
-      print("not in 6m!");
-    }
-    print("");
+    int sector = determineSector(x, y);
+    String perimeters = determinePerimeter(x, y);
+    return "sector "+sector.toString()+" and "+perimeters;
   }
 
   /* Calculates if a point (x,y) is inside the smaller ellipse.
@@ -70,10 +60,31 @@ class SectorCalc {
         1;
   }
 
+  /// deterime whether throw was from within 6m, 9m or further
+  /// @return boolan list [within 6m, within 9m]
+  String determinePerimeter(num x, num y) {
+    String in9m = "";
+    String in6m = "";
+    if (inNineMeterEllipse(x, y)) {
+      in9m = "in 9m";
+    } else {
+      in9m = "not in 9m";
+    }
+
+    if (inSixMeterEllipse(x, y)) {
+      in6m = "in 6m";
+    } else {
+      in6m = "not in 6m";
+    }
+    return in6m + " and "+in9m;
+  }
+
   /* 
   * Calculates if a point (x,y) is between two sector borders. 
   */
-  inSector(num x, num y) {
+  int determineSector(num x, num y) {
+    int sector = -1;
+
     // variables for gradient and intercept of lower line, the first lower line is the bottom horizontal line
     num lowerGradient = 0;
     num lowerIntercept = fieldSizeParameter.fieldHeight;
@@ -98,11 +109,14 @@ class SectorCalc {
       // check if (x,y) is below this line and still above the line below
       bool inSector = (gradient * x + yIntercept <= y) &&
           (lowerGradient * x + lowerIntercept > y);
-      print("is in Sector $i : $inSector");
+      //print("is in Sector $i : $inSector");
       lowerGradient = gradient;
       lowerIntercept = yIntercept;
+      if (inSector == true) {
+        sector = i;
+      }
     }
-    return false;
+    return sector;
   }
 }
 

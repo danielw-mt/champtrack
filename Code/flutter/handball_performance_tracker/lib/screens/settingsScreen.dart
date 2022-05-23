@@ -7,7 +7,6 @@ import './../controllers/globalController.dart';
 
 class SettingsScreen extends GetView<GlobalController> {
   // screen that allows players to be selected including what players are on the field or on the bench (non selected)
-
   final GlobalController globalController = Get.find<GlobalController>();
 
   @override
@@ -59,7 +58,15 @@ class SettingsScreen extends GetView<GlobalController> {
             }
             return Container();
           }),
-          GameStartStopButtons()
+          GameStartStopButtons(),
+          Text("Home goal is right side of screen"),
+          Obx(() => Switch(
+              value: globalController.attackIsLeft.value,
+              onChanged: (bool) {
+                globalController.attackIsLeft.value =
+                    !globalController.attackIsLeft.value;
+                globalController.refresh();
+              }))
         ],
       ),
     );

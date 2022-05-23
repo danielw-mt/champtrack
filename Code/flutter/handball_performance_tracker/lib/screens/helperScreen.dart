@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import './../../controllers/globalController.dart';
 import './../widgets/helper_screen/stopwatch.dart';
-import '../widgets/helper_screen/actionmenu.dart';
-import './../widgets/helper_screen/playermenu.dart';
+import '../widgets/main_screen/actionmenu.dart';
+import '../widgets/main_screen/playermenu.dart';
 
 class HelperScreen extends GetView<GlobalController> {
   @override
@@ -15,8 +15,6 @@ class HelperScreen extends GetView<GlobalController> {
         body: Column(
           children: [
             StopWatch(),
-            ActionMenu(),
-            PlayerMenu(),
           ],
         ));
   }
