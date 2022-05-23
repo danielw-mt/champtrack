@@ -1,7 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:get/get.dart';
 import 'package:handball_performance_tracker/data/player.dart';
 
+import '../controllers/globalController.dart';
+
 class DatabaseRepository {
+  GlobalController globalController = Get.find<GlobalController>();
   final FirebaseFirestore _db = FirebaseFirestore.instance;
 
   Future<DocumentReference> addPlayer(Player player){
@@ -17,6 +21,6 @@ class DatabaseRepository {
   }
 
   Stream<QuerySnapshot> getPlayerStream() {
-    return _db.collection("player").snapshots();
+    return _db.collection("player").where("clubId", isEqualTo: globalController.currentClubId.value).snapshots();
   }
 }
