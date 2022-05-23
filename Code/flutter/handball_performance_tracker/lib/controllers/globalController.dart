@@ -2,14 +2,21 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 
+import '../data/player.dart';
+
 class GlobalController extends GetxController {
   // Class for managing global state of the app
   // Refer to https://github.com/jonataslaw/getx/wiki/State-Management
 
+  ///
+  // currently signed in club
+  /// @return rxString
+  var currentClubId = "-1".obs;
+
   ////
   // settingsscreen
   ////
-  var selectedPlayer = "".obs;
+  final selectedPlayer = Player().obs;
   var availablePlayers = [].obs;
   var chosenPlayers = [].obs;
   // boolean list of chosen players i.e. true, true, false would mean the first two players start

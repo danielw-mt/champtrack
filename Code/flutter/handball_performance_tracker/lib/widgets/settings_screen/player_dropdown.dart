@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import './../../controllers/globalController.dart';
+import '../../data/database_repository.dart';
+import '../../data/player.dart';
+import '../../controllers/globalController.dart';
 import 'package:get/get.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -8,35 +10,28 @@ class PlayerDropdown extends StatelessWidget {
 
   GlobalController globalController = Get.find<GlobalController>();
 
-  setFirstPlayerName() async {
-    String playerName = "";
-    FirebaseFirestore.instance
-      ..collection("players").get().then((res) {
-        print("Successfully completed");
-        playerName = "" + res.docs.first.get("first_name") + " ";
-        playerName = playerName + res.docs.first.get("last_name");
-        this.globalController.selectedPlayer.value = playerName;
-      });
-  }
-
   @override
   Widget build(BuildContext context) {
-    setFirstPlayerName();
-    List<String> availablePlayers = [];
-    var collection = FirebaseFirestore.instance.collection("players");
-    final docRef = FirebaseFirestore.instance.collection("players").doc;
+    print("in dropdown build"); 
+    DatabaseRepository repository = DatabaseRepository();
 
-    return StreamBuilder(
-      stream: collection.snapshots(),
-      builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+    List<Player> availablePlayers = [];
+
+    
+
+    return StreamBuilder<QuerySnapshot>(
+      stream: repository.getPlayerStream(),
+      builder: (context, snapshot) {
         if (snapshot.hasData) {
-          snapshot.data!.docs.forEach((element) {
-            String firstName = element.get("first_name");
-            String lastName = element.get("last_name");
-            availablePlayers.add(firstName + " " + lastName);
-          });
+          // set default selection
+          globalController.selectedPlayer.value = Player.fromDocumentSnapshot(snapshot.data!.docs[0] as DocumentSnapshot<Map<String, dynamic>>);
+          for (var element in snapshot.data!.docs) {
+            Player player = Player.fromDocumentSnapshot(element as DocumentSnapshot<Map<String, dynamic>>);
+            availablePlayers.add(player);
+          }
+          //globalController.selectedPlayer.value();
           return Obx(() => DropdownButton<String>(
-                value: globalController.selectedPlayer.value,
+                value: globalController.selectedPlayer.value.name,
                 icon: const Icon(Icons.arrow_downward),
                 elevation: 16,
                 style: const TextStyle(color: Colors.deepPurple),
@@ -45,13 +40,13 @@ class PlayerDropdown extends StatelessWidget {
                   color: Colors.deepPurpleAccent,
                 ),
                 onChanged: (String? newValue) {
-                  globalController.selectedPlayer.value = newValue.toString();
+                  print("$newValue"); 
+                  globalController.selectedPlayer.value = availablePlayers.firstWhere((element) => element.name == newValue);
                 },
-                items: availablePlayers
-                    .map<DropdownMenuItem<String>>((String list_value) {
+                items: availablePlayers.map<DropdownMenuItem<String>>((Player player) {
                   return DropdownMenuItem<String>(
-                    value: list_value,
-                    child: Text(list_value),
+                    value: player.name,
+                    child: Text(player.name),
                   );
                 }).toList(),
               ));
