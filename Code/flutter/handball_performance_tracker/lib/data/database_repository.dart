@@ -4,6 +4,7 @@ import 'package:handball_performance_tracker/data/player.dart';
 
 import '../controllers/globalController.dart';
 
+// TODO rename collection "player" to "players" and fix in firestore before merging to master
 class DatabaseRepository {
   GlobalController globalController = Get.find<GlobalController>();
   final FirebaseFirestore _db = FirebaseFirestore.instance;

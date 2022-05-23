@@ -12,21 +12,20 @@ class PlayerDropdown extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print("in dropdown build"); 
     DatabaseRepository repository = DatabaseRepository();
 
     List<Player> availablePlayers = [];
-
-    
 
     return StreamBuilder<QuerySnapshot>(
       stream: repository.getPlayerStream(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           // set default selection
-          globalController.selectedPlayer.value = Player.fromDocumentSnapshot(snapshot.data!.docs[0] as DocumentSnapshot<Map<String, dynamic>>);
+          globalController.selectedPlayer.value = Player.fromDocumentSnapshot(
+              snapshot.data!.docs[0] as DocumentSnapshot<Map<String, dynamic>>);
           for (var element in snapshot.data!.docs) {
-            Player player = Player.fromDocumentSnapshot(element as DocumentSnapshot<Map<String, dynamic>>);
+            Player player = Player.fromDocumentSnapshot(
+                element as DocumentSnapshot<Map<String, dynamic>>);
             availablePlayers.add(player);
           }
           //globalController.selectedPlayer.value();
@@ -40,10 +39,11 @@ class PlayerDropdown extends StatelessWidget {
                   color: Colors.deepPurpleAccent,
                 ),
                 onChanged: (String? newValue) {
-                  print("$newValue"); 
-                  globalController.selectedPlayer.value = availablePlayers.firstWhere((element) => element.name == newValue);
+                  globalController.selectedPlayer.value = availablePlayers
+                      .firstWhere((element) => element.name == newValue);
                 },
-                items: availablePlayers.map<DropdownMenuItem<String>>((Player player) {
+                items: availablePlayers
+                    .map<DropdownMenuItem<String>>((Player player) {
                   return DropdownMenuItem<String>(
                     value: player.name,
                     child: Text(player.name),
