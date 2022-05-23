@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:handball_performance_tracker/data/game.dart';
+import '../../data/database_repository.dart';
 import './../../controllers/globalController.dart';
+import './../../data/game.dart';
+import './../../data/player.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
@@ -7,7 +11,7 @@ import 'package:stop_watch_timer/stop_watch_timer.dart';
 
 class GameStartStopButtons extends StatelessWidget {
   GlobalController globalController = Get.find<GlobalController>();
-  var db = FirebaseFirestore.instance;
+  DatabaseRepository repository = DatabaseRepository();
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +45,8 @@ class GameStartStopButtons extends StatelessWidget {
             ));
   }
 
-  void startGame(BuildContext context) {
+  void startGame(BuildContext context) async {
+    print("in start game"); 
     // check if enough players have been selected
     var numPlayersOnField =
         globalController.playersOnField.where((c) => c == true).toList().length;
@@ -59,17 +64,16 @@ class GameStartStopButtons extends StatelessWidget {
     // start a new game in firebase
     DateTime dateTime = DateTime.now();
     int unixTimeStamp = dateTime.toUtc().millisecondsSinceEpoch;
-    final game = {
-      "date": dateTime,
-      "start_time": unixTimeStamp,
-      "stop_time": "",
-      "score_home": "",
-      "score_guest": "",
-      "players": globalController.chosenPlayers
-    };
+    Game newGame = Game(
+        clubId: globalController.currentClubId.value,
+        date: dateTime,
+        startTime: unixTimeStamp,
+        players: globalController.chosenPlayers.cast<Player>());
 
-    db.collection("games").add(game).then((DocumentReference doc) =>
-        globalController.currentGameId.value = doc.id);
+    final DocumentReference ref = await repository.addGame(newGame);
+    newGame.id = ref.id;
+    globalController.currentGame.value = newGame;
+    print("start game, id: ${globalController.currentGame.value.id}");
 
     // activate the game timer
     globalController.stopWatchTimer.value.onExecute.add(StopWatchExecute.start);
@@ -80,18 +84,17 @@ class GameStartStopButtons extends StatelessWidget {
 
   void stopGame() async {
     // update game document in firebase
-    String currentGameId = globalController.currentGameId.value;
-    final gameDocument = db.collection("games").doc(currentGameId);
-    DocumentSnapshot documentSnapshot = await gameDocument.get();
-    Map<String, dynamic> documentData =
-        documentSnapshot.data() as Map<String, dynamic>;
+    Game currentGame = globalController.currentGame.value;
+    print("stop game, id: ${globalController.currentGame.value.id}");
+
     DateTime dateTime = DateTime.now();
-    int unixTimeStamp = dateTime.toUtc().millisecondsSinceEpoch;
-    documentData["stop_time"] = unixTimeStamp;
-    documentData["score_home"] = globalController.homeTeamGoals.value;
-    documentData["score_guest"] = globalController.guestTeamGoals.value;
-    documentData["players"] = globalController.chosenPlayers;
-    await db.collection("games").doc(currentGameId).update(documentData);
+    currentGame.date = dateTime;
+    currentGame.stopTime = dateTime.toUtc().millisecondsSinceEpoch;
+    currentGame.score = globalController.homeTeamGoals.value;
+    currentGame.scoreOpponent = globalController.guestTeamGoals.value;
+    currentGame.players = globalController.chosenPlayers.cast<Player>();
+
+    repository.updateGame(currentGame);
 
     // stop the game timer
     globalController.stopWatchTimer.value.onExecute.add(StopWatchExecute.stop);

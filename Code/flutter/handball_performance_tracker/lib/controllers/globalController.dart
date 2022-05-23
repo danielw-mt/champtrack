@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 
+import '../data/game.dart';
 import '../data/player.dart';
 
 class GlobalController extends GetxController {
@@ -71,9 +72,9 @@ class GlobalController extends GetxController {
   /// firebase id of last action document written to gameData collection
   var lastGameActionId = "".obs;
 
-  /// @return rxString
-  /// id of last game object written to db
-  var currentGameId = "".obs;
+  /// @return rx<Game>
+  /// last game object written to db
+  final currentGame = Game(date : DateTime.now()).obs;
 
   /// @return rxInt
   /// how many goals the user's team scored

@@ -2,8 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'player.dart';
 
 class Game {
-  final String? id;
-  final String club;
+  String? id;
+  final String clubId;
   DateTime date;
   int? startTime;
   int? stopTime;
@@ -13,17 +13,17 @@ class Game {
 
   Game(
       {this.id,
-      required this.club,
+      this.clubId = "",
       required this.date,
       this.startTime,
       this.stopTime,
-      this.score,
-      this.scoreOpponent,
+      this.score = 0,
+      this.scoreOpponent = 0,
       this.players = const []});
 
   Map<String, dynamic> toMap() {
     return {
-      'club': club,
+      'clubId': clubId,
       'date': date,
       'startTime': startTime,
       'stopTime': stopTime,
@@ -33,13 +33,20 @@ class Game {
     };
   }
 
-  Game.fromDocumentSnapshot(DocumentSnapshot<Map<String, dynamic>> doc)
-      : id = doc.id,
-        club = doc.data()!["club"],
-        date = doc.data()!["date"],
-        startTime = doc.data()!["startTime"],
-        stopTime = doc.data()!["stopTime"],
-        score = doc.data()!["score"],
-        scoreOpponent = doc.data()!["scoreOpponent"],
-        players = doc.data()!["players"];
+  factory Game.fromDocumentSnapshot(DocumentSnapshot doc) {
+    final newGame = Game.fromMap(doc.data() as Map<String, dynamic>);
+    newGame.id = doc.reference.id;
+    return newGame;
+  }
+
+  factory Game.fromMap(Map<String, dynamic> map) {
+    return Game(
+        clubId: map["clubId"],
+        date: map["date"],
+        startTime: map["startTime"],
+        stopTime: map["stopTime"],
+        score: map["score"],
+        scoreOpponent: map["scoreOpponent"],
+        players: map["players"].cast<String>());
+  }
 }
