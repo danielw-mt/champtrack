@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:handball_performance_tracker/data/game.dart';
+import 'package:handball_performance_tracker/data/game_action.dart';
 import 'package:handball_performance_tracker/data/player.dart';
 
 import '../controllers/globalController.dart';
@@ -54,5 +55,31 @@ class DatabaseRepository {
         .where("clubId", isEqualTo: globalController.currentClubId.value)
         .where("gameId", isEqualTo: globalController.currentGame.value.id)
         .snapshots();
+  }
+
+  Future<DocumentReference> addActionToGame(GameAction action) async {
+    return _db
+        .collection("gameData")
+        .doc(action.gameId)
+        .collection("actions")
+        .add(action.toMap());
+  }
+
+  void updateAction(GameAction action) async {
+    await _db
+        .collection("gameData")
+        .doc(action.gameId)
+        .collection("actions")
+        .doc(action.id)
+        .update(action.toMap());
+  }
+
+  void deleteAction(GameAction action) async {
+    await _db
+        .collection("gameData")
+        .doc(action.gameId)
+        .collection("actions")
+        .doc(action.id)
+        .delete();
   }
 }

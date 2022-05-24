@@ -111,7 +111,7 @@ class GameStartStopButtons extends StatelessWidget {
     for (Player player in globalController.chosenPlayers) {
       if (!player.games.contains(game.id)) {
         player.games.add(game.id!);
-        repository.updatePlayer(player);
+        repository.updatePlayer(player);//TODO maybe only update on stop?
       }
     }
   }

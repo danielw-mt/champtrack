@@ -48,9 +48,9 @@ class GlobalController extends GetxController {
   /// text to be displayed in the player menu title
   var playerMenuText = "Select a player".obs;
 
-  /// @return rxString
-  /// last clicked player name in the player menu
-  var lastClickedPlayer = "".obs;
+  /// @return Rx<Player>
+  /// corresponding player object for last clicked player name in the player menu
+  var lastClickedPlayer = Player().obs;
 
   ////
   // game tracking
@@ -61,16 +61,12 @@ class GlobalController extends GetxController {
   var fieldIsLeft = true.obs;
 
   /// @return rx list
-  /// Storing game actions as Map<String, dynamic> inside this list
+  /// Storing game actions as GameAction objects inside this list
   var actions = [].obs;
 
   /// @return rxBool
   /// True: game was started; False game did not start yet
   var gameStarted = false.obs;
-
-  /// @return rxString
-  /// firebase id of last action document written to gameData collection
-  var lastGameActionId = "".obs;
 
   /// @return rx<Game>
   /// last game object written to db
