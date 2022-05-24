@@ -46,7 +46,7 @@ class GameStartStopButtons extends StatelessWidget {
   }
 
   void startGame(BuildContext context) async {
-    print("in start game"); 
+    print("in start game");
     // check if enough players have been selected
     var numPlayersOnField =
         globalController.playersOnField.where((c) => c == true).toList().length;
@@ -75,6 +75,9 @@ class GameStartStopButtons extends StatelessWidget {
     globalController.currentGame.value = newGame;
     print("start game, id: ${globalController.currentGame.value.id}");
 
+    // add game to selected players
+    _addGameToPlayers(newGame);
+
     // activate the game timer
     globalController.stopWatchTimer.value.onExecute.add(StopWatchExecute.start);
 
@@ -101,5 +104,15 @@ class GameStartStopButtons extends StatelessWidget {
 
     globalController.gameStarted.value = false;
     globalController.refresh();
+  }
+
+  // TODO wo können wir solche helper-functions hinpacken und trotzdem auf das repo/globalController Objekt zugreifen?
+  void _addGameToPlayers(Game game) {
+    for (Player player in globalController.chosenPlayers) {
+      if (!player.games.contains(game.id)) {
+        player.games.add(game.id!);
+        repository.updatePlayer(player);
+      }
+    }
   }
 }

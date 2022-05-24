@@ -8,15 +8,15 @@ class Player {
   List<String> position;
   List<String> games;
   final String clubId;
-  LiveEfScore efScore; 
+  LiveEfScore efScore;
 
-  Player({
-    this.id,
-    this.name = "",
-    this.position = const [],
-    this.clubId = "",
-    this.games = const []
-  }) : efScore = LiveEfScore();
+  Player(
+      {this.id,
+      this.name = "",
+      this.position = const [],
+      this.clubId = "",
+      this.games = const []})
+      : efScore = LiveEfScore();
 
   Map<String, dynamic> toMap() {
     return {
@@ -35,10 +35,12 @@ class Player {
 
   factory Player.fromMap(Map<String, dynamic> map) {
     return Player(
-      name: map["name"],
-      position: map["position"].cast<String>(),
-      clubId: map["clubId"],
-      games: map["games"].cast<String>()
-    );
+        name: map["name"],
+        position: map["position"].cast<String>(),
+        clubId: map["clubId"],
+        games: map["games"].cast<String>());
   }
+
+  bool operator ==(dynamic other) =>
+      other != null && other is Player && id == other.id;
 }

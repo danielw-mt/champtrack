@@ -26,9 +26,10 @@ class PlayerDropdown extends StatelessWidget {
           for (var element in snapshot.data!.docs) {
             Player player = Player.fromDocumentSnapshot(
                 element as DocumentSnapshot<Map<String, dynamic>>);
-            availablePlayers.add(player);
+            if (!availablePlayers.contains(player)) {
+              availablePlayers.add(player);
+            }
           }
-          //globalController.selectedPlayer.value();
           return Obx(() => DropdownButton<String>(
                 value: globalController.selectedPlayer.value.name,
                 icon: const Icon(Icons.arrow_downward),
