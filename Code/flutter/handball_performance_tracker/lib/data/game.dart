@@ -7,7 +7,7 @@ class Game {
   DateTime date;
   int? startTime;
   int? stopTime;
-  int? score;
+  int? scoreHome;
   int? scoreOpponent;
   List<Player> players;
 
@@ -17,7 +17,7 @@ class Game {
       required this.date,
       this.startTime,
       this.stopTime,
-      this.score = 0,
+      this.scoreHome = 0,
       this.scoreOpponent = 0,
       this.players = const []});
 
@@ -27,7 +27,7 @@ class Game {
       'date': date,
       'startTime': startTime,
       'stopTime': stopTime,
-      'score': score,
+      'scoreHome': scoreHome,
       'scoreOpponent': scoreOpponent,
       'players': players.map((player) => player.id).toList()
     };
@@ -45,7 +45,7 @@ class Game {
         date: map["date"],
         startTime: map["startTime"],
         stopTime: map["stopTime"],
-        score: map["score"],
+        scoreHome: map["scoreHome"],
         scoreOpponent: map["scoreOpponent"],
         players: map["players"].cast<String>());
   }
