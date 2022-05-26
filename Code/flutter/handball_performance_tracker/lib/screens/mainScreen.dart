@@ -18,15 +18,17 @@ class MainScreen extends StatelessWidget {
       appBar: AppBar(title: const Text("Title")),
       body: Column(
         children: [
-          SizedBox(
+          Container(
+            decoration: BoxDecoration(
+                // set border around field
+                border: Border.all(width: fieldSizeParameter.lineSize)),
+            child: SizedBox(
               // FieldSwitch to swipe between right and left field side. SizedBox around it so there is no rendering error.
               width: fieldSizeParameter.fieldWidth,
               height: fieldSizeParameter.fieldHeight,
-              child: FieldSwitch()),
-          TextButton(
-              onPressed: () {},
-              child: const Text(
-                  "Testbutton")) // just a testbutton to see that it doesn't vanish when swiping from left to right field side
+              child: FieldSwitch(),
+            ),
+          ),
         ],
       ),
     );
