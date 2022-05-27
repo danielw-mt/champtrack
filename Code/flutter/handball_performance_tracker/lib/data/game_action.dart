@@ -22,6 +22,7 @@ class GameAction {
       this.timestamp = 0,
       this.relativeTime = 0});
 
+  // @return Map<String,dynamic> as representation of GameAction object that can be saved to firestore
   Map<String, dynamic> toMap() {
     return {
       'clubId': clubId,
@@ -34,13 +35,15 @@ class GameAction {
       'relativeTime': relativeTime
     };
   }
-
+  
+  // @return GameAction object according to GameAction data fetched from firestore
   factory GameAction.fromDocumentSnapshot(DocumentSnapshot doc) {
     final newAction = GameAction.fromMap(doc.data() as Map<String, dynamic>);
     newAction.id = doc.reference.id;
     return newAction;
   }
 
+  // @return GameAction object created from map representation of GameAction
   factory GameAction.fromMap(Map<String, dynamic> map) {
     return GameAction(
         clubId: map['clubId'],
@@ -53,6 +56,7 @@ class GameAction {
         relativeTime: map['relativeTime']);
   }
 
+  // @return a new GameAction instance with the exact same properties as @param action
   GameAction.clone(GameAction action)
       : this(
             actionType: action.actionType,

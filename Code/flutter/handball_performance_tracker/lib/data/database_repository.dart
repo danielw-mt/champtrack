@@ -11,18 +11,22 @@ class DatabaseRepository {
   GlobalController globalController = Get.find<GlobalController>();
   final FirebaseFirestore _db = FirebaseFirestore.instance;
 
+  // @return asynchronous reference to Player object that was saved to firebase
   Future<DocumentReference> addPlayer(Player player) {
     return _db.collection("player").add(player.toMap());
   }
-
+  
+  // update a Player's firestore record according to @param player properties
   void updatePlayer(Player player) async {
     await _db.collection("player").doc(player.id).update(player.toMap());
   }
 
+  // delete a Player's firestore record with a given @param documentId
   void deletePlayer(String documentId) async {
     await _db.collection("player").doc(documentId).delete();
   }
 
+  // query all players of the current club
   Stream<QuerySnapshot> getPlayerStream() {
     return _db
         .collection("player")
@@ -30,18 +34,22 @@ class DatabaseRepository {
         .snapshots();
   }
 
+  // @return asynchronous reference to Game object that was saved to firebase
   Future<DocumentReference> addGame(Game game) async {
     return _db.collection("games").add(game.toMap());
   }
 
+  // update a Game's firestore record according to @param game properties
   void updateGame(Game game) async {
     await _db.collection("games").doc(game.id).update(game.toMap());
   }
 
+  // delete a Game's firestore record with a given @param documentId
   void deleteGame(String documentId) async {
     await _db.collection("games").doc(documentId).delete();
   }
 
+  // query all games of current club
   Stream<QuerySnapshot> getGameStream() {
     return _db
         .collection("games")
@@ -49,6 +57,7 @@ class DatabaseRepository {
         .snapshots();
   }
 
+  // query the current game
   Stream<QuerySnapshot> getCurrentGameStream() {
     return _db
         .collection("games")
@@ -57,6 +66,7 @@ class DatabaseRepository {
         .snapshots();
   }
 
+  // @return asynchronous reference to GameAction object that was saved to firebase
   Future<DocumentReference> addActionToGame(GameAction action) async {
     return _db
         .collection("gameData")
@@ -65,6 +75,7 @@ class DatabaseRepository {
         .add(action.toMap());
   }
 
+  // update a GameAction's firestore record according to @param action properties
   void updateAction(GameAction action) async {
     await _db
         .collection("gameData")
@@ -74,6 +85,7 @@ class DatabaseRepository {
         .update(action.toMap());
   }
 
+  // delete a the firestore record of a given @param action
   void deleteAction(GameAction action) async {
     await _db
         .collection("gameData")

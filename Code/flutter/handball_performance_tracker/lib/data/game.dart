@@ -21,6 +21,7 @@ class Game {
       this.scoreOpponent = 0,
       this.players = const []});
 
+  // @return Map<String,dynamic> as representation of Game object that can be saved to firestore
   Map<String, dynamic> toMap() {
     return {
       'clubId': clubId,
@@ -33,12 +34,14 @@ class Game {
     };
   }
 
+  // @return Game object according to Game data fetched from firestore
   factory Game.fromDocumentSnapshot(DocumentSnapshot doc) {
     final newGame = Game.fromMap(doc.data() as Map<String, dynamic>);
     newGame.id = doc.reference.id;
     return newGame;
   }
 
+  // @return Game object created from map representation of Game
   factory Game.fromMap(Map<String, dynamic> map) {
     return Game(
         clubId: map["clubId"],
