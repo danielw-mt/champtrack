@@ -20,6 +20,11 @@ class SectorCalc {
     }
   }
 
+  /* 
+   * @return List<String> consisting of two elements
+   * the first element is the sector number (from 0 to 5) converted to String,
+   * the second element is the distance of the player from the goal (<6, 6to9, >9)
+   */
   List<String> calculatePosition(Offset position) {
     num x = position.dx;
     num y = position.dy;
@@ -62,9 +67,9 @@ class SectorCalc {
   }
 
   /// deterime whether throw was from within 6m, 9m or further
-  /// @return boolan list [within 6m, within 9m]
+  /// @return String (<6, 6to9, >9)
   String determinePerimeter(num x, num y) {
-     bool inNineMeter = inNineMeterEllipse(x, y);
+    bool inNineMeter = inNineMeterEllipse(x, y);
     bool inSixMeter = inSixMeterEllipse(x, y);
     if (inNineMeter) {
       if (inSixMeter) {
