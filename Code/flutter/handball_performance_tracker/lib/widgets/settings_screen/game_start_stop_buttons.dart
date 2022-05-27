@@ -65,7 +65,7 @@ class GameStartStopButtons extends StatelessWidget {
     DateTime dateTime = DateTime.now();
     int unixTimeStamp = dateTime.toUtc().millisecondsSinceEpoch;
     Game newGame = Game(
-        clubId: globalController.currentClubId.value,
+        clubId: globalController.currentClub.value.id!,
         date: dateTime,
         startTime: unixTimeStamp,
         players: globalController.chosenPlayers.cast<Player>());

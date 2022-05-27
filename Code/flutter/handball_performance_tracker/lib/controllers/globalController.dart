@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 
+import '../data/club.dart';
 import '../data/game.dart';
 import '../data/player.dart';
 
@@ -12,7 +13,7 @@ class GlobalController extends GetxController {
   ///
   // currently signed in club
   /// @return rxString
-  var currentClubId = "-1".obs;
+  var currentClub = Club().obs;
 
   ////
   // settingsscreen

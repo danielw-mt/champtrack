@@ -6,7 +6,7 @@ class Club {
 
   Club({
     this.id,
-    required this.name,
+    this.name = "default club",
   });
 
   Map<String, dynamic> toMap() {

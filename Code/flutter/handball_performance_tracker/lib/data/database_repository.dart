@@ -26,7 +26,7 @@ class DatabaseRepository {
   Stream<QuerySnapshot> getPlayerStream() {
     return _db
         .collection("player")
-        .where("clubId", isEqualTo: globalController.currentClubId.value)
+        .where("clubId", isEqualTo: globalController.currentClub.value.id)
         .snapshots();
   }
 
@@ -45,14 +45,14 @@ class DatabaseRepository {
   Stream<QuerySnapshot> getGameStream() {
     return _db
         .collection("games")
-        .where("clubId", isEqualTo: globalController.currentClubId.value)
+        .where("clubId", isEqualTo: globalController.currentClub.value.id)
         .snapshots();
   }
 
   Stream<QuerySnapshot> getCurrentGameStream() {
     return _db
         .collection("games")
-        .where("clubId", isEqualTo: globalController.currentClubId.value)
+        .where("clubId", isEqualTo: globalController.currentClub.value.id)
         .where("gameId", isEqualTo: globalController.currentGame.value.id)
         .snapshots();
   }
