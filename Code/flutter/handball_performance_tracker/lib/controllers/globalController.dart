@@ -2,14 +2,23 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 
+import '../data/club.dart';
+import '../data/game.dart';
+import '../data/player.dart';
+
 class GlobalController extends GetxController {
   // Class for managing global state of the app
   // Refer to https://github.com/jonataslaw/getx/wiki/State-Management
 
+  ///
+  // currently signed in club
+  /// @return rxString
+  var currentClub = Club(id: "-1").obs;
+
   ////
   // settingsscreen
   ////
-  var selectedPlayer = "".obs;
+  final selectedPlayer = Player().obs;
   var availablePlayers = [].obs;
   var chosenPlayers = [].obs;
   // boolean list of chosen players i.e. true, true, false would mean the first two players start
@@ -37,7 +46,6 @@ class GlobalController extends GetxController {
   //////
   /// @return rxString
   /// name of the player who made a goal, used to adapt the respective button color.
-  var goalscorer = "".obs;
 
   /// @return rxString
   /// text to be displayed in the player menu title on the right side, changes after a goal
@@ -48,9 +56,9 @@ class GlobalController extends GetxController {
     playerMenuText.value = "Assist";
   }
 
-  /// @return rxString
-  /// last clicked player name in the player menu
-  var lastClickedPlayer = "".obs;
+  /// @return Rx<Player>
+  /// corresponding player object for last clicked player name in the player menu
+  var lastClickedPlayer = Player().obs;
 
   ////
   // game tracking
@@ -61,20 +69,16 @@ class GlobalController extends GetxController {
   var fieldIsLeft = true.obs;
 
   /// @return rx list
-  /// Storing game actions as Map<String, dynamic> inside this list
+  /// Storing game actions as GameAction objects inside this list
   var actions = [].obs;
 
   /// @return rxBool
   /// True: game was started; False game did not start yet
   var gameStarted = false.obs;
 
-  /// @return rxString
-  /// firebase id of last action document written to gameData collection
-  var lastGameActionId = "".obs;
-
-  /// @return rxString
-  /// id of last game object written to db
-  var currentGameId = "".obs;
+  /// @return rx<Game>
+  /// last game object written to db
+  final currentGame = Game(date: DateTime.now()).obs;
 
   /// @return rxInt
   /// how many goals the user's team scored
@@ -82,7 +86,7 @@ class GlobalController extends GetxController {
 
   /// @return rxInt
   /// how many goals the guest's team scored
-  var guestTeamGoals = 0.obs;
+  var opponentTeamGoals = 0.obs;
 
   /// @return rxString
   /// location that was saved when clicking on a point in the field 'sector',

@@ -1,10 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:handball_performance_tracker/data/database_repository.dart';
 import '../../controllers/globalController.dart';
 import 'package:get/get.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
+import '../../data/game_action.dart';
 import 'playermenu.dart';
 
+// TODO add to constants file
 List<String> attackActions = [
   "Tor",
   "1v1 & 7m",
@@ -19,6 +22,19 @@ List<String> defenseActions = [
   "Block ohne Ballgewinn",
   "Block & Steal"
 ];
+
+Map<String, String> actionMapping = {
+  "Tor": "goal",
+  "1v1 & 7m": "1v1",
+  "2min ziehen": "2min",
+  "Fehlwurf": "err-throw",
+  "TRF": "trf",
+  "Rote Karte": "red",
+  "Foul => 7m": "foul",
+  "Zeitstrafe": "penalty",
+  "Block ohne Ballgewinn": "block",
+  "Block & Steal": "block-steal"
+};
 
 void callActionMenu(BuildContext context) {
   final GlobalController globalController = Get.find<GlobalController>();
@@ -83,27 +99,26 @@ List<DialogButton> buildDialogButtonList(
 /// builds a single dialog button that logs its text (=action) to firestore
 //  and updates the game state
 DialogButton buildDialogButton(BuildContext context, String buttonText) {
-  FirebaseFirestore db = FirebaseFirestore.instance;
   final GlobalController globalController = Get.find<GlobalController>();
+  //TODO add repository instance to global controller?
+  DatabaseRepository repository = DatabaseRepository();
   void logAction() async {
     DateTime dateTime = DateTime.now();
     int unixTime = dateTime.toUtc().millisecondsSinceEpoch;
     int secondsSinceGameStart =
         globalController.stopWatchTimer.value.secondTime.value;
 
-    // TODO get most recent game id from DB gamestate or db instead of hardcoding
-    String mostRecentGame = "zqKzCZB5nGPVuF7H3CGe";
+    // get most recent game id from DB
+    String currentGameId = globalController.currentGame.value.id!;
 
-    Map<String, dynamic> action = {
-      "club_id": "-1",
-      "game_id": mostRecentGame,
-      "player_id": "",
-      "type": determineAttack() ? "attack" : "defense",
-      "action_type": buttonText,
-      "throw_location": globalController.lastLocation.value,
-      "timestamp": unixTime,
-      "relative_time": secondsSinceGameStart
-    };
+    GameAction action = GameAction(
+        clubId: globalController.currentClub.value.id!,
+        gameId: currentGameId,
+        type: determineAttack() ? "attack" : "defense",
+        actionType: actionMapping[buttonText]!,
+        throwLocation: globalController.lastLocation.value,
+        timestamp: unixTime,
+        relativeTime: secondsSinceGameStart);
     globalController.actions.add(action);
 
     // add action to firebase
@@ -111,8 +126,9 @@ DialogButton buildDialogButton(BuildContext context, String buttonText) {
     // store most recent action id in game state for the player menu
     // when a player was selected in that menu the action document can be
     // updated in firebase with their player_id using the action_id
-    db.collection("gameData").add(action).then((DocumentReference doc) =>
-        globalController.lastGameActionId.value = doc.id);
+    repository
+        .addActionToGame(action)
+        .then((DocumentReference doc) => action.id = doc.id);
   }
 
   return DialogButton(
