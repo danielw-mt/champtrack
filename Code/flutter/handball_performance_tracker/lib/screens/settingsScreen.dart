@@ -49,7 +49,7 @@ class SettingsScreen extends GetView<GlobalController> {
                                 chosenPlayers.removeAt(index);
                                 playersOnField.removeAt(index);
                               }),
-                          Text(globalController.chosenPlayers[index]),
+                          Text(globalController.chosenPlayers[index].name),
                           OnFieldCheckbox(index: index)
                         ],
                       );
