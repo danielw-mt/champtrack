@@ -13,24 +13,24 @@ class DatabaseRepository {
 
   // @return asynchronous reference to Player object that was saved to firebase
   Future<DocumentReference> addPlayer(Player player) {
-    return _db.collection("player").add(player.toMap());
+    return _db.collection("players").add(player.toMap());
   }
 
   // update a Player's firestore record according to @param player properties
   void updatePlayer(Player player) async {
-    await _db.collection("player").doc(player.id).update(player.toMap());
+    await _db.collection("players").doc(player.id).update(player.toMap());
   }
 
   // delete a Player's firestore record with a given @param documentId
   void deletePlayer(Player player) async {
     // TODO also delete all actions associated with player? delete player from all games?
-    await _db.collection("player").doc(player.id).delete();
+    await _db.collection("players").doc(player.id).delete();
   }
 
   // query all players of the current club
   Stream<QuerySnapshot> getPlayerStream() {
     return _db
-        .collection("player")
+        .collection("players")
         .where("clubId", isEqualTo: globalController.currentClub.value.id)
         .snapshots();
   }
