@@ -15,15 +15,16 @@ class DatabaseRepository {
   Future<DocumentReference> addPlayer(Player player) {
     return _db.collection("player").add(player.toMap());
   }
-  
+
   // update a Player's firestore record according to @param player properties
   void updatePlayer(Player player) async {
     await _db.collection("player").doc(player.id).update(player.toMap());
   }
 
   // delete a Player's firestore record with a given @param documentId
-  void deletePlayer(String documentId) async {
-    await _db.collection("player").doc(documentId).delete();
+  void deletePlayer(Player player) async {
+    // TODO also delete all actions associated with player? delete player from all games?
+    await _db.collection("player").doc(player.id).delete();
   }
 
   // query all players of the current club
@@ -47,6 +48,7 @@ class DatabaseRepository {
   // delete a Game's firestore record with a given @param documentId
   void deleteGame(String documentId) async {
     await _db.collection("games").doc(documentId).delete();
+    // TODO: delete game from games list of all players
   }
 
   // query all games of current club
