@@ -4,6 +4,7 @@ import 'ef_score.dart';
 class Player {
   String? id;
   String name;
+  int number;
   List<String> position;
   List<String> games;
   final String clubId;
@@ -12,6 +13,7 @@ class Player {
   Player(
       {this.id,
       this.name = "",
+      this.number = 0,
       this.position = const [],
       this.clubId = "",
       this.games = const []})
@@ -21,6 +23,7 @@ class Player {
   Map<String, dynamic> toMap() {
     return {
       'name': name,
+      'number': number,
       'position': position,
       'clubId': clubId,
       'games': games
@@ -38,6 +41,7 @@ class Player {
   factory Player.fromMap(Map<String, dynamic> map) {
     return Player(
         name: map["name"],
+        number : map["number"],
         position: map["position"].cast<String>(),
         clubId: map["clubId"],
         games: map["games"].cast<String>());
