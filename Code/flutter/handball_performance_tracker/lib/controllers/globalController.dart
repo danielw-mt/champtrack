@@ -88,8 +88,7 @@ class GlobalController extends GetxController {
   /// how many goals the guest's team scored
   var opponentTeamGoals = 0.obs;
 
-  /// @return rxString
-  /// location that was saved when clicking on a point in the field 'sector',
-  /// 'in 6m', 'in 9m'
-  var lastLocation = "".obs;
+  /// @return rx list
+  /// first element is the sector as a string, second element distinguishes the distance ("<6", "6to9", ">9")
+  var lastLocation = [].obs;
 }

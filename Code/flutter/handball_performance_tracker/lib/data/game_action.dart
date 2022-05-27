@@ -7,7 +7,7 @@ class GameAction {
   String playerId;
   String type;
   String actionType;
-  String throwLocation;
+  List<String> throwLocation;
   int timestamp;
   int relativeTime;
 
@@ -18,7 +18,7 @@ class GameAction {
       this.playerId = "",
       this.type = "",
       this.actionType = "",
-      this.throwLocation = "",
+      this.throwLocation = const [],
       this.timestamp = 0,
       this.relativeTime = 0});
 
@@ -51,7 +51,7 @@ class GameAction {
         playerId: map['playerId'],
         type: map['type'],
         actionType: map['actionType'],
-        throwLocation: map['throwLocation'],
+        throwLocation: map['throwLocation'].cast<String>(),
         timestamp: map['timestamp'],
         relativeTime: map['relativeTime']);
   }
