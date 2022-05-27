@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:handball_performance_tracker/utils/fieldSizeParameter.dart'
     as fieldSizeParameter;
+import 'dart:math' as math;
+import 'dart:ui' as ui;
 
 /* Class to calculate if a click was inside or outside a section.
 * 
@@ -25,7 +27,7 @@ class SectorCalc {
 
     int sector = determineSector(x, y);
     String perimeters = determinePerimeter(x, y);
-    return "sector "+sector.toString()+" and "+perimeters;
+    return "sector " + sector.toString() + " and " + perimeters;
   }
 
   /* Calculates if a point (x,y) is inside the smaller ellipse.
@@ -76,7 +78,7 @@ class SectorCalc {
     } else {
       in6m = "not in 6m";
     }
-    return in6m + " and "+in9m;
+    return in6m + " and " + in9m;
   }
 
   /* 
@@ -144,7 +146,7 @@ class FieldPainter extends CustomPainter {
             center: Offset(xOffset, fieldSizeParameter.fieldHeight / 2),
             width: fieldSizeParameter.nineMeterRadiusX * 2,
             height: fieldSizeParameter.nineMeterRadiusY * 2),
-        Paint()..color = Colors.black);
+        Paint()..color = Color.fromARGB(103, 169, 172, 209));
 
     // draw smaller 6m oval
     canvas.drawOval(
@@ -152,34 +154,36 @@ class FieldPainter extends CustomPainter {
             center: Offset(xOffset, fieldSizeParameter.fieldHeight / 2),
             width: fieldSizeParameter.sixMeterRadiusX * 2,
             height: fieldSizeParameter.sixMeterRadiusY * 2),
-        Paint()..color = Colors.grey.shade300);
+        Paint()..color = Color.fromARGB(141, 129, 142, 216));
 
-    // draw all sector borders by going through the lists containing gradient and y intersection
-    for (int i = 0; i < fieldSizeParameter.gradients.length; i++) {
-      /* To draw a line you need two points: (x1,y1) and (x2,y2)
-      * (x1,y1) is given: x1 is xOffset (0 for left side, fieldWidth for right side) and y1 is the given y intercept.
-      * (x2,y2) needs to be calculated: 
-      * - for the left side we define x2=fieldWidth and put it into the given line equation (gradient*x2+y_intercept)
-      * - for the right side we know gradient_right = -gradient_left and with this we calculate the y intercept.
-      *    So we also have a line equation and can put x2 into it to get y2.
-      */
-      double x2;
-      double y2;
-      if (leftSide) {
-        // left side
-        x2 = fieldSizeParameter.fieldWidth;
-        y2 = fieldSizeParameter.gradients[i] * x2 +
-            fieldSizeParameter.yIntercepts[i];
-      } else {
-        // right side
-        x2 = 0;
-        num gradient = -fieldSizeParameter.gradients[i];
-        num yIntercept = fieldSizeParameter.yIntercepts[i] - gradient * xOffset;
-        y2 = gradient * x2 + yIntercept;
-      }
-      canvas.drawLine(Offset(xOffset, fieldSizeParameter.yIntercepts[i]),
-          Offset(x2, y2), Paint()..color = Colors.blue);
+    // draw 7m line
+    // To draw a line you need two points: (x1,y1) and (x2,y2)
+    double x1;
+    double x2;
+    // difference between y1 and y2 determines the length of the 7m line.
+    double yDifferenceFactor = 0.035;
+    double y1 = fieldSizeParameter.fieldHeight / 2 -
+        fieldSizeParameter.fieldHeight * yDifferenceFactor;
+    double y2 = fieldSizeParameter.fieldHeight / 2 +
+        fieldSizeParameter.fieldHeight * yDifferenceFactor;
+    if (leftSide) {
+      x1 = (fieldSizeParameter.sixMeterRadiusX * 2 +
+              fieldSizeParameter.nineMeterRadiusX) /
+          3;
+      x2 = x1;
+    } else {
+      x1 = fieldSizeParameter.fieldWidth -
+          (fieldSizeParameter.sixMeterRadiusX * 2 +
+                  fieldSizeParameter.nineMeterRadiusX) /
+              3;
+      x2 = x1;
     }
+    canvas.drawLine(
+        Offset(x1, y1),
+        Offset(x2, y2),
+        Paint()
+          ..color = Colors.black
+          ..strokeWidth = fieldSizeParameter.lineSize);
   }
 
   // Since this painter has no fields, it always paints
@@ -191,4 +195,160 @@ class FieldPainter extends CustomPainter {
   bool shouldRepaint(FieldPainter oldDelegate) => false;
   @override
   bool shouldRebuildSemantics(FieldPainter oldDelegate) => false;
+}
+
+// Code for the dased Oval line, taken from here:
+// https://stackoverflow.com/questions/54019785/how-to-add-line-dash-in-flutter (25.05.22)
+class DashedPathPainter extends CustomPainter {
+  late Path originalPath;
+  final Color pathColor;
+  final double strokeWidth = fieldSizeParameter.lineSize;
+  final double dashGapLength;
+  final double dashLength;
+  late DashedPathProperties _dashedPathProperties;
+  bool leftSide = true;
+
+  DashedPathPainter({
+    required this.leftSide,
+    this.pathColor = Colors.black,
+    this.dashGapLength = 7,
+    this.dashLength = 7.3,
+  });
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    double xOffset;
+    // set Parameters for field side
+    if (leftSide) {
+      xOffset = 0;
+    } else {
+      xOffset = fieldSizeParameter.fieldWidth;
+    }
+
+    // definde 9m oval
+    originalPath = Path()
+      ..addOval(
+        Rect.fromCenter(
+            center: Offset(xOffset, fieldSizeParameter.fieldHeight / 2),
+            width: fieldSizeParameter.nineMeterRadiusX * 2,
+            height: fieldSizeParameter.nineMeterRadiusY * 2),
+      );
+
+    _dashedPathProperties = DashedPathProperties(
+      path: Path(),
+      dashLength: dashLength,
+      dashGapLength: dashGapLength,
+    );
+    final dashedPath = _getDashedPath(originalPath, dashLength, dashGapLength);
+    canvas.drawPath(
+      dashedPath,
+      Paint()
+        ..style = PaintingStyle.stroke
+        ..color = pathColor
+        ..strokeWidth = strokeWidth,
+    );
+  }
+
+  @override
+  bool shouldRepaint(DashedPathPainter oldDelegate) => false;
+
+  Path _getDashedPath(
+    Path originalPath,
+    double dashLength,
+    double dashGapLength,
+  ) {
+    final metricsIterator = originalPath.computeMetrics().iterator;
+    while (metricsIterator.moveNext()) {
+      final metric = metricsIterator.current;
+      _dashedPathProperties.extractedPathLength = 0.0;
+      while (_dashedPathProperties.extractedPathLength < metric.length) {
+        if (_dashedPathProperties.addDashNext) {
+          _dashedPathProperties.addDash(metric, dashLength);
+        } else {
+          _dashedPathProperties.addDashGap(metric, dashGapLength);
+        }
+      }
+    }
+    return _dashedPathProperties.path;
+  }
+}
+
+class DashedPathProperties {
+  double extractedPathLength;
+  Path path;
+
+  final double _dashLength;
+  double _remainingDashLength;
+  double _remainingDashGapLength;
+  bool _previousWasDash;
+
+  DashedPathProperties({
+    required this.path,
+    required double dashLength,
+    required double dashGapLength,
+  })  : assert(dashLength > 0.0, 'dashLength must be > 0.0'),
+        assert(dashGapLength > 0.0, 'dashGapLength must be > 0.0'),
+        _dashLength = dashLength,
+        _remainingDashLength = dashLength,
+        _remainingDashGapLength = dashGapLength,
+        _previousWasDash = false,
+        extractedPathLength = 0.0;
+
+  bool get addDashNext {
+    if (!_previousWasDash || _remainingDashLength != _dashLength) {
+      return true;
+    }
+    return false;
+  }
+
+  void addDash(ui.PathMetric metric, double dashLength) {
+    // Calculate lengths (actual + available)
+    final end = _calculateLength(metric, _remainingDashLength);
+    final availableEnd = _calculateLength(metric, dashLength);
+    // Add path
+    final pathSegment = metric.extractPath(extractedPathLength, end);
+    path.addPath(pathSegment, Offset.zero);
+    // Update
+    final delta = _remainingDashLength - (end - extractedPathLength);
+    _remainingDashLength = _updateRemainingLength(
+      delta: delta,
+      end: end,
+      availableEnd: availableEnd,
+      initialLength: dashLength,
+    );
+    extractedPathLength = end;
+    _previousWasDash = true;
+  }
+
+  void addDashGap(ui.PathMetric metric, double dashGapLength) {
+    // Calculate lengths (actual + available)
+    final end = _calculateLength(metric, _remainingDashGapLength);
+    final availableEnd = _calculateLength(metric, dashGapLength);
+    // Move path's end point
+    ui.Tangent tangent = metric.getTangentForOffset(end)!;
+    path.moveTo(tangent.position.dx, tangent.position.dy);
+    // Update
+    final delta = end - extractedPathLength;
+    _remainingDashGapLength = _updateRemainingLength(
+      delta: delta,
+      end: end,
+      availableEnd: availableEnd,
+      initialLength: dashGapLength,
+    );
+    extractedPathLength = end;
+    _previousWasDash = false;
+  }
+
+  double _calculateLength(ui.PathMetric metric, double addedLength) {
+    return math.min(extractedPathLength + addedLength, metric.length);
+  }
+
+  double _updateRemainingLength({
+    required double delta,
+    required double end,
+    required double availableEnd,
+    required double initialLength,
+  }) {
+    return (delta > 0 && availableEnd == end) ? delta : initialLength;
+  }
 }
