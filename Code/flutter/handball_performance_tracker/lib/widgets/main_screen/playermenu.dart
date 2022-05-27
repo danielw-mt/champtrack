@@ -1,18 +1,62 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:handball_performance_tracker/utils/icons.dart';
 import '../../controllers/globalController.dart';
 import 'package:get/get.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
+import 'dart:math';
 
 void callPlayerMenu(context) {
   final GlobalController globalController = Get.find<GlobalController>();
+  List<DialogButton> dialogButtons = buildDialogButtonList(context);
   Alert(
-          context: context,
-          title: "Choose Player",
-          // alert contains a list of DialogButton objects
-          desc: globalController.playerMenuText.value,
-          buttons: buildDialogButtonList(context))
-      .show();
+    style: AlertStyle(
+      // make round edges
+      alertBorder: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(15.0),
+      ),
+      // false so there is no big close-Button at the bottom
+      isButtonVisible: false,
+    ),
+    context: context,
+    // alert contains a list of DialogButton objects
+    content:
+        // Column of "Spieler", horizontal line and Button-Row
+        Column(
+      children: [
+        const Align(
+          alignment: Alignment.topLeft,
+          child: Text(
+            "Spieler",
+            textAlign: TextAlign.left,
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 20,
+            ),
+          ),
+        ),
+        // horizontal line
+        const Divider(
+          thickness: 2,
+          color: Colors.black,
+          height: 6,
+        ),
+        // Button-Row: one Row with four Columns of one or two buttons
+        Row(children: [
+          dialogButtons[0],
+          Column(
+            children: [dialogButtons[1], dialogButtons[2]],
+          ),
+          Column(
+            children: [dialogButtons[3], dialogButtons[4]],
+          ),
+          Column(
+            children: [dialogButtons[5], dialogButtons[6]],
+          ),
+        ]),
+      ],
+    ),
+  ).show();
 }
 
 /// builds a list of Dialog buttons
@@ -21,7 +65,8 @@ List<DialogButton> buildDialogButtonList(BuildContext context) {
   var playerNames = globalController.chosenPlayers;
   List<DialogButton> dialogButtons = [];
   playerNames.forEach((rXString) {
-    DialogButton dialogButton = buildDialogButton(context, rXString.toString());
+    DialogButton dialogButton =
+        buildDialogButton(context, rXString.toString(), "1");
     dialogButtons.add(dialogButton);
   });
   return dialogButtons;
@@ -29,9 +74,14 @@ List<DialogButton> buildDialogButtonList(BuildContext context) {
 
 /// builds a single dialog button that logs its text (=player name) to firestore
 /// and updates the game state
-DialogButton buildDialogButton(BuildContext context, String buttonText) {
+DialogButton buildDialogButton(
+    BuildContext context, String buttonText, String buttonNumber) {
   final GlobalController globalController = Get.find<GlobalController>();
   FirebaseFirestore db = FirebaseFirestore.instance;
+
+  // Get width and height, so the sizes can be calculated relative to those. So it should look the same on different screen sizes.
+  final double width = MediaQuery.of(context).size.width;
+  final double height = MediaQuery.of(context).size.height;
 
   /// @return "" if action wasn't a goal, "solo" when player scored without
   /// assist and "assist" when player click was assist
@@ -117,11 +167,54 @@ DialogButton buildDialogButton(BuildContext context, String buttonText) {
     Navigator.pop(context);
   }
 
+  // Button with shirt with buttonNumber inside and buttonText below.
   return DialogButton(
-      child: Text(
-        buttonText,
-        style: TextStyle(color: Colors.white, fontSize: 20),
+      child:
+          // Column with 2 entries: 1. a Stack with Shirt & buttonNumber and 2. buttonText
+          Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Stack(
+            alignment: Alignment.center,
+            children: [
+              // ButtonNumber
+              Text(
+                buttonNumber,
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: (width * 0.03),
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              // Shirt
+              Center(
+                child: Icon(
+                  MyFlutterApp.t_shirt,
+                  size: (width * 0.11),
+                ),
+              ),
+            ],
+          ),
+          // ButtonName
+          Text(
+            buttonText,
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: (width * 0.02),
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ],
       ),
+      // have some space between the buttons
+      margin: EdgeInsets.all(min(height, width) * 0.013),
+      // have round edges with same degree as Alert dialog
+      radius: const BorderRadius.all(Radius.circular(15)),
+      // set height and width of buttons so the shirt and name are fitting inside
+      height: width * 0.14,
+      width: width * 0.14,
+      color: Color.fromARGB(255, 180, 211, 236),
       onPressed: () {
         logPlayerSelection();
       });
