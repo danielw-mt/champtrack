@@ -8,7 +8,7 @@ import 'dart:math';
 
 void callPlayerMenu(context) {
   final GlobalController globalController = Get.find<GlobalController>();
-  List<DialogButton> dialogButtons = buildDialogButtonList(context);
+  List<Obx> dialogButtons = buildDialogButtonList(context);
   Alert(
     style: AlertStyle(
       // make round edges
@@ -24,16 +24,36 @@ void callPlayerMenu(context) {
         // Column of "Spieler", horizontal line and Button-Row
         Column(
       children: [
-        const Align(
-          alignment: Alignment.topLeft,
-          child: Text(
-            "Spieler",
-            textAlign: TextAlign.left,
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 20,
+        // upper row: "Spieler" Text on left and "Assist" will pop up on right after a goal.
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            const Align(
+              alignment: Alignment.topLeft,
+              child: Text(
+                "Spieler",
+                textAlign: TextAlign.left,
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 20,
+                ),
+              ),
             ),
-          ),
+            Align(
+              alignment: Alignment.topRight,
+              // Change from "" to "Assist" after a goal.
+              child: Obx(
+                () => Text(
+                  globalController.playerMenuText.value,
+                  textAlign: TextAlign.right,
+                  style: const TextStyle(
+                    color: Colors.purple,
+                    fontSize: 20,
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
         // horizontal line
         const Divider(
@@ -60,13 +80,12 @@ void callPlayerMenu(context) {
 }
 
 /// builds a list of Dialog buttons
-List<DialogButton> buildDialogButtonList(BuildContext context) {
+List<Obx> buildDialogButtonList(BuildContext context) {
   final GlobalController globalController = Get.find<GlobalController>();
   var playerNames = globalController.chosenPlayers;
-  List<DialogButton> dialogButtons = [];
+  List<Obx> dialogButtons = [];
   playerNames.forEach((rXString) {
-    DialogButton dialogButton =
-        buildDialogButton(context, rXString.toString(), "1");
+    Obx dialogButton = buildDialogButton(context, rXString.toString(), "1");
     dialogButtons.add(dialogButton);
   });
   return dialogButtons;
@@ -74,7 +93,7 @@ List<DialogButton> buildDialogButtonList(BuildContext context) {
 
 /// builds a single dialog button that logs its text (=player name) to firestore
 /// and updates the game state
-DialogButton buildDialogButton(
+Obx buildDialogButton(
     BuildContext context, String buttonText, String buttonNumber) {
   final GlobalController globalController = Get.find<GlobalController>();
   FirebaseFirestore db = FirebaseFirestore.instance;
@@ -88,9 +107,6 @@ DialogButton buildDialogButton(
   bool wasAssist() {
     // check if action was a goal
     // if it was a goal allow the player to be pressed twice or select and assist player
-    globalController.playerMenuText.value =
-        "Press again for solo or other player for assist";
-    globalController.refresh();
     // if the player is clicked again it is a solo action
     if (globalController.lastClickedPlayer.value == buttonText) {
       return false;
@@ -109,8 +125,11 @@ DialogButton buildDialogButton(
     final gameDocument = db.collection("gameData").doc(mostRecentActionId);
     // if goal was pressed but no player was selected yet do nothing
     if (lastActionData["action_type"] == "Tor" && goalScorer == "") {
+      globalController.updatePlayerMenuText();
       print("goal player clicked once");
       globalController.lastClickedPlayer.value = buttonText;
+      // Set goalscorer value so the goalscorer-button can adapt its color.
+      globalController.goalscorer.value = buttonText;
       globalController.refresh();
       return;
     }
@@ -168,7 +187,8 @@ DialogButton buildDialogButton(
   }
 
   // Button with shirt with buttonNumber inside and buttonText below.
-  return DialogButton(
+  // Obx so the color changes if buttonText == goalscorer,
+  return Obx(() => DialogButton(
       child:
           // Column with 2 entries: 1. a Stack with Shirt & buttonNumber and 2. buttonText
           Column(
@@ -214,8 +234,10 @@ DialogButton buildDialogButton(
       // set height and width of buttons so the shirt and name are fitting inside
       height: width * 0.14,
       width: width * 0.14,
-      color: Color.fromARGB(255, 180, 211, 236),
+      color: globalController.goalscorer.value == buttonText
+          ? Colors.purple
+          : Color.fromARGB(255, 180, 211, 236),
       onPressed: () {
         logPlayerSelection();
-      });
+      }));
 }

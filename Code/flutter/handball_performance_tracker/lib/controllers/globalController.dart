@@ -35,10 +35,18 @@ class GlobalController extends GetxController {
   //////
   /// Main screen
   //////
-  
   /// @return rxString
-  /// text to be displayed in the player menu title
-  var playerMenuText = "Select a player".obs;
+  /// name of the player who made a goal, used to adapt the respective button color.
+  var goalscorer = "".obs;
+
+  /// @return rxString
+  /// text to be displayed in the player menu title on the right side, changes after a goal
+  var playerMenuText = "".obs;
+
+  void updatePlayerMenuText() {
+    // changing from dep = input.obs
+    playerMenuText.value = "Assist";
+  }
 
   /// @return rxString
   /// last clicked player name in the player menu
@@ -47,7 +55,7 @@ class GlobalController extends GetxController {
   ////
   // game tracking
   ////
-  
+
   /// @return rxBool
   /// True: home team is playing on the left; False: home team is defending
   var fieldIsLeft = true.obs;
@@ -77,7 +85,7 @@ class GlobalController extends GetxController {
   var guestTeamGoals = 0.obs;
 
   /// @return rxString
-  /// location that was saved when clicking on a point in the field 'sector', 
+  /// location that was saved when clicking on a point in the field 'sector',
   /// 'in 6m', 'in 9m'
   var lastLocation = "".obs;
 }
