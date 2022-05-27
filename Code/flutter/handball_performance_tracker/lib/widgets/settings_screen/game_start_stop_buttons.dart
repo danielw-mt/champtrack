@@ -94,7 +94,7 @@ class GameStartStopButtons extends StatelessWidget {
     currentGame.date = dateTime;
     currentGame.stopTime = dateTime.toUtc().millisecondsSinceEpoch;
     currentGame.scoreHome = globalController.homeTeamGoals.value;
-    currentGame.scoreOpponent = globalController.guestTeamGoals.value;
+    currentGame.scoreOpponent = globalController.opponentTeamGoals.value;
     currentGame.players = globalController.chosenPlayers.cast<Player>();
 
     repository.updateGame(currentGame);

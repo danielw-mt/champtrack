@@ -79,7 +79,7 @@ class GlobalController extends GetxController {
 
   /// @return rxInt
   /// how many goals the guest's team scored
-  var guestTeamGoals = 0.obs;
+  var opponentTeamGoals = 0.obs;
 
   /// @return rxString
   /// location that was saved when clicking on a point in the field 'sector', 
