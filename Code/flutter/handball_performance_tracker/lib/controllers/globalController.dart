@@ -44,7 +44,7 @@ class GlobalController extends GetxController {
   //////
   /// Main screen
   //////
-  
+
   /// @return rxString
   /// text to be displayed in the player menu title
   var playerMenuText = "Select a player".obs;
@@ -56,7 +56,7 @@ class GlobalController extends GetxController {
   ////
   // game tracking
   ////
-  
+
   /// @return rxBool
   /// True: home team is playing on the left; False: home team is defending
   var fieldIsLeft = true.obs;
@@ -71,7 +71,7 @@ class GlobalController extends GetxController {
 
   /// @return rx<Game>
   /// last game object written to db
-  final currentGame = Game(date : DateTime.now()).obs;
+  final currentGame = Game(date: DateTime.now()).obs;
 
   /// @return rxInt
   /// how many goals the user's team scored
@@ -81,8 +81,7 @@ class GlobalController extends GetxController {
   /// how many goals the guest's team scored
   var opponentTeamGoals = 0.obs;
 
-  /// @return rxString
-  /// location that was saved when clicking on a point in the field 'sector', 
-  /// 'in 6m', 'in 9m'
-  var lastLocation = "".obs;
+  /// @return rx list
+  /// first element is the sector as a string, second element distinguishes the distance ("<6", "6to9", ">9")
+  var lastLocation = [].obs;
 }

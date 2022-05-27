@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:handball_performance_tracker/utils/main_screen_field_helper.dart';
 import '../../controllers/globalController.dart';
 import 'package:get/get.dart';
-import 'actionmenu.dart';
+import 'action_menu.dart';
 
 // Class that returns a FieldPainter with a GestureDetecture, i.e. the Painted halffield with the possibility to get coordinates on click.
 class CustomField extends StatelessWidget {
@@ -21,7 +21,7 @@ class CustomField extends StatelessWidget {
           // handle coordinates on click
           onTapDown: (TapDownDetails details) {
         callActionMenu(context);
-        String location =
+        List<String> location =
             SectorCalc(fieldIsLeft).calculatePosition(details.localPosition);
         globalController.lastLocation.value = location;
       }),
