@@ -27,27 +27,15 @@ class EfScore {
     score = (positiveScore - negativeScore) / numOfActions;
   }
 
-  /// checks if a goal or error throw action happened after the 55th game minute, updates `actionStats` and `numOfActions` in that case
-  /// does **not** automatically trigger a recalculation of `score`
-  void checkLastFiveMinutes(String actionType, int relativeTime) {
-    if (relativeTime > lastFiveMinThreshold) {
-      if (actionType.startsWith("goal")) {
-        actionStats[goalLastFive] = actionStats[goalLastFive]! + 1;
-        numOfActions++;
-      } else if (actionType.startsWith("err")) {
-        actionStats[errThrowLastFive] = actionStats[errThrowLastFive]! + 1;
-        numOfActions++;
-      }
-    }
-  }
-
   /// determine the correct string identifier from `efScoreParameters` for @param action
   /// distinguished between different throw positions and the player's specified @param position for goals and error throws
-  /// does **not** consider the time of the action (refer to `checkLastFiveMinutes` method for this purpose)
   String? _getActionType(GameAction action, List<String> positions) {
     String? actionType = action.actionType;
     if (actionType == goal) {
-      if (_isPosition(positions, action.throwLocation[0])) {
+        // don't consider position and distance if goal happened after minute 55
+      if (action.relativeTime > lastFiveMinThreshold) {
+        actionType = goalLastFive;
+      } else if (_isPosition(positions, action.throwLocation[0])) {
         actionType = goalPos;
       } else if (_isInNineMeters(action.throwLocation[1])) {
         actionType = goalUnderNine;
@@ -55,7 +43,10 @@ class EfScore {
         actionType = goalOutsideNine;
       }
     } else if (actionType == errThrow) {
-      if (_isPosition(positions, action.throwLocation[0])) {
+      if (action.relativeTime > lastFiveMinThreshold) {
+        // don't consider position and distance if err happened after minute 55
+        actionType = errThrowLastFive;
+      } else if (_isPosition(positions, action.throwLocation[0])) {
         actionType = errThrowPos;
       } else if (_isInNineMeters(action.throwLocation[1])) {
         actionType = errThrowUnderNine;
@@ -82,9 +73,10 @@ class LiveEfScore extends EfScore {
     String? actionType = _getActionType(action, playerPositions);
     if (actionType != null) {
       actionStats[actionType] = actionStats[actionType]! + 1;
+      print("action added: $actionType");
       numOfActions++;
-      checkLastFiveMinutes(actionType, action.relativeTime);
       calculate();
+      print("new ef-score: $score");
     } else {
       print("Action type $actionType is unknown. Action ignored.");
     }
@@ -97,7 +89,7 @@ class LiveEfScore extends EfScore {
         actionStats[actionType] = actionStats[actionType]! - 1;
       }
     } else {
-      print("Action type $actionType is unknown. Action ignored.");
+      print("Action type $actionType is unknown. No revert performed.");
     }
   }
 }
