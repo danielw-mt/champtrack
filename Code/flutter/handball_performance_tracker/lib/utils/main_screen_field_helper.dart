@@ -75,12 +75,12 @@ class SectorCalc {
     bool inSixMeter = inSixMeterEllipse(x, y);
     if (inNineMeter) {
       if (inSixMeter) {
-        return throwPositions[inSix];
+        return inSix;
       } else {
-        return throwPositions[betweenSixAndNine];
+        return betweenSixAndNine;
       }
     } else {
-      return throwPositions[outsideNine];
+      return outsideNine;
     }
   }
 
