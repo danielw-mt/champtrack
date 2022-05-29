@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:stop_watch_timer/stop_watch_timer.dart';
 import 'player.dart';
 
 class Game {
@@ -10,6 +11,7 @@ class Game {
   int? scoreHome;
   int? scoreOpponent;
   List<Player> players;
+  StopWatchTimer stopWatch; 
 
   Game(
       {this.id,
@@ -19,7 +21,7 @@ class Game {
       this.stopTime,
       this.scoreHome = 0,
       this.scoreOpponent = 0,
-      this.players = const []});
+      this.players = const []}):stopWatch = StopWatchTimer(mode: StopWatchMode.countUp);
 
   // @return Map<String,dynamic> as representation of Game object that can be saved to firestore
   Map<String, dynamic> toMap() {

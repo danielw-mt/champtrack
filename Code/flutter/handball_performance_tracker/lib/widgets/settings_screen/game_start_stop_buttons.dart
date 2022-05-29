@@ -79,7 +79,7 @@ class GameStartStopButtons extends StatelessWidget {
     _addGameToPlayers(newGame);
 
     // activate the game timer
-    globalController.stopWatchTimer.value.onExecute.add(StopWatchExecute.start);
+    globalController.currentGame.value.stopWatch.onExecute.add(StopWatchExecute.start);
 
     globalController.gameStarted.value = true;
     globalController.refresh();
@@ -100,7 +100,7 @@ class GameStartStopButtons extends StatelessWidget {
     repository.updateGame(currentGame);
 
     // stop the game timer
-    globalController.stopWatchTimer.value.onExecute.add(StopWatchExecute.stop);
+    globalController.currentGame.value.stopWatch.onExecute.add(StopWatchExecute.stop);
 
     globalController.gameStarted.value = false;
     globalController.refresh();
