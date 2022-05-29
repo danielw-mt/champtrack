@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import './../../controllers/globalController.dart';
 import './../widgets/helper_screen/stopwatch.dart';
-import '../widgets/main_screen/actionmenu.dart';
-import '../widgets/main_screen/playermenu.dart';
+import './../widgets/helper_screen/reverse_button.dart';
 
 class HelperScreen extends GetView<GlobalController> {
   @override
@@ -13,9 +12,7 @@ class HelperScreen extends GetView<GlobalController> {
           title: const Text('CountDown Sample'),
         ),
         body: Column(
-          children: [
-            StopWatch(),
-          ],
+          children: [StopWatch(), ReverseButton()],
         ));
   }
 }
