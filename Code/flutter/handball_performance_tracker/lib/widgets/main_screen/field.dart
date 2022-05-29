@@ -14,18 +14,23 @@ class CustomField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     globalController.fieldIsLeft.value = this.fieldIsLeft;
-    return CustomPaint(
-      painter: FieldPainter(fieldIsLeft),
-      // GestureDetector to handle on click or swipe
-      child: GestureDetector(
-          // handle coordinates on click
-          onTapDown: (TapDownDetails details) {
-        callActionMenu(context);
-        String location =
-            SectorCalc(fieldIsLeft).calculatePosition(details.localPosition);
-        globalController.lastLocation.value = location;
-      }),
-    );
+    return Stack(children: [
+      // Painter of 7m, 6m and filled 9m
+      CustomPaint(
+        painter: FieldPainter(fieldIsLeft),
+        // GestureDetector to handle on click or swipe
+        child: GestureDetector(
+            // handle coordinates on click
+            onTapDown: (TapDownDetails details) {
+          callActionMenu(context);
+          String location =
+              SectorCalc(fieldIsLeft).calculatePosition(details.localPosition);
+          globalController.lastLocation.value = location;
+        }),
+      ),
+      // Painter of dashed 9m
+      CustomPaint(painter: DashedPathPainter(leftSide: fieldIsLeft))
+    ]);
   }
 }
 
