@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:handball_performance_tracker/data/game_action.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
@@ -48,9 +47,7 @@ class GlobalController extends GetxController {
   ////
   // Helper screen
   ////
-  var stopWatchTimer = StopWatchTimer(
-    mode: StopWatchMode.countUp,
-  ).obs;
+
 
   var feedTimer = StopWatchTimer(
       mode: StopWatchMode.countDown,
