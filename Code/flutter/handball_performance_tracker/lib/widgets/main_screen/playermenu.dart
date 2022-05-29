@@ -107,20 +107,8 @@ Obx buildDialogButton(BuildContext context, Player player) {
   final double width = MediaQuery.of(context).size.width;
   final double height = MediaQuery.of(context).size.height;
 
-  /// @return "" if action wasn't a goal, "solo" when player scored without
-  /// assist and "assist" when player click was assist
-  bool _wasAssist() {
-    // check if action was a goal
-    // if it was a goal allow the player to be pressed twice or select and assist player
-    // if the player is clicked again it is a solo action
-    if (globalController.lastClickedPlayer.value.name == buttonText) {
-      return false;
-    }
-    if (globalController.lastClickedPlayer.value.name != buttonText) {
-      return true;
-    }
-    return false;
-  }
+  /// @return true if action was an assist
+  bool _wasAssist() => globalController.lastClickedPlayer.value.name != buttonText; 
 
   Player? _getPlayerFromName(String name) {
     for (Player player in globalController.chosenPlayers) {
@@ -134,10 +122,10 @@ Obx buildDialogButton(BuildContext context, Player player) {
     print("log player");
     GameAction lastAction = globalController.actions.last;
     print("last action");
-    String? activePlayerId = globalController.lastClickedPlayer.value.id;
+    Player activePlayer = globalController.lastClickedPlayer.value;
 
     // if goal was pressed but no player was selected yet, do nothing
-    if (lastAction.actionType == "goal" && activePlayerId == null) {
+    if (lastAction.actionType == "goal" && activePlayer.id == null) {
       globalController.updatePlayerMenuText();
       print("goal player clicked once");
       globalController.lastClickedPlayer.value =
@@ -149,18 +137,21 @@ Obx buildDialogButton(BuildContext context, Player player) {
     if (lastAction.actionType == "goal") {
       print("goal player clicked twice");
       // if it was a solo goal the action type has to be updated to "Tor Solo"
-      if (_wasAssist() == false) {
+      if (!_wasAssist()) {
         print("solo goal");
         // update data for person that shot the goal
-        lastAction.playerId = activePlayerId!;
+        lastAction.playerId = activePlayer.id!;
         repository.updateAction(lastAction);
         globalController.actions.last = lastAction;
+        // update player's ef-score
+        activePlayer.addAction(lastAction); 
+
         globalController.lastClickedPlayer.value = Player();
         globalController.refresh();
       } else {
         // if it was an assist update data for both
         // person that scored goal
-        lastAction.playerId = activePlayerId!;
+        lastAction.playerId = activePlayer.id!;
         repository.updateAction(lastAction);
         globalController.actions.last = lastAction;
         // person that scored assist
@@ -169,17 +160,25 @@ Obx buildDialogButton(BuildContext context, Player player) {
         print("assist action: ${GameAction.clone(lastAction)}");
         GameAction assistAction = GameAction.clone(lastAction);
         print("assist action: $assistAction");
-        assistAction.playerId = globalController.lastClickedPlayer.value.id!;
+        Player assistPlayer = globalController.lastClickedPlayer.value; 
+        assistAction.playerId = assistPlayer.id!;
         assistAction.actionType = "assist";
         repository.addActionToGame(assistAction);
         globalController.actions.add(assistAction);
+        // update player's ef-score
+        assistPlayer.addAction(lastAction); 
+
         globalController.lastClickedPlayer.value = Player();
       }
     } else {
       // if the action was not a goal just update the player id in firebase and gamestate
-      lastAction.playerId = _getPlayerFromName(buttonText)!.id!;
+      activePlayer = _getPlayerFromName(buttonText)!; 
+      lastAction.playerId = activePlayer.id!;
       globalController.actions.last = lastAction;
       repository.updateAction(lastAction);
+      // update player's ef-scorer
+      activePlayer.addAction(lastAction); 
+
       globalController.lastClickedPlayer.value = Player();
     }
     print("last action saved in database: ");
