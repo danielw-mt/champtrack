@@ -48,11 +48,17 @@ class GlobalController extends GetxController {
       presetMillisecond: 10000,
       onEnded: () {
         final GlobalController globalController = Get.find<GlobalController>();
-        globalController.periodicFeedTimerReset();
-        print("Ended");
+        if (globalController.periodicResetIsHappening.value == false) {
+          globalController.periodicFeedTimerReset();
+          print("Ended");
+        }
       }).obs;
 
+  var periodicResetIsHappening = false.obs;
+
+  // while periodic reset is going on
   void periodicFeedTimerReset() async {
+    periodicResetIsHappening.value = true;
     print("periodic timer reset");
     feedTimer.value.onExecute.add(StopWatchExecute.reset);
     await Future.delayed(Duration(milliseconds: 500));
@@ -63,6 +69,7 @@ class GlobalController extends GetxController {
       numCurrentFeedItems.value -= 1;
     }
     print("periodic reset: " + numCurrentFeedItems.value.toString());
+    periodicResetIsHappening.value = false;
     update();
   }
 
