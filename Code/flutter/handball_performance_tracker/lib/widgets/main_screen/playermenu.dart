@@ -191,29 +191,23 @@ Obx buildDialogButton(BuildContext context, Player player) {
   // Button with shirt with buttonNumber inside and buttonText below.
   // Obx so the color changes if player == goalscorer,
   return Obx(() {
+    // Dialog button that shows "No Assist" instead of the player name and shirt
+    // at the place where the first player was clicked
     if (globalController.lastClickedPlayer.value.name == buttonText) {
       return DialogButton(
-          child:
-              // Column with 2 entries: 1. a Stack with Shirt & buttonNumber and 2. buttonText
-              Column(
+          child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Stack(
-                alignment: Alignment.center,
-                children: [
-                  // ButtonNumber
-                  Text(
-                    "No Assist",
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: (width * 0.03),
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  // Shirt
-                ],
+              Text(
+                "No Assist",
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: (width * 0.03),
+                  fontWeight: FontWeight.bold,
+                ),
               ),
+              // Shirt
             ],
           ),
           // have some space between the buttons

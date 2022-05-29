@@ -48,20 +48,18 @@ void callActionMenu(BuildContext context) {
   final PageController actionPageManager = PageController();
 
   // if game is not running give a warning
+  if (globalController.gameStarted.value == false) {
+    Alert(
+      context: context,
+      title: "Error game did not start yet",
+      type: AlertType.error,
+    )
+        // when displayAttackActions is true display buttonlist with attack
+        //options otherwise with defense options
 
-  // TODO uncomment this
-  // if (globalController.gameStarted.value == false) {
-  //   Alert(
-  //     context: context,
-  //     title: "Error game did not start yet",
-  //     type: AlertType.error,
-  //   )
-  //       // when displayAttackActions is true display buttonlist with attack
-  //       //options otherwise with defense options
-
-  //       .show();
-  //   return;
-  // }
+        .show();
+    return;
+  }
 
   Alert(
       style: AlertStyle(
@@ -84,27 +82,6 @@ void callActionMenu(BuildContext context) {
                     child: PageView(children: buildPageViewChildren(context))),
               ] // Column of "Spieler", horizontal line and Button-Row
               ))).show();
-
-  // alert contains a list of DialogButton objects
-  // Alert(
-  //   context: context,
-  //   title: "Select an action",
-  //   // when displayAttackActions is true display buttonlist with attack
-  //   //options otherwise with defense options
-  //   //buttons: determineAttack()
-  //   //    ? buildDialogButtonList(context, attackActions)
-  //   //    : buildDialogButtonList(context, defenseActions))
-  // content: Container(
-  //   width: MediaQuery.of(context).size.width * 0.5,
-  //   height: MediaQuery.of(context).size.height * 0.5,
-  //   child: Column(
-  //     mainAxisAlignment: MainAxisAlignment.center,
-  //     children: <Widget>[
-  //       Expanded(child: PageView(children: buildPageViewChildren(context))),
-  //     ],
-  //     ),
-  //   ),
-  // ).show();
 }
 
 ///
@@ -128,6 +105,8 @@ bool determineAttack() {
   return attacking;
 }
 
+// a method for building the children of the pageview in the right order
+// by arranging either the attack menu or defense menu first
 List<Widget> buildPageViewChildren(BuildContext context) {
   if (determineAttack() == true) {
     return [
@@ -179,7 +158,7 @@ Widget buildDialogButtonMenu(
         color: Colors.black,
         height: 6,
       ),
-      // Button-Row: one Row with 3 Columns of 3, 2 and 2 buttons
+      // Button-Row: one Row with 3 Columns of 3, 3 and 2 buttons
       Row(children: [
         Column(
           children: [dialogButtons[0], dialogButtons[1], dialogButtons[2]],
@@ -244,7 +223,7 @@ Widget buildDialogButtonMenu(
 
 /// @return
 /// builds a single dialog button that logs its text (=action) to firestore
-//  and updates the game state
+//  and updates the game state. Its color and icon can be specified as parameters
 DialogButton buildDialogButton(
     BuildContext context, String buttonText, Color color,
     [icon]) {
