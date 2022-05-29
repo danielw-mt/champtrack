@@ -1,10 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:handball_performance_tracker/data/game_action.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 
 import '../data/club.dart';
 import '../data/game.dart';
 import '../data/player.dart';
+import 'dart:async';
 
 class GlobalController extends GetxController {
   // Class for managing global state of the app
@@ -41,6 +43,51 @@ class GlobalController extends GetxController {
     mode: StopWatchMode.countUp,
   ).obs;
 
+  var feedTimer = StopWatchTimer(
+      mode: StopWatchMode.countDown,
+      presetMillisecond: 10000,
+      onEnded: () {
+        final GlobalController globalController = Get.find<GlobalController>();
+        globalController.periodicFeedTimerReset();
+        print("Ended");
+      }).obs;
+
+  void periodicFeedTimerReset() async {
+    print("periodic timer reset");
+    feedTimer.value.onExecute.add(StopWatchExecute.reset);
+    await Future.delayed(Duration(milliseconds: 500));
+    // feedTimer.value.clearPresetTime();
+    // feedTimer.value.setPresetTime(mSec: 5000);
+    feedTimer.value.onExecute.add(StopWatchExecute.start);
+    if (numCurrentFeedItems.value > 0) {
+      numCurrentFeedItems.value -= 1;
+    }
+    print("periodic reset: " + numCurrentFeedItems.value.toString());
+    update();
+  }
+
+  var numCurrentFeedItems = 0.obs;
+
+  void addFeedItem() async {
+    if (feedTimer.value.isRunning == false) {
+      feedTimer.value.onExecute.add(StopWatchExecute.start);
+      await Future.delayed(Duration(milliseconds: 500));
+    } else {
+      feedTimer.value.onExecute.add(StopWatchExecute.reset);
+      numCurrentFeedItems.value += 1;
+      await Future.delayed(Duration(milliseconds: 500));
+      feedTimer.value.onExecute.add(StopWatchExecute.start);
+    }
+
+    // feedTimer.value.clearPresetTime();
+    // feedTimer.value.setPresetTime(mSec: 5000);
+
+    numCurrentFeedItems.value += 1;
+    print("numCurrentfeeditems: " + numCurrentFeedItems.value.toString());
+    update();
+  }
+
+  var currentNumFeedItems = 0.obs;
   //////
   /// Main screen
   //////

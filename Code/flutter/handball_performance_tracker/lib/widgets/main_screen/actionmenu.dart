@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import '../../data/game_action.dart';
 import 'playermenu.dart';
+import 'package:stop_watch_timer/stop_watch_timer.dart';
 
 // TODO add to constants file
 List<String> attackActions = [
@@ -137,6 +138,9 @@ DialogButton buildDialogButton(BuildContext context, String buttonText) {
         style: TextStyle(color: Colors.white, fontSize: 20),
       ),
       onPressed: () {
+        // reset the feed timer
+        print("actionbutton pressed");
+        globalController.addFeedItem();
         logAction();
         Navigator.pop(context);
         callPlayerMenu(context);
