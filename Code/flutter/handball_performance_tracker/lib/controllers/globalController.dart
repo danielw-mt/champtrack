@@ -50,7 +50,6 @@ class GlobalController extends GetxController {
         final GlobalController globalController = Get.find<GlobalController>();
         if (globalController.periodicResetIsHappening.value == false) {
           globalController.periodicFeedTimerReset();
-          print("Ended");
         }
       }).obs;
 
@@ -59,22 +58,17 @@ class GlobalController extends GetxController {
   // while periodic reset is going on
   void periodicFeedTimerReset() async {
     periodicResetIsHappening.value = true;
-    print("periodic timer reset");
     feedTimer.value.onExecute.add(StopWatchExecute.reset);
     await Future.delayed(Duration(milliseconds: 500));
-    // feedTimer.value.clearPresetTime();
-    // feedTimer.value.setPresetTime(mSec: 5000);
     feedTimer.value.onExecute.add(StopWatchExecute.start);
     if (numCurrentFeedItems.value > 0) {
       numCurrentFeedItems.value -= 1;
     }
-    print("periodic reset: " + numCurrentFeedItems.value.toString());
     periodicResetIsHappening.value = false;
     update();
   }
 
   var numCurrentFeedItems = 0.obs;
-
   void addFeedItem() async {
     if (feedTimer.value.isRunning == false) {
       feedTimer.value.onExecute.add(StopWatchExecute.start);
@@ -85,12 +79,7 @@ class GlobalController extends GetxController {
       await Future.delayed(Duration(milliseconds: 500));
       feedTimer.value.onExecute.add(StopWatchExecute.start);
     }
-
-    // feedTimer.value.clearPresetTime();
-    // feedTimer.value.setPresetTime(mSec: 5000);
-
     numCurrentFeedItems.value += 1;
-    print("numCurrentfeeditems: " + numCurrentFeedItems.value.toString());
     update();
   }
 

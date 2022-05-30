@@ -139,8 +139,6 @@ DialogButton buildDialogButton(BuildContext context, String buttonText) {
       ),
       onPressed: () {
         // reset the feed timer
-        print("actionbutton pressed");
-        globalController.addFeedItem();
         logAction();
         Navigator.pop(context);
         callPlayerMenu(context);
