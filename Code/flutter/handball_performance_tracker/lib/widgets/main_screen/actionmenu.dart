@@ -45,7 +45,6 @@ Map<String, String> actionMapping = {
 
 void callActionMenu(BuildContext context) {
   final GlobalController globalController = Get.find<GlobalController>();
-  final PageController actionPageManager = PageController();
 
   // if game is not running give a warning
   if (globalController.gameStarted.value == false) {
@@ -53,11 +52,7 @@ void callActionMenu(BuildContext context) {
       context: context,
       title: "Error game did not start yet",
       type: AlertType.error,
-    )
-        // when displayAttackActions is true display buttonlist with attack
-        //options otherwise with defense options
-
-        .show();
+    ).show();
     return;
   }
 
@@ -265,8 +260,8 @@ DialogButton buildDialogButton(
       // have round edges with same degree as Alert dialog
       radius: const BorderRadius.all(Radius.circular(15)),
       // set height and width of buttons so the shirt and name are fitting inside
-      height: width * 0.14,
-      width: width * 0.14,
+      height: width * 0.10,
+      width: width * 0.10,
       color: color,
       child: Center(
         child: Column(
