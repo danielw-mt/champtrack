@@ -6,20 +6,26 @@ import 'package:get/get.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import '../../data/game_action.dart';
 import 'playermenu.dart';
+import 'dart:math';
 
 // TODO add to constants file
 List<String> attackActions = [
-  "Tor",
-  "1v1 & 7m",
+  "Rote Karte",
+  "Gelbe Karte",
+  "Zeitstrafe",
   "2min ziehen",
   "Fehlwurf",
-  "TRF"
+  "TRF",
+  "Tor",
+  "1v1 & 7m",
 ];
 List<String> defenseActions = [
   "Rote Karte",
-  "Foul => 7m",
+  "Gelbe Karte",
   "Zeitstrafe",
-  "Block ohne Ballgewinn",
+  "Foul => 7m",
+  "TRF",
+  "Block",
   "Block & Steal"
 ];
 
@@ -30,6 +36,7 @@ Map<String, String> actionMapping = {
   "Fehlwurf": "err-throw",
   "TRF": "trf",
   "Rote Karte": "red",
+  "Gelbe Karte": "yellow",
   "Foul => 7m": "foul",
   "Zeitstrafe": "penalty",
   "Block ohne Ballgewinn": "block",
@@ -38,29 +45,38 @@ Map<String, String> actionMapping = {
 
 void callActionMenu(BuildContext context) {
   final GlobalController globalController = Get.find<GlobalController>();
+
   // if game is not running give a warning
   if (globalController.gameStarted.value == false) {
     Alert(
       context: context,
       title: "Error game did not start yet",
       type: AlertType.error,
-    )
-        // when displayAttackActions is true display buttonlist with attack
-        //options otherwise with defense options
-
-        .show();
+    ).show();
     return;
   }
-  // alert contains a list of DialogButton objects
+
   Alert(
-          context: context,
-          title: "Select an action",
-          // when displayAttackActions is true display buttonlist with attack
-          //options otherwise with defense options
-          buttons: determineAttack()
-              ? buildDialogButtonList(context, attackActions)
-              : buildDialogButtonList(context, defenseActions))
-      .show();
+      style: AlertStyle(
+        // make round edges
+        alertBorder: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15.0),
+        ),
+        // false so there is no big close-Button at the bottom
+        isButtonVisible: false,
+      ),
+      context: context,
+      // alert contains a list of DialogButton objects
+      content: Container(
+          width: MediaQuery.of(context).size.width * 0.5,
+          height: MediaQuery.of(context).size.height * 0.88,
+          child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Expanded(
+                    child: PageView(children: buildPageViewChildren(context))),
+              ] // Column of "Spieler", horizontal line and Button-Row
+              ))).show();
 }
 
 ///
@@ -84,21 +100,128 @@ bool determineAttack() {
   return attacking;
 }
 
-/// @return a list of Dialog buttons
-List<DialogButton> buildDialogButtonList(
-    BuildContext context, List<String> buttonTexts) {
-  List<DialogButton> dialogButtons = [];
-  buttonTexts.forEach((text) {
-    DialogButton dialogButton = buildDialogButton(context, text);
-    dialogButtons.add(dialogButton);
-  });
-  return dialogButtons;
+// a method for building the children of the pageview in the right order
+// by arranging either the attack menu or defense menu first
+List<Widget> buildPageViewChildren(BuildContext context) {
+  if (determineAttack() == true) {
+    return [
+      buildDialogButtonMenu(context, attackActions, true),
+      buildDialogButtonMenu(context, defenseActions, false),
+    ];
+  } else {
+    return [
+      buildDialogButtonMenu(context, defenseActions, false),
+      buildDialogButtonMenu(context, attackActions, true),
+    ];
+  }
+}
+
+/// @return a menu of differently arranged buttons depending on action or defense
+Widget buildDialogButtonMenu(
+    BuildContext context, List<String> buttonTexts, isAttack) {
+  if (isAttack) {
+    List<DialogButton> dialogButtons = [
+      buildDialogButton(context, defenseActions[0], Colors.red, Icons.style),
+      buildDialogButton(context, defenseActions[1], Colors.yellow, Icons.style),
+      buildDialogButton(context, defenseActions[2], Colors.grey, Icons.timer),
+      buildDialogButton(context, attackActions[3], Colors.grey),
+      buildDialogButton(context, attackActions[4], Colors.grey),
+      buildDialogButton(context, attackActions[5], Colors.blue),
+      buildDialogButton(context, attackActions[6], Colors.blue),
+      buildDialogButton(context, attackActions[7], Colors.blue)
+    ];
+    return Column(children: [
+      Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: const [
+          Align(
+            alignment: Alignment.topLeft,
+            child: Text(
+              "Offensive Aktionen",
+              textAlign: TextAlign.left,
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 20,
+              ),
+            ),
+          ),
+        ],
+      ),
+      // horizontal line
+      const Divider(
+        thickness: 2,
+        color: Colors.black,
+        height: 6,
+      ),
+      // Button-Row: one Row with 3 Columns of 3, 3 and 2 buttons
+      Row(children: [
+        Column(
+          children: [dialogButtons[0], dialogButtons[1], dialogButtons[2]],
+        ),
+        Column(
+          children: [dialogButtons[3], dialogButtons[4], dialogButtons[5]],
+        ),
+        Column(
+          children: [dialogButtons[6], dialogButtons[7]],
+        ),
+      ])
+    ]);
+  } else {
+    List<DialogButton> dialogButtons = [
+      buildDialogButton(context, defenseActions[0], Colors.red, Icons.style),
+      buildDialogButton(context, defenseActions[1], Colors.yellow, Icons.style),
+      buildDialogButton(context, defenseActions[2],
+          const Color.fromRGBO(15, 66, 199, 32), Icons.timer),
+      buildDialogButton(context, defenseActions[3], Colors.grey),
+      buildDialogButton(context, defenseActions[4], Colors.grey),
+      buildDialogButton(context, defenseActions[5], Colors.blue),
+      buildDialogButton(context, defenseActions[6], Colors.blue)
+    ];
+    return Column(children: [
+      Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          const Align(
+            alignment: Alignment.topLeft,
+            child: Text(
+              "Defensive Aktionen",
+              textAlign: TextAlign.left,
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 20,
+              ),
+            ),
+          ),
+        ],
+      ),
+      // horizontal line
+      const Divider(
+        thickness: 2,
+        color: Colors.black,
+        height: 6,
+      ),
+      // Button-Row: one Row with 3 Columns of 3, 2 and 2 buttons
+      Row(children: [
+        Column(
+          children: [dialogButtons[0], dialogButtons[1], dialogButtons[2]],
+        ),
+        Column(
+          children: [dialogButtons[3], dialogButtons[4]],
+        ),
+        Column(
+          children: [dialogButtons[5], dialogButtons[6]],
+        ),
+      ])
+    ]);
+  }
 }
 
 /// @return
 /// builds a single dialog button that logs its text (=action) to firestore
-//  and updates the game state
-DialogButton buildDialogButton(BuildContext context, String buttonText) {
+//  and updates the game state. Its color and icon can be specified as parameters
+DialogButton buildDialogButton(
+    BuildContext context, String buttonText, Color color,
+    [icon]) {
   final GlobalController globalController = Get.find<GlobalController>();
   //TODO add repository instance to global controller?
   DatabaseRepository repository = DatabaseRepository();
@@ -110,7 +233,6 @@ DialogButton buildDialogButton(BuildContext context, String buttonText) {
 
     // get most recent game id from DB
     String currentGameId = globalController.currentGame.value.id!;
-
     GameAction action = GameAction(
         clubId: globalController.currentClub.value.id!,
         gameId: currentGameId,
@@ -131,10 +253,27 @@ DialogButton buildDialogButton(BuildContext context, String buttonText) {
         .then((DocumentReference doc) => action.id = doc.id);
   }
 
+  final double width = MediaQuery.of(context).size.width;
+  final double height = MediaQuery.of(context).size.height;
   return DialogButton(
-      child: Text(
-        buttonText,
-        style: TextStyle(color: Colors.white, fontSize: 20),
+      margin: EdgeInsets.all(min(height, width) * 0.013),
+      // have round edges with same degree as Alert dialog
+      radius: const BorderRadius.all(Radius.circular(15)),
+      // set height and width of buttons so the shirt and name are fitting inside
+      height: width * 0.10,
+      width: width * 0.10,
+      color: color,
+      child: Center(
+        child: Column(
+          children: [
+            (icon != null) ? Icon(icon) : Container(),
+            Text(
+              buttonText,
+              style: TextStyle(color: Colors.white, fontSize: 20),
+            )
+          ],
+          mainAxisAlignment: MainAxisAlignment.center,
+        ),
       ),
       onPressed: () {
         logAction();
