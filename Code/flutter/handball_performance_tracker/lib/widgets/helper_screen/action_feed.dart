@@ -29,42 +29,21 @@ class ActionFeed extends GetView<GlobalController> {
   @override
   Widget build(BuildContext context) {
     return GetBuilder<GlobalController>(
-      builder: (_) => ListView.builder(
-          shrinkWrap: true,
-          itemCount: globalController.numCurrentFeedItems.value,
-          itemBuilder: (context, index) {
-            var actions = globalController.actions;
-            List<dynamic> lastActions = actions.sublist(
-                actions.length - globalController.numCurrentFeedItems.value,
-                actions.length);
-            GameAction lastAction = lastActions[index];
-            String actionType = lastAction.actionType;
-            return SizedBox(
-              width: 60,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: TextButton(
-                  style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(
-                          Color.fromARGB(69, 224, 224, 224))),
-                  child: Row(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          actionMapping[actionType].toString(),
-                          style: TextStyle(
-                              backgroundColor: MaterialStateColor.resolveWith(
-                                  (states) => Colors.grey)),
-                        ),
-                      ),
-                      Text(
-                        "Player ID: " + lastAction.playerId.toString(),
-                        softWrap: false,
-                      )
-                    ],
-                  ),
-                  onPressed: () async {
+      builder: (_) => Container(
+        alignment: Alignment.centerLeft,
+        width: MediaQuery.of(context).size.width * 0.3,
+        child: ListView.builder(
+            shrinkWrap: true,
+            itemCount: globalController.numCurrentFeedItems.value,
+            itemBuilder: (context, index) {
+              var actions = globalController.actions;
+              List<dynamic> lastActions = actions.sublist(
+                  actions.length - globalController.numCurrentFeedItems.value,
+                  actions.length);
+              GameAction lastAction = lastActions[index];
+              String actionType = lastAction.actionType;
+              return GestureDetector(
+                  onTap: () async {
                     // find the document in firebase
                     // get the most recent game
 
@@ -103,10 +82,43 @@ class ActionFeed extends GetView<GlobalController> {
                     globalController.numCurrentFeedItems.value--;
                     globalController.refresh();
                   },
-                ),
-              ),
-            );
-          }),
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  color: Color.fromARGB(100, 217, 217, 217),
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(10))),
+                              child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                    actionType,
+                                  )),
+                            ),
+                          ),
+                          Container(
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                "Player ID: " + lastAction.playerId,
+                                style: TextStyle(
+                                  fontSize: 20,
+                                ),
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                      Divider()
+                    ],
+                  ));
+            }),
+      ),
     );
   }
 }

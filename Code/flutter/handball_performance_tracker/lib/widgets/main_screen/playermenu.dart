@@ -67,6 +67,7 @@ void callPlayerMenu(context) {
           height: 6,
         ),
         // Button-Row: one Row with four Columns of one or two buttons
+        // TODO: implement safety check if less than 7 players are somehow selected
         Row(children: [
           dialogButtons[0],
           Column(
