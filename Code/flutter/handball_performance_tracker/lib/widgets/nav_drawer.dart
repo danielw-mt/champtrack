@@ -4,9 +4,9 @@ import './../screens/mainScreen.dart';
 import './../screens/helperScreen.dart';
 import './../screens/settingsScreen.dart';
 import 'package:get/get.dart';
+import '../Strings.dart';
 
 class NavDrawer extends StatelessWidget {
-
   // Navigation widget for Material app. Can be opend from the sidebar
   @override
   Widget build(BuildContext context) {
@@ -16,7 +16,7 @@ class NavDrawer extends StatelessWidget {
         children: <Widget>[
           DrawerHeader(
               child: Text(
-                'Side menu',
+                Strings.sideMenuHeader,
                 style: TextStyle(color: Colors.white, fontSize: 25),
               ),
               decoration: BoxDecoration(
@@ -24,19 +24,19 @@ class NavDrawer extends StatelessWidget {
               )),
           ListTile(
             leading: Icon(Icons.input),
-            title: Text('Settings'),
+            title: Text(Strings.settings),
             onTap: () => {Get.to(SettingsScreen())},
           ),
           ListTile(
             leading: Icon(Icons.verified_user),
-            title: Text('Main Screen'),
+            title: Text(Strings.mainScreen),
             onTap: () => {
               if (Get.currentRoute.toString() != "/") {Get.to(MainScreen())}
             },
           ),
           ListTile(
             leading: Icon(Icons.verified_user),
-            title: Text('Helper Screen'),
+            title: Text(Strings.helperScreen),
             onTap: () => {Get.to(HelperScreen())},
           ),
         ],
