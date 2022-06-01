@@ -11,7 +11,10 @@ class ReverseButton extends GetView<GlobalController> {
     DatabaseRepository repo = DatabaseRepository();
     return FloatingActionButton(
         onPressed: (() {
-          repo.deleteLastAction();
+          if (globalController.actions.isNotEmpty) {
+            repo.deleteLastAction();
+            globalController.actions.removeLast();
+          }
         }),
         child: const Icon(Icons.undo));
   }
