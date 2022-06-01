@@ -67,6 +67,7 @@ void callPlayerMenu(context) {
           height: 6,
         ),
         // Button-Row: one Row with four Columns of one or two buttons
+        // TODO: implement safety check if less than 7 players are somehow selected
         Row(children: [
           dialogButtons[0],
           Column(
@@ -131,7 +132,6 @@ Obx buildDialogButton(BuildContext context, Player player) {
   }
 
   void logPlayerSelection() async {
-    print("log player");
     GameAction lastAction = globalController.actions.last;
     print("last action");
     String? activePlayerId = globalController.lastClickedPlayer.value.id;
@@ -156,6 +156,7 @@ Obx buildDialogButton(BuildContext context, Player player) {
         repository.updateAction(lastAction);
         globalController.actions.last = lastAction;
         globalController.lastClickedPlayer.value = Player();
+        globalController.addFeedItem();
         globalController.refresh();
       } else {
         // if it was an assist update data for both
@@ -163,6 +164,7 @@ Obx buildDialogButton(BuildContext context, Player player) {
         lastAction.playerId = activePlayerId!;
         repository.updateAction(lastAction);
         globalController.actions.last = lastAction;
+        globalController.addFeedItem();
         // person that scored assist
         // deep clone a new action from the most recent action
 
@@ -174,6 +176,7 @@ Obx buildDialogButton(BuildContext context, Player player) {
         repository.addActionToGame(assistAction);
         globalController.actions.add(assistAction);
         globalController.lastClickedPlayer.value = Player();
+        globalController.addFeedItem();
       }
     } else {
       // if the action was not a goal just update the player id in firebase and gamestate
@@ -181,6 +184,7 @@ Obx buildDialogButton(BuildContext context, Player player) {
       globalController.actions.last = lastAction;
       repository.updateAction(lastAction);
       globalController.lastClickedPlayer.value = Player();
+      globalController.addFeedItem();
     }
     print("last action saved in database: ");
     print(globalController.actions.last.toMap());
