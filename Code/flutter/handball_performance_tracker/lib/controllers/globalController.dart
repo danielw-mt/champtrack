@@ -23,6 +23,15 @@ class GlobalController extends GetxController {
   final selectedPlayer = Player().obs;
   var availablePlayers = [].obs;
   var chosenPlayers = [].obs;
+  var playersNotOnField = [
+    Player(id: "8", name: "aaaaaaaaaaaa", number: 20, position: ["HL"]),
+    Player(id: "9", name: "bbbbbbbbbbbb", number: 22, position: ["HR"]),
+    Player(id: "11", name: "ccccccccccc", number: 24, position: ["VL"]),
+    Player(id: "12", name: "dddddddddd", number: 25, position: ["HR", "VR"]),
+    Player(id: "14", name: "eeeeeeeeeeee", number: 22, position: ["HL", "VL"]),
+    Player(id: "15", name: "ffffffffffff", number: 26, position: ["HL", "VL"]),
+    Player(id: "17", name: "gggggggggggg", number: 27, position: ["Tor"]),
+  ].obs;
   // boolean list of chosen players i.e. true, true, false would mean the first two players start
   RxList<dynamic> playersOnField = [].obs;
 
@@ -103,6 +112,7 @@ class GlobalController extends GetxController {
   /// corresponding player object for last clicked player name in the player menu
   var lastClickedPlayer = Player().obs;
 
+  var playerToChange = Player().obs;
   ////
   // game tracking
   ////
