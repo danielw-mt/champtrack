@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import '../../data/game_action.dart';
 import 'playermenu.dart';
+import 'package:stop_watch_timer/stop_watch_timer.dart';
 import 'dart:math';
 
 // TODO add to constants file
@@ -276,6 +277,7 @@ DialogButton buildDialogButton(
         ),
       ),
       onPressed: () {
+        // reset the feed timer
         logAction();
         Navigator.pop(context);
         callPlayerMenu(context);
