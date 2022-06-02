@@ -16,9 +16,12 @@ class HelperScreen extends GetView<GlobalController> {
         ),
         body: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [Column(
-          children: [StopWatch(), ReverseButton(),ActionFeed()],
-        ), EfScoreBar()],
-      );
+          children: [
+            EfScoreBar(),
+            Column(
+              children: [StopWatch(), ReverseButton(), ActionFeed()],
+            ),
+          ],
+        ));
   }
 }
