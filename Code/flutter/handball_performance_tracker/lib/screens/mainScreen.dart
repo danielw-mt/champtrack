@@ -6,6 +6,7 @@ import 'package:handball_performance_tracker/widgets/main_screen/field.dart';
 import './../widgets/nav_drawer.dart';
 import 'package:handball_performance_tracker/utils/fieldSizeParameter.dart'
     as fieldSizeParameter;
+import 'package:flutter/services.dart';
 
 class MainScreen extends StatelessWidget {
   // screen where the game takes place
@@ -13,6 +14,10 @@ class MainScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.landscapeRight,
+      DeviceOrientation.landscapeLeft,
+    ]);
     return Scaffold(
       drawer: NavDrawer(),
       appBar: AppBar(title: const Text("Title")),
