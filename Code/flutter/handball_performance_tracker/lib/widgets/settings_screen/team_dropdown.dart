@@ -37,7 +37,7 @@ class TeamDropdown extends StatelessWidget {
           }
           // build the dropdown button
           return Obx(() => DropdownButton<String>(
-                value: globalController.selectedTeam.value.name,
+                value: globalController.selectedTeam.value.id,
                 icon: const Icon(Icons.arrow_downward),
                 elevation: 16,
                 style: const TextStyle(color: Colors.deepPurple),
@@ -53,7 +53,7 @@ class TeamDropdown extends StatelessWidget {
                 items:
                     availableTeams.map<DropdownMenuItem<String>>((Team team) {
                   return DropdownMenuItem<String>(
-                    value: team.name,
+                    value: team.id,
                     child: Text(team.name),
                   );
                 }).toList(),
