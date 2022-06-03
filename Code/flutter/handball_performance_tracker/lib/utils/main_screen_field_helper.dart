@@ -3,6 +3,7 @@ import 'package:handball_performance_tracker/utils/fieldSizeParameter.dart'
     as fieldSizeParameter;
 import 'dart:math' as math;
 import 'dart:ui' as ui;
+import '../constants/positions.dart';
 
 /* Class to calculate if a click was inside or outside a section.
 * 
@@ -21,13 +22,18 @@ class SectorCalc {
     }
   }
 
-  String calculatePosition(Offset position) {
+  /* 
+   * @return List<String> consisting of two elements
+   * the first element is the sector number (from 0 to 5) converted to String,
+   * the second element is the distance of the player from the goal (<6, 6to9, >9)
+   */
+  List<String> calculatePosition(Offset position) {
     num x = position.dx;
     num y = position.dy;
 
     int sector = determineSector(x, y);
     String perimeters = determinePerimeter(x, y);
-    return "sector " + sector.toString() + " and " + perimeters;
+    return [sector.toString(), perimeters];
   }
 
   /* Calculates if a point (x,y) is inside the smaller ellipse.
@@ -63,22 +69,19 @@ class SectorCalc {
   }
 
   /// deterime whether throw was from within 6m, 9m or further
-  /// @return boolan list [within 6m, within 9m]
+  /// @return String (<6, 6to9, >9)
   String determinePerimeter(num x, num y) {
-    String in9m = "";
-    String in6m = "";
-    if (inNineMeterEllipse(x, y)) {
-      in9m = "in 9m";
+    bool inNineMeter = inNineMeterEllipse(x, y);
+    bool inSixMeter = inSixMeterEllipse(x, y);
+    if (inNineMeter) {
+      if (inSixMeter) {
+        return inSix;
+      } else {
+        return betweenSixAndNine;
+      }
     } else {
-      in9m = "not in 9m";
+      return outsideNine;
     }
-
-    if (inSixMeterEllipse(x, y)) {
-      in6m = "in 6m";
-    } else {
-      in6m = "not in 6m";
-    }
-    return in6m + " and " + in9m;
   }
 
   /* 

@@ -5,36 +5,9 @@ import '../../controllers/globalController.dart';
 import 'package:get/get.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import '../../data/game_action.dart';
+import '../../data/database_repository.dart';
+import '../../constants/game_actions.dart';
 import 'playermenu.dart';
-
-// TODO add to constants file
-List<String> attackActions = [
-  "Tor",
-  "1v1 & 7m",
-  "2min ziehen",
-  "Fehlwurf",
-  "TRF"
-];
-List<String> defenseActions = [
-  "Rote Karte",
-  "Foul => 7m",
-  "Zeitstrafe",
-  "Block ohne Ballgewinn",
-  "Block & Steal"
-];
-
-Map<String, String> actionMapping = {
-  "Tor": "goal",
-  "1v1 & 7m": "1v1",
-  "2min ziehen": "2min",
-  "Fehlwurf": "err-throw",
-  "TRF": "trf",
-  "Rote Karte": "red",
-  "Foul => 7m": "foul",
-  "Zeitstrafe": "penalty",
-  "Block ohne Ballgewinn": "block",
-  "Block & Steal": "block-steal"
-};
 
 void callActionMenu(BuildContext context) {
   final GlobalController globalController = Get.find<GlobalController>();
@@ -58,8 +31,8 @@ void callActionMenu(BuildContext context) {
           // when displayAttackActions is true display buttonlist with attack
           //options otherwise with defense options
           buttons: determineAttack()
-              ? buildDialogButtonList(context, attackActions)
-              : buildDialogButtonList(context, defenseActions))
+              ? buildDialogButtonList(context, actionMapping[attack]!.keys.toList())
+              : buildDialogButtonList(context, actionMapping[defense]!.keys.toList()))
       .show();
 }
 
@@ -100,7 +73,6 @@ List<DialogButton> buildDialogButtonList(
 //  and updates the game state
 DialogButton buildDialogButton(BuildContext context, String buttonText) {
   final GlobalController globalController = Get.find<GlobalController>();
-  //TODO add repository instance to global controller?
   DatabaseRepository repository = DatabaseRepository();
   void logAction() async {
     DateTime dateTime = DateTime.now();
@@ -110,13 +82,14 @@ DialogButton buildDialogButton(BuildContext context, String buttonText) {
 
     // get most recent game id from DB
     String currentGameId = globalController.currentGame.value.id!;
+    String actionType = determineAttack() ? attack : defense;
 
     GameAction action = GameAction(
         clubId: globalController.currentClub.value.id!,
         gameId: currentGameId,
-        type: determineAttack() ? "attack" : "defense",
-        actionType: actionMapping[buttonText]!,
-        throwLocation: globalController.lastLocation.value,
+        type: actionType,
+        actionType: actionMapping[actionType]![buttonText]!,
+        throwLocation: globalController.lastLocation.cast<String>(),
         timestamp: unixTime,
         relativeTime: secondsSinceGameStart);
     globalController.actions.add(action);
