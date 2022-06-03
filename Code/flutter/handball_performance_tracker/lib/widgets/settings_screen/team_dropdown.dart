@@ -47,7 +47,7 @@ class TeamDropdown extends StatelessWidget {
                 ),
                 onChanged: (String? newValue) {
                   globalController.selectedTeam.value = availableTeams
-                      .firstWhere((element) => element.name == newValue);
+                      .firstWhere((element) => element.id == newValue);
                 },
                 // build dropdown item widgets
                 items:
