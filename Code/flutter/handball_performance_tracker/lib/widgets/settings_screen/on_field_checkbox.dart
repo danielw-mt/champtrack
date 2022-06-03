@@ -28,6 +28,7 @@ class OnFieldCheckbox extends StatelessWidget {
                 } else {
                   playersOnField[index] = false;
                 }
+                globalController.setPlayerBarPlayers();
                 globalController.refresh();
               },
             ));

@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:handball_performance_tracker/data/game_action.dart';
+import 'package:handball_performance_tracker/utils/player_helper.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 
 import '../data/club.dart';
@@ -104,7 +105,22 @@ class GlobalController extends GetxController {
   /// corresponding player object for last clicked player name in the player menu
   var lastClickedPlayer = Player().obs;
 
+  /// @return Rx<Player>
+  /// corresponding player object for last clicked player name in the efscore player bar
   var playerToChange = Player().obs;
+
+  // list of 7 or less Integer, give the indices of players on field in the order in which they appear on efscore player bar
+  var playerBarPlayers = [].obs;
+
+  // set the order of players displayed in player bar:
+  // The first player that was added to the game it the first in the player bar and so on.
+  void setPlayerBarPlayers() {
+    playerBarPlayers.clear();
+    for (int i in getOnFieldIndex()) {
+      playerBarPlayers.add(i);
+    }
+  }
+
   ////
   // game tracking
   ////

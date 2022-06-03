@@ -82,6 +82,7 @@ class GameStartStopButtons extends StatelessWidget {
     globalController.stopWatchTimer.value.onExecute.add(StopWatchExecute.start);
 
     globalController.gameStarted.value = true;
+    globalController.setPlayerBarPlayers();
     globalController.refresh();
   }
 
@@ -111,7 +112,7 @@ class GameStartStopButtons extends StatelessWidget {
     for (Player player in globalController.chosenPlayers) {
       if (!player.games.contains(game.id)) {
         player.games.add(game.id!);
-        repository.updatePlayer(player);//TODO maybe only update on stop?
+        repository.updatePlayer(player); //TODO maybe only update on stop?
       }
     }
   }
