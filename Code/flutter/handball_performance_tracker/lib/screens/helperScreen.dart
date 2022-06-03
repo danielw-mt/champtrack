@@ -11,14 +11,18 @@ class HelperScreen extends GetView<GlobalController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: const Text('CountDown Sample'),
-        ),
-        body: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [Column(
-          children: [StopWatch(), ReverseButton(),ActionFeed()],
-        ), EfScoreBar()],
-      ));
+      appBar: AppBar(
+        title: const Text('CountDown Sample'),
+      ),
+      body: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Column(
+            children: [StopWatch(), ReverseButton(), ActionFeed()],
+          ),
+          EfScoreBar()
+        ],
+      ),
+    );
   }
 }
