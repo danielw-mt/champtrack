@@ -27,11 +27,11 @@ class DatabaseRepository {
     await _db.collection("players").doc(player.id).delete();
   }
 
-  // query all players of the current club
+  // query all players of the current team
   Stream<QuerySnapshot> getPlayerStream() {
     return _db
         .collection("players")
-        .where("clubId", isEqualTo: globalController.currentClub.value.id)
+        .where("teamId", isEqualTo: globalController.selectedTeam.value.id)
         .snapshots();
   }
 
@@ -51,11 +51,16 @@ class DatabaseRepository {
     // TODO: delete game from games list of all players
   }
 
-  // query all games of current club
+  // query all teams in db
+  Stream<QuerySnapshot> getTeamStream() {
+    return _db.collection("teams").snapshots();
+  }
+
+  // query all games of current team
   Stream<QuerySnapshot> getGameStream() {
     return _db
         .collection("games")
-        .where("clubId", isEqualTo: globalController.currentClub.value.id)
+        .where("teamId", isEqualTo: globalController.selectedTeam.value.id)
         .snapshots();
   }
 
@@ -63,7 +68,7 @@ class DatabaseRepository {
   Stream<QuerySnapshot> getCurrentGameStream() {
     return _db
         .collection("games")
-        .where("clubId", isEqualTo: globalController.currentClub.value.id)
+        .where("teamId", isEqualTo: globalController.selectedTeam.value.id)
         .where("gameId", isEqualTo: globalController.currentGame.value.id)
         .snapshots();
   }

@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:handball_performance_tracker/data/game_action.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 
-import '../data/club.dart';
+import '../data/team.dart';
 import '../data/game.dart';
 import '../data/player.dart';
 import 'dart:async';
@@ -14,8 +14,11 @@ class GlobalController extends GetxController {
 
   ///
   // currently signed in club
+  // TODO implement this
+  var currentClub = "".obs;
+
   /// @return rxString
-  var currentClub = Club(id: "-1").obs;
+  var selectedTeam = Team(id: "").obs;
 
   ////
   // settingsscreen

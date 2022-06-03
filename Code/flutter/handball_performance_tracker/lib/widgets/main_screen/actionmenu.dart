@@ -235,7 +235,7 @@ DialogButton buildDialogButton(
     // get most recent game id from DB
     String currentGameId = globalController.currentGame.value.id!;
     GameAction action = GameAction(
-        clubId: globalController.currentClub.value.id!,
+        clubId: globalController.selectedTeam.value.id!,
         gameId: currentGameId,
         type: determineAttack() ? "attack" : "defense",
         actionType: actionMapping[buttonText]!,

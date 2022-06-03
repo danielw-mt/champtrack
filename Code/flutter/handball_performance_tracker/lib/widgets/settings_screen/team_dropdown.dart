@@ -4,34 +4,40 @@ import '../../data/player.dart';
 import '../../controllers/globalController.dart';
 import 'package:get/get.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import '../../data/team.dart';
 
-class PlayerDropdown extends StatelessWidget {
-  // dropdown that pull the available players from the players collection in firestore
-
+// dropdown that shows all available teams
+class TeamDropdown extends StatelessWidget {
   GlobalController globalController = Get.find<GlobalController>();
+
+  // TODO:
+  // * list all the teams
+  // when team is selected updated global state
 
   @override
   Widget build(BuildContext context) {
     DatabaseRepository repository = DatabaseRepository();
 
-    List<Player> availablePlayers = [];
+    List<Team> availableTeams = [];
 
     return StreamBuilder<QuerySnapshot>(
-      stream: repository.getPlayerStream(),
+      stream: repository.getTeamStream(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          // set default selection
-          globalController.selectedPlayer.value = Player.fromDocumentSnapshot(
+          // set default selection as the first team in db
+          globalController.selectedTeam.value = Team.fromDocumentSnapshot(
               snapshot.data!.docs[0] as DocumentSnapshot<Map<String, dynamic>>);
+          // add all the team objects to the available teams list so they can be used later in the dropdown
           for (var element in snapshot.data!.docs) {
-            Player player = Player.fromDocumentSnapshot(
+            Team team = Team.fromDocumentSnapshot(
                 element as DocumentSnapshot<Map<String, dynamic>>);
-            if (!availablePlayers.contains(player)) {
-              availablePlayers.add(player);
+            if (!availableTeams.contains(team)) {
+              availableTeams.add(team);
             }
           }
+          // build the dropdown button
           return Obx(() => DropdownButton<String>(
-                value: globalController.selectedPlayer.value.name,
+                value: globalController.selectedTeam.value.name,
                 icon: const Icon(Icons.arrow_downward),
                 elevation: 16,
                 style: const TextStyle(color: Colors.deepPurple),
@@ -40,14 +46,15 @@ class PlayerDropdown extends StatelessWidget {
                   color: Colors.deepPurpleAccent,
                 ),
                 onChanged: (String? newValue) {
-                  globalController.selectedPlayer.value = availablePlayers
+                  globalController.selectedTeam.value = availableTeams
                       .firstWhere((element) => element.name == newValue);
                 },
-                items: availablePlayers
-                    .map<DropdownMenuItem<String>>((Player player) {
+                // build dropdown item widgets
+                items:
+                    availableTeams.map<DropdownMenuItem<String>>((Team team) {
                   return DropdownMenuItem<String>(
-                    value: player.name,
-                    child: Text(player.name),
+                    value: team.name,
+                    child: Text(team.name),
                   );
                 }).toList(),
               ));

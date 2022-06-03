@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import './../widgets/settings_screen/player_dropdown.dart';
+import '../widgets/settings_screen/team_dropdown.dart';
 import './../widgets/settings_screen/on_field_checkbox.dart';
 import './../widgets/settings_screen/game_start_stop_buttons.dart';
 import './../controllers/globalController.dart';
@@ -23,7 +23,7 @@ class SettingsScreen extends GetView<GlobalController> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Center(child: PlayerDropdown()),
+              Center(child: TeamDropdown()),
               FloatingActionButton(
                   child: Icon(Icons.add),
                   onPressed: (() {

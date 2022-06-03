@@ -65,7 +65,7 @@ class GameStartStopButtons extends StatelessWidget {
     DateTime dateTime = DateTime.now();
     int unixTimeStamp = dateTime.toUtc().millisecondsSinceEpoch;
     Game newGame = Game(
-        clubId: globalController.currentClub.value.id!,
+        clubId: globalController.selectedTeam.value.id!,
         date: dateTime,
         startTime: unixTimeStamp,
         players: globalController.chosenPlayers.cast<Player>());
@@ -111,7 +111,7 @@ class GameStartStopButtons extends StatelessWidget {
     for (Player player in globalController.chosenPlayers) {
       if (!player.games.contains(game.id)) {
         player.games.add(game.id!);
-        repository.updatePlayer(player);//TODO maybe only update on stop?
+        repository.updatePlayer(player); //TODO maybe only update on stop?
       }
     }
   }
