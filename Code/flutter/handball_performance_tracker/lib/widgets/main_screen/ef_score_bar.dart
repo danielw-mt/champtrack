@@ -32,13 +32,14 @@ Color pressedButtonColor = Colors.blue;
 double numberFontSize = 16;
 double nameFontSize = 12;
 // Spectrum for color coding of efscore
+// TODO: Adapt the range to typical efscore values
 var rb = Rainbow(spectrum: [
   Color(0xffff6600),
   Color(0xffffaa00),
   Color(0xffffaa00),
   Color(0xffd0ff00),
   Color(0xff1fff00),
-], rangeStart: 0.0, rangeEnd: 30.0);
+], rangeStart: -20.0, rangeEnd: 20.0);
 
 /*
 * Class that builds the column with buttons for both permanent efscore player bar and player changing popup.
@@ -255,8 +256,12 @@ Container buildPlayerButton(BuildContext context, int i) {
                     // width is 1/5 of button width
                     width: scorebarButtonWidth / 5,
                     child: Text(
-                      // TODO change to real efscore
-                      "-2,8",
+                      (globalController
+                              .chosenPlayers[
+                                  globalController.playerBarPlayers[i]]
+                              .efScore
+                              .score)
+                          .toString(),
                       style: TextStyle(
                         color: Colors.black,
                         fontSize: nameFontSize,
@@ -292,15 +297,16 @@ Container buildPlayerButton(BuildContext context, int i) {
             width: scorebarButtonWidth / 30,
             padding: EdgeInsets.all(0),
             decoration: BoxDecoration(
-                // TODO: change number by efscore (right now the it colors by playernumber)
                 color: rb[globalController
                     .chosenPlayers[globalController.playerBarPlayers[i]]
-                    .number],
+                    .efScore
+                    .score],
                 // set border so corners can be made round
                 border: Border.all(
                   color: rb[globalController
                       .chosenPlayers[globalController.playerBarPlayers[i]]
-                      .number],
+                      .efScore
+                      .score],
                 ),
                 borderRadius: BorderRadius.only(
                   topRight: Radius.circular(buttonRadius),
