@@ -1,7 +1,7 @@
 library fieldSizeParameter;
 
 import 'dart:ui' as ui;
-
+import 'dart:math';
 import 'package:flutter/material.dart';
 
 // Here are the parameter which describe the field (2 ellipses and sector borders).
@@ -23,10 +23,12 @@ double toolbarHeight = AppBar().preferredSize.height;
 // pixel size of border, 7m and 9m line
 double lineSize = 3;
 
-double fieldWidth = screenWidth * 0.7;
 // fieldHeigt takes all available screen height -> substract height of toolbar, size of border*2 and padding due to time, battery indicator etc
-double fieldHeight =
+double availableScreenHeight =
     screenHeight - toolbarHeight - paddingBottom - paddingTop - lineSize * 2;
+// take ratio of screenwidth and height into account, so the field is not stretched
+double fieldHeight = min(availableScreenHeight, screenWidth);
+double fieldWidth = fieldHeight * 0.6;
 
 // Radii of the ellipses for six meter and 9 meter
 double nineMeterRadiusX = fieldWidth / 1.5;
