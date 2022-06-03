@@ -36,6 +36,7 @@ const String errThrowLastFive = "errLastFive";
 const String trf = "trf";
 const String foulWithSeven = "foul";
 const String timePenalty = "timePen";
+const String redCard = "red";
 
 const String positiveAction = "pos";
 const String negativeAction = "neg";
@@ -59,7 +60,8 @@ const Map<String, Map<String, int>> efScoreParameters = {
     "errLastFive": 10,
     "trf": 8,
     "foul": 7,
-    "timePen": 8
+    "timePen": 8,
+    "red":15
   }
 };
 
