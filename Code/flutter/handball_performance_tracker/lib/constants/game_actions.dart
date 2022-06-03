@@ -3,6 +3,9 @@ const String defense = "defense";
 
 const Map<String, Map<String, String>> actionMapping = {
   attack: {
+    "Rote Karte":"red",
+    "Gelbe Karte":"yellow",
+    "Zeitstrafe":"penalty",
     "Tor": "goal",
     "1v1 & 7m": "1v1",
     "2min ziehen": "2min",
@@ -11,10 +14,12 @@ const Map<String, Map<String, String>> actionMapping = {
   },
   defense: {
     "Rote Karte": "red",
+    "Gelbe Karte":"yellow",
     "Foul => 7m": "foul",
     "Zeitstrafe": "penalty",
     "Block ohne Ballgewinn": "block",
-    "Block & Steal": "block_steal"
+    "Block & Steal": "block_steal",
+    "TRF": "trf",
   }
 };
 
@@ -36,6 +41,7 @@ const String errThrowLastFive = "errLastFive";
 const String trf = "trf";
 const String foulWithSeven = "foul";
 const String timePenalty = "timePen";
+const String redCard = "red";
 
 const String positiveAction = "pos";
 const String negativeAction = "neg";
@@ -59,7 +65,8 @@ const Map<String, Map<String, int>> efScoreParameters = {
     "errLastFive": 10,
     "trf": 8,
     "foul": 7,
-    "timePen": 8
+    "timePen": 8,
+    "red":15
   }
 };
 
