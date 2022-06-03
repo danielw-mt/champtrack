@@ -96,4 +96,31 @@ class DatabaseRepository {
         .doc(action.id)
         .delete();
   }
+
+  void deleteLastAction() async {
+    // get the latest game
+    QuerySnapshot mostRecentGameQuery = await _db
+        .collection("games")
+        .orderBy("date", descending: true)
+        .limit(1)
+        .get();
+    DocumentSnapshot mostRecentGame = mostRecentGameQuery.docs[0];
+    // look inside gameActions for the lastest action for that game
+    QuerySnapshot mostRecentActionQuery = await _db
+        .collection("gameData")
+        .doc(mostRecentGame.id)
+        .collection("actions")
+        .orderBy("timestamp", descending: true)
+        .limit(1)
+        .get();
+
+    DocumentSnapshot mostRecentAction = mostRecentActionQuery.docs[0];
+    // delete most recent doc
+    _db
+        .collection("gameData")
+        .doc(mostRecentGame.id)
+        .collection("actions")
+        .doc(mostRecentAction.id)
+        .delete();
+  }
 }
