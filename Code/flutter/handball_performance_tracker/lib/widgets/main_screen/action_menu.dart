@@ -5,44 +5,11 @@ import '../../controllers/globalController.dart';
 import 'package:get/get.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import '../../data/game_action.dart';
+import '../../data/database_repository.dart';
+import '../../constants/game_actions.dart';
 import 'playermenu.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 import 'dart:math';
-
-// TODO add to constants file
-List<String> attackActions = [
-  "Rote Karte",
-  "Gelbe Karte",
-  "Zeitstrafe",
-  "2min ziehen",
-  "Fehlwurf",
-  "TRF",
-  "Tor",
-  "1v1 & 7m",
-];
-List<String> defenseActions = [
-  "Rote Karte",
-  "Gelbe Karte",
-  "Zeitstrafe",
-  "Foul => 7m",
-  "TRF",
-  "Block",
-  "Block & Steal"
-];
-
-Map<String, String> actionMapping = {
-  "Tor": "goal",
-  "1v1 & 7m": "1v1",
-  "2min ziehen": "2min",
-  "Fehlwurf": "err-throw",
-  "TRF": "trf",
-  "Rote Karte": "red",
-  "Gelbe Karte": "yellow",
-  "Foul => 7m": "foul",
-  "Zeitstrafe": "penalty",
-  "Block ohne Ballgewinn": "block",
-  "Block & Steal": "block-steal"
-};
 
 void callActionMenu(BuildContext context) {
   final GlobalController globalController = Get.find<GlobalController>();
@@ -106,13 +73,13 @@ bool determineAttack() {
 List<Widget> buildPageViewChildren(BuildContext context) {
   if (determineAttack() == true) {
     return [
-      buildDialogButtonMenu(context, attackActions, true),
-      buildDialogButtonMenu(context, defenseActions, false),
+      buildDialogButtonMenu(context, actionMapping[attack]!.keys.toList(), true),
+      buildDialogButtonMenu(context, actionMapping[defense]!.keys.toList(), false),
     ];
   } else {
     return [
-      buildDialogButtonMenu(context, defenseActions, false),
-      buildDialogButtonMenu(context, attackActions, true),
+      buildDialogButtonMenu(context, actionMapping[defense]!.keys.toList(), false),
+      buildDialogButtonMenu(context, actionMapping[attack]!.keys.toList(), true),
     ];
   }
 }
@@ -122,14 +89,14 @@ Widget buildDialogButtonMenu(
     BuildContext context, List<String> buttonTexts, isAttack) {
   if (isAttack) {
     List<DialogButton> dialogButtons = [
-      buildDialogButton(context, defenseActions[0], Colors.red, Icons.style),
-      buildDialogButton(context, defenseActions[1], Colors.yellow, Icons.style),
-      buildDialogButton(context, defenseActions[2], Colors.grey, Icons.timer),
-      buildDialogButton(context, attackActions[3], Colors.grey),
-      buildDialogButton(context, attackActions[4], Colors.grey),
-      buildDialogButton(context, attackActions[5], Colors.blue),
-      buildDialogButton(context, attackActions[6], Colors.blue),
-      buildDialogButton(context, attackActions[7], Colors.blue)
+      buildDialogButton(context, actionMapping[defense]!.keys.toList()[0], Colors.red, Icons.style),
+      buildDialogButton(context, actionMapping[defense]!.keys.toList()[1], Colors.yellow, Icons.style),
+      buildDialogButton(context, actionMapping[defense]!.keys.toList()[2], Colors.grey, Icons.timer),
+      buildDialogButton(context, actionMapping[attack]!.keys.toList()[3], Colors.grey),
+      buildDialogButton(context, actionMapping[attack]!.keys.toList()[4], Colors.grey),
+      buildDialogButton(context, actionMapping[attack]!.keys.toList()[5], Colors.blue),
+      buildDialogButton(context, actionMapping[attack]!.keys.toList()[6], Colors.blue),
+      buildDialogButton(context, actionMapping[attack]!.keys.toList()[7], Colors.blue)
     ];
     return Column(children: [
       Row(
@@ -169,14 +136,14 @@ Widget buildDialogButtonMenu(
     ]);
   } else {
     List<DialogButton> dialogButtons = [
-      buildDialogButton(context, defenseActions[0], Colors.red, Icons.style),
-      buildDialogButton(context, defenseActions[1], Colors.yellow, Icons.style),
-      buildDialogButton(context, defenseActions[2],
+      buildDialogButton(context, actionMapping[defense]!.keys.toList()[0], Colors.red, Icons.style),
+      buildDialogButton(context, actionMapping[defense]!.keys.toList()[1], Colors.yellow, Icons.style),
+      buildDialogButton(context, actionMapping[defense]!.keys.toList()[2],
           const Color.fromRGBO(15, 66, 199, 32), Icons.timer),
-      buildDialogButton(context, defenseActions[3], Colors.grey),
-      buildDialogButton(context, defenseActions[4], Colors.grey),
-      buildDialogButton(context, defenseActions[5], Colors.blue),
-      buildDialogButton(context, defenseActions[6], Colors.blue)
+      buildDialogButton(context, actionMapping[defense]!.keys.toList()[3], Colors.grey),
+      buildDialogButton(context, actionMapping[defense]!.keys.toList()[4], Colors.grey),
+      buildDialogButton(context, actionMapping[defense]!.keys.toList()[5], Colors.blue),
+      buildDialogButton(context, actionMapping[defense]!.keys.toList()[6], Colors.blue)
     ];
     return Column(children: [
       Row(
@@ -224,7 +191,6 @@ DialogButton buildDialogButton(
     BuildContext context, String buttonText, Color color,
     [icon]) {
   final GlobalController globalController = Get.find<GlobalController>();
-  //TODO add repository instance to global controller?
   DatabaseRepository repository = DatabaseRepository();
   void logAction() async {
     DateTime dateTime = DateTime.now();
@@ -234,12 +200,14 @@ DialogButton buildDialogButton(
 
     // get most recent game id from DB
     String currentGameId = globalController.currentGame.value.id!;
+    String actionType = determineAttack() ? attack : defense;
+
     GameAction action = GameAction(
         clubId: globalController.currentClub.value.id!,
         gameId: currentGameId,
-        type: determineAttack() ? "attack" : "defense",
-        actionType: actionMapping[buttonText]!,
-        throwLocation: globalController.lastLocation.value,
+        type: actionType,
+        actionType: actionMapping[actionType]![buttonText]!,
+        throwLocation: globalController.lastLocation.cast<String>(),
         timestamp: unixTime,
         relativeTime: secondsSinceGameStart);
     globalController.actions.add(action);
