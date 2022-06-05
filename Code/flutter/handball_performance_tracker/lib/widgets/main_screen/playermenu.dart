@@ -67,6 +67,7 @@ void callPlayerMenu(context) {
           height: 6,
         ),
         // Button-Row: one Row with four Columns of one or two buttons
+        // TODO: implement safety check if less than 7 players are somehow selected
         Row(children: [
           dialogButtons[0],
           Column(
@@ -101,26 +102,14 @@ Obx buildDialogButton(BuildContext context, Player player) {
   String buttonText = player.name;
   String buttonNumber = (player.number).toString();
   final GlobalController globalController = Get.find<GlobalController>();
-  DatabaseRepository repository = DatabaseRepository();
+  DatabaseRepository repository = globalController.repository;
 
   // Get width and height, so the sizes can be calculated relative to those. So it should look the same on different screen sizes.
   final double width = MediaQuery.of(context).size.width;
   final double height = MediaQuery.of(context).size.height;
 
-  /// @return "" if action wasn't a goal, "solo" when player scored without
-  /// assist and "assist" when player click was assist
-  bool _wasAssist() {
-    // check if action was a goal
-    // if it was a goal allow the player to be pressed twice or select and assist player
-    // if the player is clicked again it is a solo action
-    if (globalController.lastClickedPlayer.value.name == buttonText) {
-      return false;
-    }
-    if (globalController.lastClickedPlayer.value.name != buttonText) {
-      return true;
-    }
-    return false;
-  }
+  /// @return true if action was an assist
+  bool _wasAssist() => globalController.lastClickedPlayer.value.name != buttonText; 
 
   Player? _getPlayerFromName(String name) {
     for (Player player in globalController.chosenPlayers) {
@@ -131,13 +120,12 @@ Obx buildDialogButton(BuildContext context, Player player) {
   }
 
   void logPlayerSelection() async {
-    print("log player");
     GameAction lastAction = globalController.actions.last;
     print("last action");
-    String? activePlayerId = globalController.lastClickedPlayer.value.id;
+    Player activePlayer = globalController.lastClickedPlayer.value;
 
     // if goal was pressed but no player was selected yet, do nothing
-    if (lastAction.actionType == "goal" && activePlayerId == null) {
+    if (lastAction.actionType == "goal" && activePlayer.id == null) {
       globalController.updatePlayerMenuText();
       print("goal player clicked once");
       globalController.lastClickedPlayer.value =
@@ -149,38 +137,53 @@ Obx buildDialogButton(BuildContext context, Player player) {
     if (lastAction.actionType == "goal") {
       print("goal player clicked twice");
       // if it was a solo goal the action type has to be updated to "Tor Solo"
-      if (_wasAssist() == false) {
+      if (!_wasAssist()) {
         print("solo goal");
         // update data for person that shot the goal
-        lastAction.playerId = activePlayerId!;
+        lastAction.playerId = activePlayer.id!;
         repository.updateAction(lastAction);
         globalController.actions.last = lastAction;
+        // update player's ef-score
+        activePlayer.addAction(lastAction); 
+
         globalController.lastClickedPlayer.value = Player();
+        globalController.addFeedItem();
         globalController.refresh();
       } else {
         // if it was an assist update data for both
         // person that scored goal
-        lastAction.playerId = activePlayerId!;
+        lastAction.playerId = activePlayer.id!;
         repository.updateAction(lastAction);
         globalController.actions.last = lastAction;
+        globalController.addFeedItem();
         // person that scored assist
         // deep clone a new action from the most recent action
 
         print("assist action: ${GameAction.clone(lastAction)}");
         GameAction assistAction = GameAction.clone(lastAction);
         print("assist action: $assistAction");
-        assistAction.playerId = globalController.lastClickedPlayer.value.id!;
+        Player assistPlayer = globalController.lastClickedPlayer.value; 
+        assistAction.playerId = assistPlayer.id!;
         assistAction.actionType = "assist";
         repository.addActionToGame(assistAction);
         globalController.actions.add(assistAction);
+        // update player's ef-score
+        assistPlayer.addAction(lastAction); 
+
         globalController.lastClickedPlayer.value = Player();
+        globalController.addFeedItem();
       }
     } else {
       // if the action was not a goal just update the player id in firebase and gamestate
-      lastAction.playerId = _getPlayerFromName(buttonText)!.id!;
+      activePlayer = _getPlayerFromName(buttonText)!; 
+      lastAction.playerId = activePlayer.id!;
       globalController.actions.last = lastAction;
       repository.updateAction(lastAction);
+      // update player's ef-scorer
+      activePlayer.addAction(lastAction); 
+
       globalController.lastClickedPlayer.value = Player();
+      globalController.addFeedItem();
     }
     print("last action saved in database: ");
     print(globalController.actions.last.toMap());
@@ -190,19 +193,17 @@ Obx buildDialogButton(BuildContext context, Player player) {
 
   // Button with shirt with buttonNumber inside and buttonText below.
   // Obx so the color changes if player == goalscorer,
-  return Obx(() => DialogButton(
-      child:
-          // Column with 2 entries: 1. a Stack with Shirt & buttonNumber and 2. buttonText
-          Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Stack(
-            alignment: Alignment.center,
+  return Obx(() {
+    // Dialog button that shows "No Assist" instead of the player name and shirt
+    // at the place where the first player was clicked
+    if (globalController.lastClickedPlayer.value.name == buttonText) {
+      return DialogButton(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              // ButtonNumber
               Text(
-                buttonNumber,
+                "No Assist",
                 style: TextStyle(
                   color: Colors.black,
                   fontSize: (width * 0.03),
@@ -210,36 +211,73 @@ Obx buildDialogButton(BuildContext context, Player player) {
                 ),
               ),
               // Shirt
-              Center(
-                child: Icon(
-                  MyFlutterApp.t_shirt,
-                  size: (width * 0.11),
-                ),
-              ),
             ],
           ),
-          // ButtonName
-          Text(
-            buttonText,
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: (width * 0.02),
-              fontWeight: FontWeight.bold,
+          // have some space between the buttons
+          margin: EdgeInsets.all(min(height, width) * 0.013),
+          // have round edges with same degree as Alert dialog
+          radius: const BorderRadius.all(Radius.circular(15)),
+          // set height and width of buttons so the shirt and name are fitting inside
+          height: width * 0.14,
+          width: width * 0.14,
+          color: globalController.lastClickedPlayer.value == player
+              ? Colors.purple
+              : Color.fromARGB(255, 180, 211, 236),
+          onPressed: () {
+            logPlayerSelection();
+          });
+    }
+    return DialogButton(
+        child:
+            // Column with 2 entries: 1. a Stack with Shirt & buttonNumber and 2. buttonText
+            Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Stack(
+              alignment: Alignment.center,
+              children: [
+                // ButtonNumber
+                Text(
+                  buttonNumber,
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: (width * 0.03),
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                // Shirt
+                Center(
+                  child: Icon(
+                    MyFlutterApp.t_shirt,
+                    size: (width * 0.11),
+                  ),
+                ),
+              ],
             ),
-          ),
-        ],
-      ),
-      // have some space between the buttons
-      margin: EdgeInsets.all(min(height, width) * 0.013),
-      // have round edges with same degree as Alert dialog
-      radius: const BorderRadius.all(Radius.circular(15)),
-      // set height and width of buttons so the shirt and name are fitting inside
-      height: width * 0.14,
-      width: width * 0.14,
-      color: globalController.lastClickedPlayer.value == player
-          ? Colors.purple
-          : Color.fromARGB(255, 180, 211, 236),
-      onPressed: () {
-        logPlayerSelection();
-      }));
+            // ButtonName
+            Text(
+              buttonText,
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: (width * 0.02),
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
+        // have some space between the buttons
+        margin: EdgeInsets.all(min(height, width) * 0.013),
+        // have round edges with same degree as Alert dialog
+        radius: const BorderRadius.all(Radius.circular(15)),
+        // set height and width of buttons so the shirt and name are fitting inside
+        height: width * 0.14,
+        width: width * 0.14,
+        color: globalController.lastClickedPlayer.value == player
+            ? Colors.purple
+            : Color.fromARGB(255, 180, 211, 236),
+        onPressed: () {
+          logPlayerSelection();
+        });
+  });
 }

@@ -11,7 +11,6 @@ import 'package:stop_watch_timer/stop_watch_timer.dart';
 
 class GameStartStopButtons extends StatelessWidget {
   GlobalController globalController = Get.find<GlobalController>();
-  DatabaseRepository repository = DatabaseRepository();
 
   @override
   Widget build(BuildContext context) {
@@ -70,7 +69,7 @@ class GameStartStopButtons extends StatelessWidget {
         startTime: unixTimeStamp,
         players: globalController.chosenPlayers.cast<Player>());
 
-    final DocumentReference ref = await repository.addGame(newGame);
+    final DocumentReference ref = await globalController.repository.addGame(newGame);
     newGame.id = ref.id;
     globalController.currentGame.value = newGame;
     print("start game, id: ${globalController.currentGame.value.id}");
@@ -97,7 +96,7 @@ class GameStartStopButtons extends StatelessWidget {
     currentGame.scoreOpponent = globalController.opponentTeamGoals.value;
     currentGame.players = globalController.chosenPlayers.cast<Player>();
 
-    repository.updateGame(currentGame);
+    globalController.repository.updateGame(currentGame);
 
     // stop the game timer
     globalController.stopWatchTimer.value.onExecute.add(StopWatchExecute.stop);
@@ -111,7 +110,7 @@ class GameStartStopButtons extends StatelessWidget {
     for (Player player in globalController.chosenPlayers) {
       if (!player.games.contains(game.id)) {
         player.games.add(game.id!);
-        repository.updatePlayer(player);//TODO maybe only update on stop?
+        globalController.repository.updatePlayer(player);//TODO maybe only update on stop?
       }
     }
   }

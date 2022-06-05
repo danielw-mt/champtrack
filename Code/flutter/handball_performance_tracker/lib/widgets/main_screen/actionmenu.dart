@@ -101,12 +101,12 @@ List<DialogButton> buildDialogButtonList(
 DialogButton buildDialogButton(BuildContext context, String buttonText) {
   final GlobalController globalController = Get.find<GlobalController>();
   //TODO add repository instance to global controller?
-  DatabaseRepository repository = DatabaseRepository();
+  DatabaseRepository repository = globalController.repository;
   void logAction() async {
     DateTime dateTime = DateTime.now();
     int unixTime = dateTime.toUtc().millisecondsSinceEpoch;
     int secondsSinceGameStart =
-        globalController.stopWatchTimer.value.secondTime.value;
+        globalController.currentGame.value.stopWatch.secondTime.value;
 
     // get most recent game id from DB
     String currentGameId = globalController.currentGame.value.id!;
@@ -116,7 +116,7 @@ DialogButton buildDialogButton(BuildContext context, String buttonText) {
         gameId: currentGameId,
         type: determineAttack() ? "attack" : "defense",
         actionType: actionMapping[buttonText]!,
-        throwLocation: globalController.lastLocation.value,
+        throwLocation: globalController.lastLocation.value.cast<String>(),
         timestamp: unixTime,
         relativeTime: secondsSinceGameStart);
     globalController.actions.add(action);

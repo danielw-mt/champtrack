@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:handball_performance_tracker/data/game_action.dart';
 import 'ef_score.dart';
 
 class Player {
@@ -50,4 +51,6 @@ class Player {
   // Players are considered as identical if they have the same id
   bool operator ==(dynamic other) =>
       other != null && other is Player && id == other.id;
+
+  void addAction(GameAction action) => efScore.addAction(action, position);
 }
