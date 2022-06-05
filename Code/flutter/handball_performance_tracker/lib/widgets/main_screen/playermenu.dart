@@ -99,7 +99,7 @@ List<Obx> buildDialogButtonList(BuildContext context) {
 /// builds a single dialog button that logs its text (=player name) to firestore
 /// and updates the game state
 Obx buildDialogButton(BuildContext context, Player player) {
-  String buttonText = player.name;
+  String buttonText = player.lastName;
   String buttonNumber = (player.number).toString();
   final GlobalController globalController = Get.find<GlobalController>();
   DatabaseRepository repository = DatabaseRepository();
@@ -114,10 +114,10 @@ Obx buildDialogButton(BuildContext context, Player player) {
     // check if action was a goal
     // if it was a goal allow the player to be pressed twice or select and assist player
     // if the player is clicked again it is a solo action
-    if (globalController.lastClickedPlayer.value.name == buttonText) {
+    if (globalController.lastClickedPlayer.value.lastName == buttonText) {
       return false;
     }
-    if (globalController.lastClickedPlayer.value.name != buttonText) {
+    if (globalController.lastClickedPlayer.value.lastName != buttonText) {
       return true;
     }
     return false;
@@ -125,7 +125,7 @@ Obx buildDialogButton(BuildContext context, Player player) {
 
   Player? _getPlayerFromName(String name) {
     for (Player player in globalController.chosenPlayers) {
-      if (player.name == name) {
+      if (player.lastName == name) {
         return player;
       }
     }
@@ -197,7 +197,7 @@ Obx buildDialogButton(BuildContext context, Player player) {
   return Obx(() {
     // Dialog button that shows "No Assist" instead of the player name and shirt
     // at the place where the first player was clicked
-    if (globalController.lastClickedPlayer.value.name == buttonText) {
+    if (globalController.lastClickedPlayer.value.lastName == buttonText) {
       return DialogButton(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
