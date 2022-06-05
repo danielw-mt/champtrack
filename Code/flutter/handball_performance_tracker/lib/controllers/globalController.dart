@@ -17,31 +17,40 @@ class GlobalController extends GetxController {
   // TODO implement this
   var currentClub = "".obs;
 
-  /// @return rxString
-  var selectedTeam = Team(id: "").obs;
+  /// @return Team
+  var selectedTeam = Team(id: "-1", name: "Default team").obs;
 
   ////
   // settingsscreen
   ////
   final selectedPlayer = Player().obs;
-  var availablePlayers = [].obs;
-  var chosenPlayers = [].obs;
-  var playersNotOnField = [
-    Player(id: "8", name: "aaaaaaaaaaaa", number: 20, position: ["HL"]),
-    Player(id: "9", name: "bbbbbbbbbbbb", number: 22, position: ["HR"]),
-    Player(id: "11", name: "ccccccccccc", number: 24, position: ["VL"]),
-    Player(id: "12", name: "dddddddddd", number: 25, position: ["HR", "VR"]),
-    Player(id: "14", name: "eeeeeeeeeeee", number: 22, position: ["HL", "VL"]),
-    Player(id: "15", name: "ffffffffffff", number: 26, position: ["HL", "VL"]),
-    Player(id: "17", name: "gggggggggggg", number: 27, position: ["Tor"]),
+  RxList<Player> availablePlayers = <Player>[].obs;
+  RxList<Player> chosenPlayers = <Player>[].obs;
+  RxList<Player> playersNotOnField = <Player>[
+    Player(id: "8", firstName: "aaaaaaaaaaaa", number: 20, position: ["HL"]),
+    Player(id: "9", firstName: "bbbbbbbbbbbb", number: 22, position: ["HR"]),
+    Player(id: "11", firstName: "ccccccccccc", number: 24, position: ["VL"]),
+    Player(
+        id: "12", firstName: "dddddddddd", number: 25, position: ["HR", "VR"]),
+    Player(
+        id: "14",
+        firstName: "eeeeeeeeeeee",
+        number: 22,
+        position: ["HL", "VL"]),
+    Player(
+        id: "15",
+        firstName: "ffffffffffff",
+        number: 26,
+        position: ["HL", "VL"]),
+    Player(id: "17", firstName: "gggggggggggg", number: 27, position: ["Tor"]),
   ].obs;
   // boolean list of chosen players i.e. true, true, false would mean the first two players start
-  RxList<dynamic> playersOnField = [].obs;
+  RxList<Player> playersOnField = <Player>[].obs;
 
-  bool getStartingPlayerValue(int index) {
-    playersOnField.refresh();
-    return playersOnField[index];
-  }
+  // bool getStartingPlayerValue(int index) {
+  //   playersOnField.refresh();
+  //   return playersOnField[index];
+  // }
 
   /// by default attack is at the left side of the screen
   /// during half time this can be switched
