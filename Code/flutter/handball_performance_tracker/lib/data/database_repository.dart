@@ -11,6 +11,12 @@ class DatabaseRepository {
   GlobalController globalController = Get.find<GlobalController>();
   final FirebaseFirestore _db = FirebaseFirestore.instance;
 
+  // Future<Player> getPlayer(DocumentReference documentReference) async {
+  //   DocumentSnapshot snapshot =
+  //       await _db.collection("players").doc(documentReference.id).get();
+  //   return Player.fromDocumentSnapshot(snapshot);
+  // }
+
   // @return asynchronous reference to Player object that was saved to firebase
   Future<DocumentReference> addPlayer(Player player) {
     return _db.collection("players").add(player.toMap());
@@ -28,7 +34,7 @@ class DatabaseRepository {
   }
 
   // query all players of the current team
-  Stream<QuerySnapshot> getPlayerStream() {
+  Stream<QuerySnapshot> getPlayersStream() {
     return _db
         .collection("players")
         .where("teamId", isEqualTo: globalController.selectedTeam.value.id)
