@@ -200,11 +200,11 @@ Container buildPlayerButton(BuildContext context, int i, bool isPermanentBar) {
           children: [
             Text(
               isPermanentBar
-                  ? globalController.chosenPlayers.value[i].name +
+                  ? globalController.chosenPlayers.value[i].lastName +
                       " #" +
                       (globalController.chosenPlayers.value[i].number)
                           .toString()
-                  : globalController.playersNotOnField.value[i].name +
+                  : globalController.playersNotOnField.value[i].lastName +
                       " #" +
                       (globalController.playersNotOnField.value[i].number)
                           .toString(),
