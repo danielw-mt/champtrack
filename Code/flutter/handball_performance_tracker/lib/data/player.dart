@@ -6,7 +6,7 @@ class Player {
   String firstName;
   String lastName;
   int number;
-  List<String> position;
+  List<String> positions;
   List<String> games;
   final String clubId;
   LiveEfScore efScore;
@@ -16,7 +16,7 @@ class Player {
       this.firstName = "",
       this.lastName = "",
       this.number = 0,
-      this.position = const [],
+      this.positions = const [],
       this.clubId = "",
       this.games = const []})
       : efScore = LiveEfScore();
@@ -27,7 +27,7 @@ class Player {
       'firstName': firstName,
       'lastName': lastName,
       'number': number,
-      'position': position,
+      'position': positions,
       'clubId': clubId,
       'games': games
     };
@@ -42,17 +42,22 @@ class Player {
 
   // @return Player object created from map representation of Player
   factory Player.fromMap(Map<String, dynamic> map) {
+    String firstName = map["firstName"];
+    String lastName = map["lastName"];
+    int number = map["number"];
+    // TODO give out a list here
+    // List<String> positions = map["positions"];
+    String clubId = map["clubId"];
+    // String games = map["games"].cast<String>();
     return Player(
-        firstName: map["firstName"],
-        lastName: map["lastName"],
-        number: map["number"],
-        position: map["position"].cast<String>(),
-        clubId: map["clubId"],
-        games: map["games"].cast<String>());
+        firstName: firstName,
+        lastName: lastName,
+        number: number,
+        clubId: clubId);
   }
 
   // Players are considered as identical if they have the same id
   @override
-  bool operator == (dynamic other) =>
-      other != null && other is Player && id == other.id;   
+  bool operator ==(dynamic other) =>
+      other != null && other is Player && id == other.id;
 }

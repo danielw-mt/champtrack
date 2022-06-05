@@ -27,22 +27,22 @@ class GlobalController extends GetxController {
   RxList<Player> availablePlayers = <Player>[].obs;
   RxList<Player> chosenPlayers = <Player>[].obs;
   RxList<Player> playersNotOnField = <Player>[
-    Player(id: "8", firstName: "aaaaaaaaaaaa", number: 20, position: ["HL"]),
-    Player(id: "9", firstName: "bbbbbbbbbbbb", number: 22, position: ["HR"]),
-    Player(id: "11", firstName: "ccccccccccc", number: 24, position: ["VL"]),
+    Player(id: "8", firstName: "aaaaaaaaaaaa", number: 20, positions: ["HL"]),
+    Player(id: "9", firstName: "bbbbbbbbbbbb", number: 22, positions: ["HR"]),
+    Player(id: "11", firstName: "ccccccccccc", number: 24, positions: ["VL"]),
     Player(
-        id: "12", firstName: "dddddddddd", number: 25, position: ["HR", "VR"]),
+        id: "12", firstName: "dddddddddd", number: 25, positions: ["HR", "VR"]),
     Player(
         id: "14",
         firstName: "eeeeeeeeeeee",
         number: 22,
-        position: ["HL", "VL"]),
+        positions: ["HL", "VL"]),
     Player(
         id: "15",
         firstName: "ffffffffffff",
         number: 26,
-        position: ["HL", "VL"]),
-    Player(id: "17", firstName: "gggggggggggg", number: 27, position: ["Tor"]),
+        positions: ["HL", "VL"]),
+    Player(id: "17", firstName: "gggggggggggg", number: 27, positions: ["Tor"]),
   ].obs;
   // boolean list of chosen players i.e. true, true, false would mean the first two players start
   RxList<Player> playersOnField = <Player>[].obs;
