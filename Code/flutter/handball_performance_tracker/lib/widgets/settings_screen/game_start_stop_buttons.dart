@@ -13,6 +13,9 @@ class GameStartStopButtons extends StatelessWidget {
   GlobalController globalController = Get.find<GlobalController>();
   DatabaseRepository repository = DatabaseRepository();
 
+
+  // TODO implement db write of newly selected players
+
   @override
   Widget build(BuildContext context) {
     var gameStarted = globalController.gameStarted;
