@@ -102,7 +102,7 @@ Obx buildDialogButton(BuildContext context, Player player) {
   String buttonText = player.name;
   String buttonNumber = (player.number).toString();
   final GlobalController globalController = Get.find<GlobalController>();
-  DatabaseRepository repository = DatabaseRepository();
+  DatabaseRepository repository = globalController.repository;
 
   // Get width and height, so the sizes can be calculated relative to those. So it should look the same on different screen sizes.
   final double width = MediaQuery.of(context).size.width;

@@ -191,7 +191,7 @@ DialogButton buildDialogButton(
     BuildContext context, String buttonText, Color color,
     [icon]) {
   final GlobalController globalController = Get.find<GlobalController>();
-  DatabaseRepository repository = DatabaseRepository();
+  DatabaseRepository repository = globalController.repository;
   void logAction() async {
     DateTime dateTime = DateTime.now();
     int unixTime = dateTime.toUtc().millisecondsSinceEpoch;
