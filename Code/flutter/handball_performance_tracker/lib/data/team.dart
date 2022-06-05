@@ -41,19 +41,13 @@ class Team {
   factory Team.fromMap(Map<String, dynamic> map) {
     List<Player> playerList = [];
     List<Player> onFieldList = [];
-    final FirebaseFirestore _db = FirebaseFirestore.instance;
-    List<DocumentReference> players= map["players"];
-
-    // TODO hier ist documentReference vom Typ _jsonDocumentReference
-    // irgendwie funktioniert das mit den snapshots dann nicht
-    map["players"].forEach((dynamic documentReference) {
-      print(documentReference.runtimeType);
-      // DocumentReference documentReference = _db.doc(element);
+    List<DocumentReference> players = map["players"].cast<DocumentReference>();
+    players.forEach((dynamic documentReference) {
       documentReference.get().then((DocumentSnapshot documentSnapshot) {
         if (documentSnapshot.exists) {
           playerList.add(Player.fromDocumentSnapshot(documentSnapshot));
         }
-      }).onError(((error, stackTrace) => null));
+      });
     });
     return Team(
         name: map["name"],
