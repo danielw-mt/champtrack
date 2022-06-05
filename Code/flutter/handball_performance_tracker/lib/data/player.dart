@@ -3,7 +3,8 @@ import 'ef_score.dart';
 
 class Player {
   String? id;
-  String name;
+  String firstName;
+  String lastName;
   int number;
   List<String> position;
   List<String> games;
@@ -12,7 +13,8 @@ class Player {
 
   Player(
       {this.id,
-      this.name = "",
+      this.firstName = "",
+      this.lastName = "",
       this.number = 0,
       this.position = const [],
       this.clubId = "",
@@ -22,7 +24,8 @@ class Player {
   // @return Map<String,dynamic> as representation of Player object that can be saved to firestore
   Map<String, dynamic> toMap() {
     return {
-      'name': name,
+      'firstName': firstName,
+      'lastName': lastName,
       'number': number,
       'position': position,
       'clubId': clubId,
@@ -40,14 +43,16 @@ class Player {
   // @return Player object created from map representation of Player
   factory Player.fromMap(Map<String, dynamic> map) {
     return Player(
-        name: map["name"],
-        number : map["number"],
+        firstName: map["firstName"],
+        lastName: map["lastName"],
+        number: map["number"],
         position: map["position"].cast<String>(),
         clubId: map["clubId"],
         games: map["games"].cast<String>());
   }
 
   // Players are considered as identical if they have the same id
-  bool operator ==(dynamic other) =>
-      other != null && other is Player && id == other.id;
+  @override
+  bool operator == (dynamic other) =>
+      other != null && other is Player && id == other.id;   
 }
