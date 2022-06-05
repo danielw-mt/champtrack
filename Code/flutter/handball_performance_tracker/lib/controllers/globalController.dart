@@ -19,7 +19,7 @@ class GlobalController extends GetxController {
   ///
   // currently signed in club
   /// @return rxString
-  var currentClub = Club(id: "-1").obs;
+  var currentClub = Club(id: "collection/clubs/doc/ehVAJ85ILdS4tCVZcwHZ").obs;
 
   ////
   // settingsscreen
