@@ -8,11 +8,10 @@ class ReverseButton extends GetView<GlobalController> {
 
   @override
   Widget build(BuildContext context) {
-    DatabaseRepository repo = DatabaseRepository();
     return FloatingActionButton(
         onPressed: (() {
           if (globalController.actions.isNotEmpty) {
-            repo.deleteLastAction();
+            globalController.repository.deleteLastAction();
             globalController.actions.removeLast();
           }
         }),

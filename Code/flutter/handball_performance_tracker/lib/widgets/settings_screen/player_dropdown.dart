@@ -12,12 +12,12 @@ class PlayerDropdown extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    DatabaseRepository repository = DatabaseRepository();
+    DatabaseRepository repository = globalController.repository;
 
     List<Player> availablePlayers = [];
 
     return StreamBuilder<QuerySnapshot>(
-      stream: repository.getPlayerStream(),
+      stream: repository.getPlayerStream(globalController.currentClub.value.id!),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           // set default selection

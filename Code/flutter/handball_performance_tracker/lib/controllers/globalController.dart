@@ -1,6 +1,5 @@
-import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-import 'package:handball_performance_tracker/data/game_action.dart';
+import 'package:handball_performance_tracker/data/database_repository.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 
 import '../data/club.dart';
@@ -13,9 +12,14 @@ class GlobalController extends GetxController {
   // Refer to https://github.com/jonataslaw/getx/wiki/State-Management
 
   ///
+  // database handling
+  ///
+  var repository = DatabaseRepository(); 
+
+  ///
   // currently signed in club
   /// @return rxString
-  var currentClub = Club(id: "-1").obs;
+  var currentClub = Club(id: "collection/clubs/doc/ehVAJ85ILdS4tCVZcwHZ").obs;
 
   ////
   // settingsscreen
