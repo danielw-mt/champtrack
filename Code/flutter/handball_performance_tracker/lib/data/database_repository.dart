@@ -58,6 +58,9 @@ class DatabaseRepository {
     return _db.collection("teams").snapshots();
   }
 
+  Future<QuerySnapshot> getAllTeams() async {
+    return await _db.collection("teams").get();
+  }
 
   // query all games of current team
   Stream<QuerySnapshot> getGameStream() {
