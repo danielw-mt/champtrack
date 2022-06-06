@@ -10,7 +10,7 @@ import 'package:flutter/services.dart';
 
 class MainScreen extends StatelessWidget {
   // screen where the game takes place
-  final GlobalController globalController = Get.put(GlobalController());
+  GlobalController globalController = Get.find<GlobalController>();
 
   @override
   Widget build(BuildContext context) {
