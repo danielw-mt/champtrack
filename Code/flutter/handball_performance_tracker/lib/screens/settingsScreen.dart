@@ -20,7 +20,7 @@ class SettingsScreen extends GetView<GlobalController> {
       body: Column(
         children: [
           TeamDropdown(),
-          //PlayersList(),
+          PlayersList(),
           GameStartStopButtons(),
           Text("Home goal is right side of screen"),
           Obx(() => Switch(
