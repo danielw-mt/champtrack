@@ -89,9 +89,9 @@ Widget buildDialogButtonMenu(
     BuildContext context, List<String> buttonTexts, isAttack) {
   if (isAttack) {
     List<DialogButton> dialogButtons = [
-      buildDialogButton(context, actionMapping[defense]!.keys.toList()[0], Colors.red, Icons.style),
-      buildDialogButton(context, actionMapping[defense]!.keys.toList()[1], Colors.yellow, Icons.style),
-      buildDialogButton(context, actionMapping[defense]!.keys.toList()[2], Colors.grey, Icons.timer),
+      buildDialogButton(context, actionMapping[attack]!.keys.toList()[0], Colors.red, Icons.style),
+      buildDialogButton(context, actionMapping[attack]!.keys.toList()[1], Colors.yellow, Icons.style),
+      buildDialogButton(context, actionMapping[attack]!.keys.toList()[2], Colors.grey, Icons.timer),
       buildDialogButton(context, actionMapping[attack]!.keys.toList()[3], Colors.grey),
       buildDialogButton(context, actionMapping[attack]!.keys.toList()[4], Colors.grey),
       buildDialogButton(context, actionMapping[attack]!.keys.toList()[5], Colors.blue),
