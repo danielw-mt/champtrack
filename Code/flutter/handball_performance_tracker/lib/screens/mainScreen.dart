@@ -11,6 +11,7 @@ import 'package:flutter/services.dart';
 class MainScreen extends StatelessWidget {
   // screen where the game takes place
   final GlobalController globalController = Get.put(GlobalController());
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
@@ -19,20 +20,37 @@ class MainScreen extends StatelessWidget {
       DeviceOrientation.landscapeLeft,
     ]);
     return Scaffold(
+      key: _scaffoldKey,
       drawer: NavDrawer(),
-      appBar: AppBar(title: const Text("Title")),
       body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
             decoration: BoxDecoration(
-                // set border around field
-                border: Border.all(width: fieldSizeParameter.lineSize)),
-            child: SizedBox(
-              // FieldSwitch to swipe between right and left field side. SizedBox around it so there is no rendering error.
-              width: fieldSizeParameter.fieldWidth,
-              height: fieldSizeParameter.fieldHeight,
-              child: FieldSwitch(),
+                border: Border.all(color: Colors.white),
+                borderRadius: const BorderRadius.all(Radius.circular(8)),
+                color: Colors.white),
+            child: IconButton(
+              icon: const Icon(Icons.menu),
+              onPressed: () {
+                _scaffoldKey.currentState!.openDrawer();
+              },
             ),
+          ),
+          Column(
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                    // set border around field
+                    border: Border.all(width: fieldSizeParameter.lineSize)),
+                child: SizedBox(
+                  // FieldSwitch to swipe between right and left field side. SizedBox around it so there is no rendering error.
+                  width: fieldSizeParameter.fieldWidth,
+                  height: fieldSizeParameter.fieldHeight,
+                  child: FieldSwitch(),
+                ),
+              ),
+            ],
           ),
         ],
       ),
