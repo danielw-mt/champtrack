@@ -21,7 +21,7 @@ class TeamDropdown extends GetView<GlobalController> {
     List<Team> availableTeams = [];
 
     return StreamBuilder<QuerySnapshot>(
-      stream: repository.getTeamStream(),
+      stream: repository.getAllTeamsStream(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           // set default selection as the first team in db

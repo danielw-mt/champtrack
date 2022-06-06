@@ -14,7 +14,7 @@ class PlayersList extends GetView<GlobalController> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-        stream: repository.getTeamStream(),
+        stream: repository.getAllTeamsStream(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             // if there is no team selected yet in global controller select the first team in the database
