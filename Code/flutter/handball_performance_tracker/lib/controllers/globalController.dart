@@ -20,6 +20,9 @@ class GlobalController extends GetxController {
   /// @return Team
   var selectedTeam = Team(id: "-1", name: "Default team").obs;
 
+  /// @return list of all teams of the club
+  RxList<Team> teamsList = <Team>[].obs;
+
   ////
   // settingsscreen
   ////
