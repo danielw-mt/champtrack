@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:handball_performance_tracker/data/game.dart';
 import 'package:handball_performance_tracker/data/game_action.dart';
 import 'package:handball_performance_tracker/data/player.dart';
-
+import 'package:handball_performance_tracker/data/team.dart';
 import '../controllers/globalController.dart';
 
 // TODO rename collection "player" to "players" and fix in firestore before merging to master
@@ -11,11 +11,7 @@ class DatabaseRepository {
   GlobalController globalController = Get.find<GlobalController>();
   final FirebaseFirestore _db = FirebaseFirestore.instance;
 
-  // Future<Player> getPlayer(DocumentReference documentReference) async {
-  //   DocumentSnapshot snapshot =
-  //       await _db.collection("players").doc(documentReference.id).get();
-  //   return Player.fromDocumentSnapshot(snapshot);
-  // }
+  // TODO remove everything containing global controller here
 
   // @return asynchronous reference to Player object that was saved to firebase
   Future<DocumentReference> addPlayer(Player player) {
@@ -58,9 +54,10 @@ class DatabaseRepository {
   }
 
   // query all teams in db
-  Stream<QuerySnapshot> getTeamStream() {
+  Stream<QuerySnapshot> getAllTeamsStream() {
     return _db.collection("teams").snapshots();
   }
+
 
   // query all games of current team
   Stream<QuerySnapshot> getGameStream() {
