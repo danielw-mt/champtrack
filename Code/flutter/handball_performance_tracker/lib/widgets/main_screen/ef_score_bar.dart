@@ -10,7 +10,7 @@ import 'package:rainbow_color/rainbow_color.dart';
 
 // Radius of round edges
 double menuRadius = 10.0;
-double buttonRadius = 5.0;
+double buttonRadius = 8.0;
 // Width of padding between buttons
 double paddingWidth = 8.0;
 // height of button + line between buttons.
@@ -22,23 +22,23 @@ double popupWidth = buttonHeight + 3 * paddingWidth;
 // width of efscore bar
 double scorebarWidth = popupWidth * 2.3;
 // width of a button in scorebar
-double scorebarButtonWidth = scorebarWidth - 10 * paddingWidth;
+double scorebarButtonWidth = scorebarWidth - 2 * paddingWidth;
 // track if plus button was pressed, so the adapted color of the pressed player on efscore bar does not change back to normal already.
 bool plusPressed = false;
 // Color of unpressed button
-Color buttonColor = Color.fromARGB(255, 216, 216, 216);
+Color buttonColor = Color.fromARGB(255, 230, 230, 230);
 // Color of pressed button
 Color pressedButtonColor = Colors.blue;
-double numberFontSize = 16;
-double nameFontSize = 12;
+double numberFontSize = 18;
+double nameFontSize = 14;
 // Spectrum for color coding of efscore
 // TODO: Adapt the range to typical efscore values
 var rb = Rainbow(spectrum: [
-  Color(0xffff6600),
-  Color(0xffffaa00),
-  Color(0xffffaa00),
-  Color(0xffd0ff00),
-  Color(0xff1fff00),
+  Color(0xffc7d0f4),
+  Color(0xffdce2f5),
+  Color(0xffeceef3),
+  Color(0xfff8c4c0),
+  Color(0xfffe7e6d),
 ], rangeStart: -20.0, rangeEnd: 20.0);
 
 /*
@@ -125,16 +125,14 @@ void showPopup(BuildContext context, List<Container> buttons, int i) {
                 // Set padding to all sides, so the popup has the needed size and position.
                 insetPadding: EdgeInsets.only(
                     // The dialog should appear on the right side of Efscore bar, so the padding on the left side need to be around width of scorebar.
-                    left: scorebarWidth * 0.7,
+                    left: scorebarWidth,
                     // As the dialog has also width = popupWidth, the right side padding is whole screenWidth-2*popupWidth
-                    right: fieldSizeParameter.screenWidth -
-                        scorebarWidth * 0.7 -
-                        popupWidth,
+                    right: fieldSizeParameter.screenWidth - scorebarWidth * 2,
                     // The dialog should open below the toolbar and other padding. Depending on the position (=index i) of the pressed button,
                     // the top padding changes, so the dialog opens more or less besides the pressed button.
                     top: fieldSizeParameter.toolbarHeight +
                         fieldSizeParameter.paddingTop +
-                        max((i - (buttons.length / 2).round() + 1), 0) *
+                        max((i - (buttons.length / 2).round()), 0) *
                             lineAndButtonHeight,
                     // Bottom padding is determined similar to top padding.
                     bottom: fieldSizeParameter.paddingBottom +
@@ -148,7 +146,7 @@ void showPopup(BuildContext context, List<Container> buttons, int i) {
                     // show a ButtonBar inside the dialog with given buttons.
                     return ButtonBar(
                       buttons: buttons,
-                      width: popupWidth,
+                      width: scorebarWidth,
                     );
                   },
                 ));
@@ -208,114 +206,38 @@ Container buildPlayerButton(BuildContext context, int i) {
 
   // build buttons for permanent bar with efscore
   return Container(
+    decoration: BoxDecoration(
+
+        // make round edges
+        borderRadius: BorderRadius.all(Radius.circular(buttonRadius))),
     height: buttonHeight,
-    // Use Obx, so the button adapts to globalController values once they are changed.
-    child: Obx(
-      () => Row(
-        children: [
-          Expanded(
-            child: TextButton(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  // Playernumber
-                  SizedBox(
-                    // width is 1/5 of button width
-                    width: scorebarButtonWidth / 5,
-                    child: Text(
-                      (globalController
-                              .chosenPlayers[
-                                  globalController.playerBarPlayers[i]]
-                              .number)
-                          .toString(),
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: numberFontSize,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      textAlign: TextAlign.left,
-                    ),
-                  ),
-                  const VerticalDivider(),
-                  // Playername
-                  SizedBox(
-                    // width is 3/5 of button width
-                    width: scorebarButtonWidth / 5 * 3,
-                    child: Text(
-                      globalController
-                          .chosenPlayers[globalController.playerBarPlayers[i]]
-                          .name,
-                      style: TextStyle(
-                          color: Colors.black, fontSize: nameFontSize),
-                      textAlign: TextAlign.left,
-                    ),
-                  ),
-                  const VerticalDivider(),
-                  // Efscore
-                  SizedBox(
-                    // width is 1/5 of button width
-                    width: scorebarButtonWidth / 5,
-                    child: Text(
-                      (globalController
-                              .chosenPlayers[
-                                  globalController.playerBarPlayers[i]]
-                              .efScore
-                              .score)
-                          .toString(),
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: nameFontSize,
-                      ),
-                      textAlign: TextAlign.left,
-                    ),
-                  ),
-                ],
-              ),
-              onPressed: () {
-                popupSubstitutePlayer();
-              },
-              style: TextButton.styleFrom(
-                // Color of pressed player changes on efscore bar.
-                backgroundColor: globalController.playerToChange.value ==
-                        globalController
-                            .chosenPlayers[globalController.playerBarPlayers[i]]
-                    ? pressedButtonColor
-                    : buttonColor,
-                // make round button edges
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(buttonRadius),
-                    bottomLeft: Radius.circular(buttonRadius),
-                  ),
+    child: Stack(
+      children: [
+        Obx(
+          () => getButton(globalController
+              .chosenPlayers[globalController.playerBarPlayers[i]]),
+        ),
+        SizedBox(
+          height: buttonHeight,
+          width: scorebarButtonWidth,
+          child: TextButton(
+            child: const Text(""),
+            onPressed: () {
+              popupSubstitutePlayer();
+            },
+            style: TextButton.styleFrom(
+              // Color of pressed player changes on efscore bar.
+              backgroundColor: Colors.transparent,
+              // make round button edges
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(buttonRadius),
                 ),
               ),
             ),
           ),
-          // Container with Colorcoding by efscore
-          Container(
-            height: buttonHeight,
-            width: scorebarButtonWidth / 30,
-            padding: EdgeInsets.all(0),
-            decoration: BoxDecoration(
-                color: rb[globalController
-                    .chosenPlayers[globalController.playerBarPlayers[i]]
-                    .efScore
-                    .score],
-                // set border so corners can be made round
-                border: Border.all(
-                  color: rb[globalController
-                      .chosenPlayers[globalController.playerBarPlayers[i]]
-                      .efScore
-                      .score],
-                ),
-                borderRadius: BorderRadius.only(
-                  topRight: Radius.circular(buttonRadius),
-                  bottomRight: Radius.circular(buttonRadius),
-                )),
-            child: Text(""),
-          ),
-        ],
-      ),
+        ),
+      ],
     ),
   );
 }
@@ -345,42 +267,102 @@ Container buildPopupPlayerButton(BuildContext context, int i) {
 
   // build button for popup
   return Container(
+    decoration: BoxDecoration(
+
+        // make round edges
+        borderRadius: BorderRadius.all(Radius.circular(buttonRadius))),
     height: buttonHeight,
-    // Use Obx, so the button adapts to globalController values once they are changed.
-    child: Obx(
-      () => TextButton(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Text(
-              globalController.chosenPlayers[i].name,
-              style: TextStyle(color: Colors.black, fontSize: nameFontSize),
-              textAlign: TextAlign.center,
-            ),
-            Text(
-              (globalController.chosenPlayers[i].number).toString(),
-              style: TextStyle(
-                color: Colors.black,
-                fontWeight: FontWeight.bold,
-                fontSize: numberFontSize,
-              ),
-              textAlign: TextAlign.center,
-            )
-          ],
+    child: Stack(
+      children: [
+        Obx(
+          () => getButton(globalController.chosenPlayers[i]),
         ),
-        onPressed: () {
-          changePlayer();
-          Navigator.pop(context, true);
-          globalController.playerToChange.value = Player();
-        },
-        style: TextButton.styleFrom(
-          backgroundColor: buttonColor,
-          // make round button edges
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(buttonRadius)),
+        SizedBox(
+          height: buttonHeight,
+          width: scorebarButtonWidth,
+          child: TextButton(
+            child: const Text(""),
+            onPressed: () {
+              changePlayer();
+              Navigator.pop(context, true);
+              globalController.playerToChange.value = Player();
+            },
+            style: TextButton.styleFrom(
+              // Color of pressed player changes on efscore bar.
+              backgroundColor: Colors.transparent,
+              // make round button edges
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(buttonRadius),
+                ),
+              ),
+            ),
           ),
         ),
-      ),
+      ],
+    ),
+  );
+}
+
+Obx getButton(Player player) {
+  final GlobalController globalController = Get.find<GlobalController>();
+
+  return Obx(
+    () => Row(
+      children: [
+        // Playernumber
+        Container(
+          // width is 1/5 of button width
+          width: scorebarButtonWidth / 5,
+          height: buttonHeight,
+          alignment: Alignment.center,
+          color: globalController.playerToChange.value == player
+              ? pressedButtonColor
+              : buttonColor,
+          child: Text(
+            (player.number).toString(),
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: numberFontSize,
+              fontWeight: FontWeight.bold,
+            ),
+            textAlign: TextAlign.left,
+          ),
+        ),
+
+        // Playername
+        Expanded(
+          child: Container(
+            // width is 3/5 of button width
+            width: scorebarButtonWidth / 5 * 3,
+            height: buttonHeight,
+            alignment: Alignment.center,
+            color: globalController.playerToChange.value == player
+                ? pressedButtonColor
+                : buttonColor,
+            child: Text(
+              player.name,
+              style: TextStyle(color: Colors.black, fontSize: nameFontSize),
+              textAlign: TextAlign.left,
+            ),
+          ),
+        ),
+
+        Container(
+          width: scorebarButtonWidth / 5,
+          height: buttonHeight,
+          alignment: Alignment.center,
+          color: rb[player.efScore.score],
+          child: Text(
+            (player.efScore.score).toString(),
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: nameFontSize,
+            ),
+            textAlign: TextAlign.left,
+          ),
+        ),
+      ],
     ),
   );
 }
