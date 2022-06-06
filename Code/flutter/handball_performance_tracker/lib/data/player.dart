@@ -35,7 +35,8 @@ class Player {
 
   // @return Player object according to Player data fetched from firestore
   factory Player.fromDocumentSnapshot(DocumentSnapshot doc) {
-    final newPlayer = Player.fromMap(doc.data() as Map<String, dynamic>);
+    final newPlayer =
+        Player.fromMap(Map.from(doc.data() as Map<String, dynamic>));
     newPlayer.id = doc.reference.id;
     return newPlayer;
   }
@@ -44,16 +45,16 @@ class Player {
   factory Player.fromMap(Map<String, dynamic> map) {
     String firstName = map["firstName"];
     String lastName = map["lastName"];
-    int number = map["number"];
+    int number = int.parse(map["number"]);
     // TODO give out a list here
     // List<String> positions = map["positions"];
-    String clubId = map["clubId"];
+
+    //DocumentReference clubId = map["clubId"].cast<DocumentReference>();
     // String games = map["games"].cast<String>();
     return Player(
-        firstName: firstName,
-        lastName: lastName,
-        number: number,
-        clubId: clubId);
+      firstName: firstName,
+      lastName: lastName,
+    );
   }
 
   // Players are considered as identical if they have the same id
