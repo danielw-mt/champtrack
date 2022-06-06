@@ -81,9 +81,6 @@ Future<dynamic> _startupCheck() async {
     // TODO define behaviour for not connected i.e. wait 5 secs and try again
     print("not connected");
   }
-  // initialize globalController
-  final GlobalController globalController = Get.put(GlobalController());
-  globalController.updateAvailablePlayers();
 }
 
 onTimeout() {
