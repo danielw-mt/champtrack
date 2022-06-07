@@ -7,6 +7,7 @@ import 'config/firebase_options.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import '../../controllers/globalController.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -74,6 +75,7 @@ Future<dynamic> _startupCheck() async {
     FirebaseFirestore db = FirebaseFirestore.instance;
     db.enableNetwork();
     print('connected');
+
     return "";
   } else {
     // TODO define behaviour for not connected i.e. wait 5 secs and try again
