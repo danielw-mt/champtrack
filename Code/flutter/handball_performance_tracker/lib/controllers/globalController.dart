@@ -2,23 +2,21 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:handball_performance_tracker/data/game_action.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
-
+import '../data/game_action.dart';
 import '../data/team.dart';
 import '../data/game.dart';
 import '../data/player.dart';
 import 'dart:async';
 
+/// Class for managing global state of the app.
+/// Refer to https://github.com/jonataslaw/getx/wiki/State-Management
 class GlobalController extends GetxController {
-  // Class for managing global state of the app
-  // Refer to https://github.com/jonataslaw/getx/wiki/State-Management
-
-  ///
   // currently signed in club
   // TODO implement this
   var currentClub = "".obs;
 
-  /// @return Team
-  final selectedTeam = Team(id: "-1", name: "Default team").obs;
+  /// Temporary variable for storing the currently selected Team
+  Rx<Team> selectedTeam = Team(id: "-1", name: "Default team").obs;
 
   /// list of all teams of the club that are cached in the local game state. Changes made in the settings to e.g. are stored in here as well
   RxList<Team> cachedTeamsList = <Team>[].obs;
@@ -47,18 +45,10 @@ class GlobalController extends GetxController {
         positions: ["HL", "VL"]),
     Player(id: "17", firstName: "gggggggggggg", number: 27, positions: ["Tor"]),
   ].obs;
-  // boolean list of chosen players i.e. true, true, false would mean the first two players start
-  RxList<Player> playersOnField = <Player>[].obs;
 
-  // bool getStartingPlayerValue(int index) {
-  //   playersOnField.refresh();
-  //   return playersOnField[index];
-  // }
-
-  /// by default attack is at the left side of the screen
+  /// By default attack is at the left side of the screen
   /// during half time this can be switched
-  /// @return rx boolean
-  var attackIsLeft = true.obs;
+  RxBool attackIsLeft = true.obs;
 
   ////
   // Helper screen
@@ -77,7 +67,9 @@ class GlobalController extends GetxController {
         }
       }).obs;
 
-  var periodicResetIsHappening = false.obs;
+  // Variable to control periodic timer resets for feed
+  // makes sure that timer doesn't get reset twice 
+  RxBool periodicResetIsHappening = false.obs;
 
   // while periodic reset is going on
   void periodicFeedTimerReset() async {
@@ -92,7 +84,7 @@ class GlobalController extends GetxController {
     update();
   }
 
-  var numCurrentFeedItems = 0.obs;
+  RxInt numCurrentFeedItems = 0.obs;
   void addFeedItem() async {
     if (feedTimer.value.isRunning == false) {
       feedTimer.value.onExecute.add(StopWatchExecute.start);
@@ -107,57 +99,49 @@ class GlobalController extends GetxController {
     update();
   }
 
-  var currentNumFeedItems = 0.obs;
+  RxInt currentNumFeedItems = 0.obs;
   //////
   /// Main screen
   //////
-  /// @return rxString
+  
+  // TODO is something missing here?
   /// name of the player who made a goal, used to adapt the respective button color.
 
-  /// @return rxString
   /// text to be displayed in the player menu title on the right side, changes after a goal
-  var playerMenuText = "".obs;
+  RxString playerMenuText = "".obs;
 
   void updatePlayerMenuText() {
     // changing from dep = input.obs
     playerMenuText.value = "Assist";
   }
 
-  /// @return Rx<Player>
   /// corresponding player object for last clicked player name in the player menu
-  var lastClickedPlayer = Player().obs;
+  Rx<Player> lastClickedPlayer = Player().obs;
 
-  var playerToChange = Player().obs;
+  Rx<Player> playerToChange = Player().obs;
   ////
   // game tracking
   ////
 
-  /// @return rxBool
   /// True: home team is playing on the left; False: home team is defending
-  var fieldIsLeft = true.obs;
+  RxBool fieldIsLeft = true.obs;
 
-  /// @return rx list
   /// Storing game actions as GameAction objects inside this list
-  var actions = [].obs;
+  RxList<GameAction> actions = <GameAction>[].obs;
 
-  /// @return rxBool
   /// True: game was started; False game did not start yet
-  var gameStarted = false.obs;
+  RxBool gameStarted = false.obs;
 
-  /// @return rx<Game>
   /// last game object written to db
-  final currentGame = Game(date: DateTime.now()).obs;
+  Rx<Game> currentGame = Game(date: DateTime.now()).obs;
 
-  /// @return rxInt
   /// how many goals the user's team scored
-  var homeTeamGoals = 0.obs;
+  RxInt homeTeamGoals = 0.obs;
 
-  /// @return rxInt
   /// how many goals the guest's team scored
-  var opponentTeamGoals = 0.obs;
+  RxInt opponentTeamGoals = 0.obs;
 
-  /// @return rxString
   /// location that was saved when clicking on a point in the field 'sector',
   /// 'in 6m', 'in 9m'
-  var lastLocation = "".obs;
+  RxString lastLocation = "".obs;
 }
