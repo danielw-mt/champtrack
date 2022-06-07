@@ -9,7 +9,7 @@ const Map<String, Map<String, String>> actionMapping = {
     Strings.lYellowCard:"yellow",
     Strings.lTimePenalty:"penalty",
     Strings.lGoal: "goal",
-    Strings.lOneVsOne: "1v1",
+    Strings.lOneVsOneAnd7m: "1v1",
     Strings.lTwoMin: "2min",
     Strings.lErrThrow: "err",
     Strings.lTrf: "trf",
