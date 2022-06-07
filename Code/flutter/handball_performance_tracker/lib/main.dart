@@ -36,7 +36,7 @@ void main() async {
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 16),
-                child: Text('Error: ${snapshot.error}'),
+                child: Text(Strings.lError + ': ${snapshot.error}'),
               )
             ];
           } else {
@@ -48,7 +48,7 @@ void main() async {
               ),
               Padding(
                 padding: EdgeInsets.only(top: 16),
-                child: Text('Checking connection...'),
+                child: Text(Strings.lConnectionCheck),
               )
             ];
           }
@@ -74,11 +74,11 @@ Future<dynamic> _startupCheck() async {
     // I am connected to a mobile network.
     FirebaseFirestore db = FirebaseFirestore.instance;
     db.enableNetwork();
-    print('connected');
+    print(Strings.lConnected);
     return "";
   } else {
     // TODO define behaviour for not connected i.e. wait 5 secs and try again
-    print("not connected");
+    print(Strings.lNot + ' ' + Strings.lConnected);
   }
 }
 

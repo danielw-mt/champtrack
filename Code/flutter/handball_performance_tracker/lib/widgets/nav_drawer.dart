@@ -16,7 +16,7 @@ class NavDrawer extends StatelessWidget {
         children: <Widget>[
           DrawerHeader(
               child: Text(
-                Strings.sideMenuHeader,
+                Strings.lSideMenuHeader,
                 style: TextStyle(color: Colors.white, fontSize: 25),
               ),
               decoration: BoxDecoration(
@@ -24,19 +24,19 @@ class NavDrawer extends StatelessWidget {
               )),
           ListTile(
             leading: Icon(Icons.input),
-            title: Text(Strings.settings),
+            title: Text(Strings.lSettings),
             onTap: () => {Get.to(SettingsScreen())},
           ),
           ListTile(
             leading: Icon(Icons.verified_user),
-            title: Text(Strings.mainScreen),
+            title: Text(Strings.lMainScreen),
             onTap: () => {
               if (Get.currentRoute.toString() != "/") {Get.to(MainScreen())}
             },
           ),
           ListTile(
             leading: Icon(Icons.verified_user),
-            title: Text(Strings.helperScreen),
+            title: Text(Strings.lHelperScreen),
             onTap: () => {Get.to(HelperScreen())},
           ),
         ],

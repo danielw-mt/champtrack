@@ -1,25 +1,27 @@
+import 'package:handball_performance_tracker/Strings.dart';
+
 const String attack = "attack";
 const String defense = "defense";
 
 const Map<String, Map<String, String>> actionMapping = {
   attack: {
-    "Rote Karte":"red",
-    "Gelbe Karte":"yellow",
-    "Zeitstrafe":"penalty",
-    "Tor": "goal",
-    "1v1 & 7m": "1v1",
-    "2min ziehen": "2min",
-    "Fehlwurf": "err",
-    "TRF": "trf",
+    Strings.lRedCard:"red",
+    Strings.lYellowCard:"yellow",
+    Strings.lTimePenalty:"penalty",
+    Strings.lGoal: "goal",
+    Strings.lOneVsOne: "1v1",
+    Strings.lTwoMin: "2min",
+    Strings.lErrThrow: "err",
+    Strings.lTrf: "trf",
   },
   defense: {
-    "Rote Karte": "red",
-    "Gelbe Karte":"yellow",
-    "Foul => 7m": "foul",
-    "Zeitstrafe": "penalty",
-    "Block ohne Ballgewinn": "block",
-    "Block & Steal": "block_steal",
-    "TRF": "trf",
+    Strings.lRedCard: "red",
+    Strings.lYellowCard:"yellow",
+    Strings.lFoul7m: "foul",
+    Strings.lTimePenalty: "penalty",
+    Strings.lBlockNoBall: "block",
+    Strings.lBlockAndSteal: "block_st",
+    Strings.lTrf: "trf",
   }
 };
 

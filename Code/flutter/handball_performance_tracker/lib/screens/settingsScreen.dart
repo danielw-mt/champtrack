@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../Strings.dart';
 import './../widgets/settings_screen/player_dropdown.dart';
 import './../widgets/settings_screen/on_field_checkbox.dart';
 import './../widgets/settings_screen/game_start_stop_buttons.dart';
@@ -59,7 +60,7 @@ class SettingsScreen extends GetView<GlobalController> {
             return Container();
           }),
           GameStartStopButtons(),
-          Text("Home goal is right side of screen"),
+          const Text(Strings.lFieldSideIsRight),
           Obx(() => Switch(
               value: globalController.attackIsLeft.value,
               onChanged: (bool) {
