@@ -24,6 +24,7 @@ class HelperScreen extends GetView<GlobalController> {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                // Container for menu button on top left corner
                 Container(
                   decoration: BoxDecoration(
                       border: Border.all(color: Colors.white),
