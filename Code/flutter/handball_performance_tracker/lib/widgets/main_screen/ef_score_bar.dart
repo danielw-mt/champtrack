@@ -6,6 +6,8 @@ import 'package:handball_performance_tracker/utils/fieldSizeParameter.dart'
     as fieldSizeParameter;
 import 'dart:math';
 
+import '../../Strings.dart';
+
 // factor to get the height of a button + seperator line
 double buttonHeightFactor = 1.26;
 // height of a button -> The full height should be used when 7 buttons are displayed.
@@ -213,7 +215,7 @@ Container buildPlayerButton(BuildContext context, int i, bool isPermanentBar) {
             ),
             // TODO change to real efscore
             Text(
-              "EFSCORE",
+              Strings.lEfScore,
               style: TextStyle(
                 color: Colors.black,
                 fontWeight: FontWeight.bold,

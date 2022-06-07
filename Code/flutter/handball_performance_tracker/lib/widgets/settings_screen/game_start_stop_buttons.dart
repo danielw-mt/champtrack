@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:handball_performance_tracker/data/game.dart';
+import '../../Strings.dart';
 import '../../data/database_repository.dart';
 import './../../controllers/globalController.dart';
 import './../../data/game.dart';
@@ -24,7 +25,7 @@ class GameStartStopButtons extends StatelessWidget {
                     onPressed: () {
                       if (gameStarted.value == false) startGame(context);
                     },
-                    child: const Text("Start Game"),
+                    child: const Text(Strings.lStartGameButton),
                     // start button is grey when the game is started and blue when not
                     style: ButtonStyle(
                         backgroundColor: gameStarted.value
@@ -38,7 +39,7 @@ class GameStartStopButtons extends StatelessWidget {
                       onPressed: () {
                         if (gameStarted.value == true) stopGame();
                       },
-                      child: const Text("Stop Game")),
+                      child: const Text(Strings.lStopGameButton)),
                 )
               ],
             ));
@@ -53,9 +54,9 @@ class GameStartStopButtons extends StatelessWidget {
       // create alert if someone tries to start the game without enough players
       Alert(
               context: context,
-              title: "Warning",
+              title: Strings.lWarningPlayerNumberErrorMessage,
               type: AlertType.error,
-              desc: "You can only start the game with 7 players on the field")
+              desc: Strings.lPlayerNumberErrorMessage)
           .show();
       return;
     }

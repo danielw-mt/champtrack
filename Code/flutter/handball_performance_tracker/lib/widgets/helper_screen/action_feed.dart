@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
+import '../../strings.dart';
 import './../../controllers/globalController.dart';
 import 'package:get/get.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
@@ -12,16 +13,16 @@ class ActionFeed extends GetView<GlobalController> {
   final numFeedItems = 5;
 
   Map<String, String> actionMapping = {
-    "goal": "Tor",
-    "1v1": "1v1 & 7m",
-    "2min": "2min ziehen",
-    "Fehlwurf": "err-throw",
-    "trf": "TRF",
-    "red": "Rote Karte",
-    "foul": "Foul => 7m",
-    "penalty": "Zeitstrafe",
-    "block": "Block ohne Ballgewinn",
-    "block-steal": "Block & Steal"
+    "goal": Strings.lGoal,
+    "1v1": Strings.lOneVsOneAnd7m,
+    "2min": Strings.lTwoMin,
+    "Fehlwurf": "err-throw", // TODO check if the same as "err" in Strings
+    "trf": Strings.lTrf,
+    "red": Strings.lRedCard,
+    "foul": Strings.lFoul7m,
+    "penalty": Strings.lTimePenalty,
+    "block": Strings.lBlockNoBall,
+    "block-steal": Strings.lBlockAndSteal
   };
 
   @override
@@ -103,7 +104,7 @@ class ActionFeed extends GetView<GlobalController> {
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: Text(
-                                "Player ID: " + lastAction.playerId,
+                                Strings.lPlayerID + ": " + lastAction.playerId,
                                 style: TextStyle(
                                   fontSize: 20,
                                 ),
