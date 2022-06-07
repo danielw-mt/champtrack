@@ -12,7 +12,7 @@ class Player {
   LiveEfScore efScore;
 
   Player(
-      {this.id,
+      {this.id = "",
       this.firstName = "",
       this.lastName = "",
       this.number = 0,

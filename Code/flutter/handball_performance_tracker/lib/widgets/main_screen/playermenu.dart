@@ -89,7 +89,7 @@ void callPlayerMenu(context) {
 List<Obx> buildDialogButtonList(BuildContext context) {
   final GlobalController globalController = Get.find<GlobalController>();
   List<Obx> dialogButtons = [];
-  for (var player in globalController.chosenPlayers) {
+  for (Player player in globalController.selectedTeam.value.onFieldPlayers) {
     Obx dialogButton = buildDialogButton(context, player);
     dialogButtons.add(dialogButton);
   }
@@ -98,9 +98,9 @@ List<Obx> buildDialogButtonList(BuildContext context) {
 
 /// builds a single dialog button that logs its text (=player name) to firestore
 /// and updates the game state
-Obx buildDialogButton(BuildContext context, Player player) {
-  String buttonText = player.lastName;
-  String buttonNumber = (player.number).toString();
+Obx buildDialogButton(BuildContext context, Player associatedPlayer) {
+  String buttonText = associatedPlayer.lastName;
+  String buttonNumber = (associatedPlayer.number).toString();
   final GlobalController globalController = Get.find<GlobalController>();
   DatabaseRepository repository = DatabaseRepository();
 
@@ -114,54 +114,57 @@ Obx buildDialogButton(BuildContext context, Player player) {
     // check if action was a goal
     // if it was a goal allow the player to be pressed twice or select and assist player
     // if the player is clicked again it is a solo action
-    if (globalController.lastClickedPlayer.value.lastName == buttonText) {
+    if (globalController.lastClickedPlayer.value.id == associatedPlayer.id) {
       return false;
     }
-    if (globalController.lastClickedPlayer.value.lastName != buttonText) {
+    if (globalController.lastClickedPlayer.value.id != associatedPlayer.id) {
       return true;
     }
     return false;
   }
 
-  Player? _getPlayerFromName(String name) {
-    for (Player player in globalController.chosenPlayers) {
-      if (player.lastName == name) {
-        return player;
-      }
-    }
-  }
+  // Player? _getPlayerFromName(String name) {
+  //   for (Player player in globalController.chosenPlayers) {
+  //     if (player.lastName == name) {
+  //       return player;
+  //     }
+  //   }
+  // }
 
   void logPlayerSelection() async {
     GameAction lastAction = globalController.actions.last;
-    print("last action");
-    String? activePlayerId = globalController.lastClickedPlayer.value.id;
+    String? lastClickedPlayerId = globalController.lastClickedPlayer.value.id;
 
-    // if goal was pressed but no player was selected yet, do nothing
-    if (lastAction.actionType == "goal" && activePlayerId == null) {
-      globalController.updatePlayerMenuText();
+    // if goal was pressed but no player was selected yet
+    //(lastClickedPlayer is default Player Object) do nothing
+    if (lastAction.actionType == "goal" && lastClickedPlayerId == "") {
       print("goal player clicked once");
-      globalController.lastClickedPlayer.value =
-          _getPlayerFromName(buttonText)!;
+      globalController.updatePlayerMenuText();
+      // update last Clicked player value with the Player from selected team
+      // who was clicked
+      globalController.lastClickedPlayer.value = globalController
+          .selectedTeam.value.players
+          .where((Player playerItem) => (playerItem.id == associatedPlayer.id))
+          .first;
       globalController.refresh();
       return;
     }
     // if goal was pressed and a player was already clicked once
     if (lastAction.actionType == "goal") {
-      print("goal player clicked twice");
       // if it was a solo goal the action type has to be updated to "Tor Solo"
       if (_wasAssist() == false) {
         print("solo goal");
         // update data for person that shot the goal
-        lastAction.playerId = activePlayerId!;
+        lastAction.playerId = lastClickedPlayerId!;
         repository.updateAction(lastAction);
         globalController.actions.last = lastAction;
         globalController.lastClickedPlayer.value = Player();
         globalController.addFeedItem();
         globalController.refresh();
       } else {
-        // if it was an assist update data for both
+        // if it was an assist update data for both players
         // person that scored goal
-        lastAction.playerId = activePlayerId!;
+        lastAction.playerId = lastClickedPlayerId!;
         repository.updateAction(lastAction);
         globalController.actions.last = lastAction;
         globalController.addFeedItem();
@@ -180,7 +183,7 @@ Obx buildDialogButton(BuildContext context, Player player) {
       }
     } else {
       // if the action was not a goal just update the player id in firebase and gamestate
-      lastAction.playerId = _getPlayerFromName(buttonText)!.id!;
+      lastAction.playerId = lastClickedPlayerId!;
       globalController.actions.last = lastAction;
       repository.updateAction(lastAction);
       globalController.lastClickedPlayer.value = Player();
@@ -221,7 +224,7 @@ Obx buildDialogButton(BuildContext context, Player player) {
           // set height and width of buttons so the shirt and name are fitting inside
           height: width * 0.14,
           width: width * 0.14,
-          color: globalController.lastClickedPlayer.value == player
+          color: globalController.lastClickedPlayer.value == associatedPlayer
               ? Colors.purple
               : Color.fromARGB(255, 180, 211, 236),
           onPressed: () {
@@ -274,7 +277,7 @@ Obx buildDialogButton(BuildContext context, Player player) {
         // set height and width of buttons so the shirt and name are fitting inside
         height: width * 0.14,
         width: width * 0.14,
-        color: globalController.lastClickedPlayer.value == player
+        color: globalController.lastClickedPlayer.value == associatedPlayer
             ? Colors.purple
             : Color.fromARGB(255, 180, 211, 236),
         onPressed: () {
