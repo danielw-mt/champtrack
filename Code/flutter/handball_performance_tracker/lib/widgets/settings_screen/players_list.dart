@@ -22,12 +22,17 @@ class PlayersList extends GetView<GlobalController> {
               return Row(
                 children: [
                   FloatingActionButton(
+                      key: Key("FloatingActionButton $index"),
                       child: const Icon(Icons.remove),
                       onPressed: () {
                         removePlayerFromTeam(player);
                       }),
-                  Text("${player.firstName} ${player.lastName}"),
+                  Text(
+                    "${player.firstName} ${player.lastName}",
+                    key: Key("Playertext $index"),
+                  ),
                   OnFieldCheckbox(
+                    key: Key("Checkbox $index"),
                     player: player,
                   )
                 ],
