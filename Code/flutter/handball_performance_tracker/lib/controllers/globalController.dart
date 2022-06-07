@@ -18,7 +18,7 @@ class GlobalController extends GetxController {
   var currentClub = "".obs;
 
   /// @return Team
-  var selectedTeam = Team(id: "-1", name: "Default team").obs;
+  final selectedTeam = Team(id: "-1", name: "Default team").obs;
 
   /// list of all teams of the club that are cached in the local game state. Changes made in the settings to e.g. are stored in here as well
   RxList<Team> cachedTeamsList = <Team>[].obs;
@@ -26,7 +26,7 @@ class GlobalController extends GetxController {
   ////
   // settingsscreen
   ////
-  final selectedPlayer = Player().obs;
+  Rx<Player> selectedPlayer = Player().obs;
   RxList<Player> availablePlayers = <Player>[].obs;
   RxList<Player> chosenPlayers = <Player>[].obs;
   RxList<Player> playersNotOnField = <Player>[
