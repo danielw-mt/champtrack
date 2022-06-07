@@ -34,11 +34,11 @@ double nameFontSize = 14;
 // Spectrum for color coding of efscore
 // TODO: Adapt the range to typical efscore values
 var rb = Rainbow(spectrum: [
-  Color(0xffc7d0f4),
-  Color(0xffdce2f5),
-  Color(0xffeceef3),
-  Color(0xfff8c4c0),
   Color(0xfffe7e6d),
+  Color(0xfff8c4c0),
+  Color(0xffeceef3),
+  Color(0xffdce2f5),
+  Color(0xffc7d0f4),
 ], rangeStart: -20.0, rangeEnd: 20.0);
 
 /*
@@ -112,6 +112,9 @@ class EfScoreBar extends StatelessWidget {
 // @param i: index of button to adapt the vertical position so the popup opens besides the pressed button.
 void showPopup(BuildContext context, List<Container> buttons, int i) {
   final GlobalController globalController = Get.find<GlobalController>();
+  int topPadding = i < 3
+      ? max((i - (buttons.length / 2).truncate()), 0)
+      : max((i - (buttons.length / 2).round()), 0);
   showDialog(
           context: context,
           builder: (BuildContext context) {
@@ -132,8 +135,7 @@ void showPopup(BuildContext context, List<Container> buttons, int i) {
                     // the top padding changes, so the dialog opens more or less besides the pressed button.
                     top: fieldSizeParameter.toolbarHeight +
                         fieldSizeParameter.paddingTop +
-                        max((i - (buttons.length / 2).round()), 0) *
-                            lineAndButtonHeight,
+                        topPadding * lineAndButtonHeight,
                     // Bottom padding is determined similar to top padding.
                     bottom: fieldSizeParameter.paddingBottom +
                         max(((7 - i) - buttons.length), 0) *
@@ -354,7 +356,7 @@ Obx getButton(Player player) {
           alignment: Alignment.center,
           color: rb[player.efScore.score],
           child: Text(
-            (player.efScore.score).toString(),
+            player.efScore.score.toStringAsFixed(2),
             style: TextStyle(
               color: Colors.black,
               fontSize: nameFontSize,
