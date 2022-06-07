@@ -8,11 +8,8 @@ class OnFieldCheckbox extends StatelessWidget {
   // constructor: index parameter of index of the player in the selected players list
   OnFieldCheckbox({Key? key, required this.player}) : super(key: key);
 
-  // GlobalController globalController = Get.find<GlobalController>();
-
   @override
   Widget build(BuildContext context) {
-    // TODO adapt this to new player variables
     return GetBuilder<GlobalController>(builder: (globalController) {
       List<Player> playersOnField =
           globalController.selectedTeam.value.onFieldPlayers;
