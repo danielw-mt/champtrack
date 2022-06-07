@@ -13,14 +13,13 @@ class GameStartStopButtons extends StatelessWidget {
   GlobalController globalController = Get.find<GlobalController>();
   DatabaseRepository repository = DatabaseRepository();
 
-
   // TODO implement db write of newly selected players
 
   @override
   Widget build(BuildContext context) {
     var gameStarted = globalController.gameStarted;
     return GetBuilder<GlobalController>(
-        builder: (_) => Row(
+        builder: (globalController) => Row(
               children: [
                 Padding(
                   padding: const EdgeInsets.all(8),
@@ -49,10 +48,11 @@ class GameStartStopButtons extends StatelessWidget {
   }
 
   void startGame(BuildContext context) async {
+    final GlobalController globalController = Get.find<GlobalController>();
     print("in start game");
     // check if enough players have been selected
     var numPlayersOnField =
-        globalController.playersOnField.where((c) => c == true).toList().length;
+        globalController.selectedTeam.value.onFieldPlayers.length;
     if (numPlayersOnField != 7) {
       // create alert if someone tries to start the game without enough players
       Alert(
@@ -89,6 +89,7 @@ class GameStartStopButtons extends StatelessWidget {
   }
 
   void stopGame() async {
+    final GlobalController globalController = Get.find<GlobalController>();
     // update game document in firebase
     Game currentGame = globalController.currentGame.value;
     print("stop game, id: ${globalController.currentGame.value.id}");

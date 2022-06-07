@@ -29,7 +29,9 @@ class PlayersList extends GetView<GlobalController> {
                         removePlayerFromTeam(player);
                       }),
                   Text("${player.firstName} ${player.lastName}"),
-                  OnFieldCheckbox(index: index)
+                  OnFieldCheckbox(
+                    player: player,
+                  )
                 ],
               );
             }),
