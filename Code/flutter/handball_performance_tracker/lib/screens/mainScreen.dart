@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:handball_performance_tracker/controllers/globalController.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:handball_performance_tracker/widgets/main_screen/field.dart';
+import '../strings.dart';
 import './../widgets/nav_drawer.dart';
 import 'package:handball_performance_tracker/utils/fieldSizeParameter.dart'
     as fieldSizeParameter;
@@ -20,7 +21,7 @@ class MainScreen extends StatelessWidget {
     ]);
     return Scaffold(
       drawer: NavDrawer(),
-      appBar: AppBar(title: const Text("Title")),
+      appBar: AppBar(title: const Text(Strings.lGameScreenHeader)),
       body: Column(
         children: [
           Container(

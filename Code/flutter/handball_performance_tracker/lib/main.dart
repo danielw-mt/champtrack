@@ -14,7 +14,7 @@ void main() async {
 
   // start app
   runApp(GetMaterialApp(
-      title: 'Handball Performance Tracker',
+      title: Strings.lAppTitle,
       theme: ThemeData(
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,

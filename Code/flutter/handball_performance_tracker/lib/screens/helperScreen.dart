@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:handball_performance_tracker/data/ef_score.dart';
 import 'package:handball_performance_tracker/widgets/main_screen/ef_score_bar.dart';
+import '../strings.dart';
 import './../../controllers/globalController.dart';
 import './../widgets/helper_screen/stopwatch.dart';
 import '../widgets/main_screen/action_menu.dart';
@@ -14,7 +15,7 @@ class HelperScreen extends GetView<GlobalController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('CountDown Sample'),
+        title: const Text(Strings.lHelperScreenHeader),
       ),
       body: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,

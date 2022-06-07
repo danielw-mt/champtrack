@@ -17,7 +17,7 @@ class SettingsScreen extends GetView<GlobalController> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Page Two'),
+        title: const Text(Strings.lPageTwo),
       ),
       body: Column(
         children: [
