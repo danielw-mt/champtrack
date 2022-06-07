@@ -16,7 +16,7 @@ class GlobalController extends GetxController {
   ///
   // database handling
   ///
-  var repository = DatabaseRepository(); 
+  var repository = DatabaseRepository();
 
   ///
   // currently signed in club
@@ -76,7 +76,7 @@ class GlobalController extends GetxController {
       }).obs;
 
   // Variable to control periodic timer resets for feed
-  // makes sure that timer doesn't get reset twice 
+  // makes sure that timer doesn't get reset twice
   RxBool periodicResetIsHappening = false.obs;
 
   // while periodic reset is going on
@@ -111,7 +111,7 @@ class GlobalController extends GetxController {
   //////
   /// Main screen
   //////
-  
+
   // TODO is something missing here?
   /// name of the player who made a goal, used to adapt the respective button color.
 
