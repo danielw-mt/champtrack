@@ -55,6 +55,7 @@ class Player {
     return Player(
       firstName: firstName,
       lastName: lastName,
+      number: number,
     );
   }
 
