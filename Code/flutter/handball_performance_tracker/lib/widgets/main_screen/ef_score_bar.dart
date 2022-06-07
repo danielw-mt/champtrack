@@ -142,7 +142,7 @@ Container buildPlayerButton(BuildContext context, int i, bool isPermanentBar) {
     // TODO : here go through the list with available players that are not on field
     for (Player player in globalController.playersNotOnField.value) {
       for (String position in positions) {
-        if (player.position.contains(position)) {
+        if (player.positions.contains(position)) {
           substitutePlayer.add(player);
           break;
         }
@@ -160,7 +160,7 @@ Container buildPlayerButton(BuildContext context, int i, bool isPermanentBar) {
 
     // Build buttons out of players that are not on field and have the same position as pressed player.
     List<Player> players = playerWithSamePosition(
-        globalController.chosenPlayers.value[i].position);
+        globalController.chosenPlayers.value[i].positions);
     List<Container> buttons = [];
     for (int k = 0; k < players.length; k++) {
       int l = globalController.playersNotOnField.indexOf(players[k]);
@@ -200,11 +200,11 @@ Container buildPlayerButton(BuildContext context, int i, bool isPermanentBar) {
           children: [
             Text(
               isPermanentBar
-                  ? globalController.chosenPlayers.value[i].name +
+                  ? globalController.chosenPlayers.value[i].lastName +
                       " #" +
                       (globalController.chosenPlayers.value[i].number)
                           .toString()
-                  : globalController.playersNotOnField.value[i].name +
+                  : globalController.playersNotOnField.value[i].lastName +
                       " #" +
                       (globalController.playersNotOnField.value[i].number)
                           .toString(),

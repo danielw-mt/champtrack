@@ -12,11 +12,13 @@ import 'package:stop_watch_timer/stop_watch_timer.dart';
 class GameStartStopButtons extends StatelessWidget {
   GlobalController globalController = Get.find<GlobalController>();
 
+  // TODO implement db write of newly selected players
+
   @override
   Widget build(BuildContext context) {
     var gameStarted = globalController.gameStarted;
     return GetBuilder<GlobalController>(
-        builder: (_) => Row(
+        builder: (globalController) => Row(
               children: [
                 Padding(
                   padding: const EdgeInsets.all(8),
@@ -45,10 +47,11 @@ class GameStartStopButtons extends StatelessWidget {
   }
 
   void startGame(BuildContext context) async {
+    final GlobalController globalController = Get.find<GlobalController>();
     print("in start game");
     // check if enough players have been selected
     var numPlayersOnField =
-        globalController.playersOnField.where((c) => c == true).toList().length;
+        globalController.selectedTeam.value.onFieldPlayers.length;
     if (numPlayersOnField != 7) {
       // create alert if someone tries to start the game without enough players
       Alert(
@@ -64,12 +67,13 @@ class GameStartStopButtons extends StatelessWidget {
     DateTime dateTime = DateTime.now();
     int unixTimeStamp = dateTime.toUtc().millisecondsSinceEpoch;
     Game newGame = Game(
-        clubId: globalController.currentClub.value.id!,
+        clubId: globalController.selectedTeam.value.id!,
         date: dateTime,
         startTime: unixTimeStamp,
         players: globalController.chosenPlayers.cast<Player>());
 
-    final DocumentReference ref = await globalController.repository.addGame(newGame);
+    final DocumentReference ref =
+        await globalController.repository.addGame(newGame);
     newGame.id = ref.id;
     globalController.currentGame.value = newGame;
     print("start game, id: ${globalController.currentGame.value.id}");
@@ -85,6 +89,7 @@ class GameStartStopButtons extends StatelessWidget {
   }
 
   void stopGame() async {
+    final GlobalController globalController = Get.find<GlobalController>();
     // update game document in firebase
     Game currentGame = globalController.currentGame.value;
     print("stop game, id: ${globalController.currentGame.value.id}");
@@ -110,7 +115,8 @@ class GameStartStopButtons extends StatelessWidget {
     for (Player player in globalController.chosenPlayers) {
       if (!player.games.contains(game.id)) {
         player.games.add(game.id!);
-        globalController.repository.updatePlayer(player);//TODO maybe only update on stop?
+        // TODO implement this
+        //repository.updatePlayer(player); //TODO maybe only update on stop?
       }
     }
   }

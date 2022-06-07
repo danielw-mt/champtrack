@@ -4,18 +4,20 @@ import 'ef_score.dart';
 
 class Player {
   String? id;
-  String name;
+  String firstName;
+  String lastName;
   int number;
-  List<String> position;
+  List<String> positions;
   List<String> games;
   final String clubId;
   LiveEfScore efScore;
 
   Player(
-      {this.id,
-      this.name = "",
+      {this.id = "",
+      this.firstName = "",
+      this.lastName = "",
       this.number = 0,
-      this.position = const [],
+      this.positions = const [],
       this.clubId = "",
       this.games = const []})
       : efScore = LiveEfScore();
@@ -23,9 +25,10 @@ class Player {
   // @return Map<String,dynamic> as representation of Player object that can be saved to firestore
   Map<String, dynamic> toMap() {
     return {
-      'name': name,
+      'firstName': firstName,
+      'lastName': lastName,
       'number': number,
-      'position': position,
+      'position': positions,
       'clubId': clubId,
       'games': games
     };
@@ -33,24 +36,33 @@ class Player {
 
   // @return Player object according to Player data fetched from firestore
   factory Player.fromDocumentSnapshot(DocumentSnapshot doc) {
-    final newPlayer = Player.fromMap(doc.data() as Map<String, dynamic>);
+    final newPlayer =
+        Player.fromMap(Map.from(doc.data() as Map<String, dynamic>));
     newPlayer.id = doc.reference.id;
     return newPlayer;
   }
 
   // @return Player object created from map representation of Player
   factory Player.fromMap(Map<String, dynamic> map) {
+    String firstName = map["firstName"];
+    String lastName = map["lastName"];
+    int number = int.parse(map["number"]);
+    // TODO give out a list here
+    // List<String> positions = map["positions"];
+
+    //DocumentReference clubId = map["clubId"].cast<DocumentReference>();
+    // String games = map["games"].cast<String>();
     return Player(
-        name: map["name"],
-        number : map["number"],
-        position: map["position"].cast<String>(),
-        clubId: map["clubId"],
-        games: map["games"].cast<String>());
+      firstName: firstName,
+      lastName: lastName,
+    );
   }
 
   // Players are considered as identical if they have the same id
+  @override
   bool operator ==(dynamic other) =>
       other != null && other is Player && id == other.id;
 
-  void addAction(GameAction action) => efScore.addAction(action, position);
+  // TODO fix addAction
+  //void addAction(GameAction action) => efScore.addAction(action, position);
 }
