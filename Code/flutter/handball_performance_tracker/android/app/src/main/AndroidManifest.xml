@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="mad.tf.fau.de.handball_performance_tracker">
    <application
-        android:label="handball_performance_tracker"
+        android:label="HB Performance"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
