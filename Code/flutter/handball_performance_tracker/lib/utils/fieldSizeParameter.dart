@@ -18,7 +18,7 @@ double paddingTop = ui.window.padding.top / ui.window.devicePixelRatio;
 double paddingBottom = ui.window.padding.bottom / ui.window.devicePixelRatio;
 
 // get toolbarHeight, so the field can take all the rest height of the screen
-double toolbarHeight = AppBar().preferredSize.height;
+double toolbarHeight = AppBar().preferredSize.height * 1.3;
 
 // pixel size of border, 7m and 9m line
 double lineSize = 3;
@@ -28,7 +28,7 @@ double availableScreenHeight =
     screenHeight - toolbarHeight - paddingBottom - paddingTop - lineSize * 2;
 // take ratio of screenwidth and height into account, so the field is not stretched
 double fieldHeight = min(availableScreenHeight, screenWidth);
-double fieldWidth = fieldHeight * 0.6;
+double fieldWidth = fieldHeight * 0.85;
 
 // Radii of the ellipses for six meter and 9 meter
 double nineMeterRadiusX = fieldWidth / 1.5;
