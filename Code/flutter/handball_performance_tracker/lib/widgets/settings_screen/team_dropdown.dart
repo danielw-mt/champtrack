@@ -21,7 +21,9 @@ class TeamDropdown extends GetView<GlobalController> {
     List<Team> availableTeams = globalController.cachedTeamsList;
     // select a default team
     // TODO change this once it is selected by default in global controller
-    globalController.selectedTeam.value = globalController.cachedTeamsList[0];
+    if (globalController.selectedTeam.value.name == "Default team") {
+      globalController.selectedTeam.value = globalController.cachedTeamsList[0];
+    }
     return // build the dropdown button
         DropdownButton<String>(
       value: globalController.selectedTeam.value.id,

@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:handball_performance_tracker/data/database_repository.dart';
+import 'package:handball_performance_tracker/utils/player_helper.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 import '../data/game_action.dart';
 import '../data/team.dart';
@@ -35,24 +36,6 @@ class GlobalController extends GetxController {
   Rx<Player> selectedPlayer = Player().obs;
   RxList<Player> availablePlayers = <Player>[].obs;
   RxList<Player> chosenPlayers = <Player>[].obs;
-  RxList<Player> playersNotOnField = <Player>[
-    Player(id: "8", firstName: "aaaaaaaaaaaa", number: 20, positions: ["HL"]),
-    Player(id: "9", firstName: "bbbbbbbbbbbb", number: 22, positions: ["HR"]),
-    Player(id: "11", firstName: "ccccccccccc", number: 24, positions: ["VL"]),
-    Player(
-        id: "12", firstName: "dddddddddd", number: 25, positions: ["HR", "VR"]),
-    Player(
-        id: "14",
-        firstName: "eeeeeeeeeeee",
-        number: 22,
-        positions: ["HL", "VL"]),
-    Player(
-        id: "15",
-        firstName: "ffffffffffff",
-        number: 26,
-        positions: ["HL", "VL"]),
-    Player(id: "17", firstName: "gggggggggggg", number: 27, positions: ["Tor"]),
-  ].obs;
 
   /// By default attack is at the left side of the screen
   /// during half time this can be switched
@@ -126,7 +109,22 @@ class GlobalController extends GetxController {
   /// corresponding player object for last clicked player name in the player menu
   Rx<Player> lastClickedPlayer = Player().obs;
 
+  /// @return Rx<Player>
+  /// corresponding player object for last clicked player name in the efscore player bar
   Rx<Player> playerToChange = Player().obs;
+
+  // list of 7 or less Integer, give the indices of players on field in the order in which they appear on efscore player bar
+  RxList<int> playerBarPlayers = <int>[0, 1, 2, 3, 4, 5, 6].obs;
+
+  // set the order of players displayed in player bar:
+  // The first player that was added to the game it the first in the player bar and so on.
+  void setPlayerBarPlayers() {
+    playerBarPlayers.clear();
+    for (int i in getOnFieldIndex()) {
+      playerBarPlayers.add(i);
+    }
+  }
+
   ////
   // game tracking
   ////
