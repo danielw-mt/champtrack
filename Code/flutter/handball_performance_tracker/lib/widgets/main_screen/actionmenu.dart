@@ -113,7 +113,7 @@ DialogButton buildDialogButton(BuildContext context, String buttonText) {
     String currentGameId = globalController.currentGame.value.id!;
 
     GameAction action = GameAction(
-        clubId: globalController.selectedTeam.value.id!,
+        teamId: globalController.selectedTeam.value.id!,
         gameId: currentGameId,
         type: determineAttack() ? "attack" : "defense",
         actionType: actionMapping[buttonText]!,

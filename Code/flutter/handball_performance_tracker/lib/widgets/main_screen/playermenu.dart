@@ -133,12 +133,11 @@ Obx buildDialogButton(BuildContext context, Player associatedPlayer) {
 
   void logPlayerSelection() async {
     GameAction lastAction = globalController.actions.last;
-    String? lastClickedPlayerId = globalController.lastClickedPlayer.value.id;
+    Player lastClickedPlayer = globalController.lastClickedPlayer.value;
 
     // if goal was pressed but no player was selected yet
     //(lastClickedPlayer is default Player Object) do nothing
-    if (lastAction.actionType == "goal" && lastClickedPlayerId == "") {
-      print("goal player clicked once");
+    if (lastAction.actionType == "goal" && lastClickedPlayer.id == "") {
       globalController.updatePlayerMenuText();
       // update last Clicked player value with the Player from selected team
       // who was clicked
@@ -155,54 +154,52 @@ Obx buildDialogButton(BuildContext context, Player associatedPlayer) {
       if (!_wasAssist()) {
         print("solo goal");
         // update data for person that shot the goal
-        lastAction.playerId = lastClickedPlayerId!;
+        lastAction.playerId = lastClickedPlayer.id!;
         repository.updateAction(lastAction);
         globalController.actions.last = lastAction;
         // update player's ef-score
-        // TODO implement this
-        //activePlayer.addAction(lastAction); 
-
+        globalController.lastClickedPlayer.value.addAction(lastAction);
         globalController.lastClickedPlayer.value = Player();
         globalController.addFeedItem();
         globalController.refresh();
       } else {
+        print("goal with assist");
         // if it was an assist update data for both players
         // person that scored goal
-        lastAction.playerId = lastClickedPlayerId!;
+        lastAction.playerId = lastClickedPlayer.id!;
         repository.updateAction(lastAction);
         globalController.actions.last = lastAction;
+        // update player's ef-score
+        lastClickedPlayer.addAction(lastAction);
         globalController.addFeedItem();
+        print("new action saved in database: ");
+        print(globalController.actions.last.toMap());
         // person that scored assist
         // deep clone a new action from the most recent action
-
-        print("assist action: ${GameAction.clone(lastAction)}");
         GameAction assistAction = GameAction.clone(lastAction);
-        print("assist action: $assistAction");
-        Player assistPlayer = globalController.lastClickedPlayer.value; 
+        Player assistPlayer = associatedPlayer;
         assistAction.playerId = assistPlayer.id!;
         assistAction.actionType = "assist";
         repository.addActionToGame(assistAction);
         globalController.actions.add(assistAction);
         // update player's ef-score
-        // TODO implement this
-        //assistPlayer.addAction(lastAction); 
+        assistPlayer.addAction(lastAction);
 
         globalController.lastClickedPlayer.value = Player();
         globalController.addFeedItem();
       }
     } else {
       // if the action was not a goal just update the player id in firebase and gamestate
-      lastAction.playerId = lastClickedPlayerId!;
+      globalController.lastClickedPlayer.value = associatedPlayer;
+      lastAction.playerId = globalController.lastClickedPlayer.value.id!;
       globalController.actions.last = lastAction;
       repository.updateAction(lastAction);
-      // update player's ef-scorer
-      // TODO implement this
-      // activePlayer.addAction(lastAction); 
-
+      // update player's ef-score
+      globalController.lastClickedPlayer.value.addAction(lastAction);
       globalController.lastClickedPlayer.value = Player();
       globalController.addFeedItem();
     }
-    print("last action saved in database: ");
+    print("new action saved in database: ");
     print(globalController.actions.last.toMap());
     globalController.refresh();
     Navigator.pop(context);
