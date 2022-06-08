@@ -16,7 +16,7 @@ class GameStartStopButtons extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var gameStarted = globalController.gameStarted;
+    var gameStarted = globalController.gameRunning;
     return GetBuilder<GlobalController>(
         builder: (globalController) => Row(
               children: [
@@ -84,7 +84,8 @@ class GameStartStopButtons extends StatelessWidget {
     // activate the game timer
     globalController.stopWatchTimer.value.onExecute.add(StopWatchExecute.start);
 
-    globalController.gameStarted.value = true;
+
+    globalController.gameRunning.value = true;
     globalController.setPlayerBarPlayers();
     globalController.refresh();
   }
@@ -107,7 +108,7 @@ class GameStartStopButtons extends StatelessWidget {
     // stop the game timer
     globalController.stopWatchTimer.value.onExecute.add(StopWatchExecute.stop);
 
-    globalController.gameStarted.value = false;
+    globalController.gameRunning.value = false;
     globalController.refresh();
   }
 
