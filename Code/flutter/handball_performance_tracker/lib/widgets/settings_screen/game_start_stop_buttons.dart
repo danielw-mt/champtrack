@@ -84,7 +84,9 @@ class GameStartStopButtons extends StatelessWidget {
     // activate the game timer
     globalController.stopWatchTimer.value.onExecute.add(StopWatchExecute.start);
 
+
     globalController.gameRunning.value = true;
+    globalController.setPlayerBarPlayers();
     globalController.refresh();
   }
 

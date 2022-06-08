@@ -37,10 +37,14 @@ class HelperScreen extends GetView<GlobalController> {
                     },
                   ),
                 ),
-                Column(
-                  children: [StopWatch(), ActionFeed()],
+                Row(
+                  children: [
+                    Column(
+                      children: [StopWatch(), ReverseButton(), ActionFeed()],
+                    ),
+                    EfScoreBar()
+                  ],
                 ),
-                EfScoreBar()
               ],
             ),
           ],

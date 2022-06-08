@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:handball_performance_tracker/utils/icons.dart';
 import 'package:handball_performance_tracker/data/database_repository.dart';
 import 'package:handball_performance_tracker/data/game.dart';
+import 'package:handball_performance_tracker/utils/player_helper.dart';
 import '../../controllers/globalController.dart';
 import 'package:get/get.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
@@ -160,7 +161,7 @@ Obx buildDialogButton(BuildContext context, Player associatedPlayer) {
         globalController.actions.last = lastAction;
         // update player's ef-score
         // TODO implement this
-        //activePlayer.addAction(lastAction); 
+        //activePlayer.addAction(lastAction);
 
         globalController.lastClickedPlayer.value = Player();
         globalController.addFeedItem();
@@ -178,14 +179,14 @@ Obx buildDialogButton(BuildContext context, Player associatedPlayer) {
         print("assist action: ${GameAction.clone(lastAction)}");
         GameAction assistAction = GameAction.clone(lastAction);
         print("assist action: $assistAction");
-        Player assistPlayer = globalController.lastClickedPlayer.value; 
+        Player assistPlayer = globalController.lastClickedPlayer.value;
         assistAction.playerId = assistPlayer.id!;
         assistAction.actionType = "assist";
         repository.addActionToGame(assistAction);
         globalController.actions.add(assistAction);
         // update player's ef-score
         // TODO implement this
-        //assistPlayer.addAction(lastAction); 
+        //assistPlayer.addAction(lastAction);
 
         globalController.lastClickedPlayer.value = Player();
         globalController.addFeedItem();
@@ -197,7 +198,7 @@ Obx buildDialogButton(BuildContext context, Player associatedPlayer) {
       repository.updateAction(lastAction);
       // update player's ef-scorer
       // TODO implement this
-      // activePlayer.addAction(lastAction); 
+      // activePlayer.addAction(lastAction);
 
       globalController.lastClickedPlayer.value = Player();
       globalController.addFeedItem();
