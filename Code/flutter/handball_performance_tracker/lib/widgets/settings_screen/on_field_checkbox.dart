@@ -30,6 +30,8 @@ class OnFieldCheckbox extends StatelessWidget {
               playersOnField.remove(player);
             }
           }
+          // after changing players with the checkboxes, update the player bar with those players
+          globalController.setPlayerBarPlayers();
           globalController.refresh();
         },
       );
