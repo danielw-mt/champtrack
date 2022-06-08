@@ -96,10 +96,7 @@ class StopWatch extends GetView<GlobalController> {
                   }
                   globalController.refresh();
                 },
-                child: const Text(
-                  '-1 sec',
-                  style: TextStyle(color: Colors.white),
-                ),
+                child: const Icon(Icons.remove)
               ),
             ),
             
@@ -117,10 +114,7 @@ class StopWatch extends GetView<GlobalController> {
                   stopWatchTimer.clearPresetTime();
                   stopWatchTimer.setPresetTime(mSec: 0);
                 },
-                child: const Text(
-                  'Reset',
-                  style: TextStyle(color: Colors.white),
-                ),
+                child: Icon(Icons.history)
               ),
             ),
 
