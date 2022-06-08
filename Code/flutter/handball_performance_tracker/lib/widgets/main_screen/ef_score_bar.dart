@@ -161,7 +161,7 @@ void showPopup(BuildContext context, List<Container> buttons, int i) {
 }
 
 /// builds a single button which represents a player on efscore player bar
-/// @param i: Index of player that is represented in playerBarPlayers, i is element of [0,6]
+/// @param i: Index of player that is represented in playerBarPlayers
 /// @return Container with TextButton representing the player.
 ///         On pressing the button a new popup with possible substitute player pops up.
 Container buildPlayerButton(BuildContext context, int i) {
@@ -172,8 +172,8 @@ Container buildPlayerButton(BuildContext context, int i) {
     List<Player> substitutePlayer = [];
     for (int k in getNotOnFieldIndex()) {
       for (String position in positions) {
-        Player player = globalController.chosenPlayers[k];
-        if (player.position.contains(position)) {
+        Player player = globalController.selectedTeam.value.players[k];
+        if (player.positions.contains(position)) {
           substitutePlayer.add(player);
           break;
         }
@@ -185,16 +185,16 @@ Container buildPlayerButton(BuildContext context, int i) {
   // Popup after clicking on one player at efscore bar.
   void popupSubstitutePlayer() {
     // Save pressed player, so this player can be changed in the next step.
-    globalController.playerToChange.value =
-        globalController.chosenPlayers[globalController.playerBarPlayers[i]];
+    globalController.playerToChange.value = globalController
+        .selectedTeam.value.players[globalController.playerBarPlayers[i]];
     globalController.refresh();
 
     // Build buttons out of players that are not on field and have the same position as pressed player.
-    List<Player> players = playerWithSamePosition(globalController
-        .chosenPlayers[globalController.playerBarPlayers[i]].position);
+    List<Player> players = playerWithSamePosition(globalController.selectedTeam
+        .value.players[globalController.playerBarPlayers[i]].positions);
     List<Container> buttons = [];
     for (int k = 0; k < players.length; k++) {
-      int l = globalController.chosenPlayers.indexOf(players[k]);
+      int l = globalController.selectedTeam.value.players.indexOf(players[k]);
       Container button = buildPopupPlayerButton(context, l);
       buttons.add(button);
     }
@@ -216,8 +216,8 @@ Container buildPlayerButton(BuildContext context, int i) {
     child: Stack(
       children: [
         Obx(
-          () => getButton(globalController
-              .chosenPlayers[globalController.playerBarPlayers[i]]),
+          () => getButton(globalController.selectedTeam.value
+              .players[globalController.playerBarPlayers[i]]),
         ),
         SizedBox(
           height: buttonHeight,
@@ -245,24 +245,27 @@ Container buildPlayerButton(BuildContext context, int i) {
 }
 
 /// builds a single button which represents a player on popup menu.
-/// @param i: Index of player that is represented by the button of globalController.chosenPlayers.
+/// @param i: Index of player that is represented by the button of globalController.selectedTeam.value.players.
 /// @return Container with TextButton representing the player.
-///         The index of player which button was pressed in globalController.chosenPlayers is changed with index of player
-///           with index i in globalController.playerBarPlayers.
+///         The index of player which button was pressed in globalController.selectedTeam.value.onFieldPlayers is changed with index of player
+///           with index i in globalController.selectedTeam.value.players.
 Container buildPopupPlayerButton(BuildContext context, int i) {
   final GlobalController globalController = Get.find<GlobalController>();
 
   // Changes player which was pressed in the efscore bar (globalController.playerToChange)
   // with a player which was pressed in a popup dialog.
   void changePlayer() {
-    // get index of player which was pressed in efscore bar in globalController.chosenPlayers
-    int k = globalController.chosenPlayers
+    // get index of player which was pressed in efscore bar in globalController.selectedTeam.value.onFieldPlayers
+    int k = globalController.selectedTeam.value.onFieldPlayers
         .indexOf(globalController.playerToChange.value);
-    // Change the player which was pressed in efscore bar in globalController.chosenPlayers to the player which was pressed in popup dialog.
-    globalController.playersOnField[k] = false;
-    globalController.playersOnField[i] = true;
+    // Change the player which was pressed in efscore bar in globalController.selectedTeam.value.onFieldPlayers
+    // to the player which was pressed in popup dialog.
+    globalController.selectedTeam.value.onFieldPlayers[k] =
+        globalController.selectedTeam.value.players[i];
     // Update player bar players
-    int indexToChange = globalController.playerBarPlayers.indexOf(k);
+    int l = globalController.selectedTeam.value.players
+        .indexOf(globalController.playerToChange.value);
+    int indexToChange = globalController.playerBarPlayers.indexOf(l);
     globalController.playerBarPlayers[indexToChange] = i;
     globalController.refresh();
   }
@@ -277,7 +280,7 @@ Container buildPopupPlayerButton(BuildContext context, int i) {
     child: Stack(
       children: [
         Obx(
-          () => getButton(globalController.chosenPlayers[i]),
+          () => getButton(globalController.selectedTeam.value.players[i]),
         ),
         SizedBox(
           height: buttonHeight,
@@ -306,66 +309,64 @@ Container buildPopupPlayerButton(BuildContext context, int i) {
   );
 }
 
-Obx getButton(Player player) {
+Row getButton(Player player) {
   final GlobalController globalController = Get.find<GlobalController>();
 
-  return Obx(
-    () => Row(
-      children: [
-        // Playernumber
-        Container(
-          // width is 1/5 of button width
-          width: scorebarButtonWidth / 5,
+  return Row(
+    children: [
+      // Playernumber
+      Container(
+        // width is 1/5 of button width
+        width: scorebarButtonWidth / 5,
+        height: buttonHeight,
+        alignment: Alignment.center,
+        color: globalController.playerToChange.value == player
+            ? pressedButtonColor
+            : buttonColor,
+        child: Text(
+          (player.number).toString(),
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: numberFontSize,
+            fontWeight: FontWeight.bold,
+          ),
+          textAlign: TextAlign.left,
+        ),
+      ),
+
+      // Playername
+      Expanded(
+        child: Container(
+          // width is 3/5 of button width
+          width: scorebarButtonWidth / 5 * 3,
           height: buttonHeight,
           alignment: Alignment.center,
           color: globalController.playerToChange.value == player
               ? pressedButtonColor
               : buttonColor,
           child: Text(
-            (player.number).toString(),
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: numberFontSize,
-              fontWeight: FontWeight.bold,
-            ),
+            player.lastName,
+            style: TextStyle(color: Colors.black, fontSize: nameFontSize),
             textAlign: TextAlign.left,
           ),
         ),
+      ),
 
-        // Playername
-        Expanded(
-          child: Container(
-            // width is 3/5 of button width
-            width: scorebarButtonWidth / 5 * 3,
-            height: buttonHeight,
-            alignment: Alignment.center,
-            color: globalController.playerToChange.value == player
-                ? pressedButtonColor
-                : buttonColor,
-            child: Text(
-              player.name,
-              style: TextStyle(color: Colors.black, fontSize: nameFontSize),
-              textAlign: TextAlign.left,
-            ),
+      Container(
+        width: scorebarButtonWidth / 5,
+        height: buttonHeight,
+        alignment: Alignment.center,
+        color: rb[player.efScore.score],
+        child: Text(
+          player.efScore.score.toStringAsFixed(1),
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: nameFontSize,
           ),
+          textAlign: TextAlign.left,
         ),
-
-        Container(
-          width: scorebarButtonWidth / 5,
-          height: buttonHeight,
-          alignment: Alignment.center,
-          color: rb[player.efScore.score],
-          child: Text(
-            player.efScore.score.toStringAsFixed(2),
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: nameFontSize,
-            ),
-            textAlign: TextAlign.left,
-          ),
-        ),
-      ],
-    ),
+      ),
+    ],
   );
 }
 

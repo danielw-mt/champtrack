@@ -7,8 +7,9 @@ import 'package:handball_performance_tracker/data/player.dart';
 List<int> getOnFieldIndex() {
   final GlobalController globalController = Get.find<GlobalController>();
   List<int> ind = [];
-  for (int i = 0; i < globalController.playersOnField.length; i++) {
-    if (globalController.playersOnField[i] == true) {
+  for (int i = 0; i < globalController.selectedTeam.value.players.length; i++) {
+    if (globalController.selectedTeam.value.onFieldPlayers
+        .contains(globalController.selectedTeam.value.players[i])) {
       ind.add(i);
     }
   }
@@ -20,8 +21,10 @@ List<int> getOnFieldIndex() {
 List<int> getNotOnFieldIndex() {
   final GlobalController globalController = Get.find<GlobalController>();
   List<int> ind = [];
-  for (int i = 0; i < globalController.playersOnField.length; i++) {
-    if (globalController.playersOnField[i] == false) {
+  for (int i = 0; i < globalController.selectedTeam.value.players.length; i++) {
+    if (globalController.selectedTeam.value.onFieldPlayers
+            .contains(globalController.selectedTeam.value.players[i]) ==
+        false) {
       ind.add(i);
     }
   }
