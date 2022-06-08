@@ -11,6 +11,7 @@ import './../widgets/nav_drawer.dart';
 import 'package:handball_performance_tracker/utils/fieldSizeParameter.dart'
     as fieldSizeParameter;
 import 'package:flutter/services.dart';
+import '../widgets/main_screen/stopwatchbar.dart';
 
 class MainScreen extends StatelessWidget {
   // screen where the game takes place
@@ -58,24 +59,29 @@ class MainScreen extends StatelessWidget {
                         alignment: Alignment.topCenter,
                         child: EfScoreBar()),
                     // Field
-                    Container(
-                      width: fieldSizeParameter.fieldWidth +
-                          fieldSizeParameter.toolbarHeight / 4,
-                      height: fieldSizeParameter.fieldHeight +
-                          fieldSizeParameter.toolbarHeight / 4,
-                      alignment: Alignment.topCenter,
-                      child: Container(
-                        decoration: BoxDecoration(
-                            // set border around field
-                            border:
-                                Border.all(width: fieldSizeParameter.lineSize)),
-                        child: SizedBox(
-                          // FieldSwitch to swipe between right and left field side. SizedBox around it so there is no rendering error.
-                          width: fieldSizeParameter.fieldWidth,
-                          height: fieldSizeParameter.fieldHeight,
-                          child: FieldSwitch(),
+                    Column(
+                      children: [
+                        StopWatchBar(),
+                        Container(
+                          width: fieldSizeParameter.fieldWidth +
+                              fieldSizeParameter.toolbarHeight / 4,
+                          height: fieldSizeParameter.fieldHeight +
+                              fieldSizeParameter.toolbarHeight / 4,
+                          alignment: Alignment.topCenter,
+                          child: Container(
+                            decoration: BoxDecoration(
+                                // set border around field
+                                border:
+                                    Border.all(width: fieldSizeParameter.lineSize)),
+                            child: SizedBox(
+                              // FieldSwitch to swipe between right and left field side. SizedBox around it so there is no rendering error.
+                              width: fieldSizeParameter.fieldWidth,
+                              height: fieldSizeParameter.fieldHeight,
+                              child: FieldSwitch(),
+                            ),
+                          ),
                         ),
-                      ),
+                      ],
                     ),
                   ],
                 ),
