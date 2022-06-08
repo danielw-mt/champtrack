@@ -136,7 +136,7 @@ class GlobalController extends GetxController {
   RxList<GameAction> actions = <GameAction>[].obs;
 
   /// True: game was started; False game did not start yet
-  RxBool gameStarted = false.obs;
+  RxBool gameRunning = false.obs;
 
   /// last game object written to db
   Rx<Game> currentGame = Game(date: DateTime.now()).obs;
