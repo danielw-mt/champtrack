@@ -43,7 +43,7 @@ void startGame(BuildContext context) async {
   _addGameToPlayers(newGame);
 
   // activate the game timer
-  globalController.stopWatchTimer.value.onExecute.add(StopWatchExecute.start);
+  globalController.currentGame.value.stopWatch.onExecute.add(StopWatchExecute.start);
 
   globalController.gameRunning.value = true;
   globalController.refresh();
@@ -52,14 +52,14 @@ void startGame(BuildContext context) async {
 void unpauseGame() {
   final GlobalController globalController = Get.find<GlobalController>();
   globalController.gameRunning.value = true;
-  globalController.stopWatchTimer.value.onExecute.add(StopWatchExecute.start);
+  globalController.currentGame.value.stopWatch.onExecute.add(StopWatchExecute.start);
   globalController.refresh();
 }
 
 void pauseGame() {
   final GlobalController globalController = Get.find<GlobalController>();
   globalController.gameRunning.value = false;
-  globalController.stopWatchTimer.value.onExecute.add(StopWatchExecute.stop);
+  globalController.currentGame.value.stopWatch.onExecute.add(StopWatchExecute.stop);
   globalController.refresh();
 }
 
@@ -79,7 +79,7 @@ void stopGame() async {
   globalController.repository.updateGame(currentGame);
 
   // stop the game timer
-  globalController.stopWatchTimer.value.onExecute.add(StopWatchExecute.stop);
+  globalController.currentGame.value.stopWatch.onExecute.add(StopWatchExecute.stop);
 
   globalController.gameRunning.value = false;
   globalController.refresh();

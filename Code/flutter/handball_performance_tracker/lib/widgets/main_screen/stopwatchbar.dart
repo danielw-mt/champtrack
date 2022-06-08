@@ -11,7 +11,7 @@ class StopWatchBar extends GetView<GlobalController> {
   Widget build(BuildContext context) {
     return GetBuilder<GlobalController>(
       builder: (GlobalController globalController) {
-        StopWatchTimer stopWatchTimer = globalController.stopWatchTimer.value;
+        StopWatchTimer stopWatchTimer = globalController.currentGame.value.stopWatch;
         return Row(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -29,12 +29,12 @@ class StopWatchBar extends GetView<GlobalController> {
                     stopWatchTimer.clearPresetTime();
                     if (stopWatchTimer.isRunning) {
                       stopWatchTimer.onExecute.add(StopWatchExecute.reset);
-                      globalController.stopWatchTimer.value
+                      globalController.currentGame.value.stopWatch
                           .setPresetTime(mSec: currentTime + 1000);
                       stopWatchTimer.onExecute.add(StopWatchExecute.start);
                     } else {
                       stopWatchTimer.onExecute.add(StopWatchExecute.reset);
-                      globalController.stopWatchTimer.value
+                      globalController.currentGame.value.stopWatch
                           .setPresetTime(mSec: currentTime + 1000);
                     }
                     globalController.refresh();
@@ -86,12 +86,12 @@ class StopWatchBar extends GetView<GlobalController> {
                   stopWatchTimer.clearPresetTime();
                   if (stopWatchTimer.isRunning) {
                     stopWatchTimer.onExecute.add(StopWatchExecute.reset);
-                    globalController.stopWatchTimer.value
+                    globalController.currentGame.value.stopWatch
                         .setPresetTime(mSec: currentTime - 1000);
                     stopWatchTimer.onExecute.add(StopWatchExecute.start);
                   } else {
                     stopWatchTimer.onExecute.add(StopWatchExecute.reset);
-                    globalController.stopWatchTimer.value
+                    globalController.currentGame.value.stopWatch
                         .setPresetTime(mSec: currentTime - 1000);
                   }
                   globalController.refresh();
