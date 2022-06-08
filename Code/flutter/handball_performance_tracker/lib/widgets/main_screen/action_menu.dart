@@ -15,7 +15,7 @@ void callActionMenu(BuildContext context) {
   final GlobalController globalController = Get.find<GlobalController>();
 
   // if game is not running give a warning
-  if (globalController.gameStarted.value == false) {
+  if (globalController.gameRunning.value == false) {
     Alert(
       context: context,
       title: "Error game did not start yet",
