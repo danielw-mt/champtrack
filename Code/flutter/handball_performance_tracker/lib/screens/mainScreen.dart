@@ -12,6 +12,7 @@ import 'package:handball_performance_tracker/utils/fieldSizeParameter.dart'
     as fieldSizeParameter;
 import 'package:flutter/services.dart';
 import '../widgets/main_screen/stopwatchbar.dart';
+import '../widgets/main_screen/action_feed.dart';
 
 class MainScreen extends StatelessWidget {
   // screen where the game takes place
@@ -50,6 +51,16 @@ class MainScreen extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        ActionFeed(),
+                        //Spacer(flex: 1,),
+                        Container()
+                      ],
+                    ),
+                    Spacer(flex: 1,),
                     // Player Bar
                     Container(
                         width: efscorebar.scorebarWidth +
