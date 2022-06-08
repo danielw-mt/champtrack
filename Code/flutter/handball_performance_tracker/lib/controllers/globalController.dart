@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:handball_performance_tracker/data/club.dart';
 import 'package:handball_performance_tracker/data/database_repository.dart';
 import 'package:handball_performance_tracker/utils/player_helper.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
@@ -21,8 +22,8 @@ class GlobalController extends GetxController {
 
   ///
   // currently signed in club
-  /// @return rxString
-  var currentClub = "".obs;
+  /// @return Rx<Club>
+  Rx<Club> currentClub = Club().obs;
 
   /// Temporary variable for storing the currently selected Team
   Rx<Team> selectedTeam = Team(id: "-1", name: "Default team").obs;
@@ -44,9 +45,6 @@ class GlobalController extends GetxController {
   ////
   // Helper screen
   ////
-  var stopWatchTimer = StopWatchTimer(
-    mode: StopWatchMode.countUp,
-  ).obs;
 
   var feedTimer = StopWatchTimer(
       mode: StopWatchMode.countDown,

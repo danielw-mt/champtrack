@@ -214,15 +214,14 @@ DialogButton buildDialogButton(
     DateTime dateTime = DateTime.now();
     int unixTime = dateTime.toUtc().millisecondsSinceEpoch;
     int secondsSinceGameStart =
-        globalController.stopWatchTimer.value.secondTime.value;
+        globalController.currentGame.value.stopWatch.secondTime.value;
 
     // get most recent game id from DB
     String currentGameId = globalController.currentGame.value.id!;
     String actionType = determineAttack() ? attack : defense;
 
     GameAction action = GameAction(
-        // TODO implement club here
-        clubId: globalController.currentClub.value,
+        teamId: globalController.selectedTeam.value.id!,
         gameId: currentGameId,
         type: actionType,
         actionType: actionMapping[actionType]![buttonText]!,
