@@ -62,9 +62,6 @@ class GlobalController extends GetxController {
   ////
   // Helper screen
   ////
-  var stopWatchTimer = StopWatchTimer(
-    mode: StopWatchMode.countUp,
-  ).obs;
 
   var feedTimer = StopWatchTimer(
       mode: StopWatchMode.countDown,
