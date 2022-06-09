@@ -84,7 +84,7 @@ class GlobalController extends GetxController {
       await Future.delayed(Duration(milliseconds: 500));
     } else {
       feedTimer.value.onExecute.add(StopWatchExecute.reset);
-      numCurrentFeedItems.value += 1;
+      //numCurrentFeedItems.value += 1;
       await Future.delayed(Duration(milliseconds: 500));
       feedTimer.value.onExecute.add(StopWatchExecute.start);
     }

@@ -4,6 +4,7 @@ import '../../controllers/globalController.dart';
 import 'package:get/get.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 import '../../data/game_action.dart';
+import '../../data/team.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ActionFeed extends GetView<GlobalController> {
@@ -44,7 +45,7 @@ class ActionFeed extends GetView<GlobalController> {
                 shrinkWrap: true,
                 itemCount: globalController.numCurrentFeedItems.value,
                 itemBuilder: (context, index) {
-                  var actions = globalController.actions;
+                  List<GameAction> actions = globalController.actions;
                   List<dynamic> lastActions = actions.sublist(
                       actions.length - globalController.numCurrentFeedItems.value,
                       actions.length);
@@ -105,7 +106,7 @@ class ActionFeed extends GetView<GlobalController> {
                                   child: Padding(
                                       padding: const EdgeInsets.all(8.0),
                                       child: Text(
-                                        actionType,
+                                        lastAction.actionType,
                                       )),
                                 ),
                               ),
@@ -113,7 +114,7 @@ class ActionFeed extends GetView<GlobalController> {
                                 child: Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Text(
-                                    "Player ID: " + lastAction.playerId,
+                                    "Player ID: " + globalController.selectedTeam.value.onFieldPlayers.where((player) => player.id == lastAction.playerId).first.lastName.toString(),
                                     style: TextStyle(
                                       fontSize: 20,
                                     ),

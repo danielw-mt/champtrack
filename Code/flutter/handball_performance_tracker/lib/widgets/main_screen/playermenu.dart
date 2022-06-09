@@ -171,11 +171,13 @@ Obx buildDialogButton(BuildContext context, Player associatedPlayer) {
         lastAction.playerId = lastClickedPlayer.id!;
         repository.updateAction(lastAction);
         globalController.actions.last = lastAction;
+        globalController.addFeedItem();
         // update player's ef-score
         lastClickedPlayer.addAction(lastAction);
-        globalController.addFeedItem();
+
         print("new action saved in database: ");
         print(globalController.actions.last.toMap());
+
         // person that scored assist
         // deep clone a new action from the most recent action
         GameAction assistAction = GameAction.clone(lastAction);
@@ -190,8 +192,9 @@ Obx buildDialogButton(BuildContext context, Player associatedPlayer) {
         // update player's ef-score
         globalController.lastClickedPlayer.value.addAction(lastAction);
         globalController.addFeedItem();
-        globalController.selectedTeam.refresh();
+        //globalController.selectedTeam.refresh();
         globalController.lastClickedPlayer.value = Player();
+        globalController.refresh();
       }
     } else {
       // if the action was not a goal just update the player id in firebase and gamestate
