@@ -61,8 +61,8 @@ class ButtonBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.all(padWidth),
-      width: width,
-      height: buttons.length * lineAndButtonHeight + paddingWidth,
+      width: width.toDouble(),
+      height: (buttons.length * lineAndButtonHeight + paddingWidth).toDouble(),
       decoration: BoxDecoration(
           color: Colors.white,
           // set border so corners can be made round
@@ -105,7 +105,7 @@ class EfScoreBar extends StatelessWidget {
     return ButtonBar(
       buttons: buttons,
       width: scorebarWidth,
-      padWidth: 0,
+      padWidth: 0.0,
     );
   }
 }
