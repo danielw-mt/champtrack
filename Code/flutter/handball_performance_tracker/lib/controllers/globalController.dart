@@ -15,6 +15,10 @@ class GlobalController extends GetxController {
   // Class for managing global state of the app
   // Refer to https://github.com/jonataslaw/getx/wiki/State-Management
 
+
+  /// initialization handling
+  var isInitialized = false;
+
   ///
   // database handling
   ///
