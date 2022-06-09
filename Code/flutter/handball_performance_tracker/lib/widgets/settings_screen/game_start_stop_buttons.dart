@@ -16,7 +16,7 @@ class GameStartStopButtons extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var gameStarted = globalController.gameRunning;
+    bool gameRunning = globalController.gameRunning.value;
     return GetBuilder<GlobalController>(
         builder: (globalController) => Row(
               children: [
@@ -24,12 +24,12 @@ class GameStartStopButtons extends StatelessWidget {
                   padding: const EdgeInsets.all(8),
                   child: TextButton(
                     onPressed: () {
-                      if (gameStarted.value == false) startGame(context);
+                      if (gameRunning == false) startGame(context);
                     },
                     child: const Text("Start Game"),
                     // start button is grey when the game is started and blue when not
                     style: ButtonStyle(
-                        backgroundColor: gameStarted.value
+                        backgroundColor: gameRunning
                             ? MaterialStateProperty.all<Color>(Colors.grey)
                             : MaterialStateProperty.all<Color>(Colors.red)),
                   ),
@@ -38,7 +38,7 @@ class GameStartStopButtons extends StatelessWidget {
                   padding: const EdgeInsets.all(8),
                   child: TextButton(
                       onPressed: () {
-                        if (gameStarted.value == true) stopGame();
+                        if (gameRunning == true) stopGame();
                       },
                       child: const Text("Stop Game")),
                 )
@@ -83,7 +83,6 @@ class GameStartStopButtons extends StatelessWidget {
 
     // activate the game timer
     globalController.stopWatchTimer.value.onExecute.add(StopWatchExecute.start);
-
 
     globalController.gameRunning.value = true;
     globalController.setPlayerBarPlayers();

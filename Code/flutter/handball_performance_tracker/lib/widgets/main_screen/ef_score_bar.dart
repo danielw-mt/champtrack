@@ -9,20 +9,20 @@ import 'dart:math';
 import 'package:rainbow_color/rainbow_color.dart';
 
 // Radius of round edges
-double menuRadius = 10.0;
+double menuRadius = 8.0;
 double buttonRadius = 8.0;
 // Width of padding between buttons
 double paddingWidth = 8.0;
 // height of button + line between buttons.
 double lineAndButtonHeight = fieldSizeParameter.fieldHeight / 7;
 // height of a button -> The full height should be used when 7 buttons are displayed.
-double buttonHeight = (fieldSizeParameter.fieldHeight - paddingWidth * 9) / 7;
+double buttonHeight = (fieldSizeParameter.fieldHeight - paddingWidth * 5.5) / 7;
 // width of popup
 double popupWidth = buttonHeight + 3 * paddingWidth;
 // width of efscore bar
-double scorebarWidth = popupWidth * 2.3;
+double scorebarWidth = popupWidth * 2.3 - 2 * paddingWidth;
 // width of a button in scorebar
-double scorebarButtonWidth = scorebarWidth - 2 * paddingWidth;
+double scorebarButtonWidth = scorebarWidth;
 // track if plus button was pressed, so the adapted color of the pressed player on efscore bar does not change back to normal already.
 bool plusPressed = false;
 // Color of unpressed button
@@ -50,17 +50,19 @@ var rb = Rainbow(spectrum: [
 class ButtonBar extends StatelessWidget {
   List<Container> buttons = [];
   late double width;
-  ButtonBar({required buttons, required width}) {
+  late double padWidth;
+  ButtonBar({required buttons, required width, required padWidth}) {
     this.buttons = buttons;
     this.width = width;
+    this.padWidth = padWidth;
   }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(paddingWidth),
+      padding: EdgeInsets.all(padWidth),
       width: width,
-      height: buttons.length * lineAndButtonHeight,
+      height: buttons.length * lineAndButtonHeight + paddingWidth,
       decoration: BoxDecoration(
           color: Colors.white,
           // set border so corners can be made round
@@ -103,6 +105,7 @@ class EfScoreBar extends StatelessWidget {
     return ButtonBar(
       buttons: buttons,
       width: scorebarWidth,
+      padWidth: 0,
     );
   }
 }
@@ -115,6 +118,7 @@ void showPopup(BuildContext context, List<Container> buttons, int i) {
   int topPadding = i < 3
       ? max((i - (buttons.length / 2).truncate()), 0)
       : max((i - (buttons.length / 2).round()), 0);
+  topPadding = buttons.length == 1 ? i : topPadding;
   showDialog(
           context: context,
           builder: (BuildContext context) {
@@ -128,14 +132,21 @@ void showPopup(BuildContext context, List<Container> buttons, int i) {
                 // Set padding to all sides, so the popup has the needed size and position.
                 insetPadding: EdgeInsets.only(
                     // The dialog should appear on the right side of Efscore bar, so the padding on the left side need to be around width of scorebar.
-                    left: scorebarWidth,
+                    left: fieldSizeParameter.screenWidth -
+                        (fieldSizeParameter.fieldWidth +
+                            paddingWidth * 4 -
+                            scorebarWidth) -
+                        scorebarWidth,
                     // As the dialog has also width = popupWidth, the right side padding is whole screenWidth-2*popupWidth
-                    right: fieldSizeParameter.screenWidth - scorebarWidth * 2,
+                    right: fieldSizeParameter.fieldWidth +
+                        paddingWidth * 2 -
+                        scorebarWidth,
                     // The dialog should open below the toolbar and other padding. Depending on the position (=index i) of the pressed button,
                     // the top padding changes, so the dialog opens more or less besides the pressed button.
                     top: fieldSizeParameter.toolbarHeight +
                         fieldSizeParameter.paddingTop +
-                        topPadding * lineAndButtonHeight,
+                        topPadding * lineAndButtonHeight -
+                        paddingWidth * 6,
                     // Bottom padding is determined similar to top padding.
                     bottom: fieldSizeParameter.paddingBottom +
                         max(((7 - i) - buttons.length), 0) *
@@ -149,6 +160,7 @@ void showPopup(BuildContext context, List<Container> buttons, int i) {
                     return ButtonBar(
                       buttons: buttons,
                       width: scorebarWidth,
+                      padWidth: paddingWidth,
                     );
                   },
                 ));
@@ -199,7 +211,7 @@ Container buildPlayerButton(BuildContext context, int i) {
       buttons.add(button);
     }
     // Add the button with the plus here.
-    buttons.add(buildPlusButton(context));
+    buttons.add(buildPlusButton(context, i));
 
     // Open popup dialog.
     // int i: Index of player in playerbar
@@ -277,6 +289,7 @@ Container buildPopupPlayerButton(BuildContext context, int i) {
         // make round edges
         borderRadius: BorderRadius.all(Radius.circular(buttonRadius))),
     height: buttonHeight,
+    width: scorebarButtonWidth,
     child: Stack(
       children: [
         Obx(
@@ -320,9 +333,16 @@ Row getButton(Player player) {
         width: scorebarButtonWidth / 5,
         height: buttonHeight,
         alignment: Alignment.center,
-        color: globalController.playerToChange.value == player
-            ? pressedButtonColor
-            : buttonColor,
+
+        decoration: BoxDecoration(
+            color: globalController.playerToChange.value == player
+                ? pressedButtonColor
+                : buttonColor,
+            // make round edges
+            borderRadius: BorderRadius.only(
+              bottomLeft: Radius.circular(buttonRadius),
+              topLeft: Radius.circular(buttonRadius),
+            )),
         child: Text(
           (player.number).toString(),
           style: TextStyle(
@@ -356,7 +376,13 @@ Row getButton(Player player) {
         width: scorebarButtonWidth / 5,
         height: buttonHeight,
         alignment: Alignment.center,
-        color: rb[player.efScore.score],
+        decoration: BoxDecoration(
+            color: rb[player.efScore.score],
+            // make round edges
+            borderRadius: BorderRadius.only(
+              bottomRight: Radius.circular(buttonRadius),
+              topRight: Radius.circular(buttonRadius),
+            )),
         child: Text(
           player.efScore.score.toStringAsFixed(1),
           style: TextStyle(
@@ -371,7 +397,7 @@ Row getButton(Player player) {
 }
 
 // Builds the plus button which is only present in popup.
-Container buildPlusButton(BuildContext context) {
+Container buildPlusButton(BuildContext context, int i) {
   final GlobalController globalController = Get.find<GlobalController>();
   // Popup after clicking on plus at popup dialog.
   // Shows all player which are not on field.
@@ -381,7 +407,7 @@ Container buildPlusButton(BuildContext context) {
       Container button = buildPopupPlayerButton(context, i);
       buttons.add(button);
     }
-    showPopup(context, buttons, 0);
+    showPopup(context, buttons, i);
   }
 
   return Container(
