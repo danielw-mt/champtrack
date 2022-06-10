@@ -11,9 +11,8 @@ class ActionFeed extends GetView<GlobalController> {
   @override
   Widget build(BuildContext context) {
     return GetBuilder<GlobalController>(
-      builder: (GlobalController globalController) {
+      builder: (globalController) {
         List<GameAction> feedActions = globalController.feedActions;
-        print(feedActions.length);
         return Container(
           alignment: Alignment.centerLeft,
           width: MediaQuery.of(context).size.width * 0.3,

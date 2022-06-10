@@ -16,7 +16,9 @@ void periodicFeedTimerReset() async {
     globalController.feedActions.removeAt(0);
   }
   globalController.periodicResetIsHappening.value = false;
-  globalController.refresh();
+  globalController.periodicResetIsHappening.refresh();
+  globalController.feedActions.refresh();
+  globalController.feedTimer.refresh();
 }
 
 void addFeedItem(GameAction feedAction) async {
@@ -36,7 +38,8 @@ void addFeedItem(GameAction feedAction) async {
     globalController.feedActions.removeAt(0);
   }
   globalController.feedActions.add(feedAction);
-  globalController.refresh();
+  globalController.feedActions.refresh();
+  globalController.feedTimer.refresh();
   print("adding feed item: ${feedAction.actionType}");
 }
 
@@ -53,5 +56,5 @@ void removeFeedItem(int itemIndex) {
   //DatabaseRepository().deleteFeedItem(index);
   // delete action from game state
   globalController.feedActions.removeAt(itemIndex);
-  globalController.refresh();
+  globalController.feedActions.refresh();
 }

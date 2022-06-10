@@ -195,7 +195,7 @@ Obx buildDialogButton(BuildContext context, Player associatedPlayer) {
       }
     } else {
       // if the action was not a goal just update the player id in firebase and gamestate
-      lastAction.playerId = lastClickedPlayerId!;
+      lastAction.playerId = associatedPlayer.id.toString();
       globalController.actions.last = lastAction;
       repository.updateAction(lastAction);
       addFeedItem(lastAction);
@@ -203,12 +203,12 @@ Obx buildDialogButton(BuildContext context, Player associatedPlayer) {
       // TODO implement this
       // activePlayer.addAction(lastAction);
 
-      globalController.lastClickedPlayer.value = Player();
+      globalController.lastClickedPlayer.value = Player(); 
     }
     // addFeedItem(lastAction);
     print("last action saved in database: ");
     print(globalController.actions.last.toMap());
-    globalController.refresh();
+    globalController.refresh(); 
     Navigator.pop(context);
   }
 
