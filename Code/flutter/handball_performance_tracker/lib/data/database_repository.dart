@@ -133,33 +133,4 @@ class DatabaseRepository {
         .doc(mostRecentAction.id)
         .delete();
   }
-
-  // action feed
-  Future<void> deleteFeedItem(int numCurrentFeedItems) async {
-    QuerySnapshot mostRecentGameQuery = await _db
-        .collection("games")
-        .orderBy("date", descending: true)
-        .limit(1)
-        .get();
-    DocumentSnapshot mostRecentGame = mostRecentGameQuery.docs[0];
-    // look inside gameActions for the latest x actions for that game
-    QuerySnapshot mostRecentActionQuery = await _db
-        .collection("gameData")
-        .doc(mostRecentGame.id)
-        .collection("actions")
-        .orderBy("timestamp", descending: true)
-        .limit(numCurrentFeedItems)
-        .get();
-
-    // delete the respective action
-    DocumentSnapshot respectiveRecentAction = mostRecentActionQuery.docs[0];
-
-    _db
-        .collection("gameData")
-        .doc(mostRecentGame.id)
-        .collection("actions")
-        .doc(respectiveRecentAction.id)
-        .delete();
-    return;
-  }
 }

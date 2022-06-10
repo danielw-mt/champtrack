@@ -29,7 +29,7 @@ class ActionFeed extends GetView<GlobalController> {
                     .first;
                 return GestureDetector(
                     onTap: () async {
-                      removeFeedItem(index);
+                      removeFeedItem(feedAction);
                     },
                     child: Column(
                       children: [

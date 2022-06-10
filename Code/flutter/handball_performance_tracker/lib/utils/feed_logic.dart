@@ -1,9 +1,9 @@
 import 'package:get/get.dart';
-import 'package:flutter/material.dart';
 import 'package:handball_performance_tracker/controllers/globalController.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 import '../data/game_action.dart';
 import '../constants/settings_config.dart';
+import '../data/database_repository.dart';
 
 // when the periodic reset happens remove the first (oldest) item from the feedActions list
 void periodicFeedTimerReset() async {
@@ -52,11 +52,11 @@ void onFeedTimerEnded() {
 }
 
 /// Gets triggered when user clicks on a feed item
-void removeFeedItem(int itemIndex) {
+void removeFeedItem(GameAction action) {
   final GlobalController globalController = Get.find<GlobalController>();
-  // TODO implement backend
-  //DatabaseRepository().deleteFeedItem(index);
+  // delete feed item from database
+  DatabaseRepository().deleteAction(action);
   // delete action from game state
-  globalController.feedActions.removeAt(itemIndex);
+  globalController.feedActions.remove(action);
   globalController.refresh();
 }
