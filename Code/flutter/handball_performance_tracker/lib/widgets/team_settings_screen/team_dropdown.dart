@@ -25,8 +25,8 @@ class TeamDropdown extends GetView<GlobalController> {
         if (globalController.selectedTeam.value.name == "Default team") {
           globalController.selectedTeam.value =
               globalController.cachedTeamsList[0];
-          List<Team> availableTeams = globalController.cachedTeamsList;
         }
+        List<Team> availableTeams = globalController.cachedTeamsList;
         return DropdownButton<Team>(
           value: globalController.selectedTeam.value,
           icon: const Icon(Icons.arrow_downward),
