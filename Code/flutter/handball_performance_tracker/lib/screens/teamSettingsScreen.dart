@@ -26,7 +26,7 @@ class TeamSettingsScreen extends GetView<GlobalController> {
               drawer: NavDrawer(),
               bottomNavigationBar: TeamTypeSelectionBar(),
               body: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // Container for menu button on top left corner
                     Container(

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:handball_performance_tracker/widgets/main_screen/action_menu.dart';
 import '../../controllers/globalController.dart';
 import 'package:get/get.dart';
+import '../../utils/teamTypeHelpers.dart';
 
 class TeamTypeSelectionBar extends StatelessWidget {
   @override
@@ -18,6 +19,8 @@ class TeamTypeSelectionBar extends StatelessWidget {
             indicatorColor: Colors.blue,
             onTap: (int tabNumber) {
               globalController.selectedTeamType.value = tabNumber;
+              globalController.refresh();
+              updateSelectedTeamAccordingToTeamType();
             },
             tabs: [
               Tab(
