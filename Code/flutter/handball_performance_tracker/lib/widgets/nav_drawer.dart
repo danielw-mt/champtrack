@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:handball_performance_tracker/controllers/globalController.dart';
 import './../screens/mainScreen.dart';
-import './../screens/helperScreen.dart';
+import '../screens/placeholderScreen.dart';
 import './../screens/settingsScreen.dart';
+import './../screens/teamSettingsScreen.dart';
 import 'package:get/get.dart';
 
 class NavDrawer extends StatelessWidget {
-
   // Navigation widget for Material app. Can be opend from the sidebar
   @override
   Widget build(BuildContext context) {
@@ -36,8 +36,13 @@ class NavDrawer extends StatelessWidget {
           ),
           ListTile(
             leading: Icon(Icons.verified_user),
-            title: Text('Helper Screen'),
-            onTap: () => {Get.to(HelperScreen())},
+            title: Text('Placeholder Screen'),
+            onTap: () => {Get.to(PlaceholderScreen())},
+          ),
+          ListTile(
+            leading: Icon(Icons.verified_user),
+            title: Text('Team Settings Screen'),
+            onTap: () => {Get.to(TeamSettingsScreen())},
           ),
         ],
       ),
