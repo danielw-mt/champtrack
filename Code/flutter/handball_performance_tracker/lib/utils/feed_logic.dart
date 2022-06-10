@@ -7,7 +7,7 @@ import '../constants/settings_config.dart';
 
 // when the periodic reset happens remove the first (oldest) item from the feedActions list
 void periodicFeedTimerReset() async {
-  final GlobalController globalController = Get.find<GlobalController>();
+  GlobalController globalController = Get.find<GlobalController>();
   globalController.periodicResetIsHappening.value = true;
   globalController.feedTimer.value.onExecute.add(StopWatchExecute.reset);
   await Future.delayed(Duration(milliseconds: 500));
@@ -16,14 +16,13 @@ void periodicFeedTimerReset() async {
     globalController.feedActions.removeAt(0);
   }
   globalController.periodicResetIsHappening.value = false;
-  globalController.periodicResetIsHappening.refresh();
-  globalController.feedActions.refresh();
-  globalController.feedTimer.refresh();
+  globalController.refresh();
 }
 
 void addFeedItem(GameAction feedAction) async {
   
-  final GlobalController globalController = Get.find<GlobalController>();
+  GlobalController globalController = Get.find<GlobalController>();
+  globalController.addingFeedItem.value = true;
   StopWatchTimer feedTimer = globalController.feedTimer.value;
   if (feedTimer.isRunning == false) {
     feedTimer.onExecute.add(StopWatchExecute.start);
@@ -38,14 +37,13 @@ void addFeedItem(GameAction feedAction) async {
     globalController.feedActions.removeAt(0);
   }
   globalController.feedActions.add(feedAction);
-  globalController.feedActions.refresh();
-  globalController.feedTimer.refresh();
-  print("adding feed item: ${feedAction.actionType}");
+  globalController.addingFeedItem.value = false;
+  globalController.refresh();
 }
 
 void onFeedTimerEnded() {
-  final GlobalController globalController = Get.find<GlobalController>();
-  if (globalController.periodicResetIsHappening.value == false) {
+  GlobalController globalController = Get.find<GlobalController>();
+  if (globalController.periodicResetIsHappening.value == false && globalController.addingFeedItem.value == false) {
     periodicFeedTimerReset();
   }
 }
@@ -56,5 +54,5 @@ void removeFeedItem(int itemIndex) {
   //DatabaseRepository().deleteFeedItem(index);
   // delete action from game state
   globalController.feedActions.removeAt(itemIndex);
-  globalController.feedActions.refresh();
+  globalController.refresh();
 }

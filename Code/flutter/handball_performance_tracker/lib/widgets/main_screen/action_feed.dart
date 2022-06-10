@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import './../../controllers/globalController.dart';
+import '../../controllers/globalController.dart';
 import 'package:get/get.dart';
 import '../../data/game_action.dart';
 import '../../data/player.dart';
@@ -27,7 +27,6 @@ class ActionFeed extends GetView<GlobalController> {
                     .selectedTeam.value.players
                     .where((Player player) => player.id == feedAction.playerId)
                     .first;
-                print(relevantPlayer.lastName);
                 return GestureDetector(
                     onTap: () async {
                       removeFeedItem(index);
@@ -42,7 +41,7 @@ class ActionFeed extends GetView<GlobalController> {
                               child: Container(
                                 decoration: BoxDecoration(
                                     color: Color.fromARGB(100, 217, 217, 217),
-                                    borderRadius:
+                                    borderRadius: 
                                         BorderRadius.all(Radius.circular(10))),
                                 child: Padding(
                                     padding: const EdgeInsets.all(8.0),
