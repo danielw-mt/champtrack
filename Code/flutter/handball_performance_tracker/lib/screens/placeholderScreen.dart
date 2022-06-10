@@ -10,7 +10,7 @@ import '../widgets/main_screen/playermenu.dart';
 import './../widgets/helper_screen/reverse_button.dart';
 import './../widgets/helper_screen/action_feed.dart';
 
-class HelperScreen extends GetView<GlobalController> {
+class PlaceholderScreen extends GetView<GlobalController> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
