@@ -60,7 +60,7 @@ class ActionFeed extends GetView<GlobalController> {
                                   ),
                                 ),
                               ),
-                            )
+                            ), Icon(Icons.delete)
                           ],
                         ),
                         Divider()
