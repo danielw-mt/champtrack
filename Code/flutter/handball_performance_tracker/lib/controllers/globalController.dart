@@ -9,14 +9,11 @@ import '../data/game.dart';
 import '../data/player.dart';
 import 'dart:async';
 import '../utils/feed_logic.dart';
+import '../constants/settings_config.dart';
 
 /// Class for managing global state of the app.
 /// Refer to https://github.com/jonataslaw/getx/wiki/State-Management
 class GlobalController extends GetxController {
-  // Class for managing global state of the app
-  // Refer to https://github.com/jonataslaw/getx/wiki/State-Management
-
-
   /// initialization handling
   var isInitialized = false;
 
@@ -39,6 +36,8 @@ class GlobalController extends GetxController {
   ////
   // settingsscreen
   ////
+
+  // TODO check if these player variables are being needed now
   Rx<Player> selectedPlayer = Player().obs;
   RxList<Player> availablePlayers = <Player>[].obs;
   RxList<Player> chosenPlayers = <Player>[].obs;
@@ -50,13 +49,22 @@ class GlobalController extends GetxController {
   ////
   // Helper screen
   ////
+  
+  
+  //////
+  /// Main screen
+  //////
+
+  // TODO is something missing here?
+  /// name of the player who made a goal, used to adapt the respective button color.
+  
   Rx<StopWatchTimer> stopWatchTimer = StopWatchTimer(
     mode: StopWatchMode.countUp,
   ).obs;
-
+  
   Rx<StopWatchTimer> feedTimer = StopWatchTimer(
       mode: StopWatchMode.countDown,
-      presetMillisecond: 10000,
+      presetMillisecond: FEED_RESET_PERIOD*1000,
       onEnded: () {
         onFeedTimerEnded();
       }).obs;
@@ -67,16 +75,11 @@ class GlobalController extends GetxController {
   RxBool addingFeedItem = false.obs;
   // List to store all the actions currently being displayed in the feed
   RxList<GameAction> feedActions = <GameAction>[].obs;
-  //////
-  /// Main screen
-  //////
-
-  // TODO is something missing here?
-  /// name of the player who made a goal, used to adapt the respective button color.
 
   /// text to be displayed in the player menu title on the right side, changes after a goal
   RxString playerMenuText = "".obs;
 
+  // TODO this method is unnecessary unless we want getters and setters to exist for every method
   void updatePlayerMenuText() {
     // changing from dep = input.obs
     playerMenuText.value = "Assist";

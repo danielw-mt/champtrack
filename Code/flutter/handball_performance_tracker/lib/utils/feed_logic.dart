@@ -19,9 +19,11 @@ void periodicFeedTimerReset() async {
   globalController.refresh();
 }
 
+/// adds item to the feedActions list
 void addFeedItem(GameAction feedAction) async {
-  
   GlobalController globalController = Get.find<GlobalController>();
+  // this is needed so that when the timer is reset here it does not remove an item
+  // every time the timer is reset it triggers onFeedTimerEnded() which would remove the item again
   globalController.addingFeedItem.value = true;
   StopWatchTimer feedTimer = globalController.feedTimer.value;
   if (feedTimer.isRunning == false) {
@@ -41,6 +43,7 @@ void addFeedItem(GameAction feedAction) async {
   globalController.refresh();
 }
 
+/// gets triggered every time the period of the timer runs out or when the timer is reset
 void onFeedTimerEnded() {
   GlobalController globalController = Get.find<GlobalController>();
   if (globalController.periodicResetIsHappening.value == false && globalController.addingFeedItem.value == false) {
@@ -48,6 +51,7 @@ void onFeedTimerEnded() {
   }
 }
 
+/// Gets triggered when user clicks on a feed item
 void removeFeedItem(int itemIndex) {
   final GlobalController globalController = Get.find<GlobalController>();
   // TODO implement backend
