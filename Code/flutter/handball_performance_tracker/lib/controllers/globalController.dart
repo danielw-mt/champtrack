@@ -7,6 +7,7 @@ import '../data/team.dart';
 import '../data/game.dart';
 import '../data/player.dart';
 import 'dart:async';
+import '../utils/feed_logic.dart';
 
 /// Class for managing global state of the app.
 /// Refer to https://github.com/jonataslaw/getx/wiki/State-Management
@@ -44,53 +45,22 @@ class GlobalController extends GetxController {
   ////
   // Helper screen
   ////
-  var stopWatchTimer = StopWatchTimer(
+  Rx<StopWatchTimer> stopWatchTimer = StopWatchTimer(
     mode: StopWatchMode.countUp,
   ).obs;
 
-  var feedTimer = StopWatchTimer(
+  Rx<StopWatchTimer> feedTimer = StopWatchTimer(
       mode: StopWatchMode.countDown,
       presetMillisecond: 10000,
       onEnded: () {
-        final GlobalController globalController = Get.find<GlobalController>();
-        if (globalController.periodicResetIsHappening.value == false) {
-          globalController.periodicFeedTimerReset();
-        }
+        onFeedTimerEnded();
       }).obs;
 
   // Variable to control periodic timer resets for feed
   // makes sure that timer doesn't get reset twice
   RxBool periodicResetIsHappening = false.obs;
-
-  // while periodic reset is going on
-  void periodicFeedTimerReset() async {
-    periodicResetIsHappening.value = true;
-    feedTimer.value.onExecute.add(StopWatchExecute.reset);
-    await Future.delayed(Duration(milliseconds: 500));
-    feedTimer.value.onExecute.add(StopWatchExecute.start);
-    if (numCurrentFeedItems.value > 0) {
-      numCurrentFeedItems.value -= 1;
-    }
-    periodicResetIsHappening.value = false;
-    update();
-  }
-
-  RxInt numCurrentFeedItems = 0.obs;
-  void addFeedItem() async {
-    if (feedTimer.value.isRunning == false) {
-      feedTimer.value.onExecute.add(StopWatchExecute.start);
-      await Future.delayed(Duration(milliseconds: 500));
-    } else {
-      feedTimer.value.onExecute.add(StopWatchExecute.reset);
-      numCurrentFeedItems.value += 1;
-      await Future.delayed(Duration(milliseconds: 500));
-      feedTimer.value.onExecute.add(StopWatchExecute.start);
-    }
-    numCurrentFeedItems.value += 1;
-    update();
-  }
-
-  RxInt currentNumFeedItems = 0.obs;
+  // List to store all the actions currently being displayed in the feed
+  RxList<GameAction> feedActions = <GameAction>[].obs;
   //////
   /// Main screen
   //////
