@@ -8,7 +8,7 @@ import '../widgets/team_settings_screen/players_list.dart';
 import './../controllers/globalController.dart';
 import '../data/player.dart';
 
-class SettingsScreen extends GetView<GlobalController> {
+class TeamSettingsScreen extends GetView<GlobalController> {
   // screen that allows players to be selected including what players are on the field or on the bench (non selected)
   final GlobalController globalController = Get.find<GlobalController>();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -16,11 +16,9 @@ class SettingsScreen extends GetView<GlobalController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: _scaffoldKey,
-      drawer: NavDrawer(),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
+        key: _scaffoldKey,
+        drawer: NavDrawer(),
+        body: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           // Container for menu button on top left corner
           Container(
             decoration: BoxDecoration(
@@ -34,17 +32,8 @@ class SettingsScreen extends GetView<GlobalController> {
               },
             ),
           ),
-          GameStartStopButtons(),
-          Text("Home goal is right side of screen"),
-          Obx(() => Switch(
-              value: globalController.attackIsLeft.value,
-              onChanged: (bool) {
-                globalController.attackIsLeft.value =
-                    !globalController.attackIsLeft.value;
-                globalController.refresh();
-              }))
-        ],
-      ),
-    );
+          TeamDropdown(),
+          PlayersList(),
+        ]));
   }
 }
