@@ -27,11 +27,25 @@ class GlobalController extends GetxController {
   /// @return Rx<Club>
   Rx<Club> currentClub = Club().obs;
 
+  ////////
+  /// Team Selection Screen
+  ////////
+
   /// Temporary variable for storing the currently selected Team
   Rx<Team> selectedTeam = Team(id: "-1", name: "Default team").obs;
 
   /// list of all teams of the club that are cached in the local game state. Changes made in the settings to e.g. are stored in here as well
   RxList<Team> cachedTeamsList = <Team>[].obs;
+
+  /// 0: male, 1: female, 2: youth
+  RxInt selectedTeamType = 0.obs;
+
+  /////////
+  ///  Team Settings Screen
+  /////////
+
+  /// 0: playerSettings, 1: games, 2: teamDetails
+  RxInt selectedTeamSetting = 0.obs;
 
   ////
   // settingsscreen

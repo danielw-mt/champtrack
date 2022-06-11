@@ -9,13 +9,16 @@ class Team {
   String name;
   List<Player> players;
   List<Player> onFieldPlayers;
+  String type;
 
-  Team(
-      {this.id,
-      this.clubId = "",
-      this.name = "Default Team",
-      this.players = const [],
-      this.onFieldPlayers = const []});
+  Team({
+    this.id,
+    this.clubId = "",
+    this.name = "Default Team",
+    this.players = const [],
+    this.onFieldPlayers = const [],
+    this.type = "",
+  });
 
   // @return Map<String,dynamic> as representation of Club object that can be saved to firestore
   Map<String, dynamic> toMap() {
