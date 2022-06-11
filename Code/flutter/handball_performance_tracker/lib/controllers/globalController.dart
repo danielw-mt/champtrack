@@ -27,7 +27,7 @@ class GlobalController extends GetxController {
   var currentClub = "".obs;
 
   ////////
-  /// Team Settings Screen
+  /// Team Selection Screen
   ////////
   
   /// Temporary variable for storing the currently selected Team
@@ -38,6 +38,14 @@ class GlobalController extends GetxController {
   
   /// 0: male, 1: female, 2: youth
   RxInt selectedTeamType = 0.obs;
+
+  /////////
+  ///  Team Settings Screen
+  /////////
+  
+  /// 0: playerSettings, 1: games, 2: teamDetails
+  RxInt selectedTeamSettings = 0.obs;
+
 
   ////
   // settingsscreen

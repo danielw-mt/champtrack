@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import '../../data/database_repository.dart';
-import '../../data/player.dart';
 import '../../controllers/globalController.dart';
 import 'package:get/get.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../data/team.dart';
 import '../../utils/teamTypeHelpers.dart';
+import '../../constants/team_constants.dart';
 
 // dropdown that shows all available teams belonging to the selected team type
 class TeamDropdown extends GetView<GlobalController> {
@@ -19,9 +18,8 @@ class TeamDropdown extends GetView<GlobalController> {
     return // build the dropdown button
         GetBuilder(
       builder: (GlobalController globalController) {
-        List<String> teamTypeMapping = ["men", "women", "youth"];
         int selectedTeamTypeInt = globalController.selectedTeamType.value;
-        String selectedTeamTypeString = teamTypeMapping[selectedTeamTypeInt];
+        String selectedTeamTypeString = TEAM_TYPE_MAPPING[selectedTeamTypeInt];
         // available teams are all the ones that match the selected team type (0,1,2) => "men", "women", "youth"
         List<Team> availableTeams = globalController.cachedTeamsList
             .where((Team team) => team.type == selectedTeamTypeString)

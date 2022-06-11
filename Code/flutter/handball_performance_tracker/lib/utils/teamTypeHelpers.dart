@@ -1,22 +1,20 @@
 import 'package:get/get.dart';
 import '../controllers/globalController.dart';
 import '../data/team.dart';
-
+import '../constants/team_constants.dart';
 // TODO move constants to const folder
 
 void updateSelectedTeamAccordingToTeamType() {
-  List<String> teamTypeMapping = ["men", "women", "youth"];
   GlobalController globalController = Get.find<GlobalController>();
   int selectedTeamTypeInt = globalController.selectedTeamType.value;
-  String selectedTeamTypeString = teamTypeMapping[selectedTeamTypeInt];
+  String selectedTeamTypeString = TEAM_TYPE_MAPPING[selectedTeamTypeInt];
   // available teams are all the ones that match the selected team type (0,1,2) => "men", "women", "youth"
   List<Team> availableTeams = globalController.cachedTeamsList
       .where((Team team) => team.type == selectedTeamTypeString)
       .toList();
   // if a team was already selected before and team type still matches return
   if (globalController.selectedTeam.value.type ==
-      teamTypeMapping[globalController.selectedTeamType.value]) {
-        print("team type is still fine");
+      TEAM_TYPE_MAPPING[globalController.selectedTeamType.value]) {
     return;
   }
   // if team type of previously selected team doesnt match update selected team with the first team that matches types
