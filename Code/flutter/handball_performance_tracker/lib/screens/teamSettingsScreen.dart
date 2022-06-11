@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:handball_performance_tracker/widgets/nav_drawer.dart';
 import '../widgets/team_settings_screen/players_list.dart';
 import '../widgets/team_settings_screen/team_settings_bar.dart';
+import '../widgets/team_settings_screen/team_details_form.dart';
 import './../controllers/globalController.dart';
 
 
@@ -29,7 +30,7 @@ class TeamSettingsScreen extends GetView<GlobalController> {
                     MenuButton(_scaffoldKey),
                     if (globalController.selectedTeamSetting.value == 0) PlayersList(),
                     if (globalController.selectedTeamSetting.value == 1) Text("Games"),
-                    if (globalController.selectedTeamSetting.value == 2) Text("Team Details")
+                    if (globalController.selectedTeamSetting.value == 2) TeamDetailsForm()
                   ])),
         );
       },
