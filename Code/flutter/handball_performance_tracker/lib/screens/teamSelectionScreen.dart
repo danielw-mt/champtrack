@@ -9,6 +9,8 @@ import './../controllers/globalController.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'teamSettingsScreen.dart';
 
+
+// A screen where all the available teams are listed for men, women and youth teams
 class TeamSelectionScreen extends GetView<GlobalController> {
   // screen that allows players to be selected including what players are on the field or on the bench (non selected)
   final GlobalController globalController = Get.find<GlobalController>();

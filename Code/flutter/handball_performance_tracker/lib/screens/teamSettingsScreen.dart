@@ -6,7 +6,7 @@ import '../widgets/team_settings_screen/team_settings_bar.dart';
 import '../widgets/team_settings_screen/team_details_form.dart';
 import './../controllers/globalController.dart';
 
-
+// A screen where all relevant Infos of a team can be edited (players, game history and team details like name)
 class TeamSettingsScreen extends GetView<GlobalController> {
   // screen that allows players to be selected including what players are on the field or on the bench (non selected)
   final GlobalController globalController = Get.find<GlobalController>();
@@ -29,7 +29,7 @@ class TeamSettingsScreen extends GetView<GlobalController> {
                     // Container for menu button on top left corner
                     MenuButton(_scaffoldKey),
                     if (globalController.selectedTeamSetting.value == 0) PlayersList(),
-                    if (globalController.selectedTeamSetting.value == 1) Text("Games"),
+                    if (globalController.selectedTeamSetting.value == 1) Text("TODO Games"),
                     if (globalController.selectedTeamSetting.value == 2) TeamDetailsForm()
                   ])),
         );

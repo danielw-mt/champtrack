@@ -4,6 +4,8 @@ import '../../controllers/globalController.dart';
 import 'package:get/get.dart';
 import '../../utils/teamTypeHelpers.dart';
 
+
+// Bottom Nav Bar for team settings screen
 class TeamSettingsBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
