@@ -4,7 +4,7 @@ import '../../controllers/globalController.dart';
 import 'package:get/get.dart';
 import '../../utils/teamTypeHelpers.dart';
 
-class TeamTypeSelectionBar extends StatelessWidget {
+class TeamSettingsBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetBuilder<GlobalController>(
@@ -18,22 +18,21 @@ class TeamTypeSelectionBar extends StatelessWidget {
             indicatorPadding: EdgeInsets.all(5.0),
             indicatorColor: Colors.blue,
             onTap: (int tabNumber) {
-              globalController.selectedTeamType.value = tabNumber;
+              globalController.selectedTeamSetting.value = tabNumber;
               globalController.refresh();
-              updateSelectedTeamAccordingToTeamType();
             },
             tabs: [
               Tab(
-                text: "Herren",
-                icon: Icon(Icons.male),
+                text: "Players",
+                icon: Icon(Icons.sports_handball),
               ),
               Tab(
-                text: "Damen",
-                icon: Icon(Icons.female),
+                text: "Games",
+                icon: Icon(Icons.list_alt),
               ),
               Tab(
-                text: "Jugend",
-                icon: Icon(Icons.child_care),
+                text: "Team Details",
+                icon: Icon(Icons.book),
               ),
             ],
           ),

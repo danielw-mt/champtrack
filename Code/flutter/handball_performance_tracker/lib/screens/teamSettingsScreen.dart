@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:handball_performance_tracker/widgets/nav_drawer.dart';
-import '../widgets/team_selection_screen/team_dropdown.dart';
-import './../widgets/settings_screen/game_start_stop_buttons.dart';
 import '../widgets/team_settings_screen/players_list.dart';
-import '../widgets/team_selection_screen/team_type_selection_bar.dart';
+import '../widgets/team_settings_screen/team_settings_bar.dart';
 import './../controllers/globalController.dart';
-import 'package:rflutter_alert/rflutter_alert.dart';
+
 
 class TeamSettingsScreen extends GetView<GlobalController> {
   // screen that allows players to be selected including what players are on the field or on the bench (non selected)
@@ -18,18 +16,20 @@ class TeamSettingsScreen extends GetView<GlobalController> {
     return GetBuilder<GlobalController>(
       builder: (globalController) {
         return DefaultTabController(
-          initialIndex: globalController.selectedTeamType.value,
+          initialIndex: globalController.selectedTeamSetting.value,
           length: 3,
           child: Scaffold(
               key: _scaffoldKey,
               drawer: NavDrawer(),
-              bottomNavigationBar: TeamTypeSelectionBar(),
+              bottomNavigationBar: TeamSettingsBar(),
               body: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // Container for menu button on top left corner
                     MenuButton(_scaffoldKey),
-                    PlayersList(),
+                    if (globalController.selectedTeamSetting.value == 0) PlayersList(),
+                    if (globalController.selectedTeamSetting.value == 1) Text("Games"),
+                    if (globalController.selectedTeamSetting.value == 2) Text("Team Details")
                   ])),
         );
       },

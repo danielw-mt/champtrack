@@ -41,7 +41,7 @@ class NavDrawer extends StatelessWidget {
           ),
           ListTile(
             leading: Icon(Icons.verified_user),
-            title: Text('Team Settings Screen'),
+            title: Text('Team Selection Screen'),
             onTap: () => {Get.to(TeamSelectionScreen())},
           ),
         ],

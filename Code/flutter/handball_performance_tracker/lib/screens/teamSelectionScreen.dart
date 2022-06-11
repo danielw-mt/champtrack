@@ -19,7 +19,7 @@ class TeamSelectionScreen extends GetView<GlobalController> {
     return GetBuilder<GlobalController>(
       builder: (globalController) {
         return DefaultTabController(
-          initialIndex: globalController.selectedTeamSettings.value,
+          initialIndex: globalController.selectedTeamSetting.value,
           length: 3,
           child: Scaffold(
               key: _scaffoldKey,
@@ -30,7 +30,11 @@ class TeamSelectionScreen extends GetView<GlobalController> {
                   children: [
                     MenuButton(_scaffoldKey),
                     TeamDropdown(),
-                    TextButton(onPressed: () {Get.to(TeamSettingsScreen());}, child: Icon(Icons.edit))
+                    TextButton(
+                        onPressed: () {
+                          Get.to(TeamSettingsScreen());
+                        },
+                        child: Icon(Icons.edit))
                   ])),
         );
       },
