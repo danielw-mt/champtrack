@@ -8,7 +8,7 @@ import '../../controllers/globalController.dart';
 import 'package:get/get.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'dart:math';
-
+import '../../utils/feed_logic.dart';
 import '../../data/game_action.dart';
 import '../../data/player.dart';
 
@@ -133,13 +133,13 @@ Obx buildDialogButton(BuildContext context, Player associatedPlayer) {
   // }
 
   void logPlayerSelection() async {
+    print(associatedPlayer.lastName);
     GameAction lastAction = globalController.actions.last;
     String? lastClickedPlayerId = globalController.lastClickedPlayer.value.id;
-
+    lastAction.playerId = lastClickedPlayerId.toString();
     // if goal was pressed but no player was selected yet
     //(lastClickedPlayer is default Player Object) do nothing
     if (lastAction.actionType == "goal" && lastClickedPlayerId == "") {
-      print("goal player clicked once");
       globalController.updatePlayerMenuText();
       // update last Clicked player value with the Player from selected team
       // who was clicked
@@ -147,7 +147,7 @@ Obx buildDialogButton(BuildContext context, Player associatedPlayer) {
           .selectedTeam.value.players
           .where((Player playerItem) => (playerItem.id == associatedPlayer.id))
           .first;
-      globalController.refresh();
+      globalController.selectedTeam.refresh();
       return;
     }
     // if goal was pressed and a player was already clicked once
@@ -156,7 +156,7 @@ Obx buildDialogButton(BuildContext context, Player associatedPlayer) {
       if (!_wasAssist()) {
         print("solo goal");
         // update data for person that shot the goal
-        lastAction.playerId = lastClickedPlayerId!;
+        lastAction.playerId = globalController.lastClickedPlayer.value.id!;
         repository.updateAction(lastAction);
         globalController.actions.last = lastAction;
         // update player's ef-score
@@ -164,48 +164,50 @@ Obx buildDialogButton(BuildContext context, Player associatedPlayer) {
         //activePlayer.addAction(lastAction);
 
         globalController.lastClickedPlayer.value = Player();
-        globalController.addFeedItem();
+        addFeedItem(lastAction);
         globalController.refresh();
       } else {
+        print("goal with assist");
         // if it was an assist update data for both players
         // person that scored goal
-        lastAction.playerId = lastClickedPlayerId!;
+        lastAction.playerId = globalController.lastClickedPlayer.value.id!;
         repository.updateAction(lastAction);
         globalController.actions.last = lastAction;
-        globalController.addFeedItem();
         // person that scored assist
         // deep clone a new action from the most recent action
-
-        print("assist action: ${GameAction.clone(lastAction)}");
         GameAction assistAction = GameAction.clone(lastAction);
         print("assist action: $assistAction");
-        Player assistPlayer = globalController.lastClickedPlayer.value;
+        Player assistPlayer = associatedPlayer;
         assistAction.playerId = assistPlayer.id!;
         assistAction.actionType = "assist";
         repository.addActionToGame(assistAction);
         globalController.actions.add(assistAction);
+
+        // add assist first to the feed and then the goal
+        addFeedItem(assistAction);
+        addFeedItem(lastAction);
         // update player's ef-score
         // TODO implement this
         //assistPlayer.addAction(lastAction);
 
         globalController.lastClickedPlayer.value = Player();
-        globalController.addFeedItem();
       }
     } else {
       // if the action was not a goal just update the player id in firebase and gamestate
-      lastAction.playerId = lastClickedPlayerId!;
+      lastAction.playerId = associatedPlayer.id.toString();
       globalController.actions.last = lastAction;
       repository.updateAction(lastAction);
+      addFeedItem(lastAction);
       // update player's ef-scorer
       // TODO implement this
       // activePlayer.addAction(lastAction);
 
-      globalController.lastClickedPlayer.value = Player();
-      globalController.addFeedItem();
+      globalController.lastClickedPlayer.value = Player(); 
     }
+    // addFeedItem(lastAction);
     print("last action saved in database: ");
     print(globalController.actions.last.toMap());
-    globalController.refresh();
+    globalController.refresh(); 
     Navigator.pop(context);
   }
 
