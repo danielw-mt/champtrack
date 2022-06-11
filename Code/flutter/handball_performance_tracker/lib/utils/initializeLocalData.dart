@@ -47,9 +47,14 @@ Future<bool> initializeLocalData() async {
           players: playerList,
           onFieldPlayers: onFieldList));
     }
-    globalController.cachedTeamsList.value = teamsList;
-    print("done initializing data");
-    globalController.isInitialized = true;
+    print("adding team" + docData["name"]);
+    teamsList.add(Team(
+        id: element.reference.id,
+        type: docData["type"],
+        name: docData["name"],
+        clubId: docData["clubId"],
+        players: playerList,
+        onFieldPlayers: onFieldList));
   }
   return true;
 }
