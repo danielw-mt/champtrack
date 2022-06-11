@@ -31,18 +31,7 @@ class MainScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // Container for menu button on top left corner
-                Container(
-                  decoration: BoxDecoration(
-                      border: Border.all(color: Colors.white),
-                      borderRadius: const BorderRadius.all(Radius.circular(8)),
-                      color: Colors.white),
-                  child: IconButton(
-                    icon: const Icon(Icons.menu),
-                    onPressed: () {
-                      _scaffoldKey.currentState!.openDrawer();
-                    },
-                  ),
-                ),
+                MenuButton(_scaffoldKey),
                 Column(
                   children: [
                     Container(
