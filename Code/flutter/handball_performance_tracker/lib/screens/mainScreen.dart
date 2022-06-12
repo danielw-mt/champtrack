@@ -100,10 +100,15 @@ class MainScreen extends StatelessWidget {
           );
         } else {
           return Center(
-            child: SizedBox(
-              height: 50,
-              width: 50,
-              child: CircularProgressIndicator(),
+            child: Column(
+              children: [
+                Text("Loading data",),
+                SizedBox(
+                  height: 50,
+                  width: 50,
+                  child: CircularProgressIndicator(),
+                ),
+              ],
             ),
           );
         }
