@@ -49,7 +49,9 @@ class MainScreen extends StatelessWidget {
                         Container()
                       ],
                     ),
-                    Spacer(flex: 1,),
+                    Spacer(
+                      flex: 1,
+                    ),
                     // Player Bar
                     Container(
                         width: efscorebar.scorebarWidth +
@@ -71,8 +73,8 @@ class MainScreen extends StatelessWidget {
                           child: Container(
                             decoration: BoxDecoration(
                                 // set border around field
-                                border:
-                                    Border.all(width: fieldSizeParameter.lineSize)),
+                                border: Border.all(
+                                    width: fieldSizeParameter.lineSize)),
                             child: SizedBox(
                               // FieldSwitch to swipe between right and left field side. SizedBox around it so there is no rendering error.
                               width: fieldSizeParameter.fieldWidth,
@@ -88,8 +90,27 @@ class MainScreen extends StatelessWidget {
               ],
             ),
           );
+        }
+        if (snapshot.hasError) {
+          return Column(
+            children: [
+              Icon(Icons.error),
+              Text("Couldn't get any data from Firebase")
+            ],
+          );
         } else {
-          return Container();
+          return Center(
+            child: Column(
+              children: [
+                Text("Loading data",),
+                SizedBox(
+                  height: 50,
+                  width: 50,
+                  child: CircularProgressIndicator(),
+                ),
+              ],
+            ),
+          );
         }
       },
     );

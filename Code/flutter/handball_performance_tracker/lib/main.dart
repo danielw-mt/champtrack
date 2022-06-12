@@ -1,5 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:handball_performance_tracker/screens/authenticationScreen.dart';
 import 'screens/mainScreen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'dart:io';
@@ -8,6 +9,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import '../../controllers/globalController.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -26,7 +28,20 @@ void main() async {
         builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
           List<Widget> children;
           if (snapshot.hasData) {
-            return MainScreen();
+            return StreamBuilder<User?>(
+                stream: FirebaseAuth.instance.authStateChanges(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting){
+                    return Center(child: CircularProgressIndicator(),);
+                  } else if (snapshot.hasError){
+                    return Center(child: Text("There was a problem with authentication"),);
+                  } else if (snapshot.hasData){
+                    // if we have a User object we are logged in and can display the app
+                    return MainScreen();
+                  } else {
+                    return AuthenticationScreen(context: context);
+                  }
+                });
           } else if (snapshot.hasError) {
             children = <Widget>[
               const Icon(
