@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:handball_performance_tracker/controllers/globalController.dart';
 import './../screens/mainScreen.dart';
@@ -44,6 +45,11 @@ class NavDrawer extends StatelessWidget {
             title: Text('Team Selection Screen'),
             onTap: () => {Get.to(TeamSelectionScreen())},
           ),
+          Spacer(),
+          ElevatedButton.icon(
+              onPressed: () {FirebaseAuth.instance.signOut();},
+              icon: Icon(Icons.logout),
+              label: Text("Sign Out"))
         ],
       ),
     );
