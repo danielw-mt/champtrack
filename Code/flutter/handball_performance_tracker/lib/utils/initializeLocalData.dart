@@ -49,6 +49,7 @@ Future<bool> initializeLocalData() async {
           onFieldPlayers: onFieldList));
     }
     globalController.cachedTeamsList.value = teamsList;
+    globalController.isInitialized = true;
   }
   return true;
 }
