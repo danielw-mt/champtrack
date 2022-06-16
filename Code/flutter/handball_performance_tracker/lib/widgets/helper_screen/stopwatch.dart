@@ -2,146 +2,205 @@ import 'package:flutter/material.dart';
 import './../../controllers/globalController.dart';
 import 'package:get/get.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
-import '../../utils/gameControl.dart';
 
 class StopWatch extends GetView<GlobalController> {
   // stop watch widget that allows to the time to be started, stopped, resetted and in-/decremented by 1 sec
+  final GlobalController globalController = Get.find<GlobalController>();
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<GlobalController>(
-      builder: (GlobalController globalController) {
-        StopWatchTimer stopWatchTimer = globalController.stopWatchTimer.value;
-        return Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 4),
-              child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    primary: Colors.red,
-                    onPrimary: Colors.white,
-                    shape: const StadiumBorder(),
-                  ),
-                  onPressed: () async {
-                    int currentTime = stopWatchTimer.rawTime.value;
-                    stopWatchTimer.clearPresetTime();
-                    if (stopWatchTimer.isRunning) {
-                      stopWatchTimer.onExecute.add(StopWatchExecute.reset);
-                      globalController.stopWatchTimer.value
-                          .setPresetTime(mSec: currentTime + 1000);
-                      stopWatchTimer.onExecute.add(StopWatchExecute.start);
-                    } else {
-                      stopWatchTimer.onExecute.add(StopWatchExecute.reset);
-                      globalController.stopWatchTimer.value
-                          .setPresetTime(mSec: currentTime + 1000);
-                    }
-                    globalController.refresh();
-                  },
-                  child: Icon(Icons.add)),
-            ),
+    StopWatchTimer stopWatchTimer =
+        globalController.currentGame.value.stopWatch;
 
-            // Display stop watch time
-            ConstrainedBox(
-                constraints: const BoxConstraints(minHeight: 50, minWidth: 100),
-                child: StreamBuilder<int>(
-                    stream: stopWatchTimer.rawTime,
-                    initialData: stopWatchTimer.rawTime.value,
-                    builder: (context, snap) {
-                      final value = snap.data!;
-                      String displayTime = StopWatchTimer.getDisplayTime(value,
-                          hours: false,
-                          minute: true,
-                          second: true,
-                          milliSecond: false);
-                      return Padding(
-                        padding: const EdgeInsets.all(8),
+    return Scrollbar(
+        child: SingleChildScrollView(
+            child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  vertical: 32,
+                  horizontal: 16,
+                ),
+                child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      /// Display stop watch time
+                      StreamBuilder<int>(
+                        stream: stopWatchTimer.rawTime,
+                        initialData: stopWatchTimer.rawTime.value,
+                        builder: (context, snap) {
+                          final value = snap.data!;
+                          final displayTime =
+                              StopWatchTimer.getDisplayTime(value, hours: true);
+                          return Column(
+                            children: <Widget>[
+                              Padding(
+                                padding: const EdgeInsets.all(8),
+                                child: Text(
+                                  displayTime,
+                                  style: const TextStyle(
+                                      fontSize: 40,
+                                      fontFamily: 'Helvetica',
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(8),
+                                child: Text(
+                                  value.toString(),
+                                  style: const TextStyle(
+                                      fontSize: 16,
+                                      fontFamily: 'Helvetica',
+                                      fontWeight: FontWeight.w400),
+                                ),
+                              ),
+                            ],
+                          );
+                        },
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 0),
                         child: Row(
-                          children: [
-                            StartStopIcon(),
-                            Text(
-                              snap.hasData ? displayTime : "",
-                              style: const TextStyle(
-                                  fontSize: 40,
-                                  fontFamily: 'Helvetica',
-                                  fontWeight: FontWeight.bold),
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 4),
+                              child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  primary: Colors.lightBlue,
+                                  onPrimary: Colors.white,
+                                  shape: const StadiumBorder(),
+                                ),
+                                onPressed: () async {
+                                  stopWatchTimer.onExecute
+                                      .add(StopWatchExecute.start);
+                                },
+                                child: const Text(
+                                  'Start',
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 4),
+                              child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  primary: Colors.green,
+                                  onPrimary: Colors.white,
+                                  shape: const StadiumBorder(),
+                                ),
+                                onPressed: () async {
+                                  globalController
+                                      .currentGame.value.stopWatch.onExecute
+                                      .add(StopWatchExecute.stop);
+                                },
+                                child: const Text(
+                                  'Stop',
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 4),
+                              child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  primary: Colors.red,
+                                  onPrimary: Colors.white,
+                                  shape: const StadiumBorder(),
+                                ),
+                                onPressed: () async {
+                                  stopWatchTimer.onExecute
+                                      .add(StopWatchExecute.stop);
+                                  stopWatchTimer.onExecute
+                                      .add(StopWatchExecute.reset);
+                                  stopWatchTimer.clearPresetTime();
+                                  stopWatchTimer.setPresetTime(mSec: 0);
+                                },
+                                child: const Text(
+                                  'Reset',
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 4),
+                              child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  primary: Colors.red,
+                                  onPrimary: Colors.white,
+                                  shape: const StadiumBorder(),
+                                ),
+                                onPressed: () async {
+                                  int currentTime =
+                                      stopWatchTimer.rawTime.value;
+                                  stopWatchTimer.clearPresetTime();
+                                  if (stopWatchTimer.isRunning) {
+                                    stopWatchTimer.onExecute
+                                        .add(StopWatchExecute.reset);
+                                    globalController.currentGame.value.stopWatch
+                                        .setPresetTime(
+                                            mSec: currentTime + 1000);
+                                    stopWatchTimer.onExecute
+                                        .add(StopWatchExecute.start);
+                                  } else {
+                                    stopWatchTimer.onExecute
+                                        .add(StopWatchExecute.reset);
+                                    globalController.currentGame.value.stopWatch
+                                        .setPresetTime(
+                                            mSec: currentTime + 1000);
+                                  }
+                                  globalController.refresh();
+                                },
+                                child: const Text(
+                                  '+1 sec',
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 4),
+                              child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  primary: Colors.red,
+                                  onPrimary: Colors.white,
+                                  shape: const StadiumBorder(),
+                                ),
+                                onPressed: () async {
+                                  int currentTime =
+                                      stopWatchTimer.rawTime.value;
+                                  // make sure the timer can't go negative
+                                  if (currentTime <= 1000) return;
+                                  stopWatchTimer.clearPresetTime();
+                                  if (stopWatchTimer.isRunning) {
+                                    stopWatchTimer.onExecute
+                                        .add(StopWatchExecute.reset);
+                                    globalController.currentGame.value.stopWatch
+                                        .setPresetTime(
+                                            mSec: currentTime - 1000);
+                                    stopWatchTimer.onExecute
+                                        .add(StopWatchExecute.start);
+                                  } else {
+                                    stopWatchTimer.onExecute
+                                        .add(StopWatchExecute.reset);
+                                    globalController.currentGame.value.stopWatch
+                                        .setPresetTime(
+                                            mSec: currentTime - 1000);
+                                  }
+                                  globalController.refresh();
+                                },
+                                child: const Text(
+                                  '-1 sec',
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                              ),
                             ),
                           ],
                         ),
-                      );
-                    })),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 4),
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  primary: Colors.red,
-                  onPrimary: Colors.white,
-                  shape: const StadiumBorder(),
-                ),
-                onPressed: () async {
-                  int currentTime = stopWatchTimer.rawTime.value;
-                  // make sure the timer can't go negative
-                  if (currentTime <= 1000) return;
-                  stopWatchTimer.clearPresetTime();
-                  if (stopWatchTimer.isRunning) {
-                    stopWatchTimer.onExecute.add(StopWatchExecute.reset);
-                    globalController.stopWatchTimer.value
-                        .setPresetTime(mSec: currentTime - 1000);
-                    stopWatchTimer.onExecute.add(StopWatchExecute.start);
-                  } else {
-                    stopWatchTimer.onExecute.add(StopWatchExecute.reset);
-                    globalController.stopWatchTimer.value
-                        .setPresetTime(mSec: currentTime - 1000);
-                  }
-                  globalController.refresh();
-                },
-                child: const Icon(Icons.remove)
-              ),
-            ),
-            
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 4),
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  primary: Colors.red,
-                  onPrimary: Colors.white,
-                  shape: const StadiumBorder(),
-                ),
-                onPressed: () async {
-                  stopWatchTimer.onExecute.add(StopWatchExecute.stop);
-                  stopWatchTimer.onExecute.add(StopWatchExecute.reset);
-                  stopWatchTimer.clearPresetTime();
-                  stopWatchTimer.setPresetTime(mSec: 0);
-                },
-                child: Icon(Icons.history)
-              ),
-            ),
-
-            
-          ],
-        );
-      },
-    );
-  }
-}
-
-class StartStopIcon extends GetView<GlobalController> {
-  @override
-  Widget build(BuildContext context) {
-    return GetBuilder<GlobalController>(
-        builder: (GlobalController globalController) {
-      bool gameRunning = globalController.gameRunning.value;
-      return GestureDetector(
-        onTap: () {
-          if (gameRunning) {
-            pauseGame();
-          } else {
-            unpauseGame();
-          }
-        },
-        child: gameRunning ? Icon(Icons.pause) : Icon(Icons.play_arrow),
-      );
-    });
+                      ),
+                    ]))));
   }
 }

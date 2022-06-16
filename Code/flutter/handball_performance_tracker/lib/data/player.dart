@@ -9,7 +9,8 @@ class Player {
   int number;
   List<String> positions;
   List<String> games;
-  final String clubId;
+  DocumentReference? clubId;
+  DocumentReference? teamId;
   LiveEfScore efScore;
 
   Player(
@@ -18,7 +19,8 @@ class Player {
       this.lastName = "",
       this.number = 0,
       this.positions = const [],
-      this.clubId = "",
+      this.clubId = null,
+      this.teamId = null,
       this.games = const []})
       : efScore = LiveEfScore();
 
@@ -30,6 +32,7 @@ class Player {
       'number': number,
       'position': positions,
       'clubId': clubId,
+      'teamId': teamId,
       'games': games
     };
   }
@@ -47,15 +50,18 @@ class Player {
     String firstName = map["firstName"];
     String lastName = map["lastName"];
     int number = int.parse(map["number"]);
-    // TODO give out a list here
-    // List<String> positions = map["positions"];
-
-    //DocumentReference clubId = map["clubId"].cast<DocumentReference>();
-    // String games = map["games"].cast<String>();
+    List<String> positions = map["positions"].cast<String>();
+    DocumentReference clubId = map["clubId"];
+    DocumentReference teamId = map["teamId"];
+    List<String> games = map["games"].cast<String>();
     return Player(
       firstName: firstName,
       lastName: lastName,
       number: number,
+      positions: positions,
+      clubId: clubId,
+      teamId: teamId,
+      games: games
     );
   }
 
@@ -64,6 +70,5 @@ class Player {
   bool operator ==(dynamic other) =>
       other != null && other is Player && id == other.id;
 
-  // TODO fix addAction
-  //void addAction(GameAction action) => efScore.addAction(action, position);
+  void addAction(GameAction action) => efScore.addAction(action, positions);
 }

@@ -2,16 +2,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:handball_performance_tracker/data/game.dart';
 import 'package:handball_performance_tracker/data/game_action.dart';
 import 'package:handball_performance_tracker/data/player.dart';
-import 'package:handball_performance_tracker/data/team.dart';
-import '../controllers/globalController.dart';
 
-// TODO rename collection "player" to "players" and fix in firestore before merging to master
 class DatabaseRepository {
-  
   final FirebaseFirestore _db = FirebaseFirestore.instance;
 
   /// @return asynchronous reference to Player object that was saved to firebase
-  // TODO remove everything containing global controller here
 
   // @return asynchronous reference to Player object that was saved to firebase
   Future<DocumentReference> addPlayer(Player player) {

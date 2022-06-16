@@ -10,13 +10,12 @@ import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 
 class GameStartStopButtons extends StatelessWidget {
-  GlobalController globalController = Get.find<GlobalController>();
+  //GlobalController globalController = Get.find<GlobalController>();
 
   // TODO implement db write of newly selected players
 
   @override
   Widget build(BuildContext context) {
-    var gameStarted = globalController.gameRunning;
     return GetBuilder<GlobalController>(
         builder: (globalController) => Row(
               children: [
@@ -24,12 +23,12 @@ class GameStartStopButtons extends StatelessWidget {
                   padding: const EdgeInsets.all(8),
                   child: TextButton(
                     onPressed: () {
-                      if (gameStarted.value == false) startGame(context);
+                      if (globalController.gameRunning.value == false) startGame(context);
                     },
                     child: const Text("Start Game"),
                     // start button is grey when the game is started and blue when not
                     style: ButtonStyle(
-                        backgroundColor: gameStarted.value
+                        backgroundColor: globalController.gameRunning.value
                             ? MaterialStateProperty.all<Color>(Colors.grey)
                             : MaterialStateProperty.all<Color>(Colors.red)),
                   ),
@@ -38,7 +37,7 @@ class GameStartStopButtons extends StatelessWidget {
                   padding: const EdgeInsets.all(8),
                   child: TextButton(
                       onPressed: () {
-                        if (gameStarted.value == true) stopGame();
+                        if (globalController.gameRunning.value == true) stopGame();
                       },
                       child: const Text("Stop Game")),
                 )
@@ -79,11 +78,11 @@ class GameStartStopButtons extends StatelessWidget {
     print("start game, id: ${globalController.currentGame.value.id}");
 
     // add game to selected players
-    _addGameToPlayers(newGame);
+    _addGameToPlayers(newGame, globalController);
 
     // activate the game timer
-    globalController.stopWatchTimer.value.onExecute.add(StopWatchExecute.start);
-
+    globalController.currentGame.value.stopWatch.onExecute
+        .add(StopWatchExecute.start);
 
     globalController.gameRunning.value = true;
     globalController.setPlayerBarPlayers();
@@ -106,15 +105,16 @@ class GameStartStopButtons extends StatelessWidget {
     globalController.repository.updateGame(currentGame);
 
     // stop the game timer
-    globalController.stopWatchTimer.value.onExecute.add(StopWatchExecute.stop);
+    globalController.currentGame.value.stopWatch.onExecute
+        .add(StopWatchExecute.stop);
 
     globalController.gameRunning.value = false;
     globalController.refresh();
   }
 
   // TODO wo können wir solche helper-functions hinpacken und trotzdem auf das repo/globalController Objekt zugreifen?
-  void _addGameToPlayers(Game game) {
-    for (Player player in globalController.chosenPlayers) {
+  void _addGameToPlayers(Game game, GlobalController gc) {
+    for (Player player in gc.chosenPlayers) {
       if (!player.games.contains(game.id)) {
         player.games.add(game.id!);
         // TODO implement this
