@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:handball_performance_tracker/controllers/globalController.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:handball_performance_tracker/utils/initializeLocalData.dart';
 import 'package:handball_performance_tracker/widgets/main_screen/ef_score_bar.dart';
 import 'package:handball_performance_tracker/widgets/main_screen/ef_score_bar.dart'
