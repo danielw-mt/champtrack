@@ -1,7 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'player.dart';
-import 'dart:convert';
-import 'database_repository.dart';
 
 class Team {
   String? id;

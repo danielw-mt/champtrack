@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:handball_performance_tracker/widgets/main_screen/action_menu.dart';
 import '../../controllers/globalController.dart';
 import 'package:get/get.dart';
 import '../../utils/teamTypeHelpers.dart';

@@ -4,7 +4,6 @@ import '/../controllers/globalController.dart';
 import '../../data/player.dart';
 import '../../data/team.dart';
 import '../../data/database_repository.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'on_field_checkbox.dart';
 
 class PlayersList extends GetView<GlobalController> {

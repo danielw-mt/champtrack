@@ -2,7 +2,6 @@ import 'package:get/get.dart';
 import '../controllers/globalController.dart';
 import '../data/team.dart';
 import '../constants/team_constants.dart';
-// TODO move constants to const folder
 
 void updateSelectedTeamAccordingToTeamType() {
   GlobalController globalController = Get.find<GlobalController>();

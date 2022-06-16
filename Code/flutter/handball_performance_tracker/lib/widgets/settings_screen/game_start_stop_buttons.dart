@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:handball_performance_tracker/data/game.dart';
-import '../../data/database_repository.dart';
 import './../../controllers/globalController.dart';
 import './../../data/game.dart';
 import './../../data/player.dart';

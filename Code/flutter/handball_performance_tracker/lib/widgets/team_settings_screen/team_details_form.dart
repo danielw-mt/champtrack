@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../controllers/globalController.dart';
-import '../../constants/team_constants.dart';
 
 // Create a Form widget.
 class TeamDetailsForm extends StatefulWidget {

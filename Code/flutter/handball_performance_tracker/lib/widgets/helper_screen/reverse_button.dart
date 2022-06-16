@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import './../../controllers/globalController.dart';
 import 'package:get/get.dart';
-import '../../data/database_repository.dart';
 
 class ReverseButton extends GetView<GlobalController> {
   final GlobalController globalController = Get.find<GlobalController>();
