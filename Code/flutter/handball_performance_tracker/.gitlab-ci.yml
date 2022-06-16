@@ -1,0 +1,16 @@
+image: cirrusci/flutter:stable
+
+before_script:
+  - flutter pub get
+
+stages:
+  - analyze
+
+analyze:
+  stage: analyze
+  script:
+    - flutter build aot
+    - flutter analyze
+    # - flutter test
+  only:
+    - merge_requests # only trigger pipeline for MRs
