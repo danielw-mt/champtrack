@@ -153,3 +153,7 @@ cmake-build-*/
 **/windows/flutter/generated_plugins.cmake
 Code/flutter/handball_performance_tracker/macos/Podfile
 Code/flutter/handball_performance_tracker/ios/Podfile
+Code/flutter/handball_performance_tracker/linux/flutter/
+Code/flutter/handball_performance_tracker/linux/flutter/
+Code/flutter/handball_performance_tracker/linux/flutter/
+Code/flutter/handball_performance_tracker/windows/flutter/

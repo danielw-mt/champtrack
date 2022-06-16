@@ -16,7 +16,7 @@ void callActionMenu(BuildContext context) {
   final GlobalController globalController = Get.find<GlobalController>();
 
   // if game is not running give a warning
-  if (globalController.gameStarted.value == false) {
+  if (globalController.gameRunning.value == false) {
     Alert(
       context: context,
       title: Strings.lGameStartErrorMessage,
@@ -74,13 +74,17 @@ bool determineAttack() {
 List<Widget> buildPageViewChildren(BuildContext context) {
   if (determineAttack() == true) {
     return [
-      buildDialogButtonMenu(context, actionMapping[attack]!.keys.toList(), true),
-      buildDialogButtonMenu(context, actionMapping[defense]!.keys.toList(), false),
+      buildDialogButtonMenu(
+          context, actionMapping[attack]!.keys.toList(), true),
+      buildDialogButtonMenu(
+          context, actionMapping[defense]!.keys.toList(), false),
     ];
   } else {
     return [
-      buildDialogButtonMenu(context, actionMapping[defense]!.keys.toList(), false),
-      buildDialogButtonMenu(context, actionMapping[attack]!.keys.toList(), true),
+      buildDialogButtonMenu(
+          context, actionMapping[defense]!.keys.toList(), false),
+      buildDialogButtonMenu(
+          context, actionMapping[attack]!.keys.toList(), true),
     ];
   }
 }
@@ -90,14 +94,22 @@ Widget buildDialogButtonMenu(
     BuildContext context, List<String> buttonTexts, isAttack) {
   if (isAttack) {
     List<DialogButton> dialogButtons = [
-      buildDialogButton(context, actionMapping[defense]!.keys.toList()[0], Colors.red, Icons.style),
-      buildDialogButton(context, actionMapping[defense]!.keys.toList()[1], Colors.yellow, Icons.style),
-      buildDialogButton(context, actionMapping[defense]!.keys.toList()[2], Colors.grey, Icons.timer),
-      buildDialogButton(context, actionMapping[attack]!.keys.toList()[3], Colors.grey),
-      buildDialogButton(context, actionMapping[attack]!.keys.toList()[4], Colors.grey),
-      buildDialogButton(context, actionMapping[attack]!.keys.toList()[5], Colors.blue),
-      buildDialogButton(context, actionMapping[attack]!.keys.toList()[6], Colors.blue),
-      buildDialogButton(context, actionMapping[attack]!.keys.toList()[7], Colors.blue)
+      buildDialogButton(context, actionMapping[defense]!.keys.toList()[0],
+          Colors.red, Icons.style),
+      buildDialogButton(context, actionMapping[defense]!.keys.toList()[1],
+          Colors.yellow, Icons.style),
+      buildDialogButton(context, actionMapping[defense]!.keys.toList()[2],
+          Colors.grey, Icons.timer),
+      buildDialogButton(
+          context, actionMapping[attack]!.keys.toList()[3], Colors.grey),
+      buildDialogButton(
+          context, actionMapping[attack]!.keys.toList()[4], Colors.grey),
+      buildDialogButton(
+          context, actionMapping[attack]!.keys.toList()[5], Colors.blue),
+      buildDialogButton(
+          context, actionMapping[attack]!.keys.toList()[6], Colors.blue),
+      buildDialogButton(
+          context, actionMapping[attack]!.keys.toList()[7], Colors.blue)
     ];
     return Column(children: [
       Row(
@@ -137,14 +149,20 @@ Widget buildDialogButtonMenu(
     ]);
   } else {
     List<DialogButton> dialogButtons = [
-      buildDialogButton(context, actionMapping[defense]!.keys.toList()[0], Colors.red, Icons.style),
-      buildDialogButton(context, actionMapping[defense]!.keys.toList()[1], Colors.yellow, Icons.style),
+      buildDialogButton(context, actionMapping[defense]!.keys.toList()[0],
+          Colors.red, Icons.style),
+      buildDialogButton(context, actionMapping[defense]!.keys.toList()[1],
+          Colors.yellow, Icons.style),
       buildDialogButton(context, actionMapping[defense]!.keys.toList()[2],
           const Color.fromRGBO(15, 66, 199, 32), Icons.timer),
-      buildDialogButton(context, actionMapping[defense]!.keys.toList()[3], Colors.grey),
-      buildDialogButton(context, actionMapping[defense]!.keys.toList()[4], Colors.grey),
-      buildDialogButton(context, actionMapping[defense]!.keys.toList()[5], Colors.blue),
-      buildDialogButton(context, actionMapping[defense]!.keys.toList()[6], Colors.blue)
+      buildDialogButton(
+          context, actionMapping[defense]!.keys.toList()[3], Colors.grey),
+      buildDialogButton(
+          context, actionMapping[defense]!.keys.toList()[4], Colors.grey),
+      buildDialogButton(
+          context, actionMapping[defense]!.keys.toList()[5], Colors.blue),
+      buildDialogButton(
+          context, actionMapping[defense]!.keys.toList()[6], Colors.blue)
     ];
     return Column(children: [
       Row(
@@ -197,14 +215,14 @@ DialogButton buildDialogButton(
     DateTime dateTime = DateTime.now();
     int unixTime = dateTime.toUtc().millisecondsSinceEpoch;
     int secondsSinceGameStart =
-        globalController.stopWatchTimer.value.secondTime.value;
+        globalController.currentGame.value.stopWatch.secondTime.value;
 
     // get most recent game id from DB
     String currentGameId = globalController.currentGame.value.id!;
     String actionType = determineAttack() ? attack : defense;
 
     GameAction action = GameAction(
-        clubId: globalController.currentClub.value.id!,
+        teamId: globalController.selectedTeam.value.id!,
         gameId: currentGameId,
         type: actionType,
         actionType: actionMapping[actionType]![buttonText]!,

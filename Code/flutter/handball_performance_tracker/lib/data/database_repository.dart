@@ -4,10 +4,11 @@ import 'package:handball_performance_tracker/data/game_action.dart';
 import 'package:handball_performance_tracker/data/player.dart';
 
 class DatabaseRepository {
-  
   final FirebaseFirestore _db = FirebaseFirestore.instance;
 
   /// @return asynchronous reference to Player object that was saved to firebase
+
+  // @return asynchronous reference to Player object that was saved to firebase
   Future<DocumentReference> addPlayer(Player player) {
     return _db.collection("players").add(player.toMap());
   }
@@ -23,13 +24,14 @@ class DatabaseRepository {
     await _db.collection("players").doc(player.id).delete();
   }
 
-  /// query all players of the current club
-  Stream<QuerySnapshot> getPlayerStream(String currentClubId) {
-    return _db
-        .collection("players")
-        .where("clubId", isEqualTo: currentClubId)
-        .snapshots();
-  }
+  // query all players of the current team
+  // TODO remove global controller here
+  // Stream<QuerySnapshot> getPlayersStream() {
+  //   return _db
+  //       .collection("players")
+  //       .where("teamId", isEqualTo: globalController.selectedTeam.value.id)
+  //       .snapshots();
+  // }
 
   /// @return asynchronous reference to Game object that was saved to firebase
   Future<DocumentReference> addGame(Game game) async {
@@ -48,12 +50,21 @@ class DatabaseRepository {
   }
 
   /// query all games of current club
-  Stream<QuerySnapshot> getGameStream(String currentClubId) {
-    // TODO: unused
-    return _db
-        .collection("games")
-        .where("clubId", isEqualTo: currentClubId)
-        .snapshots();
+  // TODO fix getGameStream method
+  // Stream<QuerySnapshot> getGameStream(String currentClubId) {
+  //   // TODO: unused
+  //   return _db
+  //       .collection("games")
+  //       .where("clubId", isEqualTo: currentClubId);
+  // }
+
+  // query all teams in db
+  Stream<QuerySnapshot> getAllTeamsStream() {
+    return _db.collection("teams").snapshots();
+  }
+
+  Future<QuerySnapshot> getAllTeams() async {
+    return await _db.collection("teams").get();
   }
 
   /// query the current game

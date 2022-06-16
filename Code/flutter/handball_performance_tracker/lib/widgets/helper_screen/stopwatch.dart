@@ -10,7 +10,8 @@ class StopWatch extends GetView<GlobalController> {
 
   @override
   Widget build(BuildContext context) {
-    StopWatchTimer stopWatchTimer = globalController.stopWatchTimer.value;
+    StopWatchTimer stopWatchTimer =
+        globalController.currentGame.value.stopWatch;
 
     return Scrollbar(
         child: SingleChildScrollView(
@@ -92,7 +93,7 @@ class StopWatch extends GetView<GlobalController> {
                                 ),
                                 onPressed: () async {
                                   globalController
-                                      .stopWatchTimer.value.onExecute
+                                      .currentGame.value.stopWatch.onExecute
                                       .add(StopWatchExecute.stop);
                                 },
                                 child: const Text(
@@ -140,7 +141,7 @@ class StopWatch extends GetView<GlobalController> {
                                   if (stopWatchTimer.isRunning) {
                                     stopWatchTimer.onExecute
                                         .add(StopWatchExecute.reset);
-                                    globalController.stopWatchTimer.value
+                                    globalController.currentGame.value.stopWatch
                                         .setPresetTime(
                                             mSec: currentTime + 1000);
                                     stopWatchTimer.onExecute
@@ -148,7 +149,7 @@ class StopWatch extends GetView<GlobalController> {
                                   } else {
                                     stopWatchTimer.onExecute
                                         .add(StopWatchExecute.reset);
-                                    globalController.stopWatchTimer.value
+                                    globalController.currentGame.value.stopWatch
                                         .setPresetTime(
                                             mSec: currentTime + 1000);
                                   }
@@ -178,7 +179,7 @@ class StopWatch extends GetView<GlobalController> {
                                   if (stopWatchTimer.isRunning) {
                                     stopWatchTimer.onExecute
                                         .add(StopWatchExecute.reset);
-                                    globalController.stopWatchTimer.value
+                                    globalController.currentGame.value.stopWatch
                                         .setPresetTime(
                                             mSec: currentTime - 1000);
                                     stopWatchTimer.onExecute
@@ -186,7 +187,7 @@ class StopWatch extends GetView<GlobalController> {
                                   } else {
                                     stopWatchTimer.onExecute
                                         .add(StopWatchExecute.reset);
-                                    globalController.stopWatchTimer.value
+                                    globalController.currentGame.value.stopWatch
                                         .setPresetTime(
                                             mSec: currentTime - 1000);
                                   }

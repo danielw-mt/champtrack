@@ -39,7 +39,7 @@ Map<String, String> actionMapping = {
 void callActionMenu(BuildContext context) {
   final GlobalController globalController = Get.find<GlobalController>();
   // if game is not running give a warning
-  if (globalController.gameStarted.value == false) {
+  if (globalController.gameRunning.value == false) {
     Alert(
       context: context,
       title: "Error game did not start yet",
@@ -105,20 +105,23 @@ DialogButton buildDialogButton(BuildContext context, String buttonText) {
   void logAction() async {
     DateTime dateTime = DateTime.now();
     int unixTime = dateTime.toUtc().millisecondsSinceEpoch;
-    int secondsSinceGameStart =
-        globalController.currentGame.value.stopWatch.secondTime.value;
+    // TODO implement stopwatch in game class
+    // int secondsSinceGameStart =
+    //     globalController.currentGame.value.stopWatch.secondTime.value;
 
     // get most recent game id from DB
     String currentGameId = globalController.currentGame.value.id!;
 
     GameAction action = GameAction(
-        clubId: globalController.currentClub.value.id!,
+        teamId: globalController.selectedTeam.value.id!,
         gameId: currentGameId,
         type: determineAttack() ? "attack" : "defense",
         actionType: actionMapping[buttonText]!,
         throwLocation: globalController.lastLocation.value.cast<String>(),
         timestamp: unixTime,
-        relativeTime: secondsSinceGameStart);
+        // TODO implement stopwatch in game class
+        relativeTime: 0);
+    // relativeTime: secondsSinceGameStart);
     globalController.actions.add(action);
 
     // add action to firebase
