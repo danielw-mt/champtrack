@@ -108,4 +108,11 @@ class Strings {
   static const String lNumber = "Nummer";
   static const String lPosition = "Position";
   static const String lEdit = "Bearbeiten";
+  static const String lEditPlayer = "Player Bearbeiten";
+  static const String lDeletePlayer = "Löschen";
+  static const String lFirstName = "Vorname";
+  static const String lLastName = "Nachname";
+  static const String lNickName = "Spitzname";
+  static const String lShirtNumber = "Trikotnummer";
+  static const String lTeams = "Mannschaften";
 }
