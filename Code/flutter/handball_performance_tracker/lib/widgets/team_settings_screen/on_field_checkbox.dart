@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import './../../controllers/globalController.dart';
+import '../../controllers/globalController.dart';
 import 'package:get/get.dart';
 import '../../data/player.dart';
 

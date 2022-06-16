@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class GameAction {
   String? id;
-  final String clubId;
+  final String teamId;
   final String gameId;
   String playerId;
   String type;
@@ -13,7 +13,7 @@ class GameAction {
 
   GameAction(
       {this.id,
-      this.clubId = "",
+      this.teamId = "",
       this.gameId = "",
       this.playerId = "",
       this.type = "",
@@ -25,7 +25,7 @@ class GameAction {
   // @return Map<String,dynamic> as representation of GameAction object that can be saved to firestore
   Map<String, dynamic> toMap() {
     return {
-      'clubId': clubId,
+      'teamId': teamId,
       'gameId': gameId,
       'playerId': playerId,
       'type': type,
@@ -46,7 +46,7 @@ class GameAction {
   // @return GameAction object created from map representation of GameAction
   factory GameAction.fromMap(Map<String, dynamic> map) {
     return GameAction(
-        clubId: map['clubId'],
+        teamId: map['teamId'],
         gameId: map['gameId'],
         playerId: map['playerId'],
         type: map['type'],
@@ -60,7 +60,7 @@ class GameAction {
   GameAction.clone(GameAction action)
       : this(
             actionType: action.actionType,
-            clubId: action.clubId,
+            teamId: action.teamId,
             gameId: action.gameId,
             playerId: action.playerId,
             relativeTime: action.relativeTime,
