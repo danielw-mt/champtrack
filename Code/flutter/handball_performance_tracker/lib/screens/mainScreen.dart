@@ -44,7 +44,7 @@ class MainScreen extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text("Feed"),
+                        Text(Strings.lFeedHeader),
                         ActionFeed(),
                         //Spacer(flex: 1,),
                         Container()

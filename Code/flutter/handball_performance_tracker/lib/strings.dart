@@ -34,6 +34,7 @@ class Strings {
 
   // mainScreen.dart
   static const String lGameScreenHeader = "Game mode";
+  static const String lFeedHeader = "Feed";
 
   // helperScreen.dart
   static const String lHelperScreenHeader = "Clock Example";
@@ -52,6 +53,7 @@ class Strings {
   static const String lGameStartErrorMessage = "Fehler: Spiel wurde noch nicht gesartet!";
   static const String lOffensePopUpHeader = "Offensive Aktionen";
   static const String lDeffensePopUpHeader = "Defensive Aktionen";
+  static const String lSelectActionDialogHeader = "Wählen Sie eine Aktion";
 
   // ef_score_bar.dart
   static const String lEfScore = "EFSCORE";
@@ -65,6 +67,42 @@ class Strings {
   static const String lStopGameButton = "Spiel stoppen";
   static const String lWarningPlayerNumberErrorMessage = "Warnung";
   static const String lPlayerNumberErrorMessage = "Sie können das Spiel nur mit 7 Playern auf dem Feld starten";
+
+  
+  // globalController.dart
+  static const String lGoalScreenText = "Assist2"; // not used
+
+  // AuthScreen
+  static const String lSignUpButton = "Sign up";
+  static const String lSignInButton = "Sign in";
+  static const String lLogInButton = "Log in";
+  static const String lLoggingIn = "Logging in";
+  static const String lSigningUp = "Signing up";
+
+  //gameControl.dart
+  static const String lStartGameAlertHeader = "Warnung";
+  static const String lStartGameAlert = "Sie können das Spiel nur mit 7 Spielern starten.";
+
+  // team_type_selection_bar.dart
+  static const String lMenTeams = "Herren";
+  static const String lWomenTeams = "Damen";
+  static const String lYouthTeams = "Jugend";
+
+  // team_details_form.dart
+  static const String lTeamName = "Team Name";
+  static const String lTeamType = "Team Typ";
+  static const String lSubmitButton = "Eintragen";
+  static const String lEmptyFieldWarning = "Bitte Beschreibung eintragen";
+  static const String lProcessingData = "Verarbeite Daten";
+
+  // team_settings_bar.dart
+  static const String lGames = "Spiele";
+  static const String lTeamDetails = "Team Details";
+
+  // nav_drawer.dart
+  static const String lTeamSelectionScreen = "Team Auswahl";
+  static const String lSignedInAs = "Angemeldet als: "; //TODO anwenden
+  static const String lSignOutButton = "Abmelden";
 
 
 }

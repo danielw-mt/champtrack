@@ -6,7 +6,7 @@ import '../screens/placeholderScreen.dart';
 import './../screens/settingsScreen.dart';
 import '../screens/teamSelectionScreen.dart';
 import 'package:get/get.dart';
-import '../Strings.dart';
+import '../strings.dart';
 
 class NavDrawer extends StatelessWidget {
   // Navigation widget for Material app. Can be opend from the sidebar
@@ -43,7 +43,7 @@ class NavDrawer extends StatelessWidget {
           ),
           ListTile(
             leading: Icon(Icons.verified_user),
-            title: Text('Team Selection Screen'),
+            title: Text(Strings.lTeamSelectionScreen),
             onTap: () => {Get.to(TeamSelectionScreen())},
           ),
           Spacer(),
@@ -51,7 +51,7 @@ class NavDrawer extends StatelessWidget {
           ElevatedButton.icon(
               onPressed: () {FirebaseAuth.instance.signOut();},
               icon: Icon(Icons.logout),
-              label: Text("Sign Out"))
+              label: Text(Strings.lSignOutButton))
         ],
       ),
     );

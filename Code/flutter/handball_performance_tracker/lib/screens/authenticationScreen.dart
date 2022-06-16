@@ -6,6 +6,8 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/widgets.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
+import '../strings.dart';
+
 class AuthenticationScreen extends StatefulWidget {
   final BuildContext context;
   const AuthenticationScreen({Key? key, required this.context})
@@ -54,11 +56,11 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
             SizedBox(
               height: 20,
             ),
-            ElevatedButton(onPressed: signIn, child: Text("Sign in")),
+            ElevatedButton(onPressed: signIn, child: Text(Strings.lSignInButton)),
             isLogin
                 ? TextButton(
                     onPressed: onClickedSignUp,
-                    child: Text("Sign up"),
+                    child: Text(Strings.lSignUpButton),
                   )
                 : Container()
           ]),
@@ -87,12 +89,12 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
           SizedBox(
             height: 20,
           ),
-          ElevatedButton(onPressed: signUp, child: Text("Sign Up")),
+          ElevatedButton(onPressed: signUp, child: Text(Strings.lSignInButton)),
           isLogin
               ? Container()
               : TextButton(
                   onPressed: onClickedSignUp,
-                  child: Text("Log in"),
+                  child: Text(Strings.lLogInButton),
                 )
         ]),
       ),
@@ -105,7 +107,7 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
         context: context,
         content: Column(
           children: [
-            Text("Logging in"),
+            Text(Strings.lLoggingIn),
             CircularProgressIndicator(),
           ],
         ),
@@ -131,7 +133,7 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
         context: context,
         content: Column(
           children: [
-            Text("Signing up"),
+            Text(Strings.lSigningUp),
             CircularProgressIndicator(),
           ],
         ),
