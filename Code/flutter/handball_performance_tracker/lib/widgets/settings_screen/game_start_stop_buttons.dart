@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:handball_performance_tracker/constants/team_constants.dart';
 import 'package:handball_performance_tracker/data/game.dart';
 import './../../controllers/globalController.dart';
 import './../../data/game.dart';
@@ -50,13 +51,13 @@ class GameStartStopButtons extends StatelessWidget {
     // check if enough players have been selected
     var numPlayersOnField =
         globalController.selectedTeam.value.onFieldPlayers.length;
-    if (numPlayersOnField != 7) {
+    if (numPlayersOnField != PLAYER_NUM) {
       // create alert if someone tries to start the game without enough players
       Alert(
               context: context,
               title: "Warning",
               type: AlertType.error,
-              desc: "You can only start the game with 7 players on the field")
+              desc: "You can only start the game with $PLAYER_NUM players on the field")
           .show();
       return;
     }
