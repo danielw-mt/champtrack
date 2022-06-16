@@ -6,39 +6,70 @@ import '../../data/team.dart';
 import '../../data/database_repository.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'on_field_checkbox.dart';
+import '../../strings.dart';
 
 class PlayersList extends GetView<GlobalController> {
   DatabaseRepository repository = DatabaseRepository();
   @override
   Widget build(BuildContext context) {
     return GetBuilder<GlobalController>(
-      builder: (globalController) => Expanded(
-        child: ListView.builder(
-            shrinkWrap: true,
-            itemCount: globalController.selectedTeam.value.players.length,
-            itemBuilder: (context, index) {
-              Player player =
-                  globalController.selectedTeam.value.players[index];
-              return Row(
-                children: [
-                  FloatingActionButton(
-                      key: Key("FloatingActionButton $index"),
-                      child: const Icon(Icons.remove),
-                      onPressed: () {
-                        removePlayerFromTeam(player);
-                      }),
-                  Text(
-                    "${player.firstName} ${player.lastName}",
-                    key: Key("Playertext $index"),
-                  ),
-                  OnFieldCheckbox(
-                    key: Key("Checkbox $index"),
-                    player: player,
-                  )
-                ],
-              );
-            }),
-      ),
+      builder: (globalController) {
+        int numberOfPlayers =
+            globalController.selectedTeam.value.players.length;
+        List<Player> playersList = globalController.selectedTeam.value.players;
+        return SizedBox(
+            width: double.infinity,
+            child: DataTable(
+              columns: const <DataColumn>[
+                DataColumn(
+                  label: Text(Strings.lName),
+                ),
+                DataColumn(
+                  label: Text(Strings.lNumber),
+                ),
+                DataColumn(label: Text(Strings.lPosition)),
+                DataColumn(label: Text("Starts on Field (temporary)")),
+                DataColumn(label: Text(Strings.lEdit))
+              ],
+              rows: List<DataRow>.generate(
+                numberOfPlayers,
+                (int index) => DataRow(
+                  color: MaterialStateProperty.resolveWith<Color?>(
+                      (Set<MaterialState> states) {
+                    // All rows will have the same selected color.
+                    if (states.contains(MaterialState.selected)) {
+                      return Theme.of(context)
+                          .colorScheme
+                          .primary
+                          .withOpacity(0.08);
+                    }
+                    // Even rows will have a grey color.
+                    if (index.isEven) {
+                      return Colors.grey.withOpacity(0.3);
+                    }
+                    return null; // Use default value for other states and odd rows.
+                  }),
+                  cells: <DataCell>[
+                    DataCell(Text(
+                        "${playersList[index].firstName} ${playersList[index].lastName}")),
+                    DataCell(Text(playersList[index].number.toString())),
+                    DataCell(Text(playersList[index]
+                        .positions
+                        .reduce((value, element) => value + ", " + element))),
+                    DataCell(OnFieldCheckbox(
+                      player: playersList[index],
+                    )),
+                    DataCell(GestureDetector(
+                      child: Icon(Icons.edit),
+                      onTap: () {
+                        // TODO open player edit dialog
+                      },
+                    ))
+                  ],
+                ),
+              ),
+            ));
+      },
     );
   }
 
