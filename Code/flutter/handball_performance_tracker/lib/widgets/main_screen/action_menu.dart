@@ -10,8 +10,21 @@ import '../../constants/game_actions.dart';
 import 'playermenu.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 import 'dart:math';
+import 'package:logger/logger.dart';
+
+var logger = Logger(
+  printer: PrettyPrinter(
+      methodCount: 2, // number of method calls to be displayed
+      errorMethodCount: 8, // number of method calls if stacktrace is provided
+      lineLength: 120, // width of the output
+      colors: true, // Colorful log messages
+      printEmojis: true, // Print an emoji for each log message
+      printTime: false // Should each log print contain a timestamp
+      ),
+);
 
 void callActionMenu(BuildContext context) {
+  logger.d("Calling action menu");
   final GlobalController globalController = Get.find<GlobalController>();
 
   // if game is not running give a warning
@@ -42,13 +55,16 @@ void callActionMenu(BuildContext context) {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Expanded(
-                    child: PageView(children: buildPageViewChildren(context))),
+                    child: PageView(
+                        controller: new PageController(),
+                        children: buildPageViewChildren(context))),
               ] // Column of "Spieler", horizontal line and Button-Row
               ))).show();
 }
 
 ///
 bool determineAttack() {
+  logger.d("Determining whether attack actions should be displayed...");
   final GlobalController globalController = Get.find<GlobalController>();
   // decide whether attack or defense actions should be displayed depending
   //on what side the team goals is and whether they are attacking or defending
@@ -65,6 +81,7 @@ bool determineAttack() {
   } else if (attackIsLeft == false && fieldIsLeft == false) {
     attacking = true;
   }
+  logger.d("Attack actions should be displayed: $attacking");
   return attacking;
 }
 
@@ -211,6 +228,7 @@ DialogButton buildDialogButton(
   final GlobalController globalController = Get.find<GlobalController>();
   DatabaseRepository repository = globalController.repository;
   void logAction() async {
+    logger.d("logging an action");
     DateTime dateTime = DateTime.now();
     int unixTime = dateTime.toUtc().millisecondsSinceEpoch;
     int secondsSinceGameStart =
@@ -228,6 +246,8 @@ DialogButton buildDialogButton(
         throwLocation: globalController.lastLocation.cast<String>(),
         timestamp: unixTime,
         relativeTime: secondsSinceGameStart);
+    logger.d("GameAction object created: ");
+    logger.d(action);
     globalController.actions.add(action);
 
     // add action to firebase
@@ -235,6 +255,7 @@ DialogButton buildDialogButton(
     // store most recent action id in game state for the player menu
     // when a player was selected in that menu the action document can be
     // updated in firebase with their player_id using the action_id
+    logger.d("Adding gameaction to firebase");
     repository
         .addActionToGame(action)
         .then((DocumentReference doc) => action.id = doc.id);
