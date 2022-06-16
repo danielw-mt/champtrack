@@ -6,6 +6,7 @@ import '../screens/placeholderScreen.dart';
 import './../screens/settingsScreen.dart';
 import '../screens/teamSelectionScreen.dart';
 import 'package:get/get.dart';
+import '../strings.dart';
 
 class NavDrawer extends StatelessWidget {
   // Navigation widget for Material app. Can be opend from the sidebar
@@ -17,7 +18,7 @@ class NavDrawer extends StatelessWidget {
         children: <Widget>[
           DrawerHeader(
               child: Text(
-                'Side menu',
+                Strings.lSideMenuHeader,
                 style: TextStyle(color: Colors.white, fontSize: 25),
               ),
               decoration: BoxDecoration(
@@ -25,12 +26,12 @@ class NavDrawer extends StatelessWidget {
               )),
           ListTile(
             leading: Icon(Icons.input),
-            title: Text('Settings'),
+            title: Text(Strings.lSettings),
             onTap: () => {Get.to(SettingsScreen())},
           ),
           ListTile(
             leading: Icon(Icons.verified_user),
-            title: Text('Main Screen'),
+            title: Text(Strings.lMainScreen),
             onTap: () => {
               if (Get.currentRoute.toString() != "/") {Get.to(MainScreen())}
             },
@@ -42,7 +43,7 @@ class NavDrawer extends StatelessWidget {
           ),
           ListTile(
             leading: Icon(Icons.verified_user),
-            title: Text('Team Selection Screen'),
+            title: Text(Strings.lTeamSelectionScreen),
             onTap: () => {Get.to(TeamSelectionScreen())},
           ),
           Spacer(),
@@ -50,7 +51,7 @@ class NavDrawer extends StatelessWidget {
           ElevatedButton.icon(
               onPressed: () {FirebaseAuth.instance.signOut();},
               icon: Icon(Icons.logout),
-              label: Text("Sign Out"))
+              label: Text(Strings.lSignOutButton))
         ],
       ),
     );

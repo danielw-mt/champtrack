@@ -5,6 +5,7 @@ import '../../controllers/globalController.dart';
 import 'package:get/get.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import '../../data/game_action.dart';
+import '../../strings.dart';
 import 'playermenu.dart';
 
 // TODO add to constants file
@@ -42,7 +43,7 @@ void callActionMenu(BuildContext context) {
   if (globalController.gameRunning.value == false) {
     Alert(
       context: context,
-      title: "Error game did not start yet",
+      title: Strings.lGameStartErrorMessage,
       type: AlertType.error,
     )
         // when displayAttackActions is true display buttonlist with attack
@@ -54,7 +55,7 @@ void callActionMenu(BuildContext context) {
   // alert contains a list of DialogButton objects
   Alert(
           context: context,
-          title: "Select an action",
+          title: Strings.lSelectActionDialogHeader,
           // when displayAttackActions is true display buttonlist with attack
           //options otherwise with defense options
           buttons: determineAttack()

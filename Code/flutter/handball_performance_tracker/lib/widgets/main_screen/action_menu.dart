@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:handball_performance_tracker/data/database_repository.dart';
+import '../../Strings.dart';
 import '../../controllers/globalController.dart';
 import 'package:get/get.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
@@ -18,7 +19,7 @@ void callActionMenu(BuildContext context) {
   if (globalController.gameRunning.value == false) {
     Alert(
       context: context,
-      title: "Error game did not start yet",
+      title: Strings.lGameStartErrorMessage,
       type: AlertType.error,
     ).show();
     return;
@@ -117,7 +118,7 @@ Widget buildDialogButtonMenu(
           Align(
             alignment: Alignment.topLeft,
             child: Text(
-              "Offensive Aktionen",
+              Strings.lOffensePopUpHeader,
               textAlign: TextAlign.left,
               style: TextStyle(
                 color: Colors.black,
@@ -170,7 +171,7 @@ Widget buildDialogButtonMenu(
           const Align(
             alignment: Alignment.topLeft,
             child: Text(
-              "Defensive Aktionen",
+              Strings.lDeffensePopUpHeader,
               textAlign: TextAlign.left,
               style: TextStyle(
                 color: Colors.black,
