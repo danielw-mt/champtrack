@@ -1,3 +1,4 @@
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:handball_performance_tracker/data/club.dart';
 import 'package:handball_performance_tracker/data/database_repository.dart';
@@ -124,7 +125,8 @@ class GlobalController extends GetxController {
 
   /// True: home team is playing on the left; False: home team is defending
   RxBool fieldIsLeft = true.obs;
-
+  Rx<PageController> fieldController = PageController().obs;
+  
   /// Storing game actions as GameAction objects inside this list
   RxList<GameAction> actions = <GameAction>[].obs;
 
