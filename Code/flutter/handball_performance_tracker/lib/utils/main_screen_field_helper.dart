@@ -136,11 +136,17 @@ class FieldPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     double xOffset;
+    double startAngle;
+    double sweepAngle;
     // set Parameters for field side
     if (leftSide) {
       xOffset = 0;
+      startAngle = math.pi / 2;
+      sweepAngle = -math.pi;
     } else {
       xOffset = fieldSizeParameter.fieldWidth;
+      startAngle = math.pi / 2;
+      sweepAngle = math.pi;
     }
 
     // draw bigger 9m oval
@@ -149,8 +155,8 @@ class FieldPainter extends CustomPainter {
             center: Offset(xOffset, fieldSizeParameter.fieldHeight / 2),
             width: fieldSizeParameter.nineMeterRadiusX * 2,
             height: fieldSizeParameter.nineMeterRadiusY * 2),
-        math.pi / 2,
-        -math.pi,
+        startAngle,
+        sweepAngle,
         false,
         Paint()..color = Color.fromARGB(103, 169, 172, 209));
 
@@ -160,8 +166,8 @@ class FieldPainter extends CustomPainter {
             center: Offset(xOffset, fieldSizeParameter.fieldHeight / 2),
             width: fieldSizeParameter.sixMeterRadiusX * 2,
             height: fieldSizeParameter.sixMeterRadiusY * 2),
-        math.pi / 2,
-        -math.pi,
+        startAngle,
+        sweepAngle,
         false,
         Paint()..color = Color.fromARGB(141, 129, 142, 216));
 
@@ -227,11 +233,17 @@ class DashedPathPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     double xOffset;
+    double startAngle;
+    double sweepAngle;
     // set Parameters for field side
     if (leftSide) {
       xOffset = 0;
+      startAngle = math.pi / 2;
+      sweepAngle = -math.pi;
     } else {
       xOffset = fieldSizeParameter.fieldWidth;
+      startAngle = math.pi / 2;
+      sweepAngle = math.pi;
     }
 
     // definde 9m oval
@@ -241,8 +253,8 @@ class DashedPathPainter extends CustomPainter {
             center: Offset(xOffset, fieldSizeParameter.fieldHeight / 2),
             width: fieldSizeParameter.nineMeterRadiusX * 2,
             height: fieldSizeParameter.nineMeterRadiusY * 2),
-        math.pi / 2,
-        -math.pi,
+        startAngle,
+        sweepAngle,
       );
 
     _dashedPathProperties = DashedPathProperties(
