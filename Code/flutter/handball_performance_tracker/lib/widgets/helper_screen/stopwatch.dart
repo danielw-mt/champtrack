@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import './../../controllers/globalController.dart';
+import '../../strings.dart';
 import 'package:get/get.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 
@@ -76,7 +77,7 @@ class StopWatch extends GetView<GlobalController> {
                                       .add(StopWatchExecute.start);
                                 },
                                 child: const Text(
-                                  'Start',
+                                  Strings.lStartTime,
                                   style: TextStyle(color: Colors.white),
                                 ),
                               ),
@@ -96,7 +97,7 @@ class StopWatch extends GetView<GlobalController> {
                                       .add(StopWatchExecute.stop);
                                 },
                                 child: const Text(
-                                  'Stop',
+                                  Strings.lStopTime,
                                   style: TextStyle(color: Colors.white),
                                 ),
                               ),
@@ -119,7 +120,7 @@ class StopWatch extends GetView<GlobalController> {
                                   stopWatchTimer.setPresetTime(mSec: 0);
                                 },
                                 child: const Text(
-                                  'Reset',
+                                  Strings.lResetTime,
                                   style: TextStyle(color: Colors.white),
                                 ),
                               ),
@@ -155,7 +156,7 @@ class StopWatch extends GetView<GlobalController> {
                                   globalController.refresh();
                                 },
                                 child: const Text(
-                                  '+1 sec',
+                                  Strings.lPlusOneTime,
                                   style: TextStyle(color: Colors.white),
                                 ),
                               ),
@@ -193,7 +194,7 @@ class StopWatch extends GetView<GlobalController> {
                                   globalController.refresh();
                                 },
                                 child: const Text(
-                                  '-1 sec',
+                                  Strings.lMinusOneTime,
                                   style: TextStyle(color: Colors.white),
                                 ),
                               ),

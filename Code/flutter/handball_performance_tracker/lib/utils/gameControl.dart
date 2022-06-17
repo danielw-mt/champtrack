@@ -7,6 +7,8 @@ import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 
+import '../strings.dart';
+
 void startGame(BuildContext context) async {
   final GlobalController globalController = Get.find<GlobalController>();
   print("in start game");
@@ -17,9 +19,9 @@ void startGame(BuildContext context) async {
     // create alert if someone tries to start the game without enough players
     Alert(
             context: context,
-            title: "Warning",
+            title: Strings.lStartGameAlertHeader,
             type: AlertType.error,
-            desc: "You can only start the game with 7 players on the field")
+            desc: Strings.lStartGameAlert)
         .show();
     return;
   }

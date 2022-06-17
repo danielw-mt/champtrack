@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:handball_performance_tracker/utils/icons.dart';
 import 'package:handball_performance_tracker/data/database_repository.dart';
 import 'package:handball_performance_tracker/data/game.dart';
+import '../../Strings.dart';
 import 'package:handball_performance_tracker/utils/player_helper.dart';
 import '../../controllers/globalController.dart';
 import 'package:get/get.dart';
@@ -37,7 +38,7 @@ void callPlayerMenu(context) {
             const Align(
               alignment: Alignment.topLeft,
               child: Text(
-                "Spieler",
+                Strings.lPlayer,
                 textAlign: TextAlign.left,
                 style: TextStyle(
                   color: Colors.black,
@@ -226,7 +227,7 @@ Obx buildDialogButton(BuildContext context, Player associatedPlayer) {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
-                "No Assist",
+                Strings.lNoAssist,
                 style: TextStyle(
                   color: Colors.black,
                   fontSize: (width * 0.03),
