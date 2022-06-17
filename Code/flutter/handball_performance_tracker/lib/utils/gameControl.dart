@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:handball_performance_tracker/constants/team_constants.dart';
+import 'package:handball_performance_tracker/data/database_repository.dart';
+import '../controllers/appController.dart';
 import '../controllers/globalController.dart';
 import '../data/player.dart';
 import '../data/game.dart';
@@ -10,6 +12,8 @@ import 'package:stop_watch_timer/stop_watch_timer.dart';
 
 void startGame(BuildContext context) async {
   final GlobalController globalController = Get.find<GlobalController>();
+  AppController appController = Get.find<AppController>();
+  DatabaseRepository repository = Get.find<AppController>().repository;
   print("in start game");
   // check if enough players have been selected
   var numPlayersOnField =
@@ -36,16 +40,16 @@ void startGame(BuildContext context) async {
       players: globalController.chosenPlayers.cast<Player>());
 
   final DocumentReference ref =
-      await globalController.repository.addGame(newGame);
+      await repository.addGame(newGame);
   newGame.id = ref.id;
-  globalController.currentGame.value = newGame;
-  print("start game, id: ${globalController.currentGame.value.id}");
+  appController.setCurrentGame(newGame);
+  print("start game, id: $appController.currentGame.value.id}");
 
   // add game to selected players
   _addGameToPlayers(newGame);
 
   // activate the game timer
-  globalController.currentGame.value.stopWatch.onExecute.add(StopWatchExecute.start);
+  appController.getCurrentGame().stopWatch.onExecute.add(StopWatchExecute.start);
 
   globalController.gameRunning.value = true;
   globalController.refresh();
@@ -53,33 +57,37 @@ void startGame(BuildContext context) async {
 
 void unpauseGame() {
   final GlobalController globalController = Get.find<GlobalController>();
+  AppController appController = Get.find<AppController>();
   globalController.gameRunning.value = true;
-  globalController.currentGame.value.stopWatch.onExecute.add(StopWatchExecute.start);
+  appController.getCurrentGame().stopWatch.onExecute.add(StopWatchExecute.start);
   globalController.refresh();
 }
 
 void pauseGame() {
   final GlobalController globalController = Get.find<GlobalController>();
+  AppController appController = Get.find<AppController>();
   globalController.gameRunning.value = false;
-  globalController.currentGame.value.stopWatch.onExecute.add(StopWatchExecute.stop);
+  appController.getCurrentGame().stopWatch.onExecute.add(StopWatchExecute.stop);
   globalController.refresh();
 }
 
 void stopGame() async {
   final GlobalController globalController = Get.find<GlobalController>();
+  AppController appController = Get.find<AppController>();
+  DatabaseRepository repository = Get.find<AppController>().repository;
   // update game document in firebase
-  Game currentGame = globalController.currentGame.value;
-  print("stop game, id: ${globalController.currentGame.value.id}");
+  Game currentGame = appController.getCurrentGame();
+  print("stop game, id: ${appController.getCurrentGame().id}");
 
   DateTime dateTime = DateTime.now();
   currentGame.date = dateTime;
   currentGame.stopTime = dateTime.toUtc().millisecondsSinceEpoch;
   currentGame.players = globalController.chosenPlayers.cast<Player>();
 
-  globalController.repository.updateGame(currentGame);
+  repository.updateGame(currentGame);
 
   // stop the game timer
-  globalController.currentGame.value.stopWatch.onExecute.add(StopWatchExecute.stop);
+  appController.getCurrentGame().stopWatch.onExecute.add(StopWatchExecute.stop);
 
   globalController.gameRunning.value = false;
   globalController.refresh();

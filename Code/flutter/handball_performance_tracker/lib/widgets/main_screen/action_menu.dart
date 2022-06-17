@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:handball_performance_tracker/data/database_repository.dart';
+import '../../controllers/appController.dart';
 import '../../controllers/globalController.dart';
 import 'package:get/get.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
@@ -207,16 +208,17 @@ Widget buildDialogButtonMenu(
 DialogButton buildDialogButton(
     BuildContext context, String buttonText, Color color,
     [icon]) {
-  final GlobalController globalController = Get.find<GlobalController>();
-  DatabaseRepository repository = globalController.repository;
+  GlobalController globalController = Get.find<GlobalController>();
+  AppController appController =  Get.find<AppController>();
+  final DatabaseRepository repository = appController.repository;
   void logAction() async {
     DateTime dateTime = DateTime.now();
     int unixTime = dateTime.toUtc().millisecondsSinceEpoch;
     int secondsSinceGameStart =
-        globalController.currentGame.value.stopWatch.secondTime.value;
+        appController.getCurrentGame().stopWatch.secondTime.value;
 
     // get most recent game id from DB
-    String currentGameId = globalController.currentGame.value.id!;
+    String currentGameId = appController.getCurrentGame().id!;
     String actionType = determineAttack() ? attack : defense;
 
     GameAction action = GameAction(
@@ -227,7 +229,7 @@ DialogButton buildDialogButton(
         throwLocation: globalController.lastLocation.cast<String>(),
         timestamp: unixTime,
         relativeTime: secondsSinceGameStart);
-    globalController.actions.add(action);
+    appController.addAction(action);
 
     // add action to firebase
 

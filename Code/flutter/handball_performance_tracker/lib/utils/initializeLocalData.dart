@@ -4,12 +4,12 @@ import '../data/player.dart';
 import '../data/team.dart';
 import '../data/database_repository.dart';
 import 'package:get/get.dart';
-import '../controllers/globalController.dart';
+import '../controllers/appController.dart';
 
 Future<bool> initializeLocalData() async {
   DatabaseRepository repo = DatabaseRepository();
-  GlobalController globalController = Get.find<GlobalController>();
-  if (!globalController.isInitialized) {
+  AppController appController = Get.find<AppController>();
+  if (!appController.isInitialized) {
     print("initializing local data");
     List<Team> teamsList = [];
     // initialize all teams with corresponding player objects first and wait
@@ -47,8 +47,8 @@ Future<bool> initializeLocalData() async {
           players: playerList,
           onFieldPlayers: onFieldList));
     }
-    globalController.cachedTeamsList.value = teamsList;
-    globalController.isInitialized = true;
+    appController.updateAvailableTeams(teamsList);
+    appController.isInitialized = true;
   }
   return true;
 }

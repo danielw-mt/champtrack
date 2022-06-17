@@ -1,5 +1,4 @@
 import 'package:get/get.dart';
-import 'package:handball_performance_tracker/data/database_repository.dart';
 import 'package:handball_performance_tracker/utils/player_helper.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 import '../data/game_action.dart';
@@ -12,23 +11,12 @@ import '../constants/settings_config.dart';
 /// Class for managing global state of the app.
 /// Refer to https://github.com/jonataslaw/getx/wiki/State-Management
 class GlobalController extends GetxController {
-  /// handles teams initialization when building MainScreen
-  var isInitialized = false;
-
-  ///
-  // database handling
-  ///
-  var repository = DatabaseRepository();
-
   ////////
   /// Team Selection Screen
   ////////
 
   /// Temporary variable for storing the currently selected Team
   Rx<Team> selectedTeam = Team(id: "-1", name: "Default team").obs;
-
-  /// list of all teams of the club that are cached in the local game state. Changes made in the settings to e.g. are stored in here as well
-  RxList<Team> cachedTeamsList = <Team>[].obs;
 
   /// 0: male, 1: female, 2: youth
   RxInt selectedTeamType = 0.obs;
@@ -108,14 +96,10 @@ class GlobalController extends GetxController {
   /// True: home team is playing on the left; False: home team is defending
   RxBool fieldIsLeft = true.obs;
 
-  /// Storing game actions as GameAction objects inside this list
-  RxList<GameAction> actions = <GameAction>[].obs;
 
   /// True: game was started; False game did not start yet
   RxBool gameRunning = false.obs;
 
-  /// last game object written to db
-  Rx<Game> currentGame = Game(date: DateTime.now()).obs;
 
   /// @return rx list
   /// first element is the sector as a string, second element distinguishes the distance ("<6", "6to9", ">9")

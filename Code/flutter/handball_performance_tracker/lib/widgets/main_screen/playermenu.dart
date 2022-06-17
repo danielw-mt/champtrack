@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:handball_performance_tracker/controllers/appController.dart';
 import 'package:handball_performance_tracker/utils/icons.dart';
 import 'package:handball_performance_tracker/data/database_repository.dart';
 import '../../controllers/globalController.dart';
@@ -99,8 +100,9 @@ List<Obx> buildDialogButtonList(BuildContext context) {
 Obx buildDialogButton(BuildContext context, Player associatedPlayer) {
   String buttonText = associatedPlayer.lastName;
   String buttonNumber = (associatedPlayer.number).toString();
-  final GlobalController globalController = Get.find<GlobalController>();
-  DatabaseRepository repository = globalController.repository;
+  AppController appController = Get.find<AppController>();
+  GlobalController globalController = Get.find<GlobalController>();
+  DatabaseRepository repository = appController.repository;
 
   // Get width and height, so the sizes can be calculated relative to those. So it should look the same on different screen sizes.
   final double width = MediaQuery.of(context).size.width;
@@ -131,7 +133,7 @@ Obx buildDialogButton(BuildContext context, Player associatedPlayer) {
 
   void logPlayerSelection() async {
     print(associatedPlayer.lastName);
-    GameAction lastAction = globalController.actions.last;
+    GameAction lastAction = appController.getLastAction();
     String? lastClickedPlayerId = globalController.lastClickedPlayer.value.id;
     lastAction.playerId = lastClickedPlayerId.toString();
     // if goal was pressed but no player was selected yet
@@ -155,7 +157,7 @@ Obx buildDialogButton(BuildContext context, Player associatedPlayer) {
         // update data for person that shot the goal
         lastAction.playerId = globalController.lastClickedPlayer.value.id!;
         repository.updateAction(lastAction);
-        globalController.actions.last = lastAction;
+        appController.setLastAction(lastAction);
         // update player's ef-score
         // TODO implement this
         //activePlayer.addAction(lastAction);
@@ -169,7 +171,7 @@ Obx buildDialogButton(BuildContext context, Player associatedPlayer) {
         // person that scored goal
         lastAction.playerId = globalController.lastClickedPlayer.value.id!;
         repository.updateAction(lastAction);
-        globalController.actions.last = lastAction;
+        appController.setLastAction(lastAction);
         // person that scored assist
         // deep clone a new action from the most recent action
         GameAction assistAction = GameAction.clone(lastAction);
@@ -178,7 +180,7 @@ Obx buildDialogButton(BuildContext context, Player associatedPlayer) {
         assistAction.playerId = assistPlayer.id!;
         assistAction.actionType = "assist";
         repository.addActionToGame(assistAction);
-        globalController.actions.add(assistAction);
+        appController.addAction(assistAction);
 
         // add assist first to the feed and then the goal
         addFeedItem(assistAction);
@@ -192,7 +194,7 @@ Obx buildDialogButton(BuildContext context, Player associatedPlayer) {
     } else {
       // if the action was not a goal just update the player id in firebase and gamestate
       lastAction.playerId = associatedPlayer.id.toString();
-      globalController.actions.last = lastAction;
+      appController.setLastAction(lastAction);
       repository.updateAction(lastAction);
       addFeedItem(lastAction);
       // update player's ef-scorer
@@ -203,7 +205,7 @@ Obx buildDialogButton(BuildContext context, Player associatedPlayer) {
     }
     // addFeedItem(lastAction);
     print("last action saved in database: ");
-    print(globalController.actions.last.toMap());
+    print(appController.getLastAction().toMap());
     globalController.refresh(); 
     Navigator.pop(context);
   }

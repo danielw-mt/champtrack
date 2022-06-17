@@ -6,6 +6,8 @@ import 'package:handball_performance_tracker/widgets/main_screen/ef_score_bar.da
 import 'package:handball_performance_tracker/widgets/main_screen/ef_score_bar.dart'
     as efscorebar;
 import 'package:handball_performance_tracker/widgets/main_screen/field.dart';
+import '../controllers/appController.dart';
+import '../controllers/gameController.dart';
 import './../widgets/nav_drawer.dart';
 import 'package:handball_performance_tracker/utils/fieldSizeParameter.dart'
     as fieldSizeParameter;
@@ -16,6 +18,8 @@ import '../widgets/main_screen/action_feed.dart';
 class MainScreen extends StatelessWidget {
   // screen where the game takes place
   final GlobalController globalController = Get.put(GlobalController());
+  final AppController appController = Get.put(AppController());
+  final GameController gameController = Get.put(GameController());
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override

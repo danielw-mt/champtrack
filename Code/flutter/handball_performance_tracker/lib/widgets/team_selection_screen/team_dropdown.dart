@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../controllers/appController.dart';
 import '../../data/database_repository.dart';
 import '../../controllers/globalController.dart';
 import 'package:get/get.dart';
@@ -10,7 +11,7 @@ import '../../constants/team_constants.dart';
 class TeamDropdown extends GetView<GlobalController> {
   @override
   Widget build(BuildContext context) {
-    DatabaseRepository repository = DatabaseRepository();
+    AppController appController = Get.find<AppController>();
 
     // select a default team
     // TODO write a function to select the default team in globalController / utils instead of just having "Default team"
@@ -21,7 +22,7 @@ class TeamDropdown extends GetView<GlobalController> {
         int selectedTeamTypeInt = globalController.selectedTeamType.value;
         String selectedTeamTypeString = TEAM_TYPE_MAPPING[selectedTeamTypeInt];
         // available teams are all the ones that match the selected team type (0,1,2) => "men", "women", "youth"
-        List<Team> availableTeams = globalController.cachedTeamsList
+        List<Team> availableTeams = appController.getAvailableTeams()
             .where((Team team) => team.type == selectedTeamTypeString)
             .toList();
         updateSelectedTeamAccordingToTeamType();

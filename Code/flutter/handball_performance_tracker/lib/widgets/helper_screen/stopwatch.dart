@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../controllers/appController.dart';
 import './../../controllers/globalController.dart';
 import 'package:get/get.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
@@ -6,11 +7,11 @@ import 'package:stop_watch_timer/stop_watch_timer.dart';
 class StopWatch extends GetView<GlobalController> {
   // stop watch widget that allows to the time to be started, stopped, resetted and in-/decremented by 1 sec
   final GlobalController globalController = Get.find<GlobalController>();
+  AppController appController = Get.find<AppController>();
 
   @override
   Widget build(BuildContext context) {
-    StopWatchTimer stopWatchTimer =
-        globalController.currentGame.value.stopWatch;
+    StopWatchTimer stopWatchTimer = appController.getCurrentGame().stopWatch;
 
     return Scrollbar(
         child: SingleChildScrollView(
@@ -91,8 +92,10 @@ class StopWatch extends GetView<GlobalController> {
                                   shape: const StadiumBorder(),
                                 ),
                                 onPressed: () async {
-                                  globalController
-                                      .currentGame.value.stopWatch.onExecute
+                                  appController
+                                      .getCurrentGame()
+                                      .stopWatch
+                                      .onExecute
                                       .add(StopWatchExecute.stop);
                                 },
                                 child: const Text(
@@ -140,7 +143,9 @@ class StopWatch extends GetView<GlobalController> {
                                   if (stopWatchTimer.isRunning) {
                                     stopWatchTimer.onExecute
                                         .add(StopWatchExecute.reset);
-                                    globalController.currentGame.value.stopWatch
+                                    appController
+                                        .getCurrentGame()
+                                        .stopWatch
                                         .setPresetTime(
                                             mSec: currentTime + 1000);
                                     stopWatchTimer.onExecute
@@ -148,7 +153,9 @@ class StopWatch extends GetView<GlobalController> {
                                   } else {
                                     stopWatchTimer.onExecute
                                         .add(StopWatchExecute.reset);
-                                    globalController.currentGame.value.stopWatch
+                                    appController
+                                        .getCurrentGame()
+                                        .stopWatch
                                         .setPresetTime(
                                             mSec: currentTime + 1000);
                                   }
@@ -178,7 +185,9 @@ class StopWatch extends GetView<GlobalController> {
                                   if (stopWatchTimer.isRunning) {
                                     stopWatchTimer.onExecute
                                         .add(StopWatchExecute.reset);
-                                    globalController.currentGame.value.stopWatch
+                                    appController
+                                        .getCurrentGame()
+                                        .stopWatch
                                         .setPresetTime(
                                             mSec: currentTime - 1000);
                                     stopWatchTimer.onExecute
@@ -186,7 +195,9 @@ class StopWatch extends GetView<GlobalController> {
                                   } else {
                                     stopWatchTimer.onExecute
                                         .add(StopWatchExecute.reset);
-                                    globalController.currentGame.value.stopWatch
+                                    appController
+                                        .getCurrentGame()
+                                        .stopWatch
                                         .setPresetTime(
                                             mSec: currentTime - 1000);
                                   }

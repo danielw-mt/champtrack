@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:handball_performance_tracker/constants/team_constants.dart';
+import 'package:handball_performance_tracker/data/database_repository.dart';
 import 'package:handball_performance_tracker/data/game.dart';
+import '../../controllers/appController.dart';
 import './../../controllers/globalController.dart';
 import './../../data/game.dart';
 import './../../data/player.dart';
@@ -23,7 +25,8 @@ class GameStartStopButtons extends StatelessWidget {
                   padding: const EdgeInsets.all(8),
                   child: TextButton(
                     onPressed: () {
-                      if (globalController.gameRunning.value == false) startGame(context);
+                      if (globalController.gameRunning.value == false)
+                        startGame(context);
                     },
                     child: const Text("Start Game"),
                     // start button is grey when the game is started and blue when not
@@ -37,7 +40,8 @@ class GameStartStopButtons extends StatelessWidget {
                   padding: const EdgeInsets.all(8),
                   child: TextButton(
                       onPressed: () {
-                        if (globalController.gameRunning.value == true) stopGame();
+                        if (globalController.gameRunning.value == true)
+                          stopGame();
                       },
                       child: const Text("Stop Game")),
                 )
@@ -47,6 +51,8 @@ class GameStartStopButtons extends StatelessWidget {
 
   void startGame(BuildContext context) async {
     final GlobalController globalController = Get.find<GlobalController>();
+    final AppController appController = Get.find<AppController>();
+    final DatabaseRepository repository = appController.repository;
     print("in start game");
     // check if enough players have been selected
     var numPlayersOnField =
@@ -57,7 +63,8 @@ class GameStartStopButtons extends StatelessWidget {
               context: context,
               title: "Warning",
               type: AlertType.error,
-              desc: "You can only start the game with $PLAYER_NUM players on the field")
+              desc:
+                  "You can only start the game with $PLAYER_NUM players on the field")
           .show();
       return;
     }
@@ -71,17 +78,19 @@ class GameStartStopButtons extends StatelessWidget {
         startTime: unixTimeStamp,
         players: globalController.chosenPlayers.cast<Player>());
 
-    final DocumentReference ref =
-        await globalController.repository.addGame(newGame);
+    final DocumentReference ref = await repository.addGame(newGame);
     newGame.id = ref.id;
-    globalController.currentGame.value = newGame;
-    print("start game, id: ${globalController.currentGame.value.id}");
+    appController.setCurrentGame(newGame);
+    print("start game, id: ${appController.getCurrentGame().id}");
 
     // add game to selected players
     _addGameToPlayers(newGame, globalController);
 
     // activate the game timer
-    globalController.currentGame.value.stopWatch.onExecute
+    appController
+        .getCurrentGame()
+        .stopWatch
+        .onExecute
         .add(StopWatchExecute.start);
 
     globalController.gameRunning.value = true;
@@ -91,19 +100,25 @@ class GameStartStopButtons extends StatelessWidget {
 
   void stopGame() async {
     final GlobalController globalController = Get.find<GlobalController>();
+    final AppController appController = Get.find<AppController>();
+    final DatabaseRepository repository = appController.repository;
     // update game document in firebase
-    Game currentGame = globalController.currentGame.value;
-    print("stop game, id: ${globalController.currentGame.value.id}");
+    Game currentGame = appController.getCurrentGame();
+    print("stop game, id: ${appController.getCurrentGame().id}");
 
     DateTime dateTime = DateTime.now();
     currentGame.date = dateTime;
     currentGame.stopTime = dateTime.toUtc().millisecondsSinceEpoch;
     currentGame.players = globalController.chosenPlayers.cast<Player>();
 
-    globalController.repository.updateGame(currentGame);
+    repository.updateGame(currentGame);
+    appController.setCurrentGame(currentGame);
 
     // stop the game timer
-    globalController.currentGame.value.stopWatch.onExecute
+    appController
+        .getCurrentGame()
+        .stopWatch
+        .onExecute
         .add(StopWatchExecute.stop);
 
     globalController.gameRunning.value = false;

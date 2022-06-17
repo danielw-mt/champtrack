@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../controllers/appController.dart';
 import '../../controllers/globalController.dart';
 import 'package:get/get.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
@@ -9,9 +10,9 @@ class StopWatchBar extends GetView<GlobalController> {
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<GlobalController>(
-      builder: (GlobalController globalController) {
-        StopWatchTimer stopWatchTimer = globalController.currentGame.value.stopWatch;
+    return GetBuilder<AppController>(
+      builder: (AppController appController) {
+        StopWatchTimer stopWatchTimer = appController.getCurrentGame().stopWatch;
         return Row(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -29,15 +30,14 @@ class StopWatchBar extends GetView<GlobalController> {
                     stopWatchTimer.clearPresetTime();
                     if (stopWatchTimer.isRunning) {
                       stopWatchTimer.onExecute.add(StopWatchExecute.reset);
-                      globalController.currentGame.value.stopWatch
+                      appController.getCurrentGame().stopWatch
                           .setPresetTime(mSec: currentTime + 1000);
                       stopWatchTimer.onExecute.add(StopWatchExecute.start);
                     } else {
                       stopWatchTimer.onExecute.add(StopWatchExecute.reset);
-                      globalController.currentGame.value.stopWatch
+                      appController.getCurrentGame().stopWatch
                           .setPresetTime(mSec: currentTime + 1000);
                     }
-                    globalController.refresh();
                   },
                   child: Icon(Icons.add)),
             ),
@@ -86,15 +86,14 @@ class StopWatchBar extends GetView<GlobalController> {
                   stopWatchTimer.clearPresetTime();
                   if (stopWatchTimer.isRunning) {
                     stopWatchTimer.onExecute.add(StopWatchExecute.reset);
-                    globalController.currentGame.value.stopWatch
+                    appController.getCurrentGame().stopWatch
                         .setPresetTime(mSec: currentTime - 1000);
                     stopWatchTimer.onExecute.add(StopWatchExecute.start);
                   } else {
                     stopWatchTimer.onExecute.add(StopWatchExecute.reset);
-                    globalController.currentGame.value.stopWatch
+                    appController.getCurrentGame().stopWatch
                         .setPresetTime(mSec: currentTime - 1000);
                   }
-                  globalController.refresh();
                 },
                 child: const Icon(Icons.remove)
               ),

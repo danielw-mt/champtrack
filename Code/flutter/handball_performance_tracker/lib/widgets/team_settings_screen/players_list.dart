@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../../controllers/appController.dart';
 import '/../controllers/globalController.dart';
 import '../../data/player.dart';
 import '../../data/team.dart';
-import '../../data/database_repository.dart';
 import 'on_field_checkbox.dart';
 
 class PlayersList extends GetView<GlobalController> {
-  DatabaseRepository repository = DatabaseRepository();
   @override
   Widget build(BuildContext context) {
     return GetBuilder<GlobalController>(
@@ -42,10 +41,11 @@ class PlayersList extends GetView<GlobalController> {
   }
 
   void removePlayerFromTeam(Player player) {
-    // need to get fresh globalController here every time the method is called
+    // need to get fresh appController here every time the method is called
+    final AppController appController = Get.find<AppController>();
     final GlobalController globalController = Get.find<GlobalController>();
     // in order to update the team in the teams list of the local state
-    Team selectedCacheTeam = globalController.cachedTeamsList
+    Team selectedCacheTeam = appController.getAvailableTeams()
         .where((cachedTeamItem) =>
             (cachedTeamItem.id == globalController.selectedTeam.value.id))
         .toList()[0];
