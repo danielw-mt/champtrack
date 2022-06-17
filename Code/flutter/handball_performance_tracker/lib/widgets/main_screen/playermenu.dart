@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:handball_performance_tracker/controllers/appController.dart';
 import 'package:handball_performance_tracker/utils/icons.dart';
 import 'package:handball_performance_tracker/data/database_repository.dart';
-import '../../controllers/globalController.dart';
+import '../../controllers/gameController.dart';
 import 'package:get/get.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'dart:math';
@@ -11,7 +11,7 @@ import '../../data/game_action.dart';
 import '../../data/player.dart';
 
 void callPlayerMenu(context) {
-  final GlobalController globalController = Get.find<GlobalController>();
+  final GameController gameController = Get.find<GameController>();
   List<Obx> dialogButtons = buildDialogButtonList(context);
   Alert(
     style: AlertStyle(
@@ -48,7 +48,7 @@ void callPlayerMenu(context) {
               // Change from "" to "Assist" after a goal.
               child: Obx(
                 () => Text(
-                  globalController.playerMenuText.value,
+                  gameController.getPlayerMenuText(),
                   textAlign: TextAlign.right,
                   style: const TextStyle(
                     color: Colors.purple,
@@ -86,9 +86,9 @@ void callPlayerMenu(context) {
 
 /// builds a list of Dialog buttons
 List<Obx> buildDialogButtonList(BuildContext context) {
-  final GlobalController globalController = Get.find<GlobalController>();
+  final GameController gameController = Get.find<GameController>();
   List<Obx> dialogButtons = [];
-  for (Player player in globalController.selectedTeam.value.onFieldPlayers) {
+  for (Player player in gameController.getOnFieldPlayers()) {
     Obx dialogButton = buildDialogButton(context, player);
     dialogButtons.add(dialogButton);
   }
@@ -101,7 +101,7 @@ Obx buildDialogButton(BuildContext context, Player associatedPlayer) {
   String buttonText = associatedPlayer.lastName;
   String buttonNumber = (associatedPlayer.number).toString();
   AppController appController = Get.find<AppController>();
-  GlobalController globalController = Get.find<GlobalController>();
+  GameController gameController = Get.find<GameController>();
   DatabaseRepository repository = appController.repository;
 
   // Get width and height, so the sizes can be calculated relative to those. So it should look the same on different screen sizes.
@@ -114,39 +114,27 @@ Obx buildDialogButton(BuildContext context, Player associatedPlayer) {
     // check if action was a goal
     // if it was a goal allow the player to be pressed twice or select and assist player
     // if the player is clicked again it is a solo action
-    if (globalController.lastClickedPlayer.value.id == associatedPlayer.id) {
+    if (gameController.getLastClickedPlayer().id == associatedPlayer.id) {
       return false;
     }
-    if (globalController.lastClickedPlayer.value.id != associatedPlayer.id) {
+    if (gameController.getLastClickedPlayer().id != associatedPlayer.id) {
       return true;
     }
     return false;
   }
 
-  // Player? _getPlayerFromName(String name) {
-  //   for (Player player in globalController.chosenPlayers) {
-  //     if (player.lastName == name) {
-  //       return player;
-  //     }
-  //   }
-  // }
-
   void logPlayerSelection() async {
     print(associatedPlayer.lastName);
     GameAction lastAction = appController.getLastAction();
-    String? lastClickedPlayerId = globalController.lastClickedPlayer.value.id;
+    String? lastClickedPlayerId = gameController.getLastClickedPlayer().id;
     lastAction.playerId = lastClickedPlayerId.toString();
     // if goal was pressed but no player was selected yet
     //(lastClickedPlayer is default Player Object) do nothing
     if (lastAction.actionType == "goal" && lastClickedPlayerId == "") {
-      globalController.updatePlayerMenuText();
+      gameController.updatePlayerMenuText();
       // update last Clicked player value with the Player from selected team
       // who was clicked
-      globalController.lastClickedPlayer.value = globalController
-          .selectedTeam.value.players
-          .where((Player playerItem) => (playerItem.id == associatedPlayer.id))
-          .first;
-      globalController.selectedTeam.refresh();
+      gameController.setLastClickedPlayer(gameController.getPlayerFromSelectedTeam(associatedPlayer.id!));
       return;
     }
     // if goal was pressed and a player was already clicked once
@@ -155,21 +143,21 @@ Obx buildDialogButton(BuildContext context, Player associatedPlayer) {
       if (!_wasAssist()) {
         print("solo goal");
         // update data for person that shot the goal
-        lastAction.playerId = globalController.lastClickedPlayer.value.id!;
+        lastAction.playerId = gameController.getLastClickedPlayer().id!;
         repository.updateAction(lastAction);
         appController.setLastAction(lastAction);
         // update player's ef-score
         // TODO implement this
         //activePlayer.addAction(lastAction);
 
-        globalController.lastClickedPlayer.value = Player();
+        gameController.setLastClickedPlayer(Player());
         addFeedItem(lastAction);
-        globalController.refresh();
+        gameController.refresh();
       } else {
         print("goal with assist");
         // if it was an assist update data for both players
         // person that scored goal
-        lastAction.playerId = globalController.lastClickedPlayer.value.id!;
+        lastAction.playerId = gameController.getLastClickedPlayer().id!;
         repository.updateAction(lastAction);
         appController.setLastAction(lastAction);
         // person that scored assist
@@ -189,7 +177,7 @@ Obx buildDialogButton(BuildContext context, Player associatedPlayer) {
         // TODO implement this
         //assistPlayer.addAction(lastAction);
 
-        globalController.lastClickedPlayer.value = Player();
+        gameController.setLastClickedPlayer(Player());
       }
     } else {
       // if the action was not a goal just update the player id in firebase and gamestate
@@ -201,12 +189,12 @@ Obx buildDialogButton(BuildContext context, Player associatedPlayer) {
       // TODO implement this
       // activePlayer.addAction(lastAction);
 
-      globalController.lastClickedPlayer.value = Player(); 
+      gameController.setLastClickedPlayer(Player()); 
     }
     // addFeedItem(lastAction);
     print("last action saved in database: ");
     print(appController.getLastAction().toMap());
-    globalController.refresh(); 
+    gameController.refresh(); 
     Navigator.pop(context);
   }
 
@@ -215,7 +203,7 @@ Obx buildDialogButton(BuildContext context, Player associatedPlayer) {
   return Obx(() {
     // Dialog button that shows "No Assist" instead of the player name and shirt
     // at the place where the first player was clicked
-    if (globalController.lastClickedPlayer.value.lastName == buttonText) {
+    if (gameController.getLastClickedPlayer().lastName == buttonText) {
       return DialogButton(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -239,7 +227,7 @@ Obx buildDialogButton(BuildContext context, Player associatedPlayer) {
           // set height and width of buttons so the shirt and name are fitting inside
           height: width * 0.14,
           width: width * 0.14,
-          color: globalController.lastClickedPlayer.value == associatedPlayer
+          color: gameController.getLastClickedPlayer() == associatedPlayer
               ? Colors.purple
               : Color.fromARGB(255, 180, 211, 236),
           onPressed: () {
@@ -292,7 +280,7 @@ Obx buildDialogButton(BuildContext context, Player associatedPlayer) {
         // set height and width of buttons so the shirt and name are fitting inside
         height: width * 0.14,
         width: width * 0.14,
-        color: globalController.lastClickedPlayer.value == associatedPlayer
+        color: gameController.getLastClickedPlayer() == associatedPlayer
             ? Colors.purple
             : Color.fromARGB(255, 180, 211, 236),
         onPressed: () {

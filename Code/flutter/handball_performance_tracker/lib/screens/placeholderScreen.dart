@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:handball_performance_tracker/widgets/nav_drawer.dart';
-import './../../controllers/globalController.dart';
 
-class PlaceholderScreen extends GetView<GlobalController> {
+import '../controllers/gameController.dart';
+
+class PlaceholderScreen extends GetView<GameController> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override

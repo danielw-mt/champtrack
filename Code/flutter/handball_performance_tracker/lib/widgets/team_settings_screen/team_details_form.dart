@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../controllers/globalController.dart';
+
+import '../../controllers/gameController.dart';
 
 // Create a Form widget.
 class TeamDetailsForm extends StatefulWidget {
@@ -23,8 +24,8 @@ class TeamDetailsFormState extends State<TeamDetailsForm> {
   @override
   Widget build(BuildContext context) {
     // Build a Form widget using the _formKey created above.
-    return GetBuilder<GlobalController>(
-      builder: (GlobalController globalController) {
+    return GetBuilder<GameController>(
+      builder: (GameController gameController) {
         return Form(
           key: _formKey,
           child: Column(
@@ -32,7 +33,7 @@ class TeamDetailsFormState extends State<TeamDetailsForm> {
             children: [
               Text("Team Name"),
               TextFormField(
-                initialValue: globalController.selectedTeam.value.name,
+                initialValue: gameController.getSelectedTeam().name,
                 // The validator receives the text that the user has entered.
                 validator: (value) {
                   if (value == null || value.isEmpty) {

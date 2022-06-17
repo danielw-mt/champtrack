@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../controllers/globalController.dart';
+import 'package:handball_performance_tracker/constants/team_constants.dart';
+import '../../controllers/gameController.dart';
 import 'package:get/get.dart';
 import '../../data/player.dart';
 
@@ -10,9 +11,8 @@ class OnFieldCheckbox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<GlobalController>(builder: (globalController) {
-      List<Player> playersOnField =
-          globalController.selectedTeam.value.onFieldPlayers;
+    return GetBuilder<GameController>(builder: (gameController) {
+      List<Player> playersOnField = gameController.getOnFieldPlayers();
       return Checkbox(
         value: playersOnField.contains(player), //playersOnField[index],
         onChanged: (value) {
@@ -20,19 +20,19 @@ class OnFieldCheckbox extends StatelessWidget {
           int numOnField = playersOnField.length;
           // when you try to check a checkbox it should only be possible with less than 7 players
           if (value == true) {
-            if (numOnField < 7) {
+            if (numOnField < PLAYER_NUM) {
               if (!playersOnField.contains(player)) {
-                playersOnField.add(player);
+                gameController.addOnFieldPlayer(player);
               }
             }
           } else {
             if (playersOnField.contains(player)) {
-              playersOnField.remove(player);
+              gameController.removeOnFieldPlayer(player);
             }
           }
           // after changing players with the checkboxes, update the player bar with those players
-          globalController.setPlayerBarPlayers();
-          globalController.refresh();
+          gameController.setPlayerBarPlayers();
+          gameController.refresh();
         },
       );
     });

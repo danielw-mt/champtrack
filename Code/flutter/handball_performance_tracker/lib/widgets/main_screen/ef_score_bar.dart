@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:handball_performance_tracker/controllers/globalController.dart';
 import 'package:handball_performance_tracker/data/player.dart';
 import 'package:handball_performance_tracker/utils/fieldSizeParameter.dart'
     as fieldSizeParameter;
 import 'package:handball_performance_tracker/utils/player_helper.dart';
 import 'dart:math';
 import 'package:rainbow_color/rainbow_color.dart';
+
+import '../../controllers/gameController.dart';
 
 // Radius of round edges
 double menuRadius = 8.0;
@@ -95,7 +96,7 @@ class EfScoreBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final GlobalController globalController = Get.find<GlobalController>();
+    final GameController gameController = Get.find<GameController>();
 
     List<Container> buttons = [];
     for (int i = 0; i < getOnFieldIndex().length; i++) {
@@ -114,7 +115,7 @@ class EfScoreBar extends StatelessWidget {
 // @param buttons: Buttons to be displayed in popup
 // @param i: index of button to adapt the vertical position so the popup opens besides the pressed button.
 void showPopup(BuildContext context, List<Container> buttons, int i) {
-  final GlobalController globalController = Get.find<GlobalController>();
+  final GameController gameController = Get.find<GameController>();
   int topPadding = i < 3
       ? max((i - (buttons.length / 2).truncate()), 0)
       : max((i - (buttons.length / 2).round()), 0);
@@ -169,7 +170,7 @@ void showPopup(BuildContext context, List<Container> buttons, int i) {
       // or because of other reasons (chose a player for substitution or just pressed anywhere in screen => player is unselected)
       .then((_) => plusPressed
           ? null
-          : globalController.playerToChange.value = Player());
+          : gameController.setPlayerToChange(Player()));
 }
 
 /// builds a single button which represents a player on efscore player bar
@@ -177,14 +178,14 @@ void showPopup(BuildContext context, List<Container> buttons, int i) {
 /// @return Container with TextButton representing the player.
 ///         On pressing the button a new popup with possible substitute player pops up.
 Container buildPlayerButton(BuildContext context, int i) {
-  final GlobalController globalController = Get.find<GlobalController>();
+  final GameController gameController = Get.find<GameController>();
 
   // Get player which have at least one of the given positions.
   List<Player> playerWithSamePosition(List<String> positions) {
     List<Player> substitutePlayer = [];
     for (int k in getNotOnFieldIndex()) {
       for (String position in positions) {
-        Player player = globalController.selectedTeam.value.players[k];
+        Player player = gameController.getPlayersFromSelectedTeam()[k];
         if (player.positions.contains(position)) {
           substitutePlayer.add(player);
           break;
@@ -197,16 +198,14 @@ Container buildPlayerButton(BuildContext context, int i) {
   // Popup after clicking on one player at efscore bar.
   void popupSubstitutePlayer() {
     // Save pressed player, so this player can be changed in the next step.
-    globalController.playerToChange.value = globalController
-        .selectedTeam.value.players[globalController.playerBarPlayers[i]];
-    globalController.refresh();
+    gameController.setPlayerToChange(gameController.getPlayersFromSelectedTeam()[gameController.getPlayerBarPlayers()[i]]);
+    gameController.refresh();
 
     // Build buttons out of players that are not on field and have the same position as pressed player.
-    List<Player> players = playerWithSamePosition(globalController.selectedTeam
-        .value.players[globalController.playerBarPlayers[i]].positions);
+    List<Player> players = playerWithSamePosition(gameController.getPlayersFromSelectedTeam()[gameController.getPlayerBarPlayers()[i]].positions);
     List<Container> buttons = [];
     for (int k = 0; k < players.length; k++) {
-      int l = globalController.selectedTeam.value.players.indexOf(players[k]);
+      int l = gameController.getPlayersFromSelectedTeam().indexOf(players[k]);
       Container button = buildPopupPlayerButton(context, l);
       buttons.add(button);
     }
@@ -228,8 +227,7 @@ Container buildPlayerButton(BuildContext context, int i) {
     child: Stack(
       children: [
         Obx(
-          () => getButton(globalController.selectedTeam.value
-              .players[globalController.playerBarPlayers[i]]),
+          () => getButton(gameController.getPlayersFromSelectedTeam()[gameController.getPlayerBarPlayers()[i]]),
         ),
         SizedBox(
           height: buttonHeight,
@@ -257,29 +255,28 @@ Container buildPlayerButton(BuildContext context, int i) {
 }
 
 /// builds a single button which represents a player on popup menu.
-/// @param i: Index of player that is represented by the button of globalController.selectedTeam.value.players.
+/// @param i: Index of player that is represented by the button of gameController.getSelectedPlayersFromSelectedTeam().
 /// @return Container with TextButton representing the player.
-///         The index of player which button was pressed in globalController.selectedTeam.value.onFieldPlayers is changed with index of player
-///           with index i in globalController.selectedTeam.value.players.
+///         The index of player which button was pressed in gameController.getOnFieldPlayers() is changed with index of player
+///           with index i in gameController.getSelectedPlayersFromSelectedTeam().
 Container buildPopupPlayerButton(BuildContext context, int i) {
-  final GlobalController globalController = Get.find<GlobalController>();
+  final GameController gameController = Get.find<GameController>();
 
-  // Changes player which was pressed in the efscore bar (globalController.playerToChange)
+  // Changes player which was pressed in the efscore bar (gameController.getPlayerToChange)
   // with a player which was pressed in a popup dialog.
   void changePlayer() {
-    // get index of player which was pressed in efscore bar in globalController.selectedTeam.value.onFieldPlayers
-    int k = globalController.selectedTeam.value.onFieldPlayers
-        .indexOf(globalController.playerToChange.value);
-    // Change the player which was pressed in efscore bar in globalController.selectedTeam.value.onFieldPlayers
+    // get index of player which was pressed in efscore bar in gameController.getOnFieldPlayers()
+    int k = gameController.getOnFieldPlayers()
+        .indexOf(gameController.getPlayerToChange());
+    // Change the player which was pressed in efscore bar in gameController.getOnFieldPlayers()
     // to the player which was pressed in popup dialog.
-    globalController.selectedTeam.value.onFieldPlayers[k] =
-        globalController.selectedTeam.value.players[i];
+    gameController.setOnFieldPlayer(k, gameController.getPlayersFromSelectedTeam()[i]);
     // Update player bar players
-    int l = globalController.selectedTeam.value.players
-        .indexOf(globalController.playerToChange.value);
-    int indexToChange = globalController.playerBarPlayers.indexOf(l);
-    globalController.playerBarPlayers[indexToChange] = i;
-    globalController.refresh();
+    int l = gameController.getPlayersFromSelectedTeam()
+        .indexOf(gameController.getPlayerToChange());
+    int indexToChange = gameController.getPlayerBarPlayers().indexOf(l);
+    gameController.getPlayerBarPlayers()[indexToChange] = i;
+    gameController.refresh();
   }
 
   // build button for popup
@@ -293,7 +290,7 @@ Container buildPopupPlayerButton(BuildContext context, int i) {
     child: Stack(
       children: [
         Obx(
-          () => getButton(globalController.selectedTeam.value.players[i]),
+          () => getButton(gameController.getPlayersFromSelectedTeam()[i]),
         ),
         SizedBox(
           height: buttonHeight,
@@ -303,7 +300,7 @@ Container buildPopupPlayerButton(BuildContext context, int i) {
             onPressed: () {
               changePlayer();
               Navigator.pop(context, true);
-              globalController.playerToChange.value = Player();
+              gameController.setPlayerToChange(Player());
             },
             style: TextButton.styleFrom(
               // Color of pressed player changes on efscore bar.
@@ -323,7 +320,7 @@ Container buildPopupPlayerButton(BuildContext context, int i) {
 }
 
 Row getButton(Player player) {
-  final GlobalController globalController = Get.find<GlobalController>();
+  final GameController gameController = Get.find<GameController>();
 
   return Row(
     children: [
@@ -335,7 +332,7 @@ Row getButton(Player player) {
         alignment: Alignment.center,
 
         decoration: BoxDecoration(
-            color: globalController.playerToChange.value == player
+            color: gameController.getPlayerToChange() == player
                 ? pressedButtonColor
                 : buttonColor,
             // make round edges
@@ -361,7 +358,7 @@ Row getButton(Player player) {
           width: scorebarButtonWidth / 5 * 3,
           height: buttonHeight,
           alignment: Alignment.center,
-          color: globalController.playerToChange.value == player
+          color: gameController.getPlayerToChange() == player
               ? pressedButtonColor
               : buttonColor,
           child: Text(
@@ -398,7 +395,6 @@ Row getButton(Player player) {
 
 // Builds the plus button which is only present in popup.
 Container buildPlusButton(BuildContext context, int i) {
-  final GlobalController globalController = Get.find<GlobalController>();
   // Popup after clicking on plus at popup dialog.
   // Shows all player which are not on field.
   void popupAllPlayer() {

@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
-import '../../controllers/globalController.dart';
 import 'package:get/get.dart';
+
+import '../../controllers/gameController.dart';
 
 
 // Bottom Nav Bar for team settings screen
 class TeamSettingsBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<GlobalController>(
-      builder: (GlobalController globalController) {
+    return GetBuilder<GameController>(
+      builder: (GameController gameController) {
         return Container(
           color: Color(0xFF3F5AA6),
           child: TabBar(
@@ -18,8 +19,7 @@ class TeamSettingsBar extends StatelessWidget {
             indicatorPadding: EdgeInsets.all(5.0),
             indicatorColor: Colors.blue,
             onTap: (int tabNumber) {
-              globalController.selectedTeamSetting.value = tabNumber;
-              globalController.refresh();
+              gameController.setSelectedTeamSetting(tabNumber);
             },
             tabs: [
               Tab(

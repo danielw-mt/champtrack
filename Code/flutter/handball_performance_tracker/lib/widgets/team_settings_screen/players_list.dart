@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../controllers/appController.dart';
-import '/../controllers/globalController.dart';
+import '../../controllers/gameController.dart';
 import '../../data/player.dart';
 import '../../data/team.dart';
 import 'on_field_checkbox.dart';
 
-class PlayersList extends GetView<GlobalController> {
+class PlayersList extends GetView<GameController> {
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<GlobalController>(
-      builder: (globalController) => Expanded(
+    return GetBuilder<GameController>(
+      builder: (gameController) => Expanded(
         child: ListView.builder(
             shrinkWrap: true,
-            itemCount: globalController.selectedTeam.value.players.length,
+            itemCount: gameController.getPlayersFromSelectedTeam().length,
             itemBuilder: (context, index) {
               Player player =
-                  globalController.selectedTeam.value.players[index];
+                  gameController.getPlayersFromSelectedTeam()[index];
               return Row(
                 children: [
                   FloatingActionButton(
@@ -43,19 +43,19 @@ class PlayersList extends GetView<GlobalController> {
   void removePlayerFromTeam(Player player) {
     // need to get fresh appController here every time the method is called
     final AppController appController = Get.find<AppController>();
-    final GlobalController globalController = Get.find<GlobalController>();
+    final GameController gameController = Get.find<GameController>();
     // in order to update the team in the teams list of the local state
     Team selectedCacheTeam = appController.getAvailableTeams()
         .where((cachedTeamItem) =>
-            (cachedTeamItem.id == globalController.selectedTeam.value.id))
+            (cachedTeamItem.id == gameController.getSelectedTeam().id))
         .toList()[0];
     selectedCacheTeam.players.remove(player);
     // update selected team with the player list as well
-    globalController.selectedTeam.value = selectedCacheTeam;
+    gameController.setSelectedTeam(selectedCacheTeam);
     // remove the player from onFieldPlayers if necessary
-    if (globalController.selectedTeam.value.onFieldPlayers.contains(player)) {
-      globalController.selectedTeam.value.onFieldPlayers.remove(player);
+    if (gameController.getOnFieldPlayers().contains(player)) {
+      gameController.removeOnFieldPlayer(player);
     }
-    globalController.refresh();
+    gameController.refresh();
   }
 }

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import '../../controllers/appController.dart';
-import '../../controllers/globalController.dart';
+import '../../controllers/gameController.dart';
 import 'package:get/get.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 import '../../utils/gameControl.dart';
 
-class StopWatchBar extends GetView<GlobalController> {
+class StopWatchBar extends GetView<GameController> {
   // stop watch widget that allows to the time to be started, stopped, resetted and in-/decremented by 1 sec
 
   @override
@@ -125,12 +125,12 @@ class StopWatchBar extends GetView<GlobalController> {
   }
 }
 
-class StartStopIcon extends GetView<GlobalController> {
+class StartStopIcon extends GetView<GameController> {
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<GlobalController>(
-        builder: (GlobalController globalController) {
-      bool gameRunning = globalController.gameRunning.value;
+    return GetBuilder<GameController>(
+        builder: (GameController gameController) {
+      bool gameRunning = gameController.getGameIsRunning();
       return GestureDetector(
         onTap: () {
           if (gameRunning) {

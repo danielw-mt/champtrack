@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:handball_performance_tracker/controllers/globalController.dart';
 import 'package:handball_performance_tracker/utils/initializeLocalData.dart';
 import 'package:handball_performance_tracker/widgets/main_screen/ef_score_bar.dart';
 import 'package:handball_performance_tracker/widgets/main_screen/ef_score_bar.dart'
@@ -17,7 +16,6 @@ import '../widgets/main_screen/action_feed.dart';
 
 class MainScreen extends StatelessWidget {
   // screen where the game takes place
-  final GlobalController globalController = Get.put(GlobalController());
   final AppController appController = Get.put(AppController());
   final GameController gameController = Get.put(GameController());
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();

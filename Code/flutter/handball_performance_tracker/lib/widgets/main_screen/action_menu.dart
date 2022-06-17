@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:handball_performance_tracker/data/database_repository.dart';
 import '../../controllers/appController.dart';
-import '../../controllers/globalController.dart';
+import '../../controllers/gameController.dart';
 import 'package:get/get.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import '../../data/game_action.dart';
@@ -12,10 +12,10 @@ import 'playermenu.dart';
 import 'dart:math';
 
 void callActionMenu(BuildContext context) {
-  final GlobalController globalController = Get.find<GlobalController>();
+  final GameController gameController = Get.find<GameController>();
 
   // if game is not running give a warning
-  if (globalController.gameRunning.value == false) {
+  if (gameController.getGameIsRunning() == false) {
     Alert(
       context: context,
       title: "Error game did not start yet",
@@ -49,12 +49,12 @@ void callActionMenu(BuildContext context) {
 
 ///
 bool determineAttack() {
-  final GlobalController globalController = Get.find<GlobalController>();
+  final GameController gameController = Get.find<GameController>();
   // decide whether attack or defense actions should be displayed depending
   //on what side the team goals is and whether they are attacking or defending
   bool attacking = false;
-  bool attackIsLeft = globalController.attackIsLeft.value;
-  bool fieldIsLeft = globalController.fieldIsLeft.value;
+  bool attackIsLeft = gameController.getAttackIsLeft();
+  bool fieldIsLeft = gameController.getFieldIsLeft();
 
   // when our goal is to the right (= attackIsLeft) and the field is left
   //display attack options
@@ -208,7 +208,7 @@ Widget buildDialogButtonMenu(
 DialogButton buildDialogButton(
     BuildContext context, String buttonText, Color color,
     [icon]) {
-  GlobalController globalController = Get.find<GlobalController>();
+  GameController gameController = Get.find<GameController>();
   AppController appController =  Get.find<AppController>();
   final DatabaseRepository repository = appController.repository;
   void logAction() async {
@@ -222,11 +222,11 @@ DialogButton buildDialogButton(
     String actionType = determineAttack() ? attack : defense;
 
     GameAction action = GameAction(
-        teamId: globalController.selectedTeam.value.id!,
+        teamId: gameController.getSelectedTeam().id!,
         gameId: currentGameId,
         type: actionType,
         actionType: actionMapping[actionType]![buttonText]!,
-        throwLocation: globalController.lastLocation.cast<String>(),
+        throwLocation: gameController.getLastLocation().cast<String>(),
         timestamp: unixTime,
         relativeTime: secondsSinceGameStart);
     appController.addAction(action);

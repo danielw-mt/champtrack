@@ -1,25 +1,24 @@
 import 'package:flutter/material.dart';
 import '../../controllers/appController.dart';
-import '../../data/database_repository.dart';
-import '../../controllers/globalController.dart';
+import '../../controllers/gameController.dart';
 import 'package:get/get.dart';
 import '../../data/team.dart';
 import '../../utils/teamTypeHelpers.dart';
 import '../../constants/team_constants.dart';
 
 // dropdown that shows all available teams belonging to the selected team type
-class TeamDropdown extends GetView<GlobalController> {
+class TeamDropdown extends GetView<GameController> {
   @override
   Widget build(BuildContext context) {
     AppController appController = Get.find<AppController>();
 
     // select a default team
-    // TODO write a function to select the default team in globalController / utils instead of just having "Default team"
+    // TODO write a function to select the default team in gameController / utils instead of just having "Default team"
 
     return // build the dropdown button
         GetBuilder(
-      builder: (GlobalController globalController) {
-        int selectedTeamTypeInt = globalController.selectedTeamType.value;
+      builder: (GameController gameController) {
+        int selectedTeamTypeInt = gameController.getSelectedTeamType();
         String selectedTeamTypeString = TEAM_TYPE_MAPPING[selectedTeamTypeInt];
         // available teams are all the ones that match the selected team type (0,1,2) => "men", "women", "youth"
         List<Team> availableTeams = appController.getAvailableTeams()
@@ -27,7 +26,7 @@ class TeamDropdown extends GetView<GlobalController> {
             .toList();
         updateSelectedTeamAccordingToTeamType();
         return DropdownButton<Team>(
-          value: globalController.selectedTeam.value,
+          value: gameController.getSelectedTeam(),
           icon: const Icon(Icons.arrow_downward),
           elevation: 16,
           style: const TextStyle(color: Colors.deepPurple),
@@ -36,10 +35,10 @@ class TeamDropdown extends GetView<GlobalController> {
             color: Colors.deepPurpleAccent,
           ),
           onChanged: (Team? newTeam) {
-            globalController.selectedTeam.value = availableTeams
+            gameController.setSelectedTeam(availableTeams
                 .where((Team teamItem) => teamItem.id == newTeam?.id)
-                .first;
-            globalController.refresh();
+                .first);
+            gameController.refresh();
           },
           // build dropdown item widgets
           items: availableTeams.map<DropdownMenuItem<Team>>((Team team) {
