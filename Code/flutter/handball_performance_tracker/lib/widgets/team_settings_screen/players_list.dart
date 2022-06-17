@@ -87,8 +87,11 @@ class PlayersList extends GetView<GlobalController> {
                                             },
                                             child: Text(Strings.lDeletePlayer)),
                                       ]),
-                                  PlayerForm(firstName: firstName, lastName: lastName, shirtNumber: shirtNumber,)
-                                  // TODO build a form here
+                                  PlayerForm(
+                                    firstName: firstName,
+                                    lastName: lastName,
+                                    shirtNumber: shirtNumber,
+                                  )
                                 ],
                               ),
                             ),
@@ -124,28 +127,31 @@ class PlayersList extends GetView<GlobalController> {
 }
 
 class PlayerForm extends StatefulWidget {
-   final String firstName = "";
+  final String firstName = "";
   final String lastName = "";
   final String nickName = "";
   final String shirtNumber = "";
-  
+
   const PlayerForm({super.key, firstName, lastName, nickName, shirtNumber});
 
   @override
   PlayerFormState createState() {
     return PlayerFormState(
-        firstName: firstName, lastName: lastName, nickName: nickName, shirtNumber: shirtNumber);
+        firstName: firstName,
+        lastName: lastName,
+        nickName: nickName,
+        shirtNumber: shirtNumber);
   }
 }
 
 // Create a corresponding State class.
 // This class holds data related to the form.
 class PlayerFormState extends State<PlayerForm> {
-  final String firstName = "";
-  final String lastName = "";
-  final String nickName = "";
-  final String shirtNumber = "";
-  PlayerFormState({firstName, lastName, nickName, shirtNumber});
+  String firstName = "";
+  String lastName = "";
+  String nickName = "";
+  String shirtNumber = "";
+  PlayerFormState({required this.firstName, lastName, nickName, shirtNumber});
 
   // Create a global key that uniquely identifies the Form widget
   // and allows validation of the form.
@@ -160,90 +166,94 @@ class PlayerFormState extends State<PlayerForm> {
 
   @override
   Widget build(BuildContext context) {
+    firstNameController.text = firstName;
+    lastNameController.text = lastName;
+
+    shirtNumberController.text = shirtNumber;
     // Build a Form widget using the _formKey created above.
     return Form(
       key: _formKey,
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Row(
-            children: [
-              TextFormField(
-                obscureText: true,
-                decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: Strings.lFirstName),
-                // The validator receives the text that the user has entered.
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter some text';
-                  }
-                  return null;
-                },
-              ),
-              TextFormField(
-                obscureText: true,
-                decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: Strings.lFirstName),
-                // The validator receives the text that the user has entered.
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter some text';
-                  }
-                  return null;
-                },
-              ),
-            ],
-          ),
-          Row(
-            children: [
-              TextFormField(
-                obscureText: true,
-                decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: Strings.lFirstName),
-                // The validator receives the text that the user has entered.
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter some text';
-                  }
-                  return null;
-                },
-              ),
-              TextFormField(
-                controller: shirtNumberController,
-                keyboardType: TextInputType.number,
-                obscureText: true,
-                decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: Strings.lShirtNumber),
-                // The validator receives the text that the user has entered.
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter some text';
-                  }
-                  return null;
-                },
-              ),
-            ],
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 16.0),
-            child: ElevatedButton(
-              onPressed: () {
-                // Validate returns true if the form is valid, or false otherwise.
-                if (_formKey.currentState!.validate()) {
-                  // If the form is valid, display a snackbar. In the real world,
-                  // you'd often call a server or save the information in a database.
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Processing Data')),
-                  );
+          Row(children: [
+            TextFormField(
+              controller: firstNameController,
+              obscureText: true,
+              decoration: InputDecoration(
+                  border: OutlineInputBorder(), labelText: Strings.lFirstName),
+              // The validator receives the text that the user has entered.
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter some text';
                 }
+                return null;
               },
-              child: const Text('Submit'),
             ),
-          ),
+          ]),
+          //     TextFormField(
+          //       controller: lastNameController,
+          //       obscureText: true,
+          //       decoration: InputDecoration(
+          //           border: OutlineInputBorder(), labelText: Strings.lLastName),
+          //       // The validator receives the text that the user has entered.
+          //       validator: (value) {
+          //         if (value == null || value.isEmpty) {
+          //           return 'Please enter some text';
+          //         }
+          //         return null;
+          //       },
+          //     ),
+          //   ],
+          // ),
+          // Row(
+          //   children: [
+          //     TextFormField(
+          //       controller: nickNameController,
+          //       obscureText: true,
+          //       decoration: InputDecoration(
+          //           border: OutlineInputBorder(), labelText: Strings.lNickName),
+          //       // The validator receives the text that the user has entered.
+          //       validator: (value) {
+          //         if (value == null || value.isEmpty) {
+          //           return 'Please enter some text';
+          //         }
+          //         return null;
+          //       },
+          //     ),
+          //     TextFormField(
+          //       controller: shirtNumberController,
+          //       keyboardType: TextInputType.number,
+          //       obscureText: true,
+          //       decoration: InputDecoration(
+          //           border: OutlineInputBorder(),
+          //           labelText: Strings.lShirtNumber),
+          //       // The validator receives the text that the user has entered.
+          //       validator: (value) {
+          //         if (value == null || value.isEmpty) {
+          //           return 'Please enter some text';
+          //         }
+          //         return null;
+          //       },
+          //     ),
+          //   ],
+          // ),
+          // Padding(
+          //   padding: const EdgeInsets.symmetric(vertical: 16.0),
+          //   child: ElevatedButton(
+          //     onPressed: () {
+          //       // Validate returns true if the form is valid, or false otherwise.
+          //       if (_formKey.currentState!.validate()) {
+          //         // If the form is valid, display a snackbar. In the real world,
+          //         // you'd often call a server or save the information in a database.
+          //         ScaffoldMessenger.of(context).showSnackBar(
+          //           const SnackBar(content: Text('Processing Data')),
+          //         );
+          //       }
+          //     },
+          //     child: const Text('Submit'),
+          //   ),
+          // ),
         ],
       ),
     );
