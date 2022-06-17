@@ -144,19 +144,25 @@ class FieldPainter extends CustomPainter {
     }
 
     // draw bigger 9m oval
-    canvas.drawOval(
+    canvas.drawArc(
         Rect.fromCenter(
             center: Offset(xOffset, fieldSizeParameter.fieldHeight / 2),
             width: fieldSizeParameter.nineMeterRadiusX * 2,
             height: fieldSizeParameter.nineMeterRadiusY * 2),
+        math.pi / 2,
+        -math.pi,
+        false,
         Paint()..color = Color.fromARGB(103, 169, 172, 209));
 
     // draw smaller 6m oval
-    canvas.drawOval(
+    canvas.drawArc(
         Rect.fromCenter(
             center: Offset(xOffset, fieldSizeParameter.fieldHeight / 2),
             width: fieldSizeParameter.sixMeterRadiusX * 2,
             height: fieldSizeParameter.sixMeterRadiusY * 2),
+        math.pi / 2,
+        -math.pi,
+        false,
         Paint()..color = Color.fromARGB(141, 129, 142, 216));
 
     // draw 7m line
@@ -230,11 +236,13 @@ class DashedPathPainter extends CustomPainter {
 
     // definde 9m oval
     originalPath = Path()
-      ..addOval(
+      ..addArc(
         Rect.fromCenter(
             center: Offset(xOffset, fieldSizeParameter.fieldHeight / 2),
             width: fieldSizeParameter.nineMeterRadiusX * 2,
             height: fieldSizeParameter.nineMeterRadiusY * 2),
+        math.pi / 2,
+        -math.pi,
       );
 
     _dashedPathProperties = DashedPathProperties(
