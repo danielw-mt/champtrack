@@ -74,8 +74,6 @@ void stopGame() async {
   DateTime dateTime = DateTime.now();
   currentGame.date = dateTime;
   currentGame.stopTime = dateTime.toUtc().millisecondsSinceEpoch;
-  currentGame.scoreHome = globalController.homeTeamGoals.value;
-  currentGame.scoreOpponent = globalController.opponentTeamGoals.value;
   currentGame.players = globalController.chosenPlayers.cast<Player>();
 
   globalController.repository.updateGame(currentGame);

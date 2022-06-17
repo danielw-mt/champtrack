@@ -117,12 +117,6 @@ class GlobalController extends GetxController {
   /// last game object written to db
   Rx<Game> currentGame = Game(date: DateTime.now()).obs;
 
-  /// how many goals the user's team scored
-  RxInt homeTeamGoals = 0.obs;
-
-  /// how many goals the guest's team scored
-  RxInt opponentTeamGoals = 0.obs;
-
   /// @return rx list
   /// first element is the sector as a string, second element distinguishes the distance ("<6", "6to9", ">9")
   var lastLocation = [].obs;
