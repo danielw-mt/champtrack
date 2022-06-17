@@ -127,31 +127,33 @@ class PlayersList extends GetView<GlobalController> {
 }
 
 class PlayerForm extends StatefulWidget {
-  final String firstName = "";
-  final String lastName = "";
-  final String nickName = "";
-  final String shirtNumber = "";
+  final String firstName;
+  final String lastName;
+  final String nickName;
+  final String shirtNumber;
 
-  const PlayerForm({super.key, firstName, lastName, nickName, shirtNumber});
+  const PlayerForm(
+      {super.key,
+      this.firstName = "",
+      this.lastName = "",
+      this.nickName = "",
+      this.shirtNumber = ""});
 
   @override
   PlayerFormState createState() {
-    return PlayerFormState(
-        firstName: firstName,
-        lastName: lastName,
-        nickName: nickName,
-        shirtNumber: shirtNumber);
+    return PlayerFormState(firstName, lastName, nickName, shirtNumber);
   }
 }
 
 // Create a corresponding State class.
 // This class holds data related to the form.
 class PlayerFormState extends State<PlayerForm> {
-  String firstName = "";
-  String lastName = "";
-  String nickName = "";
-  String shirtNumber = "";
-  PlayerFormState({required this.firstName, lastName, nickName, shirtNumber});
+  String firstName;
+  String lastName;
+  String nickName;
+  String shirtNumber;
+  PlayerFormState(
+      this.firstName, this.lastName, this.nickName, this.shirtNumber);
 
   // Create a global key that uniquely identifies the Form widget
   // and allows validation of the form.
@@ -168,92 +170,108 @@ class PlayerFormState extends State<PlayerForm> {
   Widget build(BuildContext context) {
     firstNameController.text = firstName;
     lastNameController.text = lastName;
-
+    // TODO nickname
     shirtNumberController.text = shirtNumber;
+    
     // Build a Form widget using the _formKey created above.
+    double width = MediaQuery.of(context).size.width;
     return Form(
       key: _formKey,
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Row(children: [
-            TextFormField(
-              controller: firstNameController,
-              obscureText: true,
-              decoration: InputDecoration(
-                  border: OutlineInputBorder(), labelText: Strings.lFirstName),
-              // The validator receives the text that the user has entered.
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter some text';
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              SizedBox(
+                width: width * 0.25,
+                child: TextFormField(
+                  controller: firstNameController,
+                  decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: Strings.lFirstName),
+                  // The validator receives the text that the user has entered.
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter some text';
+                    }
+                    return null;
+                  },
+                ),
+              ),
+              SizedBox(
+                width: width * 0.25,
+                child: TextFormField(
+                  controller: lastNameController,
+                  decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: Strings.lLastName),
+                  // The validator receives the text that the user has entered.
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter some text';
+                    }
+                    return null;
+                  },
+                ),
+              ),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              SizedBox(
+                width: width * 0.25,
+                child: TextFormField(
+                  controller: nickNameController,
+                  decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: Strings.lNickName),
+                  // The validator receives the text that the user has entered.
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter some text';
+                    }
+                    return null;
+                  },
+                ),
+              ),
+              SizedBox(
+                width: width * 0.25,
+                child: TextFormField(
+                  controller: shirtNumberController,
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: Strings.lShirtNumber),
+                  // The validator receives the text that the user has entered.
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter some text';
+                    }
+                    return null;
+                  },
+                ),
+              ),
+            ],
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 16.0),
+            child: ElevatedButton(
+              onPressed: () {
+                // Validate returns true if the form is valid, or false otherwise.
+                if (_formKey.currentState!.validate()) {
+                  // If the form is valid, display a snackbar. In the real world,
+                  // you'd often call a server or save the information in a database.
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Processing Data')),
+                  );
                 }
-                return null;
               },
+              child: const Text('Submit'),
             ),
-          ]),
-          //     TextFormField(
-          //       controller: lastNameController,
-          //       obscureText: true,
-          //       decoration: InputDecoration(
-          //           border: OutlineInputBorder(), labelText: Strings.lLastName),
-          //       // The validator receives the text that the user has entered.
-          //       validator: (value) {
-          //         if (value == null || value.isEmpty) {
-          //           return 'Please enter some text';
-          //         }
-          //         return null;
-          //       },
-          //     ),
-          //   ],
-          // ),
-          // Row(
-          //   children: [
-          //     TextFormField(
-          //       controller: nickNameController,
-          //       obscureText: true,
-          //       decoration: InputDecoration(
-          //           border: OutlineInputBorder(), labelText: Strings.lNickName),
-          //       // The validator receives the text that the user has entered.
-          //       validator: (value) {
-          //         if (value == null || value.isEmpty) {
-          //           return 'Please enter some text';
-          //         }
-          //         return null;
-          //       },
-          //     ),
-          //     TextFormField(
-          //       controller: shirtNumberController,
-          //       keyboardType: TextInputType.number,
-          //       obscureText: true,
-          //       decoration: InputDecoration(
-          //           border: OutlineInputBorder(),
-          //           labelText: Strings.lShirtNumber),
-          //       // The validator receives the text that the user has entered.
-          //       validator: (value) {
-          //         if (value == null || value.isEmpty) {
-          //           return 'Please enter some text';
-          //         }
-          //         return null;
-          //       },
-          //     ),
-          //   ],
-          // ),
-          // Padding(
-          //   padding: const EdgeInsets.symmetric(vertical: 16.0),
-          //   child: ElevatedButton(
-          //     onPressed: () {
-          //       // Validate returns true if the form is valid, or false otherwise.
-          //       if (_formKey.currentState!.validate()) {
-          //         // If the form is valid, display a snackbar. In the real world,
-          //         // you'd often call a server or save the information in a database.
-          //         ScaffoldMessenger.of(context).showSnackBar(
-          //           const SnackBar(content: Text('Processing Data')),
-          //         );
-          //       }
-          //     },
-          //     child: const Text('Submit'),
-          //   ),
-          // ),
+          ),
         ],
       ),
     );
