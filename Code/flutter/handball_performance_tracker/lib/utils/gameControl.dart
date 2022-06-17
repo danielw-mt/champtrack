@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:handball_performance_tracker/constants/team_constants.dart';
 import '../controllers/globalController.dart';
 import '../data/player.dart';
 import '../data/game.dart';
@@ -13,18 +14,19 @@ void startGame(BuildContext context) async {
   // check if enough players have been selected
   var numPlayersOnField =
       globalController.selectedTeam.value.onFieldPlayers.length;
-  if (numPlayersOnField != 7) {
+  if (numPlayersOnField != PLAYER_NUM) {
     // create alert if someone tries to start the game without enough players
     Alert(
             context: context,
             title: "Warning",
             type: AlertType.error,
-            desc: "You can only start the game with 7 players on the field")
+            desc: "You can only start the game with $PLAYER_NUM players on the field")
         .show();
     return;
   }
 
   // start a new game in firebase
+  print("starting new game");
   DateTime dateTime = DateTime.now();
   int unixTimeStamp = dateTime.toUtc().millisecondsSinceEpoch;
   Game newGame = Game(

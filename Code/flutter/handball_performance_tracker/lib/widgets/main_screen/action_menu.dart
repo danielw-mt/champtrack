@@ -8,7 +8,6 @@ import '../../data/game_action.dart';
 import '../../data/database_repository.dart';
 import '../../constants/game_actions.dart';
 import 'playermenu.dart';
-import 'package:stop_watch_timer/stop_watch_timer.dart';
 import 'dart:math';
 
 void callActionMenu(BuildContext context) {

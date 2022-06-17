@@ -1,6 +1,5 @@
 import 'package:handball_performance_tracker/controllers/globalController.dart';
 import 'package:get/get.dart';
-import 'package:handball_performance_tracker/data/player.dart';
 
 // Function to get list of indices where the list playersOnField is true.
 // Those are the indices of players on field in chosenPlayers.

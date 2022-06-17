@@ -1,9 +1,6 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:handball_performance_tracker/utils/icons.dart';
 import 'package:handball_performance_tracker/data/database_repository.dart';
-import 'package:handball_performance_tracker/data/game.dart';
-import 'package:handball_performance_tracker/utils/player_helper.dart';
 import '../../controllers/globalController.dart';
 import 'package:get/get.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';

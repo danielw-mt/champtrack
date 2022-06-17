@@ -1,5 +1,4 @@
 import 'package:get/get.dart';
-import 'package:handball_performance_tracker/data/club.dart';
 import 'package:handball_performance_tracker/data/database_repository.dart';
 import 'package:handball_performance_tracker/utils/player_helper.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
@@ -7,25 +6,19 @@ import '../data/game_action.dart';
 import '../data/team.dart';
 import '../data/game.dart';
 import '../data/player.dart';
-import 'dart:async';
 import '../utils/feed_logic.dart';
 import '../constants/settings_config.dart';
 
 /// Class for managing global state of the app.
 /// Refer to https://github.com/jonataslaw/getx/wiki/State-Management
 class GlobalController extends GetxController {
-  /// initialization handling
+  /// handles teams initialization when building MainScreen
   var isInitialized = false;
 
   ///
   // database handling
   ///
   var repository = DatabaseRepository();
-
-  ///
-  // currently signed in club
-  /// @return Rx<Club>
-  Rx<Club> currentClub = Club().obs;
 
   ////////
   /// Team Selection Screen
@@ -51,27 +44,17 @@ class GlobalController extends GetxController {
   // settingsscreen
   ////
 
-  // TODO check if these player variables are being needed now
-  Rx<Player> selectedPlayer = Player().obs;
-  RxList<Player> availablePlayers = <Player>[].obs;
+  // TODO this might not be needed anymore when #192 is fixed 
   RxList<Player> chosenPlayers = <Player>[].obs;
 
   /// By default attack is at the left side of the screen
   /// during half time this can be switched
   RxBool attackIsLeft = true.obs;
 
-  ////
-  // Helper screen
-  ////
-  
-  
   //////
   /// Main screen
   //////
 
-  // TODO is something missing here?
-  /// name of the player who made a goal, used to adapt the respective button color.
-  
   Rx<StopWatchTimer> stopWatchTimer = StopWatchTimer(
     mode: StopWatchMode.countUp,
   ).obs;
@@ -93,7 +76,7 @@ class GlobalController extends GetxController {
   /// text to be displayed in the player menu title on the right side, changes after a goal
   RxString playerMenuText = "".obs;
 
-  // TODO this method is unnecessary unless we want getters and setters to exist for every method
+  // TODO this method is unnecessary unless we want getters and setters to exist for every method -> fix this in scope of 163
   void updatePlayerMenuText() {
     // changing from dep = input.obs
     playerMenuText.value = "Assist";
