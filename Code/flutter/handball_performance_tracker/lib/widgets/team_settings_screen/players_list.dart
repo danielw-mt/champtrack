@@ -10,6 +10,7 @@ class PlayersList extends GetView<GameController> {
   @override
   Widget build(BuildContext context) {
     return GetBuilder<GameController>(
+      id: "players-list",
       builder: (gameController) => Expanded(
         child: ListView.builder(
             shrinkWrap: true,
@@ -56,6 +57,5 @@ class PlayersList extends GetView<GameController> {
     if (gameController.getOnFieldPlayers().contains(player)) {
       gameController.removeOnFieldPlayer(player);
     }
-    gameController.refresh();
   }
 }

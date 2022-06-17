@@ -11,6 +11,7 @@ class StopWatchBar extends GetView<GameController> {
   @override
   Widget build(BuildContext context) {
     return GetBuilder<AppController>(
+      id: "stopwatch-bar",
       builder: (AppController appController) {
         StopWatchTimer stopWatchTimer = appController.getCurrentGame().stopWatch;
         return Row(
@@ -129,6 +130,7 @@ class StartStopIcon extends GetView<GameController> {
   @override
   Widget build(BuildContext context) {
     return GetBuilder<GameController>(
+        id: "start-stop-icon",
         builder: (GameController gameController) {
       bool gameRunning = gameController.getGameIsRunning();
       return GestureDetector(

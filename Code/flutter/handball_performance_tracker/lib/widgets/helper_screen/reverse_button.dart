@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import '../../controllers/appController.dart';
-import './../../controllers/globalController.dart';
 import 'package:get/get.dart';
+import '../../controllers/gameController.dart';
 
-class ReverseButton extends GetView<GlobalController> {
+class ReverseButton extends GetView<GameController> {
   final AppController appController = Get.find<AppController>();
 
   @override

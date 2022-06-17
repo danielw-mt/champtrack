@@ -58,5 +58,4 @@ void removeFeedItem(GameAction action) {
   DatabaseRepository().deleteAction(action);
   // delete action from game state
   gameController.removeFeedAction(action);
-  gameController.refresh();
 }

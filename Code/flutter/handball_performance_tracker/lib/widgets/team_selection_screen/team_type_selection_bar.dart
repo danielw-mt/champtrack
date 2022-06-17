@@ -7,6 +7,7 @@ class TeamTypeSelectionBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetBuilder<GameController>(
+      id: "team-type-selection-bar",
       builder: (GameController gameController) {
         return Container(
           color: Color(0xFF3F5AA6),

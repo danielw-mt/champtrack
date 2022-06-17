@@ -9,6 +9,7 @@ class TeamSettingsBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetBuilder<GameController>(
+      id: "team-settings-bar",
       builder: (GameController gameController) {
         return Container(
           color: Color(0xFF3F5AA6),

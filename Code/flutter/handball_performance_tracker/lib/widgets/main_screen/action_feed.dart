@@ -11,6 +11,7 @@ class ActionFeed extends GetView<GameController> {
   @override
   Widget build(BuildContext context) {
     return GetBuilder<GameController>(
+      id: "action-feed",
       builder: (gameController) {
         List<GameAction> feedActions = gameController.getFeedActions();
         return Container(

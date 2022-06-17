@@ -14,6 +14,7 @@ final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 @override
 Widget build(BuildContext context) {
   return GetBuilder<GameController>(
+    id: "team-setting-screen",
     builder: (gameController) {
       return DefaultTabController(
         initialIndex: gameController.getSelectedTeamSetting(),

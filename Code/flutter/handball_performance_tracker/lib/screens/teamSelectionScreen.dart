@@ -15,6 +15,7 @@ class TeamSelectionScreen extends GetView<GameController> {
   @override
   Widget build(BuildContext context) {
     return GetBuilder<GameController>(
+      id: "team-selection-screen",
       builder: (gameController) {
         return DefaultTabController(
           initialIndex: gameController.getSelectedTeamSetting(),

@@ -18,7 +18,7 @@ class GameController extends GetxController {
   /// setter for selectedTeam
   void setSelectedTeam(Team team) {
     _selectedTeam.value = team;
-    update();
+    update(["team-type-selection-bar", "players-list", "team-details-form-state"]);
   }
 
   /// return the first player in selectedTeam with the given playerId
@@ -39,19 +39,19 @@ class GameController extends GetxController {
   /// set the onFieldPlayer from selectedTeam stored at the given index
   void setOnFieldPlayer(int index, Player player) {
     _selectedTeam.value.onFieldPlayers[index] = player;
-    update();
+    update(["action-feed", "on-field-checkbox"]);
   }
 
   /// add additional onFieldPlayer to selectedTeam
   void addOnFieldPlayer(Player player) {
     _selectedTeam.value.onFieldPlayers.add(player);
-    update();
+    update(["action-feed", "on-field-checkbox"]);
   }
 
   /// remove the given Player from onFieldPlayers of selectedTeam
   void removeOnFieldPlayer(Player player) {
     _selectedTeam.value.onFieldPlayers.remove(player);
-    update();
+    update(["action-feed", "on-field-checkbox"]);
   }
 
   /// 0: male, 1: female, 2: youth
@@ -63,7 +63,7 @@ class GameController extends GetxController {
   /// setter for selectedTeamType
   void setSelectedTeamType(int tabNumber) {
     _selectedTeamType.value = tabNumber;
-    update();
+    update(["team-dropdown", "team-type-selection-bar"]);
   }
 
   /////////
@@ -73,12 +73,13 @@ class GameController extends GetxController {
   /// 0: playerSettings, 1: games, 2: teamDetails
   RxInt _selectedTeamSetting = 0.obs;
 
+  /// getter for selectedTeamSetting
   int getSelectedTeamSetting() => _selectedTeamSetting.value;
 
   /// setter for selectedTeamSetting
   void setSelectedTeamSetting(int tabNumber) {
-    _selectedTeamType.value = tabNumber;
-    update();
+    _selectedTeamSetting.value = tabNumber;
+    update(["team-selection-screen", "team-setting-screen", "team-settings-bar"]);
   }
 
   ////
@@ -98,7 +99,7 @@ class GameController extends GetxController {
   /// setter for attackIsLeft
   setAttackIsLeft(bool attackIsLeft) {
     _attackIsLeft.value = attackIsLeft;
-    update();
+    //update();
   }
 
   //////
@@ -112,7 +113,7 @@ class GameController extends GetxController {
       }).obs;
   
   /// getter for feedTimer
-  getFeedTimer() => _feedTimer;
+  getFeedTimer() => _feedTimer.value;
 
   // Variable to control periodic timer resets for feed
   // makes sure that timer doesn't get reset twice
@@ -124,7 +125,7 @@ class GameController extends GetxController {
   /// setter for periodicResetIsHappening
   setPeriodicResetIsHappening(bool periodicResetIsHappening) {
     _periodicResetIsHappening.value = periodicResetIsHappening;
-    update();
+    //update();
   }
 
   RxBool _addingFeedItem = false.obs;
@@ -135,7 +136,7 @@ class GameController extends GetxController {
   /// setter for addingFeedItem
   setAddingFeedItem(bool addingFeedItem) {
     _addingFeedItem.value = addingFeedItem;
-    update();
+    //update();
   }
 
   // List to store all the actions currently being displayed in the feed
@@ -147,19 +148,19 @@ class GameController extends GetxController {
   /// remove first feedAction 
   removeFirstFeedAction() {
     _feedActions.removeAt(0);
-    update();
+    update(["action-feed"]);
   }
 
   /// remove given feedAction 
   void removeFeedAction(GameAction action) {
     _feedActions.remove(action);
-    update();
+    update(["action-feed"]);
   }
 
   /// add feedAction to end of list
   void addFeedAction(GameAction action) {
     _feedActions.add(action);
-    update();
+    update(["action-feed"]);
   }
 
   /// text to be displayed in the player menu title on the right side, changes after a goal
@@ -172,7 +173,7 @@ class GameController extends GetxController {
   void updatePlayerMenuText() {
     // changing from dep = input.obs
     _playerMenuText.value = "Assist";
-    update();
+    //update();
   }
 
   /// corresponding player object for last clicked player name in the player menu
@@ -184,7 +185,7 @@ class GameController extends GetxController {
   /// setter for lastClickedPlayer
   setLastClickedPlayer(Player lastClickedPlayer) {
     _lastClickedPlayer.value = lastClickedPlayer;
-    update();
+    //update();
   }
 
   /// @return Rx<Player>
@@ -197,7 +198,7 @@ class GameController extends GetxController {
   /// setter for playerToChange
   setPlayerToChange(Player playerToChange) {
     _playerToChange.value = playerToChange;
-    update();
+    //update();
   }
 
   // list of 7 or less Integer, give the indices of players on field in the order in which they appear on efscore player bar
@@ -213,7 +214,7 @@ class GameController extends GetxController {
     for (int i in getOnFieldIndex()) {
       _playerBarPlayers.add(i);
     }
-    update();
+    //update();
   }
 
   ////
@@ -229,7 +230,7 @@ class GameController extends GetxController {
   /// setter for fieldIsLeft
   setFieldIsLeft(bool fieldIsLeft) {
     _fieldIsLeft.value = fieldIsLeft;
-    update();
+    // no call of update since no GetBuilder involved and it would break during build of mainScreen otherwise
   }
 
   /// True: game was started; False game did not start yet
@@ -241,7 +242,7 @@ class GameController extends GetxController {
   /// setter for gameRunning
   setGameIsRunning(bool gameIsRunning) {
     _gameRunning.value = gameIsRunning;
-    update();
+    update(["start-stop-icon"]);
   }
 
   /// @return rx list
@@ -254,6 +255,6 @@ class GameController extends GetxController {
   /// setter for lastLocation
   setLastLocation(List<String> lastLocation) {
     _lastLocation.value = lastLocation;
-    update();
+    //update();
   }
 }

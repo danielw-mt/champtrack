@@ -17,6 +17,7 @@ class TeamDropdown extends GetView<GameController> {
 
     return // build the dropdown button
         GetBuilder(
+      id: "team-dropdown",
       builder: (GameController gameController) {
         int selectedTeamTypeInt = gameController.getSelectedTeamType();
         String selectedTeamTypeString = TEAM_TYPE_MAPPING[selectedTeamTypeInt];
@@ -38,7 +39,6 @@ class TeamDropdown extends GetView<GameController> {
             gameController.setSelectedTeam(availableTeams
                 .where((Team teamItem) => teamItem.id == newTeam?.id)
                 .first);
-            gameController.refresh();
           },
           // build dropdown item widgets
           items: availableTeams.map<DropdownMenuItem<Team>>((Team team) {

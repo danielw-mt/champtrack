@@ -25,6 +25,7 @@ class AppController extends GetxController {
   /// Setter for cachedTeamsList
   void updateAvailableTeams(List<Team> teamsList) {
     _cachedTeamsList.value = teamsList;
+    update(["team-dropdown", "team-type-selection-bar", "players-list"]);
   }
 
   /// Storing game actions as GameAction objects inside this list

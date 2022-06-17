@@ -11,7 +11,9 @@ class OnFieldCheckbox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<GameController>(builder: (gameController) {
+    return GetBuilder<GameController>(
+      id: "on-field-checkbox",  
+      builder: (gameController) {
       List<Player> playersOnField = gameController.getOnFieldPlayers();
       return Checkbox(
         value: playersOnField.contains(player), //playersOnField[index],
@@ -32,7 +34,6 @@ class OnFieldCheckbox extends StatelessWidget {
           }
           // after changing players with the checkboxes, update the player bar with those players
           gameController.setPlayerBarPlayers();
-          gameController.refresh();
         },
       );
     });

@@ -25,6 +25,7 @@ class TeamDetailsFormState extends State<TeamDetailsForm> {
   Widget build(BuildContext context) {
     // Build a Form widget using the _formKey created above.
     return GetBuilder<GameController>(
+      id: "team-details-form-state",
       builder: (GameController gameController) {
         return Form(
           key: _formKey,
