@@ -47,27 +47,30 @@ class FieldSwitch extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetBuilder<GlobalController>(
       builder: (GlobalController globalController) {
-        if (globalController.fieldIsLeft.value == true){
-          return GestureDetector(onPanUpdate: (details){
-            // swipe right
-            if (details.delta.dx > 0){
-              logger.d("Swipe to the right detected");
-              globalController.fieldIsLeft.value = false;
-              globalController.refresh();
-            }
-          },child: CustomField(fieldIsLeft: true),);
-        } 
-        else {
-          return GestureDetector(onPanUpdate: (details){
-            // swipe left
-            if (details.delta.dx < 0){
-              logger.d("Swipe to the left detected");
-              globalController.fieldIsLeft.value = true;
-              globalController.refresh();
-            }
-          },child: CustomField(fieldIsLeft: false),);
+        if (globalController.fieldIsLeft.value == true) {
+          return GestureDetector(
+              onPanUpdate: (details) {
+                // swipe right
+                if (details.delta.dx > 0) {
+                  logger.d("Swipe to the right detected");
+                  globalController.fieldIsLeft.value = false;
+                  globalController.refresh();
+                }
+              },
+              child: Text("right")); //CustomField(fieldIsLeft: true),);
+        } else {
+          return GestureDetector(
+              onPanUpdate: (details) {
+                // swipe left
+                if (details.delta.dx < 0) {
+                  logger.d("Swipe to the left detected");
+                  globalController.fieldIsLeft.value = true;
+                  globalController.refresh();
+                }
+              },
+              child: Text("left") //CustomField(fieldIsLeft: false),
+              );
         }
-
 
         // globalController.fieldController.value = pageController;
         // if (globalController.fieldController.value.hasClients &&
