@@ -69,19 +69,22 @@ void callPlayerMenu(context) {
           height: 6,
         ),
         // Button-Row: one Row with four Columns of one or two buttons
-        // TODO: implement safety check if less than 7 players are somehow selected
-        Row(children: [
-          dialogButtons[0],
-          Column(
-            children: [dialogButtons[1], dialogButtons[2]],
-          ),
-          Column(
-            children: [dialogButtons[3], dialogButtons[4]],
-          ),
-          Column(
-            children: [dialogButtons[5], dialogButtons[6]],
-          ),
-        ]),
+        
+        // TODO update this with new AppState getter later
+        globalController.selectedTeam.value.onFieldPlayers.length == 7
+            ? Row(children: [
+                dialogButtons[0],
+                Column(
+                  children: [dialogButtons[1], dialogButtons[2]],
+                ),
+                Column(
+                  children: [dialogButtons[3], dialogButtons[4]],
+                ),
+                Column(
+                  children: [dialogButtons[5], dialogButtons[6]],
+                ),
+              ])
+            : Text("7 Players were not selected. Cannot display this Menu!"),
       ],
     ),
   ).show();
@@ -203,12 +206,12 @@ Obx buildDialogButton(BuildContext context, Player associatedPlayer) {
       // TODO implement this
       // activePlayer.addAction(lastAction);
 
-      globalController.lastClickedPlayer.value = Player(); 
+      globalController.lastClickedPlayer.value = Player();
     }
     // addFeedItem(lastAction);
     print("last action saved in database: ");
     print(globalController.actions.last.toMap());
-    globalController.refresh(); 
+    globalController.refresh();
     Navigator.pop(context);
   }
 
