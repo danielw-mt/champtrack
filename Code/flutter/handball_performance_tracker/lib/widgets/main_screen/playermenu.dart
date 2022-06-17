@@ -124,14 +124,6 @@ Obx buildDialogButton(BuildContext context, Player associatedPlayer) {
     return false;
   }
 
-  // Player? _getPlayerFromName(String name) {
-  //   for (Player player in globalController.chosenPlayers) {
-  //     if (player.lastName == name) {
-  //       return player;
-  //     }
-  //   }
-  // }
-
   void logPlayerSelection() async {
     print(associatedPlayer.lastName);
     GameAction lastAction = globalController.actions.last;
@@ -140,7 +132,7 @@ Obx buildDialogButton(BuildContext context, Player associatedPlayer) {
     // if goal was pressed but no player was selected yet
     //(lastClickedPlayer is default Player Object) do nothing
     if (lastAction.actionType == "goal" && lastClickedPlayerId == "") {
-      globalController.updatePlayerMenuText();
+      globalController.playerMenuText.value = "Assist";
       // update last Clicked player value with the Player from selected team
       // who was clicked
       globalController.lastClickedPlayer.value = globalController
@@ -152,6 +144,7 @@ Obx buildDialogButton(BuildContext context, Player associatedPlayer) {
     }
     // if goal was pressed and a player was already clicked once
     if (lastAction.actionType == "goal") {
+      globalController.refresh();
       // if it was a solo goal the action type has to be updated to "Tor Solo"
       if (!_wasAssist()) {
         print("solo goal");
@@ -202,12 +195,12 @@ Obx buildDialogButton(BuildContext context, Player associatedPlayer) {
       // TODO implement this
       // activePlayer.addAction(lastAction);
 
-      globalController.lastClickedPlayer.value = Player(); 
+      globalController.lastClickedPlayer.value = Player();
     }
     // addFeedItem(lastAction);
     print("last action saved in database: ");
     print(globalController.actions.last.toMap());
-    globalController.refresh(); 
+    globalController.refresh();
     Navigator.pop(context);
   }
 
