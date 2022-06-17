@@ -91,13 +91,7 @@ class GlobalController extends GetxController {
   RxList<GameAction> feedActions = <GameAction>[].obs;
 
   /// text to be displayed in the player menu title on the right side, changes after a goal
-  RxString playerMenuText = "".obs;
-
-  // TODO this method is unnecessary unless we want getters and setters to exist for every method
-  void updatePlayerMenuText() {
-    // changing from dep = input.obs
-    playerMenuText.value = "Assist";
-  }
+  RxString playerMenuText = "Scorer".obs;
 
   /// corresponding player object for last clicked player name in the player menu
   Rx<Player> lastClickedPlayer = Player().obs;
