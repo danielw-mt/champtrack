@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:handball_performance_tracker/data/team.dart';
 import 'package:handball_performance_tracker/widgets/team_selection_screen/team_dropdown.dart';
 import '../../controllers/globalController.dart';
 import '../../constants/team_constants.dart';
@@ -43,6 +44,9 @@ class StartGameFormState extends State<StartGameForm> {
 
   @override
   Widget build(BuildContext context) {
+    seasonController.text = "TODO";
+    locationController.text = "TODO";
+    opponentController.text = "TODO";
     // Build a Form widget using the _formKey created above.
     return GetBuilder<GlobalController>(
       builder: (GlobalController globalController) {
@@ -50,17 +54,29 @@ class StartGameFormState extends State<StartGameForm> {
         return Form(
           key: _formKey,
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              //row
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  // season
-                  SizedBox(width: width*0.2, child: TextFormField()),
-                  // team dropdown
-                  SizedBox(width: width*0.2, child: Container()),
-                  // TeamDropdown()),
-                  // date
+                  // Textfield allowing to set season. Later this should not be a textfield but a value from the club settings
+                  SizedBox(
+                      width: width * 0.2,
+                      child: TextFormField(
+                        controller: seasonController,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(),
+                          labelText: Strings.lSeason,
+                        ),
+                      )),
+                  // team dropdown showing all available teams from teams collection
+                  Column(
+                    children: [
+                      Text(Strings.lTeam),
+                      TeamDropdown(),
+                    ],
+                  ),
+                  // DateTime Picker
                   Column(
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
@@ -80,15 +96,35 @@ class StartGameFormState extends State<StartGameForm> {
                 height: 20,
               ),
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  // opponent
-                  // location
+                  // Textfield for opponent name
+                  SizedBox(
+                      width: width * 0.2,
+                      child: TextFormField(
+                        controller: opponentController,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(),
+                          labelText: Strings.lOpponent,
+                        ),
+                      )),
+                  // Textfield for location
+                  SizedBox(
+                      width: width * 0.2,
+                      child: TextFormField(
+                        controller: locationController,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(),
+                          labelText: Strings.lLocation,
+                        ),
+                      )),
                 ],
               ),
               Container(
                 height: 20,
               ),
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   Row(
                     children: [
@@ -104,7 +140,21 @@ class StartGameFormState extends State<StartGameForm> {
                   )
                 ],
               ),
-
+              Container(
+                height: 20,
+              ),
+              Column(
+                children: [
+                  const Text(Strings.lHomeSideIsRight),
+                  Switch(
+                      value: globalController.attackIsLeft.value,
+                      onChanged: (bool) {
+                        globalController.attackIsLeft.value =
+                            !globalController.attackIsLeft.value;
+                        globalController.refresh();
+                      }),
+                ],
+              ),
               Padding(
                 // TODO create a lock in button
                 padding: const EdgeInsets.symmetric(vertical: 16.0),

@@ -25,14 +25,6 @@ class SettingsScreen extends GetView<GlobalController> {
           // Container for menu button on top left corner
           MenuButton(_scaffoldKey),
           GameStartStopButtons(),
-          const Text(Strings.lFieldSideIsRight),
-          Obx(() => Switch(
-              value: globalController.attackIsLeft.value,
-              onChanged: (bool) {
-                globalController.attackIsLeft.value =
-                    !globalController.attackIsLeft.value;
-                globalController.refresh();
-              }))
         ],
       ),
     );
