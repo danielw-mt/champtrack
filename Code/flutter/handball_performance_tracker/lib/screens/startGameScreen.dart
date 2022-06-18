@@ -2,8 +2,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:handball_performance_tracker/controllers/globalController.dart';
+import 'package:handball_performance_tracker/screens/dashboard.dart';
 import 'package:handball_performance_tracker/widgets/start_game_screen/start_game_form.dart';
 import 'package:handball_performance_tracker/strings.dart';
+import '../widgets/nav_drawer.dart';
 
 // TODO change this to Statefulwidget
 // turn team selection screen into team selection screen and teamSelectionWidget
@@ -11,26 +13,33 @@ import 'package:handball_performance_tracker/strings.dart';
 // build halbzeit seite auswählen widget
 // dependign on the State of StartGameScreen build StartGameForm,teamSelectionDropdown, PlayersList, PlayerPositionWidget, halbzeit seite auswählen widget, check everything widget
 
-class StartScreen extends StatefulWidget {
-  StartScreen({Key? key}) : super(key: key);
+class StartGameScreen extends StatefulWidget {
+  StartGameScreen({Key? key}) : super(key: key);
 
   @override
-  State<StartScreen> createState() => _StartScreenState();
+  State<StartGameScreen> createState() => _StartGameScreenState();
 }
 
-class _StartScreenState extends State<StartScreen> {
+class _StartGameScreenState extends State<StartGameScreen> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   int startScreenStep = 0;
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
+    return Scaffold(
+        key: _scaffoldKey,
+        drawer: NavDrawer(),
+        body: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          // Container for menu button on top left corner
+          MenuButton(_scaffoldKey),
         buildStartScreenContent(),
         Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
           ElevatedButton(
             onPressed: () {
               if (startScreenStep > 0) {
                 startScreenStep -= 1;
+              } else {
+                Get.to(Dashboard());
               }
             },
             child: startScreenStep == 0 ? Container() : Text(Strings.lBack),
@@ -44,7 +53,7 @@ class _StartScreenState extends State<StartScreen> {
                   : Text(Strings.lNext))
         ])
       ],
-    );
+    ));
   }
 
   Widget buildStartScreenContent() {
