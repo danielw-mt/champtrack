@@ -28,11 +28,9 @@ void main() async {
       scrollBehavior:
           AppScrollBehavior(), // add scrollbehaviour so swiping is possible in web
       getPages: [
-        GetPage(name: '/start-game', page: () => StartGameScreen()),
-        GetPage(
-            name: '/settings',
-            page: () => SettingsScreen()),
-        GetPage(name: '/dashboard', page: () => Dashboard()),
+        GetPage(name: '/StartGameScreen', page: () => StartGameScreen()),
+        GetPage(name: '/SettingsScreen', page: () => SettingsScreen()),
+        GetPage(name: '/Dashboard', page: () => Dashboard()),
       ],
       home: FutureBuilder<dynamic>(
         future: _startupCheck(),
@@ -42,11 +40,15 @@ void main() async {
             return StreamBuilder<User?>(
                 stream: FirebaseAuth.instance.authStateChanges(),
                 builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting){
-                    return Center(child: CircularProgressIndicator(),);
-                  } else if (snapshot.hasError){
-                    return Center(child: Text("There was a problem with authentication"),);
-                  } else if (snapshot.hasData){
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  } else if (snapshot.hasError) {
+                    return Center(
+                      child: Text("There was a problem with authentication"),
+                    );
+                  } else if (snapshot.hasData) {
                     // if we have a User object we are logged in and can display the app
                     return Dashboard();
                   } else {
