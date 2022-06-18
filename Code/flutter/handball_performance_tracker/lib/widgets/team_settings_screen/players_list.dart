@@ -30,7 +30,7 @@ class PlayersList extends GetView<GlobalController> {
                   label: Text(Strings.lNumber),
                 ),
                 DataColumn(label: Text(Strings.lPosition)),
-                DataColumn(label: Text("Starts on Field (temporary)")),
+                DataColumn(label: Text(Strings.lPlayerStartingOnField)),
                 DataColumn(label: Text(Strings.lEdit))
               ],
               rows: List<DataRow>.generate(

@@ -145,4 +145,5 @@ class Strings {
   static const String lLeftWinger = "LA";
   static const String lCenterForward = "KR";
   static const String lRightWinger = "RA";
+  static const String lPlayerStartingOnField = "Spieler in Startaufstellung";
 }
