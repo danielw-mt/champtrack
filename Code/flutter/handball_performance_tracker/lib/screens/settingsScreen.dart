@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:handball_performance_tracker/widgets/nav_drawer.dart';
 import '../widgets/team_selection_screen/team_dropdown.dart';
-import '../Strings.dart';
+import '../strings.dart';
 // import './../widgets/settings_screen/on_field_checkbox.dart';
 import './../widgets/settings_screen/game_start_stop_buttons.dart';
 import '../widgets/team_settings_screen/players_list.dart';

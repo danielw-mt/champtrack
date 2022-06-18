@@ -1,13 +1,13 @@
-import 'package:handball_performance_tracker/Strings.dart';
+import 'package:handball_performance_tracker/strings.dart';
 
 const String attack = "attack";
 const String defense = "defense";
 
 const Map<String, Map<String, String>> actionMapping = {
   attack: {
-    Strings.lRedCard:"red",
-    Strings.lYellowCard:"yellow",
-    Strings.lTimePenalty:"penalty",
+    Strings.lRedCard: "red",
+    Strings.lYellowCard: "yellow",
+    Strings.lTimePenalty: "penalty",
     Strings.lGoal: "goal",
     Strings.lOneVsOneAnd7m: "1v1",
     Strings.lTwoMin: "2min",
@@ -16,7 +16,7 @@ const Map<String, Map<String, String>> actionMapping = {
   },
   defense: {
     Strings.lRedCard: "red",
-    Strings.lYellowCard:"yellow",
+    Strings.lYellowCard: "yellow",
     Strings.lFoul7m: "foul",
     Strings.lTimePenalty: "penalty",
     Strings.lBlockNoBall: "block",
@@ -68,8 +68,8 @@ const Map<String, Map<String, int>> efScoreParameters = {
     "trf": 8,
     "foul": 7,
     "timePen": 8,
-    "red":15
+    "red": 15
   }
 };
 
-int lastFiveMinThreshold = 3300; 
+int lastFiveMinThreshold = 3300;

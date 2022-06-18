@@ -8,7 +8,7 @@ import 'config/firebase_options.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
-import 'Strings.dart';
+import 'strings.dart';
 import '../../controllers/globalController.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -32,11 +32,15 @@ void main() async {
             return StreamBuilder<User?>(
                 stream: FirebaseAuth.instance.authStateChanges(),
                 builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting){
-                    return Center(child: CircularProgressIndicator(),);
-                  } else if (snapshot.hasError){
-                    return Center(child: Text("There was a problem with authentication"),);
-                  } else if (snapshot.hasData){
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  } else if (snapshot.hasError) {
+                    return Center(
+                      child: Text("There was a problem with authentication"),
+                    );
+                  } else if (snapshot.hasData) {
                     // if we have a User object we are logged in and can display the app
                     return MainScreen();
                   } else {

@@ -14,23 +14,25 @@ class CustomField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     globalController.fieldIsLeft.value = this.fieldIsLeft;
-    return Stack(children: [
-      // Painter of 7m, 6m and filled 9m
-      CustomPaint(
-        painter: FieldPainter(fieldIsLeft),
-        // GestureDetector to handle on click or swipe
-        child: GestureDetector(
-            // handle coordinates on click
-            onTapDown: (TapDownDetails details) {
-          callActionMenu(context);
-          List<String> location =
-              SectorCalc(fieldIsLeft).calculatePosition(details.localPosition);
-          globalController.lastLocation.value = location;
-        }),
-      ),
-      // Painter of dashed 9m
-      CustomPaint(painter: DashedPathPainter(leftSide: fieldIsLeft))
-    ]);
+    return GetBuilder<GlobalController>(
+      builder: (GlobalController globalController) => Stack(children: [
+        // Painter of 7m, 6m and filled 9m
+        CustomPaint(
+          painter: FieldPainter(fieldIsLeft),
+          // GestureDetector to handle on click or swipe
+          child: GestureDetector(
+              // handle coordinates on click
+              onTapDown: (TapDownDetails details) {
+            callActionMenu(context);
+            List<String> location = SectorCalc(fieldIsLeft)
+                .calculatePosition(details.localPosition);
+            globalController.lastLocation.value = location;
+          }),
+        ),
+        // Painter of dashed 9m
+        CustomPaint(painter: DashedPathPainter(leftSide: fieldIsLeft))
+      ]),
+    );
   }
 }
 
@@ -39,11 +41,12 @@ class CustomField extends StatelessWidget {
 * @return   Returns a Pageview with left field side and right field side as children.
 */
 class FieldSwitch extends StatelessWidget {
-  final GlobalController globalController = Get.find<GlobalController>();
+  static final PageController pageController = PageController();
 
   @override
   Widget build(BuildContext context) {
     return PageView(
+      controller: pageController,
       children: <Widget>[
         CustomField(
           fieldIsLeft: true,

@@ -1,10 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:handball_performance_tracker/constants/game_actions.dart';
 import 'package:handball_performance_tracker/utils/icons.dart';
 import 'package:handball_performance_tracker/data/database_repository.dart';
 import 'package:handball_performance_tracker/data/game.dart';
-import '../../Strings.dart';
+import '../../strings.dart';
 import 'package:handball_performance_tracker/utils/player_helper.dart';
+import 'package:handball_performance_tracker/widgets/main_screen/field.dart';
 import '../../controllers/globalController.dart';
 import 'package:get/get.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
@@ -12,8 +14,21 @@ import 'dart:math';
 import '../../utils/feed_logic.dart';
 import '../../data/game_action.dart';
 import '../../data/player.dart';
+import 'package:logger/logger.dart';
+
+var logger = Logger(
+  printer: PrettyPrinter(
+      methodCount: 2, // number of method calls to be displayed
+      errorMethodCount: 8, // number of method calls if stacktrace is provided
+      lineLength: 120, // width of the output
+      colors: true, // Colorful log messages
+      printEmojis: true, // Print an emoji for each log message
+      printTime: false // Should each log print contain a timestamp
+      ),
+);
 
 void callPlayerMenu(context) {
+  logger.d("Calling player menu");
   final GlobalController globalController = Get.find<GlobalController>();
   List<Obx> dialogButtons = buildDialogButtonList(context);
   Alert(
@@ -69,7 +84,7 @@ void callPlayerMenu(context) {
           height: 6,
         ),
         // Button-Row: one Row with four Columns of one or two buttons
-        
+
         // TODO update this with new AppState getter later
         globalController.selectedTeam.value.onFieldPlayers.length == 7
             ? Row(children: [
@@ -120,11 +135,14 @@ Obx buildDialogButton(BuildContext context, Player associatedPlayer) {
     // if it was a goal allow the player to be pressed twice or select and assist player
     // if the player is clicked again it is a solo action
     if (globalController.lastClickedPlayer.value.id == associatedPlayer.id) {
+      logger.d("Action was not an assist");
       return false;
     }
     if (globalController.lastClickedPlayer.value.id != associatedPlayer.id) {
+      logger.d("Action was an assist");
       return true;
     }
+    logger.d("Action was not an assist");
     return false;
   }
 
@@ -137,7 +155,7 @@ Obx buildDialogButton(BuildContext context, Player associatedPlayer) {
   // }
 
   void logPlayerSelection() async {
-    print(associatedPlayer.lastName);
+    logger.d("Logging the player selection");
     GameAction lastAction = globalController.actions.last;
     String? lastClickedPlayerId = globalController.lastClickedPlayer.value.id;
     lastAction.playerId = lastClickedPlayerId.toString();
@@ -158,7 +176,7 @@ Obx buildDialogButton(BuildContext context, Player associatedPlayer) {
     if (lastAction.actionType == "goal") {
       // if it was a solo goal the action type has to be updated to "Tor Solo"
       if (!_wasAssist()) {
-        print("solo goal");
+        logger.d("Logging solo goal");
         // update data for person that shot the goal
         lastAction.playerId = globalController.lastClickedPlayer.value.id!;
         repository.updateAction(lastAction);
@@ -171,7 +189,7 @@ Obx buildDialogButton(BuildContext context, Player associatedPlayer) {
         addFeedItem(lastAction);
         globalController.refresh();
       } else {
-        print("goal with assist");
+        logger.d("Logging goal with assist");
         // if it was an assist update data for both players
         // person that scored goal
         lastAction.playerId = globalController.lastClickedPlayer.value.id!;
@@ -207,6 +225,50 @@ Obx buildDialogButton(BuildContext context, Player associatedPlayer) {
       // activePlayer.addAction(lastAction);
 
       globalController.lastClickedPlayer.value = Player();
+    }
+    // TODO debug if there are no cases missing here because when you switch back it doesnt get triggered again
+    if (lastAction.actionType == goal || lastAction.actionType == errThrow) {
+      // if our action is left (page 0) and we are attacking (on page 0) jump back to defense (page 1) after the action
+      if (globalController.fieldIsLeft.value == true &&
+          globalController.attackIsLeft == true) {
+        logger.d("Switching to right field after action");
+        while (FieldSwitch.pageController.positions.length > 1) {
+          FieldSwitch.pageController
+              .detach(FieldSwitch.pageController.positions.first);
+        }
+        FieldSwitch.pageController.jumpToPage(1);
+
+        // if out action is right (page 1) and we are attacking (on page 1) jump back to defense (page 0) after the action
+      } else if (globalController.fieldIsLeft == false &&
+          globalController.attackIsLeft == false) {
+        logger.d("Switching to left field after action");
+        while (FieldSwitch.pageController.positions.length > 1) {
+          FieldSwitch.pageController
+              .detach(FieldSwitch.pageController.positions.first);
+        }
+        FieldSwitch.pageController.jumpToPage(0);
+      }
+    } else if (lastAction.actionType == "block_st") {
+      // if our action is left (page 0) and we are defensing (on page 0) jump back to attack (page 1) after the action
+      if (globalController.fieldIsLeft.value == true &&
+          globalController.attackIsLeft == false) {
+        logger.d("Switching to right field after action");
+        while (FieldSwitch.pageController.positions.length > 1) {
+          FieldSwitch.pageController
+              .detach(FieldSwitch.pageController.positions.first);
+        }
+        FieldSwitch.pageController.jumpToPage(1);
+
+        // if out action is right (page 1) and we are defensing (on page 1) jump back to attack (page 0) after the action
+      } else if (globalController.fieldIsLeft == false &&
+          globalController.attackIsLeft == true) {
+        logger.d("Switching to left field after action");
+        while (FieldSwitch.pageController.positions.length > 1) {
+          FieldSwitch.pageController
+              .detach(FieldSwitch.pageController.positions.first);
+        }
+        FieldSwitch.pageController.jumpToPage(0);
+      }
     }
     // addFeedItem(lastAction);
     print("last action saved in database: ");
