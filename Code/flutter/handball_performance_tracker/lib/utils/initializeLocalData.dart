@@ -8,6 +8,8 @@ import 'package:get/get.dart';
 import '../controllers/globalController.dart';
 
 Future<bool> initializeLocalData() async {
+  // TODO get all player objects beforehand so no extra call has to be made to DB for every player
+
   DatabaseRepository repo = DatabaseRepository();
   GlobalController globalController = Get.find<GlobalController>();
   if (!globalController.isInitialized) {

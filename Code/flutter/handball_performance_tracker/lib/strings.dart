@@ -13,6 +13,9 @@ class Strings {
   static const String lSettings = "Settings";
   static const String lMainScreen = "Main Screen";
   static const String lHelperScreen = "Helper Screen";
+  static const String lTeamSelectionScreen = "Team Auswahl";
+  static const String lSignedInAs = "Angemeldet als: "; //TODO anwenden
+  static const String lSignOutButton = "Abmelden";
 
   // game_actions.dart & action_feed.dart
   static const String lRedCard = "Rote Karte";
@@ -100,11 +103,6 @@ class Strings {
   static const String lGames = "Spiele";
   static const String lTeamDetails = "Team Details";
 
-  // nav_drawer.dart
-  static const String lTeamSelectionScreen = "Team Auswahl";
-  static const String lSignedInAs = "Angemeldet als: "; //TODO anwenden
-  static const String lSignOutButton = "Abmelden";
-
   // start game screen
   static const String lBack = "Zurück";
   static const String lNext = "Weiter";
@@ -128,4 +126,23 @@ class Strings {
   static const String lDashboard = "Dashboard";
   static const String lManageTeams = "Mannschaften verwalten";
   static const String lTrackNewGame = "Neues Spiel tracken";
+  // team settings screen
+  static const String lName = "Name";
+  static const String lNumber = "Nummer";
+  static const String lPosition = "Position";
+  static const String lEdit = "Bearbeiten";
+  static const String lEditPlayer = "Player Bearbeiten";
+  static const String lDeletePlayer = "Löschen";
+  static const String lFirstName = "Vorname";
+  static const String lLastName = "Nachname";
+  static const String lNickName = "Spitzname";
+  static const String lShirtNumber = "Trikotnummer";
+  static const String lTeams = "Mannschaften";
+  static const String lGoalkeeper = "TW";
+  static const String lLeftBack = "RL";
+  static const String lCenterBack = "RM";
+  static const String lRightBack = "RR";
+  static const String lLeftWinger = "LA";
+  static const String lCenterForward = "KR";
+  static const String lRightWinger = "RA";
 }
