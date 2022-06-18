@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:handball_performance_tracker/constants/game_actions.dart';
 import 'package:handball_performance_tracker/utils/icons.dart';
 import 'package:handball_performance_tracker/data/database_repository.dart';
 import 'package:handball_performance_tracker/data/game.dart';
@@ -209,29 +210,6 @@ Obx buildDialogButton(BuildContext context, Player associatedPlayer) {
 
         globalController.lastClickedPlayer.value = Player();
       }
-
-      // TODO debug if there are no cases missing here because when you switch back it doesnt get triggered again
-
-      // if our goal is right (page 1) and we are attacking (on page 0) jump back to defense (page 1) after the goal
-      if (globalController.fieldIsLeft.value == true &&
-          globalController.attackIsLeft == true) {
-        logger.d("Switching to right field after goal");
-        if (FieldSwitch.pageController.positions.length > 1) {
-          FieldSwitch.pageController
-              .detach(FieldSwitch.pageController.positions.first);
-        }
-        FieldSwitch.pageController.jumpToPage(1);
-
-        // if out goal is left (page 0) and we are attacking (on page 1) jump back to defense (page 0) after the goal
-      } else if (globalController.fieldIsLeft == false &&
-          globalController.attackIsLeft == false) {
-        logger.d("Switching to left field after goal");
-        if (FieldSwitch.pageController.positions.length > 1) {
-          FieldSwitch.pageController
-              .detach(FieldSwitch.pageController.positions.first);
-        }
-        FieldSwitch.pageController.jumpToPage(0);
-      }
     } else {
       // if the action was not a goal just update the player id in firebase and gamestate
       lastAction.playerId = associatedPlayer.id.toString();
@@ -243,6 +221,50 @@ Obx buildDialogButton(BuildContext context, Player associatedPlayer) {
       // activePlayer.addAction(lastAction);
 
       globalController.lastClickedPlayer.value = Player();
+    }
+    // TODO debug if there are no cases missing here because when you switch back it doesnt get triggered again
+    if (lastAction.actionType == goal || lastAction.actionType == errThrow) {
+      // if our action is left (page 0) and we are attacking (on page 0) jump back to defense (page 1) after the action
+      if (globalController.fieldIsLeft.value == true &&
+          globalController.attackIsLeft == true) {
+        logger.d("Switching to right field after action");
+        while (FieldSwitch.pageController.positions.length > 1) {
+          FieldSwitch.pageController
+              .detach(FieldSwitch.pageController.positions.first);
+        }
+        FieldSwitch.pageController.jumpToPage(1);
+
+        // if out action is right (page 1) and we are attacking (on page 1) jump back to defense (page 0) after the action
+      } else if (globalController.fieldIsLeft == false &&
+          globalController.attackIsLeft == false) {
+        logger.d("Switching to left field after action");
+        while (FieldSwitch.pageController.positions.length > 1) {
+          FieldSwitch.pageController
+              .detach(FieldSwitch.pageController.positions.first);
+        }
+        FieldSwitch.pageController.jumpToPage(0);
+      }
+    } else if (lastAction.actionType == blockAndSteal) {
+      // if our action is left (page 0) and we are defensing (on page 0) jump back to attack (page 1) after the action
+      if (globalController.fieldIsLeft.value == true &&
+          globalController.attackIsLeft == false) {
+        logger.d("Switching to right field after action");
+        while (FieldSwitch.pageController.positions.length > 1) {
+          FieldSwitch.pageController
+              .detach(FieldSwitch.pageController.positions.first);
+        }
+        FieldSwitch.pageController.jumpToPage(1);
+
+        // if out action is right (page 1) and we are defensing (on page 1) jump back to attack (page 0) after the action
+      } else if (globalController.fieldIsLeft == false &&
+          globalController.attackIsLeft == true) {
+        logger.d("Switching to left field after action");
+        while (FieldSwitch.pageController.positions.length > 1) {
+          FieldSwitch.pageController
+              .detach(FieldSwitch.pageController.positions.first);
+        }
+        FieldSwitch.pageController.jumpToPage(0);
+      }
     }
     // addFeedItem(lastAction);
     print("last action saved in database: ");
