@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import '../../controllers/appController.dart';
+import '../../controllers/persistentController.dart';
 import 'package:get/get.dart';
-import '../../controllers/gameController.dart';
+import '../../controllers/tempController.dart';
 
-class ReverseButton extends GetView<GameController> {
-  final AppController appController = Get.find<AppController>();
+class ReverseButton extends GetView<TempController> {
+  final persistentController appController = Get.find<persistentController>();
 
   @override
   Widget build(BuildContext context) {

@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
-import '../../controllers/appController.dart';
-import '../../controllers/gameController.dart';
+import '../../controllers/persistentController.dart';
+import '../../controllers/tempController.dart';
 import 'package:get/get.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 import '../../utils/gameControl.dart';
 
-class StopWatchBar extends GetView<GameController> {
+class StopWatchBar extends GetView<TempController> {
   // stop watch widget that allows to the time to be started, stopped, resetted and in-/decremented by 1 sec
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<AppController>(
+    return GetBuilder<persistentController>(
       id: "stopwatch-bar",
-      builder: (AppController appController) {
-        StopWatchTimer stopWatchTimer = appController.getCurrentGame().stopWatch;
+      builder: (persistentController appController) {
+        StopWatchTimer stopWatchTimer =
+            appController.getCurrentGame().stopWatch;
         return Row(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -31,12 +32,16 @@ class StopWatchBar extends GetView<GameController> {
                     stopWatchTimer.clearPresetTime();
                     if (stopWatchTimer.isRunning) {
                       stopWatchTimer.onExecute.add(StopWatchExecute.reset);
-                      appController.getCurrentGame().stopWatch
+                      appController
+                          .getCurrentGame()
+                          .stopWatch
                           .setPresetTime(mSec: currentTime + 1000);
                       stopWatchTimer.onExecute.add(StopWatchExecute.start);
                     } else {
                       stopWatchTimer.onExecute.add(StopWatchExecute.reset);
-                      appController.getCurrentGame().stopWatch
+                      appController
+                          .getCurrentGame()
+                          .stopWatch
                           .setPresetTime(mSec: currentTime + 1000);
                     }
                   },
@@ -75,50 +80,50 @@ class StopWatchBar extends GetView<GameController> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 4),
               child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  primary: Colors.red,
-                  onPrimary: Colors.white,
-                  shape: const StadiumBorder(),
-                ),
-                onPressed: () async {
-                  int currentTime = stopWatchTimer.rawTime.value;
-                  // make sure the timer can't go negative
-                  if (currentTime <= 1000) return;
-                  stopWatchTimer.clearPresetTime();
-                  if (stopWatchTimer.isRunning) {
-                    stopWatchTimer.onExecute.add(StopWatchExecute.reset);
-                    appController.getCurrentGame().stopWatch
-                        .setPresetTime(mSec: currentTime - 1000);
-                    stopWatchTimer.onExecute.add(StopWatchExecute.start);
-                  } else {
-                    stopWatchTimer.onExecute.add(StopWatchExecute.reset);
-                    appController.getCurrentGame().stopWatch
-                        .setPresetTime(mSec: currentTime - 1000);
-                  }
-                },
-                child: const Icon(Icons.remove)
-              ),
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.red,
+                    onPrimary: Colors.white,
+                    shape: const StadiumBorder(),
+                  ),
+                  onPressed: () async {
+                    int currentTime = stopWatchTimer.rawTime.value;
+                    // make sure the timer can't go negative
+                    if (currentTime <= 1000) return;
+                    stopWatchTimer.clearPresetTime();
+                    if (stopWatchTimer.isRunning) {
+                      stopWatchTimer.onExecute.add(StopWatchExecute.reset);
+                      appController
+                          .getCurrentGame()
+                          .stopWatch
+                          .setPresetTime(mSec: currentTime - 1000);
+                      stopWatchTimer.onExecute.add(StopWatchExecute.start);
+                    } else {
+                      stopWatchTimer.onExecute.add(StopWatchExecute.reset);
+                      appController
+                          .getCurrentGame()
+                          .stopWatch
+                          .setPresetTime(mSec: currentTime - 1000);
+                    }
+                  },
+                  child: const Icon(Icons.remove)),
             ),
-            
+
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 4),
               child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  primary: Colors.red,
-                  onPrimary: Colors.white,
-                  shape: const StadiumBorder(),
-                ),
-                onPressed: () async {
-                  stopWatchTimer.onExecute.add(StopWatchExecute.stop);
-                  stopWatchTimer.onExecute.add(StopWatchExecute.reset);
-                  stopWatchTimer.clearPresetTime();
-                  stopWatchTimer.setPresetTime(mSec: 0);
-                },
-                child: Icon(Icons.history)
-              ),
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.red,
+                    onPrimary: Colors.white,
+                    shape: const StadiumBorder(),
+                  ),
+                  onPressed: () async {
+                    stopWatchTimer.onExecute.add(StopWatchExecute.stop);
+                    stopWatchTimer.onExecute.add(StopWatchExecute.reset);
+                    stopWatchTimer.clearPresetTime();
+                    stopWatchTimer.setPresetTime(mSec: 0);
+                  },
+                  child: Icon(Icons.history)),
             ),
-
-            
           ],
         );
       },
@@ -126,23 +131,23 @@ class StopWatchBar extends GetView<GameController> {
   }
 }
 
-class StartStopIcon extends GetView<GameController> {
+class StartStopIcon extends GetView<TempController> {
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<GameController>(
+    return GetBuilder<TempController>(
         id: "start-stop-icon",
-        builder: (GameController gameController) {
-      bool gameRunning = gameController.getGameIsRunning();
-      return GestureDetector(
-        onTap: () {
-          if (gameRunning) {
-            pauseGame();
-          } else {
-            unpauseGame();
-          }
-        },
-        child: gameRunning ? Icon(Icons.pause) : Icon(Icons.play_arrow),
-      );
-    });
+        builder: (TempController gameController) {
+          bool gameRunning = gameController.getGameIsRunning();
+          return GestureDetector(
+            onTap: () {
+              if (gameRunning) {
+                pauseGame();
+              } else {
+                unpauseGame();
+              }
+            },
+            child: gameRunning ? Icon(Icons.pause) : Icon(Icons.play_arrow),
+          );
+        });
   }
 }

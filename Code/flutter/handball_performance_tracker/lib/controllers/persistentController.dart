@@ -5,7 +5,10 @@ import '../data/game.dart';
 import '../data/game_action.dart';
 import '../data/team.dart';
 
-class AppController extends GetxController {
+/// stores more persistent state
+/// generally more complex variables and data structure that are
+/// cached from the database like all available teams
+class persistentController extends GetxController {
   /// handles teams initialization when building MainScreen
   var isInitialized = false;
 

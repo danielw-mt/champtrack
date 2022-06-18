@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../controllers/gameController.dart';
-
+import '../../controllers/tempController.dart';
 
 // Bottom Nav Bar for team settings screen
 class TeamSettingsBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<GameController>(
+    return GetBuilder<TempController>(
       id: "team-settings-bar",
-      builder: (GameController gameController) {
+      builder: (TempController gameController) {
         return Container(
           color: Color(0xFF3F5AA6),
           child: TabBar(

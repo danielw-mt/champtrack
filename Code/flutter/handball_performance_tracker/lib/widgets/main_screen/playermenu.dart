@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:handball_performance_tracker/controllers/appController.dart';
+import 'package:handball_performance_tracker/controllers/persistentController.dart';
 import 'package:handball_performance_tracker/utils/icons.dart';
-import '../../controllers/gameController.dart';
+import '../../controllers/tempController.dart';
 import 'package:get/get.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'dart:math';
@@ -10,7 +10,7 @@ import '../../data/game_action.dart';
 import '../../data/player.dart';
 
 void callPlayerMenu(context) {
-  final GameController gameController = Get.find<GameController>();
+  final TempController gameController = Get.find<TempController>();
   List<Obx> dialogButtons = buildDialogButtonList(context);
   Alert(
     style: AlertStyle(
@@ -85,7 +85,7 @@ void callPlayerMenu(context) {
 
 /// builds a list of Dialog buttons
 List<Obx> buildDialogButtonList(BuildContext context) {
-  final GameController gameController = Get.find<GameController>();
+  final TempController gameController = Get.find<TempController>();
   List<Obx> dialogButtons = [];
   for (Player player in gameController.getOnFieldPlayers()) {
     Obx dialogButton = buildDialogButton(context, player);
@@ -99,8 +99,8 @@ List<Obx> buildDialogButtonList(BuildContext context) {
 Obx buildDialogButton(BuildContext context, Player associatedPlayer) {
   String buttonText = associatedPlayer.lastName;
   String buttonNumber = (associatedPlayer.number).toString();
-  AppController appController = Get.find<AppController>();
-  GameController gameController = Get.find<GameController>();
+  persistentController appController = Get.find<persistentController>();
+  TempController gameController = Get.find<TempController>();
 
   // Get width and height, so the sizes can be calculated relative to those. So it should look the same on different screen sizes.
   final double width = MediaQuery.of(context).size.width;
@@ -132,7 +132,8 @@ Obx buildDialogButton(BuildContext context, Player associatedPlayer) {
       gameController.updatePlayerMenuText();
       // update last Clicked player value with the Player from selected team
       // who was clicked
-      gameController.setLastClickedPlayer(gameController.getPlayerFromSelectedTeam(associatedPlayer.id!));
+      gameController.setLastClickedPlayer(
+          gameController.getPlayerFromSelectedTeam(associatedPlayer.id!));
       return;
     }
     // if goal was pressed and a player was already clicked once
@@ -183,12 +184,12 @@ Obx buildDialogButton(BuildContext context, Player associatedPlayer) {
       // TODO implement this
       // activePlayer.addAction(lastAction);
 
-      gameController.setLastClickedPlayer(Player()); 
+      gameController.setLastClickedPlayer(Player());
     }
     // addFeedItem(lastAction);
     print("last action saved in database: ");
     print(appController.getLastAction().toMap());
-    gameController.refresh(); 
+    gameController.refresh();
     Navigator.pop(context);
   }
 

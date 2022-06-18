@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:handball_performance_tracker/utils/main_screen_field_helper.dart';
-import '../../controllers/gameController.dart';
+import '../../controllers/tempController.dart';
 import 'package:get/get.dart';
 import 'action_menu.dart';
 
 // Class that returns a FieldPainter with a GestureDetecture, i.e. the Painted halffield with the possibility to get coordinates on click.
 class CustomField extends StatelessWidget {
-  final GameController gameController = Get.find<GameController>();
+  final TempController gameController = Get.find<TempController>();
   bool fieldIsLeft = true;
   CustomField({required fieldIsLeft}) {
     this.fieldIsLeft = fieldIsLeft;
@@ -39,7 +39,7 @@ class CustomField extends StatelessWidget {
 * @return   Returns a Pageview with left field side and right field side as children.
 */
 class FieldSwitch extends StatelessWidget {
-  final GameController gameController = Get.find<GameController>();
+  final TempController gameController = Get.find<TempController>();
 
   @override
   Widget build(BuildContext context) {

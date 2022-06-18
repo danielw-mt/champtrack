@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import '../../constants/team_constants.dart';
 import '../../data/game.dart';
-import '../../controllers/appController.dart';
-import '../../controllers/gameController.dart';
+import '../../controllers/persistentController.dart';
+import '../../controllers/tempController.dart';
 import './../../data/game.dart';
 import './../../data/player.dart';
 import 'package:get/get.dart';
@@ -14,7 +14,7 @@ class GameStartStopButtons extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<GameController>(
+    return GetBuilder<TempController>(
         builder: (gameController) => Row(
               children: [
                 Padding(
@@ -36,8 +36,7 @@ class GameStartStopButtons extends StatelessWidget {
                   padding: const EdgeInsets.all(8),
                   child: TextButton(
                       onPressed: () {
-                        if (gameController.getGameIsRunning())
-                          stopGame();
+                        if (gameController.getGameIsRunning()) stopGame();
                       },
                       child: const Text("Stop Game")),
                 )
@@ -46,12 +45,11 @@ class GameStartStopButtons extends StatelessWidget {
   }
 
   void startGame(BuildContext context) async {
-    final GameController gameController = Get.find<GameController>();
-    final AppController appController = Get.find<AppController>();
+    final TempController gameController = Get.find<TempController>();
+    final persistentController appController = Get.find<persistentController>();
     print("in start game");
     // check if enough players have been selected
-    var numPlayersOnField =
-        gameController.getOnFieldPlayers().length;
+    var numPlayersOnField = gameController.getOnFieldPlayers().length;
     if (numPlayersOnField != PLAYER_NUM) {
       // create alert if someone tries to start the game without enough players
       Alert(
@@ -93,8 +91,8 @@ class GameStartStopButtons extends StatelessWidget {
   }
 
   void stopGame() async {
-    final GameController gameController = Get.find<GameController>();
-    final AppController appController = Get.find<AppController>();
+    final TempController gameController = Get.find<TempController>();
+    final persistentController appController = Get.find<persistentController>();
     // update game document in firebase
     Game currentGame = appController.getCurrentGame();
     print("stop game, id: ${appController.getCurrentGame().id}");
@@ -117,7 +115,7 @@ class GameStartStopButtons extends StatelessWidget {
     gameController.refresh();
   }
 
-  void _addGameToPlayers(Game game, GameController gc) {
+  void _addGameToPlayers(Game game, TempController gc) {
     for (Player player in gc.chosenPlayers) {
       if (!player.games.contains(game.id)) {
         player.games.add(game.id!);

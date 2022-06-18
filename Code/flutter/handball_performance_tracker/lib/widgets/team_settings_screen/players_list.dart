@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../controllers/appController.dart';
-import '../../controllers/gameController.dart';
+import '../../controllers/persistentController.dart';
+import '../../controllers/tempController.dart';
 import '../../data/player.dart';
 import '../../data/team.dart';
 import 'on_field_checkbox.dart';
 
-class PlayersList extends GetView<GameController> {
+class PlayersList extends GetView<TempController> {
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<GameController>(
+    return GetBuilder<TempController>(
       id: "players-list",
       builder: (gameController) => Expanded(
         child: ListView.builder(
@@ -43,10 +43,11 @@ class PlayersList extends GetView<GameController> {
 
   void removePlayerFromTeam(Player player) {
     // need to get fresh appController here every time the method is called
-    final AppController appController = Get.find<AppController>();
-    final GameController gameController = Get.find<GameController>();
+    final persistentController appController = Get.find<persistentController>();
+    final TempController gameController = Get.find<TempController>();
     // in order to update the team in the teams list of the local state
-    Team selectedCacheTeam = appController.getAvailableTeams()
+    Team selectedCacheTeam = appController
+        .getAvailableTeams()
         .where((cachedTeamItem) =>
             (cachedTeamItem.id == gameController.getSelectedTeam().id))
         .toList()[0];

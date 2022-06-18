@@ -3,16 +3,20 @@ import 'package:handball_performance_tracker/data/database_repository.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 
 import '../constants/settings_config.dart';
-import '../controllers/appController.dart';
+import 'persistentController.dart';
 import '../data/game_action.dart';
 import '../data/player.dart';
 import '../data/team.dart';
 import '../utils/feed_logic.dart';
 import '../utils/player_helper.dart';
 
-class GameController extends GetxController {
+/// Contains variables that are changed often throughout the app.
+/// Stores mostly ephemeral state
+/// Usually variables just contain single objects that
+/// for example change on the switch of a button
+class TempController extends GetxController {
   /// Database instance for automatically updating instances in firestore
-  DatabaseRepository repository = Get.find<AppController>().repository;
+  DatabaseRepository repository = Get.find<persistentController>().repository;
 
   /// Temporary variable for storing the currently selected Team
   Rx<Team> _selectedTeam = Team(id: "-1", name: "Default team").obs;
@@ -23,7 +27,8 @@ class GameController extends GetxController {
   /// setter for selectedTeam
   void setSelectedTeam(Team team) {
     _selectedTeam.value = team;
-    update(["team-type-selection-bar", "players-list", "team-details-form-state"]);
+    update(
+        ["team-type-selection-bar", "players-list", "team-details-form-state"]);
   }
 
   /// return the first player in selectedTeam with the given playerId
@@ -84,7 +89,8 @@ class GameController extends GetxController {
   /// setter for selectedTeamSetting
   void setSelectedTeamSetting(int tabNumber) {
     _selectedTeamSetting.value = tabNumber;
-    update(["team-selection-screen", "team-setting-screen", "team-settings-bar"]);
+    update(
+        ["team-selection-screen", "team-setting-screen", "team-settings-bar"]);
   }
 
   ////
@@ -116,7 +122,7 @@ class GameController extends GetxController {
       onEnded: () {
         onFeedTimerEnded();
       }).obs;
-  
+
   /// getter for feedTimer
   getFeedTimer() => _feedTimer.value;
 
@@ -150,13 +156,13 @@ class GameController extends GetxController {
   /// getter for feedActions
   getFeedActions() => _feedActions;
 
-  /// remove first feedAction 
+  /// remove first feedAction
   removeFirstFeedAction() {
     _feedActions.removeAt(0);
     update(["action-feed"]);
   }
 
-  /// remove given feedAction 
+  /// remove given feedAction
   void removeFeedAction(GameAction action) {
     _feedActions.remove(action);
     // delete feed item from database
@@ -197,7 +203,6 @@ class GameController extends GetxController {
     //update();
   }
 
-  /// @return Rx<Player>
   /// corresponding player object for last clicked player name in the efscore player bar
   Rx<Player> _playerToChange = Player().obs;
 

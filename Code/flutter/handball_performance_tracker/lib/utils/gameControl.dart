@@ -1,27 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:handball_performance_tracker/constants/team_constants.dart';
-import '../controllers/appController.dart';
-import '../controllers/gameController.dart';
+import '../controllers/persistentController.dart';
+import '../controllers/tempController.dart';
 import '../data/player.dart';
 import '../data/game.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 
 void startGame(BuildContext context) async {
-  GameController gameController = Get.find<GameController>();
-  AppController appController = Get.find<AppController>();
+  TempController gameController = Get.find<TempController>();
+  persistentController appController = Get.find<persistentController>();
   print("in start game");
   // check if enough players have been selected
-  var numPlayersOnField =
-      gameController.getOnFieldPlayers().length;
+  var numPlayersOnField = gameController.getOnFieldPlayers().length;
   if (numPlayersOnField != PLAYER_NUM) {
     // create alert if someone tries to start the game without enough players
     Alert(
             context: context,
             title: "Warning",
             type: AlertType.error,
-            desc: "You can only start the game with $PLAYER_NUM players on the field")
+            desc:
+                "You can only start the game with $PLAYER_NUM players on the field")
         .show();
     return;
   }
@@ -42,31 +42,39 @@ void startGame(BuildContext context) async {
   _addGameToPlayers(newGame);
 
   // activate the game timer
-  appController.getCurrentGame().stopWatch.onExecute.add(StopWatchExecute.start);
+  appController
+      .getCurrentGame()
+      .stopWatch
+      .onExecute
+      .add(StopWatchExecute.start);
 
   gameController.setGameIsRunning(true);
   gameController.refresh();
 }
 
 void unpauseGame() {
-  GameController gameController = Get.find<GameController>();
-  AppController appController = Get.find<AppController>();
+  TempController gameController = Get.find<TempController>();
+  persistentController appController = Get.find<persistentController>();
   gameController.setGameIsRunning(true);
-  appController.getCurrentGame().stopWatch.onExecute.add(StopWatchExecute.start);
+  appController
+      .getCurrentGame()
+      .stopWatch
+      .onExecute
+      .add(StopWatchExecute.start);
   gameController.refresh();
 }
 
 void pauseGame() {
-  GameController gameController = Get.find<GameController>();
-  AppController appController = Get.find<AppController>();
+  TempController gameController = Get.find<TempController>();
+  persistentController appController = Get.find<persistentController>();
   gameController.setGameIsRunning(false);
   appController.getCurrentGame().stopWatch.onExecute.add(StopWatchExecute.stop);
   gameController.refresh();
 }
 
 void stopGame() async {
-  GameController gameController = Get.find<GameController>();
-  AppController appController = Get.find<AppController>();
+  TempController gameController = Get.find<TempController>();
+  persistentController appController = Get.find<persistentController>();
   // update game document in firebase
   Game currentGame = appController.getCurrentGame();
   print("stop game, id: ${appController.getCurrentGame().id}");
@@ -86,7 +94,7 @@ void stopGame() async {
 }
 
 void _addGameToPlayers(Game game) {
-  GameController gameController = Get.find<GameController>();
+  TempController gameController = Get.find<TempController>();
   for (Player player in gameController.chosenPlayers) {
     if (!player.games.contains(game.id)) {
       player.games.add(game.id!);

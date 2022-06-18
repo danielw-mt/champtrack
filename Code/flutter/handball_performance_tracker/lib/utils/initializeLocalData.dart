@@ -4,11 +4,11 @@ import '../data/player.dart';
 import '../data/team.dart';
 import '../data/database_repository.dart';
 import 'package:get/get.dart';
-import '../controllers/appController.dart';
+import '../controllers/persistentController.dart';
 
 Future<bool> initializeLocalData() async {
-  AppController appController = Get.find<AppController>();
-  DatabaseRepository repository = appController.repository; 
+  persistentController appController = Get.find<persistentController>();
+  DatabaseRepository repository = appController.repository;
   if (!appController.isInitialized) {
     print("initializing local data");
     List<Team> teamsList = [];

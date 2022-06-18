@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import '../../controllers/appController.dart';
+import '../../controllers/persistentController.dart';
 import 'package:get/get.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
-import '../../controllers/gameController.dart';
+import '../../controllers/tempController.dart';
 
-class StopWatch extends GetView<GameController> {
+class StopWatch extends GetView<TempController> {
   // stop watch widget that allows to the time to be started, stopped, resetted and in-/decremented by 1 sec
-  AppController appController = Get.find<AppController>();
+  persistentController appController = Get.find<persistentController>();
 
   @override
   Widget build(BuildContext context) {

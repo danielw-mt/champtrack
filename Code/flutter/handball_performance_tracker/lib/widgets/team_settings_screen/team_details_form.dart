@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../controllers/gameController.dart';
+import '../../controllers/tempController.dart';
 
 // Create a Form widget.
 class TeamDetailsForm extends StatefulWidget {
@@ -24,9 +24,9 @@ class TeamDetailsFormState extends State<TeamDetailsForm> {
   @override
   Widget build(BuildContext context) {
     // Build a Form widget using the _formKey created above.
-    return GetBuilder<GameController>(
+    return GetBuilder<TempController>(
       id: "team-details-form-state",
-      builder: (GameController gameController) {
+      builder: (TempController gameController) {
         return Form(
           key: _formKey,
           child: Column(
@@ -50,7 +50,6 @@ class TeamDetailsFormState extends State<TeamDetailsForm> {
                 padding: const EdgeInsets.symmetric(vertical: 16.0),
                 child: ElevatedButton(
                   onPressed: () {
-
                     // TODO save these infos in Firebase using repository
 
                     // Validate returns true if the form is valid, or false otherwise.
@@ -72,5 +71,3 @@ class TeamDetailsFormState extends State<TeamDetailsForm> {
     );
   }
 }
- 
- 

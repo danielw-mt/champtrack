@@ -1,12 +1,12 @@
 import 'package:get/get.dart';
-import 'package:handball_performance_tracker/controllers/appController.dart';
-import '../controllers/gameController.dart';
+import 'package:handball_performance_tracker/controllers/persistentController.dart';
+import '../controllers/tempController.dart';
 import '../data/team.dart';
 import '../constants/team_constants.dart';
 
 void updateSelectedTeamAccordingToTeamType() {
-  GameController gameController = Get.find<GameController>();
-  AppController appController = Get.find<AppController>();
+  TempController gameController = Get.find<TempController>();
+  persistentController appController = Get.find<persistentController>();
   int selectedTeamTypeInt = gameController.getSelectedTeamType();
   String selectedTeamTypeString = TEAM_TYPE_MAPPING[selectedTeamTypeInt];
   // available teams are all the ones that match the selected team type (0,1,2) => "men", "women", "youth"

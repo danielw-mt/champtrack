@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
-import '../../controllers/appController.dart';
-import '../../controllers/gameController.dart';
+import '../../controllers/persistentController.dart';
+import '../../controllers/tempController.dart';
 import 'package:get/get.dart';
 import '../../data/team.dart';
 import '../../utils/teamTypeHelpers.dart';
 import '../../constants/team_constants.dart';
 
 // dropdown that shows all available teams belonging to the selected team type
-class TeamDropdown extends GetView<GameController> {
+class TeamDropdown extends GetView<TempController> {
   @override
   Widget build(BuildContext context) {
-    AppController appController = Get.find<AppController>();
+    persistentController appController = Get.find<persistentController>();
 
     // select a default team
     // TODO write a function to select the default team in gameController / utils instead of just having "Default team"
@@ -18,11 +18,12 @@ class TeamDropdown extends GetView<GameController> {
     return // build the dropdown button
         GetBuilder(
       id: "team-dropdown",
-      builder: (GameController gameController) {
+      builder: (TempController gameController) {
         int selectedTeamTypeInt = gameController.getSelectedTeamType();
         String selectedTeamTypeString = TEAM_TYPE_MAPPING[selectedTeamTypeInt];
         // available teams are all the ones that match the selected team type (0,1,2) => "men", "women", "youth"
-        List<Team> availableTeams = appController.getAvailableTeams()
+        List<Team> availableTeams = appController
+            .getAvailableTeams()
             .where((Team team) => team.type == selectedTeamTypeString)
             .toList();
         updateSelectedTeamAccordingToTeamType();

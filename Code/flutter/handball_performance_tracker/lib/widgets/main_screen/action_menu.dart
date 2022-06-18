@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import '../../controllers/appController.dart';
-import '../../controllers/gameController.dart';
+import '../../controllers/persistentController.dart';
+import '../../controllers/tempController.dart';
 import 'package:get/get.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import '../../data/game_action.dart';
@@ -10,7 +10,7 @@ import 'playermenu.dart';
 import 'dart:math';
 
 void callActionMenu(BuildContext context) {
-  final GameController gameController = Get.find<GameController>();
+  final TempController gameController = Get.find<TempController>();
 
   // if game is not running give a warning
   if (gameController.getGameIsRunning() == false) {
@@ -47,7 +47,7 @@ void callActionMenu(BuildContext context) {
 
 ///
 bool determineAttack() {
-  final GameController gameController = Get.find<GameController>();
+  final TempController gameController = Get.find<TempController>();
   // decide whether attack or defense actions should be displayed depending
   //on what side the team goals is and whether they are attacking or defending
   bool attacking = false;
@@ -206,8 +206,8 @@ Widget buildDialogButtonMenu(
 DialogButton buildDialogButton(
     BuildContext context, String buttonText, Color color,
     [icon]) {
-  GameController gameController = Get.find<GameController>();
-  AppController appController =  Get.find<AppController>();
+  TempController gameController = Get.find<TempController>();
+  persistentController appController = Get.find<persistentController>();
   void logAction() async {
     DateTime dateTime = DateTime.now();
     int unixTime = dateTime.toUtc().millisecondsSinceEpoch;

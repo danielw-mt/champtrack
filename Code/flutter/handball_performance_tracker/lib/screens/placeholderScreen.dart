@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:handball_performance_tracker/widgets/nav_drawer.dart';
 
-import '../controllers/gameController.dart';
+import '../controllers/tempController.dart';
 
-class PlaceholderScreen extends GetView<GameController> {
+class PlaceholderScreen extends GetView<TempController> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
@@ -24,7 +24,7 @@ class PlaceholderScreen extends GetView<GameController> {
                   children: [
                     Column(
                       children: [],
-                    ), 
+                    ),
                   ],
                 ),
               ],

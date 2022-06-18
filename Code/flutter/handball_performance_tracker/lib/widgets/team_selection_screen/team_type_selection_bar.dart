@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import '../../controllers/gameController.dart';
+import '../../controllers/tempController.dart';
 import 'package:get/get.dart';
 import '../../utils/teamTypeHelpers.dart';
 
 class TeamTypeSelectionBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<GameController>(
+    return GetBuilder<TempController>(
       id: "team-type-selection-bar",
-      builder: (GameController gameController) {
+      builder: (TempController gameController) {
         return Container(
           color: Color(0xFF3F5AA6),
           child: DefaultTabController(
