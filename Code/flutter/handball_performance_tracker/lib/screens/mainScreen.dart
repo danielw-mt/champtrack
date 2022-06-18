@@ -25,94 +25,66 @@ class MainScreen extends StatelessWidget {
       DeviceOrientation.landscapeRight,
       DeviceOrientation.landscapeLeft,
     ]);
-    return FutureBuilder(
-      future: initializeLocalData(),
-      builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-        if (snapshot.hasData) {
-          return Scaffold(
-            key: _scaffoldKey,
-            drawer: NavDrawer(),
-            body: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                MenuButton(_scaffoldKey),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(Strings.lFeedHeader),
-                        ActionFeed(),
-                        //Spacer(flex: 1,),
-                        Container()
-                      ],
-                    ),
-                    Spacer(
-                      flex: 1,
-                    ),
-                    // Player Bar
-                    Container(
-                        width: efscorebar.scorebarWidth +
-                            efscorebar.paddingWidth * 4,
-                        height: fieldSizeParameter.fieldHeight +
-                            fieldSizeParameter.toolbarHeight / 4,
-                        alignment: Alignment.topCenter,
-                        child: EfScoreBar()),
-                    // Field
-                    Column(
-                      children: [
-                        StopWatchBar(),
-                        Container(
-                          width: fieldSizeParameter.fieldWidth +
-                              fieldSizeParameter.toolbarHeight / 4,
-                          height: fieldSizeParameter.fieldHeight +
-                              fieldSizeParameter.toolbarHeight / 4,
-                          alignment: Alignment.topCenter,
-                          child: Container(
-                            decoration: BoxDecoration(
-                                // set border around field
-                                border: Border.all(
-                                    width: fieldSizeParameter.lineSize)),
-                            child: SizedBox(
-                              // FieldSwitch to swipe between right and left field side. SizedBox around it so there is no rendering error.
-                              width: fieldSizeParameter.fieldWidth,
-                              height: fieldSizeParameter.fieldHeight,
-                              child: FieldSwitch(),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          );
-        }
-        if (snapshot.hasError) {
-          return Column(
+
+    return Scaffold(
+      key: _scaffoldKey,
+      drawer: NavDrawer(),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          MenuButton(_scaffoldKey),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              Icon(Icons.error),
-              Text("Couldn't get any data from Firebase")
+              Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(Strings.lFeedHeader),
+                  ActionFeed(),
+                  //Spacer(flex: 1,),
+                  Container()
+                ],
+              ),
+              Spacer(
+                flex: 1,
+              ),
+              // Player Bar
+              Container(
+                  width: efscorebar.scorebarWidth + efscorebar.paddingWidth * 4,
+                  height: fieldSizeParameter.fieldHeight +
+                      fieldSizeParameter.toolbarHeight / 4,
+                  alignment: Alignment.topCenter,
+                  child: EfScoreBar()),
+              // Field
+              Column(
+                children: [
+                  StopWatchBar(),
+                  Container(
+                    width: fieldSizeParameter.fieldWidth +
+                        fieldSizeParameter.toolbarHeight / 4,
+                    height: fieldSizeParameter.fieldHeight +
+                        fieldSizeParameter.toolbarHeight / 4,
+                    alignment: Alignment.topCenter,
+                    child: Container(
+                      decoration: BoxDecoration(
+                          // set border around field
+                          border:
+                              Border.all(width: fieldSizeParameter.lineSize)),
+                      child: SizedBox(
+                        // FieldSwitch to swipe between right and left field side. SizedBox around it so there is no rendering error.
+                        width: fieldSizeParameter.fieldWidth,
+                        height: fieldSizeParameter.fieldHeight,
+                        child: FieldSwitch(),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ],
-          );
-        } else {
-          return Center(
-            child: Column(
-              children: [
-                Text("Loading data",),
-                SizedBox(
-                  height: 50,
-                  width: 50,
-                  child: CircularProgressIndicator(),
-                ),
-              ],
-            ),
-          );
-        }
-      },
+          ),
+        ],
+      ),
     );
   }
 }
