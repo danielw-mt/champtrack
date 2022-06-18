@@ -31,7 +31,7 @@ class TeamSelectionScreen extends GetView<GlobalController> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     MenuButton(_scaffoldKey),
-                    TeamDropdown(),
+                    // TODO implement team cards here
                     TextButton(
                         onPressed: () {
                           Get.to(TeamSettingsScreen());
