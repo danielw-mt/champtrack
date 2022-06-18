@@ -29,31 +29,35 @@ class _StartGameScreenState extends State<StartGameScreen> {
     return Scaffold(
         key: _scaffoldKey,
         drawer: NavDrawer(),
-        body: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          // Container for menu button on top left corner
-          MenuButton(_scaffoldKey),
-        buildStartScreenContent(),
-        Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-          ElevatedButton(
-            onPressed: () {
-              if (startScreenStep > 0) {
-                startScreenStep -= 1;
-              } else {
-                Get.to(Dashboard());
-              }
-            },
-            child: startScreenStep == 0 ? Container() : Text(Strings.lBack),
-          ),
-          ElevatedButton(
-              onPressed: () {
-                startScreenStep += 1;
-              },
-              child: startScreenStep == 3
-                  ? Text(Strings.lStartGameButton)
-                  : Text(Strings.lNext))
-        ])
-      ],
-    ));
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Container for menu button on top left corner
+            MenuButton(_scaffoldKey),
+            buildStartScreenContent(),
+            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+              ElevatedButton(
+                onPressed: () {
+                  if (startScreenStep > 0) {
+                    startScreenStep -= 1;
+                  } else {
+                    Get.to(Dashboard());
+                  }
+                },
+                child: startScreenStep == 0
+                    ? Text(Strings.lDashboard)
+                    : Text(Strings.lBack),
+              ),
+              ElevatedButton(
+                  onPressed: () {
+                    startScreenStep += 1;
+                  },
+                  child: startScreenStep == 3
+                      ? Text(Strings.lStartGameButton)
+                      : Text(Strings.lNext))
+            ])
+          ],
+        ));
   }
 
   Widget buildStartScreenContent() {

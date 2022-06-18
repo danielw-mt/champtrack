@@ -46,6 +46,7 @@ class StartGameFormState extends State<StartGameForm> {
     // Build a Form widget using the _formKey created above.
     return GetBuilder<GlobalController>(
       builder: (GlobalController globalController) {
+        double width = MediaQuery.of(context).size.width;
         return Form(
           key: _formKey,
           child: Column(
@@ -55,21 +56,24 @@ class StartGameFormState extends State<StartGameForm> {
               Row(
                 children: [
                   // season
-                  TextFormField(),
+                  SizedBox(width: width*0.2, child: TextFormField()),
                   // team dropdown
-                  TeamDropdown(),
+                  SizedBox(width: width*0.2, child: Container()),
+                  // TeamDropdown()),
                   // date
                   Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            Text("${selectedDate.toLocal()}".split(' ')[0]),
-            SizedBox(height: 20.0,),
-            ElevatedButton(
-              onPressed: () => selectDate(context),
-              child: Text('Select date'),
-            ),
-          ],
-        ),
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Text("${selectedDate.toLocal()}".split(' ')[0]),
+                      SizedBox(
+                        height: 20.0,
+                      ),
+                      ElevatedButton(
+                        onPressed: () => selectDate(context),
+                        child: Text('Select date'),
+                      ),
+                    ],
+                  ),
                 ],
               ),
               Container(
