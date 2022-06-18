@@ -4,6 +4,7 @@ import 'package:handball_performance_tracker/constants/game_actions.dart';
 import 'package:handball_performance_tracker/utils/icons.dart';
 import 'package:handball_performance_tracker/data/database_repository.dart';
 import 'package:handball_performance_tracker/data/game.dart';
+import '../../Strings.dart';
 import 'package:handball_performance_tracker/utils/player_helper.dart';
 import 'package:handball_performance_tracker/widgets/main_screen/field.dart';
 import '../../controllers/globalController.dart';
@@ -52,7 +53,7 @@ void callPlayerMenu(context) {
             const Align(
               alignment: Alignment.topLeft,
               child: Text(
-                "Spieler",
+                Strings.lPlayer,
                 textAlign: TextAlign.left,
                 style: TextStyle(
                   color: Colors.black,
@@ -83,19 +84,22 @@ void callPlayerMenu(context) {
           height: 6,
         ),
         // Button-Row: one Row with four Columns of one or two buttons
-        // TODO: implement safety check if less than 7 players are somehow selected
-        Row(children: [
-          dialogButtons[0],
-          Column(
-            children: [dialogButtons[1], dialogButtons[2]],
-          ),
-          Column(
-            children: [dialogButtons[3], dialogButtons[4]],
-          ),
-          Column(
-            children: [dialogButtons[5], dialogButtons[6]],
-          ),
-        ]),
+
+        // TODO update this with new AppState getter later
+        globalController.selectedTeam.value.onFieldPlayers.length == 7
+            ? Row(children: [
+                dialogButtons[0],
+                Column(
+                  children: [dialogButtons[1], dialogButtons[2]],
+                ),
+                Column(
+                  children: [dialogButtons[3], dialogButtons[4]],
+                ),
+                Column(
+                  children: [dialogButtons[5], dialogButtons[6]],
+                ),
+              ])
+            : Text("7 Players were not selected. Cannot display this Menu!"),
       ],
     ),
   ).show();
@@ -285,7 +289,7 @@ Obx buildDialogButton(BuildContext context, Player associatedPlayer) {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
-                "No Assist",
+                Strings.lNoAssist,
                 style: TextStyle(
                   color: Colors.black,
                   fontSize: (width * 0.03),

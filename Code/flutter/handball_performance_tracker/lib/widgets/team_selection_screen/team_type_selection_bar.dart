@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:handball_performance_tracker/widgets/main_screen/action_menu.dart';
 import '../../controllers/globalController.dart';
 import 'package:get/get.dart';
+import '../../strings.dart';
 import '../../utils/teamTypeHelpers.dart';
 
 class TeamTypeSelectionBar extends StatelessWidget {
@@ -24,15 +25,15 @@ class TeamTypeSelectionBar extends StatelessWidget {
             },
             tabs: [
               Tab(
-                text: "Herren",
+                text: Strings.lMenTeams,
                 icon: Icon(Icons.male),
               ),
               Tab(
-                text: "Damen",
+                text: Strings.lWomenTeams,
                 icon: Icon(Icons.female),
               ),
               Tab(
-                text: "Jugend",
+                text: Strings.lYouthTeams,
                 icon: Icon(Icons.child_care),
               ),
             ],
