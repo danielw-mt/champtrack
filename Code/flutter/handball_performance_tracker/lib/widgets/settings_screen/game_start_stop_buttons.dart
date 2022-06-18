@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:handball_performance_tracker/data/game.dart';
-import '../../Strings.dart';
+import '../../strings.dart';
 import '../../data/database_repository.dart';
 import './../../controllers/globalController.dart';
 import './../../data/game.dart';
@@ -24,7 +24,8 @@ class GameStartStopButtons extends StatelessWidget {
                   padding: const EdgeInsets.all(8),
                   child: TextButton(
                     onPressed: () {
-                      if (globalController.gameRunning.value == false) startGame(context);
+                      if (globalController.gameRunning.value == false)
+                        startGame(context);
                     },
                     child: const Text(Strings.lStartGameButton),
                     // start button is grey when the game is started and blue when not
@@ -38,7 +39,8 @@ class GameStartStopButtons extends StatelessWidget {
                   padding: const EdgeInsets.all(8),
                   child: TextButton(
                       onPressed: () {
-                        if (globalController.gameRunning.value == true) stopGame();
+                        if (globalController.gameRunning.value == true)
+                          stopGame();
                       },
                       child: const Text(Strings.lStopGameButton)),
                 )

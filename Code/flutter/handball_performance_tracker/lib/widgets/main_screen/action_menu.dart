@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:handball_performance_tracker/data/database_repository.dart';
-import '../../Strings.dart';
+import '../../strings.dart';
 import '../../controllers/globalController.dart';
 import 'package:get/get.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
@@ -111,14 +111,22 @@ Widget buildDialogButtonMenu(
     BuildContext context, List<String> buttonTexts, isAttack) {
   if (isAttack) {
     List<DialogButton> dialogButtons = [
-      buildDialogButton(context, actionMapping[attack]!.keys.toList()[0], Colors.red, Icons.style),
-      buildDialogButton(context, actionMapping[attack]!.keys.toList()[1], Colors.yellow, Icons.style),
-      buildDialogButton(context, actionMapping[attack]!.keys.toList()[2], Colors.grey, Icons.timer),
-      buildDialogButton(context, actionMapping[attack]!.keys.toList()[3], Colors.grey),
-      buildDialogButton(context, actionMapping[attack]!.keys.toList()[4], Colors.grey),
-      buildDialogButton(context, actionMapping[attack]!.keys.toList()[5], Colors.blue),
-      buildDialogButton(context, actionMapping[attack]!.keys.toList()[6], Colors.blue),
-      buildDialogButton(context, actionMapping[attack]!.keys.toList()[7], Colors.blue)
+      buildDialogButton(context, actionMapping[attack]!.keys.toList()[0],
+          Colors.red, Icons.style),
+      buildDialogButton(context, actionMapping[attack]!.keys.toList()[1],
+          Colors.yellow, Icons.style),
+      buildDialogButton(context, actionMapping[attack]!.keys.toList()[2],
+          Colors.grey, Icons.timer),
+      buildDialogButton(
+          context, actionMapping[attack]!.keys.toList()[3], Colors.grey),
+      buildDialogButton(
+          context, actionMapping[attack]!.keys.toList()[4], Colors.grey),
+      buildDialogButton(
+          context, actionMapping[attack]!.keys.toList()[5], Colors.blue),
+      buildDialogButton(
+          context, actionMapping[attack]!.keys.toList()[6], Colors.blue),
+      buildDialogButton(
+          context, actionMapping[attack]!.keys.toList()[7], Colors.blue)
     ];
     return Column(children: [
       Row(

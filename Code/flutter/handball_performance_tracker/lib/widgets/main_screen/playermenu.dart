@@ -4,7 +4,7 @@ import 'package:handball_performance_tracker/constants/game_actions.dart';
 import 'package:handball_performance_tracker/utils/icons.dart';
 import 'package:handball_performance_tracker/data/database_repository.dart';
 import 'package:handball_performance_tracker/data/game.dart';
-import '../../Strings.dart';
+import '../../strings.dart';
 import 'package:handball_performance_tracker/utils/player_helper.dart';
 import 'package:handball_performance_tracker/widgets/main_screen/field.dart';
 import '../../controllers/globalController.dart';
@@ -248,7 +248,7 @@ Obx buildDialogButton(BuildContext context, Player associatedPlayer) {
         }
         FieldSwitch.pageController.jumpToPage(0);
       }
-    } else if (lastAction.actionType == blockAndSteal) {
+    } else if (lastAction.actionType == "block_st") {
       // if our action is left (page 0) and we are defensing (on page 0) jump back to attack (page 1) after the action
       if (globalController.fieldIsLeft.value == true &&
           globalController.attackIsLeft == false) {
