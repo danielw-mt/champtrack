@@ -11,6 +11,7 @@ import 'package:handball_performance_tracker/widgets/team_settings_screen/player
 import '../widgets/nav_drawer.dart';
 import '../widgets/settings_screen/game_start_stop_buttons.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
+import '../screens/mainScreen.dart';
 
 // TODO change this to Statefulwidget
 // turn team selection screen into team selection screen and teamSelectionWidget
@@ -106,6 +107,7 @@ class _StartGameScreenState extends State<StartGameScreen> {
                     }
                     if (startGameFlowStep == 3) {
                       startGame(context);
+                      Get.to(MainScreen());
                       return;
                     }
                   },
