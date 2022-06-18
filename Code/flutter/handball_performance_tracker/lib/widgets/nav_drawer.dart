@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:handball_performance_tracker/controllers/globalController.dart';
 import './../screens/mainScreen.dart';
-import '../screens/placeholderScreen.dart';
+import '../screens/debugScreen.dart';
 import './../screens/settingsScreen.dart';
 import '../screens/teamSelectionScreen.dart';
 import 'package:get/get.dart';
@@ -39,7 +39,7 @@ class NavDrawer extends StatelessWidget {
           ListTile(
             leading: Icon(Icons.verified_user),
             title: Text('Placeholder Screen'),
-            onTap: () => {Get.to(PlaceholderScreen())},
+            onTap: () => {Get.to(DebugScreen())},
           ),
           ListTile(
             leading: Icon(Icons.verified_user),
@@ -47,9 +47,12 @@ class NavDrawer extends StatelessWidget {
             onTap: () => {Get.to(TeamSelectionScreen())},
           ),
           Spacer(),
-          Text("Signed in as ${FirebaseAuth.instance.currentUser?.email.toString()}"),
+          Text(
+              "Signed in as ${FirebaseAuth.instance.currentUser?.email.toString()}"),
           ElevatedButton.icon(
-              onPressed: () {FirebaseAuth.instance.signOut();},
+              onPressed: () {
+                FirebaseAuth.instance.signOut();
+              },
               icon: Icon(Icons.logout),
               label: Text(Strings.lSignOutButton))
         ],

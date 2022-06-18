@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:handball_performance_tracker/controllers/globalController.dart';
 import 'package:handball_performance_tracker/screens/dashboard.dart';
+import 'package:handball_performance_tracker/utils/gameControl.dart';
 import 'package:handball_performance_tracker/widgets/start_game_screen/start_game_form.dart';
 import 'package:handball_performance_tracker/strings.dart';
 import '../widgets/nav_drawer.dart';
+import '../widgets/settings_screen/game_start_stop_buttons.dart';
 
 // TODO change this to Statefulwidget
 // turn team selection screen into team selection screen and teamSelectionWidget
@@ -22,7 +24,7 @@ class StartGameScreen extends StatefulWidget {
 
 class _StartGameScreenState extends State<StartGameScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  int startScreenStep = 0;
+  int startGameFlowStep = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -38,21 +40,24 @@ class _StartGameScreenState extends State<StartGameScreen> {
             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
               ElevatedButton(
                 onPressed: () {
-                  if (startScreenStep > 0) {
-                    startScreenStep -= 1;
+                  if (startGameFlowStep > 0) {
+                    startGameFlowStep -= 1;
                   } else {
                     Get.to(Dashboard());
                   }
                 },
-                child: startScreenStep == 0
+                child: startGameFlowStep == 0
                     ? Text(Strings.lDashboard)
                     : Text(Strings.lBack),
               ),
               ElevatedButton(
                   onPressed: () {
-                    startScreenStep += 1;
+                    if (startGameFlowStep == 3) {
+                      startGame(context);
+                    }
+                    startGameFlowStep += 1;
                   },
-                  child: startScreenStep == 3
+                  child: startGameFlowStep == 3
                       ? Text(Strings.lStartGameButton)
                       : Text(Strings.lNext))
             ])
@@ -61,20 +66,22 @@ class _StartGameScreenState extends State<StartGameScreen> {
   }
 
   Widget buildStartScreenContent() {
-    if (startScreenStep == 0) {
+    if (startGameFlowStep == 0) {
       return StartGameForm();
     }
-    // TODO Implement playerselection
-    if (startScreenStep == 1) {
+    if (startGameFlowStep == 1) {
       // return PlayerSelection;
+      return Text("Player Selection");
     }
 
-    if (startScreenStep == 2) {
+    if (startGameFlowStep == 2) {
       // return PlayerPositioningWidget;
+      return Text("Player Start Positioning");
     }
 
-    if (startScreenStep == 3) {
+    if (startGameFlowStep == 3) {
       // return
+      return Text("Verifiy inputs");
     }
     return Container();
   }

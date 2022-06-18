@@ -28,7 +28,7 @@ class Strings {
   static const String lBlockAndSteal = "Block & Steal";
 
   //settingsScreen.dart
-  static const String lFieldSideIsRight = "Home goal is right side of screen";
+  static const String lHomeSideIsRight = "Home goal is right side of screen";
   static const String lPageTwo = "Page Two"; // TODO correct name
 
   // mainScreen.dart
