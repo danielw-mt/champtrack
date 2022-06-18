@@ -26,9 +26,9 @@ class TeamDropdown extends GetView<GlobalController> {
         //     .toList();
         // updateSelectedTeamAccordingToTeamType();
         // end TODO
-        if (globalController.selectedTeam.value) {
+        
+        if (globalController.selectedTeam.value.name == "Default team") {
           globalController.selectedTeam.value = availableTeams[0];
-          globalController.refresh;
         }
         return DropdownButton<Team>(
           value: globalController.selectedTeam.value,
@@ -47,7 +47,6 @@ class TeamDropdown extends GetView<GlobalController> {
           },
           // build dropdown item widgets
           items: availableTeams.map<DropdownMenuItem<Team>>((Team team) {
-            print(team.name);
             return DropdownMenuItem<Team>(
               value: team,
               child: Text(team.name),
