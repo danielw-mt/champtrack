@@ -3,7 +3,7 @@ import 'package:handball_performance_tracker/widgets/main_screen/action_menu.dar
 import '../../controllers/globalController.dart';
 import 'package:get/get.dart';
 import '../../strings.dart';
-import '../../utils/teamTypeHelpers.dart';
+import '../../utils/team_type_helpers.dart';
 
 
 // Bottom Nav Bar for team settings screen

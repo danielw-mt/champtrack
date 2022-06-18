@@ -3,28 +3,33 @@ import '../../data/database_repository.dart';
 import '../../controllers/globalController.dart';
 import 'package:get/get.dart';
 import '../../data/team.dart';
-import '../../utils/teamTypeHelpers.dart';
+import '../../utils/team_type_helpers.dart';
 import '../../constants/team_constants.dart';
 
 // dropdown that shows all available teams belonging to the selected team type
 class TeamDropdown extends GetView<GlobalController> {
   @override
   Widget build(BuildContext context) {
-    DatabaseRepository repository = DatabaseRepository();
-
     // select a default team
     // TODO write a function to select the default team in globalController / utils instead of just having "Default team"
-
     return // build the dropdown button
-        GetBuilder(
+        GetBuilder<GlobalController>(
       builder: (GlobalController globalController) {
-        int selectedTeamTypeInt = globalController.selectedTeamType.value;
-        String selectedTeamTypeString = TEAM_TYPE_MAPPING[selectedTeamTypeInt];
         // available teams are all the ones that match the selected team type (0,1,2) => "men", "women", "youth"
-        List<Team> availableTeams = globalController.cachedTeamsList
-            .where((Team team) => team.type == selectedTeamTypeString)
-            .toList();
-        updateSelectedTeamAccordingToTeamType();
+        List<Team> availableTeams = globalController.cachedTeamsList;
+
+        // start TODO: keep this for # 174
+        // int selectedTeamTypeInt = globalController.selectedTeamType.value;
+        // String selectedTeamTypeString = TEAM_TYPE_MAPPING[selectedTeamTypeInt];
+        // List<Team> availableTeams = globalController.cachedTeamsList
+        //     .where((Team team) => team.type == selectedTeamTypeString)
+        //     .toList();
+        // updateSelectedTeamAccordingToTeamType();
+        // end TODO
+        if (globalController.selectedTeam.value) {
+          globalController.selectedTeam.value = availableTeams[0];
+          globalController.refresh;
+        }
         return DropdownButton<Team>(
           value: globalController.selectedTeam.value,
           icon: const Icon(Icons.arrow_downward),
@@ -42,6 +47,7 @@ class TeamDropdown extends GetView<GlobalController> {
           },
           // build dropdown item widgets
           items: availableTeams.map<DropdownMenuItem<Team>>((Team team) {
+            print(team.name);
             return DropdownMenuItem<Team>(
               value: team,
               child: Text(team.name),
