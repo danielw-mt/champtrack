@@ -1,3 +1,4 @@
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:handball_performance_tracker/data/club.dart';
 import 'package:handball_performance_tracker/data/database_repository.dart';
@@ -63,22 +64,21 @@ class GlobalController extends GetxController {
   ////
   // Helper screen
   ////
-  
-  
+
   //////
   /// Main screen
   //////
 
   // TODO is something missing here?
   /// name of the player who made a goal, used to adapt the respective button color.
-  
+
   Rx<StopWatchTimer> stopWatchTimer = StopWatchTimer(
     mode: StopWatchMode.countUp,
   ).obs;
-  
+
   Rx<StopWatchTimer> feedTimer = StopWatchTimer(
       mode: StopWatchMode.countDown,
-      presetMillisecond: FEED_RESET_PERIOD*1000,
+      presetMillisecond: FEED_RESET_PERIOD * 1000,
       onEnded: () {
         onFeedTimerEnded();
       }).obs;
