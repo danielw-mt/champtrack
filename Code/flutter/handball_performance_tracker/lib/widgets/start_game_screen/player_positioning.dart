@@ -13,7 +13,6 @@ class PlayerPositioning extends StatefulWidget {
 }
 
 class _PlayerPositioningState extends State<PlayerPositioning> {
-
   @override
   Widget build(BuildContext context) {
     return GetBuilder<GlobalController>(builder: (globalController) {
@@ -54,27 +53,31 @@ class _PlayerPositioningState extends State<PlayerPositioning> {
                     DataCell(Text(
                         "${onFieldPlayers[index].firstName} ${onFieldPlayers[index].lastName}")),
                     DataCell(Text(onFieldPlayers[index].number.toString())),
-                    DataCell(ListView.builder(
-                        itemCount: 7,
-                        shrinkWrap: true,
-                        itemBuilder: (context, item) {
-                          List<String> positionNames = [
-                            Strings.lGoalkeeper,
-                            Strings.lLeftBack,
-                            Strings.lCenterBack,
-                            Strings.lRightBack,
-                            Strings.lLeftWinger,
-                            Strings.lCenterForward,
-                            Strings.lRightWinger
-                          ];
-                          return Row(
-                            children: [
-                              Text(positionNames[item]),
-                              // TODO implement checkbox
-                              Checkbox(value: false, onChanged: (value) {})
-                            ],
-                          );
-                        }))
+                    DataCell(Text("Test")),
+                    // DataCell(SizedBox(
+                    //   height: 30,
+                    //   child: ListView.builder(
+                    //       itemCount: 7,
+                    //       shrinkWrap: true,
+                    //       itemBuilder: (context, item) {
+                    //         List<String> positionNames = [
+                    //           Strings.lGoalkeeper,
+                    //           Strings.lLeftBack,
+                    //           Strings.lCenterBack,
+                    //           Strings.lRightBack,
+                    //           Strings.lLeftWinger,
+                    //           Strings.lCenterForward,
+                    //           Strings.lRightWinger
+                    //         ];
+                    //         return Row(
+                    //           children: [
+                    //             Text(positionNames[item]),
+                    //             // TODO implement checkbox
+                    //             Checkbox(value: false, onChanged: (value) {})
+                    //           ],
+                    //         );
+                    //       }),
+                    // ))
                   ],
                 );
               },

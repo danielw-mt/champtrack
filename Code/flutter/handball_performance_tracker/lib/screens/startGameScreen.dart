@@ -31,6 +31,19 @@ class _StartGameScreenState extends State<StartGameScreen> {
 
   @override
   Widget build(BuildContext context) {
+    if (!Get.isRegistered<GlobalController>())
+      return Column(
+        children: [
+          Text(
+              "There seems to be a problem. Please go back to the home screen"),
+          ElevatedButton(
+              onPressed: () {
+                Get.toNamed("Dashboard");
+              },
+              child: Text("Home"))
+        ],
+      );
+    print("Page $startGameFlowStep");
     return Scaffold(
         key: _scaffoldKey,
         drawer: NavDrawer(),
@@ -57,10 +70,13 @@ class _StartGameScreenState extends State<StartGameScreen> {
               ),
               ElevatedButton(
                   onPressed: () {
-                    if (startGameFlowStep < 1) {
+                    // for first page and page 3 just go to next page normally
+                    if (startGameFlowStep == 0) {
                       setState(() {
-                        startGameFlowStep += 1;
+                        print("page 0 or 2");
+                        startGameFlowStep = 1;
                       });
+                      return;
                     }
                     if (startGameFlowStep == 1) {
                       GlobalController globalController =
@@ -75,12 +91,22 @@ class _StartGameScreenState extends State<StartGameScreen> {
                                 desc: Strings.lPlayerNumberErrorMessage)
                             .show();
                       } else {
+                        print("page 1 and correct");
                         setState(() {
-                          startGameFlowStep += 1;
+                          startGameFlowStep = 2;
                         });
+                        return;
                       }
-                    } else if (startGameFlowStep == 3) {
+                    }
+                    if (startGameFlowStep == 2) {
+                      setState(() {
+                        startGameFlowStep = 3;
+                      });
+                      return;
+                    }
+                    if (startGameFlowStep == 3) {
                       startGame(context);
+                      return;
                     }
                   },
                   child: startGameFlowStep == 3
@@ -98,7 +124,6 @@ class _StartGameScreenState extends State<StartGameScreen> {
     if (startGameFlowStep == 1) {
       return PlayersList();
     }
-
     if (startGameFlowStep == 2) {
       return PlayerPositioning();
     }
