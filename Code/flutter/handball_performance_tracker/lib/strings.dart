@@ -1,4 +1,3 @@
-
 class Strings {
 // all language strings start with a small l in front of the variable
 
@@ -23,7 +22,7 @@ class Strings {
   static const String lOneVsOneAnd7m = "1v1 & 7m";
   static const String lTwoMin = "2min ziehen";
   static const String lErrThrow = "err"; // TODO correct name
-  static const String lTrf  = "TRF";
+  static const String lTrf = "TRF";
   static const String lFoul7m = "Foul => 7m";
   static const String lBlockNoBall = "Block ohne Ballgewinn";
   static const String lBlockAndSteal = "Block & Steal";
@@ -48,9 +47,10 @@ class Strings {
   static const String lResetTime = "Zurücksetzen";
   static const String lPlusOneTime = "+1 Sek";
   static const String lMinusOneTime = "-1 Sek";
-  
+
   // action_menu.dart
-  static const String lGameStartErrorMessage = "Fehler: Spiel wurde noch nicht gesartet!";
+  static const String lGameStartErrorMessage =
+      "Fehler: Spiel wurde noch nicht gesartet!";
   static const String lOffensePopUpHeader = "Offensive Aktionen";
   static const String lDeffensePopUpHeader = "Defensive Aktionen";
   static const String lSelectActionDialogHeader = "Wählen Sie eine Aktion";
@@ -59,16 +59,16 @@ class Strings {
   static const String lEfScore = "EFSCORE";
 
   // playermenu.dart
-  static const String lPlayer  = "Spieler";
+  static const String lPlayer = "Spieler";
   static const String lNoAssist = "Kein Assist";
 
   // game_start_stop_buttons.dart
   static const String lStartGameButton = "Spiel starten";
   static const String lStopGameButton = "Spiel stoppen";
   static const String lWarningPlayerNumberErrorMessage = "Warnung";
-  static const String lPlayerNumberErrorMessage = "Sie können das Spiel nur mit 7 Playern auf dem Feld starten";
+  static const String lPlayerNumberErrorMessage =
+      "Sie können das Spiel nur mit 7 Playern auf dem Feld starten";
 
-  
   // globalController.dart
   static const String lGoalScreenText = "Assist2"; // not used
 
@@ -81,7 +81,8 @@ class Strings {
 
   //gameControl.dart
   static const String lStartGameAlertHeader = "Warnung";
-  static const String lStartGameAlert = "Sie können das Spiel nur mit 7 Spielern starten.";
+  static const String lStartGameAlert =
+      "Sie können das Spiel nur mit 7 Spielern starten.";
 
   // team_type_selection_bar.dart
   static const String lMenTeams = "Herren";
@@ -104,5 +105,27 @@ class Strings {
   static const String lSignedInAs = "Angemeldet als: "; //TODO anwenden
   static const String lSignOutButton = "Abmelden";
 
+  // start game screen
+  static const String lBack = "Zurück";
+  static const String lNext = "Weiter";
+  static const String lSeason = "Saison";
+  static const String lTeam = "Mannschaft";
+  static const String lDate = "Datum";
+  static const String lOpponent = "Gegner";
+  static const String lLocation = "Halle";
+  static const String lHomeGame = "Heimspiel";
+  static const String lOutwardsGame = "Auswärtsspiel";
+  static const String lStartGameFormPrompt =
+      "Bitte ergänze alle fehlenden Felder";
+  static const String lStartGameTitle = "Neues Spiel tracken";
+  static const String lStartGameTeamPrompt = "Bitte wähle ein Team aus";
+  static const String lStartGamePlayerSelectionPrompt =
+      "Bitte wähle alle Spieler für den Spieltag aus";
+  static const String lStartGamePlayerPositioningPrompt =
+      "Bitte wähle die Startaufstellung aus den nominierten Spielern aus";
 
+  // Dashboard
+  static const String lDashboard = "Dashboard";
+  static const String lManageTeams = "Mannschaften verwalten";
+  static const String lTrackNewGame = "Neues Spiel tracken";
 }
