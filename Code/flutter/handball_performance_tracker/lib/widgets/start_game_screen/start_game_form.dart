@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:handball_performance_tracker/widgets/team_selection_screen/team_dropdown.dart';
 import '../../controllers/globalController.dart';
 import '../../constants/team_constants.dart';
 import '../../strings.dart';
@@ -19,8 +20,26 @@ class StartGameForm extends StatefulWidget {
 class StartGameFormState extends State<StartGameForm> {
   // Create a global key that uniquely identifies the Form widget
   // and allows validation of the form.
+  TextEditingController seasonController = TextEditingController();
+  TextEditingController opponentController = TextEditingController();
+  TextEditingController locationController = TextEditingController();
+
+  DateTime selectedDate = DateTime.now();
 
   final _formKey = GlobalKey<FormState>();
+
+  Future<void> selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+        context: context,
+        initialDate: selectedDate,
+        firstDate: DateTime(2015, 8),
+        lastDate: DateTime(2101));
+    if (picked != null && picked != selectedDate) {
+      setState(() {
+        selectedDate = picked;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,25 +51,61 @@ class StartGameFormState extends State<StartGameForm> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(Strings.lTeamName),
-              TextFormField(
-                initialValue: globalController.selectedTeam.value.name,
-                // The validator receives the text that the user has entered.
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return Strings.lEmptyFieldWarning;
-                  }
-                  return null;
-                },
+              //row
+              Row(
+                children: [
+                  // season
+                  TextFormField(),
+                  // team dropdown
+                  TeamDropdown(),
+                  // date
+                  Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Text("${selectedDate.toLocal()}".split(' ')[0]),
+            SizedBox(height: 20.0,),
+            ElevatedButton(
+              onPressed: () => selectDate(context),
+              child: Text('Select date'),
+            ),
+          ],
+        ),
+                ],
               ),
-              Text(Strings.lTeamType),
-              // TODO implement a dropdown for selecting the team type based on the constants team_constants.dart
-              // TODO implement a textfield that allows to set the league
+              Container(
+                height: 20,
+              ),
+              Row(
+                children: [
+                  // opponent
+                  // location
+                ],
+              ),
+              Container(
+                height: 20,
+              ),
+              Row(
+                children: [
+                  Row(
+                    children: [
+                      Checkbox(value: false, onChanged: (value) {}),
+                      Text(Strings.lHomeGame)
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Checkbox(value: false, onChanged: (value) {}),
+                      Text(Strings.lOutwardsGame)
+                    ],
+                  )
+                ],
+              ),
+
               Padding(
+                // TODO create a lock in button
                 padding: const EdgeInsets.symmetric(vertical: 16.0),
                 child: ElevatedButton(
                   onPressed: () {
-
                     // TODO save these infos in Firebase using repository
 
                     // Validate returns true if the form is valid, or false otherwise.
@@ -72,5 +127,3 @@ class StartGameFormState extends State<StartGameForm> {
     );
   }
 }
- 
- 
