@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:handball_performance_tracker/constants/team_constants.dart';
-import 'package:handball_performance_tracker/data/database_repository.dart';
-import 'package:handball_performance_tracker/data/game.dart';
+import '../../constants/team_constants.dart';
+import '../../data/game.dart';
 import '../../controllers/appController.dart';
 import '../../controllers/gameController.dart';
 import './../../data/game.dart';
 import './../../data/player.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
@@ -50,7 +48,6 @@ class GameStartStopButtons extends StatelessWidget {
   void startGame(BuildContext context) async {
     final GameController gameController = Get.find<GameController>();
     final AppController appController = Get.find<AppController>();
-    final DatabaseRepository repository = appController.repository;
     print("in start game");
     // check if enough players have been selected
     var numPlayersOnField =
@@ -76,9 +73,8 @@ class GameStartStopButtons extends StatelessWidget {
         startTime: unixTimeStamp,
         players: gameController.chosenPlayers.cast<Player>());
 
-    final DocumentReference ref = await repository.addGame(newGame);
-    newGame.id = ref.id;
-    appController.setCurrentGame(newGame);
+    appController.setCurrentGame(newGame, isNewGame: true);
+    newGame = appController.getCurrentGame(); // id was updated during set
     print("start game, id: ${appController.getCurrentGame().id}");
 
     // add game to selected players
@@ -99,7 +95,6 @@ class GameStartStopButtons extends StatelessWidget {
   void stopGame() async {
     final GameController gameController = Get.find<GameController>();
     final AppController appController = Get.find<AppController>();
-    final DatabaseRepository repository = appController.repository;
     // update game document in firebase
     Game currentGame = appController.getCurrentGame();
     print("stop game, id: ${appController.getCurrentGame().id}");
@@ -109,7 +104,6 @@ class GameStartStopButtons extends StatelessWidget {
     currentGame.stopTime = dateTime.toUtc().millisecondsSinceEpoch;
     currentGame.players = gameController.chosenPlayers.cast<Player>();
 
-    repository.updateGame(currentGame);
     appController.setCurrentGame(currentGame);
 
     // stop the game timer

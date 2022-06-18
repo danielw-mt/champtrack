@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import '../data/database_repository.dart';
 import '../data/game.dart';
@@ -31,9 +32,10 @@ class AppController extends GetxController {
   /// Storing game actions as GameAction objects inside this list
   RxList<GameAction> _actions = <GameAction>[].obs;
 
-  /// remove last added entry from actions list
+  /// remove last added entry from actions list and firestore
   void removeLastAction() {
     _actions.removeLast();
+    repository.deleteLastAction();
   }
 
   /// check whether there were game actions entered already
@@ -41,11 +43,12 @@ class AppController extends GetxController {
     return _actions.isEmpty;
   }
 
-  /// add action to actions list
+  /// add action to actions list and firestore
   void addAction(GameAction action) {
-    print("adding action");
     _actions.add(action);
-    print("action added: ${_actions.last.toMap()}");
+    repository
+        .addActionToGame(action)
+        .then((DocumentReference doc) => action.id = doc.id);
   }
 
   /// return last action that was added
@@ -53,19 +56,29 @@ class AppController extends GetxController {
     return _actions.last;
   }
 
-  /// update last added action in actions list
+  /// update last added action in actions list and firestore
   void setLastAction(GameAction lastAction) {
     _actions.last = lastAction;
+    repository.updateAction(lastAction);
   }
 
-  /// last game object written to db
+  /// last game object written to firestore
   Rx<Game> _currentGame = Game(date: DateTime.now()).obs;
 
+  /// get current game object
   Game getCurrentGame() {
     return _currentGame.value;
   }
 
-  void setCurrentGame(Game game){
+  /// set game object and either add is to firestore with new id or update the existing one
+  void setCurrentGame(Game game, {isNewGame: false}) {
+    if (isNewGame) {
+      repository
+          .addGame(game)
+          .then((DocumentReference ref) => game.id = ref.id);
+    } else {
+      repository.updateGame(game);
+    }
     _currentGame.value = game;
   }
 }

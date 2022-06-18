@@ -11,7 +11,6 @@ class ReverseButton extends GetView<GameController> {
     return FloatingActionButton(
         onPressed: (() {
           if (!appController.actionsIsEmpty()) {
-            appController.repository.deleteLastAction();
             appController.removeLastAction();
             // TODO: also remove last action from corresponding player and update Ef-Score
           }

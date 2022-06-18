@@ -11,30 +11,34 @@ class TeamTypeSelectionBar extends StatelessWidget {
       builder: (GameController gameController) {
         return Container(
           color: Color(0xFF3F5AA6),
-          child: TabBar(
-            labelColor: Colors.white,
-            unselectedLabelColor: Colors.white70,
-            indicatorSize: TabBarIndicatorSize.tab,
-            indicatorPadding: EdgeInsets.all(5.0),
-            indicatorColor: Colors.blue,
-            onTap: (int tabNumber) {
-              gameController.setSelectedTeamType(tabNumber);
-              updateSelectedTeamAccordingToTeamType();
-            },
-            tabs: [
-              Tab(
-                text: "Herren",
-                icon: Icon(Icons.male),
-              ),
-              Tab(
-                text: "Damen",
-                icon: Icon(Icons.female),
-              ),
-              Tab(
-                text: "Jugend",
-                icon: Icon(Icons.child_care),
-              ),
-            ],
+          child: DefaultTabController(
+            length: 3,
+            initialIndex: gameController.getSelectedTeamType(),
+            child: TabBar(
+              labelColor: Colors.white,
+              unselectedLabelColor: Colors.white70,
+              indicatorSize: TabBarIndicatorSize.tab,
+              indicatorPadding: EdgeInsets.all(5.0),
+              indicatorColor: Colors.blue,
+              onTap: (int tabNumber) {
+                gameController.setSelectedTeamType(tabNumber);
+                updateSelectedTeamAccordingToTeamType();
+              },
+              tabs: [
+                Tab(
+                  text: "Herren",
+                  icon: Icon(Icons.male),
+                ),
+                Tab(
+                  text: "Damen",
+                  icon: Icon(Icons.female),
+                ),
+                Tab(
+                  text: "Jugend",
+                  icon: Icon(Icons.child_care),
+                ),
+              ],
+            ),
           ),
         );
       },

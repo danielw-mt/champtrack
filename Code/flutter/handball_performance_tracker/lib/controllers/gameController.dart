@@ -1,7 +1,9 @@
 import 'package:get/get.dart';
+import 'package:handball_performance_tracker/data/database_repository.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 
 import '../constants/settings_config.dart';
+import '../controllers/appController.dart';
 import '../data/game_action.dart';
 import '../data/player.dart';
 import '../data/team.dart';
@@ -9,6 +11,9 @@ import '../utils/feed_logic.dart';
 import '../utils/player_helper.dart';
 
 class GameController extends GetxController {
+  /// Database instance for automatically updating instances in firestore
+  DatabaseRepository repository = Get.find<AppController>().repository;
+
   /// Temporary variable for storing the currently selected Team
   Rx<Team> _selectedTeam = Team(id: "-1", name: "Default team").obs;
 
@@ -154,12 +159,16 @@ class GameController extends GetxController {
   /// remove given feedAction 
   void removeFeedAction(GameAction action) {
     _feedActions.remove(action);
+    // delete feed item from database
+    repository.deleteAction(action);
     update(["action-feed"]);
   }
 
   /// add feedAction to end of list
   void addFeedAction(GameAction action) {
     _feedActions.add(action);
+    // add feed item to database
+    repository.addActionToGame(action);
     update(["action-feed"]);
   }
 

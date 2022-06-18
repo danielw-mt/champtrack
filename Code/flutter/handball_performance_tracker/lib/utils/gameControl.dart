@@ -1,19 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:handball_performance_tracker/constants/team_constants.dart';
-import 'package:handball_performance_tracker/data/database_repository.dart';
 import '../controllers/appController.dart';
 import '../controllers/gameController.dart';
 import '../data/player.dart';
 import '../data/game.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 
 void startGame(BuildContext context) async {
   GameController gameController = Get.find<GameController>();
   AppController appController = Get.find<AppController>();
-  DatabaseRepository repository = Get.find<AppController>().repository;
   print("in start game");
   // check if enough players have been selected
   var numPlayersOnField =
@@ -38,11 +35,7 @@ void startGame(BuildContext context) async {
       date: dateTime,
       startTime: unixTimeStamp,
       players: gameController.chosenPlayers.cast<Player>());
-
-  final DocumentReference ref =
-      await repository.addGame(newGame);
-  newGame.id = ref.id;
-  appController.setCurrentGame(newGame);
+  appController.setCurrentGame(newGame, isNewGame: true);
   print("start game, id: $appController.currentGame.value.id}");
 
   // add game to selected players
@@ -74,7 +67,6 @@ void pauseGame() {
 void stopGame() async {
   GameController gameController = Get.find<GameController>();
   AppController appController = Get.find<AppController>();
-  DatabaseRepository repository = Get.find<AppController>().repository;
   // update game document in firebase
   Game currentGame = appController.getCurrentGame();
   print("stop game, id: ${appController.getCurrentGame().id}");
@@ -84,7 +76,7 @@ void stopGame() async {
   currentGame.stopTime = dateTime.toUtc().millisecondsSinceEpoch;
   currentGame.players = gameController.chosenPlayers().cast<Player>();
 
-  repository.updateGame(currentGame);
+  appController.setCurrentGame(currentGame);
 
   // stop the game timer
   appController.getCurrentGame().stopWatch.onExecute.add(StopWatchExecute.stop);

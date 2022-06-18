@@ -54,8 +54,6 @@ void onFeedTimerEnded() {
 /// Gets triggered when user clicks on a feed item
 void removeFeedItem(GameAction action) {
   final GameController gameController = Get.find<GameController>();
-  // delete feed item from database
-  DatabaseRepository().deleteAction(action);
-  // delete action from game state
+  // delete action from game state and database
   gameController.removeFeedAction(action);
 }

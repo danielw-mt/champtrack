@@ -1,12 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:handball_performance_tracker/data/database_repository.dart';
 import '../../controllers/appController.dart';
 import '../../controllers/gameController.dart';
 import 'package:get/get.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import '../../data/game_action.dart';
-import '../../data/database_repository.dart';
 import '../../constants/game_actions.dart';
 import 'playermenu.dart';
 import 'dart:math';
@@ -210,7 +208,6 @@ DialogButton buildDialogButton(
     [icon]) {
   GameController gameController = Get.find<GameController>();
   AppController appController =  Get.find<AppController>();
-  final DatabaseRepository repository = appController.repository;
   void logAction() async {
     DateTime dateTime = DateTime.now();
     int unixTime = dateTime.toUtc().millisecondsSinceEpoch;
@@ -230,15 +227,6 @@ DialogButton buildDialogButton(
         timestamp: unixTime,
         relativeTime: secondsSinceGameStart);
     appController.addAction(action);
-
-    // add action to firebase
-
-    // store most recent action id in game state for the player menu
-    // when a player was selected in that menu the action document can be
-    // updated in firebase with their player_id using the action_id
-    repository
-        .addActionToGame(action)
-        .then((DocumentReference doc) => action.id = doc.id);
   }
 
   final double width = MediaQuery.of(context).size.width;

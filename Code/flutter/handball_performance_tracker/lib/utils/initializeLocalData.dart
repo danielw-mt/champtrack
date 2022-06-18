@@ -7,14 +7,14 @@ import 'package:get/get.dart';
 import '../controllers/appController.dart';
 
 Future<bool> initializeLocalData() async {
-  DatabaseRepository repo = DatabaseRepository();
   AppController appController = Get.find<AppController>();
+  DatabaseRepository repository = appController.repository; 
   if (!appController.isInitialized) {
     print("initializing local data");
     List<Team> teamsList = [];
     // initialize all teams with corresponding player objects first and wait
     //for them to be built
-    QuerySnapshot snapshot = await repo.getAllTeams();
+    QuerySnapshot snapshot = await repository.getAllTeams();
     // go through every team document
     for (var element in snapshot.docs) {
       Map<String, dynamic> docData = element.data() as Map<String, dynamic>;
