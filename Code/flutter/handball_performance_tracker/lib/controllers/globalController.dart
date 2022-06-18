@@ -64,22 +64,21 @@ class GlobalController extends GetxController {
   ////
   // Helper screen
   ////
-  
-  
+
   //////
   /// Main screen
   //////
 
   // TODO is something missing here?
   /// name of the player who made a goal, used to adapt the respective button color.
-  
+
   Rx<StopWatchTimer> stopWatchTimer = StopWatchTimer(
     mode: StopWatchMode.countUp,
   ).obs;
-  
+
   Rx<StopWatchTimer> feedTimer = StopWatchTimer(
       mode: StopWatchMode.countDown,
-      presetMillisecond: FEED_RESET_PERIOD*1000,
+      presetMillisecond: FEED_RESET_PERIOD * 1000,
       onEnded: () {
         onFeedTimerEnded();
       }).obs;
@@ -125,8 +124,7 @@ class GlobalController extends GetxController {
 
   /// True: home team is playing on the left; False: home team is defending
   RxBool fieldIsLeft = true.obs;
-  Rx<PageController> fieldController = PageController().obs;
-  
+
   /// Storing game actions as GameAction objects inside this list
   RxList<GameAction> actions = <GameAction>[].obs;
 

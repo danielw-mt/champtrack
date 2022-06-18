@@ -4,6 +4,7 @@ import 'package:handball_performance_tracker/utils/icons.dart';
 import 'package:handball_performance_tracker/data/database_repository.dart';
 import 'package:handball_performance_tracker/data/game.dart';
 import 'package:handball_performance_tracker/utils/player_helper.dart';
+import 'package:handball_performance_tracker/widgets/main_screen/field.dart';
 import '../../controllers/globalController.dart';
 import 'package:get/get.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
@@ -12,7 +13,6 @@ import '../../utils/feed_logic.dart';
 import '../../data/game_action.dart';
 import '../../data/player.dart';
 import 'package:logger/logger.dart';
-
 
 var logger = Logger(
   printer: PrettyPrinter(
@@ -24,7 +24,6 @@ var logger = Logger(
       printTime: false // Should each log print contain a timestamp
       ),
 );
-
 
 void callPlayerMenu(context) {
   logger.d("Calling player menu");
@@ -214,19 +213,25 @@ Obx buildDialogButton(BuildContext context, Player associatedPlayer) {
       // TODO debug if there are no cases missing here because when you switch back it doesnt get triggered again
 
       // if our goal is right (page 1) and we are attacking (on page 0) jump back to defense (page 1) after the goal
-      if (globalController.fieldIsLeft.value == true && globalController.attackIsLeft == true){
+      if (globalController.fieldIsLeft.value == true &&
+          globalController.attackIsLeft == true) {
         logger.d("Switching to right field after goal");
-        globalController.fieldController.value.jumpToPage(1);
-        globalController.fieldIsLeft == false;
-      // if out goal is left (page 0) and we are attacking (on page 1) jump back to defense (page 0) after the goal
-      } else if (globalController.fieldIsLeft == false && globalController.attackIsLeft == false) {
+        if (FieldSwitch.pageController.positions.length > 1) {
+          FieldSwitch.pageController
+              .detach(FieldSwitch.pageController.positions.first);
+        }
+        FieldSwitch.pageController.jumpToPage(1);
+
+        // if out goal is left (page 0) and we are attacking (on page 1) jump back to defense (page 0) after the goal
+      } else if (globalController.fieldIsLeft == false &&
+          globalController.attackIsLeft == false) {
         logger.d("Switching to left field after goal");
-        globalController.fieldController.value.jumpToPage(0);
-        globalController.fieldIsLeft == true;
+        if (FieldSwitch.pageController.positions.length > 1) {
+          FieldSwitch.pageController
+              .detach(FieldSwitch.pageController.positions.first);
+        }
+        FieldSwitch.pageController.jumpToPage(0);
       }
-      // globalController.fieldIsLeft.value = !globalController.fieldIsLeft.value;
-      globalController.fieldController.refresh();
-      
     } else {
       // if the action was not a goal just update the player id in firebase and gamestate
       lastAction.playerId = associatedPlayer.id.toString();
@@ -237,12 +242,12 @@ Obx buildDialogButton(BuildContext context, Player associatedPlayer) {
       // TODO implement this
       // activePlayer.addAction(lastAction);
 
-      globalController.lastClickedPlayer.value = Player(); 
+      globalController.lastClickedPlayer.value = Player();
     }
     // addFeedItem(lastAction);
     print("last action saved in database: ");
     print(globalController.actions.last.toMap());
-    globalController.refresh(); 
+    globalController.refresh();
     Navigator.pop(context);
   }
 
