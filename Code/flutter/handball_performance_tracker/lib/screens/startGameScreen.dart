@@ -4,10 +4,13 @@ import 'package:get/get.dart';
 import 'package:handball_performance_tracker/controllers/globalController.dart';
 import 'package:handball_performance_tracker/screens/dashboard.dart';
 import 'package:handball_performance_tracker/utils/gameControl.dart';
+import 'package:handball_performance_tracker/widgets/start_game_screen/player_positioning.dart';
 import 'package:handball_performance_tracker/widgets/start_game_screen/start_game_form.dart';
 import 'package:handball_performance_tracker/strings.dart';
+import 'package:handball_performance_tracker/widgets/team_settings_screen/players_list.dart';
 import '../widgets/nav_drawer.dart';
 import '../widgets/settings_screen/game_start_stop_buttons.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 
 // TODO change this to Statefulwidget
 // turn team selection screen into team selection screen and teamSelectionWidget
@@ -41,7 +44,9 @@ class _StartGameScreenState extends State<StartGameScreen> {
               ElevatedButton(
                 onPressed: () {
                   if (startGameFlowStep > 0) {
-                    startGameFlowStep -= 1;
+                    setState(() {
+                      startGameFlowStep -= 1;
+                    });
                   } else {
                     Get.to(Dashboard());
                   }
@@ -52,10 +57,31 @@ class _StartGameScreenState extends State<StartGameScreen> {
               ),
               ElevatedButton(
                   onPressed: () {
-                    if (startGameFlowStep == 3) {
+                    if (startGameFlowStep < 1) {
+                      setState(() {
+                        startGameFlowStep += 1;
+                      });
+                    }
+                    if (startGameFlowStep == 1) {
+                      GlobalController globalController =
+                          Get.find<GlobalController>();
+                      if (globalController
+                              .selectedTeam.value.onFieldPlayers.length !=
+                          7) {
+                        Alert(
+                                context: context,
+                                title: Strings.lWarningPlayerNumberErrorMessage,
+                                type: AlertType.error,
+                                desc: Strings.lPlayerNumberErrorMessage)
+                            .show();
+                      } else {
+                        setState(() {
+                          startGameFlowStep += 1;
+                        });
+                      }
+                    } else if (startGameFlowStep == 3) {
                       startGame(context);
                     }
-                    startGameFlowStep += 1;
                   },
                   child: startGameFlowStep == 3
                       ? Text(Strings.lStartGameButton)
@@ -70,13 +96,11 @@ class _StartGameScreenState extends State<StartGameScreen> {
       return StartGameForm();
     }
     if (startGameFlowStep == 1) {
-      // return PlayerSelection;
-      return Text("Player Selection");
+      return PlayersList();
     }
 
     if (startGameFlowStep == 2) {
-      // return PlayerPositioningWidget;
-      return Text("Player Start Positioning");
+      return PlayerPositioning();
     }
 
     if (startGameFlowStep == 3) {
