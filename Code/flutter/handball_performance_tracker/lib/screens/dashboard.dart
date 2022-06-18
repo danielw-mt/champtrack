@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:handball_performance_tracker/screens/startGameScreen.dart';
 import 'package:handball_performance_tracker/widgets/nav_drawer.dart';
 import '../strings.dart';
-import './../controllers/globalController.dart';
+import 'package:get/get.dart';
+import '../controllers/globalController.dart';
 
-class SettingsScreen extends GetView<GlobalController> {
-  // screen that allows players to be selected including what players are on the field or on the bench (non selected)
-  final GlobalController globalController = Get.find<GlobalController>();
+class Dashboard extends StatelessWidget {
+  final GlobalController globalController = Get.put(GlobalController());
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
@@ -19,11 +19,15 @@ class SettingsScreen extends GetView<GlobalController> {
           MenuButton(_scaffoldKey),
           Text("Dashboard"),
           Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               ElevatedButton(
                   onPressed: () {}, child: Text(Strings.lManageTeams)),
               ElevatedButton(
-                  onPressed: () {}, child: Text(Strings.lTrackNewGame)),
+                  onPressed: () {
+                    Get.to(StartGameScreen());
+                  },
+                  child: Text(Strings.lTrackNewGame)),
             ],
           ),
         ]));

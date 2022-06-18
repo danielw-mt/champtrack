@@ -1,6 +1,9 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:handball_performance_tracker/screens/authenticationScreen.dart';
+import 'package:handball_performance_tracker/screens/dashboard.dart';
+import 'package:handball_performance_tracker/screens/settingsScreen.dart';
+import 'package:handball_performance_tracker/screens/startGameScreen.dart';
 import 'screens/mainScreen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'dart:io';
@@ -24,6 +27,13 @@ void main() async {
       ),
       scrollBehavior:
           AppScrollBehavior(), // add scrollbehaviour so swiping is possible in web
+      getPages: [
+        GetPage(name: '/start-game', page: () => StartGameScreen()),
+        GetPage(
+            name: '/settings',
+            page: () => SettingsScreen()),
+        GetPage(name: '/dashboard', page: () => Dashboard()),
+      ],
       home: FutureBuilder<dynamic>(
         future: _startupCheck(),
         builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
@@ -38,7 +48,7 @@ void main() async {
                     return Center(child: Text("There was a problem with authentication"),);
                   } else if (snapshot.hasData){
                     // if we have a User object we are logged in and can display the app
-                    return MainScreen();
+                    return Dashboard();
                   } else {
                     return AuthenticationScreen(context: context);
                   }

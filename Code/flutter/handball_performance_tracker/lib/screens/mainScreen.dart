@@ -17,7 +17,6 @@ import '../widgets/main_screen/action_feed.dart';
 
 class MainScreen extends StatelessWidget {
   // screen where the game takes place
-  final GlobalController globalController = Get.put(GlobalController());
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
