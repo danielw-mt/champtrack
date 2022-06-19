@@ -1,21 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:handball_performance_tracker/utils/main_screen_field_helper.dart';
-import '../../controllers/globalController.dart';
+import '../../controllers/tempController.dart';
 import 'package:get/get.dart';
 import 'action_menu.dart';
 
 // Class that returns a FieldPainter with a GestureDetecture, i.e. the Painted halffield with the possibility to get coordinates on click.
 class CustomField extends StatelessWidget {
-  final GlobalController globalController = Get.find<GlobalController>();
+  final TempController tempController = Get.find<TempController>();
   bool fieldIsLeft = true;
   CustomField({required fieldIsLeft}) {
     this.fieldIsLeft = fieldIsLeft;
   }
   @override
   Widget build(BuildContext context) {
-    globalController.fieldIsLeft.value = this.fieldIsLeft;
-    return GetBuilder<GlobalController>(
-      builder: (GlobalController globalController) => Stack(children: [
+    tempController.setFieldIsLeft(this.fieldIsLeft);
+    return GetBuilder<TempController>(
+      id: "custom-field",
+      builder: (TempController tempController) => Stack(children: [
         // Painter of 7m, 6m and filled 9m
         CustomPaint(
           painter: FieldPainter(fieldIsLeft),
@@ -23,8 +24,8 @@ class CustomField extends StatelessWidget {
           child: GestureDetector(
               // handle coordinates on click
               onTapDown: (TapDownDetails details) {
-            globalController.lastLocation.value = SectorCalc(fieldIsLeft)
-                .calculatePosition(details.localPosition);
+            tempController.setLastLocation(SectorCalc(fieldIsLeft)
+                .calculatePosition(details.localPosition));
             callActionMenu(context);         
           }),
         ),

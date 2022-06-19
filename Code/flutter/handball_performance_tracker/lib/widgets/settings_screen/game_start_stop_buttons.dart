@@ -1,36 +1,35 @@
 import 'package:flutter/material.dart';
 import 'package:handball_performance_tracker/data/game.dart';
 import '../../strings.dart';
-import '../../data/database_repository.dart';
-import './../../controllers/globalController.dart';
+import '../../constants/team_constants.dart';
+import '../../data/game.dart';
+import '../../controllers/persistentController.dart';
+import '../../controllers/tempController.dart';
 import './../../data/game.dart';
 import './../../data/player.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 
 class GameStartStopButtons extends StatelessWidget {
-  //GlobalController globalController = Get.find<GlobalController>();
-
   // TODO implement db write of newly selected players
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<GlobalController>(
-        builder: (globalController) => Row(
+    return GetBuilder<TempController>(
+        builder: (tempController) => Row(
               children: [
                 Padding(
                   padding: const EdgeInsets.all(8),
                   child: TextButton(
                     onPressed: () {
-                      if (globalController.gameRunning.value == false)
+                      if (!tempController.getGameIsRunning())
                         startGame(context);
                     },
                     child: const Text(Strings.lStartGameButton),
                     // start button is grey when the game is started and blue when not
                     style: ButtonStyle(
-                        backgroundColor: globalController.gameRunning.value
+                        backgroundColor: tempController.getGameIsRunning()
                             ? MaterialStateProperty.all<Color>(Colors.grey)
                             : MaterialStateProperty.all<Color>(Colors.red)),
                   ),
@@ -39,8 +38,7 @@ class GameStartStopButtons extends StatelessWidget {
                   padding: const EdgeInsets.all(8),
                   child: TextButton(
                       onPressed: () {
-                        if (globalController.gameRunning.value == true)
-                          stopGame();
+                        if (tempController.getGameIsRunning()) stopGame();
                       },
                       child: const Text(Strings.lStopGameButton)),
                 )
@@ -49,12 +47,12 @@ class GameStartStopButtons extends StatelessWidget {
   }
 
   void startGame(BuildContext context) async {
-    final GlobalController globalController = Get.find<GlobalController>();
+    final TempController tempController = Get.find<TempController>();
+    final PersistentController persistentController = Get.find<PersistentController>();
     print("in start game");
     // check if enough players have been selected
-    var numPlayersOnField =
-        globalController.selectedTeam.value.onFieldPlayers.length;
-    if (numPlayersOnField != 7) {
+    var numPlayersOnField = tempController.getOnFieldPlayers().length;
+    if (numPlayersOnField != PLAYER_NUM) {
       // create alert if someone tries to start the game without enough players
       Alert(
               context: context,
@@ -69,54 +67,56 @@ class GameStartStopButtons extends StatelessWidget {
     DateTime dateTime = DateTime.now();
     int unixTimeStamp = dateTime.toUtc().millisecondsSinceEpoch;
     Game newGame = Game(
-        clubId: globalController.selectedTeam.value.id!,
+        clubId: tempController.getSelectedTeam().id!,
         date: dateTime,
         startTime: unixTimeStamp,
-        players: globalController.chosenPlayers.cast<Player>());
+        players: tempController.chosenPlayers.cast<Player>());
 
-    final DocumentReference ref =
-        await globalController.repository.addGame(newGame);
-    newGame.id = ref.id;
-    globalController.currentGame.value = newGame;
-    print("start game, id: ${globalController.currentGame.value.id}");
+    await persistentController.setCurrentGame(newGame, isNewGame: true);
+    newGame = persistentController.getCurrentGame(); // id was updated during set
+    print("start game, id: ${persistentController.getCurrentGame().id}");
 
     // add game to selected players
-    _addGameToPlayers(newGame, globalController);
+    _addGameToPlayers(newGame, tempController);
 
     // activate the game timer
-    globalController.currentGame.value.stopWatch.onExecute
+    persistentController
+        .getCurrentGame()
+        .stopWatch
+        .onExecute
         .add(StopWatchExecute.start);
 
-    globalController.gameRunning.value = true;
-    globalController.setPlayerBarPlayers();
-    globalController.refresh();
+    tempController.setGameIsRunning(true);
+    tempController.setPlayerBarPlayers();
+    tempController.refresh();
   }
 
   void stopGame() async {
-    final GlobalController globalController = Get.find<GlobalController>();
+    final TempController tempController = Get.find<TempController>();
+    final PersistentController persistentController = Get.find<PersistentController>();
     // update game document in firebase
-    Game currentGame = globalController.currentGame.value;
-    print("stop game, id: ${globalController.currentGame.value.id}");
+    Game currentGame = persistentController.getCurrentGame();
+    print("stop game, id: ${persistentController.getCurrentGame().id}");
 
     DateTime dateTime = DateTime.now();
     currentGame.date = dateTime;
     currentGame.stopTime = dateTime.toUtc().millisecondsSinceEpoch;
-    currentGame.scoreHome = globalController.homeTeamGoals.value;
-    currentGame.scoreOpponent = globalController.opponentTeamGoals.value;
-    currentGame.players = globalController.chosenPlayers.cast<Player>();
+    currentGame.players = tempController.chosenPlayers.cast<Player>();
 
-    globalController.repository.updateGame(currentGame);
+    persistentController.setCurrentGame(currentGame);
 
     // stop the game timer
-    globalController.currentGame.value.stopWatch.onExecute
+    persistentController
+        .getCurrentGame()
+        .stopWatch
+        .onExecute
         .add(StopWatchExecute.stop);
 
-    globalController.gameRunning.value = false;
-    globalController.refresh();
+    tempController.setGameIsRunning(false);
+    tempController.refresh();
   }
 
-  // TODO wo können wir solche helper-functions hinpacken und trotzdem auf das repo/globalController Objekt zugreifen?
-  void _addGameToPlayers(Game game, GlobalController gc) {
+  void _addGameToPlayers(Game game, TempController gc) {
     for (Player player in gc.chosenPlayers) {
       if (!player.games.contains(game.id)) {
         player.games.add(game.id!);

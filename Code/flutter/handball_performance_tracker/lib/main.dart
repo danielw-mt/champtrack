@@ -3,13 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:handball_performance_tracker/screens/authenticationScreen.dart';
 import 'screens/mainScreen.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'dart:io';
 import 'config/firebase_options.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'strings.dart';
-import '../../controllers/globalController.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 void main() async {
