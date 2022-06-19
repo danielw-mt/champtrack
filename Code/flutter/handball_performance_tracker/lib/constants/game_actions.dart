@@ -2,6 +2,7 @@ import 'package:handball_performance_tracker/strings.dart';
 
 const String attack = "attack";
 const String defense = "defense";
+const String goalkeeper = "goalkeeper";
 
 const Map<String, Map<String, String>> actionMapping = {
   attack: {
@@ -22,6 +23,15 @@ const Map<String, Map<String, String>> actionMapping = {
     Strings.lBlockNoBall: "block",
     Strings.lBlockAndSteal: "block_st",
     Strings.lTrf: "trf",
+  },
+  goalkeeper: {
+    Strings.lRedCard: "red",
+    Strings.lYellowCard: "yellow",
+    Strings.lTimePenalty: "penalty",
+    Strings.lGoal: "goal",
+    Strings.lHold: "hold",
+    Strings.lBadPass: "bad pass",
+    Strings.lErrThrow: "err",
   }
 };
 

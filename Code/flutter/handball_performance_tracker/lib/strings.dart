@@ -27,6 +27,8 @@ class Strings {
   static const String lFoul7m = "Foul => 7m";
   static const String lBlockNoBall = "Block ohne Ballgewinn";
   static const String lBlockAndSteal = "Block & Steal";
+  static const String lHold = "Gehalten";
+  static const String lBadPass = "Fehlpass";
 
   //settingsScreen.dart
   static const String lFieldSideIsRight = "Home goal is right side of screen";
@@ -53,6 +55,7 @@ class Strings {
   static const String lGameStartErrorMessage = "Fehler: Spiel wurde noch nicht gesartet!";
   static const String lOffensePopUpHeader = "Offensive Aktionen";
   static const String lDeffensePopUpHeader = "Defensive Aktionen";
+  static const String lGoalkeeperPopUpHeader = "Torwart Aktionen";
   static const String lSelectActionDialogHeader = "Wählen Sie eine Aktion";
 
   // ef_score_bar.dart

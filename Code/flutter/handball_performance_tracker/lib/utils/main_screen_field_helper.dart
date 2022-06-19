@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:handball_performance_tracker/constants/game_actions.dart';
 import 'package:handball_performance_tracker/utils/fieldSizeParameter.dart'
     as fieldSizeParameter;
 import 'dart:math' as math;
@@ -31,7 +32,7 @@ class SectorCalc {
     num x = position.dx;
     num y = position.dy;
     if (determineGoal(x, y)) {
-      return ["inGoal"];
+      return [goal];
     }
     int sector = determineSector(x, y);
     String perimeters = determinePerimeter(x, y);
@@ -70,6 +71,10 @@ class SectorCalc {
         1;
   }
 
+  /* Calculates if a point (x,y) is inside the goal.
+  * 
+  * @return  true if (x,y) is inside and otherwise false.
+  */
   bool determineGoal(num x, num y) {
     bool inGoal = y >
             fieldSizeParameter.fieldHeight / 2 -
@@ -83,7 +88,6 @@ class SectorCalc {
       inGoal = inGoal &&
           x > fieldSizeParameter.fieldWidth - fieldSizeParameter.goalWidth;
     }
-    print(inGoal);
     return inGoal;
   }
 
