@@ -4,6 +4,7 @@ import 'package:handball_performance_tracker/constants/game_actions.dart';
 import 'package:handball_performance_tracker/utils/icons.dart';
 import 'package:handball_performance_tracker/data/database_repository.dart';
 import 'package:handball_performance_tracker/data/game.dart';
+import 'package:handball_performance_tracker/widgets/main_screen/seven_meter_menu.dart';
 import '../../strings.dart';
 import 'package:handball_performance_tracker/utils/player_helper.dart';
 import 'package:handball_performance_tracker/widgets/main_screen/field.dart';
@@ -12,6 +13,7 @@ import 'package:get/get.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'dart:math';
 import '../../utils/feed_logic.dart';
+import '../../utils/field_control.dart';
 import '../../data/game_action.dart';
 import '../../data/player.dart';
 import 'package:logger/logger.dart';
@@ -146,14 +148,6 @@ Obx buildDialogButton(BuildContext context, Player associatedPlayer) {
     return false;
   }
 
-  // Player? _getPlayerFromName(String name) {
-  //   for (Player player in globalController.chosenPlayers) {
-  //     if (player.lastName == name) {
-  //       return player;
-  //     }
-  //   }
-  // }
-
   void logPlayerSelection() async {
     logger.d("Logging the player selection");
     GameAction lastAction = globalController.actions.last;
@@ -162,7 +156,6 @@ Obx buildDialogButton(BuildContext context, Player associatedPlayer) {
     // if goal was pressed but no player was selected yet
     //(lastClickedPlayer is default Player Object) do nothing
     if (lastAction.actionType == "goal" && lastClickedPlayerId == "") {
-      globalController.updatePlayerMenuText();
       // update last Clicked player value with the Player from selected team
       // who was clicked
       globalController.lastClickedPlayer.value = globalController
@@ -226,55 +219,26 @@ Obx buildDialogButton(BuildContext context, Player associatedPlayer) {
 
       globalController.lastClickedPlayer.value = Player();
     }
-    // TODO debug if there are no cases missing here because when you switch back it doesnt get triggered again
+    // if we scored a 7m after a 1v1
+    if (lastAction.actionType == "1v1") {
+      logger.d("Last action was a 1v1 7m. Going to 7m screen");
+      Navigator.pop(context);
+      callSevenMeterMenu(context, true);
+    }
     if (lastAction.actionType == goal || lastAction.actionType == errThrow) {
-      // if our action is left (page 0) and we are attacking (on page 0) jump back to defense (page 1) after the action
-      if (globalController.fieldIsLeft.value == true &&
-          globalController.attackIsLeft == true) {
-        logger.d("Switching to right field after action");
-        while (FieldSwitch.pageController.positions.length > 1) {
-          FieldSwitch.pageController
-              .detach(FieldSwitch.pageController.positions.first);
-        }
-        FieldSwitch.pageController.jumpToPage(1);
-
-        // if out action is right (page 1) and we are attacking (on page 1) jump back to defense (page 0) after the action
-      } else if (globalController.fieldIsLeft == false &&
-          globalController.attackIsLeft == false) {
-        logger.d("Switching to left field after action");
-        while (FieldSwitch.pageController.positions.length > 1) {
-          FieldSwitch.pageController
-              .detach(FieldSwitch.pageController.positions.first);
-        }
-        FieldSwitch.pageController.jumpToPage(0);
-      }
+      offensiveFieldSwitch();
     } else if (lastAction.actionType == "block_st") {
-      // if our action is left (page 0) and we are defensing (on page 0) jump back to attack (page 1) after the action
-      if (globalController.fieldIsLeft.value == true &&
-          globalController.attackIsLeft == false) {
-        logger.d("Switching to right field after action");
-        while (FieldSwitch.pageController.positions.length > 1) {
-          FieldSwitch.pageController
-              .detach(FieldSwitch.pageController.positions.first);
-        }
-        FieldSwitch.pageController.jumpToPage(1);
-
-        // if out action is right (page 1) and we are defensing (on page 1) jump back to attack (page 0) after the action
-      } else if (globalController.fieldIsLeft == false &&
-          globalController.attackIsLeft == true) {
-        logger.d("Switching to left field after action");
-        while (FieldSwitch.pageController.positions.length > 1) {
-          FieldSwitch.pageController
-              .detach(FieldSwitch.pageController.positions.first);
-        }
-        FieldSwitch.pageController.jumpToPage(0);
-      }
+      defensiveFieldSwitch();
     }
     // addFeedItem(lastAction);
     print("last action saved in database: ");
     print(globalController.actions.last.toMap());
     globalController.refresh();
-    Navigator.pop(context);
+    // if the action was a 7 meter action we pop the screen above and go to 7m menu
+    // for all other actions the player menu
+    if (lastAction.actionType != "1v1") {
+      Navigator.pop(context);
+    }
   }
 
   // Button with shirt with buttonNumber inside and buttonText below.
