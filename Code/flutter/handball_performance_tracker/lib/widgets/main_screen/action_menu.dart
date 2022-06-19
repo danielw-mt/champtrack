@@ -1,21 +1,18 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:handball_performance_tracker/data/database_repository.dart';
-import '../../controllers/globalController.dart';
+import '../../controllers/persistentController.dart';
+import '../../controllers/tempController.dart';
 import 'package:get/get.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import '../../data/game_action.dart';
-import '../../data/database_repository.dart';
 import '../../constants/game_actions.dart';
 import 'playermenu.dart';
-import 'package:stop_watch_timer/stop_watch_timer.dart';
 import 'dart:math';
 
 void callActionMenu(BuildContext context) {
-  final GlobalController globalController = Get.find<GlobalController>();
+  final TempController tempController = Get.find<TempController>();
 
   // if game is not running give a warning
-  if (globalController.gameRunning.value == false) {
+  if (tempController.getGameIsRunning() == false) {
     Alert(
       context: context,
       title: "Error game did not start yet",
@@ -49,12 +46,12 @@ void callActionMenu(BuildContext context) {
 
 ///
 bool determineAttack() {
-  final GlobalController globalController = Get.find<GlobalController>();
+  final TempController tempController = Get.find<TempController>();
   // decide whether attack or defense actions should be displayed depending
   //on what side the team goals is and whether they are attacking or defending
   bool attacking = false;
-  bool attackIsLeft = globalController.attackIsLeft.value;
-  bool fieldIsLeft = globalController.fieldIsLeft.value;
+  bool attackIsLeft = tempController.getAttackIsLeft();
+  bool fieldIsLeft = tempController.getFieldIsLeft();
 
   // when our goal is to the right (= attackIsLeft) and the field is left
   //display attack options
@@ -200,36 +197,27 @@ Widget buildDialogButtonMenu(
 DialogButton buildDialogButton(
     BuildContext context, String buttonText, Color color,
     [icon]) {
-  final GlobalController globalController = Get.find<GlobalController>();
-  DatabaseRepository repository = globalController.repository;
+  TempController tempController = Get.find<TempController>();
+  PersistentController persistentController = Get.find<PersistentController>();
   void logAction() async {
     DateTime dateTime = DateTime.now();
     int unixTime = dateTime.toUtc().millisecondsSinceEpoch;
     int secondsSinceGameStart =
-        globalController.currentGame.value.stopWatch.secondTime.value;
+        persistentController.getCurrentGame().stopWatch.secondTime.value;
 
     // get most recent game id from DB
-    String currentGameId = globalController.currentGame.value.id!;
+    String currentGameId = persistentController.getCurrentGame().id!;
     String actionType = determineAttack() ? attack : defense;
 
     GameAction action = GameAction(
-        teamId: globalController.selectedTeam.value.id!,
+        teamId: tempController.getSelectedTeam().id!,
         gameId: currentGameId,
         type: actionType,
         actionType: actionMapping[actionType]![buttonText]!,
-        throwLocation: globalController.lastLocation.cast<String>(),
+        throwLocation: tempController.getLastLocation().cast<String>(),
         timestamp: unixTime,
         relativeTime: secondsSinceGameStart);
-    globalController.actions.add(action);
-
-    // add action to firebase
-
-    // store most recent action id in game state for the player menu
-    // when a player was selected in that menu the action document can be
-    // updated in firebase with their player_id using the action_id
-    repository
-        .addActionToGame(action)
-        .then((DocumentReference doc) => action.id = doc.id);
+    persistentController.addAction(action);
   }
 
   final double width = MediaQuery.of(context).size.width;
