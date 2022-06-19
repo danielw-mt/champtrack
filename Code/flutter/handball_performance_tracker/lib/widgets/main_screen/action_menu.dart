@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:handball_performance_tracker/data/database_repository.dart';
+import 'package:handball_performance_tracker/utils/feed_logic.dart';
+import 'package:handball_performance_tracker/widgets/main_screen/seven_meter_menu.dart';
 import '../../strings.dart';
 import '../../controllers/globalController.dart';
 import 'package:get/get.dart';
@@ -260,6 +262,20 @@ DialogButton buildDialogButton(
     repository
         .addActionToGame(action)
         .then((DocumentReference doc) => action.id = doc.id);
+
+    // close action menu
+    Navigator.pop(context);
+    // if we perform a 7m foul go straight to 7m screen and skip player screen
+    if (action.actionType == "foul") {
+      logger.d("7m foul. Going to 7m screen");
+      // TODO add 7m action data to repository here and not in player screen
+      addFeedItem(action);
+      callSevenMeterMenu(context, false);
+      return;
+      // go to player menu for all other actions
+    } else {
+      callPlayerMenu(context);
+    }
   }
 
   final double width = MediaQuery.of(context).size.width;
@@ -285,9 +301,6 @@ DialogButton buildDialogButton(
         ),
       ),
       onPressed: () {
-        // reset the feed timer
         logAction();
-        Navigator.pop(context);
-        callPlayerMenu(context);
       });
 }
