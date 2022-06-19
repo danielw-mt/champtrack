@@ -74,14 +74,13 @@ class PersistentController extends GetxController {
   }
 
   /// set game object and either add is to firestore with new id or update the existing one
-  void setCurrentGame(Game game, {isNewGame: false}) {
+  Future<void> setCurrentGame(Game game, {isNewGame: false}) async {
+    _currentGame.value = game;
     if (isNewGame) {
-      repository
-          .addGame(game)
-          .then((DocumentReference ref) => game.id = ref.id);
+      DocumentReference ref = await repository.addGame(game);
+      _currentGame.value.id = ref.id;
     } else {
       repository.updateGame(game);
     }
-    _currentGame.value = game;
   }
 }
