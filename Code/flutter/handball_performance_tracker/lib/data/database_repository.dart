@@ -18,21 +18,6 @@ class DatabaseRepository {
     await _db.collection("players").doc(player.id).update(player.toMap());
   }
 
-  /// delete a Player's firestore record with a given @param documentId
-  void deletePlayer(Player player) async {
-    // TODO also delete all actions associated with player? delete player from all games?
-    await _db.collection("players").doc(player.id).delete();
-  }
-
-  // query all players of the current team
-  // TODO remove global controller here
-  // Stream<QuerySnapshot> getPlayersStream() {
-  //   return _db
-  //       .collection("players")
-  //       .where("teamId", isEqualTo: globalController.selectedTeam.value.id)
-  //       .snapshots();
-  // }
-
   /// @return asynchronous reference to Game object that was saved to firebase
   Future<DocumentReference> addGame(Game game) async {
     return _db.collection("games").add(game.toMap());
@@ -43,21 +28,6 @@ class DatabaseRepository {
     await _db.collection("games").doc(game.id).update(game.toMap());
   }
 
-  /// delete a Game's firestore record with a given @param documentId
-  void deleteGame(String documentId) async {
-    await _db.collection("games").doc(documentId).delete();
-    // TODO: delete game from games list of all players
-  }
-
-  /// query all games of current club
-  // TODO fix getGameStream method
-  // Stream<QuerySnapshot> getGameStream(String currentClubId) {
-  //   // TODO: unused
-  //   return _db
-  //       .collection("games")
-  //       .where("clubId", isEqualTo: currentClubId);
-  // }
-
   // query all teams in db
   Stream<QuerySnapshot> getAllTeamsStream() {
     return _db.collection("teams").snapshots();
@@ -65,17 +35,6 @@ class DatabaseRepository {
 
   Future<QuerySnapshot> getAllTeams() async {
     return await _db.collection("teams").get();
-  }
-
-  /// query the current game
-  Stream<QuerySnapshot> getCurrentGameStream(
-      String currentClubId, String currentGameId) {
-    // TODO: unused
-    return _db
-        .collection("games")
-        .where("clubId", isEqualTo: currentClubId)
-        .where("gameId", isEqualTo: currentGameId)
-        .snapshots();
   }
 
   /// @return asynchronous reference to GameAction object that was saved to firebase

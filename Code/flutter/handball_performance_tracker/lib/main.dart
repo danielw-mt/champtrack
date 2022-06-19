@@ -3,12 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:handball_performance_tracker/screens/authenticationScreen.dart';
 import 'screens/mainScreen.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'dart:io';
 import 'config/firebase_options.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
-import '../../controllers/globalController.dart';
+import 'strings.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 void main() async {
@@ -16,7 +15,7 @@ void main() async {
 
   // start app
   runApp(GetMaterialApp(
-      title: 'Handball Performance Tracker',
+      title: Strings.lAppTitle,
       theme: ThemeData(
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
@@ -31,11 +30,15 @@ void main() async {
             return StreamBuilder<User?>(
                 stream: FirebaseAuth.instance.authStateChanges(),
                 builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting){
-                    return Center(child: CircularProgressIndicator(),);
-                  } else if (snapshot.hasError){
-                    return Center(child: Text("There was a problem with authentication"),);
-                  } else if (snapshot.hasData){
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  } else if (snapshot.hasError) {
+                    return Center(
+                      child: Text("There was a problem with authentication"),
+                    );
+                  } else if (snapshot.hasData) {
                     // if we have a User object we are logged in and can display the app
                     return MainScreen();
                   } else {
@@ -51,7 +54,7 @@ void main() async {
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 16),
-                child: Text('Error: ${snapshot.error}'),
+                child: Text(Strings.lError + ': ${snapshot.error}'),
               )
             ];
           } else {
@@ -63,7 +66,7 @@ void main() async {
               ),
               Padding(
                 padding: EdgeInsets.only(top: 16),
-                child: Text('Checking connection...'),
+                child: Text(Strings.lConnectionCheck),
               )
             ];
           }
@@ -89,12 +92,11 @@ Future<dynamic> _startupCheck() async {
     // I am connected to a mobile network.
     FirebaseFirestore db = FirebaseFirestore.instance;
     db.enableNetwork();
-    print('connected');
-
+    print(Strings.lConnected);
     return "";
   } else {
     // TODO define behaviour for not connected i.e. wait 5 secs and try again
-    print("not connected");
+    print(Strings.lNot + ' ' + Strings.lConnected);
   }
 }
 

@@ -2,20 +2,19 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../data/player.dart';
 import '../data/team.dart';
-import '../data/game.dart';
 import '../data/database_repository.dart';
 import 'package:get/get.dart';
-import '../controllers/globalController.dart';
+import '../controllers/persistentController.dart';
 
 Future<bool> initializeLocalData() async {
-  DatabaseRepository repo = DatabaseRepository();
-  GlobalController globalController = Get.find<GlobalController>();
-  if (!globalController.isInitialized) {
+  PersistentController persistentController = Get.find<PersistentController>();
+  DatabaseRepository repository = persistentController.repository;
+  if (!persistentController.isInitialized) {
     print("initializing local data");
     List<Team> teamsList = [];
     // initialize all teams with corresponding player objects first and wait
     //for them to be built
-    QuerySnapshot snapshot = await repo.getAllTeams();
+    QuerySnapshot snapshot = await repository.getAllTeams();
     // go through every team document
     for (var element in snapshot.docs) {
       Map<String, dynamic> docData = element.data() as Map<String, dynamic>;
@@ -48,7 +47,8 @@ Future<bool> initializeLocalData() async {
           players: playerList,
           onFieldPlayers: onFieldList));
     }
-    globalController.cachedTeamsList.value = teamsList;
+    persistentController.updateAvailableTeams(teamsList);
+    persistentController.isInitialized = true;
   }
   return true;
 }

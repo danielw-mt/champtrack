@@ -40,9 +40,9 @@ double sixMeterRadiusX = nineMeterRadiusX * 0.7;
 double sixMeterRadiusY = nineMeterRadiusY * 0.7;
 
 // List for gradients and y intercepts of the sector borders
-List gradients = [1, 0.5, 0, -0.5, -1];
+// To get the gradients its tan(angle) where angle is 20 degree and 55 degree here (to get 35 and 70 degree like in design).
+List gradients = [1.43, 0.36, -0.36, -1.43];
 List yIntercepts = [
-  fieldHeight / 2,
   fieldHeight / 2,
   fieldHeight / 2,
   fieldHeight / 2,

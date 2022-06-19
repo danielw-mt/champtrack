@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:handball_performance_tracker/controllers/globalController.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:handball_performance_tracker/utils/initializeLocalData.dart';
 import 'package:handball_performance_tracker/widgets/main_screen/ef_score_bar.dart';
 import 'package:handball_performance_tracker/widgets/main_screen/ef_score_bar.dart'
     as efscorebar;
 import 'package:handball_performance_tracker/widgets/main_screen/field.dart';
+import '../strings.dart';
+import '../controllers/persistentController.dart';
+import '../controllers/tempController.dart';
 import './../widgets/nav_drawer.dart';
 import 'package:handball_performance_tracker/utils/fieldSizeParameter.dart'
     as fieldSizeParameter;
@@ -16,7 +17,8 @@ import '../widgets/main_screen/action_feed.dart';
 
 class MainScreen extends StatelessWidget {
   // screen where the game takes place
-  final GlobalController globalController = Get.put(GlobalController());
+  final PersistentController persistentController = Get.put(PersistentController());
+  final TempController tempController = Get.put(TempController());
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
@@ -43,7 +45,7 @@ class MainScreen extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text("Feed"),
+                        Text(Strings.lFeedHeader),
                         ActionFeed(),
                         //Spacer(flex: 1,),
                         Container()
@@ -102,7 +104,9 @@ class MainScreen extends StatelessWidget {
           return Center(
             child: Column(
               children: [
-                Text("Loading data",),
+                Text(
+                  "Loading data",
+                ),
                 SizedBox(
                   height: 50,
                   width: 50,
