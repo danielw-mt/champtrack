@@ -15,19 +15,19 @@ class GameStartStopButtons extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetBuilder<TempController>(
-        builder: (gameController) => Row(
+        builder: (tempController) => Row(
               children: [
                 Padding(
                   padding: const EdgeInsets.all(8),
                   child: TextButton(
                     onPressed: () {
-                      if (!gameController.getGameIsRunning())
+                      if (!tempController.getGameIsRunning())
                         startGame(context);
                     },
                     child: const Text("Start Game"),
                     // start button is grey when the game is started and blue when not
                     style: ButtonStyle(
-                        backgroundColor: gameController.getGameIsRunning()
+                        backgroundColor: tempController.getGameIsRunning()
                             ? MaterialStateProperty.all<Color>(Colors.grey)
                             : MaterialStateProperty.all<Color>(Colors.red)),
                   ),
@@ -36,7 +36,7 @@ class GameStartStopButtons extends StatelessWidget {
                   padding: const EdgeInsets.all(8),
                   child: TextButton(
                       onPressed: () {
-                        if (gameController.getGameIsRunning()) stopGame();
+                        if (tempController.getGameIsRunning()) stopGame();
                       },
                       child: const Text("Stop Game")),
                 )
@@ -45,11 +45,11 @@ class GameStartStopButtons extends StatelessWidget {
   }
 
   void startGame(BuildContext context) async {
-    final TempController gameController = Get.find<TempController>();
-    final persistentController appController = Get.find<persistentController>();
+    final TempController tempController = Get.find<TempController>();
+    final PersistentController persistentController = Get.find<PersistentController>();
     print("in start game");
     // check if enough players have been selected
-    var numPlayersOnField = gameController.getOnFieldPlayers().length;
+    var numPlayersOnField = tempController.getOnFieldPlayers().length;
     if (numPlayersOnField != PLAYER_NUM) {
       // create alert if someone tries to start the game without enough players
       Alert(
@@ -66,53 +66,53 @@ class GameStartStopButtons extends StatelessWidget {
     DateTime dateTime = DateTime.now();
     int unixTimeStamp = dateTime.toUtc().millisecondsSinceEpoch;
     Game newGame = Game(
-        clubId: gameController.getSelectedTeam().id!,
+        clubId: tempController.getSelectedTeam().id!,
         date: dateTime,
         startTime: unixTimeStamp,
-        players: gameController.chosenPlayers.cast<Player>());
+        players: tempController.chosenPlayers.cast<Player>());
 
-    appController.setCurrentGame(newGame, isNewGame: true);
-    newGame = appController.getCurrentGame(); // id was updated during set
-    print("start game, id: ${appController.getCurrentGame().id}");
+    persistentController.setCurrentGame(newGame, isNewGame: true);
+    newGame = persistentController.getCurrentGame(); // id was updated during set
+    print("start game, id: ${persistentController.getCurrentGame().id}");
 
     // add game to selected players
-    _addGameToPlayers(newGame, gameController);
+    _addGameToPlayers(newGame, tempController);
 
     // activate the game timer
-    appController
+    persistentController
         .getCurrentGame()
         .stopWatch
         .onExecute
         .add(StopWatchExecute.start);
 
-    gameController.setGameIsRunning(true);
-    gameController.setPlayerBarPlayers();
-    gameController.refresh();
+    tempController.setGameIsRunning(true);
+    tempController.setPlayerBarPlayers();
+    tempController.refresh();
   }
 
   void stopGame() async {
-    final TempController gameController = Get.find<TempController>();
-    final persistentController appController = Get.find<persistentController>();
+    final TempController tempController = Get.find<TempController>();
+    final PersistentController persistentController = Get.find<PersistentController>();
     // update game document in firebase
-    Game currentGame = appController.getCurrentGame();
-    print("stop game, id: ${appController.getCurrentGame().id}");
+    Game currentGame = persistentController.getCurrentGame();
+    print("stop game, id: ${persistentController.getCurrentGame().id}");
 
     DateTime dateTime = DateTime.now();
     currentGame.date = dateTime;
     currentGame.stopTime = dateTime.toUtc().millisecondsSinceEpoch;
-    currentGame.players = gameController.chosenPlayers.cast<Player>();
+    currentGame.players = tempController.chosenPlayers.cast<Player>();
 
-    appController.setCurrentGame(currentGame);
+    persistentController.setCurrentGame(currentGame);
 
     // stop the game timer
-    appController
+    persistentController
         .getCurrentGame()
         .stopWatch
         .onExecute
         .add(StopWatchExecute.stop);
 
-    gameController.setGameIsRunning(false);
-    gameController.refresh();
+    tempController.setGameIsRunning(false);
+    tempController.refresh();
   }
 
   void _addGameToPlayers(Game game, TempController gc) {

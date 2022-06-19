@@ -7,9 +7,9 @@ import 'package:get/get.dart';
 import '../controllers/persistentController.dart';
 
 Future<bool> initializeLocalData() async {
-  persistentController appController = Get.find<persistentController>();
-  DatabaseRepository repository = appController.repository;
-  if (!appController.isInitialized) {
+  PersistentController persistentController = Get.find<PersistentController>();
+  DatabaseRepository repository = persistentController.repository;
+  if (!persistentController.isInitialized) {
     print("initializing local data");
     List<Team> teamsList = [];
     // initialize all teams with corresponding player objects first and wait
@@ -47,8 +47,8 @@ Future<bool> initializeLocalData() async {
           players: playerList,
           onFieldPlayers: onFieldList));
     }
-    appController.updateAvailableTeams(teamsList);
-    appController.isInitialized = true;
+    persistentController.updateAvailableTeams(teamsList);
+    persistentController.isInitialized = true;
   }
   return true;
 }

@@ -10,11 +10,11 @@ class StopWatchBar extends GetView<TempController> {
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<persistentController>(
+    return GetBuilder<PersistentController>(
       id: "stopwatch-bar",
-      builder: (persistentController appController) {
+      builder: (PersistentController persistentController) {
         StopWatchTimer stopWatchTimer =
-            appController.getCurrentGame().stopWatch;
+            persistentController.getCurrentGame().stopWatch;
         return Row(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -32,14 +32,14 @@ class StopWatchBar extends GetView<TempController> {
                     stopWatchTimer.clearPresetTime();
                     if (stopWatchTimer.isRunning) {
                       stopWatchTimer.onExecute.add(StopWatchExecute.reset);
-                      appController
+                      persistentController
                           .getCurrentGame()
                           .stopWatch
                           .setPresetTime(mSec: currentTime + 1000);
                       stopWatchTimer.onExecute.add(StopWatchExecute.start);
                     } else {
                       stopWatchTimer.onExecute.add(StopWatchExecute.reset);
-                      appController
+                      persistentController
                           .getCurrentGame()
                           .stopWatch
                           .setPresetTime(mSec: currentTime + 1000);
@@ -92,14 +92,14 @@ class StopWatchBar extends GetView<TempController> {
                     stopWatchTimer.clearPresetTime();
                     if (stopWatchTimer.isRunning) {
                       stopWatchTimer.onExecute.add(StopWatchExecute.reset);
-                      appController
+                      persistentController
                           .getCurrentGame()
                           .stopWatch
                           .setPresetTime(mSec: currentTime - 1000);
                       stopWatchTimer.onExecute.add(StopWatchExecute.start);
                     } else {
                       stopWatchTimer.onExecute.add(StopWatchExecute.reset);
-                      appController
+                      persistentController
                           .getCurrentGame()
                           .stopWatch
                           .setPresetTime(mSec: currentTime - 1000);
@@ -136,8 +136,8 @@ class StartStopIcon extends GetView<TempController> {
   Widget build(BuildContext context) {
     return GetBuilder<TempController>(
         id: "start-stop-icon",
-        builder: (TempController gameController) {
-          bool gameRunning = gameController.getGameIsRunning();
+        builder: (TempController tempController) {
+          bool gameRunning = tempController.getGameIsRunning();
           return GestureDetector(
             onTap: () {
               if (gameRunning) {

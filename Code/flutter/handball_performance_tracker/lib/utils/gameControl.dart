@@ -9,11 +9,11 @@ import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 
 void startGame(BuildContext context) async {
-  TempController gameController = Get.find<TempController>();
-  persistentController appController = Get.find<persistentController>();
+  TempController tempController = Get.find<TempController>();
+  PersistentController persistentController = Get.find<PersistentController>();
   print("in start game");
   // check if enough players have been selected
-  var numPlayersOnField = gameController.getOnFieldPlayers().length;
+  var numPlayersOnField = tempController.getOnFieldPlayers().length;
   if (numPlayersOnField != PLAYER_NUM) {
     // create alert if someone tries to start the game without enough players
     Alert(
@@ -31,71 +31,71 @@ void startGame(BuildContext context) async {
   DateTime dateTime = DateTime.now();
   int unixTimeStamp = dateTime.toUtc().millisecondsSinceEpoch;
   Game newGame = Game(
-      clubId: gameController.getSelectedTeam().id!,
+      clubId: tempController.getSelectedTeam().id!,
       date: dateTime,
       startTime: unixTimeStamp,
-      players: gameController.chosenPlayers.cast<Player>());
-  appController.setCurrentGame(newGame, isNewGame: true);
-  print("start game, id: $appController.currentGame.value.id}");
+      players: tempController.chosenPlayers.cast<Player>());
+  persistentController.setCurrentGame(newGame, isNewGame: true);
+  print("start game, id: $persistentController.currentGame.value.id}");
 
   // add game to selected players
   _addGameToPlayers(newGame);
 
   // activate the game timer
-  appController
+  persistentController
       .getCurrentGame()
       .stopWatch
       .onExecute
       .add(StopWatchExecute.start);
 
-  gameController.setGameIsRunning(true);
-  gameController.refresh();
+  tempController.setGameIsRunning(true);
+  tempController.refresh();
 }
 
 void unpauseGame() {
-  TempController gameController = Get.find<TempController>();
-  persistentController appController = Get.find<persistentController>();
-  gameController.setGameIsRunning(true);
-  appController
+  TempController tempController = Get.find<TempController>();
+  PersistentController persistentController = Get.find<PersistentController>();
+  tempController.setGameIsRunning(true);
+  persistentController
       .getCurrentGame()
       .stopWatch
       .onExecute
       .add(StopWatchExecute.start);
-  gameController.refresh();
+  tempController.refresh();
 }
 
 void pauseGame() {
-  TempController gameController = Get.find<TempController>();
-  persistentController appController = Get.find<persistentController>();
-  gameController.setGameIsRunning(false);
-  appController.getCurrentGame().stopWatch.onExecute.add(StopWatchExecute.stop);
-  gameController.refresh();
+  TempController tempController = Get.find<TempController>();
+  PersistentController persistentController = Get.find<PersistentController>();
+  tempController.setGameIsRunning(false);
+  persistentController.getCurrentGame().stopWatch.onExecute.add(StopWatchExecute.stop);
+  tempController.refresh();
 }
 
 void stopGame() async {
-  TempController gameController = Get.find<TempController>();
-  persistentController appController = Get.find<persistentController>();
+  TempController tempController = Get.find<TempController>();
+  PersistentController persistentController = Get.find<PersistentController>();
   // update game document in firebase
-  Game currentGame = appController.getCurrentGame();
-  print("stop game, id: ${appController.getCurrentGame().id}");
+  Game currentGame = persistentController.getCurrentGame();
+  print("stop game, id: ${persistentController.getCurrentGame().id}");
 
   DateTime dateTime = DateTime.now();
   currentGame.date = dateTime;
   currentGame.stopTime = dateTime.toUtc().millisecondsSinceEpoch;
-  currentGame.players = gameController.chosenPlayers().cast<Player>();
+  currentGame.players = tempController.chosenPlayers().cast<Player>();
 
-  appController.setCurrentGame(currentGame);
+  persistentController.setCurrentGame(currentGame);
 
   // stop the game timer
-  appController.getCurrentGame().stopWatch.onExecute.add(StopWatchExecute.stop);
+  persistentController.getCurrentGame().stopWatch.onExecute.add(StopWatchExecute.stop);
 
-  gameController.setGameIsRunning(false);
-  gameController.refresh();
+  tempController.setGameIsRunning(false);
+  tempController.refresh();
 }
 
 void _addGameToPlayers(Game game) {
-  TempController gameController = Get.find<TempController>();
-  for (Player player in gameController.chosenPlayers) {
+  TempController tempController = Get.find<TempController>();
+  for (Player player in tempController.chosenPlayers) {
     if (!player.games.contains(game.id)) {
       player.games.add(game.id!);
       // TODO implement this

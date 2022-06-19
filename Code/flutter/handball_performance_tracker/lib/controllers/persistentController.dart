@@ -8,7 +8,7 @@ import '../data/team.dart';
 /// stores more persistent state
 /// generally more complex variables and data structure that are
 /// cached from the database like all available teams
-class persistentController extends GetxController {
+class PersistentController extends GetxController {
   /// handles teams initialization when building MainScreen
   var isInitialized = false;
 

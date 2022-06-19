@@ -9,7 +9,7 @@ class TeamSettingsBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetBuilder<TempController>(
       id: "team-settings-bar",
-      builder: (TempController gameController) {
+      builder: (TempController tempController) {
         return Container(
           color: Color(0xFF3F5AA6),
           child: TabBar(
@@ -19,7 +19,7 @@ class TeamSettingsBar extends StatelessWidget {
             indicatorPadding: EdgeInsets.all(5.0),
             indicatorColor: Colors.blue,
             onTap: (int tabNumber) {
-              gameController.setSelectedTeamSetting(tabNumber);
+              tempController.setSelectedTeamSetting(tabNumber);
             },
             tabs: [
               Tab(

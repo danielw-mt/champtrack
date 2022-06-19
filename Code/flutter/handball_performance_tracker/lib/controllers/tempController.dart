@@ -16,7 +16,7 @@ import '../utils/player_helper.dart';
 /// for example change on the switch of a button
 class TempController extends GetxController {
   /// Database instance for automatically updating instances in firestore
-  DatabaseRepository repository = Get.find<persistentController>().repository;
+  DatabaseRepository repository = Get.find<PersistentController>().repository;
 
   /// Temporary variable for storing the currently selected Team
   Rx<Team> _selectedTeam = Team(id: "-1", name: "Default team").obs;

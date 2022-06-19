@@ -4,14 +4,14 @@ import 'package:get/get.dart';
 import '../../controllers/tempController.dart';
 
 class ReverseButton extends GetView<TempController> {
-  final persistentController appController = Get.find<persistentController>();
+  final PersistentController persistentController = Get.find<PersistentController>();
 
   @override
   Widget build(BuildContext context) {
     return FloatingActionButton(
         onPressed: (() {
-          if (!appController.actionsIsEmpty()) {
-            appController.removeLastAction();
+          if (!persistentController.actionsIsEmpty()) {
+            persistentController.removeLastAction();
             // TODO: also remove last action from corresponding player and update Ef-Score
           }
         }),

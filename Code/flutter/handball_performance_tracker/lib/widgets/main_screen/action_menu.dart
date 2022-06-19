@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import '../../controllers/persistentController.dart';
 import '../../controllers/tempController.dart';
@@ -10,10 +9,10 @@ import 'playermenu.dart';
 import 'dart:math';
 
 void callActionMenu(BuildContext context) {
-  final TempController gameController = Get.find<TempController>();
+  final TempController tempController = Get.find<TempController>();
 
   // if game is not running give a warning
-  if (gameController.getGameIsRunning() == false) {
+  if (tempController.getGameIsRunning() == false) {
     Alert(
       context: context,
       title: "Error game did not start yet",
@@ -47,12 +46,12 @@ void callActionMenu(BuildContext context) {
 
 ///
 bool determineAttack() {
-  final TempController gameController = Get.find<TempController>();
+  final TempController tempController = Get.find<TempController>();
   // decide whether attack or defense actions should be displayed depending
   //on what side the team goals is and whether they are attacking or defending
   bool attacking = false;
-  bool attackIsLeft = gameController.getAttackIsLeft();
-  bool fieldIsLeft = gameController.getFieldIsLeft();
+  bool attackIsLeft = tempController.getAttackIsLeft();
+  bool fieldIsLeft = tempController.getFieldIsLeft();
 
   // when our goal is to the right (= attackIsLeft) and the field is left
   //display attack options
@@ -206,27 +205,27 @@ Widget buildDialogButtonMenu(
 DialogButton buildDialogButton(
     BuildContext context, String buttonText, Color color,
     [icon]) {
-  TempController gameController = Get.find<TempController>();
-  persistentController appController = Get.find<persistentController>();
+  TempController tempController = Get.find<TempController>();
+  PersistentController persistentController = Get.find<PersistentController>();
   void logAction() async {
     DateTime dateTime = DateTime.now();
     int unixTime = dateTime.toUtc().millisecondsSinceEpoch;
     int secondsSinceGameStart =
-        appController.getCurrentGame().stopWatch.secondTime.value;
+        persistentController.getCurrentGame().stopWatch.secondTime.value;
 
     // get most recent game id from DB
-    String currentGameId = appController.getCurrentGame().id!;
+    String currentGameId = persistentController.getCurrentGame().id!;
     String actionType = determineAttack() ? attack : defense;
 
     GameAction action = GameAction(
-        teamId: gameController.getSelectedTeam().id!,
+        teamId: tempController.getSelectedTeam().id!,
         gameId: currentGameId,
         type: actionType,
         actionType: actionMapping[actionType]![buttonText]!,
-        throwLocation: gameController.getLastLocation().cast<String>(),
+        throwLocation: tempController.getLastLocation().cast<String>(),
         timestamp: unixTime,
         relativeTime: secondsSinceGameStart);
-    appController.addAction(action);
+    persistentController.addAction(action);
   }
 
   final double width = MediaQuery.of(context).size.width;

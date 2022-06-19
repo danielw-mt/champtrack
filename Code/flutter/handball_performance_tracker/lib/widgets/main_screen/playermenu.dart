@@ -10,7 +10,7 @@ import '../../data/game_action.dart';
 import '../../data/player.dart';
 
 void callPlayerMenu(context) {
-  final TempController gameController = Get.find<TempController>();
+  final TempController tempController = Get.find<TempController>();
   List<Obx> dialogButtons = buildDialogButtonList(context);
   Alert(
     style: AlertStyle(
@@ -47,7 +47,7 @@ void callPlayerMenu(context) {
               // Change from "" to "Assist" after a goal.
               child: Obx(
                 () => Text(
-                  gameController.getPlayerMenuText(),
+                  tempController.getPlayerMenuText(),
                   textAlign: TextAlign.right,
                   style: const TextStyle(
                     color: Colors.purple,
@@ -85,9 +85,9 @@ void callPlayerMenu(context) {
 
 /// builds a list of Dialog buttons
 List<Obx> buildDialogButtonList(BuildContext context) {
-  final TempController gameController = Get.find<TempController>();
+  final TempController tempController = Get.find<TempController>();
   List<Obx> dialogButtons = [];
-  for (Player player in gameController.getOnFieldPlayers()) {
+  for (Player player in tempController.getOnFieldPlayers()) {
     Obx dialogButton = buildDialogButton(context, player);
     dialogButtons.add(dialogButton);
   }
@@ -99,8 +99,8 @@ List<Obx> buildDialogButtonList(BuildContext context) {
 Obx buildDialogButton(BuildContext context, Player associatedPlayer) {
   String buttonText = associatedPlayer.lastName;
   String buttonNumber = (associatedPlayer.number).toString();
-  persistentController appController = Get.find<persistentController>();
-  TempController gameController = Get.find<TempController>();
+  PersistentController persistentController = Get.find<PersistentController>();
+  TempController tempController = Get.find<TempController>();
 
   // Get width and height, so the sizes can be calculated relative to those. So it should look the same on different screen sizes.
   final double width = MediaQuery.of(context).size.width;
@@ -112,10 +112,10 @@ Obx buildDialogButton(BuildContext context, Player associatedPlayer) {
     // check if action was a goal
     // if it was a goal allow the player to be pressed twice or select and assist player
     // if the player is clicked again it is a solo action
-    if (gameController.getLastClickedPlayer().id == associatedPlayer.id) {
+    if (tempController.getLastClickedPlayer().id == associatedPlayer.id) {
       return false;
     }
-    if (gameController.getLastClickedPlayer().id != associatedPlayer.id) {
+    if (tempController.getLastClickedPlayer().id != associatedPlayer.id) {
       return true;
     }
     return false;
@@ -123,17 +123,17 @@ Obx buildDialogButton(BuildContext context, Player associatedPlayer) {
 
   void logPlayerSelection() async {
     print(associatedPlayer.lastName);
-    GameAction lastAction = appController.getLastAction();
-    String? lastClickedPlayerId = gameController.getLastClickedPlayer().id;
+    GameAction lastAction = persistentController.getLastAction();
+    String? lastClickedPlayerId = tempController.getLastClickedPlayer().id;
     lastAction.playerId = lastClickedPlayerId.toString();
     // if goal was pressed but no player was selected yet
     //(lastClickedPlayer is default Player Object) do nothing
     if (lastAction.actionType == "goal" && lastClickedPlayerId == "") {
-      gameController.updatePlayerMenuText();
+      tempController.updatePlayerMenuText();
       // update last Clicked player value with the Player from selected team
       // who was clicked
-      gameController.setLastClickedPlayer(
-          gameController.getPlayerFromSelectedTeam(associatedPlayer.id!));
+      tempController.setLastClickedPlayer(
+          tempController.getPlayerFromSelectedTeam(associatedPlayer.id!));
       return;
     }
     // if goal was pressed and a player was already clicked once
@@ -142,21 +142,21 @@ Obx buildDialogButton(BuildContext context, Player associatedPlayer) {
       if (!_wasAssist()) {
         print("solo goal");
         // update data for person that shot the goal
-        lastAction.playerId = gameController.getLastClickedPlayer().id!;
-        appController.setLastAction(lastAction);
+        lastAction.playerId = tempController.getLastClickedPlayer().id!;
+        persistentController.setLastAction(lastAction);
         // update player's ef-score
         // TODO implement this
         //activePlayer.addAction(lastAction);
 
-        gameController.setLastClickedPlayer(Player());
+        tempController.setLastClickedPlayer(Player());
         addFeedItem(lastAction);
-        gameController.refresh();
+        tempController.refresh();
       } else {
         print("goal with assist");
         // if it was an assist update data for both players
         // person that scored goal
-        lastAction.playerId = gameController.getLastClickedPlayer().id!;
-        appController.setLastAction(lastAction);
+        lastAction.playerId = tempController.getLastClickedPlayer().id!;
+        persistentController.setLastAction(lastAction);
         // person that scored assist
         // deep clone a new action from the most recent action
         GameAction assistAction = GameAction.clone(lastAction);
@@ -164,7 +164,7 @@ Obx buildDialogButton(BuildContext context, Player associatedPlayer) {
         Player assistPlayer = associatedPlayer;
         assistAction.playerId = assistPlayer.id!;
         assistAction.actionType = "assist";
-        appController.addAction(assistAction);
+        persistentController.addAction(assistAction);
 
         // add assist first to the feed and then the goal
         addFeedItem(assistAction);
@@ -173,23 +173,23 @@ Obx buildDialogButton(BuildContext context, Player associatedPlayer) {
         // TODO implement this
         //assistPlayer.addAction(lastAction);
 
-        gameController.setLastClickedPlayer(Player());
+        tempController.setLastClickedPlayer(Player());
       }
     } else {
       // if the action was not a goal just update the player id in firebase and gamestate
       lastAction.playerId = associatedPlayer.id.toString();
-      appController.setLastAction(lastAction);
+      persistentController.setLastAction(lastAction);
       addFeedItem(lastAction);
       // update player's ef-scorer
       // TODO implement this
       // activePlayer.addAction(lastAction);
 
-      gameController.setLastClickedPlayer(Player());
+      tempController.setLastClickedPlayer(Player());
     }
     // addFeedItem(lastAction);
     print("last action saved in database: ");
-    print(appController.getLastAction().toMap());
-    gameController.refresh();
+    print(persistentController.getLastAction().toMap());
+    tempController.refresh();
     Navigator.pop(context);
   }
 
@@ -198,7 +198,7 @@ Obx buildDialogButton(BuildContext context, Player associatedPlayer) {
   return Obx(() {
     // Dialog button that shows "No Assist" instead of the player name and shirt
     // at the place where the first player was clicked
-    if (gameController.getLastClickedPlayer().lastName == buttonText) {
+    if (tempController.getLastClickedPlayer().lastName == buttonText) {
       return DialogButton(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -222,7 +222,7 @@ Obx buildDialogButton(BuildContext context, Player associatedPlayer) {
           // set height and width of buttons so the shirt and name are fitting inside
           height: width * 0.14,
           width: width * 0.14,
-          color: gameController.getLastClickedPlayer() == associatedPlayer
+          color: tempController.getLastClickedPlayer() == associatedPlayer
               ? Colors.purple
               : Color.fromARGB(255, 180, 211, 236),
           onPressed: () {
@@ -275,7 +275,7 @@ Obx buildDialogButton(BuildContext context, Player associatedPlayer) {
         // set height and width of buttons so the shirt and name are fitting inside
         height: width * 0.14,
         width: width * 0.14,
-        color: gameController.getLastClickedPlayer() == associatedPlayer
+        color: tempController.getLastClickedPlayer() == associatedPlayer
             ? Colors.purple
             : Color.fromARGB(255, 180, 211, 236),
         onPressed: () {

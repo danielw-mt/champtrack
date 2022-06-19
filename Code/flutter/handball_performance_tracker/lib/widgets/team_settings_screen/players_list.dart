@@ -11,13 +11,13 @@ class PlayersList extends GetView<TempController> {
   Widget build(BuildContext context) {
     return GetBuilder<TempController>(
       id: "players-list",
-      builder: (gameController) => Expanded(
+      builder: (tempController) => Expanded(
         child: ListView.builder(
             shrinkWrap: true,
-            itemCount: gameController.getPlayersFromSelectedTeam().length,
+            itemCount: tempController.getPlayersFromSelectedTeam().length,
             itemBuilder: (context, index) {
               Player player =
-                  gameController.getPlayersFromSelectedTeam()[index];
+                  tempController.getPlayersFromSelectedTeam()[index];
               return Row(
                 children: [
                   FloatingActionButton(
@@ -42,21 +42,21 @@ class PlayersList extends GetView<TempController> {
   }
 
   void removePlayerFromTeam(Player player) {
-    // need to get fresh appController here every time the method is called
-    final persistentController appController = Get.find<persistentController>();
-    final TempController gameController = Get.find<TempController>();
+    // need to get fresh persistentController here every time the method is called
+    final PersistentController persistentController = Get.find<PersistentController>();
+    final TempController tempController = Get.find<TempController>();
     // in order to update the team in the teams list of the local state
-    Team selectedCacheTeam = appController
+    Team selectedCacheTeam = persistentController
         .getAvailableTeams()
         .where((cachedTeamItem) =>
-            (cachedTeamItem.id == gameController.getSelectedTeam().id))
+            (cachedTeamItem.id == tempController.getSelectedTeam().id))
         .toList()[0];
     selectedCacheTeam.players.remove(player);
     // update selected team with the player list as well
-    gameController.setSelectedTeam(selectedCacheTeam);
+    tempController.setSelectedTeam(selectedCacheTeam);
     // remove the player from onFieldPlayers if necessary
-    if (gameController.getOnFieldPlayers().contains(player)) {
-      gameController.removeOnFieldPlayer(player);
+    if (tempController.getOnFieldPlayers().contains(player)) {
+      tempController.removeOnFieldPlayer(player);
     }
   }
 }
