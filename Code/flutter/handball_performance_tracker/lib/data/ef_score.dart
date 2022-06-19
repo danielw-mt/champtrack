@@ -32,7 +32,7 @@ class EfScore {
   String? _getActionType(GameAction action, List<String> positions) {
     String? actionType = action.actionType;
     if (actionType == goal) {
-        // don't consider position and distance if goal happened after minute 55
+      // don't consider position and distance if goal happened after minute 55
       if (action.relativeTime > lastFiveMinThreshold) {
         actionType = goalLastFive;
       } else if (_isPosition(positions, action.throwLocation)) {
@@ -59,10 +59,23 @@ class EfScore {
     return actionType;
   }
 
-  /// @return true if the throw sector @param sector belongs to one of the player's specialized @param positions
-  bool _isPosition(List<String> positions, List<String> sector) =>
-      // TODO adapt for proper positions instead of sectors
-      positions.contains(sector);
+  /// @return true if the throw sector @param sector belongs to one of the player's specialized @param positions (according to #60)
+  bool _isPosition(List<String> positions, List<String> sector) {
+    // player has one of the positions leftOutside, backcourtLeft, backcourtMiddle, backcourtRight, rightOutside and action was performed there
+    if (positions.contains(sector[0])) {
+      return true;
+    }
+    // player has circle position and action was performed in 9m circle
+    if (positions.contains(circle) && _isInNineMeters(sector[1])) {
+      // action was performed in backcourt area
+      if ((sector[0] == backcourtLeft) ||
+          (sector[0] == backcourtMiddle) ||
+          (sector[0] == backcourtRight)) {
+        return true;
+      }
+    }
+    return false;
+  }
 
   /// @return true if the action happened within the 9-m-circle
   bool _isInNineMeters(String distance) => distance != outsideNine;
