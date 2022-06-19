@@ -12,6 +12,7 @@ import 'playermenu.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 import 'dart:math';
 import 'package:logger/logger.dart';
+import '../../utils/field_control.dart';
 
 var logger = Logger(
   printer: PrettyPrinter(
@@ -178,6 +179,23 @@ DialogButton buildDialogButton(
     repository
         .addActionToGame(action)
         .then((DocumentReference doc) => action.id = doc.id);
+
+    // goal
+    if (actionType == actionMapping[seven_meter]!.values.toList()[0]) {
+      offensiveFieldSwitch();
+    }
+    // missed 7m
+    if (actionType == actionMapping[seven_meter]!.values.toList()[1]) {
+      offensiveFieldSwitch();
+    }
+    // opponent goal
+    if (actionType == actionMapping[seven_meter]!.values.toList()[2]) {
+      defensiveFieldSwitch();
+    }
+    // opponent missed
+    if (actionType == actionMapping[seven_meter]!.values.toList()[3]) {
+      defensiveFieldSwitch();
+    }
   }
 
   final double width = MediaQuery.of(context).size.width;
@@ -205,6 +223,5 @@ DialogButton buildDialogButton(
       onPressed: () {
         logAction();
         Navigator.pop(context);
-        // TODO switch to other side
       });
 }

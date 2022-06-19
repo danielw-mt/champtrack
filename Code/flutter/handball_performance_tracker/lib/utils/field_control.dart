@@ -17,6 +17,8 @@ import '../../data/game_action.dart';
 import '../../data/player.dart';
 import 'package:logger/logger.dart';
 
+// TODO fix case of offensive actions from defensive side
+
 void defensiveFieldSwitch() {
   final GlobalController globalController = Get.find<GlobalController>();
   // if our action is left (page 0) and we are defensing (on page 0) jump back to attack (page 1) after the action

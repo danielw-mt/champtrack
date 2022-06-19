@@ -269,7 +269,7 @@ DialogButton buildDialogButton(
     if (action.actionType == "foul") {
       logger.d("7m foul. Going to 7m screen");
       // TODO add 7m action data to repository here and not in player screen
-      addFeedItem(action);
+      //addFeedItem(action);
       callSevenMeterMenu(context, false);
       return;
       // go to player menu for all other actions

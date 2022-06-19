@@ -230,7 +230,6 @@ Obx buildDialogButton(BuildContext context, Player associatedPlayer) {
     } else if (lastAction.actionType == "block_st") {
       defensiveFieldSwitch();
     }
-    // addFeedItem(lastAction);
     print("last action saved in database: ");
     print(globalController.actions.last.toMap());
     globalController.refresh();
