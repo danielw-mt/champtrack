@@ -35,8 +35,9 @@ void startGame(BuildContext context) async {
       date: dateTime,
       startTime: unixTimeStamp,
       players: tempController.chosenPlayers.cast<Player>());
-  persistentController.setCurrentGame(newGame, isNewGame: true);
-  print("start game, id: $persistentController.currentGame.value.id}");
+  await persistentController.setCurrentGame(newGame, isNewGame: true);
+
+  print("start game, id: ${persistentController.getCurrentGame().id}");
 
   // add game to selected players
   _addGameToPlayers(newGame);
@@ -48,6 +49,7 @@ void startGame(BuildContext context) async {
       .onExecute
       .add(StopWatchExecute.start);
 
+  print("start game, id: ${persistentController.getCurrentGame().id}");
   tempController.setGameIsRunning(true);
   tempController.refresh();
 }
