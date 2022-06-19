@@ -138,6 +138,7 @@ Obx buildDialogButton(BuildContext context, Player associatedPlayer) {
     }
     // if goal was pressed and a player was already clicked once
     if (lastAction.actionType == "goal") {
+      tempController.refresh();
       // if it was a solo goal the action type has to be updated to "Tor Solo"
       if (!_wasAssist()) {
         print("solo goal");
