@@ -24,16 +24,16 @@ class SectorCalc {
 
   /* 
    * @return List<String> consisting of two elements
-   * the first element is the sector number (from 0 to 5) converted to String,
+   * the first element is the sector's String abbreviation (as taken from positions.dart, either leftOutside, backcourtLeft, backcourtMiddle, backcourtRight, or rightOutside),
    * the second element is the distance of the player from the goal (<6, 6to9, >9)
    */
   List<String> calculatePosition(Offset position) {
     num x = position.dx;
     num y = position.dy;
 
-    int sector = determineSector(x, y);
+    String sector = determineSector(x, y);
     String perimeters = determinePerimeter(x, y);
-    return [sector.toString(), perimeters];
+    return [sector, perimeters];
   }
 
   /* Calculates if a point (x,y) is inside the smaller ellipse.
@@ -85,9 +85,9 @@ class SectorCalc {
   }
 
   /* 
-  * Calculates if a point (x,y) is between two sector borders. 
+  * Calculates in which sector of the field (leftOutside, backcourtLeft, backcourtMiddle, backcourtRight, or rightOutside) a point (x,y) is situated 
   */
-  int determineSector(num x, num y) {
+  String determineSector(num x, num y) {
     int sector = -1;
 
     // variables for gradient and intercept of lower line, the first lower line is the bottom horizontal line
@@ -121,7 +121,14 @@ class SectorCalc {
         sector = i;
       }
     }
-    return sector;
+    String sectorOnField = "";
+    if (leftSide) {
+      sectorOnField = sectorsFieldIsLeft[sector];
+    } else {
+      sectorOnField = sectorsFieldIsRight[sector];
+    }
+    print(sectorOnField);
+    return sectorOnField;
   }
 }
 

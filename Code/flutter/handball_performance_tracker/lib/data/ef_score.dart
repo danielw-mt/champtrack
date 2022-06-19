@@ -35,7 +35,7 @@ class EfScore {
         // don't consider position and distance if goal happened after minute 55
       if (action.relativeTime > lastFiveMinThreshold) {
         actionType = goalLastFive;
-      } else if (_isPosition(positions, action.throwLocation[0])) {
+      } else if (_isPosition(positions, action.throwLocation)) {
         actionType = goalPos;
       } else if (_isInNineMeters(action.throwLocation[1])) {
         actionType = goalUnderNine;
@@ -46,7 +46,7 @@ class EfScore {
       if (action.relativeTime > lastFiveMinThreshold) {
         // don't consider position and distance if err happened after minute 55
         actionType = errThrowLastFive;
-      } else if (_isPosition(positions, action.throwLocation[0])) {
+      } else if (_isPosition(positions, action.throwLocation)) {
         actionType = errThrowPos;
       } else if (_isInNineMeters(action.throwLocation[1])) {
         actionType = errThrowUnderNine;
@@ -60,7 +60,7 @@ class EfScore {
   }
 
   /// @return true if the throw sector @param sector belongs to one of the player's specialized @param positions
-  bool _isPosition(List<String> positions, String sector) =>
+  bool _isPosition(List<String> positions, List<String> sector) =>
       // TODO adapt for proper positions instead of sectors
       positions.contains(sector);
 
