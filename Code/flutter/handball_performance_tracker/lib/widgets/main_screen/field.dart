@@ -30,7 +30,12 @@ class CustomField extends StatelessWidget {
           }),
         ),
         // Painter of dashed 9m
-        CustomPaint(painter: DashedPathPainter(leftSide: fieldIsLeft))
+        CustomPaint(
+            painter: DashedPathPainter(leftSide: fieldIsLeft, isEllipse: true)),
+        // Painter of dashed goal
+        CustomPaint(
+            painter:
+                DashedPathPainter(leftSide: fieldIsLeft, isEllipse: false)),
       ]),
     );
   }
