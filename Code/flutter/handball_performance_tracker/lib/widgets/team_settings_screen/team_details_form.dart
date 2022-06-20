@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../controllers/globalController.dart';
-import '../../constants/team_constants.dart';
 import '../../strings.dart';
+import '../../controllers/tempController.dart';
 
 // Create a Form widget.
 class TeamDetailsForm extends StatefulWidget {
@@ -25,8 +24,9 @@ class TeamDetailsFormState extends State<TeamDetailsForm> {
   @override
   Widget build(BuildContext context) {
     // Build a Form widget using the _formKey created above.
-    return GetBuilder<GlobalController>(
-      builder: (GlobalController globalController) {
+    return GetBuilder<TempController>(
+      id: "team-details-form-state",
+      builder: (TempController gameController) {
         return Form(
           key: _formKey,
           child: Column(
@@ -34,7 +34,7 @@ class TeamDetailsFormState extends State<TeamDetailsForm> {
             children: [
               Text(Strings.lTeamName),
               TextFormField(
-                initialValue: globalController.selectedTeam.value.name,
+                initialValue: gameController.getSelectedTeam().name,
                 // The validator receives the text that the user has entered.
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -50,7 +50,6 @@ class TeamDetailsFormState extends State<TeamDetailsForm> {
                 padding: const EdgeInsets.symmetric(vertical: 16.0),
                 child: ElevatedButton(
                   onPressed: () {
-
                     // TODO save these infos in Firebase using repository
 
                     // Validate returns true if the form is valid, or false otherwise.
@@ -72,5 +71,3 @@ class TeamDetailsFormState extends State<TeamDetailsForm> {
     );
   }
 }
- 
- 

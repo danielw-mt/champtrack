@@ -1,17 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:handball_performance_tracker/widgets/nav_drawer.dart';
-import '../widgets/team_selection_screen/team_dropdown.dart';
-import '../Strings.dart';
-// import './../widgets/settings_screen/on_field_checkbox.dart';
+import '../strings.dart';
+import '../controllers/tempController.dart';
 import './../widgets/settings_screen/game_start_stop_buttons.dart';
-import '../widgets/team_settings_screen/players_list.dart';
-import './../controllers/globalController.dart';
-import '../data/player.dart';
 
-class SettingsScreen extends GetView<GlobalController> {
+class SettingsScreen extends GetView<TempController> {
   // screen that allows players to be selected including what players are on the field or on the bench (non selected)
-  final GlobalController globalController = Get.find<GlobalController>();
+  final TempController gameController = Get.find<TempController>();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
@@ -25,6 +21,14 @@ class SettingsScreen extends GetView<GlobalController> {
           // Container for menu button on top left corner
           MenuButton(_scaffoldKey),
           GameStartStopButtons(),
+          const Text(Strings.lHomeSideIsRight),
+          Obx(() => Switch(
+              value: gameController.getAttackIsLeft(),
+              onChanged: (bool) {
+                gameController
+                    .setAttackIsLeft(!gameController.getAttackIsLeft());
+                gameController.refresh();
+              }))
         ],
       ),
     );

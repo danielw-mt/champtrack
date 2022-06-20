@@ -1,21 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../controllers/globalController.dart';
+import 'package:handball_performance_tracker/constants/team_constants.dart';
+import '../controllers/persistentController.dart';
+import '../controllers/tempController.dart';
 import '../data/player.dart';
 import '../data/game.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 
 import '../strings.dart';
 
 void startGame(BuildContext context) async {
-  final GlobalController globalController = Get.find<GlobalController>();
+  TempController tempController = Get.find<TempController>();
+  PersistentController persistentController = Get.find<PersistentController>();
   print("in start game");
   // check if enough players have been selected
-  var numPlayersOnField =
-      globalController.selectedTeam.value.onFieldPlayers.length;
-  if (numPlayersOnField != 7) {
+  var numPlayersOnField = tempController.getOnFieldPlayers().length;
+  if (numPlayersOnField != PLAYER_NUM) {
     // create alert if someone tries to start the game without enough players
     Alert(
             context: context,
@@ -27,70 +28,77 @@ void startGame(BuildContext context) async {
   }
 
   // start a new game in firebase
+  print("starting new game");
   DateTime dateTime = DateTime.now();
   int unixTimeStamp = dateTime.toUtc().millisecondsSinceEpoch;
   Game newGame = Game(
-      clubId: globalController.selectedTeam.value.id!,
+      clubId: tempController.getSelectedTeam().id!,
       date: dateTime,
       startTime: unixTimeStamp,
-      players: globalController.chosenPlayers.cast<Player>());
+      players: tempController.chosenPlayers.cast<Player>());
+  await persistentController.setCurrentGame(newGame, isNewGame: true);
 
-  final DocumentReference ref =
-      await globalController.repository.addGame(newGame);
-  newGame.id = ref.id;
-  globalController.currentGame.value = newGame;
-  print("start game, id: ${globalController.currentGame.value.id}");
+  print("start game, id: ${persistentController.getCurrentGame().id}");
 
   // add game to selected players
   _addGameToPlayers(newGame);
 
   // activate the game timer
-  globalController.currentGame.value.stopWatch.onExecute.add(StopWatchExecute.start);
+  persistentController
+      .getCurrentGame()
+      .stopWatch
+      .onExecute
+      .add(StopWatchExecute.start);
 
-  globalController.gameRunning.value = true;
-  globalController.refresh();
+  print("start game, id: ${persistentController.getCurrentGame().id}");
+  tempController.setGameIsRunning(true);
+  tempController.refresh();
 }
 
 void unpauseGame() {
-  final GlobalController globalController = Get.find<GlobalController>();
-  globalController.gameRunning.value = true;
-  globalController.currentGame.value.stopWatch.onExecute.add(StopWatchExecute.start);
-  globalController.refresh();
+  TempController tempController = Get.find<TempController>();
+  PersistentController persistentController = Get.find<PersistentController>();
+  tempController.setGameIsRunning(true);
+  persistentController
+      .getCurrentGame()
+      .stopWatch
+      .onExecute
+      .add(StopWatchExecute.start);
+  tempController.refresh();
 }
 
 void pauseGame() {
-  final GlobalController globalController = Get.find<GlobalController>();
-  globalController.gameRunning.value = false;
-  globalController.currentGame.value.stopWatch.onExecute.add(StopWatchExecute.stop);
-  globalController.refresh();
+  TempController tempController = Get.find<TempController>();
+  PersistentController persistentController = Get.find<PersistentController>();
+  tempController.setGameIsRunning(false);
+  persistentController.getCurrentGame().stopWatch.onExecute.add(StopWatchExecute.stop);
+  tempController.refresh();
 }
 
 void stopGame() async {
-  final GlobalController globalController = Get.find<GlobalController>();
+  TempController tempController = Get.find<TempController>();
+  PersistentController persistentController = Get.find<PersistentController>();
   // update game document in firebase
-  Game currentGame = globalController.currentGame.value;
-  print("stop game, id: ${globalController.currentGame.value.id}");
+  Game currentGame = persistentController.getCurrentGame();
+  print("stop game, id: ${persistentController.getCurrentGame().id}");
 
   DateTime dateTime = DateTime.now();
   currentGame.date = dateTime;
   currentGame.stopTime = dateTime.toUtc().millisecondsSinceEpoch;
-  currentGame.scoreHome = globalController.homeTeamGoals.value;
-  currentGame.scoreOpponent = globalController.opponentTeamGoals.value;
-  currentGame.players = globalController.chosenPlayers.cast<Player>();
+  currentGame.players = tempController.chosenPlayers().cast<Player>();
 
-  globalController.repository.updateGame(currentGame);
+  persistentController.setCurrentGame(currentGame);
 
   // stop the game timer
-  globalController.currentGame.value.stopWatch.onExecute.add(StopWatchExecute.stop);
+  persistentController.getCurrentGame().stopWatch.onExecute.add(StopWatchExecute.stop);
 
-  globalController.gameRunning.value = false;
-  globalController.refresh();
+  tempController.setGameIsRunning(false);
+  tempController.refresh();
 }
 
-// TODO wo können wir solche helper-functions hinpacken und trotzdem auf das repo/globalController Objekt zugreifen?
 void _addGameToPlayers(Game game) {
-  final GlobalController globalController = Get.find<GlobalController>();
-  for (Player player in globalController.chosenPlayers) {
+  TempController tempController = Get.find<TempController>();
+  for (Player player in tempController.chosenPlayers) {
     if (!player.games.contains(game.id)) {
       player.games.add(game.id!);
       // TODO implement this

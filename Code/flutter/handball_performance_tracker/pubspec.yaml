@@ -46,6 +46,7 @@ dev_dependencies:
     sdk: flutter
   flutter_svg: ^1.0.3
   flutter_launcher_icons: "^0.9.3"
+  logger: ^1.1.0
   
 
 flutter_icons:

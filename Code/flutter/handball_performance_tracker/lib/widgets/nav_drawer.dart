@@ -1,6 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:handball_performance_tracker/controllers/globalController.dart';
 import './../screens/mainScreen.dart';
 import '../screens/debugScreen.dart';
 import './../screens/settingsScreen.dart';

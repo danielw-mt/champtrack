@@ -6,13 +6,11 @@ import 'package:handball_performance_tracker/screens/settingsScreen.dart';
 import 'package:handball_performance_tracker/screens/startGameScreen.dart';
 import 'screens/mainScreen.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'dart:io';
 import 'config/firebase_options.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
-import 'Strings.dart';
-import '../../controllers/globalController.dart';
+import 'strings.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 void main() async {

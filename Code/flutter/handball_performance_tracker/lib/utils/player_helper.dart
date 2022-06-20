@@ -1,15 +1,17 @@
-import 'package:handball_performance_tracker/controllers/globalController.dart';
 import 'package:get/get.dart';
-import 'package:handball_performance_tracker/data/player.dart';
+
+import '../controllers/tempController.dart';
 
 // Function to get list of indices where the list playersOnField is true.
 // Those are the indices of players on field in chosenPlayers.
 List<int> getOnFieldIndex() {
-  final GlobalController globalController = Get.find<GlobalController>();
+  TempController gameController = Get.find<TempController>();
   List<int> ind = [];
-  for (int i = 0; i < globalController.selectedTeam.value.players.length; i++) {
-    if (globalController.selectedTeam.value.onFieldPlayers
-        .contains(globalController.selectedTeam.value.players[i])) {
+  for (int i = 0; i < gameController.getSelectedTeam().players.length; i++) {
+    if (gameController
+        .getSelectedTeam()
+        .onFieldPlayers
+        .contains(gameController.getSelectedTeam().players[i])) {
       ind.add(i);
     }
   }
@@ -19,11 +21,13 @@ List<int> getOnFieldIndex() {
 // Function to get list of indices where the list playersOnField is false.
 // Those are the indices of players not on field in chosenPlayers.
 List<int> getNotOnFieldIndex() {
-  final GlobalController globalController = Get.find<GlobalController>();
+  TempController gameController = Get.find<TempController>();
   List<int> ind = [];
-  for (int i = 0; i < globalController.selectedTeam.value.players.length; i++) {
-    if (globalController.selectedTeam.value.onFieldPlayers
-            .contains(globalController.selectedTeam.value.players[i]) ==
+  for (int i = 0; i < gameController.getSelectedTeam().players.length; i++) {
+    if (gameController
+            .getSelectedTeam()
+            .onFieldPlayers
+            .contains(gameController.getSelectedTeam().players[i]) ==
         false) {
       ind.add(i);
     }
