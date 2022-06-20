@@ -207,13 +207,12 @@ Obx buildDialogButton(BuildContext context, Player associatedPlayer) {
     if (lastAction.actionType == "goal") {
       // update data for person that shot the goal
       persistentController.setLastActionPlayer(lastClickedPlayer);
+      tempController.updatePlayerEfScore(lastClickedPlayer.id!, persistentController.getLastAction());
       addFeedItem(persistentController.getLastAction());
       // add goal to feed
-      tempController.refresh();
       // if it was a solo goal the action type has to be updated to "Tor Solo"
       if (!_wasAssist()) {
         logger.d("Logging solo goal for ${lastClickedPlayer.lastName}");
-        tempController.refresh();
       } else {
         logger.d(
             "Logging goal of ${lastClickedPlayer.lastName} with assist from ${associatedPlayer.lastName}");
@@ -224,6 +223,7 @@ Obx buildDialogButton(BuildContext context, Player associatedPlayer) {
         assistAction.actionType = "assist";
         await persistentController.addAction(assistAction);
         persistentController.setLastActionPlayer(assistPlayer);
+        tempController.updatePlayerEfScore(assistPlayer.id!, persistentController.getLastAction());
         logger.d("assist action: ${assistAction.toMap()}");
         // add assist to the feed
         addFeedItem(assistAction);
@@ -233,6 +233,7 @@ Obx buildDialogButton(BuildContext context, Player associatedPlayer) {
           "Logging ${lastAction.actionType} of ${associatedPlayer.lastName}");
       // if the action was not a goal just update the player id in firebase and gamestate
       persistentController.setLastActionPlayer(associatedPlayer);
+      tempController.updatePlayerEfScore(associatedPlayer.id!, persistentController.getLastAction());
       // add action to feed
       addFeedItem(persistentController.getLastAction());
     }
@@ -240,7 +241,6 @@ Obx buildDialogButton(BuildContext context, Player associatedPlayer) {
         "last action saved in database: ${persistentController.getLastAction().toMap()}");
     // reset last clicked player
     tempController.setLastClickedPlayer(Player());
-    tempController.refresh();
     _setFieldBasedOnLastAction(lastAction);
     Navigator.pop(context);
   }

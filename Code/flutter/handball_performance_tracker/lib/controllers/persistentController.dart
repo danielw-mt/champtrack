@@ -68,7 +68,6 @@ class PersistentController extends GetxController {
   /// updates playerid of the last action and eff score of player according to last action
   void setLastActionPlayer(Player player){
     _actions.last.playerId = player.id!;
-    player.addAction(_actions.last);
     repository.updateAction(_actions.last);
   }
 

@@ -96,9 +96,12 @@ class EfScoreBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    return GetBuilder<TempController>(
+        id: "ef-score-bar",
+        builder: (tempController) {
     List<Container> buttons = [];
     for (int i = 0; i < getOnFieldIndex().length; i++) {
-      Container button = buildPlayerButton(context, i);
+            Container button = buildPlayerButton(context, i, tempController);
       buttons.add(button);
     }
     return ButtonBar(
@@ -106,6 +109,7 @@ class EfScoreBar extends StatelessWidget {
       width: scorebarWidth,
       padWidth: 0.0,
     );
+        });
   }
 }
 
@@ -174,9 +178,7 @@ void showPopup(BuildContext context, List<Container> buttons, int i) {
 /// @param i: Index of player that is represented in playerBarPlayers
 /// @return Container with TextButton representing the player.
 ///         On pressing the button a new popup with possible substitute player pops up.
-Container buildPlayerButton(BuildContext context, int i) {
-  final TempController tempController = Get.find<TempController>();
-
+Container buildPlayerButton(BuildContext context, int i, TempController tempController) {
   // Get player which have at least one of the given positions.
   List<Player> playerWithSamePosition(List<String> positions) {
     List<Player> substitutePlayer = [];
@@ -193,7 +195,7 @@ Container buildPlayerButton(BuildContext context, int i) {
   }
 
   // Popup after clicking on one player at efscore bar.
-  void popupSubstitutePlayer() {
+  void popupSubstitutePlayer(TempController tempController) {
     // Save pressed player, so this player can be changed in the next step.
     tempController.setPlayerToChange(tempController
         .getPlayersFromSelectedTeam()[tempController.getPlayerBarPlayers()[i]]);
@@ -206,11 +208,11 @@ Container buildPlayerButton(BuildContext context, int i) {
     List<Container> buttons = [];
     for (int k = 0; k < players.length; k++) {
       int l = tempController.getPlayersFromSelectedTeam().indexOf(players[k]);
-      Container button = buildPopupPlayerButton(context, l);
+      Container button = buildPopupPlayerButton(context, l, tempController);
       buttons.add(button);
     }
     // Add the button with the plus here.
-    buttons.add(buildPlusButton(context, i));
+    buttons.add(buildPlusButton(context, i, tempController));
 
     // Open popup dialog.
     // int i: Index of player in playerbar
@@ -226,17 +228,17 @@ Container buildPlayerButton(BuildContext context, int i) {
     height: buttonHeight,
     child: Stack(
       children: [
-        Obx(
-          () => getButton(tempController.getPlayersFromSelectedTeam()[
-              tempController.getPlayerBarPlayers()[i]]),
-        ),
+              getButton(
+                  tempController.getPlayersFromSelectedTeam()[
+                      tempController.getPlayerBarPlayers()[i]],
+                  tempController),
         SizedBox(
           height: buttonHeight,
           width: scorebarButtonWidth,
           child: TextButton(
             child: const Text(""),
             onPressed: () {
-              popupSubstitutePlayer();
+                    popupSubstitutePlayer(tempController);
             },
             style: TextButton.styleFrom(
               // Color of pressed player changes on efscore bar.
@@ -260,9 +262,8 @@ Container buildPlayerButton(BuildContext context, int i) {
 /// @return Container with TextButton representing the player.
 ///         The index of player which button was pressed in tempController.getOnFieldPlayers() is changed with index of player
 ///           with index i in tempController.getSelectedPlayersFromSelectedTeam().
-Container buildPopupPlayerButton(BuildContext context, int i) {
-  final TempController tempController = Get.find<TempController>();
-
+Container buildPopupPlayerButton(
+    BuildContext context, int i, TempController tempController) {
   // Changes player which was pressed in the efscore bar (tempController.getPlayerToChange)
   // with a player which was pressed in a popup dialog.
   void changePlayer() {
@@ -286,16 +287,14 @@ Container buildPopupPlayerButton(BuildContext context, int i) {
   // build button for popup
   return Container(
     decoration: BoxDecoration(
-
         // make round edges
         borderRadius: BorderRadius.all(Radius.circular(buttonRadius))),
     height: buttonHeight,
     width: scorebarButtonWidth,
     child: Stack(
       children: [
-        Obx(
-          () => getButton(tempController.getPlayersFromSelectedTeam()[i]),
-        ),
+              getButton(tempController.getPlayersFromSelectedTeam()[i],
+                  tempController),
         SizedBox(
           height: buttonHeight,
           width: scorebarButtonWidth,
@@ -323,9 +322,7 @@ Container buildPopupPlayerButton(BuildContext context, int i) {
   );
 }
 
-Row getButton(Player player) {
-  final TempController tempController = Get.find<TempController>();
-
+Row getButton(Player player, TempController tempController) {
   return Row(
     children: [
       // Playernumber
@@ -398,13 +395,14 @@ Row getButton(Player player) {
 }
 
 // Builds the plus button which is only present in popup.
-Container buildPlusButton(BuildContext context, int i) {
+Container buildPlusButton(
+    BuildContext context, int i, TempController tempController) {
   // Popup after clicking on plus at popup dialog.
   // Shows all player which are not on field.
-  void popupAllPlayer() {
+  void popupAllPlayer(TempController tempController) {
     List<Container> buttons = [];
     for (int i in getNotOnFieldIndex()) {
-      Container button = buildPopupPlayerButton(context, i);
+      Container button = buildPopupPlayerButton(context, i, tempController);
       buttons.add(button);
     }
     showPopup(context, buttons, i);
@@ -422,7 +420,7 @@ Container buildPlusButton(BuildContext context, int i) {
       onPressed: () {
         plusPressed = true;
         Navigator.pop(context);
-        popupAllPlayer();
+        popupAllPlayer(tempController);
       },
       style: TextButton.styleFrom(
         backgroundColor: buttonColor,
