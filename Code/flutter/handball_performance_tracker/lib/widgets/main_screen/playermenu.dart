@@ -142,72 +142,7 @@ Obx buildDialogButton(BuildContext context, Player associatedPlayer) {
     return false;
   }
 
-  void logPlayerSelection() async {
-    logger.d("Logging the player selection");
-    GameAction lastAction = persistentController.getLastAction();
-    String? lastClickedPlayerId = tempController.getLastClickedPlayer().id;
-    lastAction.playerId = lastClickedPlayerId.toString();
-    // if goal was pressed but no player was selected yet
-    //(lastClickedPlayer is default Player Object) do nothing
-    if (lastAction.actionType == "goal" && lastClickedPlayerId == "") {
-      tempController.updatePlayerMenuText();
-      // update last Clicked player value with the Player from selected team
-      // who was clicked
-      tempController.setLastClickedPlayer(
-          tempController.getPlayerFromSelectedTeam(associatedPlayer.id!));
-      return;
-    }
-    // if goal was pressed and a player was already clicked once
-    if (lastAction.actionType == "goal") {
-      tempController.refresh();
-      // if it was a solo goal the action type has to be updated to "Tor Solo"
-      if (!_wasAssist()) {
-        logger.d("Logging solo goal");
-        // update data for person that shot the goal
-        lastAction.playerId = tempController.getLastClickedPlayer().id!;
-        persistentController.setLastAction(lastAction);
-        // update player's ef-score
-        // TODO implement this
-        //activePlayer.addAction(lastAction);
-
-        tempController.setLastClickedPlayer(Player());
-        addFeedItem(lastAction);
-        tempController.refresh();
-      } else {
-        logger.d("Logging goal with assist");
-        // if it was an assist update data for both players
-        // person that scored goal
-        lastAction.playerId = tempController.getLastClickedPlayer().id!;
-        persistentController.setLastAction(lastAction);
-        // person that scored assist
-        // deep clone a new action from the most recent action
-        GameAction assistAction = GameAction.clone(lastAction);
-        print("assist action: $assistAction");
-        Player assistPlayer = associatedPlayer;
-        assistAction.playerId = assistPlayer.id!;
-        assistAction.actionType = "assist";
-        persistentController.addAction(assistAction);
-
-        // add assist first to the feed and then the goal
-        addFeedItem(assistAction);
-        addFeedItem(lastAction);
-        // update player's ef-score
-        // TODO implement this
-        //assistPlayer.addAction(lastAction);
-
-        tempController.setLastClickedPlayer(Player());
-      }
-    } else {
-      // if the action was not a goal just update the player id in firebase and gamestate
-      lastAction.playerId = associatedPlayer.id.toString();
-      persistentController.setLastAction(lastAction);
-      addFeedItem(lastAction);
-      // update player's ef-scorer
-      // TODO implement this
-      // activePlayer.addAction(lastAction);
-
-      tempController.setLastClickedPlayer(Player());
-    }
+  void _setFieldBasedOnLastAction(GameAction lastAction) {
     // TODO debug if there are no cases missing here because when you switch back it doesnt get triggered again
     if (lastAction.actionType == goal || lastAction.actionType == errThrow) {
       // if our action is left (page 0) and we are attacking (on page 0) jump back to defense (page 1) after the action
@@ -252,10 +187,61 @@ Obx buildDialogButton(BuildContext context, Player associatedPlayer) {
         FieldSwitch.pageController.jumpToPage(0);
       }
     }
-    // addFeedItem(lastAction);
-    print("last action saved in database: ");
-    print(persistentController.getLastAction().toMap());
+  }
+
+  void logPlayerSelection() async {
+    logger.d("Logging the player selection");
+    GameAction lastAction = persistentController.getLastAction();
+    Player lastClickedPlayer = tempController.getLastClickedPlayer();
+    // if goal was pressed but no player was selected yet
+    //(lastClickedPlayer is default Player Object) do nothing
+    if (lastAction.actionType == "goal" && lastClickedPlayer.id! == "") {
+      tempController.updatePlayerMenuText();
+      // update last Clicked player value with the Player from selected team
+      // who was clicked
+      tempController.setLastClickedPlayer(
+          tempController.getPlayerFromSelectedTeam(associatedPlayer.id!));
+      return;
+    }
+    // if goal was pressed and a player was already clicked once
+    if (lastAction.actionType == "goal") {
+      // update data for person that shot the goal
+      persistentController.setLastActionPlayer(lastClickedPlayer);
+      addFeedItem(persistentController.getLastAction());
+      // add goal to feed
+      tempController.refresh();
+      // if it was a solo goal the action type has to be updated to "Tor Solo"
+      if (!_wasAssist()) {
+        logger.d("Logging solo goal for ${lastClickedPlayer.lastName}");
+        tempController.refresh();
+      } else {
+        logger.d(
+            "Logging goal of ${lastClickedPlayer.lastName} with assist from ${associatedPlayer.lastName}");
+        // deep clone a new action from the most recent action
+        GameAction assistAction = GameAction.clone(lastAction);
+        // person that scored assist
+        Player assistPlayer = associatedPlayer;
+        assistAction.actionType = "assist";
+        await persistentController.addAction(assistAction);
+        persistentController.setLastActionPlayer(assistPlayer);
+        logger.d("assist action: ${assistAction.toMap()}");
+        // add assist to the feed
+        addFeedItem(assistAction);
+      }
+    } else {
+      logger.d(
+          "Logging ${lastAction.actionType} of ${associatedPlayer.lastName}");
+      // if the action was not a goal just update the player id in firebase and gamestate
+      persistentController.setLastActionPlayer(associatedPlayer);
+      // add action to feed
+      addFeedItem(persistentController.getLastAction());
+    }
+    logger.d(
+        "last action saved in database: ${persistentController.getLastAction().toMap()}");
+    // reset last clicked player
+    tempController.setLastClickedPlayer(Player());
     tempController.refresh();
+    _setFieldBasedOnLastAction(lastAction);
     Navigator.pop(context);
   }
 
