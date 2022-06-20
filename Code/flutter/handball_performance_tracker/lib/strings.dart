@@ -121,6 +121,8 @@ class Strings {
       "Bitte wähle alle Spieler für den Spieltag aus";
   static const String lStartGamePlayerPositioningPrompt =
       "Bitte wähle die Startaufstellung aus den nominierten Spielern aus";
+  static const String lHotReloadError =
+      "Es scheint ein Problem zu geben. Bitte gehen Sie zurück zum Dashboard";
 
   // Dashboard
   static const String lDashboard = "Dashboard";

@@ -32,8 +32,7 @@ class _StartGameScreenState extends State<StartGameScreen> {
     if (!Get.isRegistered<TempController>())
       return Column(
         children: [
-          Text(
-              "There seems to be a problem. Please go back to the home screen"),
+          Text(Strings.lHotReloadError),
           ElevatedButton(
               onPressed: () {
                 Get.toNamed("Dashboard");
