@@ -1,6 +1,18 @@
 import 'package:handball_performance_tracker/constants/game_actions.dart';
 import 'package:handball_performance_tracker/constants/positions.dart';
 import 'package:handball_performance_tracker/data/game_action.dart';
+import 'package:logger/logger.dart';
+
+var logger = Logger(
+  printer: PrettyPrinter(
+      methodCount: 2, // number of method calls to be displayed
+      errorMethodCount: 8, // number of method calls if stacktrace is provided
+      lineLength: 120, // width of the output
+      colors: true, // Colorful log messages
+      printEmojis: true, // Print an emoji for each log message
+      printTime: false // Should each log print contain a timestamp
+      ),
+);
 
 class EfScore {
   double score;
@@ -86,12 +98,12 @@ class LiveEfScore extends EfScore {
     String? actionType = _getActionType(action, playerPositions);
     if (actionType != null) {
       actionStats[actionType] = actionStats[actionType]! + 1;
-      print("action added: $actionType");
       numOfActions++;
+      logger.d("Action added: $actionType, old ef-score: $score");
       calculate();
-      print("new ef-score: $score");
+      logger.d("New ef-score: $score");
     } else {
-      print("Action type $actionType is unknown. Action ignored.");
+      logger.i("Action type $actionType is unknown. Action ignored.");
     }
   }
 
@@ -100,9 +112,13 @@ class LiveEfScore extends EfScore {
     if (actionType != null) {
       if (actionStats[actionType]! >= 1) {
         actionStats[actionType] = actionStats[actionType]! - 1;
+        numOfActions--;
+        logger.d("Action reverted: $actionType, old ef-score: $score");
+        calculate();
+        logger.d("New ef-score: $score");
       }
     } else {
-      print("Action type $actionType is unknown. No revert performed.");
+      logger.i("Action type $actionType is unknown. No revert performed.");
     }
   }
 }
