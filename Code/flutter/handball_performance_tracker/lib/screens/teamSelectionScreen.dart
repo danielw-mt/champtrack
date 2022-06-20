@@ -28,6 +28,7 @@ class TeamSelectionScreen extends GetView<TempController> {
                   children: [
                     MenuButton(_scaffoldKey),
                     // TODO implement team cards here
+                    TeamDropdown(),
                     TextButton(
                         onPressed: () {
                           Get.to(TeamSettingsScreen());

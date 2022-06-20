@@ -27,8 +27,12 @@ class TempController extends GetxController {
   /// setter for selectedTeam
   void setSelectedTeam(Team team) {
     _selectedTeam.value = team;
-    update(
-        ["team-type-selection-bar", "players-list", "team-details-form-state"]);
+    update([
+      "team-type-selection-bar",
+      "players-list",
+      "team-details-form-state",
+      "team-dropdown"
+    ]);
   }
 
   /// return the first player in selectedTeam with the given playerId

@@ -8,13 +8,13 @@ import '../../constants/team_constants.dart';
 
 // dropdown that shows all available teams belonging to the selected team type
 class TeamDropdown extends GetView<TempController> {
-  final PersistentController persistentController =
-      Get.find<PersistentController>();
-
   @override
   Widget build(BuildContext context) {
+    final PersistentController persistentController =
+        Get.find<PersistentController>();
     return // build the dropdown button
         GetBuilder<TempController>(
+      id: "team-dropdown",
       builder: (TempController tempController) {
         // available teams are all the ones that match the selected team type (0,1,2) => "men", "women", "youth"
 
@@ -36,31 +36,18 @@ class TeamDropdown extends GetView<TempController> {
               color: Colors.deepPurpleAccent,
             ),
             onChanged: (Team? newTeam) {
-              Obx(() {
-                tempController.setSelectedTeam(persistentController
-                    .getAvailableTeams()
-                    .where((Team teamItem) => teamItem.id == newTeam?.id)
-                    .first);
-                return Container();
-              });
+              tempController.setSelectedTeam(persistentController
+                  .getAvailableTeams()
+                  .where((Team teamItem) => teamItem.id == newTeam?.id)
+                  .first);
             },
             // build dropdown item widgets
-            items: buildDropDownItems());
+            items: persistentController.getAvailableTeams().map((Team team) {
+              print("adding ${team.name}");
+              return DropdownMenuItem<Team>(
+                  value: team, child: Text(team.name));
+            }).toList());
       },
     );
-  }
-
-  List<DropdownMenuItem<Team>> buildDropDownItems() {
-    List<DropdownMenuItem<Team>> items = [];
-    Obx(() {
-      persistentController.getAvailableTeams().forEach((Team team) {
-        items.add(DropdownMenuItem<Team>(
-          value: team,
-          child: Text(team.name),
-        ));
-      });
-      return Container();
-    });
-    return items;
   }
 }
