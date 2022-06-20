@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:handball_performance_tracker/controllers/globalController.dart';
+import 'package:handball_performance_tracker/controllers/tempController.dart';
 import 'package:handball_performance_tracker/screens/dashboard.dart';
 import 'package:handball_performance_tracker/utils/gameControl.dart';
 import 'package:handball_performance_tracker/widgets/start_game_screen/player_positioning.dart';
@@ -29,7 +29,7 @@ class _StartGameScreenState extends State<StartGameScreen> {
   @override
   Widget build(BuildContext context) {
     // after a hot reload the app crashes. This prevents it
-    if (!Get.isRegistered<GlobalController>())
+    if (!Get.isRegistered<TempController>())
       return Column(
         children: [
           Text(
@@ -50,7 +50,7 @@ class _StartGameScreenState extends State<StartGameScreen> {
             // Container for menu button on top left corner
             MenuButton(_scaffoldKey),
             buildStartScreenContent(),
-            // buttons
+            buildBackNextButtons()
           ],
         ));
   }
@@ -107,10 +107,9 @@ class _StartGameScreenState extends State<StartGameScreen> {
             }
             // validate whether 7 players were selected on this page
             if (startGameFlowStep == 1) {
-              GlobalController globalController = Get.find<GlobalController>();
+              TempController tempController = Get.find<TempController>();
               // display alert if less than 7 have been selected
-              if (globalController.selectedTeam.value.onFieldPlayers.length !=
-                  7) {
+              if (tempController.getOnFieldPlayers().length != 7) {
                 Alert(
                         context: context,
                         title: Strings.lWarningPlayerNumberErrorMessage,

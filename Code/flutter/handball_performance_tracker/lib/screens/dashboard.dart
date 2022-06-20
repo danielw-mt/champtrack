@@ -3,11 +3,13 @@ import 'package:handball_performance_tracker/screens/startGameScreen.dart';
 import 'package:handball_performance_tracker/widgets/nav_drawer.dart';
 import '../strings.dart';
 import 'package:get/get.dart';
-import '../controllers/globalController.dart';
+import '../controllers/persistentController.dart';
+import '../controllers/tempController.dart';
 import '../utils/initializeLocalData.dart';
 
 class Dashboard extends StatelessWidget {
-  final GlobalController globalController = Get.put(GlobalController());
+  final PersistentController persistentController = Get.put(PersistentController());
+  final TempController tempController = Get.put(TempController());
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override

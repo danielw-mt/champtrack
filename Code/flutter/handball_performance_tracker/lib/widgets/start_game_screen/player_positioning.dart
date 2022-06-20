@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '/../controllers/globalController.dart';
-import '../../data/database_repository.dart';
+import '/../controllers/tempController.dart';
 import '../../strings.dart';
 import '../../data/player.dart';
 
@@ -23,11 +22,11 @@ class _PlayerPositioningState extends State<PlayerPositioning> {
 
   @override
   void initState() {
-    GlobalController globalController = Get.find<GlobalController>();
-    numberOfPlayers = globalController.selectedTeam.value.onFieldPlayers.length;
+    TempController tempController = Get.find<TempController>();
+    numberOfPlayers = tempController.getOnFieldPlayers().length;
     // fill data structures in state
     List<Player> onFieldPlayers =
-        globalController.selectedTeam.value.onFieldPlayers;
+        tempController.getOnFieldPlayers();
     onFieldPlayers.forEach((Player player) {
       playerMap[player] = player.positions;
       selectedPositions.add(player.positions[0]);

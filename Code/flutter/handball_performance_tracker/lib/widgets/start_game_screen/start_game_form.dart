@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:handball_performance_tracker/data/team.dart';
 import 'package:handball_performance_tracker/widgets/team_selection_screen/team_dropdown.dart';
-import '../../controllers/globalController.dart';
+import '../../controllers/tempController.dart';
 import '../../constants/team_constants.dart';
 import '../../strings.dart';
 
@@ -48,8 +48,9 @@ class StartGameFormState extends State<StartGameForm> {
     locationController.text = "TODO";
     opponentController.text = "TODO";
     // Build a Form widget using the _formKey created above.
-    return GetBuilder<GlobalController>(
-      builder: (GlobalController globalController) {
+    return GetBuilder<TempController>(
+      id: "start-game-form",
+      builder: (TempController tempController) {
         double width = MediaQuery.of(context).size.width;
         return Form(
           key: _formKey,
@@ -147,11 +148,9 @@ class StartGameFormState extends State<StartGameForm> {
                 children: [
                   const Text(Strings.lHomeSideIsRight),
                   Switch(
-                      value: globalController.attackIsLeft.value,
-                      onChanged: (bool) {
-                        globalController.attackIsLeft.value =
-                            !globalController.attackIsLeft.value;
-                        globalController.refresh();
+                      value: tempController.getAttackIsLeft(),
+                      onChanged: (bool value) {
+                        tempController.setAttackIsLeft(value);
                       }),
                 ],
               ),
