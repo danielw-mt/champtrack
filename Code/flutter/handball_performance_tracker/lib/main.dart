@@ -11,6 +11,8 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import '../../controllers/globalController.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+// test comment
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
