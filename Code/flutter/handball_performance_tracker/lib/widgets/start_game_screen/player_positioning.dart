@@ -67,7 +67,7 @@ class _PlayerPositioningState extends State<PlayerPositioning> {
                 cells: <DataCell>[
                   // column 1: first and last name of player
                   DataCell(Text(
-                      "${playerMap.keys.elementAt(index).firstName} ${playerMap.keys.elementAt(index).firstName}")),
+                      "${playerMap.keys.elementAt(index).firstName} ${playerMap.keys.elementAt(index).lastName}")),
                   // column 2: number of player
                   DataCell(
                       Text(playerMap.keys.elementAt(index).number.toString())),
