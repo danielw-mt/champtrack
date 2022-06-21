@@ -33,14 +33,13 @@ Color pressedButtonColor = Colors.blue;
 double numberFontSize = 18;
 double nameFontSize = 14;
 // Spectrum for color coding of efscore
-// TODO: Adapt the range to typical efscore values
 var rb = Rainbow(spectrum: [
-  Color(0xfffe7e6d),
-  Color(0xfff8c4c0),
-  Color(0xffeceef3),
-  Color(0xffdce2f5),
-  Color(0xffc7d0f4),
-], rangeStart: -20.0, rangeEnd: 20.0);
+  Color(0xffe99e9f),
+  Color(0xfff0d4b2),
+  Color(0xfff5fabf),
+  Color(0xffdef6c1),
+  Color(0xffbff2c4),
+], rangeStart: -7.0, rangeEnd: 7.0);
 
 /*
 * Class that builds the column with buttons for both permanent efscore player bar and player changing popup.
