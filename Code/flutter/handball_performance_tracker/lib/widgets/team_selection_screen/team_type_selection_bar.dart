@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../../controllers/tempController.dart';
 import 'package:get/get.dart';
 import '../../strings.dart';
-import '../../utils/teamTypeHelpers.dart';
+import '../../utils/team_type_helpers.dart';
 
 class TeamTypeSelectionBar extends StatelessWidget {
   @override

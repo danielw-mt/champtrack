@@ -21,7 +21,7 @@ class SettingsScreen extends GetView<TempController> {
           // Container for menu button on top left corner
           MenuButton(_scaffoldKey),
           GameStartStopButtons(),
-          const Text(Strings.lFieldSideIsRight),
+          const Text(Strings.lHomeSideIsRight),
           Obx(() => Switch(
               value: gameController.getAttackIsLeft(),
               onChanged: (bool) {
