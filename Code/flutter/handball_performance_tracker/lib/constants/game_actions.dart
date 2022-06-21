@@ -4,6 +4,7 @@ const String attack = "attack";
 const String defense = "defense";
 const String ownGoalkeeper = "goalkeeper";
 const String otherGoalkeeper = "other_goalkeeper";
+const String allActions = "allActions";
 
 const Map<String, Map<String, String>> actionMapping = {
   attack: {
@@ -35,15 +36,21 @@ const Map<String, Map<String, String>> actionMapping = {
     Strings.lErrThrow: "err",
     Strings.lGoalOtherSide: "goal_others",
   },
-  otherGoalkeeper: {
+  allActions: {
     Strings.lRedCard: "red",
     Strings.lYellowCard: "yellow",
     Strings.lTimePenalty: "penalty",
-    Strings.lGoalOtherSide: "goal_others",
+    Strings.lGoal: "goal",
+    Strings.lOneVsOneAnd7m: "1v1",
+    Strings.lTwoMin: "2min",
+    Strings.lErrThrow: "err",
+    Strings.lTrf: "trf",
+    Strings.lFoul7m: "foul",
+    Strings.lBlockNoBall: "block",
+    Strings.lBlockAndSteal: "block_st",
     Strings.lHold: "hold",
     Strings.lBadPass: "bad pass",
-    Strings.lErrThrow: "err",
-    Strings.lGoal: "goal",
+    Strings.lGoalOtherSide: "goal_others",
   }
 };
 
@@ -66,6 +73,7 @@ const String trf = "trf";
 const String foulWithSeven = "foul";
 const String timePenalty = "timePen";
 const String redCard = "red";
+const String hold = "hold";
 
 const String positiveAction = "pos";
 const String negativeAction = "neg";

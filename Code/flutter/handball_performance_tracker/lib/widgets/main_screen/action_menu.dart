@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:handball_performance_tracker/data/player.dart';
+import 'package:handball_performance_tracker/utils/feed_logic.dart';
+import 'package:handball_performance_tracker/utils/player_helper.dart';
+import 'package:handball_performance_tracker/widgets/main_screen/field.dart';
 import '../../strings.dart';
 import '../../controllers/persistentController.dart';
 import '../../controllers/tempController.dart';
@@ -24,6 +28,13 @@ var logger = Logger(
 void callActionMenu(BuildContext context) {
   logger.d("Calling action menu");
   final TempController tempController = Get.find<TempController>();
+
+  String actionType = determineActionType();
+
+  // do nothing if goal of others was clicked
+  if (actionType == otherGoalkeeper) {
+    return;
+  }
 
   // if game is not running give a warning
   if (tempController.getGameIsRunning() == false) {
@@ -55,7 +66,7 @@ void callActionMenu(BuildContext context) {
                 Expanded(
                     child: PageView(
                         controller: new PageController(),
-                        children: buildPageViewChildren(context))),
+                        children: buildPageViewChildren(context, actionType))),
               ] // Column of "Spieler", horizontal line and Button-Row
               ))).show();
 }
@@ -96,17 +107,11 @@ String determineActionType() {
 
 // a method for building the children of the pageview in the right order
 // by arranging either the attack menu or defense menu first
-List<Widget> buildPageViewChildren(BuildContext context) {
-  String actionType = determineActionType();
+List<Widget> buildPageViewChildren(BuildContext context, String actionType) {
   if (actionType == ownGoalkeeper) {
     return [
       buildDialogButtonMenu(
           context, actionMapping[ownGoalkeeper]!.keys.toList(), false, true),
-    ];
-  } else if (actionType == otherGoalkeeper) {
-    return [
-      buildDialogButtonMenu(
-          context, actionMapping[otherGoalkeeper]!.keys.toList(), false, true),
     ];
   } else if (actionType == attack) {
     return [
@@ -234,6 +239,7 @@ DialogButton buildDialogButton(
     [icon]) {
   TempController tempController = Get.find<TempController>();
   PersistentController persistentController = Get.find<PersistentController>();
+  String actionType = determineActionType();
   void logAction() async {
     logger.d("logging an action");
     DateTime dateTime = DateTime.now();
@@ -243,13 +249,30 @@ DialogButton buildDialogButton(
 
     // get most recent game id from DB
     String currentGameId = persistentController.getCurrentGame().id!;
-    String actionType = determineActionType();
+
+    // switch field side after hold of goalkeeper
+    if (actionMapping[allActions]![buttonText]! == hold) {
+      print(FieldSwitch.pageController.positions);
+      while (FieldSwitch.pageController.positions.length > 1) {
+        FieldSwitch.pageController
+            .detach(FieldSwitch.pageController.positions.first);
+      }
+      if (tempController.getAttackIsLeft() == true) {
+        logger.d("Switching to left field after hold");
+
+        FieldSwitch.pageController.jumpToPage(0);
+      } else {
+        logger.d("Switching to right field after hold");
+
+        FieldSwitch.pageController.jumpToPage(1);
+      }
+    }
 
     GameAction action = GameAction(
         teamId: tempController.getSelectedTeam().id!,
         gameId: currentGameId,
         type: actionType,
-        actionType: buttonText,
+        actionType: actionMapping[allActions]![buttonText]!,
         throwLocation: tempController.getLastLocation().cast<String>(),
         timestamp: unixTime,
         relativeTime: secondsSinceGameStart);
@@ -262,7 +285,27 @@ DialogButton buildDialogButton(
     // when a player was selected in that menu the action document can be
     // updated in firebase with their player_id using the action_id
     logger.d("Adding gameaction to firebase");
-    persistentController.addAction(action);
+
+    // Save action directly if goalkeeper action
+    if (actionType == ownGoalkeeper) {
+      String? goalKeeperId = "goalkeeper";
+      // get id of goalkeeper by going through players on field and searching for position
+      for (int k in getOnFieldIndex()) {
+        Player player = tempController.getPlayersFromSelectedTeam()[k];
+        if (player.positions.contains("TW")) {
+          goalKeeperId = player.id;
+          break;
+        }
+      }
+
+      action.playerId = goalKeeperId.toString();
+      persistentController.addAction(action);
+      addFeedItem(action);
+      print("last action saved in database: ");
+      print(persistentController.getLastAction().toMap());
+    } else {
+      persistentController.addAction(action);
+    }
   }
 
   final double width = MediaQuery.of(context).size.width;
@@ -291,6 +334,9 @@ DialogButton buildDialogButton(
         // reset the feed timer
         logAction();
         Navigator.pop(context);
-        callPlayerMenu(context);
+        // close action menu if goalkeeper action
+        if (!(actionType == ownGoalkeeper)) {
+          callPlayerMenu(context);
+        }
       });
 }
