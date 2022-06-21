@@ -24,6 +24,7 @@ class CustomField extends StatelessWidget {
           child: GestureDetector(
               // handle coordinates on click
               onTapDown: (TapDownDetails details) {
+            // Set last location in controller before calling action menu, because it is queried there.
             tempController.setLastLocation(SectorCalc(fieldIsLeft)
                 .calculatePosition(details.localPosition));
             callActionMenu(context);         

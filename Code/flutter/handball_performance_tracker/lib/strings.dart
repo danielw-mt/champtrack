@@ -29,6 +29,7 @@ class Strings {
   static const String lBlockAndSteal = "Block & Steal";
   static const String lHold = "Gehalten";
   static const String lBadPass = "Fehlpass";
+  static const String lGoalOtherSide = "Gegentor";
 
   //settingsScreen.dart
   static const String lFieldSideIsRight = "Home goal is right side of screen";

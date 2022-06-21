@@ -61,38 +61,55 @@ void callActionMenu(BuildContext context) {
 }
 
 ///
-bool determineAttack() {
+String determineActionType() {
   logger.d("Determining whether attack actions should be displayed...");
   final TempController tempController = Get.find<TempController>();
   // decide whether attack or defense actions should be displayed depending
   //on what side the team goals is and whether they are attacking or defending
-  bool attacking = false;
+  String actionType = defense;
   bool attackIsLeft = tempController.getAttackIsLeft();
   bool fieldIsLeft = tempController.getFieldIsLeft();
 
   // when our goal is to the right (= attackIsLeft) and the field is left
   //display attack options
-  if (attackIsLeft && fieldIsLeft) {
-    attacking = true;
-    // when our goal is to the left (=attack is right) and the field is to the
-    //right display attack options
-  } else if (attackIsLeft == false && fieldIsLeft == false) {
-    attacking = true;
+  if (tempController.getLastLocation()[0] == goal) {
+    actionType = ownGoalkeeper;
+    if (attackIsLeft && fieldIsLeft) {
+      actionType = otherGoalkeeper;
+      // when our goal is to the left (=attack is right) and the field is to the
+      //right display attack options
+    } else if (attackIsLeft == false && fieldIsLeft == false) {
+      actionType = otherGoalkeeper;
+    }
+  } else {
+    if (attackIsLeft && fieldIsLeft) {
+      actionType = attack;
+      // when our goal is to the left (=attack is right) and the field is to the
+      //right display attack options
+    } else if (attackIsLeft == false && fieldIsLeft == false) {
+      actionType = attack;
+    }
   }
-  logger.d("Attack actions should be displayed: $attacking");
-  return attacking;
+  print(actionType);
+  logger.d("Attack actions should be displayed: $actionType");
+  return actionType;
 }
 
 // a method for building the children of the pageview in the right order
 // by arranging either the attack menu or defense menu first
 List<Widget> buildPageViewChildren(BuildContext context) {
-  final TempController tempController = Get.find<TempController>();
-  if (tempController.getLastLocation()[0] == goal) {
+  String actionType = determineActionType();
+  if (actionType == ownGoalkeeper) {
     return [
       buildDialogButtonMenu(
-          context, actionMapping[goalkeeper]!.keys.toList(), false, true),
+          context, actionMapping[ownGoalkeeper]!.keys.toList(), false, true),
     ];
-  } else if (determineAttack() == true) {
+  } else if (actionType == otherGoalkeeper) {
+    return [
+      buildDialogButtonMenu(
+          context, actionMapping[otherGoalkeeper]!.keys.toList(), false, true),
+    ];
+  } else if (actionType == attack) {
     return [
       buildDialogButtonMenu(
           context, actionMapping[attack]!.keys.toList(), true, false),
@@ -112,8 +129,9 @@ List<Widget> buildPageViewChildren(BuildContext context) {
 /// @return a menu of differently arranged buttons depending on action or defense
 Widget buildDialogButtonMenu(BuildContext context, List<String> buttonTexts,
     bool isAttack, bool isGoalkeeper) {
+  String header;
+  Row buttonRow;
   if (isGoalkeeper) {
-    print("isgoal");
     List<DialogButton> dialogButtons = [
       buildDialogButton(context, buttonTexts[0], Colors.red, Icons.style),
       buildDialogButton(context, buttonTexts[1], Colors.yellow, Icons.style),
@@ -122,152 +140,91 @@ Widget buildDialogButtonMenu(BuildContext context, List<String> buttonTexts,
       buildDialogButton(context, buttonTexts[4], Colors.grey),
       buildDialogButton(context, buttonTexts[5], Colors.blue),
       buildDialogButton(context, buttonTexts[6], Colors.blue),
+      buildDialogButton(context, buttonTexts[7], Colors.blue),
     ];
-    return Column(children: [
-      Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: const [
-          Align(
-            alignment: Alignment.topLeft,
-            child: Text(
-              Strings.lGoalkeeperPopUpHeader,
-              textAlign: TextAlign.left,
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 20,
-              ),
-            ),
-          ),
-        ],
+    buttonRow = Row(children: [
+      Column(
+        children: [dialogButtons[0], dialogButtons[1], dialogButtons[2]],
       ),
-      // horizontal line
-      const Divider(
-        thickness: 2,
-        color: Colors.black,
-        height: 6,
+      Column(children: [dialogButtons[3], dialogButtons[4], dialogButtons[5]]),
+      Column(
+        children: [dialogButtons[6], dialogButtons[7]],
       ),
-      // Button-Row: one Row with 3 Columns of 3, 3 and 2 buttons
-      Row(children: [
-        Column(
-          children: [dialogButtons[0], dialogButtons[1], dialogButtons[2]],
-        ),
-        Column(
-          children: [dialogButtons[3], dialogButtons[4]],
-        ),
-        Column(
-          children: [dialogButtons[5], dialogButtons[6]],
-        ),
-      ])
     ]);
+    header = Strings.lGoalkeeperPopUpHeader;
   } else if (isAttack) {
     List<DialogButton> dialogButtons = [
-      buildDialogButton(context, actionMapping[attack]!.keys.toList()[0],
-          Colors.red, Icons.style),
-      buildDialogButton(context, actionMapping[attack]!.keys.toList()[1],
-          Colors.yellow, Icons.style),
-      buildDialogButton(context, actionMapping[attack]!.keys.toList()[2],
-          Colors.grey, Icons.timer),
-      buildDialogButton(
-          context, actionMapping[attack]!.keys.toList()[3], Colors.grey),
-      buildDialogButton(
-          context, actionMapping[attack]!.keys.toList()[4], Colors.grey),
-      buildDialogButton(
-          context, actionMapping[attack]!.keys.toList()[5], Colors.blue),
-      buildDialogButton(
-          context, actionMapping[attack]!.keys.toList()[6], Colors.blue),
-      buildDialogButton(
-          context, actionMapping[attack]!.keys.toList()[7], Colors.blue)
+      buildDialogButton(context, buttonTexts[0], Colors.red, Icons.style),
+      buildDialogButton(context, buttonTexts[1], Colors.yellow, Icons.style),
+      buildDialogButton(context, buttonTexts[2], Colors.grey, Icons.timer),
+      buildDialogButton(context, buttonTexts[3], Colors.grey),
+      buildDialogButton(context, buttonTexts[4], Colors.grey),
+      buildDialogButton(context, buttonTexts[5], Colors.blue),
+      buildDialogButton(context, buttonTexts[6], Colors.blue),
+      buildDialogButton(context, buttonTexts[7], Colors.blue)
     ];
-    return Column(children: [
-      Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: const [
-          Align(
-            alignment: Alignment.topLeft,
-            child: Text(
-              Strings.lOffensePopUpHeader,
-              textAlign: TextAlign.left,
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 20,
-              ),
-            ),
-          ),
-        ],
+    buttonRow = Row(children: [
+      Column(
+        children: [dialogButtons[0], dialogButtons[1], dialogButtons[2]],
       ),
-      // horizontal line
-      const Divider(
-        thickness: 2,
-        color: Colors.black,
-        height: 6,
+      Column(
+        children: [dialogButtons[3], dialogButtons[4], dialogButtons[5]],
       ),
-      // Button-Row: one Row with 3 Columns of 3, 3 and 2 buttons
-      Row(children: [
-        Column(
-          children: [dialogButtons[0], dialogButtons[1], dialogButtons[2]],
-        ),
-        Column(
-          children: [dialogButtons[3], dialogButtons[4], dialogButtons[5]],
-        ),
-        Column(
-          children: [dialogButtons[6], dialogButtons[7]],
-        ),
-      ])
+      Column(
+        children: [dialogButtons[6], dialogButtons[7]],
+      ),
     ]);
+    header = Strings.lOffensePopUpHeader;
   } else {
     List<DialogButton> dialogButtons = [
-      buildDialogButton(context, actionMapping[defense]!.keys.toList()[0],
-          Colors.red, Icons.style),
-      buildDialogButton(context, actionMapping[defense]!.keys.toList()[1],
-          Colors.yellow, Icons.style),
-      buildDialogButton(context, actionMapping[defense]!.keys.toList()[2],
+      buildDialogButton(context, buttonTexts[0], Colors.red, Icons.style),
+      buildDialogButton(context, buttonTexts[1], Colors.yellow, Icons.style),
+      buildDialogButton(context, buttonTexts[2],
           const Color.fromRGBO(15, 66, 199, 32), Icons.timer),
-      buildDialogButton(
-          context, actionMapping[defense]!.keys.toList()[3], Colors.grey),
-      buildDialogButton(
-          context, actionMapping[defense]!.keys.toList()[4], Colors.grey),
-      buildDialogButton(
-          context, actionMapping[defense]!.keys.toList()[5], Colors.blue),
-      buildDialogButton(
-          context, actionMapping[defense]!.keys.toList()[6], Colors.blue)
+      buildDialogButton(context, buttonTexts[3], Colors.grey),
+      buildDialogButton(context, buttonTexts[4], Colors.grey),
+      buildDialogButton(context, buttonTexts[5], Colors.blue),
+      buildDialogButton(context, buttonTexts[6], Colors.blue)
     ];
-    return Column(children: [
-      Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          const Align(
-            alignment: Alignment.topLeft,
-            child: Text(
-              Strings.lDeffensePopUpHeader,
-              textAlign: TextAlign.left,
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 20,
-              ),
+    buttonRow = Row(children: [
+      Column(
+        children: [dialogButtons[0], dialogButtons[1], dialogButtons[2]],
+      ),
+      Column(
+        children: [dialogButtons[3], dialogButtons[4]],
+      ),
+      Column(
+        children: [dialogButtons[5], dialogButtons[6]],
+      ),
+    ]);
+    header = Strings.lDeffensePopUpHeader;
+  }
+  return Column(children: [
+    Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Align(
+          alignment: Alignment.topLeft,
+          child: Text(
+            header,
+            textAlign: TextAlign.left,
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 20,
             ),
           ),
-        ],
-      ),
-      // horizontal line
-      const Divider(
-        thickness: 2,
-        color: Colors.black,
-        height: 6,
-      ),
-      // Button-Row: one Row with 3 Columns of 3, 2 and 2 buttons
-      Row(children: [
-        Column(
-          children: [dialogButtons[0], dialogButtons[1], dialogButtons[2]],
         ),
-        Column(
-          children: [dialogButtons[3], dialogButtons[4]],
-        ),
-        Column(
-          children: [dialogButtons[5], dialogButtons[6]],
-        ),
-      ])
-    ]);
-  }
+      ],
+    ),
+    // horizontal line
+    const Divider(
+      thickness: 2,
+      color: Colors.black,
+      height: 6,
+    ),
+    // Button-Row: one Row with 3 Columns of 3, 2 and 2 buttons
+    buttonRow
+  ]);
 }
 
 /// @return
@@ -287,13 +244,13 @@ DialogButton buildDialogButton(
 
     // get most recent game id from DB
     String currentGameId = persistentController.getCurrentGame().id!;
-    String actionType = determineAttack() ? attack : defense;
+    String actionType = determineActionType();
 
     GameAction action = GameAction(
         teamId: tempController.getSelectedTeam().id!,
         gameId: currentGameId,
         type: actionType,
-        actionType: actionMapping[actionType]![buttonText]!,
+        actionType: buttonText,
         throwLocation: tempController.getLastLocation().cast<String>(),
         timestamp: unixTime,
         relativeTime: secondsSinceGameStart);
