@@ -5,6 +5,7 @@ import '../data/team.dart';
 import '../data/database_repository.dart';
 import 'package:get/get.dart';
 import '../controllers/persistentController.dart';
+import '../controllers/tempController.dart';
 
 Future<bool> initializeLocalData() async {
   PersistentController persistentController = Get.find<PersistentController>();
@@ -50,5 +51,8 @@ Future<bool> initializeLocalData() async {
     persistentController.updateAvailableTeams(teamsList);
     persistentController.isInitialized = true;
   }
+  // set the default selected team to be the first one available
+  TempController tempController = Get.find<TempController>();
+  tempController.setSelectedTeam(persistentController.getAvailableTeams()[0]);
   return true;
 }

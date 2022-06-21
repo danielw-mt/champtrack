@@ -6,6 +6,7 @@ class Player {
   String? id;
   String firstName;
   String lastName;
+  String nickName;
   int number;
   List<String> positions;
   List<String> games;
@@ -17,6 +18,7 @@ class Player {
       {this.id = "",
       this.firstName = "",
       this.lastName = "",
+      this.nickName = "",
       this.number = 0,
       this.positions = const [],
       this.clubId = null,
@@ -29,6 +31,7 @@ class Player {
     return {
       'firstName': firstName,
       'lastName': lastName,
+      'nickName': nickName,
       'number': number,
       'position': positions,
       'clubId': clubId,
@@ -49,20 +52,21 @@ class Player {
   factory Player.fromMap(Map<String, dynamic> map) {
     String firstName = map["firstName"];
     String lastName = map["lastName"];
+    String nickName = map["nickName"];
     int number = int.parse(map["number"]);
     List<String> positions = map["positions"].cast<String>();
     DocumentReference clubId = map["clubId"];
     DocumentReference teamId = map["teamId"];
     List<String> games = map["games"].cast<String>();
     return Player(
-      firstName: firstName,
-      lastName: lastName,
-      number: number,
-      positions: positions,
-      clubId: clubId,
-      teamId: teamId,
-      games: games
-    );
+        firstName: firstName,
+        lastName: lastName,
+        nickName: nickName,
+        number: number,
+        positions: positions,
+        clubId: clubId,
+        teamId: teamId,
+        games: games);
   }
 
   // Players are considered as identical if they have the same id
