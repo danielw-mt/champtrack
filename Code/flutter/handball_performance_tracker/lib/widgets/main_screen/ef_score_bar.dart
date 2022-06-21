@@ -226,10 +226,12 @@ Container buildPlayerButton(BuildContext context, int i) {
     height: buttonHeight,
     child: Stack(
       children: [
-        Obx(
-          () => getButton(tempController.getPlayersFromSelectedTeam()[
-              tempController.getPlayerBarPlayers()[i]]),
-        ),
+        GetBuilder<TempController>(
+            id: "efscorebar-players",
+            builder: (tempController) {
+              return getButton(tempController.getPlayersFromSelectedTeam()[
+                  tempController.getPlayerBarPlayers()[i]]);
+            }),
         SizedBox(
           height: buttonHeight,
           width: scorebarButtonWidth,
@@ -279,7 +281,7 @@ Container buildPopupPlayerButton(BuildContext context, int i) {
         .getPlayersFromSelectedTeam()
         .indexOf(tempController.getPlayerToChange());
     int indexToChange = tempController.getPlayerBarPlayers().indexOf(l);
-    tempController.getPlayerBarPlayers()[indexToChange] = i;
+    tempController.changePlayerBarPlayers(indexToChange, i);
     tempController.refresh();
   }
 
@@ -293,9 +295,7 @@ Container buildPopupPlayerButton(BuildContext context, int i) {
     width: scorebarButtonWidth,
     child: Stack(
       children: [
-        Obx(
-          () => getButton(tempController.getPlayersFromSelectedTeam()[i]),
-        ),
+        getButton(tempController.getPlayersFromSelectedTeam()[i]),
         SizedBox(
           height: buttonHeight,
           width: scorebarButtonWidth,

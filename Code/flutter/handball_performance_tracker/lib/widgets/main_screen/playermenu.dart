@@ -27,7 +27,8 @@ var logger = Logger(
 void callPlayerMenu(context) {
   logger.d("Calling player menu");
   final TempController tempController = Get.find<TempController>();
-  List<Obx> dialogButtons = buildDialogButtonList(context);
+  List<GetBuilder<TempController>> dialogButtons =
+      buildDialogButtonList(context);
   Alert(
     style: AlertStyle(
       // make round edges
@@ -61,16 +62,18 @@ void callPlayerMenu(context) {
             Align(
               alignment: Alignment.topRight,
               // Change from "" to "Assist" after a goal.
-              child: Obx(
-                () => Text(
-                  tempController.getPlayerMenuText(),
-                  textAlign: TextAlign.right,
-                  style: const TextStyle(
-                    color: Colors.purple,
-                    fontSize: 20,
-                  ),
-                ),
-              ),
+              child: GetBuilder<TempController>(
+                  id: "player-menu-text",
+                  builder: (tempController) {
+                    return Text(
+                      tempController.getPlayerMenuText(),
+                      textAlign: TextAlign.right,
+                      style: const TextStyle(
+                        color: Colors.purple,
+                        fontSize: 20,
+                      ),
+                    );
+                  }),
             ),
           ],
         ),
@@ -102,11 +105,12 @@ void callPlayerMenu(context) {
 }
 
 /// builds a list of Dialog buttons
-List<Obx> buildDialogButtonList(BuildContext context) {
+List<GetBuilder<TempController>> buildDialogButtonList(BuildContext context) {
   final TempController tempController = Get.find<TempController>();
-  List<Obx> dialogButtons = [];
+  List<GetBuilder<TempController>> dialogButtons = [];
   for (Player player in tempController.getOnFieldPlayers()) {
-    Obx dialogButton = buildDialogButton(context, player);
+    GetBuilder<TempController> dialogButton =
+        buildDialogButton(context, player);
     dialogButtons.add(dialogButton);
   }
   return dialogButtons;
@@ -114,7 +118,8 @@ List<Obx> buildDialogButtonList(BuildContext context) {
 
 /// builds a single dialog button that logs its text (=player name) to firestore
 /// and updates the game state
-Obx buildDialogButton(BuildContext context, Player associatedPlayer) {
+GetBuilder<TempController> buildDialogButton(
+    BuildContext context, Player associatedPlayer) {
   String buttonText = associatedPlayer.lastName;
   String buttonNumber = (associatedPlayer.number).toString();
   PersistentController persistentController = Get.find<PersistentController>();
@@ -259,92 +264,95 @@ Obx buildDialogButton(BuildContext context, Player associatedPlayer) {
   }
 
   // Button with shirt with buttonNumber inside and buttonText below.
-  // Obx so the color changes if player == goalscorer,
-  return Obx(() {
-    // Dialog button that shows "No Assist" instead of the player name and shirt
-    // at the place where the first player was clicked
-    if (tempController.getLastClickedPlayer().lastName == buttonText) {
-      return DialogButton(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text(
-                Strings.lNoAssist,
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: (width * 0.03),
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              // Shirt
-            ],
-          ),
-          // have some space between the buttons
-          margin: EdgeInsets.all(min(height, width) * 0.013),
-          // have round edges with same degree as Alert dialog
-          radius: const BorderRadius.all(Radius.circular(15)),
-          // set height and width of buttons so the shirt and name are fitting inside
-          height: width * 0.14,
-          width: width * 0.14,
-          color: tempController.getLastClickedPlayer() == associatedPlayer
-              ? Colors.purple
-              : Color.fromARGB(255, 180, 211, 236),
-          onPressed: () {
-            logPlayerSelection();
-          });
-    }
-    return DialogButton(
-        child:
-            // Column with 2 entries: 1. a Stack with Shirt & buttonNumber and 2. buttonText
-            Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Stack(
-              alignment: Alignment.center,
-              children: [
-                // ButtonNumber
-                Text(
-                  buttonNumber,
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: (width * 0.03),
-                    fontWeight: FontWeight.bold,
+  // Getbuilder so the color changes if player == goalscorer,
+  return GetBuilder<TempController>(
+      id: "player-menu-button",
+      builder: (tempController) {
+        // Dialog button that shows "No Assist" instead of the player name and shirt
+        // at the place where the first player was clicked
+        if (tempController.getLastClickedPlayer().lastName == buttonText) {
+          return DialogButton(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    Strings.lNoAssist,
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: (width * 0.03),
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                ),
-                // Shirt
-                Center(
-                  child: Icon(
-                    MyFlutterApp.t_shirt,
-                    size: (width * 0.11),
-                  ),
-                ),
-              ],
-            ),
-            // ButtonName
-            Text(
-              buttonText,
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: (width * 0.02),
-                fontWeight: FontWeight.bold,
+                  // Shirt
+                ],
               ),
-            ),
-          ],
-        ),
-        // have some space between the buttons
-        margin: EdgeInsets.all(min(height, width) * 0.013),
-        // have round edges with same degree as Alert dialog
-        radius: const BorderRadius.all(Radius.circular(15)),
-        // set height and width of buttons so the shirt and name are fitting inside
-        height: width * 0.14,
-        width: width * 0.14,
-        color: tempController.getLastClickedPlayer() == associatedPlayer
-            ? Colors.purple
-            : Color.fromARGB(255, 180, 211, 236),
-        onPressed: () {
-          logPlayerSelection();
-        });
-  });
+              // have some space between the buttons
+              margin: EdgeInsets.all(min(height, width) * 0.013),
+              // have round edges with same degree as Alert dialog
+              radius: const BorderRadius.all(Radius.circular(15)),
+              // set height and width of buttons so the shirt and name are fitting inside
+              height: width * 0.14,
+              width: width * 0.14,
+              color: tempController.getLastClickedPlayer() == associatedPlayer
+                  ? Colors.purple
+                  : Color.fromARGB(255, 180, 211, 236),
+              onPressed: () {
+                logPlayerSelection();
+              });
+        } else {
+          return DialogButton(
+              child:
+                  // Column with 2 entries: 1. a Stack with Shirt & buttonNumber and 2. buttonText
+                  Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      // ButtonNumber
+                      Text(
+                        buttonNumber,
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: (width * 0.03),
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      // Shirt
+                      Center(
+                        child: Icon(
+                          MyFlutterApp.t_shirt,
+                          size: (width * 0.11),
+                        ),
+                      ),
+                    ],
+                  ),
+                  // ButtonName
+                  Text(
+                    buttonText,
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: (width * 0.02),
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+              // have some space between the buttons
+              margin: EdgeInsets.all(min(height, width) * 0.013),
+              // have round edges with same degree as Alert dialog
+              radius: const BorderRadius.all(Radius.circular(15)),
+              // set height and width of buttons so the shirt and name are fitting inside
+              height: width * 0.14,
+              width: width * 0.14,
+              color: tempController.getLastClickedPlayer() == associatedPlayer
+                  ? Colors.purple
+                  : Color.fromARGB(255, 180, 211, 236),
+              onPressed: () {
+                logPlayerSelection();
+              });
+        }
+      });
 }

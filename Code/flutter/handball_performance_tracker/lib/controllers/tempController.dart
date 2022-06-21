@@ -49,19 +49,19 @@ class TempController extends GetxController {
   /// set the onFieldPlayer from selectedTeam stored at the given index
   void setOnFieldPlayer(int index, Player player) {
     _selectedTeam.value.onFieldPlayers[index] = player;
-    update(["action-feed", "on-field-checkbox"]);
+    update(["action-feed", "on-field-checkbox", "efscorebar-players"]);
   }
 
   /// add additional onFieldPlayer to selectedTeam
   void addOnFieldPlayer(Player player) {
     _selectedTeam.value.onFieldPlayers.add(player);
-    update(["action-feed", "on-field-checkbox"]);
+    update(["action-feed", "on-field-checkbox", "efscorebar-players"]);
   }
 
   /// remove the given Player from onFieldPlayers of selectedTeam
   void removeOnFieldPlayer(Player player) {
     _selectedTeam.value.onFieldPlayers.remove(player);
-    update(["action-feed", "on-field-checkbox"]);
+    update(["action-feed", "on-field-checkbox", "efscorebar-players"]);
   }
 
   /// 0: male, 1: female, 2: youth
@@ -110,7 +110,7 @@ class TempController extends GetxController {
   /// setter for attackIsLeft
   setAttackIsLeft(bool attackIsLeft) {
     _attackIsLeft.value = attackIsLeft;
-    //update();
+    update(["side-switch"]);
   }
 
   //////
@@ -188,7 +188,7 @@ class TempController extends GetxController {
   void updatePlayerMenuText() {
     // changing from dep = input.obs
     _playerMenuText.value = "Assist";
-    //update();
+    update(["player-menu-text"]);
   }
 
   /// corresponding player object for last clicked player name in the player menu
@@ -200,7 +200,7 @@ class TempController extends GetxController {
   /// setter for lastClickedPlayer
   setLastClickedPlayer(Player lastClickedPlayer) {
     _lastClickedPlayer.value = lastClickedPlayer;
-    //update();
+    update(["player-menu-button"]);
   }
 
   /// corresponding player object for last clicked player name in the efscore player bar
@@ -228,7 +228,12 @@ class TempController extends GetxController {
     for (int i in getOnFieldIndex()) {
       _playerBarPlayers.add(i);
     }
-    //update();
+    update(["efscorebar-players"]);
+  }
+
+  void changePlayerBarPlayers(int indexToChange, int i) {
+    _playerBarPlayers[indexToChange] = i;
+    update(["efscorebar-players"]);
   }
 
   ////

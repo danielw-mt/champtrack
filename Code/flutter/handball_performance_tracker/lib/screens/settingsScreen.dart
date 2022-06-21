@@ -22,13 +22,17 @@ class SettingsScreen extends GetView<TempController> {
           MenuButton(_scaffoldKey),
           GameStartStopButtons(),
           const Text(Strings.lFieldSideIsRight),
-          Obx(() => Switch(
-              value: gameController.getAttackIsLeft(),
-              onChanged: (bool) {
-                gameController
-                    .setAttackIsLeft(!gameController.getAttackIsLeft());
-                gameController.refresh();
-              }))
+          GetBuilder<TempController>(
+              id: "side-switch",
+              builder: (tempController) {
+                return Switch(
+                    value: gameController.getAttackIsLeft(),
+                    onChanged: (bool) {
+                      gameController
+                          .setAttackIsLeft(!gameController.getAttackIsLeft());
+                      gameController.refresh();
+                    });
+              })
         ],
       ),
     );
