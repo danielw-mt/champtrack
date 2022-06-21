@@ -6,7 +6,7 @@ import '../../data/player.dart';
 import '../../data/team.dart';
 import 'on_field_checkbox.dart';
 
-class PlayersList extends GetView<TempController> {
+class PlayersList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetBuilder<TempController>(

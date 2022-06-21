@@ -17,6 +17,7 @@ class GameStartStopButtons extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetBuilder<TempController>(
+        id: "start-button",
         builder: (tempController) => Row(
               children: [
                 Padding(

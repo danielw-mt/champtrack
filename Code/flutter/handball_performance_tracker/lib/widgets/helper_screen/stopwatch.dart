@@ -3,9 +3,8 @@ import '../../strings.dart';
 import '../../controllers/persistentController.dart';
 import 'package:get/get.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
-import '../../controllers/tempController.dart';
 
-class StopWatch extends GetView<TempController> {
+class StopWatch extends StatelessWidget {
   // stop watch widget that allows to the time to be started, stopped, resetted and in-/decremented by 1 sec
   PersistentController persistentController = Get.find<PersistentController>();
 

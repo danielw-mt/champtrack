@@ -7,7 +7,7 @@ import '../widgets/team_selection_screen/team_type_selection_bar.dart';
 import 'teamSettingsScreen.dart';
 
 // A screen where all the available teams are listed for men, women and youth teams
-class TeamSelectionScreen extends GetView<TempController> {
+class TeamSelectionScreen extends StatelessWidget {
   // screen that allows players to be selected including what players are on the field or on the bench (non selected)
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
