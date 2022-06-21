@@ -176,7 +176,6 @@ GetBuilder<TempController> buildDialogButton(
 
         tempController.setLastClickedPlayer(Player());
         addFeedItem(lastAction);
-        tempController.refresh();
       } else {
         logger.d("Logging goal with assist");
         // if it was an assist update data for both players
@@ -259,7 +258,6 @@ GetBuilder<TempController> buildDialogButton(
     // addFeedItem(lastAction);
     print("last action saved in database: ");
     print(persistentController.getLastAction().toMap());
-    tempController.refresh();
     Navigator.pop(context);
   }
 

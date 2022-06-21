@@ -197,7 +197,6 @@ Container buildPlayerButton(BuildContext context, int i) {
     // Save pressed player, so this player can be changed in the next step.
     tempController.setPlayerToChange(tempController
         .getPlayersFromSelectedTeam()[tempController.getPlayerBarPlayers()[i]]);
-    tempController.refresh();
 
     // Build buttons out of players that are not on field and have the same position as pressed player.
     List<Player> players = playerWithSamePosition(tempController
@@ -282,7 +281,6 @@ Container buildPopupPlayerButton(BuildContext context, int i) {
         .indexOf(tempController.getPlayerToChange());
     int indexToChange = tempController.getPlayerBarPlayers().indexOf(l);
     tempController.changePlayerBarPlayers(indexToChange, i);
-    tempController.refresh();
   }
 
   // build button for popup

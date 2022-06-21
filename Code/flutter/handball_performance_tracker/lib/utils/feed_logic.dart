@@ -16,7 +16,6 @@ void periodicFeedTimerReset() async {
     gameController.removeFirstFeedAction();
   }
   gameController.setPeriodicResetIsHappening(false);
-  gameController.refresh();
 }
 
 /// adds item to the feedActions list
@@ -40,7 +39,6 @@ void addFeedItem(GameAction feedAction) async {
   }
   gameController.addFeedAction(feedAction);
   gameController.setAddingFeedItem(false);
-  gameController.refresh();
 }
 
 /// gets triggered every time the period of the timer runs out or when the timer is reset

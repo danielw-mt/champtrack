@@ -30,7 +30,6 @@ class SettingsScreen extends GetView<TempController> {
                     onChanged: (bool) {
                       gameController
                           .setAttackIsLeft(!gameController.getAttackIsLeft());
-                      gameController.refresh();
                     });
               })
         ],

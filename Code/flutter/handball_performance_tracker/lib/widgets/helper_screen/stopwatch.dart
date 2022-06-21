@@ -159,7 +159,6 @@ class StopWatch extends GetView<TempController> {
                                         .setPresetTime(
                                             mSec: currentTime + 1000);
                                   }
-                                  persistentController.refresh();
                                 },
                                 child: const Text(
                                   Strings.lPlusOneTime,
@@ -201,7 +200,6 @@ class StopWatch extends GetView<TempController> {
                                         .setPresetTime(
                                             mSec: currentTime - 1000);
                                   }
-                                  persistentController.refresh();
                                 },
                                 child: const Text(
                                   Strings.lMinusOneTime,
