@@ -90,7 +90,6 @@ String determineActionType() {
       actionType = attack;
     }
   }
-  print(actionType);
   logger.d("Attack actions should be displayed: $actionType");
   return actionType;
 }
