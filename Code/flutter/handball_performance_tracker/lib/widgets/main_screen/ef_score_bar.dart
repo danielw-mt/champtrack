@@ -197,7 +197,6 @@ Container buildPlayerButton(BuildContext context, int i) {
     // Save pressed player, so this player can be changed in the next step.
     tempController.setPlayerToChange(tempController
         .getPlayersFromSelectedTeam()[tempController.getPlayerBarPlayers()[i]]);
-    tempController.refresh();
 
     // Build buttons out of players that are not on field and have the same position as pressed player.
     List<Player> players = playerWithSamePosition(tempController
@@ -226,10 +225,12 @@ Container buildPlayerButton(BuildContext context, int i) {
     height: buttonHeight,
     child: Stack(
       children: [
-        Obx(
-          () => getButton(tempController.getPlayersFromSelectedTeam()[
-              tempController.getPlayerBarPlayers()[i]]),
-        ),
+        GetBuilder<TempController>(
+            id: "efscorebar-players",
+            builder: (tempController) {
+              return getButton(tempController.getPlayersFromSelectedTeam()[
+                  tempController.getPlayerBarPlayers()[i]]);
+            }),
         SizedBox(
           height: buttonHeight,
           width: scorebarButtonWidth,
@@ -279,8 +280,7 @@ Container buildPopupPlayerButton(BuildContext context, int i) {
         .getPlayersFromSelectedTeam()
         .indexOf(tempController.getPlayerToChange());
     int indexToChange = tempController.getPlayerBarPlayers().indexOf(l);
-    tempController.getPlayerBarPlayers()[indexToChange] = i;
-    tempController.refresh();
+    tempController.changePlayerBarPlayers(indexToChange, i);
   }
 
   // build button for popup
@@ -293,9 +293,7 @@ Container buildPopupPlayerButton(BuildContext context, int i) {
     width: scorebarButtonWidth,
     child: Stack(
       children: [
-        Obx(
-          () => getButton(tempController.getPlayersFromSelectedTeam()[i]),
-        ),
+        getButton(tempController.getPlayersFromSelectedTeam()[i]),
         SizedBox(
           height: buttonHeight,
           width: scorebarButtonWidth,

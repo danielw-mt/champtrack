@@ -52,7 +52,6 @@ void startGame(BuildContext context) async {
 
   print("start game, id: ${persistentController.getCurrentGame().id}");
   tempController.setGameIsRunning(true);
-  tempController.refresh();
 }
 
 void unpauseGame() {
@@ -64,15 +63,17 @@ void unpauseGame() {
       .stopWatch
       .onExecute
       .add(StopWatchExecute.start);
-  tempController.refresh();
 }
 
 void pauseGame() {
   TempController tempController = Get.find<TempController>();
   PersistentController persistentController = Get.find<PersistentController>();
   tempController.setGameIsRunning(false);
-  persistentController.getCurrentGame().stopWatch.onExecute.add(StopWatchExecute.stop);
-  tempController.refresh();
+  persistentController
+      .getCurrentGame()
+      .stopWatch
+      .onExecute
+      .add(StopWatchExecute.stop);
 }
 
 void stopGame() async {
@@ -93,7 +94,6 @@ void stopGame() async {
   persistentController.getCurrentGame().stopWatch.onExecute.add(StopWatchExecute.stop);
 
   tempController.setGameIsRunning(false);
-  tempController.refresh();
 }
 
 void _addGameToPlayers(Game game) {
