@@ -8,7 +8,7 @@ import '../widgets/team_settings_screen/team_details_form.dart';
 
 // A screen where all relevant Infos of a team can be edited (players, game history and team details like name)
 // screen that allows players to be selected including what players are on the field or on the bench (non selected)
-class TeamSettingsScreen extends GetView<TempController> {
+class TeamSettingsScreen extends StatelessWidget {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override

@@ -5,9 +5,8 @@ import '../strings.dart';
 import '../controllers/tempController.dart';
 import './../widgets/settings_screen/game_start_stop_buttons.dart';
 
-class SettingsScreen extends GetView<TempController> {
+class SettingsScreen extends StatelessWidget {
   // screen that allows players to be selected including what players are on the field or on the bench (non selected)
-  final TempController gameController = Get.find<TempController>();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
@@ -21,14 +20,17 @@ class SettingsScreen extends GetView<TempController> {
           // Container for menu button on top left corner
           MenuButton(_scaffoldKey),
           GameStartStopButtons(),
-          const Text(Strings.lFieldSideIsRight),
-          Obx(() => Switch(
-              value: gameController.getAttackIsLeft(),
-              onChanged: (bool) {
-                gameController
-                    .setAttackIsLeft(!gameController.getAttackIsLeft());
-                gameController.refresh();
-              }))
+          const Text(Strings.lHomeSideIsRight),
+          GetBuilder<TempController>(
+              id: "side-switch",
+              builder: (tempController) {
+                return Switch(
+                    value: tempController.getAttackIsLeft(),
+                    onChanged: (bool) {
+                      tempController
+                          .setAttackIsLeft(!tempController.getAttackIsLeft());
+                    });
+              })
         ],
       ),
     );

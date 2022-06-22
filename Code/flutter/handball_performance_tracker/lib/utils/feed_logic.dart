@@ -3,7 +3,6 @@ import 'package:stop_watch_timer/stop_watch_timer.dart';
 import '../controllers/tempController.dart';
 import '../data/game_action.dart';
 import '../constants/settings_config.dart';
-import '../data/database_repository.dart';
 
 // when the periodic reset happens remove the first (oldest) item from the feedActions list
 void periodicFeedTimerReset() async {
@@ -16,7 +15,6 @@ void periodicFeedTimerReset() async {
     gameController.removeFirstFeedAction();
   }
   gameController.setPeriodicResetIsHappening(false);
-  gameController.refresh();
 }
 
 /// adds item to the feedActions list
@@ -40,7 +38,6 @@ void addFeedItem(GameAction feedAction) async {
   }
   gameController.addFeedAction(feedAction);
   gameController.setAddingFeedItem(false);
-  gameController.refresh();
 }
 
 /// gets triggered every time the period of the timer runs out or when the timer is reset

@@ -7,7 +7,7 @@ import '../../utils/feed_logic.dart';
 
 /// A widget that displays the newest actions. It can be tweaked in lib/const/settings_config
 /// GameActions are periodically removed and can also be removed by clicking on them
-class ActionFeed extends GetView<TempController> {
+class ActionFeed extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetBuilder<TempController>(
