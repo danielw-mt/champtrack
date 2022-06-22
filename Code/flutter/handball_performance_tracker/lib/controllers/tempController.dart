@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:handball_performance_tracker/data/database_repository.dart';
+import 'package:handball_performance_tracker/data/game.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 
 import '../constants/settings_config.dart';
@@ -40,6 +41,14 @@ class TempController extends GetxController {
     return _selectedTeam.value.players
         .where((Player player) => player.id == playerId)
         .first;
+  }
+
+  void updatePlayerEfScore(String playerId, GameAction action) {
+    _selectedTeam.value.players
+        .where((Player player) => player.id == playerId)
+        .first
+        .addAction(action);
+    update(["ef-score-bar"]);
   }
 
   /// return all players in selectedTeam

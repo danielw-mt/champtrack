@@ -1,6 +1,18 @@
 import 'package:handball_performance_tracker/constants/game_actions.dart';
 import 'package:handball_performance_tracker/constants/positions.dart';
 import 'package:handball_performance_tracker/data/game_action.dart';
+import 'package:logger/logger.dart';
+
+var logger = Logger(
+  printer: PrettyPrinter(
+      methodCount: 2, // number of method calls to be displayed
+      errorMethodCount: 8, // number of method calls if stacktrace is provided
+      lineLength: 120, // width of the output
+      colors: true, // Colorful log messages
+      printEmojis: true, // Print an emoji for each log message
+      printTime: false // Should each log print contain a timestamp
+      ),
+);
 
 class EfScore {
   double score;
@@ -32,10 +44,10 @@ class EfScore {
   String? _getActionType(GameAction action, List<String> positions) {
     String? actionType = action.actionType;
     if (actionType == goal) {
-        // don't consider position and distance if goal happened after minute 55
+      // don't consider position and distance if goal happened after minute 55
       if (action.relativeTime > lastFiveMinThreshold) {
         actionType = goalLastFive;
-      } else if (_isPosition(positions, action.throwLocation[0])) {
+      } else if (_isPosition(positions, action.throwLocation)) {
         actionType = goalPos;
       } else if (_isInNineMeters(action.throwLocation[1])) {
         actionType = goalUnderNine;
@@ -46,7 +58,7 @@ class EfScore {
       if (action.relativeTime > lastFiveMinThreshold) {
         // don't consider position and distance if err happened after minute 55
         actionType = errThrowLastFive;
-      } else if (_isPosition(positions, action.throwLocation[0])) {
+      } else if (_isPosition(positions, action.throwLocation)) {
         actionType = errThrowPos;
       } else if (_isInNineMeters(action.throwLocation[1])) {
         actionType = errThrowUnderNine;
@@ -59,10 +71,23 @@ class EfScore {
     return actionType;
   }
 
-  /// @return true if the throw sector @param sector belongs to one of the player's specialized @param positions
-  bool _isPosition(List<String> positions, String sector) =>
-      // TODO adapt for proper positions instead of sectors
-      positions.contains(sector);
+  /// @return true if the throw sector @param sector belongs to one of the player's specialized @param positions (according to #60)
+  bool _isPosition(List<String> positions, List<String> sector) {
+    // player has one of the positions leftOutside, backcourtLeft, backcourtMiddle, backcourtRight, rightOutside and action was performed there
+    if (positions.contains(sector[0])) {
+      return true;
+    }
+    // player has circle position and action was performed in 9m circle
+    if (positions.contains(circle) && _isInNineMeters(sector[1])) {
+      // action was performed in backcourt area
+      if ((sector[0] == backcourtLeft) ||
+          (sector[0] == backcourtMiddle) ||
+          (sector[0] == backcourtRight)) {
+        return true;
+      }
+    }
+    return false;
+  }
 
   /// @return true if the action happened within the 9-m-circle
   bool _isInNineMeters(String distance) => distance != outsideNine;
@@ -73,12 +98,12 @@ class LiveEfScore extends EfScore {
     String? actionType = _getActionType(action, playerPositions);
     if (actionType != null) {
       actionStats[actionType] = actionStats[actionType]! + 1;
-      print("action added: $actionType");
       numOfActions++;
+      logger.d("Action added: $actionType, old ef-score: $score");
       calculate();
-      print("new ef-score: $score");
+      logger.d("New ef-score: $score");
     } else {
-      print("Action type $actionType is unknown. Action ignored.");
+      logger.i("Action type $actionType is unknown. Action ignored.");
     }
   }
 
@@ -87,9 +112,13 @@ class LiveEfScore extends EfScore {
     if (actionType != null) {
       if (actionStats[actionType]! >= 1) {
         actionStats[actionType] = actionStats[actionType]! - 1;
+        numOfActions--;
+        logger.d("Action reverted: $actionType, old ef-score: $score");
+        calculate();
+        logger.d("New ef-score: $score");
       }
     } else {
-      print("Action type $actionType is unknown. No revert performed.");
+      logger.i("Action type $actionType is unknown. No revert performed.");
     }
   }
 }
