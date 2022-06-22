@@ -36,7 +36,9 @@ Future<bool> initializeLocalData() async {
       for (var documentReference in onFieldPlayers) {
         DocumentSnapshot documentSnapshot = await documentReference.get();
         if (documentSnapshot.exists) {
-          onFieldList.add(Player.fromDocumentSnapshot(documentSnapshot));
+          String playerId = documentSnapshot.reference.id;
+          // add references from playerList to onFieldList
+          onFieldList.add(playerList.firstWhere((player) => player.id == playerId));
         }
       }
       print("adding team" + docData["name"]);

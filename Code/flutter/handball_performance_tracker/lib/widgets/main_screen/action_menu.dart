@@ -244,8 +244,7 @@ DialogButton buildDialogButton(
         throwLocation: tempController.getLastLocation().cast<String>(),
         timestamp: unixTime,
         relativeTime: secondsSinceGameStart);
-    logger.d("GameAction object created: ");
-    logger.d(action);
+    logger.d("GameAction object created: ${action.actionType}");
 
     // add action to firebase
 

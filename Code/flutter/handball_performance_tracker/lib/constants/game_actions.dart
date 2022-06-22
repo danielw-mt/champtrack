@@ -3,28 +3,6 @@ import 'package:handball_performance_tracker/strings.dart';
 const String attack = "attack";
 const String defense = "defense";
 
-const Map<String, Map<String, String>> actionMapping = {
-  attack: {
-    Strings.lRedCard: "red",
-    Strings.lYellowCard: "yellow",
-    Strings.lTimePenalty: "penalty",
-    Strings.lGoal: "goal",
-    Strings.lOneVsOneAnd7m: "1v1",
-    Strings.lTwoMin: "2min",
-    Strings.lErrThrow: "err",
-    Strings.lTrf: "trf",
-  },
-  defense: {
-    Strings.lRedCard: "red",
-    Strings.lYellowCard: "yellow",
-    Strings.lFoul7m: "foul",
-    Strings.lTimePenalty: "penalty",
-    Strings.lBlockNoBall: "block",
-    Strings.lBlockAndSteal: "block_st",
-    Strings.lTrf: "trf",
-  }
-};
-
 const String goal = "goal";
 const String goalPos = "goal_pos";
 const String goalUnderNine = "goal<9m";
@@ -44,31 +22,54 @@ const String trf = "trf";
 const String foulWithSeven = "foul";
 const String timePenalty = "timePen";
 const String redCard = "red";
+const String yellowCard = "yellow";
 
 const String positiveAction = "pos";
 const String negativeAction = "neg";
 
-const Map<String, Map<String, int>> efScoreParameters = {
-  "pos": {
-    "goal_pos": 5,
-    "goal<9m": 4,
-    "goal>9m": 5,
-    "goalLastFive": 9,
-    "assist": 7,
-    "1v1": 7,
-    "block": 3,
-    "block_steal": 8,
-    "2min": 9
+Map<String, Map<String, String>> actionMapping = {
+  attack: {
+    Strings.lRedCard: redCard,
+    Strings.lYellowCard: yellowCard,
+    Strings.lTimePenalty: timePenalty,
+    Strings.lGoal: goal,
+    Strings.lOneVsOneAnd7m: oneVsOne,
+    Strings.lTwoMin: twoMin,
+    Strings.lErrThrow: errThrow,
+    Strings.lTrf: trf,
   },
-  "neg": {
-    "err_pos": 6,
-    "err<9m": 8,
-    "err>9m": 6,
-    "errLastFive": 10,
-    "trf": 8,
-    "foul": 7,
-    "timePen": 8,
-    "red": 15
+  defense: {
+    Strings.lRedCard: redCard,
+    Strings.lYellowCard: yellowCard,
+    Strings.lFoul7m: foulWithSeven,
+    Strings.lTimePenalty: timePenalty,
+    Strings.lBlockNoBall: blockNoBall,
+    Strings.lBlockAndSteal: blockAndSteal,
+    Strings.lTrf: trf,
+  }
+};
+
+const Map<String, Map<String, int>> efScoreParameters = {
+  positiveAction: {
+    goalPos: 5,
+    goalUnderNine: 4,
+    goalOutsideNine: 5,
+    goalLastFive: 9,
+    assist: 7,
+    oneVsOne: 7,
+    blockNoBall: 3,
+    blockAndSteal: 8,
+    twoMin: 9
+  },
+  negativeAction: {
+    errThrowPos: 6,
+    errThrowUnderNine: 8,
+    errThrowOutsideNine: 6,
+    errThrowLastFive: 10,
+    trf: 8,
+    foulWithSeven: 7,
+    timePenalty: 8,
+    redCard: 15
   }
 };
 
