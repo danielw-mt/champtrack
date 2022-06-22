@@ -33,18 +33,21 @@ class PlayerFormState extends State<PlayerForm> {
   TextEditingController lastNameController = TextEditingController();
   TextEditingController nickNameController = TextEditingController();
   TextEditingController shirtNumberController = TextEditingController();
+  bool editModeEnabled;
 
   @override
   void initState() {
+    // if Player form gets passed an empty ID it is new player mode
     if (this.playerId != "") {
-      print("player edit mode");
+      editModeEnabled = true;
       this.player = tempController.getPlayerFromSelectedTeam(this.playerId);
       this.firstNameController.text = player.firstName;
       this.lastNameController.text = player.lastName;
       this.nickNameController.text = player.nickName;
       this.shirtNumberController.text = player.number.toString();
+    // otherwise if get a playerID it is edit mode for that specified player
     } else {
-      print("new player mode");
+      editModeEnabled = false;
     }
     super.initState();
   }
@@ -58,6 +61,7 @@ class PlayerFormState extends State<PlayerForm> {
     // Build a Form widget using the _formKey created above.
     double width = MediaQuery.of(context).size.width;
     return Column(children: [
+      Center(child: editModeEnabled ? Text(Strings.lPlayerEditMode) : Text(Strings.lPlayerCreateMode)),
       Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
         Text(Strings.lEditPlayer),
         ElevatedButton(
@@ -218,11 +222,11 @@ class PlayerFormState extends State<PlayerForm> {
                     // If the form is valid, display a snackbar. In the real world,
                     // you'd often call a server or save the information in a database.
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Processing Data')),
+                      const SnackBar(content: Text(Strings.lProcessingData)),
                     );
                   }
                 },
-                child: const Text('Submit'),
+                child: const Text(Strings.lSubmitButton),
               ),
             ),
           ],
