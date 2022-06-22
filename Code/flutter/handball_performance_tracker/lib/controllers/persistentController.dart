@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import '../data/database_repository.dart';
 import '../data/game.dart';
 import '../data/game_action.dart';
+import '../data/player.dart';
 import '../data/team.dart';
 
 /// stores more persistent state
@@ -47,11 +48,10 @@ class PersistentController extends GetxController {
   }
 
   /// add action to actions list and firestore
-  void addAction(GameAction action) {
+  Future<void> addAction(GameAction action) async {
     _actions.add(action);
-    repository
-        .addActionToGame(action)
-        .then((DocumentReference doc) => action.id = doc.id);
+    DocumentReference ref = await repository.addActionToGame(action);
+    _actions.last.id = ref.id;
   }
 
   /// return last action that was added
@@ -63,6 +63,12 @@ class PersistentController extends GetxController {
   void setLastAction(GameAction lastAction) {
     _actions.last = lastAction;
     repository.updateAction(lastAction);
+  }
+
+  /// updates playerid of the last action and eff score of player according to last action
+  void setLastActionPlayer(Player player){
+    _actions.last.playerId = player.id!;
+    repository.updateAction(_actions.last);
   }
 
   /// last game object written to firestore

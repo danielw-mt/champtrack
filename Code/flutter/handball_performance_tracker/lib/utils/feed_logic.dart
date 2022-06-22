@@ -50,8 +50,10 @@ void onFeedTimerEnded() {
 }
 
 /// Gets triggered when user clicks on a feed item
-void removeFeedItem(GameAction action) {
-  final TempController gameController = Get.find<TempController>();
+void removeFeedItem(GameAction action, TempController tempController) {
   // delete action from game state and database
-  gameController.removeFeedAction(action);
+  tempController.removeFeedAction(action);
+  // update player's ef.score
+  tempController.updatePlayerEfScore(action.playerId, action,
+      removeAction: true);
 }

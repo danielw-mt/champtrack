@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:handball_performance_tracker/data/database_repository.dart';
+import 'package:handball_performance_tracker/data/game.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 
 import '../constants/settings_config.dart';
@@ -42,6 +43,22 @@ class TempController extends GetxController {
         .first;
   }
 
+  void updatePlayerEfScore(String playerId, GameAction action,
+      {removeAction = false}) {
+    if (removeAction) {
+      _selectedTeam.value.players
+          .where((Player player) => player.id == playerId)
+          .first
+          .removeAction(action);
+    } else {
+      _selectedTeam.value.players
+          .where((Player player) => player.id == playerId)
+          .first
+          .addAction(action);
+    }
+    update(["ef-score-bar"]);
+  }
+
   /// return all players in selectedTeam
   List<Player> getPlayersFromSelectedTeam() {
     return _selectedTeam.value.players;
@@ -53,29 +70,22 @@ class TempController extends GetxController {
   /// set the onFieldPlayer from selectedTeam stored at the given index
   void setOnFieldPlayer(int index, Player player) {
     _selectedTeam.value.onFieldPlayers[index] = player;
-    update([
-      "action-feed",
-      "on-field-checkbox",
-      "players-list",
-      "efscorebar-players"
-    ]);
+    update(
+        ["action-feed", "on-field-checkbox", "players-list", "ef-score-bar"]);
   }
 
   /// add additional onFieldPlayer to selectedTeam
   void addOnFieldPlayer(Player player) {
     _selectedTeam.value.onFieldPlayers.add(player);
-    update([
-      "action-feed",
-      "on-field-checkbox",
-      "efscorebar-players",
-      "players-list"
-    ]);
+    update(
+        ["action-feed", "on-field-checkbox", "ef-score-bar", "players-list"]);
   }
 
   /// remove the given Player from onFieldPlayers of selectedTeam
   void removeOnFieldPlayer(Player player) {
     _selectedTeam.value.onFieldPlayers.remove(player);
-    update(["action-feed", "on-field-checkbox", "efscorebar-players", "players-list"]);
+    update(
+        ["action-feed", "on-field-checkbox", "ef-score-bar", "players-list"]);
   }
 
   /// 0: male, 1: female, 2: youth

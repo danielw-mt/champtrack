@@ -75,4 +75,6 @@ class Player {
       other != null && other is Player && id == other.id;
 
   void addAction(GameAction action) => efScore.addAction(action, positions);
+  
+  void removeAction(GameAction action) => efScore.removeAction(action, positions);
 }
