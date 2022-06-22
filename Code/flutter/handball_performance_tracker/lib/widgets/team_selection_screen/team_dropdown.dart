@@ -7,7 +7,7 @@ import '../../utils/team_type_helpers.dart';
 import '../../constants/team_constants.dart';
 
 // dropdown that shows all available teams belonging to the selected team type
-class TeamDropdown extends GetView<TempController> {
+class TeamDropdown extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final PersistentController persistentController =

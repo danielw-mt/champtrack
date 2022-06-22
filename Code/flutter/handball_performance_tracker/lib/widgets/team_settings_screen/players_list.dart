@@ -9,7 +9,7 @@ import '../../strings.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'player_edit_form.dart';
 
-class PlayersList extends GetView<TempController> {
+class PlayersList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetBuilder<TempController>(

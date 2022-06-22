@@ -17,6 +17,7 @@ class GameStartStopButtons extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetBuilder<TempController>(
+        id: "start-button",
         builder: (tempController) => Row(
               children: [
                 Padding(
@@ -88,7 +89,6 @@ class GameStartStopButtons extends StatelessWidget {
 
     tempController.setGameIsRunning(true);
     tempController.setPlayerBarPlayers();
-    tempController.refresh();
   }
 
   void stopGame() async {
@@ -113,7 +113,6 @@ class GameStartStopButtons extends StatelessWidget {
         .add(StopWatchExecute.stop);
 
     tempController.setGameIsRunning(false);
-    tempController.refresh();
   }
 
   void _addGameToPlayers(Game game, TempController gc) {

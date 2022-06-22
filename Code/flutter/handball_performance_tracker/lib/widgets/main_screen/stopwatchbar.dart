@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 import '../../utils/gameControl.dart';
 
-class StopWatchBar extends GetView<TempController> {
+class StopWatchBar extends StatelessWidget {
   // stop watch widget that allows to the time to be started, stopped, resetted and in-/decremented by 1 sec
 
   @override
@@ -131,7 +131,7 @@ class StopWatchBar extends GetView<TempController> {
   }
 }
 
-class StartStopIcon extends GetView<TempController> {
+class StartStopIcon extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetBuilder<TempController>(
