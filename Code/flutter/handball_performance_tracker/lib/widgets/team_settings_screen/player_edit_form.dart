@@ -5,7 +5,7 @@ import '../../data/player.dart';
 class PlayerForm extends StatefulWidget {
   Player? player = Player();
 
-  PlayerForm([Player? this.player]);
+  PlayerForm([Player? this.player = Player()]);
 
   @override
   PlayerFormState createState() {

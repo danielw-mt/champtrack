@@ -31,7 +31,19 @@ class PlayersList extends GetView<TempController> {
                   right: 30,
                   bottom: 30,
                   child: FloatingActionButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Alert(
+                        context: context,
+                        content: SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.7,
+                          height: MediaQuery.of(context).size.height * 0.8,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [PlayerForm()],
+                          ),
+                        ),
+                      ).show();
+                    },
                     backgroundColor: Colors.black,
                     child: Icon(Icons.add),
                   ),
