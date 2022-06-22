@@ -1,24 +1,28 @@
 import 'package:flutter/material.dart';
 import '../../strings.dart';
 import '../../data/player.dart';
+import '../../controllers/tempController.dart';
+import 'package:get/get.dart';
 
 class PlayerForm extends StatefulWidget {
-  Player? player = Player();
+  String playerId;
 
-  PlayerForm([Player? this.player = Player()]);
+  PlayerForm([this.playerId = ""]);
 
   @override
   PlayerFormState createState() {
-    return PlayerFormState(player);
+    return PlayerFormState(playerId);
   }
 }
 
 // Create a corresponding State class.
 // This class holds data related to the form.
 class PlayerFormState extends State<PlayerForm> {
-  Player? player;
-  PlayerFormState(this.player);
+  TempController tempController = Get.find<TempController>();
 
+  String playerId;
+  PlayerFormState(this.playerId);
+  late Player player;
   // Create a global key that uniquely identifies the Form widget
   // and allows validation of the form.
   //
@@ -32,12 +36,15 @@ class PlayerFormState extends State<PlayerForm> {
 
   @override
   void initState() {
-    if (this.player!.id != "") {
+    if (this.playerId != "") {
       print("player edit mode");
-      this.firstNameController.text = player!.firstName;
-      this.lastNameController.text = player!.lastName;
-      this.nickNameController.text = player!.nickName;
-      this.shirtNumberController.text = player!.number.toString();
+      this.player = tempController.getPlayerFromSelectedTeam(this.playerId);
+      this.firstNameController.text = player.firstName;
+      this.lastNameController.text = player.lastName;
+      this.nickNameController.text = player.nickName;
+      this.shirtNumberController.text = player.number.toString();
+    } else {
+      print("new player mode");
     }
     super.initState();
   }

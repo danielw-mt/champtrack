@@ -116,7 +116,7 @@ class PlayersList extends GetView<TempController> {
                                           mainAxisAlignment:
                                               MainAxisAlignment.center,
                                           children: [
-                                            PlayerForm(playersList[index])
+                                            PlayerForm(playersList[index].id.toString())
                                           ],
                                         ),
                                       ),
