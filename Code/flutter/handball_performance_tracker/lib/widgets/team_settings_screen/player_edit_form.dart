@@ -33,7 +33,7 @@ class PlayerFormState extends State<PlayerForm> {
   TextEditingController lastNameController = TextEditingController();
   TextEditingController nickNameController = TextEditingController();
   TextEditingController shirtNumberController = TextEditingController();
-  bool editModeEnabled;
+  bool editModeEnabled = false;
 
   @override
   void initState() {
@@ -45,8 +45,9 @@ class PlayerFormState extends State<PlayerForm> {
       this.lastNameController.text = player.lastName;
       this.nickNameController.text = player.nickName;
       this.shirtNumberController.text = player.number.toString();
-    // otherwise if get a playerID it is edit mode for that specified player
+      // otherwise if get a playerID it is edit mode for that specified player
     } else {
+      this.player = Player();
       editModeEnabled = false;
     }
     super.initState();
@@ -54,14 +55,13 @@ class PlayerFormState extends State<PlayerForm> {
 
   @override
   Widget build(BuildContext context) {
-    // firstNameController.text = firstName;
-    // lastNameController.text = lastName;
-    // shirtNumberController.text = shirtNumber;
-
     // Build a Form widget using the _formKey created above.
     double width = MediaQuery.of(context).size.width;
     return Column(children: [
-      Center(child: editModeEnabled ? Text(Strings.lPlayerEditMode) : Text(Strings.lPlayerCreateMode)),
+      Center(
+          child: editModeEnabled
+              ? Text(Strings.lPlayerEditMode)
+              : Text(Strings.lPlayerCreateMode)),
       Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
         Text(Strings.lEditPlayer),
         ElevatedButton(
@@ -128,9 +128,9 @@ class PlayerFormState extends State<PlayerForm> {
                         labelText: Strings.lNickName),
                     // The validator receives the text that the user has entered.
                     validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter some text';
-                      }
+                      // if (value == null || value.isEmpty) {
+                      //   return 'Please enter some text';
+                      // }
                       return null;
                     },
                   ),
@@ -213,17 +213,29 @@ class PlayerFormState extends State<PlayerForm> {
             Container(
               height: 20,
             ),
+            // Submit button
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 16.0),
               child: ElevatedButton(
                 onPressed: () {
                   // Validate returns true if the form is valid, or false otherwise.
                   if (_formKey.currentState!.validate()) {
-                    // If the form is valid, display a snackbar. In the real world,
-                    // you'd often call a server or save the information in a database.
+                    player.firstName = firstNameController.text;
+                    player.lastName = lastNameController.text;
+                    player.nickName = nickNameController.text;
+                    player.number = int.parse(shirtNumberController.text);
+                    // pop alert
+                    Navigator.pop(context);
+                    // display snackbar while data is stored in db
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(content: Text(Strings.lProcessingData)),
                     );
+                    // Edit mode
+                    if (editModeEnabled) {
+                      tempController.setPlayer(player);
+                    } else {
+                      tempController.addPlayer(player);
+                    }
                   }
                 },
                 child: const Text(Strings.lSubmitButton),

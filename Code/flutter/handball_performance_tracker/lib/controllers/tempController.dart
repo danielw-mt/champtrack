@@ -47,6 +47,21 @@ class TempController extends GetxController {
     return _selectedTeam.value.players;
   }
 
+  void setPlayer(Player player) {
+    _selectedTeam.value.players
+        .where((Player playerElement) => playerElement.id == player.id)
+        .toList()
+        .first = player;
+    repository.updatePlayer(player);
+    // TODO update where necessary
+  }
+
+  void addPlayer(Player player) {
+    _selectedTeam.value.players.add(player);
+    repository.addPlayer(player);
+    repository.addPlayerToTeam(player, _selectedTeam.value);
+  }
+
   /// get the players from selectedTeam that are currently marked as onFieldPlayers
   List<Player> getOnFieldPlayers() => _selectedTeam.value.onFieldPlayers;
 
@@ -58,6 +73,7 @@ class TempController extends GetxController {
 
   /// add additional onFieldPlayer to selectedTeam
   void addOnFieldPlayer(Player player) {
+    // TODO implement check if there are not already 7 onFieldPlayers
     _selectedTeam.value.onFieldPlayers.add(player);
     update(["action-feed", "on-field-checkbox", "players-list"]);
   }

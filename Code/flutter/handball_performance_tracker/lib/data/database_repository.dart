@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:handball_performance_tracker/data/game.dart';
+import 'package:handball_performance_tracker/data/team.dart';
 import 'package:handball_performance_tracker/data/game_action.dart';
 import 'package:handball_performance_tracker/data/player.dart';
 
@@ -16,6 +17,11 @@ class DatabaseRepository {
   /// update a Player's firestore record according to @param player properties
   void updatePlayer(Player player) async {
     await _db.collection("players").doc(player.id).update(player.toMap());
+  }
+
+  void addPlayerToTeam(Player player, Team team) async {
+    team.players.add(player);
+    await _db.collection("teams").doc(team.id).update(team.toMap());
   }
 
   /// @return asynchronous reference to Game object that was saved to firebase
