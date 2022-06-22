@@ -53,13 +53,30 @@ class TempController extends GetxController {
   /// set the onFieldPlayer from selectedTeam stored at the given index
   void setOnFieldPlayer(int index, Player player) {
     _selectedTeam.value.onFieldPlayers[index] = player;
-    update(["action-feed", "on-field-checkbox", "players-list", "efscorebar-players"]);
+    update([
+      "action-feed",
+      "on-field-checkbox",
+      "players-list",
+      "efscorebar-players"
+    ]);
   }
 
   /// add additional onFieldPlayer to selectedTeam
   void addOnFieldPlayer(Player player) {
     _selectedTeam.value.onFieldPlayers.add(player);
+    update([
+      "action-feed",
+      "on-field-checkbox",
+      "efscorebar-players",
+      "players-list"
+    ]);
+  }
+
+  /// remove the given Player from onFieldPlayers of selectedTeam
+  void removeOnFieldPlayer(Player player) {
+    _selectedTeam.value.onFieldPlayers.remove(player);
     update(["action-feed", "on-field-checkbox", "efscorebar-players", "players-list"]);
+  }
 
   /// 0: male, 1: female, 2: youth
   RxInt _selectedTeamType = 0.obs;
