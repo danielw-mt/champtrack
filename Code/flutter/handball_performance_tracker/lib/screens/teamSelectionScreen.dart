@@ -27,6 +27,7 @@ class TeamSelectionScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     MenuButton(_scaffoldKey),
+                    // TODO implement team cards here
                     TeamDropdown(),
                     TextButton(
                         onPressed: () {

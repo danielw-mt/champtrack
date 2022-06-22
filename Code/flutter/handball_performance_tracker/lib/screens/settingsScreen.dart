@@ -20,7 +20,7 @@ class SettingsScreen extends StatelessWidget {
           // Container for menu button on top left corner
           MenuButton(_scaffoldKey),
           GameStartStopButtons(),
-          const Text(Strings.lFieldSideIsRight),
+          const Text(Strings.lHomeSideIsRight),
           GetBuilder<TempController>(
               id: "side-switch",
               builder: (tempController) {

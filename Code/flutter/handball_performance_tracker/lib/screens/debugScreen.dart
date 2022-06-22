@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:handball_performance_tracker/widgets/nav_drawer.dart';
 
-class PlaceholderScreen extends StatelessWidget {
+// a screen that holds widgets that can be useful for debugging and game control
+class DebugScreen extends StatelessWidget {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override

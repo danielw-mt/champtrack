@@ -27,8 +27,12 @@ class TempController extends GetxController {
   /// setter for selectedTeam
   void setSelectedTeam(Team team) {
     _selectedTeam.value = team;
-    update(
-        ["team-type-selection-bar", "players-list", "team-details-form-state"]);
+    update([
+      "team-type-selection-bar",
+      "players-list",
+      "team-details-form-state",
+      "team-dropdown"
+    ]);
   }
 
   /// return the first player in selectedTeam with the given playerId
@@ -49,20 +53,13 @@ class TempController extends GetxController {
   /// set the onFieldPlayer from selectedTeam stored at the given index
   void setOnFieldPlayer(int index, Player player) {
     _selectedTeam.value.onFieldPlayers[index] = player;
-    update(["action-feed", "on-field-checkbox", "efscorebar-players"]);
+    update(["action-feed", "on-field-checkbox", "players-list", "efscorebar-players"]);
   }
 
   /// add additional onFieldPlayer to selectedTeam
   void addOnFieldPlayer(Player player) {
     _selectedTeam.value.onFieldPlayers.add(player);
-    update(["action-feed", "on-field-checkbox", "efscorebar-players"]);
-  }
-
-  /// remove the given Player from onFieldPlayers of selectedTeam
-  void removeOnFieldPlayer(Player player) {
-    _selectedTeam.value.onFieldPlayers.remove(player);
-    update(["action-feed", "on-field-checkbox", "efscorebar-players"]);
-  }
+    update(["action-feed", "on-field-checkbox", "efscorebar-players", "players-list"]);
 
   /// 0: male, 1: female, 2: youth
   RxInt _selectedTeamType = 0.obs;
@@ -249,7 +246,7 @@ class TempController extends GetxController {
   /// setter for fieldIsLeft
   setFieldIsLeft(bool fieldIsLeft) {
     _fieldIsLeft.value = fieldIsLeft;
-    // no call of update since no GetBuilder involved and it would break during build of mainScreen otherwise
+    update(["start-game-form"]);
   }
 
   /// True: game was started; False game did not start yet
