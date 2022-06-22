@@ -165,7 +165,7 @@ Obx buildDialogButton(BuildContext context, Player associatedPlayer) {
         }
         FieldSwitch.pageController.jumpToPage(0);
       }
-    } else if (lastAction.actionType == "block_st") {
+    } else if (lastAction.actionType == blockAndSteal) {
       // if our action is left (page 0) and we are defensing (on page 0) jump back to attack (page 1) after the action
       if (tempController.getFieldIsLeft() == true &&
           tempController.getAttackIsLeft() == false) {
