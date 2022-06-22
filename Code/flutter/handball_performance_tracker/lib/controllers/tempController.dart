@@ -39,11 +39,19 @@ class TempController extends GetxController {
         .first;
   }
 
-  void updatePlayerEfScore(String playerId, GameAction action) {
-    _selectedTeam.value.players
-        .where((Player player) => player.id == playerId)
-        .first
-        .addAction(action);
+  void updatePlayerEfScore(String playerId, GameAction action,
+      {removeAction = false}) {
+    if (removeAction) {
+      _selectedTeam.value.players
+          .where((Player player) => player.id == playerId)
+          .first
+          .removeAction(action);
+    } else {
+      _selectedTeam.value.players
+          .where((Player player) => player.id == playerId)
+          .first
+          .addAction(action);
+    }
     update(["ef-score-bar"]);
   }
 

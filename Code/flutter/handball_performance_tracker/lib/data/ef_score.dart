@@ -36,7 +36,11 @@ class EfScore {
     efScoreParameters[negativeAction]!.forEach((key, value) {
       negativeScore += value * actionStats[key]!;
     });
-    score = (positiveScore - negativeScore) / numOfActions;
+    if (numOfActions > 0) {
+      score = (positiveScore - negativeScore) / numOfActions;
+    } else {
+      score = 0;
+    }
   }
 
   /// determine the correct string identifier from `efScoreParameters` for @param action
@@ -107,18 +111,18 @@ class LiveEfScore extends EfScore {
     }
   }
 
-  void revertAction(GameAction action, List<String> playerPositions) {
+  void removeAction(GameAction action, List<String> playerPositions) {
     String? actionType = _getActionType(action, playerPositions);
     if (actionType != null) {
       if (actionStats[actionType]! >= 1) {
         actionStats[actionType] = actionStats[actionType]! - 1;
         numOfActions--;
-        logger.d("Action reverted: $actionType, old ef-score: $score");
+        logger.d("Action deleted: $actionType, old ef-score: $score");
         calculate();
         logger.d("New ef-score: $score");
       }
     } else {
-      logger.i("Action type $actionType is unknown. No revert performed.");
+      logger.i("Action type $actionType is unknown. No delete performed.");
     }
   }
 }
