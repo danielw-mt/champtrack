@@ -53,7 +53,7 @@ class Player {
     String firstName = map["firstName"];
     String lastName = map["lastName"];
     String nickName = map["nickName"];
-    int number = int.parse(map["number"]);
+    int number = map["number"];
     List<String> positions = map["positions"].cast<String>();
     DocumentReference clubId = map["clubId"];
     DocumentReference teamId = map["teamId"];

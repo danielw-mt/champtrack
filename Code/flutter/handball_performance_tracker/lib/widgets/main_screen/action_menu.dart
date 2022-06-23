@@ -234,21 +234,21 @@ DialogButton buildDialogButton(
     int unixTime = dateTime.toUtc().millisecondsSinceEpoch;
     int secondsSinceGameStart =
         persistentController.getCurrentGame().stopWatch.secondTime.value;
-
     // get most recent game id from DB
     String currentGameId = persistentController.getCurrentGame().id!;
-    String actionType = determineAttack() ? attack : defense;
-
+    String type = determineAttack() ? attack : defense;
+    print(buttonText);
+    String actionType = actionMapping[type]![buttonText]!;
     GameAction action = GameAction(
         teamId: tempController.getSelectedTeam().id!,
         gameId: currentGameId,
-        type: actionType,
-        actionType: actionMapping[actionType]![buttonText]!,
+        type: type,
+        actionType: actionType,
         throwLocation: tempController.getLastLocation().cast<String>(),
         timestamp: unixTime,
         relativeTime: secondsSinceGameStart);
     logger.d("GameAction object created: ");
-    logger.d(action);
+    logger.d(action.actionType);
 
     // add action to firebase
 

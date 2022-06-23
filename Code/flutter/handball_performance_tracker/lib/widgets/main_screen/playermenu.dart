@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:handball_performance_tracker/constants/game_actions.dart';
 import 'package:handball_performance_tracker/utils/icons.dart';
+import 'package:handball_performance_tracker/widgets/main_screen/seven_meter_menu.dart';
 import '../../strings.dart';
 import 'package:handball_performance_tracker/widgets/main_screen/field.dart';
 import 'package:handball_performance_tracker/controllers/persistentController.dart';
@@ -208,7 +209,6 @@ Obx buildDialogButton(BuildContext context, Player associatedPlayer) {
 
       tempController.setLastClickedPlayer(Player());
     }
-    // TODO debug if there are no cases missing here because when you switch back it doesnt get triggered again
     if (lastAction.actionType == goal || lastAction.actionType == errThrow) {
       // if our action is left (page 0) and we are attacking (on page 0) jump back to defense (page 1) after the action
       if (tempController.getFieldIsLeft() == true &&
@@ -252,15 +252,17 @@ Obx buildDialogButton(BuildContext context, Player associatedPlayer) {
         FieldSwitch.pageController.jumpToPage(0);
       }
     }
+    if (lastAction.actionType == "1v1") {
+      logger.d("1v1 detected");
+      Navigator.pop(context);
+      callSevenMeterMenu(context, true);
+    }
     print("last action saved in database: ");
     // if the action was a 7 meter action we pop the screen above and go to 7m menu
     // for all other actions the player menu
     if (lastAction.actionType != "1v1") {
       Navigator.pop(context);
     }
-    print(persistentController.getLastAction().toMap());
-    tempController.refresh();
-    Navigator.pop(context);
   }
 
   // Button with shirt with buttonNumber inside and buttonText below.
