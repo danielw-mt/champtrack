@@ -20,8 +20,12 @@ class DatabaseRepository {
   }
 
   void addPlayerToTeam(Player player, Team team) async {
+    // TODO this breaks because you cannot just map a team back and add it like that
     team.players.add(player);
-    await _db.collection("teams").doc(team.id).update(team.toMap());
+    DocumentReference<Map<String, dynamic>> selectedTeam =
+        _db.collection("teams").doc(team.id);
+    print("selectedTeam ${selectedTeam.id}");
+    await selectedTeam.update(team.toMap());
   }
 
   /// @return asynchronous reference to Game object that was saved to firebase
