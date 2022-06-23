@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:handball_performance_tracker/data/game.dart';
+import 'package:handball_performance_tracker/data/team.dart';
 import 'package:handball_performance_tracker/data/game_action.dart';
 import 'package:handball_performance_tracker/data/player.dart';
 
@@ -16,6 +17,15 @@ class DatabaseRepository {
   /// update a Player's firestore record according to @param player properties
   void updatePlayer(Player player) async {
     await _db.collection("players").doc(player.id).update(player.toMap());
+  }
+
+  void addPlayerToTeam(Player player, Team team) async {
+    // TODO this breaks because you cannot just map a team back and add it like that
+    team.players.add(player);
+    DocumentReference<Map<String, dynamic>> selectedTeam =
+        _db.collection("teams").doc(team.id);
+    print("selectedTeam ${selectedTeam.id}");
+    await selectedTeam.update(team.toMap());
   }
 
   /// @return asynchronous reference to Game object that was saved to firebase

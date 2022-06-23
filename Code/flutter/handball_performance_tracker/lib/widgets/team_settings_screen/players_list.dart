@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 import '../../controllers/persistentController.dart';
 import '../../controllers/tempController.dart';
@@ -13,93 +14,127 @@ class PlayersList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetBuilder<TempController>(
-      id: "players-list",
-      builder: (globalController) {
-        int numberOfPlayers =
-            globalController.getPlayersFromSelectedTeam().length;
-        List<Player> playersList = globalController.getPlayersFromSelectedTeam();
-        return SizedBox(
-            width: double.infinity,
-            child: DataTable(
-              columns: const <DataColumn>[
-                DataColumn(
-                  label: Text(Strings.lName),
+        id: "players-list",
+        builder: (globalController) {
+          int numberOfPlayers =
+              globalController.getPlayersFromSelectedTeam().length;
+          List<Player> playersList =
+              globalController.getPlayersFromSelectedTeam();
+          return Expanded(
+            child: SingleChildScrollView(
+              child: Stack(children: [
+                // Container(
+                //   margin: EdgeInsets.only(bottom: , right: 500),
+                //   child: FloatingActionButton(onPressed: () {}),
+                // ),
+                Positioned(
+                  right: 30,
+                  bottom: 30,
+                  child: FloatingActionButton(
+                    onPressed: () {
+                      Alert(
+                        context: context,
+                        content: SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.7,
+                          height: MediaQuery.of(context).size.height * 0.8,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [PlayerForm()],
+                          ),
+                        ),
+                      ).show();
+                    },
+                    backgroundColor: Colors.black,
+                    child: Icon(Icons.add),
+                  ),
                 ),
-                DataColumn(
-                  label: Text(Strings.lNumber),
-                ),
-                DataColumn(label: Text(Strings.lPosition)),
-                DataColumn(label: Text(Strings.lPlayerStartingOnField)),
-                DataColumn(label: Text(Strings.lEdit))
-              ],
-              rows: List<DataRow>.generate(
-                numberOfPlayers,
-                (int index) {
-                  String positionsString = playersList[index]
-                      .positions
-                      .reduce((value, element) => value + ", " + element);
-                  String playerId = playersList[index].id.toString();
+                SizedBox(
+                  height: MediaQuery.of(context).size.height,
+                  width: double.infinity,
+                  child: Column(
+                    children: [
+                      DataTable(
+                        columns: const <DataColumn>[
+                          DataColumn(
+                            label: Text(Strings.lName),
+                          ),
+                          DataColumn(
+                            label: Text(Strings.lNumber),
+                          ),
+                          DataColumn(label: Text(Strings.lPosition)),
+                          DataColumn(
+                              label: Text(Strings.lPlayerStartingOnField)),
+                          DataColumn(label: Text(Strings.lEdit))
+                        ],
+                        rows: List<DataRow>.generate(
+                          numberOfPlayers,
+                          (int index) {
+                            String positionsString = playersList[index]
+                                .positions
+                                .reduce(
+                                    (value, element) => value + ", " + element);
+                            String playerId = playersList[index].id.toString();
 
-                  return DataRow(
-                    color: MaterialStateProperty.resolveWith<Color?>(
-                        (Set<MaterialState> states) {
-                      // All rows will have the same selected color.
-                      if (states.contains(MaterialState.selected)) {
-                        return Theme.of(context)
-                            .colorScheme
-                            .primary
-                            .withOpacity(0.08);
-                      }
-                      // Even rows will have a grey color.
-                      if (index.isEven) {
-                        return Colors.grey.withOpacity(0.3);
-                      }
-                      return null; // Use default value for other states and odd rows.
-                    }),
-                    cells: <DataCell>[
-                      DataCell(Text(
-                          "${playersList[index].firstName} ${playersList[index].lastName}")),
-                      DataCell(Text(playersList[index].number.toString())),
-                      DataCell(Text(positionsString)),
-                      DataCell(OnFieldCheckbox(
-                        player: playersList[index],
-                      )),
-                      DataCell(GestureDetector(
-                        child: Icon(Icons.edit),
-                        onTap: () {
-                          Alert(
-                            context: context,
-                            content: SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.7,
-                              height: MediaQuery.of(context).size.height * 0.8,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(Strings.lEditPlayer),
-                                        ElevatedButton(
-                                            onPressed: () {
-                                              // TODO implement delete player
-                                            },
-                                            child: Text(Strings.lDeletePlayer)),
-                                      ]),
-                                  PlayerForm(playerId: playerId)
-                                ],
-                              ),
-                            ),
-                          ).show();
-                        },
-                      ))
+                            return DataRow(
+                              color: MaterialStateProperty.resolveWith<Color?>(
+                                  (Set<MaterialState> states) {
+                                // All rows will have the same selected color.
+                                if (states.contains(MaterialState.selected)) {
+                                  return Theme.of(context)
+                                      .colorScheme
+                                      .primary
+                                      .withOpacity(0.08);
+                                }
+                                // Even rows will have a grey color.
+                                if (index.isEven) {
+                                  return Colors.grey.withOpacity(0.3);
+                                }
+                                return null; // Use default value for other states and odd rows.
+                              }),
+                              cells: <DataCell>[
+                                DataCell(Text(
+                                    "${playersList[index].firstName} ${playersList[index].lastName}")),
+                                DataCell(
+                                    Text(playersList[index].number.toString())),
+                                DataCell(Text(positionsString)),
+                                DataCell(OnFieldCheckbox(
+                                  player: playersList[index],
+                                )),
+                                DataCell(GestureDetector(
+                                  child: Icon(Icons.edit),
+                                  onTap: () {
+                                    Alert(
+                                      context: context,
+                                      content: SizedBox(
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.7,
+                                        height:
+                                            MediaQuery.of(context).size.height *
+                                                0.8,
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            PlayerForm(playersList[index].id.toString())
+                                          ],
+                                        ),
+                                      ),
+                                    ).show();
+                                  },
+                                ))
+                              ],
+                            );
+                          },
+                        ),
+                      ),
                     ],
-                  );
-                },
-              ),
-            ));
-      },
-    );
+                  ),
+                )
+              ]),
+            ),
+          );
+        });
   }
 
   void removePlayerFromTeam(Player player) {
