@@ -52,6 +52,7 @@ void startGame(BuildContext context) async {
 
   print("start game, id: ${persistentController.getCurrentGame().id}");
   tempController.setGameIsRunning(true);
+  tempController.setPlayerBarPlayers();
 }
 
 void unpauseGame() {
