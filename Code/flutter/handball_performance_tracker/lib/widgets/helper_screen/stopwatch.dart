@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
-import './../../controllers/globalController.dart';
 import '../../strings.dart';
+import '../../controllers/persistentController.dart';
 import 'package:get/get.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
+import '../../controllers/tempController.dart';
 
-class StopWatch extends GetView<GlobalController> {
+class StopWatch extends GetView<TempController> {
   // stop watch widget that allows to the time to be started, stopped, resetted and in-/decremented by 1 sec
-  final GlobalController globalController = Get.find<GlobalController>();
+  PersistentController persistentController = Get.find<PersistentController>();
 
   @override
   Widget build(BuildContext context) {
-    StopWatchTimer stopWatchTimer =
-        globalController.currentGame.value.stopWatch;
+    StopWatchTimer stopWatchTimer = persistentController.getCurrentGame().stopWatch;
 
     return Scrollbar(
         child: SingleChildScrollView(
@@ -92,8 +92,10 @@ class StopWatch extends GetView<GlobalController> {
                                   shape: const StadiumBorder(),
                                 ),
                                 onPressed: () async {
-                                  globalController
-                                      .currentGame.value.stopWatch.onExecute
+                                  persistentController
+                                      .getCurrentGame()
+                                      .stopWatch
+                                      .onExecute
                                       .add(StopWatchExecute.stop);
                                 },
                                 child: const Text(
@@ -141,7 +143,9 @@ class StopWatch extends GetView<GlobalController> {
                                   if (stopWatchTimer.isRunning) {
                                     stopWatchTimer.onExecute
                                         .add(StopWatchExecute.reset);
-                                    globalController.currentGame.value.stopWatch
+                                    persistentController
+                                        .getCurrentGame()
+                                        .stopWatch
                                         .setPresetTime(
                                             mSec: currentTime + 1000);
                                     stopWatchTimer.onExecute
@@ -149,11 +153,13 @@ class StopWatch extends GetView<GlobalController> {
                                   } else {
                                     stopWatchTimer.onExecute
                                         .add(StopWatchExecute.reset);
-                                    globalController.currentGame.value.stopWatch
+                                    persistentController
+                                        .getCurrentGame()
+                                        .stopWatch
                                         .setPresetTime(
                                             mSec: currentTime + 1000);
                                   }
-                                  globalController.refresh();
+                                  persistentController.refresh();
                                 },
                                 child: const Text(
                                   Strings.lPlusOneTime,
@@ -179,7 +185,9 @@ class StopWatch extends GetView<GlobalController> {
                                   if (stopWatchTimer.isRunning) {
                                     stopWatchTimer.onExecute
                                         .add(StopWatchExecute.reset);
-                                    globalController.currentGame.value.stopWatch
+                                    persistentController
+                                        .getCurrentGame()
+                                        .stopWatch
                                         .setPresetTime(
                                             mSec: currentTime - 1000);
                                     stopWatchTimer.onExecute
@@ -187,11 +195,13 @@ class StopWatch extends GetView<GlobalController> {
                                   } else {
                                     stopWatchTimer.onExecute
                                         .add(StopWatchExecute.reset);
-                                    globalController.currentGame.value.stopWatch
+                                    persistentController
+                                        .getCurrentGame()
+                                        .stopWatch
                                         .setPresetTime(
                                             mSec: currentTime - 1000);
                                   }
-                                  globalController.refresh();
+                                  persistentController.refresh();
                                 },
                                 child: const Text(
                                   Strings.lMinusOneTime,

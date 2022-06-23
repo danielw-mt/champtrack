@@ -13,6 +13,9 @@ class Strings {
   static const String lSettings = "Settings";
   static const String lMainScreen = "Main Screen";
   static const String lHelperScreen = "Helper Screen";
+  static const String lTeamSelectionScreen = "Team Auswahl";
+  static const String lSignedInAs = "Angemeldet als: "; //TODO anwenden
+  static const String lSignOutButton = "Abmelden";
 
   // game_actions.dart & action_feed.dart
   static const String lRedCard = "Rote Karte";
@@ -28,7 +31,7 @@ class Strings {
   static const String lBlockAndSteal = "Block & Steal";
 
   //settingsScreen.dart
-  static const String lFieldSideIsRight = "Home goal is right side of screen";
+  static const String lHomeSideIsRight = "Home goal is right side of screen";
   static const String lPageTwo = "Page Two"; // TODO correct name
 
   // mainScreen.dart
@@ -100,10 +103,26 @@ class Strings {
   static const String lGames = "Spiele";
   static const String lTeamDetails = "Team Details";
 
-  // nav_drawer.dart
-  static const String lTeamSelectionScreen = "Team Auswahl";
-  static const String lSignedInAs = "Angemeldet als: "; //TODO anwenden
-  static const String lSignOutButton = "Abmelden";
+  // start game screen
+  static const String lBack = "Zurück";
+  static const String lNext = "Weiter";
+  static const String lSeason = "Saison";
+  static const String lTeam = "Mannschaft";
+  static const String lDate = "Datum";
+  static const String lOpponent = "Gegner";
+  static const String lLocation = "Halle";
+  static const String lHomeGame = "Heimspiel";
+  static const String lOutwardsGame = "Auswärtsspiel";
+  static const String lStartGameFormPrompt =
+      "Bitte ergänze alle fehlenden Felder";
+  static const String lStartGameTitle = "Neues Spiel tracken";
+  static const String lStartGameTeamPrompt = "Bitte wähle ein Team aus";
+  static const String lStartGamePlayerSelectionPrompt =
+      "Bitte wähle alle Spieler für den Spieltag aus";
+  static const String lStartGamePlayerPositioningPrompt =
+      "Bitte wähle die Startaufstellung aus den nominierten Spielern aus";
+  static const String lHotReloadError =
+      "Es scheint ein Problem zu geben. Bitte gehen Sie zurück zum Dashboard";
 
   // 7 meter
   static const String lMissedThrow = "Fehlwurf";
@@ -111,4 +130,28 @@ class Strings {
   static const String lCaught = "Gehalten";
   static const String lSevenMeter = "7m";
   static const String lChooseSevenMeterPlayer = "7m Auführung";
+  // Dashboard
+  static const String lDashboard = "Dashboard";
+  static const String lManageTeams = "Mannschaften verwalten";
+  static const String lTrackNewGame = "Neues Spiel tracken";
+  // team settings screen
+  static const String lName = "Name";
+  static const String lNumber = "Nummer";
+  static const String lPosition = "Position";
+  static const String lEdit = "Bearbeiten";
+  static const String lEditPlayer = "Player Bearbeiten";
+  static const String lDeletePlayer = "Löschen";
+  static const String lFirstName = "Vorname";
+  static const String lLastName = "Nachname";
+  static const String lNickName = "Spitzname";
+  static const String lShirtNumber = "Trikotnummer";
+  static const String lTeams = "Mannschaften";
+  static const String lGoalkeeper = "TW";
+  static const String lLeftBack = "RL";
+  static const String lCenterBack = "RM";
+  static const String lRightBack = "RR";
+  static const String lLeftWinger = "LA";
+  static const String lCenterForward = "KR";
+  static const String lRightWinger = "RA";
+  static const String lPlayerStartingOnField = "Spieler in Startaufstellung";
 }

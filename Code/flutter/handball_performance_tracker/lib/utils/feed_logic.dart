@@ -1,31 +1,31 @@
 import 'package:get/get.dart';
-import 'package:handball_performance_tracker/controllers/globalController.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
+import '../controllers/tempController.dart';
 import '../data/game_action.dart';
 import '../constants/settings_config.dart';
 import '../data/database_repository.dart';
 
 // when the periodic reset happens remove the first (oldest) item from the feedActions list
 void periodicFeedTimerReset() async {
-  GlobalController globalController = Get.find<GlobalController>();
-  globalController.periodicResetIsHappening.value = true;
-  globalController.feedTimer.value.onExecute.add(StopWatchExecute.reset);
+  TempController gameController = Get.find<TempController>();
+  gameController.setPeriodicResetIsHappening(true);
+  gameController.getFeedTimer().onExecute.add(StopWatchExecute.reset);
   await Future.delayed(Duration(milliseconds: 500));
-  globalController.feedTimer.value.onExecute.add(StopWatchExecute.start);
-  if (globalController.feedActions.length > 0) {
-    globalController.feedActions.removeAt(0);
+  gameController.getFeedTimer().onExecute.add(StopWatchExecute.start);
+  if (gameController.getFeedActions().length > 0) {
+    gameController.removeFirstFeedAction();
   }
-  globalController.periodicResetIsHappening.value = false;
-  globalController.refresh();
+  gameController.setPeriodicResetIsHappening(false);
+  gameController.refresh();
 }
 
 /// adds item to the feedActions list
 void addFeedItem(GameAction feedAction) async {
-  GlobalController globalController = Get.find<GlobalController>();
+  TempController gameController = Get.find<TempController>();
   // this is needed so that when the timer is reset here it does not remove an item
   // every time the timer is reset it triggers onFeedTimerEnded() which would remove the item again
-  globalController.addingFeedItem.value = true;
-  StopWatchTimer feedTimer = globalController.feedTimer.value;
+  gameController.setAddingFeedItem(true);
+  StopWatchTimer feedTimer = gameController.getFeedTimer();
   if (feedTimer.isRunning == false) {
     feedTimer.onExecute.add(StopWatchExecute.start);
     await Future.delayed(Duration(milliseconds: 500));
@@ -35,28 +35,26 @@ void addFeedItem(GameAction feedAction) async {
     feedTimer.onExecute.add(StopWatchExecute.start);
   }
   // when there are too many items in this feed remove the oldest item
-  if (globalController.feedActions.length == MAX_FEED_ITEMS) {
-    globalController.feedActions.removeAt(0);
+  if (gameController.getFeedActions().length == MAX_FEED_ITEMS) {
+    gameController.removeFirstFeedAction();
   }
-  globalController.feedActions.add(feedAction);
-  globalController.addingFeedItem.value = false;
-  globalController.refresh();
+  gameController.addFeedAction(feedAction);
+  gameController.setAddingFeedItem(false);
+  gameController.refresh();
 }
 
 /// gets triggered every time the period of the timer runs out or when the timer is reset
 void onFeedTimerEnded() {
-  GlobalController globalController = Get.find<GlobalController>();
-  if (globalController.periodicResetIsHappening.value == false && globalController.addingFeedItem.value == false) {
+  TempController gameController = Get.find<TempController>();
+  if (!gameController.getPeriodicResetIsHappening() &&
+      !gameController.getAddingFeedItem()) {
     periodicFeedTimerReset();
   }
 }
 
 /// Gets triggered when user clicks on a feed item
 void removeFeedItem(GameAction action) {
-  final GlobalController globalController = Get.find<GlobalController>();
-  // delete feed item from database
-  DatabaseRepository().deleteAction(action);
-  // delete action from game state
-  globalController.feedActions.remove(action);
-  globalController.refresh();
+  final TempController gameController = Get.find<TempController>();
+  // delete action from game state and database
+  gameController.removeFeedAction(action);
 }

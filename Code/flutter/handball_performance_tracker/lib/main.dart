@@ -1,15 +1,16 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:handball_performance_tracker/screens/authenticationScreen.dart';
+import 'package:handball_performance_tracker/screens/dashboard.dart';
+import 'package:handball_performance_tracker/screens/settingsScreen.dart';
+import 'package:handball_performance_tracker/screens/startGameScreen.dart';
 import 'screens/mainScreen.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'dart:io';
 import 'config/firebase_options.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'strings.dart';
-import '../../controllers/globalController.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 void main() async {
@@ -24,6 +25,11 @@ void main() async {
       ),
       scrollBehavior:
           AppScrollBehavior(), // add scrollbehaviour so swiping is possible in web
+      getPages: [
+        GetPage(name: '/StartGameScreen', page: () => StartGameScreen()),
+        GetPage(name: '/SettingsScreen', page: () => SettingsScreen()),
+        GetPage(name: '/Dashboard', page: () => Dashboard()),
+      ],
       home: FutureBuilder<dynamic>(
         future: _startupCheck(),
         builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
@@ -42,7 +48,7 @@ void main() async {
                     );
                   } else if (snapshot.hasData) {
                     // if we have a User object we are logged in and can display the app
-                    return MainScreen();
+                    return Dashboard();
                   } else {
                     return AuthenticationScreen(context: context);
                   }

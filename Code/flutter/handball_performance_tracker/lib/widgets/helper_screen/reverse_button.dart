@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
-import './../../controllers/globalController.dart';
+import '../../controllers/persistentController.dart';
 import 'package:get/get.dart';
-import '../../data/database_repository.dart';
+import '../../controllers/tempController.dart';
 
-class ReverseButton extends GetView<GlobalController> {
-  final GlobalController globalController = Get.find<GlobalController>();
+class ReverseButton extends GetView<TempController> {
+  final PersistentController persistentController = Get.find<PersistentController>();
 
   @override
   Widget build(BuildContext context) {
     return FloatingActionButton(
         onPressed: (() {
-          if (globalController.actions.isNotEmpty) {
-            globalController.repository.deleteLastAction();
-            globalController.actions.removeLast();
+          if (!persistentController.actionsIsEmpty()) {
+            persistentController.removeLastAction();
+            // TODO: also remove last action from corresponding player and update Ef-Score
           }
         }),
         child: const Icon(Icons.undo));
