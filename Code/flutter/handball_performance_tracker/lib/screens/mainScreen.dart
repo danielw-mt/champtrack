@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:handball_performance_tracker/utils/initializeLocalData.dart';
 import 'package:handball_performance_tracker/widgets/main_screen/ef_score_bar.dart';
 import 'package:handball_performance_tracker/widgets/main_screen/ef_score_bar.dart'
     as efscorebar;
 import 'package:handball_performance_tracker/widgets/main_screen/field.dart';
+import 'package:handball_performance_tracker/widgets/main_screen/score_keeping.dart';
 import '../strings.dart';
-import '../controllers/persistentController.dart';
-import '../controllers/tempController.dart';
 import './../widgets/nav_drawer.dart';
 import 'package:handball_performance_tracker/utils/fieldSizeParameter.dart'
     as fieldSizeParameter;
@@ -33,7 +30,12 @@ class MainScreen extends StatelessWidget {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          MenuButton(_scaffoldKey),
+          Row(
+            children: [
+              MenuButton(_scaffoldKey),
+              ScoreKeeping(),
+            ],
+          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [

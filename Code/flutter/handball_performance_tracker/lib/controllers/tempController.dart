@@ -1,6 +1,5 @@
 import 'package:get/get.dart';
 import 'package:handball_performance_tracker/data/database_repository.dart';
-import 'package:handball_performance_tracker/data/game.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 
 import '../constants/settings_config.dart';
@@ -258,6 +257,43 @@ class TempController extends GetxController {
   void changePlayerBarPlayers(int indexToChange, int i) {
     _playerBarPlayers[indexToChange] = i;
     update(["efscorebar-players"]);
+  }
+
+
+  /// Score of own team
+  RxInt _ownScore = 0.obs;
+
+  /// getter for _ownScore
+  getOwnScore() => _ownScore.value;
+
+  /// increaser for _ownScore
+  incOwnScore() {
+    _ownScore++;
+    update(["score-keeping"]);
+  }
+
+  ///  for _ownScore
+  decOwnScore() {
+    _ownScore--;
+    update(["score-keeping"]);
+  }
+
+  /// Score of opponent team
+  RxInt _opponentScore = 0.obs;
+
+  /// getter for lastClickedPlayer
+  getOpponentScore() => _opponentScore.value;
+
+  /// increaser for lastClickedPlayer
+  incOpponentScore() {
+    _opponentScore++;
+    update(["score-keeping"]);
+  }
+
+  /// increaser for lastClickedPlayer
+  decOpponentScore() {
+    _opponentScore--;
+    update(["score-keeping"]);
   }
 
   ////
