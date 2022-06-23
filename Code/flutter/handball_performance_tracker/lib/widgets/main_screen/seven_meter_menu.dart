@@ -2,12 +2,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:handball_performance_tracker/data/database_repository.dart';
 import '../../strings.dart';
-import '../../controllers/globalController.dart';
 import 'package:get/get.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import '../../data/game_action.dart';
 import '../../data/database_repository.dart';
 import '../../constants/game_actions.dart';
+import '../../controllers/tempController.dart';
+import '../../controllers/persistentController.dart';
 import 'playermenu.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 import 'dart:math';
@@ -54,12 +55,12 @@ void callSevenMeterMenu(BuildContext context, bool belongsToHomeTeam) {
 /// @return true if attacking false if defending
 bool determineAttack() {
   logger.d("Determining whether attack actions should be displayed...");
-  final GlobalController globalController = Get.find<GlobalController>();
+  final TempController tempController = Get.find<TempController>();
   // decide whether attack or defense actions should be displayed depending
   //on what side the team goals is and whether they are attacking or defending
   bool attacking = false;
-  bool attackIsLeft = globalController.attackIsLeft.value;
-  bool fieldIsLeft = globalController.fieldIsLeft.value;
+  bool attackIsLeft = tempController.getAttackIsLeft();
+  bool fieldIsLeft = tempController.getFieldIsLeft();
 
   // when our goal is to the right (= attackIsLeft) and the field is left
   //display attack options
@@ -146,29 +147,31 @@ Widget buildDialogButtonMenu(BuildContext context, bool belongsToHomeTeam) {
 DialogButton buildDialogButton(
     BuildContext context, String actionType, String buttonText, Color color,
     [icon]) {
-  final GlobalController globalController = Get.find<GlobalController>();
-  DatabaseRepository repository = globalController.repository;
+  final PersistentController persistentController =
+      Get.find<PersistentController>();
+  final TempController tempController = Get.find<TempController>();
+  DatabaseRepository repository = persistentController.repository;
   void logAction() async {
     logger.d("logging an action");
     DateTime dateTime = DateTime.now();
     int unixTime = dateTime.toUtc().millisecondsSinceEpoch;
     int secondsSinceGameStart =
-        globalController.currentGame.value.stopWatch.secondTime.value;
+        persistentController.getCurrentGame().stopWatch.secondTime.value;
 
     // get most recent game id from DB
-    String currentGameId = globalController.currentGame.value.id!;
+    String currentGameId = persistentController.getCurrentGame().id!;
 
     GameAction action = GameAction(
-        teamId: globalController.selectedTeam.value.id!,
+        teamId: tempController.getSelectedTeam().id!,
         gameId: currentGameId,
         type: determineAttack() ? 'attack' : 'defense',
         actionType: actionType,
-        throwLocation: globalController.lastLocation.cast<String>(),
+        throwLocation: tempController.getLastLocation().cast<String>(),
         timestamp: unixTime,
         relativeTime: secondsSinceGameStart);
     logger.d("GameAction object created: ");
     logger.d(action);
-    globalController.actions.add(action);
+    persistentController.addAction(action);
 
     // add action to firebase
 
