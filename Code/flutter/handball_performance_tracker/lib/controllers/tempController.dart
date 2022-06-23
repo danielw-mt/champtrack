@@ -71,7 +71,7 @@ class TempController extends GetxController {
   void setOnFieldPlayer(int index, Player player) {
     _selectedTeam.value.onFieldPlayers[index] = player;
     update(
-        ["action-feed", "on-field-checkbox", "players-list", "ef-score-bar"]);
+        ["action-feed", "on-field-checkbox", "ef-score-bar", "players-list"]);
   }
 
   /// add additional onFieldPlayer to selectedTeam
