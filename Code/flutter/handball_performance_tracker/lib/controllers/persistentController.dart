@@ -4,6 +4,7 @@ import '../data/database_repository.dart';
 import '../data/game.dart';
 import '../data/game_action.dart';
 import '../data/team.dart';
+import '../data/club.dart';
 
 /// stores more persistent state
 /// generally more complex variables and data structure that are
@@ -11,6 +12,12 @@ import '../data/team.dart';
 class PersistentController extends GetxController {
   /// handles teams initialization when building MainScreen
   var isInitialized = false;
+
+  Rx<Club> _loggedInClub = Club().obs;
+
+  void setLoggedInClub(Club club) {
+    _loggedInClub.value = club;
+  }
 
   ///
   // database handling
