@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:handball_performance_tracker/constants/game_actions.dart';
 import 'package:handball_performance_tracker/utils/icons.dart';
 import 'package:handball_performance_tracker/widgets/main_screen/seven_meter_menu.dart';
+import 'package:handball_performance_tracker/widgets/main_screen/seven_meter_player_menu.dart';
 import '../../strings.dart';
 import 'package:handball_performance_tracker/widgets/main_screen/field.dart';
 import 'package:handball_performance_tracker/controllers/persistentController.dart';
@@ -152,7 +153,7 @@ Obx buildDialogButton(BuildContext context, Player associatedPlayer) {
     // if goal was pressed but no player was selected yet
     //(lastClickedPlayer is default Player Object) do nothing
     if (lastAction.actionType == "goal" && lastClickedPlayerId == "") {
-      tempController.updatePlayerMenuText();
+      tempController.setPlayerMenutText("Assist");
       // update last Clicked player value with the Player from selected team
       // who was clicked
       tempController.setLastClickedPlayer(
@@ -255,7 +256,8 @@ Obx buildDialogButton(BuildContext context, Player associatedPlayer) {
     if (lastAction.actionType == "1v1") {
       logger.d("1v1 detected");
       Navigator.pop(context);
-      callSevenMeterMenu(context, true);
+      tempController.setPlayerMenutText(Strings.lChooseSevenMeterPlayer);
+      callSevenMeterPlayerMenu(context);
     }
     print("last action saved in database: ");
     // if the action was a 7 meter action we pop the screen above and go to 7m menu

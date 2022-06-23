@@ -129,7 +129,8 @@ class Strings {
   static const String lOpponentGoal = "Gegentor";
   static const String lCaught = "Gehalten";
   static const String lSevenMeter = "7m";
-  static const String lChooseSevenMeterPlayer = "7m Auführung";
+  static const String lChooseSevenMeterPlayer = "7m Ausführung";
+  static const String lSamePlayer = "Gleicher Spieler";
   // Dashboard
   static const String lDashboard = "Dashboard";
   static const String lManageTeams = "Mannschaften verwalten";
