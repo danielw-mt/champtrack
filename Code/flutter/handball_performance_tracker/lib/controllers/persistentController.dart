@@ -19,6 +19,10 @@ class PersistentController extends GetxController {
     _loggedInClub.value = club;
   }
 
+  Club getLoggedInClub() {
+    return _loggedInClub.value;
+  }
+
   ///
   // database handling
   ///

@@ -1,11 +1,12 @@
 import 'package:get/get.dart';
 import 'package:handball_performance_tracker/data/database_repository.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
 import '../constants/settings_config.dart';
 import 'persistentController.dart';
 import '../data/game_action.dart';
 import '../data/player.dart';
+import '../data/club.dart';
 import '../data/team.dart';
 import '../utils/feed_logic.dart';
 import '../utils/player_helper.dart';
@@ -53,12 +54,35 @@ class TempController extends GetxController {
         .toList()
         .first = player;
     repository.updatePlayer(player);
+    PersistentController persistentController =
+        Get.find<PersistentController>();
     // TODO update where necessary
   }
 
-  void addPlayer(Player player) {
+  void deletePlayer(Player player) async {
+    logger.d("deleting player");
+    logger.d("players before: ${_selectedTeam.value.players.length}");
+    logger.d(
+        "onFiledPlayers before: ${_selectedTeam.value.onFieldPlayers.length}");
+    _selectedTeam.value.players.remove(player);
+    if (_selectedTeam.value.onFieldPlayers.contains(player)) {
+      _selectedTeam.value.onFieldPlayers.remove(player);
+    }
+    repository.deletePlayer(player);
+    logger.d("players after: ${_selectedTeam.value.players.length}");
+    logger.d(
+        "onFiledPlayers after: ${_selectedTeam.value.onFieldPlayers.length}");
+  }
+
+  void addPlayer(Player player) async {
+    PersistentController persistentController =
+        Get.find<PersistentController>();
+    player.teamId = await repository.getTeamReference(_selectedTeam.value);
+    Club loggedInClub = persistentController.getLoggedInClub();
+    player.clubId = await repository.getClubReference(loggedInClub);
+    DocumentReference docRef = await repository.addPlayer(player);
+    player.id = docRef.id;
     _selectedTeam.value.players.add(player);
-    repository.addPlayer(player);
     repository.addPlayerToTeam(player, _selectedTeam.value);
   }
 

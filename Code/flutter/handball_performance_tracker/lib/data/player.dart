@@ -75,4 +75,9 @@ class Player {
       other != null && other is Player && id == other.id;
 
   void addAction(GameAction action) => efScore.addAction(action, positions);
+
+  @override
+  String toString() {
+    return "Player( +\n firstName: ${firstName}, +\n lastName: ${lastName}, +\n nickName: ${nickName} ";
+  }
 }
