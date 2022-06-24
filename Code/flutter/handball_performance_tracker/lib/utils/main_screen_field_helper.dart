@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:handball_performance_tracker/utils/fieldSizeParameter.dart'
+import 'package:handball_performance_tracker/constants/fieldSizeParameter.dart'
     as fieldSizeParameter;
 import 'dart:math' as math;
 import 'dart:ui' as ui;
@@ -138,7 +138,11 @@ class SectorCalc {
 */
 class FieldPainter extends CustomPainter {
   bool leftSide = true;
-  FieldPainter(this.leftSide);
+  Color nineMeterColor;
+  Color sixMeterColor;
+  Color fieldBackgroundColor;
+  FieldPainter(this.leftSide, this.nineMeterColor, this.sixMeterColor,
+      this.fieldBackgroundColor);
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -155,6 +159,14 @@ class FieldPainter extends CustomPainter {
       startAngle = math.pi / 2;
       sweepAngle = math.pi;
     }
+    // draw background
+    canvas.drawRect(
+        Rect.fromCenter(
+            center: Offset(fieldSizeParameter.fieldWidth / 2,
+                fieldSizeParameter.fieldHeight / 2),
+            width: fieldSizeParameter.fieldWidth,
+            height: fieldSizeParameter.fieldHeight),
+        Paint()..color = fieldBackgroundColor);
 
     // draw bigger 9m oval
     canvas.drawArc(
@@ -165,7 +177,7 @@ class FieldPainter extends CustomPainter {
         startAngle,
         sweepAngle,
         false,
-        Paint()..color = Color.fromARGB(103, 169, 172, 209));
+        Paint()..color = nineMeterColor);
 
     // draw smaller 6m oval
     canvas.drawArc(
@@ -176,7 +188,7 @@ class FieldPainter extends CustomPainter {
         startAngle,
         sweepAngle,
         false,
-        Paint()..color = Color.fromARGB(141, 129, 142, 216));
+        Paint()..color = sixMeterColor);
 
     // draw 7m line
     // To draw a line you need two points: (x1,y1) and (x2,y2)

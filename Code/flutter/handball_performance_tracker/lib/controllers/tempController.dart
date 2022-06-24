@@ -133,7 +133,7 @@ class TempController extends GetxController {
   /// setter for attackIsLeft
   setAttackIsLeft(bool attackIsLeft) {
     _attackIsLeft.value = attackIsLeft;
-    update(["side-switch"]);
+    update(["side-switch", "custom-field"]);
   }
 
   //////

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:handball_performance_tracker/constants/colors.dart';
 import 'package:handball_performance_tracker/data/player.dart';
-import 'package:handball_performance_tracker/utils/fieldSizeParameter.dart'
+import 'package:handball_performance_tracker/constants/fieldSizeParameter.dart'
     as fieldSizeParameter;
 import 'package:handball_performance_tracker/utils/player_helper.dart';
 import 'dart:math';
@@ -27,7 +28,7 @@ double scorebarButtonWidth = scorebarWidth;
 // track if plus button was pressed, so the adapted color of the pressed player on efscore bar does not change back to normal already.
 bool plusPressed = false;
 // Color of unpressed button
-Color buttonColor = Color.fromARGB(255, 230, 230, 230);
+Color buttonColor = Colors.white;
 // Color of pressed button
 Color pressedButtonColor = Colors.blue;
 double numberFontSize = 18;
@@ -64,10 +65,10 @@ class ButtonBar extends StatelessWidget {
       width: width.toDouble(),
       height: (buttons.length * lineAndButtonHeight + paddingWidth).toDouble(),
       decoration: BoxDecoration(
-          color: Colors.white,
+          color: backgroundColor,
           // set border so corners can be made round
           border: Border.all(
-            color: Colors.white,
+            color: backgroundColor,
           ),
           // make round edges
           borderRadius: BorderRadius.all(Radius.circular(menuRadius))),
