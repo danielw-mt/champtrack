@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:handball_performance_tracker/controllers/persistentController.dart';
+import 'package:handball_performance_tracker/data/team.dart';
 import '../../strings.dart';
 import '../../data/player.dart';
 import '../../controllers/tempController.dart';
@@ -19,7 +21,7 @@ class PlayerForm extends StatefulWidget {
 // This class holds data related to the form.
 class PlayerFormState extends State<PlayerForm> {
   TempController tempController = Get.find<TempController>();
-
+  PersistentController persistentController = Get.find<PersistentController>();
   String playerId;
   PlayerFormState(this.playerId);
   late Player player;
@@ -34,6 +36,7 @@ class PlayerFormState extends State<PlayerForm> {
   TextEditingController nickNameController = TextEditingController();
   TextEditingController shirtNumberController = TextEditingController();
   bool editModeEnabled = false;
+  List<Team> availableTeams = [];
 
   @override
   void initState() {
@@ -50,7 +53,20 @@ class PlayerFormState extends State<PlayerForm> {
       this.player = Player();
       editModeEnabled = false;
     }
+    availableTeams = persistentController.getAvailableTeams();
     super.initState();
+  }
+
+  /// checks whether one of the team reference corresponding to player i.e.
+  /// "teams/ehVAJ85ILdS4tCVZcwHZ" contains the teamId "ehVAJ85ILdS4tCVZcwHZ"
+  bool isPlayerPartOfTeam(String teamId) {
+    bool playerIsPartOfTeam = false;
+    player.teams.forEach((String teamReferenceId) {
+      if (teamReferenceId.contains(teamId)) {
+        playerIsPartOfTeam = true;
+      }
+    });
+    return playerIsPartOfTeam;
   }
 
   @override
@@ -66,7 +82,9 @@ class PlayerFormState extends State<PlayerForm> {
         Text(Strings.lEditPlayer),
         ElevatedButton(
             onPressed: () {
-              // TODO implement delete player
+              tempController.deletePlayer(player);
+              Navigator.pop(context);
+              tempController.update(["players-list"]);
             },
             child: Text(Strings.lDeletePlayer)),
       ]),
@@ -164,17 +182,32 @@ class PlayerFormState extends State<PlayerForm> {
                   children: [
                     Text(Strings.lTeams),
                     SizedBox(
-                      width: width * 0.25,
-                      height: 50,
-                      child: ListView(
-                        children: [
-                          Text("TODO"),
-                          Text("Mannschaft"),
-                          Text("Mannschaft"),
-                          Text("Mannschaft")
-                        ],
-                      ),
-                    ),
+                        width: width * 0.25,
+                        height: 100,
+                        child: ListView.builder(
+                            itemCount: availableTeams.length,
+                            itemBuilder: (context, index) {
+                              Team relevantTeam = availableTeams[index];
+                              return Row(
+                                children: [
+                                  Text(relevantTeam.name),
+                                  Checkbox(
+                                      value: isPlayerPartOfTeam(
+                                          relevantTeam.id.toString()),
+                                      onChanged: (value) {
+                                        setState(() {
+                                          if (value == true) {
+                                            player.teams.add("teams/" +
+                                                relevantTeam.id.toString());
+                                          } else {
+                                            player.teams.remove("teams/" +
+                                                relevantTeam.id.toString());
+                                          }
+                                        });
+                                      })
+                                ],
+                              );
+                            })),
                   ],
                 ),
                 Column(
@@ -182,7 +215,7 @@ class PlayerFormState extends State<PlayerForm> {
                     Text(Strings.lPosition),
                     SizedBox(
                       width: width * 0.25,
-                      height: 50,
+                      height: 100,
                       child: ListView.builder(
                         itemCount: 7,
                         shrinkWrap: true,
@@ -199,8 +232,11 @@ class PlayerFormState extends State<PlayerForm> {
                           return Row(
                             children: [
                               Text(positionNames[item]),
-                              // TODO implement checkbox
-                              Checkbox(value: false, onChanged: (value) {})
+                              Checkbox(
+                                  value: false,
+                                  onChanged: (value) {
+                                    if (value == true) {}
+                                  })
                             ],
                           );
                         },

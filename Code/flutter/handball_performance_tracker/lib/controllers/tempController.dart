@@ -60,24 +60,17 @@ class TempController extends GetxController {
   }
 
   void deletePlayer(Player player) async {
-    logger.d("deleting player");
-    logger.d("players before: ${_selectedTeam.value.players.length}");
-    logger.d(
-        "onFiledPlayers before: ${_selectedTeam.value.onFieldPlayers.length}");
     _selectedTeam.value.players.remove(player);
     if (_selectedTeam.value.onFieldPlayers.contains(player)) {
       _selectedTeam.value.onFieldPlayers.remove(player);
     }
     repository.deletePlayer(player);
-    logger.d("players after: ${_selectedTeam.value.players.length}");
-    logger.d(
-        "onFiledPlayers after: ${_selectedTeam.value.onFieldPlayers.length}");
   }
 
   void addPlayer(Player player) async {
     PersistentController persistentController =
         Get.find<PersistentController>();
-    player.teamId = await repository.getTeamReference(_selectedTeam.value);
+
     Club loggedInClub = persistentController.getLoggedInClub();
     player.clubId = await repository.getClubReference(loggedInClub);
     player.positions = [""];
@@ -85,7 +78,10 @@ class TempController extends GetxController {
     DocumentReference docRef = await repository.addPlayer(player);
     player.id = docRef.id;
     _selectedTeam.value.players.add(player);
-    repository.addPlayerToTeam(player, _selectedTeam.value);
+    // add player to each team inside references
+    player.teams.forEach((String teamReference) {
+      repository.addPlayerToTeam(player, teamReference);
+    });
   }
 
   /// get the players from selectedTeam that are currently marked as onFieldPlayers

@@ -37,6 +37,10 @@ class PersistentController extends GetxController {
     return _cachedTeamsList;
   }
 
+  Team getSpecificTeam(String id) {
+    return _cachedTeamsList.where((Team team) => team.id == id).first;
+  }
+
   /// Setter for cachedTeamsList
   void updateAvailableTeams(List<Team> teamsList) {
     _cachedTeamsList.value = teamsList;

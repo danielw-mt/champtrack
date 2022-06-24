@@ -1,4 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:get/get.dart';
+import 'package:handball_performance_tracker/controllers/persistentController.dart';
+import 'package:handball_performance_tracker/controllers/tempController.dart';
 import 'package:handball_performance_tracker/data/game.dart';
 import 'package:handball_performance_tracker/data/team.dart';
 import 'package:handball_performance_tracker/data/game_action.dart';
@@ -32,7 +35,27 @@ class DatabaseRepository {
   }
 
   Future<void> deletePlayer(Player player) async {
+    // delete player from player collection
     await _db.collection("players").doc(player.id).delete();
+    // delete player reference from selected team player references
+    List<String> teamReferenceStrings = player.teams;
+    teamReferenceStrings.forEach((String teamReferenceString) async {
+      DocumentReference<Map<String, dynamic>> relevantTeam =
+          _db.collection("teams").doc(teamReferenceString);
+
+      // get a list of player references from the document
+      DocumentSnapshot snapshot = await relevantTeam.get();
+      Map<String, dynamic> snapshotData =
+          snapshot.data() as Map<String, dynamic>;
+      List<DocumentReference> playerReferences =
+          snapshotData["players"].cast<DocumentReference>();
+
+      //get a reference of the player object from the players collection
+      DocumentReference<Map<String, dynamic>> relevantPlayer =
+          _db.collection("players").doc(player.id);
+      playerReferences.remove(relevantPlayer);
+      await relevantTeam.update({'players': playerReferences});
+    });
   }
 
   // @return asynchronous reference to Player object that was saved to firebase
@@ -45,12 +68,14 @@ class DatabaseRepository {
     await _db.collection("players").doc(player.id).update(player.toMap());
   }
 
-  void addPlayerToTeam(Player player, Team team) async {
-    print("trying to add player ${player.id} to team ${team.id}");
-
-    team.players.add(player);
+  void addPlayerToTeam(Player player, String teamId) async {
+    print("trying to add player ${player.id} to team ${teamId}");
+    PersistentController persistentController =
+        Get.find<PersistentController>();
+    Team relevantTeam = persistentController.getSpecificTeam(teamId);
+    relevantTeam.players.add(player);
     DocumentReference<Map<String, dynamic>> selectedTeam =
-        _db.collection("teams").doc(team.id);
+        _db.collection("teams").doc(teamId);
 
     // get a list of player references from the document
     DocumentSnapshot snapshot = await selectedTeam.get();
@@ -67,7 +92,6 @@ class DatabaseRepository {
 
     // update the list of references in the respective team
     await selectedTeam.update({'players': playerReferences});
-    print("update worked");
   }
 
   /// @return asynchronous reference to Game object that was saved to firebase
@@ -87,13 +111,6 @@ class DatabaseRepository {
 
   Future<QuerySnapshot> getAllTeams() async {
     return await _db.collection("teams").get();
-  }
-
-  Future<DocumentReference> getTeamReference(Team team) async {
-    DocumentReference docRef = await _db.collection("teams").doc(team.id);
-    logger.d(
-        "Trying to get team reference for team ${team.id} Result: ${docRef}");
-    return docRef;
   }
 
   /// @return asynchronous reference to GameAction object that was saved to firebase

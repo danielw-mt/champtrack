@@ -11,7 +11,7 @@ class Player {
   List<String> positions;
   List<String> games;
   DocumentReference? clubId;
-  DocumentReference? teamId;
+  List<String> teams;
   LiveEfScore efScore;
 
   Player(
@@ -22,7 +22,7 @@ class Player {
       this.number = 0,
       this.positions = const [""],
       this.clubId = null,
-      this.teamId = null,
+      this.teams = const [""],
       this.games = const [""]})
       : efScore = LiveEfScore();
 
@@ -35,7 +35,7 @@ class Player {
       'number': number,
       'positions': positions,
       'clubId': clubId,
-      'teamId': teamId,
+      'teams': teams,
       'games': games
     };
   }
@@ -51,21 +51,13 @@ class Player {
   // @return Player object created from map representation of Player
   factory Player.fromMap(Map<String, dynamic> map) {
     String firstName = map["firstName"];
-    print("firstName worked");
     String lastName = map["lastName"];
-    print("lastname worked");
     String nickName = map["nickName"];
-    print("nickname worked");
     int number = map["number"];
-    print("number worked");
     List<String> positions = map["positions"].cast<String>();
-    print("positions worked");
     DocumentReference clubId = map["clubId"];
-    print("clubid worked");
-    DocumentReference teamId = map["teamId"];
-    print("teamid worked");
+    List<String> teams = map["teams"].cast<String>();
     List<String> games = map["games"].cast<String>();
-    print("games worked");
     return Player(
         firstName: firstName,
         lastName: lastName,
@@ -73,7 +65,7 @@ class Player {
         number: number,
         positions: positions,
         clubId: clubId,
-        teamId: teamId,
+        teams: teams,
         games: games);
   }
 

@@ -10,23 +10,27 @@ import '../../strings.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'player_edit_form.dart';
 
-class PlayersList extends GetView<TempController> {
+class PlayersList extends StatefulWidget {
+  const PlayersList({Key? key}) : super(key: key);
+
+  @override
+  State<PlayersList> createState() => _PlayersListState();
+}
+
+class _PlayersListState extends State<PlayersList> {
   @override
   Widget build(BuildContext context) {
     return GetBuilder<TempController>(
         id: "players-list",
-        builder: (globalController) {
+        builder: (tempController) {
           int numberOfPlayers =
-              globalController.getPlayersFromSelectedTeam().length;
+              tempController.getPlayersFromSelectedTeam().length;
           List<Player> playersList =
-              globalController.getPlayersFromSelectedTeam();
+              tempController.getPlayersFromSelectedTeam();
           return Expanded(
             child: SingleChildScrollView(
               child: Stack(children: [
-                // Container(
-                //   margin: EdgeInsets.only(bottom: , right: 500),
-                //   child: FloatingActionButton(onPressed: () {}),
-                // ),
+                // add player button
                 Positioned(
                   right: 30,
                   bottom: 30,
@@ -48,6 +52,7 @@ class PlayersList extends GetView<TempController> {
                     child: Icon(Icons.add),
                   ),
                 ),
+                // data column displaying players
                 SizedBox(
                   height: MediaQuery.of(context).size.height,
                   width: double.infinity,
@@ -116,7 +121,9 @@ class PlayersList extends GetView<TempController> {
                                           mainAxisAlignment:
                                               MainAxisAlignment.center,
                                           children: [
-                                            PlayerForm(playersList[index].id.toString())
+                                            PlayerForm(playersList[index]
+                                                .id
+                                                .toString())
                                           ],
                                         ),
                                       ),
