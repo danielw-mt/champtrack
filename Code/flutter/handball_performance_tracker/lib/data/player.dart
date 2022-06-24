@@ -20,10 +20,10 @@ class Player {
       this.lastName = "",
       this.nickName = "",
       this.number = 0,
-      this.positions = const [],
+      this.positions = const [""],
       this.clubId = null,
       this.teamId = null,
-      this.games = const []})
+      this.games = const [""]})
       : efScore = LiveEfScore();
 
   // @return Map<String,dynamic> as representation of Player object that can be saved to firestore
@@ -33,7 +33,7 @@ class Player {
       'lastName': lastName,
       'nickName': nickName,
       'number': number,
-      'position': positions,
+      'positions': positions,
       'clubId': clubId,
       'teamId': teamId,
       'games': games
@@ -51,13 +51,21 @@ class Player {
   // @return Player object created from map representation of Player
   factory Player.fromMap(Map<String, dynamic> map) {
     String firstName = map["firstName"];
+    print("firstName worked");
     String lastName = map["lastName"];
+    print("lastname worked");
     String nickName = map["nickName"];
+    print("nickname worked");
     int number = map["number"];
+    print("number worked");
     List<String> positions = map["positions"].cast<String>();
+    print("positions worked");
     DocumentReference clubId = map["clubId"];
+    print("clubid worked");
     DocumentReference teamId = map["teamId"];
+    print("teamid worked");
     List<String> games = map["games"].cast<String>();
+    print("games worked");
     return Player(
         firstName: firstName,
         lastName: lastName,

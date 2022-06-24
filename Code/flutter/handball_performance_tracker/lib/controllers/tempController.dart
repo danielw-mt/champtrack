@@ -80,6 +80,8 @@ class TempController extends GetxController {
     player.teamId = await repository.getTeamReference(_selectedTeam.value);
     Club loggedInClub = persistentController.getLoggedInClub();
     player.clubId = await repository.getClubReference(loggedInClub);
+    player.positions = [""];
+    player.games = [""];
     DocumentReference docRef = await repository.addPlayer(player);
     player.id = docRef.id;
     _selectedTeam.value.players.add(player);
