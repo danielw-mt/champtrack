@@ -1,10 +1,25 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:handball_performance_tracker/data/game.dart';
 import 'package:handball_performance_tracker/data/game_action.dart';
 import 'package:handball_performance_tracker/data/player.dart';
+import 'package:logger/logger.dart';
+
+var logger = Logger(
+  printer: PrettyPrinter(
+      methodCount: 2, // number of method calls to be displayed
+      errorMethodCount: 8, // number of method calls if stacktrace is provided
+      lineLength: 120, // width of the output
+      colors: true, // Colorful log messages
+      printEmojis: true, // Print an emoji for each log message
+      printTime: false // Should each log print contain a timestamp
+      ),
+);
 
 class DatabaseRepository {
-  final FirebaseFirestore _db = FirebaseFirestore.instance;
+  //FirebaseApp devApp = await Firebase.initializeApp(name: "dev", options: DevFirebaseOptions.currentPlatform);
+  //final FirebaseFirestore _db = FirebaseFirestore.instance;
+  final FirebaseFirestore _db = FirebaseFirestore.instanceFor(app: Firebase.app('dev'));
 
   /// @return asynchronous reference to Player object that was saved to firebase
 
