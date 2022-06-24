@@ -233,9 +233,18 @@ class PlayerFormState extends State<PlayerForm> {
                             children: [
                               Text(positionNames[item]),
                               Checkbox(
-                                  value: false,
+                                  value: player.positions
+                                      .contains(positionNames[item]),
                                   onChanged: (value) {
-                                    if (value == true) {}
+                                    setState(() {
+                                      if (value == true) {
+                                        player.positions
+                                            .add(positionNames[item]);
+                                      } else {
+                                        player.positions
+                                            .remove(positionNames[item]);
+                                      }
+                                    });
                                   })
                             ],
                           );
