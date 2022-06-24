@@ -285,7 +285,7 @@ class TempController extends GetxController {
   /// setter for gameRunning
   setGameIsRunning(bool gameIsRunning) {
     _gameRunning.value = gameIsRunning;
-    update(["start-stop-icon", "start-button"]);
+    update(["start-stop-icon", "start-button", "game-is-running-button"]);
   }
 
   /// @return rx list

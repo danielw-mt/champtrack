@@ -12,3 +12,8 @@ Color attackLightColor = Color(0xffeceef3);
 
 // background color
 Color backgroundColor = Color(0xfff1f2f2);
+
+// button colors
+Color buttonDarkBlueColor = Color(0xff2f3a8f);
+Color buttonGreyColor = Color(0xffd9d9d9);
+Color buttonLightBlueColor = Color(0xffc7d0f4);
