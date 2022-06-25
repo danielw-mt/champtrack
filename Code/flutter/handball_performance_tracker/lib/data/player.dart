@@ -28,11 +28,6 @@ class Player {
 
   // @return Map<String,dynamic> as representation of Player object that can be saved to firestore
   Map<String, dynamic> toMap() {
-    print("player to map");
-    print("teams" + teams.toString());
-    print("club" + clubId.toString());
-    print("pos" + positions.toString());
-    print("games" + games.toString());
     return {
       'firstName': firstName,
       'lastName': lastName,

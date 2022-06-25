@@ -91,7 +91,6 @@ class _StartGameScreenState extends State<StartGameScreen> {
             // go to page 1
             if (startGameFlowStep == 0) {
               setState(() {
-                print("page 0 or 2");
                 startGameFlowStep = 1;
               });
               return;

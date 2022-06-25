@@ -13,7 +13,6 @@ import '../strings.dart';
 void startGame(BuildContext context) async {
   TempController tempController = Get.find<TempController>();
   PersistentController persistentController = Get.find<PersistentController>();
-  print("in start game");
   // check if enough players have been selected
   var numPlayersOnField = tempController.getOnFieldPlayers().length;
   if (numPlayersOnField != PLAYER_NUM) {

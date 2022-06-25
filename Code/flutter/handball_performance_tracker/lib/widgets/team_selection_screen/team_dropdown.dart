@@ -43,7 +43,6 @@ class TeamDropdown extends GetView<TempController> {
             },
             // build dropdown item widgets
             items: persistentController.getAvailableTeams().map((Team team) {
-              print("adding ${team.name}");
               return DropdownMenuItem<Team>(
                   value: team, child: Text(team.name));
             }).toList());
