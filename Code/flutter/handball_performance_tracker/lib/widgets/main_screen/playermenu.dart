@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:handball_performance_tracker/constants/game_actions.dart';
 import 'package:handball_performance_tracker/utils/icons.dart';
-import '../../strings.dart';
+import '../../constants/stringsGeneral.dart';
+import '../../constants/stringsGameScreen.dart';
 import 'package:handball_performance_tracker/widgets/main_screen/field.dart';
 import 'package:handball_performance_tracker/controllers/persistentController.dart';
 import '../../controllers/tempController.dart';
@@ -51,7 +52,7 @@ void callPlayerMenu(context) {
             const Align(
               alignment: Alignment.topLeft,
               child: Text(
-                Strings.lPlayer,
+                StringsGeneral.lPlayer,
                 textAlign: TextAlign.left,
                 style: TextStyle(
                   color: Colors.black,
@@ -264,7 +265,7 @@ GetBuilder<TempController> buildDialogButton(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Text(
-                    Strings.lNoAssist,
+                    StringsGameScreen.lNoAssist,
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: (width * 0.03),

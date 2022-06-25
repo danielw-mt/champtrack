@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:handball_performance_tracker/constants/stringsTeamManagement.dart';
 import '../../controllers/persistentController.dart';
 import '../../controllers/tempController.dart';
 import '../../data/player.dart';
 import '../../data/team.dart';
 import 'on_field_checkbox.dart';
-import '../../strings.dart';
+import '../../constants/stringsGeneral.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'player_edit_form.dart';
 
@@ -23,14 +24,14 @@ class PlayersList extends StatelessWidget {
             child: DataTable(
               columns: const <DataColumn>[
                 DataColumn(
-                  label: Text(Strings.lName),
+                  label: Text(StringsGeneral.lName),
                 ),
                 DataColumn(
-                  label: Text(Strings.lNumber),
+                  label: Text(StringsGeneral.lNumber),
                 ),
-                DataColumn(label: Text(Strings.lPosition)),
-                DataColumn(label: Text(Strings.lPlayerStartingOnField)),
-                DataColumn(label: Text(Strings.lEdit))
+                DataColumn(label: Text(StringsGeneral.lPosition)),
+                DataColumn(label: Text(StringsTeamManagement.lPlayerStartingOnField)),
+                DataColumn(label: Text(StringsTeamManagement.lEdit))
               ],
               rows: List<DataRow>.generate(
                 numberOfPlayers,
@@ -79,12 +80,12 @@ class PlayersList extends StatelessWidget {
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
                                       children: [
-                                        Text(Strings.lEditPlayer),
+                                        Text(StringsTeamManagement.lEditPlayer),
                                         ElevatedButton(
                                             onPressed: () {
                                               // TODO implement delete player
                                             },
-                                            child: Text(Strings.lDeletePlayer)),
+                                            child: Text(StringsTeamManagement.lDeletePlayer)),
                                       ]),
                                   PlayerForm(playerId: playerId)
                                 ],

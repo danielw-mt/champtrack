@@ -6,7 +6,9 @@ import 'package:handball_performance_tracker/screens/dashboard.dart';
 import 'package:handball_performance_tracker/utils/gameControl.dart';
 import 'package:handball_performance_tracker/widgets/start_game_screen/player_positioning.dart';
 import 'package:handball_performance_tracker/widgets/start_game_screen/start_game_form.dart';
-import 'package:handball_performance_tracker/strings.dart';
+import 'package:handball_performance_tracker/constants/stringsDashboard.dart';
+import 'package:handball_performance_tracker/constants/stringsGeneral.dart';
+import 'package:handball_performance_tracker/constants/stringsGameSettings.dart';
 import 'package:handball_performance_tracker/widgets/team_settings_screen/players_list.dart';
 import '../widgets/nav_drawer.dart';
 import '../widgets/settings_screen/game_start_stop_buttons.dart';
@@ -32,7 +34,7 @@ class _StartGameScreenState extends State<StartGameScreen> {
     if (!Get.isRegistered<TempController>())
       return Column(
         children: [
-          Text(Strings.lHotReloadError),
+          Text(StringsGeneral.lHotReloadError),
           ElevatedButton(
               onPressed: () {
                 Get.toNamed("Dashboard");
@@ -90,8 +92,8 @@ class _StartGameScreenState extends State<StartGameScreen> {
         },
         // when page 0 is reached change the text of the button
         child: startGameFlowStep == 0
-            ? Text(Strings.lDashboard)
-            : Text(Strings.lBack),
+            ? Text(StringsDashboard.lDashboard)
+            : Text(StringsGeneral.lBack),
       ),
       // 'Next' button
       ElevatedButton(
@@ -111,9 +113,9 @@ class _StartGameScreenState extends State<StartGameScreen> {
               if (tempController.getOnFieldPlayers().length != 7) {
                 Alert(
                         context: context,
-                        title: Strings.lWarningPlayerNumberErrorMessage,
+                        title: StringsGameSettings.lStartGameAlertHeader,
                         type: AlertType.error,
-                        desc: Strings.lPlayerNumberErrorMessage)
+                        desc: StringsGameSettings.lStartGameAlert)
                     .show();
               } else {
                 setState(() {
@@ -138,8 +140,8 @@ class _StartGameScreenState extends State<StartGameScreen> {
           },
           // when page 3 is reached change the text of the button
           child: startGameFlowStep == 3
-              ? Text(Strings.lStartGameButton)
-              : Text(Strings.lNext))
+              ? Text(StringsGameSettings.lStartGameButton)
+              : Text(StringsGeneral.lNext))
     ]);
   }
 }
