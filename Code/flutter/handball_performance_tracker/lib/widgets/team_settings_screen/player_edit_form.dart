@@ -118,11 +118,12 @@ class PlayerFormState extends State<PlayerForm> {
                     controller: firstNameController,
                     decoration: InputDecoration(
                         border: OutlineInputBorder(),
-                        labelText: Strings.lFirstName),
+                        labelText: Strings.lFirstName,
+                        hintText: "*"),
                     // The validator receives the text that the user has entered.
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Please enter some text';
+                        return Strings.lTextFieldEmpty;
                       }
                       return null;
                     },
@@ -134,11 +135,12 @@ class PlayerFormState extends State<PlayerForm> {
                     controller: lastNameController,
                     decoration: InputDecoration(
                         border: OutlineInputBorder(),
-                        labelText: Strings.lLastName),
+                        labelText: Strings.lLastName,
+                        hintText: "*"),
                     // The validator receives the text that the user has entered.
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Please enter some text';
+                        return Strings.lTextFieldEmpty;
                       }
                       return null;
                     },
@@ -158,7 +160,8 @@ class PlayerFormState extends State<PlayerForm> {
                     controller: nickNameController,
                     decoration: InputDecoration(
                         border: OutlineInputBorder(),
-                        labelText: Strings.lNickName),
+                        labelText: Strings.lNickName,
+                        hintText: Strings.lOptional),
                     // The validator receives the text that the user has entered.
                     validator: (value) {
                       // if (value == null || value.isEmpty) {
@@ -175,11 +178,18 @@ class PlayerFormState extends State<PlayerForm> {
                     keyboardType: TextInputType.number,
                     decoration: InputDecoration(
                         border: OutlineInputBorder(),
-                        labelText: Strings.lShirtNumber),
+                        labelText: Strings.lShirtNumber,
+                        hintText: '*'),
                     // The validator receives the text that the user has entered.
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Please enter some text';
+                        return Strings.lTextFieldEmpty;
+                      }
+                      if (int.tryParse(value.toString()) == null) {
+                        return Strings.lNumberFieldNotValid;
+                      }
+                      if (value.length > 3) {
+                        return Strings.lNumberTooLong;
                       }
                       return null;
                     },

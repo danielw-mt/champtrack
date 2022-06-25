@@ -150,4 +150,8 @@ class Strings {
   static const String lPlayerStartingOnField = "Spieler in Startaufstellung";
   static const String lPlayerEditMode = "Spieler Details bearbeiten";
   static const String lPlayerCreateMode = "Neuen Spieler anlegen";
+  static const String lTextFieldEmpty = "Bitte Text eingeben";
+  static const String lOptional = "optional";
+  static const String lNumberFieldNotValid = "Bitte gültige Nummer eingeben";
+  static const String lNumberTooLong = "Bitte kürzere Nummer eingeben"; 
 }
