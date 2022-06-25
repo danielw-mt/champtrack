@@ -203,80 +203,108 @@ class PlayerFormState extends State<PlayerForm> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                Column(
-                  children: [
-                    Text(Strings.lTeams),
-                    SizedBox(
+                FormField(
+                  builder: (state) => Column(
+                    children: [
+                      Text(Strings.lTeams),
+                      SizedBox(
+                          width: width * 0.25,
+                          height: 100,
+                          child: ListView.builder(
+                              itemCount: availableTeams.length,
+                              itemBuilder: (context, index) {
+                                Team relevantTeam = availableTeams[index];
+                                return Row(
+                                  children: [
+                                    Text(relevantTeam.name),
+                                    Checkbox(
+                                        value: isPlayerPartOfTeam(
+                                            relevantTeam.id.toString()),
+                                        onChanged: (value) {
+                                          setState(() {
+                                            if (value == true) {
+                                              player.teams.add("teams/" +
+                                                  relevantTeam.id.toString());
+                                            } else {
+                                              player.teams.remove("teams/" +
+                                                  relevantTeam.id.toString());
+                                            }
+                                          });
+                                        })
+                                  ],
+                                );
+                              })),
+                      Text(
+                        state.errorText ?? '',
+                        style: TextStyle(
+                          color: Theme.of(context).errorColor,
+                        ),
+                      )
+                    ],
+                  ),
+                  validator: (value) {
+                    if (player.teams.length == 0) {
+                      return Strings.lTeamMissing;
+                    }
+                    return null;
+                  },
+                ),
+                FormField(
+                  builder: (state) => Column(
+                    children: [
+                      Text(Strings.lPosition),
+                      SizedBox(
                         width: width * 0.25,
                         height: 100,
                         child: ListView.builder(
-                            itemCount: availableTeams.length,
-                            itemBuilder: (context, index) {
-                              Team relevantTeam = availableTeams[index];
-                              return Row(
-                                children: [
-                                  Text(relevantTeam.name),
-                                  Checkbox(
-                                      value: isPlayerPartOfTeam(
-                                          relevantTeam.id.toString()),
-                                      onChanged: (value) {
-                                        setState(() {
-                                          if (value == true) {
-                                            player.teams.add("teams/" +
-                                                relevantTeam.id.toString());
-                                          } else {
-                                            player.teams.remove("teams/" +
-                                                relevantTeam.id.toString());
-                                          }
-                                        });
-                                      })
-                                ],
-                              );
-                            })),
-                  ],
-                ),
-                Column(
-                  children: [
-                    Text(Strings.lPosition),
-                    SizedBox(
-                      width: width * 0.25,
-                      height: 100,
-                      child: ListView.builder(
-                        itemCount: 7,
-                        shrinkWrap: true,
-                        itemBuilder: (context, item) {
-                          List<String> positionNames = [
-                            Strings.lGoalkeeper,
-                            Strings.lLeftBack,
-                            Strings.lCenterBack,
-                            Strings.lRightBack,
-                            Strings.lLeftWinger,
-                            Strings.lCenterForward,
-                            Strings.lRightWinger
-                          ];
-                          return Row(
-                            children: [
-                              Text(positionNames[item]),
-                              Checkbox(
-                                  value: player.positions
-                                      .contains(positionNames[item]),
-                                  onChanged: (value) {
-                                    setState(() {
-                                      if (value == true) {
-                                        player.positions
-                                            .add(positionNames[item]);
-                                      } else {
-                                        player.positions
-                                            .remove(positionNames[item]);
-                                      }
-                                    });
-                                  })
-                            ],
-                          );
-                        },
+                          itemCount: 7,
+                          shrinkWrap: true,
+                          itemBuilder: (context, item) {
+                            List<String> positionNames = [
+                              Strings.lGoalkeeper,
+                              Strings.lLeftBack,
+                              Strings.lCenterBack,
+                              Strings.lRightBack,
+                              Strings.lLeftWinger,
+                              Strings.lCenterForward,
+                              Strings.lRightWinger
+                            ];
+                            return Row(
+                              children: [
+                                Text(positionNames[item]),
+                                Checkbox(
+                                    value: player.positions
+                                        .contains(positionNames[item]),
+                                    onChanged: (value) {
+                                      setState(() {
+                                        if (value == true) {
+                                          player.positions
+                                              .add(positionNames[item]);
+                                        } else {
+                                          player.positions
+                                              .remove(positionNames[item]);
+                                        }
+                                      });
+                                    })
+                              ],
+                            );
+                          },
+                        ),
                       ),
-                    ),
-                  ],
+                      Text(
+                        state.errorText ?? '',
+                        style: TextStyle(
+                          color: Theme.of(context).errorColor,
+                        ),
+                      )
+                    ],
+                  ),
+                  validator: (value) {
+                    if (player.positions.length == 0) {
+                      return Strings.lPositionMissing;
+                    }
+                    return null;
+                  },
                 )
               ],
             ),

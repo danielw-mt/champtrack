@@ -131,7 +131,7 @@ class Strings {
   // team settings screen
   static const String lName = "Name";
   static const String lNumber = "Nummer";
-  static const String lPosition = "Position";
+  static const String lPosition = "Position*";
   static const String lEdit = "Bearbeiten";
   static const String lEditPlayer = "Player Bearbeiten";
   static const String lDeletePlayer = "Löschen";
@@ -139,7 +139,7 @@ class Strings {
   static const String lLastName = "Nachname";
   static const String lNickName = "Spitzname";
   static const String lShirtNumber = "Trikotnummer";
-  static const String lTeams = "Mannschaften";
+  static const String lTeams = "Mannschaften*";
   static const String lGoalkeeper = "TW";
   static const String lLeftBack = "RL";
   static const String lCenterBack = "RM";
@@ -153,5 +153,7 @@ class Strings {
   static const String lTextFieldEmpty = "Bitte Text eingeben";
   static const String lOptional = "optional";
   static const String lNumberFieldNotValid = "Bitte gültige Nummer eingeben";
-  static const String lNumberTooLong = "Bitte kürzere Nummer eingeben"; 
+  static const String lNumberTooLong = "Bitte kürzere Nummer eingeben";
+  static const String lPositionMissing = "Bitte Position auswählen";
+  static const String lTeamMissing = "Bitte Team auswählen";
 }
