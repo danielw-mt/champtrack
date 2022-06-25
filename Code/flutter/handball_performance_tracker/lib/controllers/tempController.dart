@@ -6,7 +6,6 @@ import '../constants/settings_config.dart';
 import 'persistentController.dart';
 import '../data/game_action.dart';
 import '../data/player.dart';
-import '../data/club.dart';
 import '../data/team.dart';
 import '../utils/feed_logic.dart';
 import '../utils/player_helper.dart';
