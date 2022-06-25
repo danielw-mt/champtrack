@@ -10,7 +10,7 @@ import 'config/firebase_options.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
-import 'strings.dart';
+import 'constants/stringsGeneral.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 void main() async {
@@ -18,7 +18,7 @@ void main() async {
 
   // start app
   runApp(GetMaterialApp(
-      title: Strings.lAppTitle,
+      title: StringsGeneral.lAppTitle,
       theme: ThemeData(
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
@@ -62,7 +62,7 @@ void main() async {
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 16),
-                child: Text(Strings.lError + ': ${snapshot.error}'),
+                child: Text(StringsGeneral.lError + ': ${snapshot.error}'),
               )
             ];
           } else {
@@ -74,7 +74,7 @@ void main() async {
               ),
               Padding(
                 padding: EdgeInsets.only(top: 16),
-                child: Text(Strings.lConnectionCheck),
+                child: Text(StringsGeneral.lConnectionCheck),
               )
             ];
           }
@@ -100,11 +100,11 @@ Future<dynamic> _startupCheck() async {
     // I am connected to a mobile network.
     FirebaseFirestore db = FirebaseFirestore.instance;
     db.enableNetwork();
-    print(Strings.lConnected);
+    print(StringsGeneral.lConnected);
     return "";
   } else {
     // TODO define behaviour for not connected i.e. wait 5 secs and try again
-    print(Strings.lNot + ' ' + Strings.lConnected);
+    print(StringsGeneral.lNot + ' ' + StringsGeneral.lConnected);
   }
 }
 

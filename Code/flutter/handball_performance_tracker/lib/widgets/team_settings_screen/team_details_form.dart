@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../strings.dart';
+import 'package:handball_performance_tracker/constants/stringsTeamManagement.dart';
+import '../../constants/stringsGeneral.dart';
 import '../../controllers/tempController.dart';
 
 // Create a Form widget.
@@ -32,18 +33,18 @@ class TeamDetailsFormState extends State<TeamDetailsForm> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(Strings.lTeamName),
+              Text(StringsTeamManagement.lTeamName),
               TextFormField(
                 initialValue: gameController.getSelectedTeam().name,
                 // The validator receives the text that the user has entered.
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return Strings.lEmptyFieldWarning;
+                    return StringsTeamManagement.lEmptyFieldWarning;
                   }
                   return null;
                 },
               ),
-              Text(Strings.lTeamType),
+              Text(StringsTeamManagement.lTeamType),
               // TODO implement a dropdown for selecting the team type based on the constants team_constants.dart
               // TODO implement a textfield that allows to set the league
               Padding(
@@ -57,11 +58,11 @@ class TeamDetailsFormState extends State<TeamDetailsForm> {
                       // If the form is valid, display a snackbar. In the real world,
                       // you'd often call a server or save the information in a database.
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text(Strings.lProcessingData)),
+                        const SnackBar(content: Text(StringsGeneral.lProcessingData)),
                       );
                     }
                   },
-                  child: const Text(Strings.lSubmitButton),
+                  child: const Text(StringsTeamManagement.lSubmitButton),
                 ),
               ),
             ],

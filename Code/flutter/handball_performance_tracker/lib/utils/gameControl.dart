@@ -8,7 +8,8 @@ import '../data/game.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 
-import '../strings.dart';
+import '../constants/stringsGeneral.dart';
+import '../constants/stringsGameSettings.dart';
 
 void startGame(BuildContext context) async {
   TempController tempController = Get.find<TempController>();
@@ -20,9 +21,9 @@ void startGame(BuildContext context) async {
     // create alert if someone tries to start the game without enough players
     Alert(
             context: context,
-            title: Strings.lStartGameAlertHeader,
+            title: StringsGameSettings.lStartGameAlertHeader,
             type: AlertType.error,
-            desc: Strings.lStartGameAlert)
+            desc: StringsGameSettings.lStartGameAlert)
         .show();
     return;
   }

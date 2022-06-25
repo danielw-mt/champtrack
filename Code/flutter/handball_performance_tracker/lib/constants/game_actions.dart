@@ -1,4 +1,5 @@
-import 'package:handball_performance_tracker/strings.dart';
+import 'package:handball_performance_tracker/constants/stringsGameScreen.dart';
+import 'package:handball_performance_tracker/constants/stringsGeneral.dart';
 
 const String attack = "attack";
 const String defense = "defense";
@@ -29,23 +30,23 @@ const String negativeAction = "neg";
 
 Map<String, Map<String, String>> actionMapping = {
   attack: {
-    Strings.lRedCard: redCard,
-    Strings.lYellowCard: yellowCard,
-    Strings.lTimePenalty: timePenalty,
-    Strings.lGoal: goal,
-    Strings.lOneVsOneAnd7m: oneVsOne,
-    Strings.lTwoMin: twoMin,
-    Strings.lErrThrow: errThrow,
-    Strings.lTrf: trf,
+    StringsGameScreen.lRedCard: redCard,
+    StringsGameScreen.lYellowCard: yellowCard,
+    StringsGameScreen.lTimePenalty: timePenalty,
+    StringsGameScreen.lGoal: goal,
+    StringsGameScreen.lOneVsOneAnd7m: oneVsOne,
+    StringsGameScreen.lTwoMin: twoMin,
+    StringsGameScreen.lErrThrow: errThrow,
+    StringsGameScreen.lTrf: trf,
   },
   defense: {
-    Strings.lRedCard: redCard,
-    Strings.lYellowCard: yellowCard,
-    Strings.lFoul7m: foulWithSeven,
-    Strings.lTimePenalty: timePenalty,
-    Strings.lBlockNoBall: blockNoBall,
-    Strings.lBlockAndSteal: blockAndSteal,
-    Strings.lTrf: trf,
+    StringsGameScreen.lRedCard: redCard,
+    StringsGameScreen.lYellowCard: yellowCard,
+    StringsGameScreen.lFoul7m: foulWithSeven,
+    StringsGameScreen.lTimePenalty: timePenalty,
+    StringsGameScreen.lBlockNoBall: blockNoBall,
+    StringsGameScreen.lBlockAndSteal: blockAndSteal,
+    StringsGameScreen.lTrf: trf,
   }
 };
 

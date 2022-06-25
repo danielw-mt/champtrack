@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../strings.dart';
+import '../../constants/stringsGeneral.dart';
 import '../../controllers/tempController.dart';
 
 // Bottom Nav Bar for team settings screen
@@ -23,15 +23,15 @@ class TeamSettingsBar extends StatelessWidget {
             },
             tabs: [
               Tab(
-                text: Strings.lPlayer,
+                text: StringsGeneral.lPlayer,
                 icon: Icon(Icons.sports_handball),
               ),
               Tab(
-                text: Strings.lGames,
+                text: StringsGeneral.lGames,
                 icon: Icon(Icons.list_alt),
               ),
               Tab(
-                text: Strings.lTeamDetails,
+                text: StringsGeneral.lTeamDetails,
                 icon: Icon(Icons.book),
               ),
             ],
