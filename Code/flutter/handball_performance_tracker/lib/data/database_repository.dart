@@ -41,7 +41,7 @@ class DatabaseRepository {
     List<String> teamReferenceStrings = player.teams;
     teamReferenceStrings.forEach((String teamReferenceString) async {
       DocumentReference<Map<String, dynamic>> relevantTeam =
-          _db.collection("teams").doc(teamReferenceString);
+          _db.doc(teamReferenceString);
 
       // get a list of player references from the document
       DocumentSnapshot snapshot = await relevantTeam.get();

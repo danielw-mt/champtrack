@@ -56,7 +56,7 @@ class TempController extends GetxController {
     repository.updatePlayer(player);
     PersistentController persistentController =
         Get.find<PersistentController>();
-    // TODO update where necessary
+    update(["players-list"]);
   }
 
   void deletePlayer(Player player) async {
@@ -65,6 +65,7 @@ class TempController extends GetxController {
       _selectedTeam.value.onFieldPlayers.remove(player);
     }
     repository.deletePlayer(player);
+    update(["players-list"]);
   }
 
   void addPlayer(Player player) async {
@@ -77,6 +78,7 @@ class TempController extends GetxController {
     player.teams.forEach((String teamReference) {
       repository.addPlayerToTeam(player, teamReference);
     });
+    update(["players-list"]);
   }
 
   /// get the players from selectedTeam that are currently marked as onFieldPlayers
