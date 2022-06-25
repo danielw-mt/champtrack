@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../strings.dart';
+import 'package:handball_performance_tracker/constants/stringsTeamManagement.dart';
+import '../../constants/stringsGeneral.dart';
 
 class PlayerForm extends StatefulWidget {
   // TODO just receive playerID as argument and build form from state
@@ -56,7 +57,7 @@ class PlayerFormState extends State<PlayerForm> {
                   controller: firstNameController,
                   decoration: InputDecoration(
                       border: OutlineInputBorder(),
-                      labelText: Strings.lFirstName),
+                      labelText: StringsGeneral.lFirstName),
                   // The validator receives the text that the user has entered.
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -72,7 +73,7 @@ class PlayerFormState extends State<PlayerForm> {
                   controller: lastNameController,
                   decoration: InputDecoration(
                       border: OutlineInputBorder(),
-                      labelText: Strings.lLastName),
+                      labelText: StringsGeneral.lLastName),
                   // The validator receives the text that the user has entered.
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -96,7 +97,7 @@ class PlayerFormState extends State<PlayerForm> {
                   controller: nickNameController,
                   decoration: InputDecoration(
                       border: OutlineInputBorder(),
-                      labelText: Strings.lNickName),
+                      labelText: StringsTeamManagement.lNickName),
                   // The validator receives the text that the user has entered.
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -113,7 +114,7 @@ class PlayerFormState extends State<PlayerForm> {
                   keyboardType: TextInputType.number,
                   decoration: InputDecoration(
                       border: OutlineInputBorder(),
-                      labelText: Strings.lShirtNumber),
+                      labelText: StringsTeamManagement.lShirtNumber),
                   // The validator receives the text that the user has entered.
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -133,7 +134,7 @@ class PlayerFormState extends State<PlayerForm> {
             children: [
               Column(
                 children: [
-                  Text(Strings.lTeams),
+                  Text(StringsTeamManagement.lTeams),
                   SizedBox(
                     width: width * 0.25,
                     height: 50,
@@ -150,7 +151,7 @@ class PlayerFormState extends State<PlayerForm> {
               ),
               Column(
                 children: [
-                  Text(Strings.lPosition),
+                  Text(StringsGeneral.lPosition),
                   SizedBox(
                     width: width * 0.25,
                     height: 50,
@@ -159,13 +160,13 @@ class PlayerFormState extends State<PlayerForm> {
                       shrinkWrap: true,
                       itemBuilder: (context, item) {
                         List<String> positionNames = [
-                          Strings.lGoalkeeper,
-                          Strings.lLeftBack,
-                          Strings.lCenterBack,
-                          Strings.lRightBack,
-                          Strings.lLeftWinger,
-                          Strings.lCenterForward,
-                          Strings.lRightWinger
+                          StringsTeamManagement.lGoalkeeper,
+                          StringsTeamManagement.lLeftBack,
+                          StringsTeamManagement.lCenterBack,
+                          StringsTeamManagement.lRightBack,
+                          StringsTeamManagement.lLeftWinger,
+                          StringsTeamManagement.lCenterForward,
+                          StringsTeamManagement.lRightWinger
                         ];
                         return Row(
                           children: [

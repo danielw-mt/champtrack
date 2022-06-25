@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../strings.dart';
+import '../../constants/stringsGeneral.dart';
+import '../../constants/stringsGameScreen.dart';
 import '../../controllers/persistentController.dart';
 import '../../controllers/tempController.dart';
 import 'package:get/get.dart';
@@ -29,7 +30,7 @@ void callActionMenu(BuildContext context) {
   if (tempController.getGameIsRunning() == false) {
     Alert(
       context: context,
-      title: Strings.lGameStartErrorMessage,
+      title: StringsGameScreen.lGameStartErrorMessage,
       type: AlertType.error,
     ).show();
     return;
@@ -132,7 +133,7 @@ Widget buildDialogButtonMenu(
           Align(
             alignment: Alignment.topLeft,
             child: Text(
-              Strings.lOffensePopUpHeader,
+              StringsGameScreen.lOffensePopUpHeader,
               textAlign: TextAlign.left,
               style: TextStyle(
                 color: Colors.black,
@@ -185,7 +186,7 @@ Widget buildDialogButtonMenu(
           const Align(
             alignment: Alignment.topLeft,
             child: Text(
-              Strings.lDeffensePopUpHeader,
+              StringsGameScreen.lDeffensePopUpHeader,
               textAlign: TextAlign.left,
               style: TextStyle(
                 color: Colors.black,

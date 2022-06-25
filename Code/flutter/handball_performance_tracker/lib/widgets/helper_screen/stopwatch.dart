@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../strings.dart';
+import '../../constants/stringsGeneral.dart';
+import '../../constants/stringsGameScreen.dart';
 import '../../controllers/persistentController.dart';
 import 'package:get/get.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
@@ -76,7 +77,7 @@ class StopWatch extends StatelessWidget {
                                       .add(StopWatchExecute.start);
                                 },
                                 child: const Text(
-                                  Strings.lStartTime,
+                                  StringsGameScreen.lStartTime,
                                   style: TextStyle(color: Colors.white),
                                 ),
                               ),
@@ -98,7 +99,7 @@ class StopWatch extends StatelessWidget {
                                       .add(StopWatchExecute.stop);
                                 },
                                 child: const Text(
-                                  Strings.lStopTime,
+                                  StringsGameScreen.lStopTime,
                                   style: TextStyle(color: Colors.white),
                                 ),
                               ),
@@ -121,7 +122,7 @@ class StopWatch extends StatelessWidget {
                                   stopWatchTimer.setPresetTime(mSec: 0);
                                 },
                                 child: const Text(
-                                  Strings.lResetTime,
+                                  StringsGameScreen.lResetTime,
                                   style: TextStyle(color: Colors.white),
                                 ),
                               ),
@@ -160,7 +161,7 @@ class StopWatch extends StatelessWidget {
                                   }
                                 },
                                 child: const Text(
-                                  Strings.lPlusOneTime,
+                                  StringsGameScreen.lPlusOneTime,
                                   style: TextStyle(color: Colors.white),
                                 ),
                               ),
@@ -201,7 +202,7 @@ class StopWatch extends StatelessWidget {
                                   }
                                 },
                                 child: const Text(
-                                  Strings.lMinusOneTime,
+                                  StringsGameScreen.lMinusOneTime,
                                   style: TextStyle(color: Colors.white),
                                 ),
                               ),

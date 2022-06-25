@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../../constants/stringsTeamManagement.dart';
 import '/../controllers/tempController.dart';
-import '../../strings.dart';
+import '../../constants/stringsGeneral.dart';
 import '../../data/player.dart';
 
 class PlayerPositioning extends StatefulWidget {
@@ -39,10 +40,10 @@ class _PlayerPositioningState extends State<PlayerPositioning> {
         width: double.infinity,
         child: DataTable(
           columns: const <DataColumn>[
-            DataColumn(label: Text(Strings.lPlayer)),
-            DataColumn(label: Text(Strings.lShirtNumber)),
+            DataColumn(label: Text(StringsGeneral.lPlayer)),
+            DataColumn(label: Text(StringsTeamManagement.lShirtNumber)),
             DataColumn(
-              label: Text(Strings.lPosition),
+              label: Text(StringsGeneral.lPosition),
             ),
           ],
           rows: List<DataRow>.generate(

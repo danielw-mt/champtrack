@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:handball_performance_tracker/screens/startGameScreen.dart';
 import 'package:handball_performance_tracker/widgets/nav_drawer.dart';
-import '../strings.dart';
+import '../constants/stringsGeneral.dart';
+import '../constants/stringsDashboard.dart';
 import 'package:get/get.dart';
 import '../controllers/persistentController.dart';
 import '../controllers/tempController.dart';
@@ -32,12 +33,12 @@ class Dashboard extends StatelessWidget {
                         children: [
                           ElevatedButton(
                               onPressed: () {},
-                              child: Text(Strings.lManageTeams)),
+                              child: Text(StringsDashboard.lManageTeams)),
                           ElevatedButton(
                               onPressed: () {
                                 Get.to(StartGameScreen());
                               },
-                              child: Text(Strings.lTrackNewGame)),
+                              child: Text(StringsDashboard.lTrackNewGame)),
                         ],
                       ),
                     ]));
