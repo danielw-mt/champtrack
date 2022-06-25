@@ -54,8 +54,6 @@ class TempController extends GetxController {
         .toList()
         .first = player;
     repository.updatePlayer(player);
-    PersistentController persistentController =
-        Get.find<PersistentController>();
     update(["players-list"]);
   }
 
