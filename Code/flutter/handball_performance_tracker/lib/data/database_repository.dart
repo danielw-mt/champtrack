@@ -68,28 +68,26 @@ class DatabaseRepository {
     await _db.collection("players").doc(player.id).update(player.toMap());
   }
 
-  void addPlayerToTeam(Player player, String teamId) async {
-    print("trying to add player ${player.id} to team ${teamId}");
+  /// add player to a team in firebase with teamReference string i.e. teams/ypunI6UsJmTr2LxKh1aw
+  void addPlayerToTeam(Player player, String teamReference) async {
+    print("trying to add player ${player.id} to team ${teamReference}");
     PersistentController persistentController =
         Get.find<PersistentController>();
-    Team relevantTeam = persistentController.getSpecificTeam(teamId);
+    Team relevantTeam = persistentController.getSpecificTeam(teamReference);
     relevantTeam.players.add(player);
     DocumentReference<Map<String, dynamic>> selectedTeam =
-        _db.collection("teams").doc(teamId);
-
+        _db.doc(teamReference);
     // get a list of player references from the document
     DocumentSnapshot snapshot = await selectedTeam.get();
     Map<String, dynamic> snapshotData = snapshot.data() as Map<String, dynamic>;
     List<DocumentReference> playerReferences =
         snapshotData["players"].cast<DocumentReference>();
-
     //get a reference of the player object from the players collection
     DocumentReference<Map<String, dynamic>> relevantPlayer =
         _db.collection("players").doc(player.id);
 
     // add player to reference list
     playerReferences.add(relevantPlayer);
-
     // update the list of references in the respective team
     await selectedTeam.update({'players': playerReferences});
   }

@@ -37,8 +37,12 @@ class PersistentController extends GetxController {
     return _cachedTeamsList;
   }
 
-  Team getSpecificTeam(String id) {
-    return _cachedTeamsList.where((Team team) => team.id == id).first;
+  /// get a team object from cachedTeamsList from reference string
+  /// i.e teams/ypunI6UsJmTr2LxKh1aw
+  Team getSpecificTeam(String teamReference) {
+    return _cachedTeamsList
+        .where((Team team) => teamReference.contains(team.id.toString()))
+        .first;
   }
 
   /// Setter for cachedTeamsList

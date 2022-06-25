@@ -3,6 +3,8 @@ import 'package:handball_performance_tracker/controllers/persistentController.da
 import 'package:handball_performance_tracker/data/team.dart';
 import '../../strings.dart';
 import '../../data/player.dart';
+import '../../data/club.dart';
+import '../../data/database_repository.dart';
 import '../../controllers/tempController.dart';
 import 'package:get/get.dart';
 
@@ -51,8 +53,14 @@ class PlayerFormState extends State<PlayerForm> {
       // otherwise if get a playerID it is edit mode for that specified player
     } else {
       this.player = Player();
+      assignPlayerClubId();
+      // replace the constant lists in player (in default constructor) with dynamic ones
+      this.player.teams = <String>[];
+      this.player.positions = <String>[];
+      this.player.games = <String>[];
       editModeEnabled = false;
     }
+    print("team: " + player.teams.length.toString());
     availableTeams = persistentController.getAvailableTeams();
     super.initState();
   }
@@ -67,6 +75,13 @@ class PlayerFormState extends State<PlayerForm> {
       }
     });
     return playerIsPartOfTeam;
+  }
+
+  void assignPlayerClubId() async {
+    // TODO change this once we can use different clubs
+    Club loggedInClub = persistentController.getLoggedInClub();
+    this.player.clubId =
+        await DatabaseRepository().getClubReference(loggedInClub);
   }
 
   @override

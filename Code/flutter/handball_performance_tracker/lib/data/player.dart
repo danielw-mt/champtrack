@@ -20,14 +20,19 @@ class Player {
       this.lastName = "",
       this.nickName = "",
       this.number = 0,
-      this.positions = const [""],
+      this.positions = const [],
       this.clubId = null,
-      this.teams = const [""],
-      this.games = const [""]})
+      this.teams = const [],
+      this.games = const []})
       : efScore = LiveEfScore();
 
   // @return Map<String,dynamic> as representation of Player object that can be saved to firestore
   Map<String, dynamic> toMap() {
+    print("player to map");
+    print("teams" + teams.toString());
+    print("club" + clubId.toString());
+    print("pos" + positions.toString());
+    print("games" + games.toString());
     return {
       'firstName': firstName,
       'lastName': lastName,
