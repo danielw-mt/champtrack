@@ -86,6 +86,19 @@ class DatabaseRepository {
     await selectedTeam.update({'players': playerReferences});
   }
 
+  void updateOnFieldPlayers(List<Player> onFieldPlayers, Team team) {
+    List<DocumentReference> onFieldPlayerReferences = [];
+    onFieldPlayers.forEach((Player player) {
+      DocumentReference<Map<String, dynamic>> playerReference =
+          _db.collection("players").doc(player.id);
+      onFieldPlayerReferences.add(playerReference);
+    });
+    _db
+        .collection("teams")
+        .doc(team.id)
+        .update({'onFieldPlayers': onFieldPlayerReferences});
+  }
+
   /// @return asynchronous reference to Game object that was saved to firebase
   Future<DocumentReference> addGame(Game game) async {
     return _db.collection("games").add(game.toMap());

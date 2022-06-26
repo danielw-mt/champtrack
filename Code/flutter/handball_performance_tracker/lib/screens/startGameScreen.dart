@@ -107,6 +107,7 @@ class _StartGameScreenState extends State<StartGameScreen> {
                         desc: Strings.lPlayerNumberErrorMessage)
                     .show();
               } else {
+                tempController.updateOnFieldPlayers();
                 startGame(context);
                 Get.to(MainScreen());
                 return;

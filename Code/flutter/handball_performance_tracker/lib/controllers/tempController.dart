@@ -95,6 +95,11 @@ class TempController extends GetxController {
     update(["action-feed", "on-field-checkbox", "players-list"]);
   }
 
+  void updateOnFieldPlayers() {
+    repository.updateOnFieldPlayers(
+        _selectedTeam.value.onFieldPlayers, _selectedTeam.value);
+  }
+
   /// remove the given Player from onFieldPlayers of selectedTeam
   void removeOnFieldPlayer(Player player) {
     _selectedTeam.value.onFieldPlayers.remove(player);
