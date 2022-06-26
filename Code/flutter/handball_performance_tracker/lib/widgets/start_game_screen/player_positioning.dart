@@ -13,7 +13,6 @@ class PlayerPositioning extends StatefulWidget {
 }
 
 class _PlayerPositioningState extends State<PlayerPositioning> {
-
   /// Map containing each player element and the List of positions corresponding to that player
   Map<Player, List<String>> playerMap = {};
 
@@ -26,8 +25,7 @@ class _PlayerPositioningState extends State<PlayerPositioning> {
     TempController tempController = Get.find<TempController>();
     numberOfPlayers = tempController.getOnFieldPlayers().length;
     // fill data structures in state
-    List<Player> onFieldPlayers =
-        tempController.getOnFieldPlayers();
+    List<Player> onFieldPlayers = tempController.getOnFieldPlayers();
     onFieldPlayers.forEach((Player player) {
       playerMap[player] = player.positions;
       selectedPositions.add(player.positions[0]);

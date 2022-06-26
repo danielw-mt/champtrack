@@ -64,14 +64,6 @@ class _StartGameScreenState extends State<StartGameScreen> {
     if (startGameFlowStep == 1) {
       return PlayersList();
     }
-    if (startGameFlowStep == 2) {
-      return PlayerPositioning();
-    }
-
-    if (startGameFlowStep == 3) {
-      // return
-      return Text("Verifiy inputs");
-    }
     return Container();
   }
 
@@ -101,7 +93,6 @@ class _StartGameScreenState extends State<StartGameScreen> {
             // go to page 1
             if (startGameFlowStep == 0) {
               setState(() {
-                print("page 0 or 2");
                 startGameFlowStep = 1;
               });
               return;
@@ -118,29 +109,16 @@ class _StartGameScreenState extends State<StartGameScreen> {
                         desc: StringsGameSettings.lStartGameAlert)
                     .show();
               } else {
-                setState(() {
-                  startGameFlowStep = 2;
-                });
+                tempController.updateOnFieldPlayers();
+                startGame(context);
+                Get.to(MainScreen());
                 return;
               }
             }
-            // go to page 3
-            if (startGameFlowStep == 2) {
-              setState(() {
-                startGameFlowStep = 3;
-              });
-              return;
-            }
-            // start game from last page and go to mainscreen
-            if (startGameFlowStep == 3) {
-              startGame(context);
-              Get.to(MainScreen());
-              return;
-            }
           },
           // when page 3 is reached change the text of the button
-          child: startGameFlowStep == 3
-              ? Text(StringsGameSettings.lStartGameButton)
+          child: startGameFlowStep == 1
+              ? Text(StringsGeneral.lStartGameButton)
               : Text(StringsGeneral.lNext))
     ]);
   }

@@ -9,7 +9,8 @@ import '../controllers/tempController.dart';
 import '../utils/initializeLocalData.dart';
 
 class Dashboard extends StatelessWidget {
-  final PersistentController persistentController = Get.put(PersistentController());
+  final PersistentController persistentController =
+      Get.put(PersistentController());
   final TempController tempController = Get.put(TempController());
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -44,6 +45,7 @@ class Dashboard extends StatelessWidget {
                     ]));
           }
           if (snapshot.hasError) {
+            print(snapshot.error);
             return Column(
               children: [
                 Icon(Icons.error),
