@@ -56,6 +56,7 @@ class TempController extends GetxController {
     update(["players-list"]);
   }
 
+  /// deleting player from game state and firebase
   void deletePlayer(Player player) async {
     _selectedTeam.value.players.remove(player);
     if (_selectedTeam.value.onFieldPlayers.contains(player)) {
@@ -65,12 +66,13 @@ class TempController extends GetxController {
     update(["players-list"]);
   }
 
+  /// adds player to the players collection and the selected teams in the teams 
+  /// collection. 
   void addPlayer(Player player) async {
     PersistentController persistentController =
         Get.find<PersistentController>();
     DocumentReference docRef = await repository.addPlayer(player);
     player.id = docRef.id;
-    _selectedTeam.value.players.add(player);
     // add player to each team inside references
     player.teams.forEach((String teamReference) {
       Team relevantTeam = persistentController.getSpecificTeam(teamReference);

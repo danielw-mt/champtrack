@@ -334,7 +334,6 @@ class PlayerFormState extends State<PlayerForm> {
                     } else {
                       tempController.addPlayer(player);
                     }
-                    tempController.update(['players-list']);
                   }
                 },
                 child: const Text(Strings.lSubmitButton),

@@ -31,11 +31,13 @@ class DatabaseRepository {
     return await _db.collection("clubs").doc(club.id);
   }
 
+  /// delete player from players collection and all the teams he belongs to
   Future<void> deletePlayer(Player player) async {
     // delete player from player collection
     await _db.collection("players").doc(player.id).delete();
     // delete player reference from selected team player references
     List<String> teamReferenceStrings = player.teams;
+    // delete player from each team
     teamReferenceStrings.forEach((String teamReferenceString) async {
       DocumentReference<Map<String, dynamic>> relevantTeam =
           _db.doc(teamReferenceString);
@@ -52,10 +54,25 @@ class DatabaseRepository {
           _db.collection("players").doc(player.id);
       playerReferences.remove(relevantPlayer);
       await relevantTeam.update({'players': playerReferences});
+      // if onFieldPlayer contains player remove him from onFieldplayer list as well
+      List<DocumentReference> onFieldPlayerReferences =
+          snapshotData["onFieldPlayers"].cast<DocumentReference>();
+      // only update onFieldPlayers if it is really necessary
+      bool onFieldPlayersNeedToBeUpdated = false;
+      onFieldPlayerReferences.forEach((DocumentReference reference) {
+        if (reference.id == player.id) {
+          onFieldPlayerReferences.remove(reference);
+          onFieldPlayersNeedToBeUpdated = true;
+        }
+      });
+      if (onFieldPlayersNeedToBeUpdated) {
+        await relevantTeam.update({'onFieldPlayer': onFieldPlayerReferences});
+      }
     });
   }
 
-  // @return asynchronous reference to Player object that was saved to firebase
+  /// @return asynchronous reference to Player object that was saved to firebase
+  /// add player to players collection in firebase
   Future<DocumentReference> addPlayer(Player player) {
     return _db.collection("players").add(player.toMap());
   }
@@ -86,6 +103,7 @@ class DatabaseRepository {
     await selectedTeam.update({'players': playerReferences});
   }
 
+  /// update all onFieldPlayers to the ones that are selected in the @param team
   void updateOnFieldPlayers(List<Player> onFieldPlayers, Team team) {
     List<DocumentReference> onFieldPlayerReferences = [];
     onFieldPlayers.forEach((Player player) {
