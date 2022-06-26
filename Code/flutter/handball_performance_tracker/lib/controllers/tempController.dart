@@ -329,6 +329,7 @@ class TempController extends GetxController {
   }
 
   /// @return rx list
+  /// after click on goal there is only one element "goal", otherwise
   /// first element is the sector as a string, second element distinguishes the distance ("<6", "6to9", ">9")
   var _lastLocation = [].obs;
 

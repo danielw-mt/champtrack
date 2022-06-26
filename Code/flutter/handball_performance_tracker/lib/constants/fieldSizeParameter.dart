@@ -39,6 +39,10 @@ double nineMeterRadiusY = fieldHeight / 2;
 double sixMeterRadiusX = nineMeterRadiusX * 0.7;
 double sixMeterRadiusY = nineMeterRadiusY * 0.7;
 
+// goal width and height
+double goalWidth = sixMeterRadiusX * 0.24;
+double goalHeight = sixMeterRadiusX * 0.4;
+
 // List for gradients and y intercepts of the sector borders
 // To get the gradients its tan(angle) where angle is 20 degree and 55 degree here (to get 35 and 70 degree like in design).
 List gradients = [1.43, 0.36, -0.36, -1.43];
