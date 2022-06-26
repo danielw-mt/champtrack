@@ -3,7 +3,9 @@ import 'package:get/get.dart';
 import '../data/database_repository.dart';
 import '../data/game.dart';
 import '../data/game_action.dart';
+import '../data/player.dart';
 import '../data/team.dart';
+import '../data/club.dart';
 
 /// stores more persistent state
 /// generally more complex variables and data structure that are
@@ -11,6 +13,16 @@ import '../data/team.dart';
 class PersistentController extends GetxController {
   /// handles teams initialization when building MainScreen
   var isInitialized = false;
+
+  Rx<Club> _loggedInClub = Club().obs;
+
+  void setLoggedInClub(Club club) {
+    _loggedInClub.value = club;
+  }
+
+  Club getLoggedInClub() {
+    return _loggedInClub.value;
+  }
 
   ///
   // database handling
@@ -24,6 +36,14 @@ class PersistentController extends GetxController {
   /// Getter for cachedTeamsList
   List<Team> getAvailableTeams() {
     return _cachedTeamsList;
+  }
+
+  /// get a team object from cachedTeamsList from reference string
+  /// i.e teams/ypunI6UsJmTr2LxKh1aw
+  Team getSpecificTeam(String teamReference) {
+    return _cachedTeamsList
+        .where((Team team) => teamReference.contains(team.id.toString()))
+        .first;
   }
 
   /// Setter for cachedTeamsList
@@ -47,11 +67,10 @@ class PersistentController extends GetxController {
   }
 
   /// add action to actions list and firestore
-  void addAction(GameAction action) {
+  Future<void> addAction(GameAction action) async {
     _actions.add(action);
-    repository
-        .addActionToGame(action)
-        .then((DocumentReference doc) => action.id = doc.id);
+    DocumentReference ref = await repository.addActionToGame(action);
+    _actions.last.id = ref.id;
   }
 
   /// return last action that was added
@@ -63,6 +82,12 @@ class PersistentController extends GetxController {
   void setLastAction(GameAction lastAction) {
     _actions.last = lastAction;
     repository.updateAction(lastAction);
+  }
+
+  /// updates playerid of the last action and eff score of player according to last action
+  void setLastActionPlayer(Player player){
+    _actions.last.playerId = player.id!;
+    repository.updateAction(_actions.last);
   }
 
   /// last game object written to firestore

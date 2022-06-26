@@ -7,13 +7,13 @@ import '../../utils/feed_logic.dart';
 
 /// A widget that displays the newest actions. It can be tweaked in lib/const/settings_config
 /// GameActions are periodically removed and can also be removed by clicking on them
-class ActionFeed extends GetView<TempController> {
+class ActionFeed extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetBuilder<TempController>(
       id: "action-feed",
-      builder: (gameController) {
-        List<GameAction> feedActions = gameController.getFeedActions();
+      builder: (tempController) {
+        List<GameAction> feedActions = tempController.getFeedActions();
         return Container(
           alignment: Alignment.centerLeft,
           width: MediaQuery.of(context).size.width * 0.3,
@@ -24,11 +24,11 @@ class ActionFeed extends GetView<TempController> {
                 GameAction feedAction = feedActions[index];
                 String actionType = feedAction.actionType;
                 // get the player object whose id matches the playerId in the action Object
-                Player relevantPlayer = gameController
+                Player relevantPlayer = tempController
                     .getPlayerFromSelectedTeam(feedAction.playerId);
                 return GestureDetector(
                     onTap: () async {
-                      removeFeedItem(feedAction);
+                      removeFeedItem(feedAction, tempController);
                     },
                     child: Column(
                       children: [

@@ -8,21 +8,21 @@ import '../data/game.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 
-import '../strings.dart';
+import '../constants/stringsGeneral.dart';
+import '../constants/stringsGameSettings.dart';
 
 void startGame(BuildContext context) async {
   TempController tempController = Get.find<TempController>();
   PersistentController persistentController = Get.find<PersistentController>();
-  print("in start game");
   // check if enough players have been selected
   var numPlayersOnField = tempController.getOnFieldPlayers().length;
   if (numPlayersOnField != PLAYER_NUM) {
     // create alert if someone tries to start the game without enough players
     Alert(
             context: context,
-            title: Strings.lStartGameAlertHeader,
+            title: StringsGameSettings.lStartGameAlertHeader,
             type: AlertType.error,
-            desc: Strings.lStartGameAlert)
+            desc: StringsGameSettings.lStartGameAlert)
         .show();
     return;
   }
@@ -52,7 +52,7 @@ void startGame(BuildContext context) async {
 
   print("start game, id: ${persistentController.getCurrentGame().id}");
   tempController.setGameIsRunning(true);
-  tempController.refresh();
+  tempController.setPlayerBarPlayers();
 }
 
 void unpauseGame() {
@@ -64,15 +64,17 @@ void unpauseGame() {
       .stopWatch
       .onExecute
       .add(StopWatchExecute.start);
-  tempController.refresh();
 }
 
 void pauseGame() {
   TempController tempController = Get.find<TempController>();
   PersistentController persistentController = Get.find<PersistentController>();
   tempController.setGameIsRunning(false);
-  persistentController.getCurrentGame().stopWatch.onExecute.add(StopWatchExecute.stop);
-  tempController.refresh();
+  persistentController
+      .getCurrentGame()
+      .stopWatch
+      .onExecute
+      .add(StopWatchExecute.stop);
 }
 
 void stopGame() async {
@@ -93,7 +95,6 @@ void stopGame() async {
   persistentController.getCurrentGame().stopWatch.onExecute.add(StopWatchExecute.stop);
 
   tempController.setGameIsRunning(false);
-  tempController.refresh();
 }
 
 void _addGameToPlayers(Game game) {

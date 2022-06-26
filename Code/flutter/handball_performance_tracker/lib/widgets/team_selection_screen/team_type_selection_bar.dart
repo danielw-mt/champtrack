@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import '../../controllers/tempController.dart';
 import 'package:get/get.dart';
-import '../../strings.dart';
-import '../../utils/teamTypeHelpers.dart';
+import '../../constants/stringsGeneral.dart';
+import '../../utils/team_type_helpers.dart';
 
 class TeamTypeSelectionBar extends StatelessWidget {
   @override
@@ -24,15 +24,15 @@ class TeamTypeSelectionBar extends StatelessWidget {
             },
             tabs: [
               Tab(
-                text: Strings.lMenTeams,
+                text: StringsGeneral.lMenTeams,
                 icon: Icon(Icons.male),
               ),
               Tab(
-                text: Strings.lWomenTeams,
+                text: StringsGeneral.lWomenTeams,
                 icon: Icon(Icons.female),
               ),
               Tab(
-                text: Strings.lYouthTeams,
+                text: StringsGeneral.lYouthTeams,
                 icon: Icon(Icons.child_care),
               ),
             ],

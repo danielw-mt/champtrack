@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import '../../controllers/persistentController.dart';
 import 'package:get/get.dart';
-import '../../controllers/tempController.dart';
 
-class ReverseButton extends GetView<TempController> {
+class ReverseButton extends StatelessWidget {
   final PersistentController persistentController = Get.find<PersistentController>();
 
   @override

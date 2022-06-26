@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:handball_performance_tracker/constants/game_actions.dart';
-import 'package:handball_performance_tracker/utils/fieldSizeParameter.dart'
+import 'package:handball_performance_tracker/constants/fieldSizeParameter.dart'
     as fieldSizeParameter;
 import 'dart:math' as math;
 import 'dart:ui' as ui;
@@ -25,7 +25,7 @@ class SectorCalc {
 
   /* 
    * @return List<String> consisting of two elements
-   * the first element is the sector number (from 0 to 5) converted to String,
+   * the first element is the sector's String abbreviation (as taken from positions.dart, either leftOutside, backcourtLeft, backcourtMiddle, backcourtRight, or rightOutside),
    * the second element is the distance of the player from the goal (<6, 6to9, >9)
    */
   List<String> calculatePosition(Offset position) {
@@ -34,9 +34,9 @@ class SectorCalc {
     if (determineGoal(x, y)) {
       return [goal];
     }
-    int sector = determineSector(x, y);
+    String sector = determineSector(x, y);
     String perimeters = determinePerimeter(x, y);
-    return [sector.toString(), perimeters];
+    return [sector, perimeters];
   }
 
   /* Calculates if a point (x,y) is inside the smaller ellipse.
@@ -108,9 +108,9 @@ class SectorCalc {
   }
 
   /* 
-  * Calculates if a point (x,y) is between two sector borders. 
+  * Calculates in which sector of the field (leftOutside, backcourtLeft, backcourtMiddle, backcourtRight, or rightOutside) a point (x,y) is situated 
   */
-  int determineSector(num x, num y) {
+  String determineSector(num x, num y) {
     int sector = -1;
 
     // variables for gradient and intercept of lower line, the first lower line is the bottom horizontal line
@@ -144,7 +144,14 @@ class SectorCalc {
         sector = i;
       }
     }
-    return sector;
+    String sectorOnField = "";
+    if (leftSide) {
+      sectorOnField = sectorsFieldIsLeft[sector];
+    } else {
+      sectorOnField = sectorsFieldIsRight[sector];
+    }
+    print(sectorOnField);
+    return sectorOnField;
   }
 }
 
@@ -154,7 +161,11 @@ class SectorCalc {
 */
 class FieldPainter extends CustomPainter {
   bool leftSide = true;
-  FieldPainter(this.leftSide);
+  Color nineMeterColor;
+  Color sixMeterColor;
+  Color fieldBackgroundColor;
+  FieldPainter(this.leftSide, this.nineMeterColor, this.sixMeterColor,
+      this.fieldBackgroundColor);
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -174,6 +185,14 @@ class FieldPainter extends CustomPainter {
       sweepAngle = math.pi;
       goalOffset = xOffset - fieldSizeParameter.goalWidth / 2;
     }
+    // draw background
+    canvas.drawRect(
+        Rect.fromCenter(
+            center: Offset(fieldSizeParameter.fieldWidth / 2,
+                fieldSizeParameter.fieldHeight / 2),
+            width: fieldSizeParameter.fieldWidth,
+            height: fieldSizeParameter.fieldHeight),
+        Paint()..color = fieldBackgroundColor);
 
     // draw bigger 9m oval
     canvas.drawArc(
@@ -184,7 +203,7 @@ class FieldPainter extends CustomPainter {
         startAngle,
         sweepAngle,
         false,
-        Paint()..color = Color.fromARGB(103, 169, 172, 209));
+        Paint()..color = nineMeterColor);
 
     // draw smaller 6m oval
     canvas.drawArc(
@@ -195,7 +214,7 @@ class FieldPainter extends CustomPainter {
         startAngle,
         sweepAngle,
         false,
-        Paint()..color = Color.fromARGB(141, 129, 142, 216));
+        Paint()..color = sixMeterColor);
 
     // draw 7m line
     // To draw a line you need two points: (x1,y1) and (x2,y2)

@@ -1,7 +1,8 @@
 import 'package:get/get.dart';
 import 'package:handball_performance_tracker/data/database_repository.dart';
+import 'package:handball_performance_tracker/data/game.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
 import '../constants/settings_config.dart';
 import 'persistentController.dart';
 import '../data/game_action.dart';
@@ -27,8 +28,12 @@ class TempController extends GetxController {
   /// setter for selectedTeam
   void setSelectedTeam(Team team) {
     _selectedTeam.value = team;
-    update(
-        ["team-type-selection-bar", "players-list", "team-details-form-state"]);
+    update([
+      "team-type-selection-bar",
+      "players-list",
+      "team-details-form-state",
+      "team-dropdown"
+    ]);
   }
 
   /// return the first player in selectedTeam with the given playerId
@@ -38,9 +43,59 @@ class TempController extends GetxController {
         .first;
   }
 
+  void updatePlayerEfScore(String playerId, GameAction action,
+      {removeAction = false}) {
+    if (removeAction) {
+      _selectedTeam.value.players
+          .where((Player player) => player.id == playerId)
+          .first
+          .removeAction(action);
+    } else {
+      _selectedTeam.value.players
+          .where((Player player) => player.id == playerId)
+          .first
+          .addAction(action);
+    }
+    update(["ef-score-bar"]);
+  }
+
   /// return all players in selectedTeam
   List<Player> getPlayersFromSelectedTeam() {
     return _selectedTeam.value.players;
+  }
+
+  void setPlayer(Player player) {
+    _selectedTeam.value.players
+        .where((Player playerElement) => playerElement.id == player.id)
+        .toList()
+        .first = player;
+    repository.updatePlayer(player);
+    update(["players-list"]);
+  }
+
+  /// deleting player from game state and firebase
+  void deletePlayer(Player player) async {
+    _selectedTeam.value.players.remove(player);
+    if (_selectedTeam.value.onFieldPlayers.contains(player)) {
+      _selectedTeam.value.onFieldPlayers.remove(player);
+    }
+    repository.deletePlayer(player);
+    update(["players-list"]);
+  }
+
+  /// adds player to the players collection and the selected teams in the teams 
+  /// collection. 
+  void addPlayer(Player player) async {
+    PersistentController persistentController =
+        Get.find<PersistentController>();
+    DocumentReference docRef = await repository.addPlayer(player);
+    player.id = docRef.id;
+    // add player to each team inside references
+    player.teams.forEach((String teamReference) {
+      Team relevantTeam = persistentController.getSpecificTeam(teamReference);
+      repository.addPlayerToTeam(player, relevantTeam);
+    });
+    update(["players-list"]);
   }
 
   /// get the players from selectedTeam that are currently marked as onFieldPlayers
@@ -49,19 +104,28 @@ class TempController extends GetxController {
   /// set the onFieldPlayer from selectedTeam stored at the given index
   void setOnFieldPlayer(int index, Player player) {
     _selectedTeam.value.onFieldPlayers[index] = player;
-    update(["action-feed", "on-field-checkbox"]);
+    update(
+        ["action-feed", "on-field-checkbox", "ef-score-bar", "players-list"]);
   }
 
   /// add additional onFieldPlayer to selectedTeam
   void addOnFieldPlayer(Player player) {
+    // TODO implement check if there are not already 7 onFieldPlayers
     _selectedTeam.value.onFieldPlayers.add(player);
-    update(["action-feed", "on-field-checkbox"]);
+    update(
+        ["action-feed", "on-field-checkbox", "ef-score-bar", "players-list"]);
+  }
+
+  void updateOnFieldPlayers() {
+    repository.updateOnFieldPlayers(
+        _selectedTeam.value.onFieldPlayers, _selectedTeam.value);
   }
 
   /// remove the given Player from onFieldPlayers of selectedTeam
   void removeOnFieldPlayer(Player player) {
     _selectedTeam.value.onFieldPlayers.remove(player);
-    update(["action-feed", "on-field-checkbox"]);
+    update(
+        ["action-feed", "on-field-checkbox", "ef-score-bar", "players-list"]);
   }
 
   /// 0: male, 1: female, 2: youth
@@ -110,7 +174,7 @@ class TempController extends GetxController {
   /// setter for attackIsLeft
   setAttackIsLeft(bool attackIsLeft) {
     _attackIsLeft.value = attackIsLeft;
-    //update();
+    update(["side-switch", "custom-field"]);
   }
 
   //////
@@ -173,8 +237,8 @@ class TempController extends GetxController {
   /// add feedAction to end of list
   void addFeedAction(GameAction action) {
     _feedActions.add(action);
-    // add feed item to database
-    repository.addActionToGame(action);
+    // update feed item to database (playerid was added)
+    repository.updateAction(action);
     update(["action-feed"]);
   }
 
@@ -188,7 +252,7 @@ class TempController extends GetxController {
   void updatePlayerMenuText() {
     // changing from dep = input.obs
     _playerMenuText.value = "Assist";
-    //update();
+    update(["player-menu-text"]);
   }
 
   /// corresponding player object for last clicked player name in the player menu
@@ -200,7 +264,7 @@ class TempController extends GetxController {
   /// setter for lastClickedPlayer
   setLastClickedPlayer(Player lastClickedPlayer) {
     _lastClickedPlayer.value = lastClickedPlayer;
-    //update();
+    update(["player-menu-button"]);
   }
 
   /// corresponding player object for last clicked player name in the efscore player bar
@@ -228,7 +292,12 @@ class TempController extends GetxController {
     for (int i in getOnFieldIndex()) {
       _playerBarPlayers.add(i);
     }
-    //update();
+    update(["efscorebar-players"]);
+  }
+
+  void changePlayerBarPlayers(int indexToChange, int i) {
+    _playerBarPlayers[indexToChange] = i;
+    update(["efscorebar-players"]);
   }
 
   ////
@@ -244,7 +313,7 @@ class TempController extends GetxController {
   /// setter for fieldIsLeft
   setFieldIsLeft(bool fieldIsLeft) {
     _fieldIsLeft.value = fieldIsLeft;
-    // no call of update since no GetBuilder involved and it would break during build of mainScreen otherwise
+    update(["start-game-form"]);
   }
 
   /// True: game was started; False game did not start yet
@@ -256,7 +325,7 @@ class TempController extends GetxController {
   /// setter for gameRunning
   setGameIsRunning(bool gameIsRunning) {
     _gameRunning.value = gameIsRunning;
-    update(["start-stop-icon"]);
+    update(["start-stop-icon", "start-button"]);
   }
 
   /// @return rx list

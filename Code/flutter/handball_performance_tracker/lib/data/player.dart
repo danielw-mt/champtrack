@@ -6,21 +6,23 @@ class Player {
   String? id;
   String firstName;
   String lastName;
+  String nickName;
   int number;
   List<String> positions;
   List<String> games;
   DocumentReference? clubId;
-  DocumentReference? teamId;
+  List<String> teams;
   LiveEfScore efScore;
 
   Player(
       {this.id = "",
       this.firstName = "",
       this.lastName = "",
+      this.nickName = "",
       this.number = 0,
       this.positions = const [],
       this.clubId = null,
-      this.teamId = null,
+      this.teams = const [],
       this.games = const []})
       : efScore = LiveEfScore();
 
@@ -29,10 +31,11 @@ class Player {
     return {
       'firstName': firstName,
       'lastName': lastName,
+      'nickName': nickName,
       'number': number,
-      'position': positions,
+      'positions': positions,
       'clubId': clubId,
-      'teamId': teamId,
+      'teams': teams,
       'games': games
     };
   }
@@ -49,20 +52,21 @@ class Player {
   factory Player.fromMap(Map<String, dynamic> map) {
     String firstName = map["firstName"];
     String lastName = map["lastName"];
-    int number = int.parse(map["number"]);
+    String nickName = map["nickName"];
+    int number = map["number"];
     List<String> positions = map["positions"].cast<String>();
     DocumentReference clubId = map["clubId"];
-    DocumentReference teamId = map["teamId"];
+    List<String> teams = map["teams"].cast<String>();
     List<String> games = map["games"].cast<String>();
     return Player(
-      firstName: firstName,
-      lastName: lastName,
-      number: number,
-      positions: positions,
-      clubId: clubId,
-      teamId: teamId,
-      games: games
-    );
+        firstName: firstName,
+        lastName: lastName,
+        nickName: nickName,
+        number: number,
+        positions: positions,
+        clubId: clubId,
+        teams: teams,
+        games: games);
   }
 
   // Players are considered as identical if they have the same id
@@ -71,4 +75,11 @@ class Player {
       other != null && other is Player && id == other.id;
 
   void addAction(GameAction action) => efScore.addAction(action, positions);
+
+  void removeAction(GameAction action) =>
+      efScore.removeAction(action, positions);
+  @override
+  String toString() {
+    return "Player( +\n firstName: ${firstName}, +\n lastName: ${lastName}, +\n nickName: ${nickName} ";
+  }
 }

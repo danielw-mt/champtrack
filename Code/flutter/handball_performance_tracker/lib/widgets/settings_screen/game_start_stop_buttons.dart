@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:handball_performance_tracker/data/game.dart';
-import '../../strings.dart';
+import '../../constants/stringsGeneral.dart';
+import '../../constants/stringsGameSettings.dart';
 import '../../constants/team_constants.dart';
 import '../../data/game.dart';
 import '../../controllers/persistentController.dart';
@@ -17,6 +18,7 @@ class GameStartStopButtons extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetBuilder<TempController>(
+        id: "start-button",
         builder: (tempController) => Row(
               children: [
                 Padding(
@@ -26,7 +28,7 @@ class GameStartStopButtons extends StatelessWidget {
                       if (!tempController.getGameIsRunning())
                         startGame(context);
                     },
-                    child: const Text(Strings.lStartGameButton),
+                    child: const Text(StringsGameSettings.lStartGameButton),
                     // start button is grey when the game is started and blue when not
                     style: ButtonStyle(
                         backgroundColor: tempController.getGameIsRunning()
@@ -40,7 +42,7 @@ class GameStartStopButtons extends StatelessWidget {
                       onPressed: () {
                         if (tempController.getGameIsRunning()) stopGame();
                       },
-                      child: const Text(Strings.lStopGameButton)),
+                      child: const Text(StringsGameSettings.lStopGameButton)),
                 )
               ],
             ));
@@ -56,9 +58,9 @@ class GameStartStopButtons extends StatelessWidget {
       // create alert if someone tries to start the game without enough players
       Alert(
               context: context,
-              title: Strings.lWarningPlayerNumberErrorMessage,
+              title: StringsGameSettings.lStartGameAlertHeader,
               type: AlertType.error,
-              desc: Strings.lPlayerNumberErrorMessage)
+              desc: StringsGameSettings.lStartGameAlert)
           .show();
       return;
     }
@@ -88,7 +90,6 @@ class GameStartStopButtons extends StatelessWidget {
 
     tempController.setGameIsRunning(true);
     tempController.setPlayerBarPlayers();
-    tempController.refresh();
   }
 
   void stopGame() async {
@@ -113,7 +114,6 @@ class GameStartStopButtons extends StatelessWidget {
         .add(StopWatchExecute.stop);
 
     tempController.setGameIsRunning(false);
-    tempController.refresh();
   }
 
   void _addGameToPlayers(Game game, TempController gc) {

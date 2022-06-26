@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:handball_performance_tracker/constants/colors.dart';
 import 'package:handball_performance_tracker/utils/main_screen_field_helper.dart';
 import '../../controllers/tempController.dart';
 import 'package:get/get.dart';
@@ -19,7 +20,21 @@ class CustomField extends StatelessWidget {
       builder: (TempController tempController) => Stack(children: [
         // Painter of 7m, 6m and filled 9m
         CustomPaint(
-          painter: FieldPainter(fieldIsLeft),
+          // Give colors: 9m(middle-dark),6m(dark),background(light)
+          painter: FieldPainter(
+              fieldIsLeft,
+              (fieldIsLeft && tempController.getAttackIsLeft() ||
+                      !fieldIsLeft && !tempController.getAttackIsLeft())
+                  ? attackMiddleColor
+                  : defenseMiddleColor,
+              (fieldIsLeft && tempController.getAttackIsLeft() ||
+                      !fieldIsLeft && !tempController.getAttackIsLeft())
+                  ? attackDarkColor
+                  : defenseDarkColor,
+              (fieldIsLeft && tempController.getAttackIsLeft() ||
+                      !fieldIsLeft && !tempController.getAttackIsLeft())
+                  ? attackLightColor
+                  : defenseLightColor),
           // GestureDetector to handle on click or swipe
           child: GestureDetector(
               // handle coordinates on click

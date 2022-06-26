@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import '../../strings.dart';
+import '../../constants/stringsGeneral.dart';
+import '../../constants/stringsGameScreen.dart';
 import '../../controllers/persistentController.dart';
 import 'package:get/get.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
-import '../../controllers/tempController.dart';
 
-class StopWatch extends GetView<TempController> {
+class StopWatch extends StatelessWidget {
   // stop watch widget that allows to the time to be started, stopped, resetted and in-/decremented by 1 sec
   PersistentController persistentController = Get.find<PersistentController>();
 
@@ -77,7 +77,7 @@ class StopWatch extends GetView<TempController> {
                                       .add(StopWatchExecute.start);
                                 },
                                 child: const Text(
-                                  Strings.lStartTime,
+                                  StringsGameScreen.lStartTime,
                                   style: TextStyle(color: Colors.white),
                                 ),
                               ),
@@ -99,7 +99,7 @@ class StopWatch extends GetView<TempController> {
                                       .add(StopWatchExecute.stop);
                                 },
                                 child: const Text(
-                                  Strings.lStopTime,
+                                  StringsGameScreen.lStopTime,
                                   style: TextStyle(color: Colors.white),
                                 ),
                               ),
@@ -122,7 +122,7 @@ class StopWatch extends GetView<TempController> {
                                   stopWatchTimer.setPresetTime(mSec: 0);
                                 },
                                 child: const Text(
-                                  Strings.lResetTime,
+                                  StringsGameScreen.lResetTime,
                                   style: TextStyle(color: Colors.white),
                                 ),
                               ),
@@ -159,10 +159,9 @@ class StopWatch extends GetView<TempController> {
                                         .setPresetTime(
                                             mSec: currentTime + 1000);
                                   }
-                                  persistentController.refresh();
                                 },
                                 child: const Text(
-                                  Strings.lPlusOneTime,
+                                  StringsGameScreen.lPlusOneTime,
                                   style: TextStyle(color: Colors.white),
                                 ),
                               ),
@@ -201,10 +200,9 @@ class StopWatch extends GetView<TempController> {
                                         .setPresetTime(
                                             mSec: currentTime - 1000);
                                   }
-                                  persistentController.refresh();
                                 },
                                 child: const Text(
-                                  Strings.lMinusOneTime,
+                                  StringsGameScreen.lMinusOneTime,
                                   style: TextStyle(color: Colors.white),
                                 ),
                               ),

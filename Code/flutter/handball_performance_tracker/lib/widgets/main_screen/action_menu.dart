@@ -3,7 +3,7 @@ import 'package:handball_performance_tracker/data/player.dart';
 import 'package:handball_performance_tracker/utils/feed_logic.dart';
 import 'package:handball_performance_tracker/utils/player_helper.dart';
 import 'package:handball_performance_tracker/widgets/main_screen/field.dart';
-import '../../strings.dart';
+import '../../constants/stringsGameScreen.dart';
 import '../../controllers/persistentController.dart';
 import '../../controllers/tempController.dart';
 import 'package:get/get.dart';
@@ -40,7 +40,7 @@ void callActionMenu(BuildContext context) {
   if (tempController.getGameIsRunning() == false) {
     Alert(
       context: context,
-      title: Strings.lGameStartErrorMessage,
+      title: StringsGameScreen.lGameStartErrorMessage,
       type: AlertType.error,
     ).show();
     return;
@@ -84,7 +84,7 @@ String determineActionType() {
   // when our goal is to the right (= attackIsLeft) and the field is left
   //display attack options
   if (tempController.getLastLocation()[0] == goal) {
-    actionType = ownGoalkeeper;
+    actionType = goalkeeper;
     if (attackIsLeft && fieldIsLeft) {
       actionType = otherGoalkeeper;
       // when our goal is to the left (=attack is right) and the field is to the
@@ -108,10 +108,10 @@ String determineActionType() {
 // a method for building the children of the pageview in the right order
 // by arranging either the attack menu or defense menu first
 List<Widget> buildPageViewChildren(BuildContext context, String actionType) {
-  if (actionType == ownGoalkeeper) {
+  if (actionType == goalkeeper) {
     return [
       buildDialogButtonMenu(
-          context, actionMapping[ownGoalkeeper]!.keys.toList(), false, true),
+          context, actionMapping[goalkeeper]!.keys.toList(), false, true),
     ];
   } else if (actionType == attack) {
     return [
@@ -155,7 +155,7 @@ Widget buildDialogButtonMenu(BuildContext context, List<String> buttonTexts,
         children: [dialogButtons[6], dialogButtons[7]],
       ),
     ]);
-    header = Strings.lGoalkeeperPopUpHeader;
+    header = StringsGameScreen.lGoalkeeperPopUpHeader;
   } else if (isAttack) {
     List<DialogButton> dialogButtons = [
       buildDialogButton(context, buttonTexts[0], Colors.red, Icons.style),
@@ -178,7 +178,7 @@ Widget buildDialogButtonMenu(BuildContext context, List<String> buttonTexts,
         children: [dialogButtons[6], dialogButtons[7]],
       ),
     ]);
-    header = Strings.lOffensePopUpHeader;
+    header = StringsGameScreen.lOffensePopUpHeader;
   } else {
     List<DialogButton> dialogButtons = [
       buildDialogButton(context, buttonTexts[0], Colors.red, Icons.style),
@@ -201,7 +201,7 @@ Widget buildDialogButtonMenu(BuildContext context, List<String> buttonTexts,
         children: [dialogButtons[5], dialogButtons[6]],
       ),
     ]);
-    header = Strings.lDeffensePopUpHeader;
+    header = StringsGameScreen.lDeffensePopUpHeader;
   }
   return Column(children: [
     Row(
@@ -276,8 +276,7 @@ DialogButton buildDialogButton(
         throwLocation: tempController.getLastLocation().cast<String>(),
         timestamp: unixTime,
         relativeTime: secondsSinceGameStart);
-    logger.d("GameAction object created: ");
-    logger.d(action);
+    logger.d("GameAction object created: ${action.actionType}");
 
     // add action to firebase
 
@@ -287,7 +286,7 @@ DialogButton buildDialogButton(
     logger.d("Adding gameaction to firebase");
 
     // Save action directly if goalkeeper action
-    if (actionType == ownGoalkeeper) {
+    if (actionType == goalkeeper) {
       String? goalKeeperId = "goalkeeper";
       // get id of goalkeeper by going through players on field and searching for position
       for (int k in getOnFieldIndex()) {
@@ -335,7 +334,7 @@ DialogButton buildDialogButton(
         logAction();
         Navigator.pop(context);
         // close action menu if goalkeeper action
-        if (!(actionType == ownGoalkeeper)) {
+        if (!(actionType == goalkeeper)) {
           callPlayerMenu(context);
         }
       });

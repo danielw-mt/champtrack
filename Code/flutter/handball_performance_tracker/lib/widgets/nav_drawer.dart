@@ -1,11 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:handball_performance_tracker/constants/stringsAuthentication.dart';
 import './../screens/mainScreen.dart';
-import '../screens/placeholderScreen.dart';
+import '../screens/debugScreen.dart';
 import './../screens/settingsScreen.dart';
 import '../screens/teamSelectionScreen.dart';
 import 'package:get/get.dart';
-import '../strings.dart';
+import '../constants/stringsGeneral.dart';
 
 class NavDrawer extends StatelessWidget {
   // Navigation widget for Material app. Can be opend from the sidebar
@@ -17,7 +18,7 @@ class NavDrawer extends StatelessWidget {
         children: <Widget>[
           DrawerHeader(
               child: Text(
-                Strings.lSideMenuHeader,
+                StringsGeneral.lSideMenuHeader,
                 style: TextStyle(color: Colors.white, fontSize: 25),
               ),
               decoration: BoxDecoration(
@@ -25,12 +26,12 @@ class NavDrawer extends StatelessWidget {
               )),
           ListTile(
             leading: Icon(Icons.input),
-            title: Text(Strings.lSettings),
+            title: Text(StringsGeneral.lSettings),
             onTap: () => {Get.to(SettingsScreen())},
           ),
           ListTile(
             leading: Icon(Icons.verified_user),
-            title: Text(Strings.lMainScreen),
+            title: Text(StringsGeneral.lMainScreen),
             onTap: () => {
               if (Get.currentRoute.toString() != "/") {Get.to(MainScreen())}
             },
@@ -38,19 +39,22 @@ class NavDrawer extends StatelessWidget {
           ListTile(
             leading: Icon(Icons.verified_user),
             title: Text('Placeholder Screen'),
-            onTap: () => {Get.to(PlaceholderScreen())},
+            onTap: () => {Get.to(DebugScreen())},
           ),
           ListTile(
             leading: Icon(Icons.verified_user),
-            title: Text(Strings.lTeamSelectionScreen),
+            title: Text(StringsGeneral.lTeamSelectionScreen),
             onTap: () => {Get.to(TeamSelectionScreen())},
           ),
           Spacer(),
-          Text("Signed in as ${FirebaseAuth.instance.currentUser?.email.toString()}"),
+          Text(
+              "Signed in as ${FirebaseAuth.instance.currentUser?.email.toString()}"),
           ElevatedButton.icon(
-              onPressed: () {FirebaseAuth.instance.signOut();},
+              onPressed: () {
+                FirebaseAuth.instance.signOut();
+              },
               icon: Icon(Icons.logout),
-              label: Text(Strings.lSignOutButton))
+              label: Text(StringsAuth.lSignOutButton))
         ],
       ),
     );
