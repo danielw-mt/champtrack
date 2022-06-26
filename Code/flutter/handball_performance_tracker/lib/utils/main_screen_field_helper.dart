@@ -251,7 +251,7 @@ class FieldPainter extends CustomPainter {
             center: Offset(goalOffset, fieldSizeParameter.fieldHeight / 2),
             width: fieldSizeParameter.goalWidth,
             height: fieldSizeParameter.goalHeight),
-        Paint()..color = Color.fromARGB(141, 159, 198, 216));
+        Paint()..color = nineMeterColor);
   }
 
   // Since this painter has no fields, it always paints

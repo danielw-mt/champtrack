@@ -71,9 +71,32 @@ void callActionMenu(BuildContext context) {
               ))).show();
 }
 
-///
-String determineActionType() {
+/// determine if acktion was attack (true) or defense (false)
+bool determineAttack() {
   logger.d("Determining whether attack actions should be displayed...");
+  final TempController tempController = Get.find<TempController>();
+  // decide whether attack or defense actions should be displayed depending
+  //on what side the team goals is and whether they are attacking or defending
+  bool attacking = false;
+  bool attackIsLeft = tempController.getAttackIsLeft();
+  bool fieldIsLeft = tempController.getFieldIsLeft();
+
+  // when our goal is to the right (= attackIsLeft) and the field is left
+  //display attack options
+  if (attackIsLeft && fieldIsLeft) {
+    attacking = true;
+    // when our goal is to the left (=attack is right) and the field is to the
+    //right display attack options
+  } else if (attackIsLeft == false && fieldIsLeft == false) {
+    attacking = true;
+  }
+  logger.d("Attack actions should be displayed: $attacking");
+  return attacking;
+}
+
+/// determine if acktion was attack, defense or goalkeeper action
+String determineActionType() {
+  logger.d("Determining which actions should be displayed...");
   final TempController tempController = Get.find<TempController>();
   // decide whether attack or defense actions should be displayed depending
   //on what side the team goals is and whether they are attacking or defending
@@ -101,7 +124,7 @@ String determineActionType() {
       actionType = attack;
     }
   }
-  logger.d("Attack actions should be displayed: $actionType");
+  logger.d("Actions should be displayed: $actionType");
   return actionType;
 }
 
@@ -139,20 +162,33 @@ Widget buildDialogButtonMenu(BuildContext context, List<String> buttonTexts,
     List<DialogButton> dialogButtons = [
       buildDialogButton(context, buttonTexts[0], Colors.red, Icons.style),
       buildDialogButton(context, buttonTexts[1], Colors.yellow, Icons.style),
-      buildDialogButton(context, buttonTexts[2], Colors.grey, Icons.timer),
+      buildDialogButton(context, buttonTexts[2], Colors.grey),
       buildDialogButton(context, buttonTexts[3], Colors.grey),
       buildDialogButton(context, buttonTexts[4], Colors.grey),
       buildDialogButton(context, buttonTexts[5], Colors.blue),
       buildDialogButton(context, buttonTexts[6], Colors.blue),
       buildDialogButton(context, buttonTexts[7], Colors.blue),
+      buildDialogButton(context, buttonTexts[8], Colors.blue),
     ];
     buttonRow = Row(children: [
       Column(
-        children: [dialogButtons[0], dialogButtons[1], dialogButtons[2]],
-      ),
-      Column(children: [dialogButtons[3], dialogButtons[4], dialogButtons[5]]),
+        children: [
+        Row(
+          children: [
+            dialogButtons[0],
+            dialogButtons[1],
+          ],
+        ),
+        dialogButtons[2],
+        dialogButtons[3],
+        dialogButtons[4],
+      ]),
+      Column(children: [
+        dialogButtons[5],
+        dialogButtons[6],
+      ]),
       Column(
-        children: [dialogButtons[6], dialogButtons[7]],
+        children: [dialogButtons[7], dialogButtons[8]],
       ),
     ]);
     header = StringsGameScreen.lGoalkeeperPopUpHeader;
@@ -239,8 +275,7 @@ DialogButton buildDialogButton(
     [icon]) {
   TempController tempController = Get.find<TempController>();
   PersistentController persistentController = Get.find<PersistentController>();
-  String actionType = determineActionType();
-  void logAction() async {
+  void logAction(String actionType) async {
     logger.d("logging an action");
     DateTime dateTime = DateTime.now();
     int unixTime = dateTime.toUtc().millisecondsSinceEpoch;
@@ -251,23 +286,21 @@ DialogButton buildDialogButton(
     String currentGameId = persistentController.getCurrentGame().id!;
 
     // switch field side after hold of goalkeeper
-    if (actionMapping[allActions]![buttonText]! == hold) {
-      print(FieldSwitch.pageController.positions);
+    if (actionMapping[allActions]![buttonText]! == parade ||
+        actionMapping[allActions]![buttonText]! == emptyGoal ||
+        actionMapping[allActions]![buttonText]! == goalOthers) {
       while (FieldSwitch.pageController.positions.length > 1) {
         FieldSwitch.pageController
             .detach(FieldSwitch.pageController.positions.first);
       }
       if (tempController.getAttackIsLeft() == true) {
         logger.d("Switching to left field after hold");
-
         FieldSwitch.pageController.jumpToPage(0);
       } else {
         logger.d("Switching to right field after hold");
-
         FieldSwitch.pageController.jumpToPage(1);
       }
     }
-
     GameAction action = GameAction(
         teamId: tempController.getSelectedTeam().id!,
         gameId: currentGameId,
@@ -300,8 +333,8 @@ DialogButton buildDialogButton(
       action.playerId = goalKeeperId.toString();
       persistentController.addAction(action);
       addFeedItem(action);
-      print("last action saved in database: ");
-      print(persistentController.getLastAction().toMap());
+      logger.d(
+          "last action saved in database: ${persistentController.getLastAction().toMap()}");
     } else {
       persistentController.addAction(action);
     }
@@ -331,7 +364,8 @@ DialogButton buildDialogButton(
       ),
       onPressed: () {
         // reset the feed timer
-        logAction();
+        String actionType = determineActionType();
+        logAction(actionType);
         Navigator.pop(context);
         // close action menu if goalkeeper action
         if (!(actionType == goalkeeper)) {

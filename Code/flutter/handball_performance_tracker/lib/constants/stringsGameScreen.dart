@@ -26,12 +26,15 @@ class StringsGameScreen{
   static const String lGoal = "Tor";
   static const String lOneVsOneAnd7m = "1v1 & 7m";
   static const String lTwoMin = "2min ziehen";
-  static const String lErrThrow = "err"; // TODO correct name
+  static const String lErrThrow = "Fehlwurf"; 
   static const String lTrf = "TRF";
   static const String lFoul7m = "Foul => 7m";
   static const String lBlockNoBall = "Block ohne Ballgewinn";
   static const String lBlockAndSteal = "Block & Steal";
-  static const String lHold = "Gehalten";
+  static const String lParade = "Parade";
   static const String lBadPass = "Fehlpass";
-  static const String lGoalOtherSide = "Gegentor";
+  static const String lGoalOtherSide = "Tor Gegner";
+  static const String lGoalGoalkeeper = "Tor Torwart";
+  static const String lEmptyGoal = "Tor Gegner \n Empty Goal";
+  static const String lAssist = "Assist";
 }

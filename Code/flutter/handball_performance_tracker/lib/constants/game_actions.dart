@@ -25,10 +25,11 @@ const String trf = "trf";
 const String foulWithSeven = "foul";
 const String timePenalty = "timePen";
 const String redCard = "red";
-const String hold = "hold";
+const String parade = "parade";
 const String yellowCard = "yellow";
 const String badPass = "badPass";
 const String goalOthers = "goalOthers";
+const String emptyGoal = "emptyGoal";
 
 const String positiveAction = "pos";
 const String negativeAction = "neg";
@@ -56,11 +57,12 @@ Map<String, Map<String, String>> actionMapping = {
   goalkeeper: {
     StringsGameScreen.lRedCard: redCard,
     StringsGameScreen.lYellowCard: yellowCard,
-    StringsGameScreen.lTimePenalty: timePenalty,
-    StringsGameScreen.lGoal: goal,
-    StringsGameScreen.lHold: hold,
-    StringsGameScreen.lBadPass: badPass,
+    StringsGameScreen.lEmptyGoal: emptyGoal,
+    StringsGameScreen.lGoalGoalkeeper: goal,
     StringsGameScreen.lErrThrow: errThrow,
+    StringsGameScreen.lAssist: assist,
+    StringsGameScreen.lBadPass: badPass,
+    StringsGameScreen.lParade: parade,
     StringsGameScreen.lGoalOtherSide: goalOthers,
   },
   allActions: {
@@ -75,9 +77,12 @@ Map<String, Map<String, String>> actionMapping = {
     StringsGameScreen.lFoul7m: foulWithSeven,
     StringsGameScreen.lBlockNoBall: blockNoBall,
     StringsGameScreen.lBlockAndSteal: blockAndSteal,
-    StringsGameScreen.lHold: hold,
+    StringsGameScreen.lParade: parade,
     StringsGameScreen.lBadPass: badPass,
     StringsGameScreen.lGoalOtherSide: goalOthers,
+    StringsGameScreen.lEmptyGoal: emptyGoal,
+    StringsGameScreen.lGoalGoalkeeper: goal,
+    StringsGameScreen.lAssist: assist,
   }
 };
 
