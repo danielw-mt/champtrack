@@ -39,14 +39,19 @@ class CustomField extends StatelessWidget {
           child: GestureDetector(
               // handle coordinates on click
               onTapDown: (TapDownDetails details) {
-            callActionMenu(context);
-            List<String> location = SectorCalc(fieldIsLeft)
-                .calculatePosition(details.localPosition);
-            tempController.setLastLocation(location);
+            // Set last location in controller before calling action menu, because it is queried there.
+            tempController.setLastLocation(SectorCalc(fieldIsLeft)
+                .calculatePosition(details.localPosition));
+            callActionMenu(context);         
           }),
         ),
         // Painter of dashed 9m
-        CustomPaint(painter: DashedPathPainter(leftSide: fieldIsLeft))
+        CustomPaint(
+            painter: DashedPathPainter(leftSide: fieldIsLeft, isEllipse: true)),
+        // Painter of dashed goal
+        CustomPaint(
+            painter:
+                DashedPathPainter(leftSide: fieldIsLeft, isEllipse: false)),
       ]),
     );
   }
