@@ -174,8 +174,7 @@ Widget buildDialogButtonMenu(BuildContext context, List<String> buttonTexts,
       buildDialogButton(context, buttonTexts[8], Colors.blue),
     ];
     buttonRow = Row(children: [
-      Column(
-        children: [
+      Column(children: [
         Row(
           children: [
             dialogButtons[0],
@@ -325,7 +324,6 @@ DialogButton buildDialogButton(
     //     .then((DocumentReference doc) => action.id = doc.id);
 
     // close action menu
-    Navigator.pop(context);
     // if we perform a 7m foul go straight to 7m screen and skip player screen
     if (action.actionType == "foul") {
       logger.d("7m foul. Going to 7m screen");
@@ -390,7 +388,7 @@ DialogButton buildDialogButton(
         logAction(actionType);
         Navigator.pop(context);
         // close action menu if goalkeeper action
-        if (!(actionType == goalkeeper)) {
+        if (actionType != goalkeeper) {
           callPlayerMenu(context);
         }
       });
