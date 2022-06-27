@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:handball_performance_tracker/constants/stringsTeamManagement.dart';
 import 'package:handball_performance_tracker/data/team.dart';
 import 'package:handball_performance_tracker/widgets/team_selection_screen/team_dropdown.dart';
+import '../../constants/stringsGameSettings.dart';
 import '../../controllers/tempController.dart';
 import '../../constants/team_constants.dart';
-import '../../strings.dart';
+import '../../constants/stringsGeneral.dart';
 
 // Create a Form widget.
 class StartGameForm extends StatefulWidget {
@@ -67,13 +69,13 @@ class StartGameFormState extends State<StartGameForm> {
                         controller: seasonController,
                         decoration: InputDecoration(
                           border: OutlineInputBorder(),
-                          labelText: Strings.lSeason,
+                          labelText: StringsGeneral.lSeason,
                         ),
                       )),
                   // team dropdown showing all available teams from teams collection
                   Column(
                     children: [
-                      Text(Strings.lTeam),
+                      Text(StringsGeneral.lTeam),
                       TeamDropdown(),
                     ],
                   ),
@@ -106,7 +108,7 @@ class StartGameFormState extends State<StartGameForm> {
                         controller: opponentController,
                         decoration: InputDecoration(
                           border: OutlineInputBorder(),
-                          labelText: Strings.lOpponent,
+                          labelText: StringsGeneral.lOpponent,
                         ),
                       )),
                   // Textfield for location
@@ -116,7 +118,7 @@ class StartGameFormState extends State<StartGameForm> {
                         controller: locationController,
                         decoration: InputDecoration(
                           border: OutlineInputBorder(),
-                          labelText: Strings.lLocation,
+                          labelText: StringsGeneral.lLocation,
                         ),
                       )),
                 ],
@@ -130,13 +132,13 @@ class StartGameFormState extends State<StartGameForm> {
                   Row(
                     children: [
                       Checkbox(value: false, onChanged: (value) {}),
-                      Text(Strings.lHomeGame)
+                      Text(StringsGeneral.lHomeGame)
                     ],
                   ),
                   Row(
                     children: [
                       Checkbox(value: false, onChanged: (value) {}),
-                      Text(Strings.lOutwardsGame)
+                      Text(StringsGeneral.lOutwardsGame)
                     ],
                   )
                 ],
@@ -146,7 +148,7 @@ class StartGameFormState extends State<StartGameForm> {
               ),
               Column(
                 children: [
-                  const Text(Strings.lHomeSideIsRight),
+                  const Text(StringsGameSettings.lHomeSideIsRight),
                   Switch(
                       value: tempController.getAttackIsLeft(),
                       onChanged: (bool value) {
@@ -166,11 +168,11 @@ class StartGameFormState extends State<StartGameForm> {
                       // If the form is valid, display a snackbar. In the real world,
                       // you'd often call a server or save the information in a database.
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text(Strings.lProcessingData)),
+                        const SnackBar(content: Text(StringsGeneral.lProcessingData)),
                       );
                     }
                   },
-                  child: const Text(Strings.lSubmitButton),
+                  child: const Text(StringsTeamManagement.lSubmitButton),
                 ),
               ),
             ],

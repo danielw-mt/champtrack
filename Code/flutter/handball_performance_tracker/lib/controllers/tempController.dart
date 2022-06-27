@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 import 'package:handball_performance_tracker/data/database_repository.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
 import '../constants/settings_config.dart';
 import 'persistentController.dart';
 import '../data/game_action.dart';
@@ -63,6 +63,40 @@ class TempController extends GetxController {
     return _selectedTeam.value.players;
   }
 
+  void setPlayer(Player player) {
+    _selectedTeam.value.players
+        .where((Player playerElement) => playerElement.id == player.id)
+        .toList()
+        .first = player;
+    repository.updatePlayer(player);
+    update(["players-list"]);
+  }
+
+  /// deleting player from game state and firebase
+  void deletePlayer(Player player) async {
+    _selectedTeam.value.players.remove(player);
+    if (_selectedTeam.value.onFieldPlayers.contains(player)) {
+      _selectedTeam.value.onFieldPlayers.remove(player);
+    }
+    repository.deletePlayer(player);
+    update(["players-list"]);
+  }
+
+  /// adds player to the players collection and the selected teams in the teams 
+  /// collection. 
+  void addPlayer(Player player) async {
+    PersistentController persistentController =
+        Get.find<PersistentController>();
+    DocumentReference docRef = await repository.addPlayer(player);
+    player.id = docRef.id;
+    // add player to each team inside references
+    player.teams.forEach((String teamReference) {
+      Team relevantTeam = persistentController.getSpecificTeam(teamReference);
+      repository.addPlayerToTeam(player, relevantTeam);
+    });
+    update(["players-list"]);
+  }
+
   /// get the players from selectedTeam that are currently marked as onFieldPlayers
   List<Player> getOnFieldPlayers() => _selectedTeam.value.onFieldPlayers;
 
@@ -75,9 +109,15 @@ class TempController extends GetxController {
 
   /// add additional onFieldPlayer to selectedTeam
   void addOnFieldPlayer(Player player) {
+    // TODO implement check if there are not already 7 onFieldPlayers
     _selectedTeam.value.onFieldPlayers.add(player);
     update(
         ["action-feed", "on-field-checkbox", "ef-score-bar", "players-list"]);
+  }
+
+  void updateOnFieldPlayers() {
+    repository.updateOnFieldPlayers(
+        _selectedTeam.value.onFieldPlayers, _selectedTeam.value);
   }
 
   /// remove the given Player from onFieldPlayers of selectedTeam
@@ -325,6 +365,7 @@ class TempController extends GetxController {
   }
 
   /// @return rx list
+  /// after click on goal there is only one element "goal", otherwise
   /// first element is the sector as a string, second element distinguishes the distance ("<6", "6to9", ">9")
   var _lastLocation = [].obs;
 

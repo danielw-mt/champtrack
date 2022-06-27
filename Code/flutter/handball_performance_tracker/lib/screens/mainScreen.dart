@@ -5,7 +5,7 @@ import 'package:handball_performance_tracker/widgets/main_screen/ef_score_bar.da
     as efscorebar;
 import 'package:handball_performance_tracker/widgets/main_screen/field.dart';
 import 'package:handball_performance_tracker/widgets/main_screen/score_keeping.dart';
-import '../strings.dart';
+import '../constants/stringsGeneral.dart';
 import './../widgets/nav_drawer.dart';
 import 'package:handball_performance_tracker/constants/fieldSizeParameter.dart'
     as fieldSizeParameter;
@@ -45,7 +45,7 @@ class MainScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(Strings.lFeedHeader),
+                  Text(StringsGeneral.lFeedHeader),
                   ActionFeed(),
                   //Spacer(flex: 1,),
                   Container()

@@ -11,7 +11,7 @@ class Player {
   List<String> positions;
   List<String> games;
   DocumentReference? clubId;
-  DocumentReference? teamId;
+  List<String> teams;
   LiveEfScore efScore;
 
   Player(
@@ -22,7 +22,7 @@ class Player {
       this.number = 0,
       this.positions = const [],
       this.clubId = null,
-      this.teamId = null,
+      this.teams = const [],
       this.games = const []})
       : efScore = LiveEfScore();
 
@@ -33,9 +33,9 @@ class Player {
       'lastName': lastName,
       'nickName': nickName,
       'number': number,
-      'position': positions,
+      'positions': positions,
       'clubId': clubId,
-      'teamId': teamId,
+      'teams': teams,
       'games': games
     };
   }
@@ -56,7 +56,7 @@ class Player {
     int number = map["number"];
     List<String> positions = map["positions"].cast<String>();
     DocumentReference clubId = map["clubId"];
-    DocumentReference teamId = map["teamId"];
+    List<String> teams = map["teams"].cast<String>();
     List<String> games = map["games"].cast<String>();
     return Player(
         firstName: firstName,
@@ -65,7 +65,7 @@ class Player {
         number: number,
         positions: positions,
         clubId: clubId,
-        teamId: teamId,
+        teams: teams,
         games: games);
   }
 
@@ -78,4 +78,8 @@ class Player {
 
   void removeAction(GameAction action) =>
       efScore.removeAction(action, positions);
+  @override
+  String toString() {
+    return "Player( +\n firstName: ${firstName}, +\n lastName: ${lastName}, +\n nickName: ${nickName} ";
+  }
 }

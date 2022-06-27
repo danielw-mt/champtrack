@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:handball_performance_tracker/screens/startGameScreen.dart';
 import 'package:handball_performance_tracker/widgets/nav_drawer.dart';
-import '../strings.dart';
+import '../constants/stringsGeneral.dart';
+import '../constants/stringsDashboard.dart';
 import 'package:get/get.dart';
 import '../controllers/persistentController.dart';
 import '../controllers/tempController.dart';
 import '../utils/initializeLocalData.dart';
 
 class Dashboard extends StatelessWidget {
-  final PersistentController persistentController = Get.put(PersistentController());
+  final PersistentController persistentController =
+      Get.put(PersistentController());
   final TempController tempController = Get.put(TempController());
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -32,17 +34,18 @@ class Dashboard extends StatelessWidget {
                         children: [
                           ElevatedButton(
                               onPressed: () {},
-                              child: Text(Strings.lManageTeams)),
+                              child: Text(StringsDashboard.lManageTeams)),
                           ElevatedButton(
                               onPressed: () {
                                 Get.to(StartGameScreen());
                               },
-                              child: Text(Strings.lTrackNewGame)),
+                              child: Text(StringsDashboard.lTrackNewGame)),
                         ],
                       ),
                     ]));
           }
           if (snapshot.hasError) {
+            print(snapshot.error);
             return Column(
               children: [
                 Icon(Icons.error),

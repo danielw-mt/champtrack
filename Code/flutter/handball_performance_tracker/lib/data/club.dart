@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Club {
-  final String? id;
-  final String name;
+  String? id;
+  String name;
 
   Club({
     this.id,
@@ -17,7 +17,20 @@ class Club {
   }
 
   // @return Club object according to Club data fetched from firestore
-  Club.fromDocumentSnapshot(DocumentSnapshot<Map<String, dynamic>> doc)
-      : id = doc.id,
-        name = doc.data()!["name"];
+  // @return Team object according to Team data fetched from firestore
+  factory Club.fromDocumentSnapshot(DocumentSnapshot doc) {
+    Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+    final newClub = Club.fromMap(data);
+
+    newClub.id = doc.reference.id;
+
+    return newClub;
+  }
+
+  // @return Team object created from map representation of Team
+  factory Club.fromMap(Map<String, dynamic> map) {
+    return Club(
+        name: map["name"],
+    );
+  }
 }
