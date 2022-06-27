@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import '../../constants/stringsGeneral.dart';
 import '../../constants/stringsGameScreen.dart';
+import 'package:handball_performance_tracker/data/database_repository.dart';
+import 'package:handball_performance_tracker/utils/feed_logic.dart';
+import 'package:handball_performance_tracker/widgets/main_screen/seven_meter_menu.dart';
 import '../../controllers/persistentController.dart';
 import '../../controllers/tempController.dart';
 import 'package:get/get.dart';
@@ -232,20 +235,21 @@ DialogButton buildDialogButton(
     int unixTime = dateTime.toUtc().millisecondsSinceEpoch;
     int secondsSinceGameStart =
         persistentController.getCurrentGame().stopWatch.secondTime.value;
-
     // get most recent game id from DB
     String currentGameId = persistentController.getCurrentGame().id!;
-    String actionType = determineAttack() ? attack : defense;
-
+    String type = determineAttack() ? attack : defense;
+    print(buttonText);
+    String actionType = actionMapping[type]![buttonText]!;
     GameAction action = GameAction(
         teamId: tempController.getSelectedTeam().id!,
         gameId: currentGameId,
-        type: actionType,
-        actionType: actionMapping[actionType]![buttonText]!,
+        type: type,
+        actionType: actionType,
         throwLocation: tempController.getLastLocation().cast<String>(),
         timestamp: unixTime,
         relativeTime: secondsSinceGameStart);
     logger.d("GameAction object created: ${action.actionType}");
+    logger.d(action.actionType);
 
     // add action to firebase
 
@@ -253,6 +257,24 @@ DialogButton buildDialogButton(
     // when a player was selected in that menu the action document can be
     // updated in firebase with their player_id using the action_id
     logger.d("Adding gameaction to firebase");
+    // repository
+    //     .addActionToGame(action)
+    //     .then((DocumentReference doc) => action.id = doc.id);
+
+    // close action menu
+    Navigator.pop(context);
+    // if we perform a 7m foul go straight to 7m screen and skip player screen
+    if (action.actionType == "foul") {
+      logger.d("7m foul. Going to 7m screen");
+      // TODO add 7m action data to repository here and not in player screen
+      // TODO add action to feedItems (causes an error for some reason)
+      //addFeedItem(action);
+      callSevenMeterMenu(context, false);
+      return;
+      // go to player menu for all other actions
+    } else {
+      callPlayerMenu(context);
+    }
     persistentController.addAction(action);
   }
 
@@ -279,9 +301,6 @@ DialogButton buildDialogButton(
         ),
       ),
       onPressed: () {
-        // reset the feed timer
         logAction();
-        Navigator.pop(context);
-        callPlayerMenu(context);
       });
 }

@@ -83,6 +83,17 @@ class StringsGeneral {
   static const String lStartGameButton = "Spiel starten";
   static const String lSubmitButton = "Speichern";
 
+  // 7 meter
+  static const String lMissedThrow = "Fehlwurf";
+  static const String lOpponentGoal = "Gegentor";
+  static const String lCaught = "Gehalten";
+  static const String lSevenMeter = "7m";
+  static const String lChooseSevenMeterPlayer = "7m Ausführung";
+  static const String lSamePlayer = "Gleicher Spieler";
+  // Dashboard
+  static const String lDashboard = "Dashboard";
+  static const String lManageTeams = "Mannschaften verwalten";
+  static const String lTrackNewGame = "Neues Spiel tracken";
   // team settings screen
   static const String lName = "Name";
   static const String lNumber = "Nummer";

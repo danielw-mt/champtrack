@@ -3,7 +3,7 @@ import 'package:handball_performance_tracker/constants/stringsGeneral.dart';
 
 const String attack = "attack";
 const String defense = "defense";
-
+const String seven_meter = "seven_meter";
 const String goal = "goal";
 const String goalPos = "goal_pos";
 const String goalUnderNine = "goal<9m";
