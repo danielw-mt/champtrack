@@ -1,9 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:handball_performance_tracker/constants/stringsGeneral.dart';
 import 'package:handball_performance_tracker/data/database_repository.dart';
-import '../../strings.dart';
 import 'package:get/get.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
+import '../../constants/stringsGameScreen.dart';
 import '../../data/game_action.dart';
 import '../../data/database_repository.dart';
 import '../../constants/game_actions.dart';
@@ -112,7 +113,7 @@ Widget buildDialogButtonMenu(BuildContext context, bool belongsToHomeTeam) {
   }
   return Column(children: [
     Row(
-      children: [Icon(Icons.sports_handball), Text(Strings.lSevenMeter)],
+      children: [Icon(Icons.sports_handball), Text(StringsGeneral.lSevenMeter)],
     ),
     Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -120,7 +121,7 @@ Widget buildDialogButtonMenu(BuildContext context, bool belongsToHomeTeam) {
         Align(
           alignment: Alignment.topLeft,
           child: Text(
-            Strings.lOffensePopUpHeader,
+            StringsGameScreen.lOffensePopUpHeader,
             textAlign: TextAlign.left,
             style: TextStyle(
               color: Colors.black,

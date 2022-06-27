@@ -1,23 +1,20 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
-import 'package:handball_performance_tracker/constants/game_actions.dart';
-import 'package:handball_performance_tracker/utils/icons.dart';
-import 'package:handball_performance_tracker/data/database_repository.dart';
-import 'package:handball_performance_tracker/data/game.dart';
-import 'package:handball_performance_tracker/widgets/main_screen/seven_meter_menu.dart';
-import '../../strings.dart';
 import '../../controllers/tempController.dart';
-import 'package:handball_performance_tracker/utils/player_helper.dart';
 import 'package:handball_performance_tracker/widgets/main_screen/field.dart';
 import 'package:get/get.dart';
-import 'package:rflutter_alert/rflutter_alert.dart';
-import 'dart:math';
-import '../../utils/feed_logic.dart';
-import '../../data/game_action.dart';
-import '../../data/player.dart';
 import 'package:logger/logger.dart';
 
 // TODO fix case of offensive actions from defensive side
+
+var logger = Logger(
+  printer: PrettyPrinter(
+      methodCount: 2, // number of method calls to be displayed
+      errorMethodCount: 8, // number of method calls if stacktrace is provided
+      lineLength: 120, // width of the output
+      colors: true, // Colorful log messages
+      printEmojis: true, // Print an emoji for each log message
+      printTime: false // Should each log print contain a timestamp
+      ),
+);
 
 void defensiveFieldSwitch() {
   final TempController tempController = Get.find<TempController>();

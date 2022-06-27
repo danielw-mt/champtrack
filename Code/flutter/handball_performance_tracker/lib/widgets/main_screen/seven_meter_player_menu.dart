@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:handball_performance_tracker/constants/game_actions.dart';
 import 'package:handball_performance_tracker/utils/icons.dart';
 import 'package:handball_performance_tracker/widgets/main_screen/seven_meter_menu.dart';
-import '../../strings.dart';
 import 'package:handball_performance_tracker/widgets/main_screen/field.dart';
 import 'package:handball_performance_tracker/controllers/persistentController.dart';
+import '../../constants/stringsGameScreen.dart';
+import '../../constants/stringsGeneral.dart';
 import '../../controllers/tempController.dart';
 import 'package:get/get.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
@@ -51,7 +52,7 @@ void callSevenMeterPlayerMenu(context) {
             const Align(
               alignment: Alignment.topLeft,
               child: Text(
-                Strings.lPlayer,
+                StringsGeneral.lPlayer,
                 textAlign: TextAlign.left,
                 style: TextStyle(
                   color: Colors.black,
@@ -126,7 +127,7 @@ DialogButton buildDialogButton(BuildContext context, Player associatedPlayer) {
 
   String buttonText = associatedPlayer.lastName;
   if (associatedPlayer.id == lastClickedPlayerId) {
-    buttonText = Strings.lSamePlayer;
+    buttonText = StringsGeneral.lSamePlayer;
   }
 
   String buttonNumber = (associatedPlayer.number).toString();
