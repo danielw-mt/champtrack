@@ -37,7 +37,7 @@ class Dashboard extends StatelessWidget {
                               child: Text(StringsDashboard.lManageTeams)),
                           ElevatedButton(
                               onPressed: () {
-                                Get.to(StartGameScreen());
+                                Get.to(() => StartGameScreen());
                               },
                               child: Text(StringsDashboard.lTrackNewGame)),
                         ],

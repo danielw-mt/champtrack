@@ -79,7 +79,7 @@ class _StartGameScreenState extends State<StartGameScreen> {
               startGameFlowStep -= 1;
             });
           } else {
-            Get.to(Dashboard());
+            Get.to(() => Dashboard());
           }
         },
         // when page 0 is reached change the text of the button
@@ -111,7 +111,7 @@ class _StartGameScreenState extends State<StartGameScreen> {
               } else {
                 tempController.updateOnFieldPlayers();
                 startGame(context);
-                Get.to(MainScreen());
+                Get.to(() => MainScreen());
                 return;
               }
             }

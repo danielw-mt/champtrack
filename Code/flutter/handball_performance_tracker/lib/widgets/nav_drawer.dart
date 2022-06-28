@@ -27,24 +27,24 @@ class NavDrawer extends StatelessWidget {
           ListTile(
             leading: Icon(Icons.input),
             title: Text(StringsGeneral.lSettings),
-            onTap: () => {Get.to(SettingsScreen())},
+            onTap: () => {Get.to(() => SettingsScreen())},
           ),
           ListTile(
             leading: Icon(Icons.verified_user),
             title: Text(StringsGeneral.lMainScreen),
             onTap: () => {
-              if (Get.currentRoute.toString() != "/") {Get.to(MainScreen())}
+              if (Get.currentRoute.toString() != "/") {Get.to(() => MainScreen())}
             },
           ),
           ListTile(
             leading: Icon(Icons.verified_user),
             title: Text('Placeholder Screen'),
-            onTap: () => {Get.to(DebugScreen())},
+            onTap: () => {Get.to(() => DebugScreen())},
           ),
           ListTile(
             leading: Icon(Icons.verified_user),
             title: Text(StringsGeneral.lTeamSelectionScreen),
-            onTap: () => {Get.to(TeamSelectionScreen())},
+            onTap: () => {Get.to(() => TeamSelectionScreen())},
           ),
           Spacer(),
           Text(
