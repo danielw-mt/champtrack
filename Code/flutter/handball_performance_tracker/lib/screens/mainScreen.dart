@@ -80,12 +80,23 @@ class MainScreen extends StatelessWidget {
                             // FieldSwitch to swipe between right and left field side. SizedBox around it so there is no rendering error.
                             width: fieldSizeParameter.fieldWidth,
                             height: fieldSizeParameter.fieldHeight,
-                            child: FieldSwitch(),
+                          // Use a LayoutBuilder to get the real size of SizedBox.
+                          // As it is inside Flexible Widget, the size can vary depending on screen size.
+                          child: new LayoutBuilder(
+                            builder: (BuildContext context,
+                                BoxConstraints constraints) {
+                              // set Field size depending on Widget size
+                              fieldSizeParameter.setFieldSize(
+                                  constraints.maxWidth, constraints.maxHeight);
+                              return FieldSwitch();
+                            },
+                          ),
                           ),
                         ),
                       ),
                     ],
-                  )),
+                ),
+              ),
             ],
           ),
         ],
