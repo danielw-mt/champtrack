@@ -248,10 +248,9 @@ class TempController extends GetxController {
   /// getter for playerMenuText
   String getPlayerMenuText() => _playerMenuText.value;
 
-  // TODO this method is unnecessary unless we want getters and setters to exist for every method -> fix this in scope of 163
-  void updatePlayerMenuText() {
-    // changing from dep = input.obs
-    _playerMenuText.value = "Assist";
+   
+  void setPlayerMenutText(String text) {
+    _playerMenuText.value = text;
     update(["player-menu-text"]);
   }
 
@@ -329,6 +328,7 @@ class TempController extends GetxController {
   }
 
   /// @return rx list
+  /// after click on goal there is only one element "goal", otherwise
   /// first element is the sector as a string, second element distinguishes the distance ("<6", "6to9", ">9")
   var _lastLocation = [].obs;
 
