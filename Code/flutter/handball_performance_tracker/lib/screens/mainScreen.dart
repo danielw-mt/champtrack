@@ -35,7 +35,8 @@ class MainScreen extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              Column(
+              Flexible(
+                  child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -44,42 +45,47 @@ class MainScreen extends StatelessWidget {
                   //Spacer(flex: 1,),
                   Container()
                 ],
-              ),
+              )),
               Spacer(
                 flex: 1,
               ),
               // Player Bar
-              Container(
-                  width: efscorebar.scorebarWidth + efscorebar.paddingWidth * 4,
-                  height: fieldSizeParameter.fieldHeight +
-                      fieldSizeParameter.toolbarHeight / 4,
-                  alignment: Alignment.topCenter,
-                  child: EfScoreBar()),
+              Flexible(
+                  flex: 4,
+                  child: Container(
+                      width: efscorebar.scorebarWidth +
+                          efscorebar.paddingWidth * 4,
+                      height: fieldSizeParameter.fieldHeight +
+                          fieldSizeParameter.toolbarHeight / 4,
+                      alignment: Alignment.topCenter,
+                      child: EfScoreBar())),
               // Field
-              Column(
-                children: [
-                  StopWatchBar(),
-                  Container(
-                    width: fieldSizeParameter.fieldWidth +
-                        fieldSizeParameter.toolbarHeight / 4,
-                    height: fieldSizeParameter.fieldHeight +
-                        fieldSizeParameter.toolbarHeight / 4,
-                    alignment: Alignment.topCenter,
-                    child: Container(
-                      decoration: BoxDecoration(
-                          // set border around field
-                          border:
-                              Border.all(width: fieldSizeParameter.lineSize)),
-                      child: SizedBox(
-                        // FieldSwitch to swipe between right and left field side. SizedBox around it so there is no rendering error.
-                        width: fieldSizeParameter.fieldWidth,
-                        height: fieldSizeParameter.fieldHeight,
-                        child: FieldSwitch(),
+              Flexible(
+                  flex: 4,
+                  child: Column(
+                    children: [
+                      StopWatchBar(),
+                      Container(
+                        width: fieldSizeParameter.fieldWidth +
+                            fieldSizeParameter.toolbarHeight / 4,
+                        height: fieldSizeParameter.fieldHeight +
+                            fieldSizeParameter.toolbarHeight / 4,
+                        alignment: Alignment.topCenter,
+                        child: Container(
+                          decoration: BoxDecoration(
+                              // set border around field
+                              border: Border.all(
+                                  width: fieldSizeParameter.lineSize)),
+                          child: SizedBox(
+                            // FieldSwitch to swipe between right and left field side. SizedBox around it so there is no rendering error.
+                            width: fieldSizeParameter.fieldWidth,
+                            height: fieldSizeParameter.fieldHeight,
+                            child: FieldSwitch(),
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                ],
-              ),
+                    ],
+                  )),
             ],
           ),
         ],
