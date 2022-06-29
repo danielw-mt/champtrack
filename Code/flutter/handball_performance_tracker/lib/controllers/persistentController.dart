@@ -75,7 +75,10 @@ class PersistentController extends GetxController {
 
   /// return last action that was added
   GameAction getLastAction() {
-    return _actions.last;
+    if (_actions.length > 0) {
+      return _actions.last;
+    }
+    return GameAction();
   }
 
   /// update last added action in actions list and firestore
@@ -85,7 +88,7 @@ class PersistentController extends GetxController {
   }
 
   /// updates playerid of the last action and eff score of player according to last action
-  void setLastActionPlayer(Player player){
+  void setLastActionPlayer(Player player) {
     _actions.last.playerId = player.id!;
     repository.updateAction(_actions.last);
   }
