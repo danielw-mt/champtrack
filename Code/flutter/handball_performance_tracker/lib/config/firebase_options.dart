@@ -82,16 +82,6 @@ class DevFirebaseOptions {
       return web;
     }
     switch (defaultTargetPlatform) {
-      case TargetPlatform.android:
-        throw UnsupportedError(
-          'DevFirebaseOptions have not been configured for android - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
-      case TargetPlatform.iOS:
-        throw UnsupportedError(
-          'DevFirebaseOptions have not been configured for iOS - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
       case TargetPlatform.macOS:
         throw UnsupportedError(
           'DevFirebaseOptions have not been configured for macos - '
@@ -124,22 +114,24 @@ class DevFirebaseOptions {
     measurementId: 'G-0BMS52683E',
   );
 
-  /*static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyBQFdpe1IL5Vrh5sAyAIWaY4isy0LdDUc8',
-    appId: '1:910235672034:android:9f6e014a8d7d1b4bbeedbb',
+  /* TODO: does not work so far as firebase SDK setup needs to be adapted
+  
+  static const FirebaseOptions android = FirebaseOptions(
+    apiKey: 'AIzaSyDgjjjDLuQoL5CTGvlAVizQiqFfqdsXMow',
+    appId: '1:974814103289:android:7044af92503d46c606c428',
     messagingSenderId: '910235672034',
     projectId: 'handball-tracker-dev',
-    //storageBucket: 'handball-performance-tracker.appspot.com',
+    storageBucket: 'handball-tracker-dev.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyBaokiMdJKekw0hT1AYwPZ-QoLOhiLpgAw',
-    appId: '1:910235672034:ios:3d33781e9d42829dbeedbb',
+    apiKey: 'AIzaSyBIopT3JQCid-K1_Ylcmc6Q7tfSVckVjLM',
+    appId: '1:974814103289:ios:2f609bd8d708d56a06c428',
     messagingSenderId: '910235672034',
     projectId: 'handball-tracker-dev',
-    //storageBucket: 'handball-performance-tracker.appspot.com',
-    //iosClientId: '910235672034-pnm1ks4onkhtst3h6st5n5cjep5o53di.apps.googleusercontent.com',
-    //iosBundleId: 'mad.tf.fau.de.handballPerformanceTracker',
+    storageBucket: 'handball-tracker-dev.appspot.com',
+    iosClientId: '910235672034-pnm1ks4onkhtst3h6st5n5cjep5o53di.apps.googleusercontent.com',
+    iosBundleId: 'com.mycompany.champtrackv2',
   );*/
 }
 
