@@ -1,8 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
-
-import '../strings.dart';
+import '../constants/stringsAuthentication.dart';
+import '../constants/stringsGeneral.dart';
 
 class AuthenticationScreen extends StatefulWidget {
   final BuildContext context;
@@ -52,11 +52,11 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
             SizedBox(
               height: 20,
             ),
-            ElevatedButton(onPressed: signIn, child: Text(Strings.lSignInButton)),
+            ElevatedButton(onPressed: signIn, child: Text(StringsAuth.lSignInButton)),
             isLogin
                 ? TextButton(
                     onPressed: onClickedSignUp,
-                    child: Text(Strings.lSignUpButton),
+                    child: Text(StringsAuth.lSignUpButton),
                   )
                 : Container()
           ]),
@@ -85,12 +85,12 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
           SizedBox(
             height: 20,
           ),
-          ElevatedButton(onPressed: signUp, child: Text(Strings.lSignInButton)),
+          ElevatedButton(onPressed: signUp, child: Text(StringsAuth.lSignInButton)),
           isLogin
               ? Container()
               : TextButton(
                   onPressed: onClickedSignUp,
-                  child: Text(Strings.lLogInButton),
+                  child: Text(StringsAuth.lLogInButton),
                 )
         ]),
       ),
@@ -103,7 +103,7 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
         context: context,
         content: Column(
           children: [
-            Text(Strings.lLoggingIn),
+            Text(StringsAuth.lLoggingIn),
             CircularProgressIndicator(),
           ],
         ),
@@ -129,7 +129,7 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
         context: context,
         content: Column(
           children: [
-            Text(Strings.lSigningUp),
+            Text(StringsAuth.lSigningUp),
             CircularProgressIndicator(),
           ],
         ),

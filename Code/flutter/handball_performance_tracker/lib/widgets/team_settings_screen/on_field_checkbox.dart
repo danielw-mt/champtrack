@@ -13,8 +13,8 @@ class OnFieldCheckbox extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetBuilder<TempController>(
         id: "on-field-checkbox",
-        builder: (gameController) {
-          List<Player> playersOnField = gameController.getOnFieldPlayers();
+        builder: (tempController) {
+          List<Player> playersOnField = tempController.getOnFieldPlayers();
           return Checkbox(
             value: playersOnField.contains(player), //playersOnField[index],
             onChanged: (value) {
@@ -24,16 +24,16 @@ class OnFieldCheckbox extends StatelessWidget {
               if (value == true) {
                 if (numOnField < PLAYER_NUM) {
                   if (!playersOnField.contains(player)) {
-                    gameController.addOnFieldPlayer(player);
+                    tempController.addOnFieldPlayer(player);
                   }
                 }
               } else {
                 if (playersOnField.contains(player)) {
-                  gameController.removeOnFieldPlayer(player);
+                  tempController.removeOnFieldPlayer(player);
                 }
               }
               // after changing players with the checkboxes, update the player bar with those players
-              gameController.setPlayerBarPlayers();
+              tempController.setPlayerBarPlayers();
             },
           );
         });

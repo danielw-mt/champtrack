@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:handball_performance_tracker/widgets/nav_drawer.dart';
-import '../strings.dart';
+import '../constants/stringsGeneral.dart';
+import '../constants/stringsGameSettings.dart';
 import '../controllers/tempController.dart';
 import './../widgets/settings_screen/game_start_stop_buttons.dart';
 
@@ -20,7 +21,7 @@ class SettingsScreen extends StatelessWidget {
           // Container for menu button on top left corner
           MenuButton(_scaffoldKey),
           GameStartStopButtons(),
-          const Text(Strings.lHomeSideIsRight),
+          const Text(StringsGameSettings.lHomeSideIsRight),
           GetBuilder<TempController>(
               id: "side-switch",
               builder: (tempController) {

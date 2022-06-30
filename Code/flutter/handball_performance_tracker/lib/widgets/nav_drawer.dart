@@ -6,11 +6,12 @@ import 'package:handball_performance_tracker/controllers/tempController.dart';
 import 'package:handball_performance_tracker/data/team.dart';
 import 'package:handball_performance_tracker/screens/dashboard.dart';
 import 'package:handball_performance_tracker/widgets/main_screen/ef_score_bar.dart';
+import 'package:handball_performance_tracker/constants/stringsAuthentication.dart';
 import './../screens/mainScreen.dart';
 import '../screens/debugScreen.dart';
 import '../screens/teamSelectionScreen.dart';
 import 'package:get/get.dart';
-import '../strings.dart';
+import '../constants/stringsGeneral.dart';
 
 class NavDrawer extends StatelessWidget {
   // Navigation widget for Material app. Can be opend from the sidebar
@@ -44,10 +45,9 @@ class NavDrawer extends StatelessWidget {
                         FirebaseAuth.instance.signOut();
                       },
                       icon: Icon(Icons.logout),
-                      label: Text(Strings.lSignOutButton))
+                      label: Text(StringsAuth.lSignOutButton))
                 ],
-              )
-              ),
+              )),
             ),
           ],
         ),
@@ -104,7 +104,7 @@ List<Widget> buildMenuList(BuildContext context, bool gameIsRunning) {
     ListTile(
       textColor: Colors.white,
       title: Text(
-        " " * 2 + Strings.lDashboard,
+        " " * 2 + StringsGeneral.lDashboard,
         style: TextStyle(fontSize: 20),
       ),
       onTap: () => {Get.to(Dashboard())},
@@ -125,7 +125,7 @@ List<Widget> buildMenuList(BuildContext context, bool gameIsRunning) {
           child: Align(
             alignment: Alignment.centerLeft,
             child: Text(
-              Strings.lTeams,
+              StringsGeneral.lTeams,
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 20,
@@ -146,7 +146,7 @@ List<Widget> buildMenuList(BuildContext context, bool gameIsRunning) {
           child: Align(
             alignment: Alignment.centerLeft,
             child: Text(
-              Strings.lStatistics,
+              StringsGeneral.lStatistics,
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 20,
@@ -168,7 +168,7 @@ List<Widget> buildMenuList(BuildContext context, bool gameIsRunning) {
           child: Align(
             alignment: Alignment.centerLeft,
             child: Text(
-              Strings.lGlossary,
+              StringsGeneral.lGlossary,
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 20,
@@ -218,7 +218,7 @@ class GameIsRunningButton extends StatelessWidget {
             Icon(Icons.sports_handball, color: buttonDarkBlueColor, size: 50),
             Expanded(
               child: Text(
-                Strings.lBackToGameButton,
+                StringsGeneral.lBackToGameButton,
                 style: TextStyle(color: buttonDarkBlueColor, fontSize: 20),
               ),
             )
