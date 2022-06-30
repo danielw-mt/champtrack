@@ -140,9 +140,12 @@ Widget buildDialogButtonMenu(BuildContext context, List<String> buttonTexts,
   Row buttonRow;
   if (isGoalkeeper) {
     List<DialogButton> dialogButtons = [
-      buildDialogButton(context, buttonTexts[0], Colors.red, Icons.style),
-      buildDialogButton(context, buttonTexts[1], Colors.yellow, Icons.style),
-      buildDialogButton(context, buttonTexts[2], Colors.grey),
+      buildDialogButton(
+          context, buttonTexts[0], Colors.red, Icons.style, 2, ""),
+      buildDialogButton(
+          context, buttonTexts[1], Colors.yellow, Icons.style, 2, ""),
+      buildDialogButton(
+          context, buttonTexts[2], Colors.grey, Icons.timer, 2, ""),
       buildDialogButton(context, buttonTexts[3], Colors.grey),
       buildDialogButton(context, buttonTexts[4], Colors.grey),
       buildDialogButton(context, buttonTexts[5], Colors.blue),
@@ -156,9 +159,9 @@ Widget buildDialogButtonMenu(BuildContext context, List<String> buttonTexts,
           children: [
             dialogButtons[0],
             dialogButtons[1],
+            dialogButtons[2],
           ],
         ),
-        dialogButtons[2],
         dialogButtons[3],
         dialogButtons[4],
       ]),
@@ -250,8 +253,8 @@ Widget buildDialogButtonMenu(BuildContext context, List<String> buttonTexts,
 /// builds a single dialog button that logs its text (=action) to firestore
 //  and updates the game state. Its color and icon can be specified as parameters
 DialogButton buildDialogButton(
-    BuildContext context, String buttonText, Color color,
-    [icon]) {
+    BuildContext context, String buttonText, Color buttonColor,
+    [icon, sizeFactor, otherText]) {
   TempController tempController = Get.find<TempController>();
   PersistentController persistentController = Get.find<PersistentController>();
   void logAction(String actionType) async {
@@ -347,15 +350,16 @@ DialogButton buildDialogButton(
       // have round edges with same degree as Alert dialog
       radius: const BorderRadius.all(Radius.circular(15)),
       // set height and width of buttons so the shirt and name are fitting inside
-      height: width * 0.10,
-      width: width * 0.10,
-      color: color,
+      height: sizeFactor != null ? width * 0.10 / sizeFactor : width * 0.10,
+      width: sizeFactor != null ? width * 0.10 / sizeFactor : width * 0.10,
+      color: buttonColor,
       child: Center(
         child: Column(
           children: [
             (icon != null) ? Icon(icon) : Container(),
             Text(
-              buttonText,
+              otherText != null ? otherText : buttonText,
+              textAlign: TextAlign.center,
               style: TextStyle(color: Colors.white, fontSize: 20),
             )
           ],
