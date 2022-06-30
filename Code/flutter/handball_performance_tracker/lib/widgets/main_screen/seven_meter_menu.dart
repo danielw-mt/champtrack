@@ -186,6 +186,7 @@ DialogButton buildDialogButton(
 
     // goal
     if (actionType == actionMapping[seven_meter]!.values.toList()[0]) {
+      tempController.incOwnScore();
       offensiveFieldSwitch();
     }
     // missed 7m
@@ -194,6 +195,7 @@ DialogButton buildDialogButton(
     }
     // opponent goal
     if (actionType == actionMapping[seven_meter]!.values.toList()[2]) {
+      tempController.incOpponentScore();
       defensiveFieldSwitch();
     }
     // opponent missed
