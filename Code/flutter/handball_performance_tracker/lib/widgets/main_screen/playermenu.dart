@@ -3,7 +3,6 @@ import 'package:handball_performance_tracker/constants/game_actions.dart';
 import 'package:handball_performance_tracker/utils/icons.dart';
 import '../../constants/stringsGeneral.dart';
 import '../../constants/stringsGameScreen.dart';
-import 'package:handball_performance_tracker/widgets/main_screen/seven_meter_menu.dart';
 import 'package:handball_performance_tracker/widgets/main_screen/seven_meter_player_menu.dart';
 import 'package:handball_performance_tracker/widgets/main_screen/field.dart';
 import 'package:handball_performance_tracker/controllers/persistentController.dart';
@@ -12,7 +11,6 @@ import 'package:get/get.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'dart:math';
 import '../../utils/feed_logic.dart';
-import '../../utils/field_control.dart';
 import '../../data/game_action.dart';
 import '../../data/player.dart';
 import 'package:logger/logger.dart';
@@ -151,14 +149,50 @@ GetBuilder<TempController> buildDialogButton(
     return false;
   }
 
+  void _setFieldBasedOnLastAction(GameAction lastAction) {
+    if (lastAction.actionType == goal || lastAction.actionType == errThrow) {
+      while (FieldSwitch.pageController.positions.length > 1) {
+        FieldSwitch.pageController
+            .detach(FieldSwitch.pageController.positions.first);
+      }
+      // if our action is left (page 0) and we are attacking (on page 0) jump back to defense (page 1) after the action
+      if (tempController.getFieldIsLeft() == true &&
+          tempController.getAttackIsLeft() == true) {
+        logger.d("Switching to right field after action");
+        FieldSwitch.pageController.jumpToPage(1);
+        // if out action is right (page 1) and we are attacking (on page 1) jump back to defense (page 0) after the action
+      } else if (tempController.getFieldIsLeft() == false &&
+          tempController.getAttackIsLeft() == false) {
+        logger.d("Switching to left field after action");
+        FieldSwitch.pageController.jumpToPage(0);
+      }
+    } else if (lastAction.actionType == blockAndSteal) {
+      // if our action is left (page 0) and we are defensing (on page 0) jump back to attack (page 1) after the action
+      while (FieldSwitch.pageController.positions.length > 1) {
+        FieldSwitch.pageController
+            .detach(FieldSwitch.pageController.positions.first);
+      }
+      if (tempController.getFieldIsLeft() == true &&
+          tempController.getAttackIsLeft() == false) {
+        logger.d("Switching to right field after action");
+        FieldSwitch.pageController.jumpToPage(1);
+
+        // if out action is right (page 1) and we are defensing (on page 1) jump back to attack (page 0) after the action
+      } else if (tempController.getFieldIsLeft() == false &&
+          tempController.getAttackIsLeft() == true) {
+        logger.d("Switching to left field after action");
+        FieldSwitch.pageController.jumpToPage(0);
+      }
+    }
+  }
+
   void logPlayerSelection() async {
     logger.d("Logging the player selection");
     GameAction lastAction = persistentController.getLastAction();
-    String? lastClickedPlayerId = tempController.getLastClickedPlayer().id;
-    lastAction.playerId = lastClickedPlayerId.toString();
+    Player lastClickedPlayer = tempController.getLastClickedPlayer();
     // if goal was pressed but no player was selected yet
     //(lastClickedPlayer is default Player Object) do nothing
-    if (lastAction.actionType == "goal" && lastClickedPlayerId == "") {
+    if (lastAction.actionType == "goal" && lastClickedPlayer.id! == "") {
       tempController.setPlayerMenutText("Assist");
       // update last Clicked player value with the Player from selected team
       // who was clicked
@@ -169,24 +203,16 @@ GetBuilder<TempController> buildDialogButton(
     // if goal was pressed and a player was already clicked once
     if (lastAction.actionType == "goal") {
       // if it was a solo goal the action type has to be updated to "Tor Solo"
+      persistentController.setLastActionPlayer(lastClickedPlayer);
+      tempController.updatePlayerEfScore(
+          lastClickedPlayer.id!, persistentController.getLastAction());
+      addFeedItem(persistentController.getLastAction());
+
       if (!_wasAssist()) {
         logger.d("Logging solo goal");
         // update data for person that shot the goal
-        lastAction.playerId = tempController.getLastClickedPlayer().id!;
-        persistentController.setLastAction(lastAction);
-        // update player's ef-score
-        // TODO implement this
-        //activePlayer.addAction(lastAction);
-
-        tempController.setLastClickedPlayer(Player());
-        addFeedItem(lastAction);
-        tempController.refresh();
       } else {
         logger.d("Logging goal with assist");
-        // if it was an assist update data for both players
-        // person that scored goal
-        lastAction.playerId = tempController.getLastClickedPlayer().id!;
-        persistentController.setLastAction(lastAction);
         // person that scored assist
         // deep clone a new action from the most recent action
         GameAction assistAction = GameAction.clone(lastAction);
@@ -195,10 +221,12 @@ GetBuilder<TempController> buildDialogButton(
         assistAction.playerId = assistPlayer.id!;
         assistAction.actionType = "assist";
         persistentController.addAction(assistAction);
+        persistentController.setLastActionPlayer(assistPlayer);
+        tempController.updatePlayerEfScore(
+            assistPlayer.id!, persistentController.getLastAction());
 
         // add assist first to the feed and then the goal
         addFeedItem(assistAction);
-        addFeedItem(lastAction);
         // update player's ef-score
         // TODO implement this
         //assistPlayer.addAction(lastAction);
@@ -207,58 +235,14 @@ GetBuilder<TempController> buildDialogButton(
       }
     } else {
       // if the action was not a goal just update the player id in firebase and gamestate
-      lastAction.playerId = associatedPlayer.id.toString();
-      persistentController.setLastAction(lastAction);
-      addFeedItem(lastAction);
-      // update player's ef-scorer
-      // TODO implement this
-      // activePlayer.addAction(lastAction);
-
-      tempController.setLastClickedPlayer(Player());
+      persistentController.setLastActionPlayer(associatedPlayer);
+      tempController.updatePlayerEfScore(
+          associatedPlayer.id!, persistentController.getLastAction());
+      // add action to feed
+      addFeedItem(persistentController.getLastAction());
     }
-    if (lastAction.actionType == goal || lastAction.actionType == errThrow) {
-      // if our action is left (page 0) and we are attacking (on page 0) jump back to defense (page 1) after the action
-      if (tempController.getFieldIsLeft() == true &&
-          tempController.getAttackIsLeft() == true) {
-        logger.d("Switching to right field after action");
-        while (FieldSwitch.pageController.positions.length > 1) {
-          FieldSwitch.pageController
-              .detach(FieldSwitch.pageController.positions.first);
-        }
-        FieldSwitch.pageController.jumpToPage(1);
-
-        // if out action is right (page 1) and we are attacking (on page 1) jump back to defense (page 0) after the action
-      } else if (tempController.getFieldIsLeft() == false &&
-          tempController.getAttackIsLeft() == false) {
-        logger.d("Switching to left field after action");
-        while (FieldSwitch.pageController.positions.length > 1) {
-          FieldSwitch.pageController
-              .detach(FieldSwitch.pageController.positions.first);
-        }
-        FieldSwitch.pageController.jumpToPage(0);
-      }
-    } else if (lastAction.actionType == blockAndSteal) {
-      // if our action is left (page 0) and we are defensing (on page 0) jump back to attack (page 1) after the action
-      if (tempController.getFieldIsLeft() == true &&
-          tempController.getAttackIsLeft() == false) {
-        logger.d("Switching to right field after action");
-        while (FieldSwitch.pageController.positions.length > 1) {
-          FieldSwitch.pageController
-              .detach(FieldSwitch.pageController.positions.first);
-        }
-        FieldSwitch.pageController.jumpToPage(1);
-
-        // if out action is right (page 1) and we are defensing (on page 1) jump back to attack (page 0) after the action
-      } else if (tempController.getFieldIsLeft() == false &&
-          tempController.getAttackIsLeft() == true) {
-        logger.d("Switching to left field after action");
-        while (FieldSwitch.pageController.positions.length > 1) {
-          FieldSwitch.pageController
-              .detach(FieldSwitch.pageController.positions.first);
-        }
-        FieldSwitch.pageController.jumpToPage(0);
-      }
-    }
+    tempController.setLastClickedPlayer(Player());
+    _setFieldBasedOnLastAction(lastAction);
     if (lastAction.actionType == "1v1") {
       logger.d("1v1 detected");
       Navigator.pop(context);

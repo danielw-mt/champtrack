@@ -4,8 +4,6 @@ import 'package:handball_performance_tracker/utils/feed_logic.dart';
 import 'package:handball_performance_tracker/utils/player_helper.dart';
 import 'package:handball_performance_tracker/widgets/main_screen/field.dart';
 import '../../constants/stringsGameScreen.dart';
-import 'package:handball_performance_tracker/data/database_repository.dart';
-import 'package:handball_performance_tracker/utils/feed_logic.dart';
 import 'package:handball_performance_tracker/widgets/main_screen/seven_meter_menu.dart';
 import '../../controllers/persistentController.dart';
 import '../../controllers/tempController.dart';
@@ -74,30 +72,7 @@ void callActionMenu(BuildContext context) {
               ))).show();
 }
 
-/// determine if acktion was attack (true) or defense (false)
-bool determineAttack() {
-  logger.d("Determining whether attack actions should be displayed...");
-  final TempController tempController = Get.find<TempController>();
-  // decide whether attack or defense actions should be displayed depending
-  //on what side the team goals is and whether they are attacking or defending
-  bool attacking = false;
-  bool attackIsLeft = tempController.getAttackIsLeft();
-  bool fieldIsLeft = tempController.getFieldIsLeft();
-
-  // when our goal is to the right (= attackIsLeft) and the field is left
-  //display attack options
-  if (attackIsLeft && fieldIsLeft) {
-    attacking = true;
-    // when our goal is to the left (=attack is right) and the field is to the
-    //right display attack options
-  } else if (attackIsLeft == false && fieldIsLeft == false) {
-    attacking = true;
-  }
-  logger.d("Attack actions should be displayed: $attacking");
-  return attacking;
-}
-
-/// determine if acktion was attack, defense, goalkeeper or 7m action
+/// determine if acktion was attack, defense, goalkeeper
 String determineActionType() {
   logger.d("Determining which actions should be displayed...");
   final TempController tempController = Get.find<TempController>();
@@ -120,9 +95,6 @@ String determineActionType() {
     } else if (attackIsLeft == false && fieldIsLeft == false) {
       actionType = otherGoalkeeper;
     }
-    // TODO no idea how to do this anymore
-  } else if (lastAction.actionType == "foul") {
-    actionType = seven_meter;
   } else {
     if (attackIsLeft && fieldIsLeft) {
       actionType = attack;
@@ -328,22 +300,17 @@ DialogButton buildDialogButton(
     //     .addActionToGame(action)
     //     .then((DocumentReference doc) => action.id = doc.id);
 
-    // close action menu
-    Navigator.pop(context);
     // if we perform a 7m foul go straight to 7m screen and skip player screen
-    if (action.actionType == "foul") {
+    if (action.actionType == foulWithSeven) {
       logger.d("7m foul. Going to 7m screen");
       // TODO add 7m action data to repository here and not in player screen
       // TODO add action to feedItems (causes an error for some reason)
       //addFeedItem(action);
-
+      Navigator.pop(context);
       callSevenMeterMenu(context, false);
       return;
       // go to player menu for all other actions
-    } else {
-      callPlayerMenu(context);
-    }
-    persistentController.addAction(action);
+    } 
 
     // Save action directly if goalkeeper action
     if (actionType == goalkeeper) {
@@ -364,6 +331,12 @@ DialogButton buildDialogButton(
           "last action saved in database: ${persistentController.getLastAction().toMap()}");
     } else {
       persistentController.addAction(action);
+    }
+    Navigator.pop(context);
+    // close action menu if goalkeeper action
+    if (actionType != goalkeeper) {
+      print("stepping in here: $actionType");
+      callPlayerMenu(context);
     }
   }
 
@@ -393,12 +366,5 @@ DialogButton buildDialogButton(
         // reset the feed timer
         String actionType = determineActionType();
         logAction(actionType);
-        Navigator.pop(context);
-        // close action menu if goalkeeper action
-        if (actionType != goalkeeper &&
-            persistentController.getLastAction().actionType != "foul") {
-          print("stepping in here: $actionType");
-          callPlayerMenu(context);
-        }
       });
 }
