@@ -252,6 +252,7 @@ GetBuilder<TempController> buildDialogButton(
     print("last action saved in database: ");
     // if the action was a 7 meter action we pop the screen above and go to 7m menu
     // for all other actions the player menu
+    tempController.setPlayerMenutText("");
     if (lastAction.actionType != "1v1") {
       Navigator.pop(context);
     }
