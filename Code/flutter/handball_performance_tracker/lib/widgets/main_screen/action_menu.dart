@@ -97,16 +97,18 @@ bool determineAttack() {
   return attacking;
 }
 
-/// determine if acktion was attack, defense or goalkeeper action
+/// determine if acktion was attack, defense, goalkeeper or 7m action
 String determineActionType() {
   logger.d("Determining which actions should be displayed...");
   final TempController tempController = Get.find<TempController>();
+  final PersistentController persistentController =
+      Get.find<PersistentController>();
   // decide whether attack or defense actions should be displayed depending
   //on what side the team goals is and whether they are attacking or defending
   String actionType = defense;
   bool attackIsLeft = tempController.getAttackIsLeft();
   bool fieldIsLeft = tempController.getFieldIsLeft();
-
+  GameAction lastAction = persistentController.getLastAction();
   // when our goal is to the right (= attackIsLeft) and the field is left
   //display attack options
   if (tempController.getLastLocation()[0] == goal) {
@@ -118,6 +120,9 @@ String determineActionType() {
     } else if (attackIsLeft == false && fieldIsLeft == false) {
       actionType = otherGoalkeeper;
     }
+    // TODO no idea how to do this anymore
+  } else if (lastAction.actionType == "foul") {
+    actionType = seven_meter;
   } else {
     if (attackIsLeft && fieldIsLeft) {
       actionType = attack;
@@ -324,12 +329,14 @@ DialogButton buildDialogButton(
     //     .then((DocumentReference doc) => action.id = doc.id);
 
     // close action menu
+    Navigator.pop(context);
     // if we perform a 7m foul go straight to 7m screen and skip player screen
     if (action.actionType == "foul") {
       logger.d("7m foul. Going to 7m screen");
       // TODO add 7m action data to repository here and not in player screen
       // TODO add action to feedItems (causes an error for some reason)
       //addFeedItem(action);
+
       callSevenMeterMenu(context, false);
       return;
       // go to player menu for all other actions
@@ -388,7 +395,9 @@ DialogButton buildDialogButton(
         logAction(actionType);
         Navigator.pop(context);
         // close action menu if goalkeeper action
-        if (actionType != goalkeeper) {
+        if (actionType != goalkeeper &&
+            persistentController.getLastAction().actionType != "foul") {
+          print("stepping in here: $actionType");
           callPlayerMenu(context);
         }
       });
