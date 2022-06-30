@@ -3,6 +3,7 @@ import 'package:handball_performance_tracker/constants/game_actions.dart';
 import 'package:handball_performance_tracker/utils/icons.dart';
 import '../../constants/stringsGeneral.dart';
 import '../../constants/stringsGameScreen.dart';
+import 'package:handball_performance_tracker/widgets/main_screen/seven_meter_player_menu.dart';
 import 'package:handball_performance_tracker/widgets/main_screen/field.dart';
 import 'package:handball_performance_tracker/controllers/persistentController.dart';
 import '../../controllers/tempController.dart';
@@ -149,18 +150,16 @@ GetBuilder<TempController> buildDialogButton(
   }
 
   void _setFieldBasedOnLastAction(GameAction lastAction) {
-    while (FieldSwitch.pageController.positions.length > 1) {
-      FieldSwitch.pageController
-          .detach(FieldSwitch.pageController.positions.first);
-    }
-    // TODO debug if there are no cases missing here because when you switch back it doesnt get triggered again
     if (lastAction.actionType == goal || lastAction.actionType == errThrow) {
+      while (FieldSwitch.pageController.positions.length > 1) {
+        FieldSwitch.pageController
+            .detach(FieldSwitch.pageController.positions.first);
+      }
       // if our action is left (page 0) and we are attacking (on page 0) jump back to defense (page 1) after the action
       if (tempController.getFieldIsLeft() == true &&
           tempController.getAttackIsLeft() == true) {
         logger.d("Switching to right field after action");
         FieldSwitch.pageController.jumpToPage(1);
-
         // if out action is right (page 1) and we are attacking (on page 1) jump back to defense (page 0) after the action
       } else if (tempController.getFieldIsLeft() == false &&
           tempController.getAttackIsLeft() == false) {
@@ -194,7 +193,7 @@ GetBuilder<TempController> buildDialogButton(
     // if goal was pressed but no player was selected yet
     //(lastClickedPlayer is default Player Object) do nothing
     if (lastAction.actionType == "goal" && lastClickedPlayer.id! == "") {
-      tempController.updatePlayerMenuText();
+      tempController.setPlayerMenutText("Assist");
       // update last Clicked player value with the Player from selected team
       // who was clicked
       tempController.setLastClickedPlayer(
@@ -203,7 +202,7 @@ GetBuilder<TempController> buildDialogButton(
     }
     // if goal was pressed and a player was already clicked once
     if (lastAction.actionType == "goal") {
-      // update data for person that shot the goal
+      // if it was a solo goal the action type has to be updated to "Tor Solo"
       persistentController.setLastActionPlayer(lastClickedPlayer);
       tempController.updatePlayerEfScore(
           lastClickedPlayer.id!, persistentController.getLastAction());
@@ -211,27 +210,33 @@ GetBuilder<TempController> buildDialogButton(
       tempController.incOwnScore();
       // add goal to feed
       // if it was a solo goal the action type has to be updated to "Tor Solo"
+
       if (!_wasAssist()) {
-        logger.d("Logging solo goal for ${lastClickedPlayer.lastName}");
+        logger.d("Logging solo goal");
+        // update data for person that shot the goal
       } else {
-        logger.d(
-            "Logging goal of ${lastClickedPlayer.lastName} with assist from ${associatedPlayer.lastName}");
+        logger.d("Logging goal with assist");
+        // person that scored assist
         // deep clone a new action from the most recent action
         GameAction assistAction = GameAction.clone(lastAction);
-        // person that scored assist
+        print("assist action: $assistAction");
         Player assistPlayer = associatedPlayer;
+        assistAction.playerId = assistPlayer.id!;
         assistAction.actionType = "assist";
-        await persistentController.addAction(assistAction);
+        persistentController.addAction(assistAction);
         persistentController.setLastActionPlayer(assistPlayer);
         tempController.updatePlayerEfScore(
             assistPlayer.id!, persistentController.getLastAction());
-        logger.d("assist action: ${assistAction.toMap()}");
-        // add assist to the feed
+
+        // add assist first to the feed and then the goal
         addFeedItem(assistAction);
+        // update player's ef-score
+        // TODO implement this
+        //assistPlayer.addAction(lastAction);
+
+        tempController.setLastClickedPlayer(Player());
       }
     } else {
-      logger.d(
-          "Logging ${lastAction.actionType} of ${associatedPlayer.lastName}");
       // if the action was not a goal just update the player id in firebase and gamestate
       persistentController.setLastActionPlayer(associatedPlayer);
       tempController.updatePlayerEfScore(
@@ -239,12 +244,20 @@ GetBuilder<TempController> buildDialogButton(
       // add action to feed
       addFeedItem(persistentController.getLastAction());
     }
-    logger.d(
-        "last action saved in database: ${persistentController.getLastAction().toMap()}");
-    // reset last clicked player
     tempController.setLastClickedPlayer(Player());
     _setFieldBasedOnLastAction(lastAction);
-    Navigator.pop(context);
+    if (lastAction.actionType == "1v1") {
+      logger.d("1v1 detected");
+      Navigator.pop(context);
+      tempController.setPlayerMenutText(StringsGeneral.lChooseSevenMeterPlayer);
+      callSevenMeterPlayerMenu(context);
+    }
+    print("last action saved in database: ");
+    // if the action was a 7 meter action we pop the screen above and go to 7m menu
+    // for all other actions the player menu
+    if (lastAction.actionType != "1v1") {
+      Navigator.pop(context);
+    }
   }
 
   // Button with shirt with buttonNumber inside and buttonText below.

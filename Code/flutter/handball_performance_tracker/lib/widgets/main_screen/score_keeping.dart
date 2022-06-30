@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:handball_performance_tracker/constants/stringsGeneral.dart';
 import 'package:handball_performance_tracker/controllers/tempController.dart';
-import 'package:handball_performance_tracker/strings.dart';
 import 'package:handball_performance_tracker/widgets/main_screen/ef_score_bar.dart';
 
 class ScoreKeeping extends StatelessWidget {
@@ -65,7 +65,7 @@ class ScoreKeeping extends StatelessWidget {
                 }),
           ),
           // Name of opponent team
-          Text(Strings.lOpponent),
+          Text(StringsGeneral.lOpponent),
           // Plus and Minus buttons of opponent team
           Column(children: [
             TextButton(

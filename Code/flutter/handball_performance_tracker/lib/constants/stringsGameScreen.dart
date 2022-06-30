@@ -27,6 +27,7 @@ class StringsGameScreen{
   static const String lOneVsOneAnd7m = "1v1 & 7m";
   static const String lTwoMin = "2min ziehen";
   static const String lErrThrow = "Fehlwurf"; 
+  static const String lErrThrowGoalkeeper = "Fehlwurf Torwart"; 
   static const String lTrf = "TRF";
   static const String lFoul7m = "Foul => 7m";
   static const String lBlockNoBall = "Block ohne Ballgewinn";

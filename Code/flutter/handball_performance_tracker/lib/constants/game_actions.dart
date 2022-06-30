@@ -1,7 +1,9 @@
 import 'package:handball_performance_tracker/constants/stringsGameScreen.dart';
+import 'package:handball_performance_tracker/constants/stringsGeneral.dart';
 
 const String attack = "attack";
 const String defense = "defense";
+const String seven_meter = "seven_meter";
 const String goalkeeper = "goalkeeper";
 const String otherGoalkeeper = "otherGoalkeeper";
 const String allActions = "allActions";
@@ -34,6 +36,10 @@ const String emptyGoal = "emptyGoal";
 const String positiveAction = "pos";
 const String negativeAction = "neg";
 
+const String goal7m = "goal7m";
+const String missed7m = "missed7m";
+const String parade7m = "parade7m";
+
 Map<String, Map<String, String>> actionMapping = {
   attack: {
     StringsGameScreen.lRedCard: redCard,
@@ -57,13 +63,19 @@ Map<String, Map<String, String>> actionMapping = {
   goalkeeper: {
     StringsGameScreen.lRedCard: redCard,
     StringsGameScreen.lYellowCard: yellowCard,
+    StringsGameScreen.lTimePenalty: timePenalty,
     StringsGameScreen.lEmptyGoal: emptyGoal,
+    StringsGameScreen.lErrThrowGoalkeeper: errThrow,
     StringsGameScreen.lGoalGoalkeeper: goal,
-    StringsGameScreen.lErrThrow: errThrow,
-    StringsGameScreen.lAssist: assist,
     StringsGameScreen.lBadPass: badPass,
     StringsGameScreen.lParade: parade,
     StringsGameScreen.lGoalOtherSide: goalOthers,
+  },
+  seven_meter: {
+    StringsGameScreen.lGoal: goal,
+    StringsGameScreen.lErrThrow: missed7m,
+    StringsGameScreen.lGoalOtherSide: goalOthers,
+    StringsGeneral.lCaught: parade7m
   },
   allActions: {
     StringsGameScreen.lRedCard: redCard,
@@ -82,7 +94,9 @@ Map<String, Map<String, String>> actionMapping = {
     StringsGameScreen.lGoalOtherSide: goalOthers,
     StringsGameScreen.lEmptyGoal: emptyGoal,
     StringsGameScreen.lGoalGoalkeeper: goal,
-    StringsGameScreen.lAssist: assist,
+    StringsGeneral.lCaught: parade7m,
+    StringsGameScreen.lErrThrowGoalkeeper: errThrow,
+
   }
 };
 
