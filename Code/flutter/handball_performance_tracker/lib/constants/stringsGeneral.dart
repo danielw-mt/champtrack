@@ -84,8 +84,6 @@ class StringsGeneral {
   static const String lSubmitButton = "Speichern";
 
   // 7 meter
-  static const String lMissedThrow = "Fehlwurf";
-  static const String lOpponentGoal = "Gegentor";
   static const String lCaught = "Gehalten";
   static const String lSevenMeter = "7m";
   static const String lChooseSevenMeterPlayer = "7m Ausführung";
