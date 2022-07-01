@@ -339,13 +339,13 @@ class TempController extends GetxController {
     update(["start-stop-icon", "start-button", "game-is-running-button"]);
   }
 
-  /// True: game was started; False game did not start yet
+  /// True: game was paused; False game did not start yet or is running
   RxBool _gameIsPaused = false.obs;
 
-  /// getter for gameRunning
+  /// getter for _gameIsPaused
   getGameIsPaused() => _gameIsPaused.value;
 
-  /// setter for gameRunning
+  /// setter for _gameIsPaused
   setGameIsPaused(bool gameIsPaused) {
     _gameIsPaused.value = gameIsPaused;
     update(["game-is-running-button"]);
@@ -369,12 +369,13 @@ class TempController extends GetxController {
   //////
   /// Nav Drawer
   //////
+  // true if a ListTile in drawer is ellapsed, false otherwise.
   RxBool _menuIsEllapsed = false.obs;
 
-  /// getter for lastLocation
+  /// getter for _menuIsEllapsed
   getMenuIsEllapsed() => _menuIsEllapsed.value;
 
-  /// setter for lastLocation
+  /// setter for _menuIsEllapsed
   setMenuIsEllapsed(bool isEllapsed) {
     _menuIsEllapsed.value = isEllapsed;
     update(["game-is-running-button"]);

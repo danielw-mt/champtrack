@@ -43,7 +43,6 @@ class NavDrawer extends StatelessWidget {
                   );
                 }),
             // Sign out button at the bottom
-
             Center(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -129,6 +128,7 @@ List<Widget> buildMenuList(BuildContext context, bool gameIsRunning,
 // Returns a simple, non-collapsible Entry for the menu.
 // Params: - text: Text that will be displayed in the entry
 //         - screen: Screen that it will send you
+//         - teamId: Given if Screen is Team settings screen to know which teams settings should be shown
 class SimpleListEntry extends StatelessWidget {
   final String text;
   final Widget screen;
@@ -137,6 +137,7 @@ class SimpleListEntry extends StatelessWidget {
     this.teamId = teamId;
   }
 
+  // Called if teamId is given, calls team selection screen for that team.
   void showSelectedTeam(teamId) {
     final TempController tempController = Get.find<TempController>();
     final PersistentController persController =
@@ -263,7 +264,7 @@ class MenuHeader extends StatelessWidget {
   }
 }
 
-//Button which takes you back to the game
+// Button which takes you back to the game
 class GameIsRunningButton extends StatelessWidget {
   const GameIsRunningButton({Key? key}) : super(key: key);
 
