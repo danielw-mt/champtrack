@@ -83,8 +83,8 @@ class TempController extends GetxController {
     update(["players-list"]);
   }
 
-  /// adds player to the players collection and the selected teams in the teams 
-  /// collection. 
+  /// adds player to the players collection and the selected teams in the teams
+  /// collection.
   void addPlayer(Player player) async {
     PersistentController persistentController =
         Get.find<PersistentController>();
@@ -339,5 +339,19 @@ class TempController extends GetxController {
   setLastLocation(List<String> lastLocation) {
     _lastLocation.value = lastLocation;
     //update();
+  }
+
+  //////
+  /// Nav Drawer
+  //////
+  RxBool _menuIsEllapsed = false.obs;
+
+  /// getter for lastLocation
+  getMenuIsEllapsed() => _menuIsEllapsed.value;
+
+  /// setter for lastLocation
+  setMenuIsEllapsed(bool isEllapsed) {
+    _menuIsEllapsed.value = isEllapsed;
+    update(["game-is-running-button"]);
   }
 }

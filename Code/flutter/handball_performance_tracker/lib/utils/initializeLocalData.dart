@@ -53,11 +53,12 @@ Future<bool> initializeLocalData() async {
     persistentController.updateAvailableTeams(teamsList);
     persistentController.isInitialized = true;
   }
+  // initialize club
+  persistentController.setLoggedInClub(await repository.getClub());
+
   // set the default selected team to be the first one available
   TempController tempController = Get.find<TempController>();
   tempController.setSelectedTeam(persistentController.getAvailableTeams()[0]);
 
-  // initialize club
-  persistentController.setLoggedInClub(await repository.getClub());
   return true;
 }

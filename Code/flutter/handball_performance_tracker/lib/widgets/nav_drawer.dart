@@ -1,10 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:handball_performance_tracker/constants/colors.dart';
+import 'package:handball_performance_tracker/constants/stringsTeamManagement.dart';
 import 'package:handball_performance_tracker/controllers/persistentController.dart';
 import 'package:handball_performance_tracker/controllers/tempController.dart';
 import 'package:handball_performance_tracker/data/team.dart';
 import 'package:handball_performance_tracker/screens/dashboard.dart';
+import 'package:handball_performance_tracker/screens/teamSettingsScreen.dart';
 import 'package:handball_performance_tracker/widgets/main_screen/ef_score_bar.dart';
 import 'package:handball_performance_tracker/constants/stringsAuthentication.dart';
 import './../screens/mainScreen.dart';
@@ -28,26 +30,59 @@ class NavDrawer extends StatelessWidget {
                 builder: (tempController) {
                   return ListView(
                     padding: EdgeInsets.zero,
-                    children: buildMenuList(
-                        context, tempController.getGameIsRunning()),
+                    children: ListTile.divideTiles(
+                      context: context,
+                      color: popupDarkBlueColor,
+                      tiles: buildMenuList(
+                          context,
+                          tempController.getGameIsRunning(),
+                          tempController.getMenuIsEllapsed()),
+                    ).toList(),
                   );
                 }),
             // Sign out button at the bottom
-            Positioned(
-              bottom: 0,
-              child: Container(
-                  child: Column(
+
+            Center(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  Text(
-                      "Signed in as ${FirebaseAuth.instance.currentUser?.email.toString()}"),
-                  ElevatedButton.icon(
+                  RichText(
+                    text: TextSpan(
+                      text: "Signed in as ",
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                      children: <TextSpan>[
+                        TextSpan(
+                            text: FirebaseAuth.instance.currentUser?.email
+                                .toString(),
+                            style: TextStyle(fontWeight: FontWeight.bold))
+                      ],
+                    ),
+                  ),
+                  Container(
+                    margin: EdgeInsets.all(5),
+                    child: ElevatedButton.icon(
+                      style: ElevatedButton.styleFrom(
+                        primary: buttonGreyColor,
+                      ),
                       onPressed: () {
                         FirebaseAuth.instance.signOut();
                       },
-                      icon: Icon(Icons.logout),
-                      label: Text(StringsAuth.lSignOutButton))
+                      icon: Icon(
+                        Icons.logout,
+                        color: buttonDarkBlueColor,
+                      ),
+                      label: Text(
+                        StringsAuth.lSignOutButton,
+                        style: TextStyle(color: buttonDarkBlueColor),
+                      ),
+                    ),
+                  ),
                 ],
-              )),
+              ),
             ),
           ],
         ),
@@ -57,10 +92,126 @@ class NavDrawer extends StatelessWidget {
 }
 
 // Build List of Menu entries to show. If gameIsRunning, add the button which takes you back to the game.
-List<Widget> buildMenuList(BuildContext context, bool gameIsRunning) {
+List<Widget> buildMenuList(
+    BuildContext context, bool gameIsRunning, bool menuIsEllapsed) {
   List<Widget> menuList = <Widget>[
+    MenuHeader(),
+    // Dashboard
+    SimpleListEntry(text: StringsGeneral.lDashboard, screen: Dashboard()),
+    // Mannschaften
+    CollabsibleListEntry(
+      text: StringsTeamManagement.lTeams,
+      screen: TeamSelectionScreen(),
+      children: buildTeamChildren(context),
+    ),
+    // Statistics
+    CollabsibleListEntry(
+        text: StringsGeneral.lStatistics,
+        screen: DebugScreen(),
+        children: [Text("")]),
+    // Glossary
+    CollabsibleListEntry(
+        text: StringsGeneral.lGlossary,
+        screen: DebugScreen(),
+        children: [Text("")]),
+  ];
+  if (gameIsRunning && !menuIsEllapsed) {
+    menuList.add(GameIsRunningButton());
+  } else {
+    // Add empty text so we have a divider after last list item
+    menuList.add(Text(""));
+  }
+  return menuList;
+}
+
+// Returns a simple, non-collapsible Entry for the menu.
+// Params: - text: Text that will be displayed in the entry
+//         - screen: Screen that it will send you
+class SimpleListEntry extends StatelessWidget {
+  final String text;
+  final Widget screen;
+  String? teamId;
+  SimpleListEntry({required this.text, required this.screen, String? teamId}) {
+    this.teamId = teamId;
+  }
+
+  void showSelectedTeam(teamId) {
+    final TempController tempController = Get.find<TempController>();
+    Get.to(screen);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      textColor: Colors.white,
+      title: Text(
+        " " * 2 + text,
+        style: TextStyle(fontSize: 20),
+      ),
+      onTap: () =>
+          {(teamId == null) ? Get.to(screen) : showSelectedTeam(teamId)},
+      minVerticalPadding: 0,
+    );
+  }
+}
+
+// Returns a collapsible Entry for the menu.
+// Params: - text: Text that will be displayed in the entry
+//         - screen: Screen that it will send you
+//         - children: List of ListTiles that will open
+class CollabsibleListEntry extends StatelessWidget {
+  final String text;
+  final Widget screen;
+  final List<Widget> children;
+  const CollabsibleListEntry(
+      {Key? key,
+      required this.text,
+      required this.screen,
+      required this.children})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final TempController tempController = Get.find<TempController>();
+    return ExpansionTile(
+      iconColor: Colors.white,
+      collapsedIconColor: Colors.white,
+      // If Menu is ellapsed, running game button should disappear to avoid overlapping
+      onExpansionChanged: (value) {
+        tempController.setMenuIsEllapsed(value);
+      },
+      title: TextButton(
+          onPressed: () => {Get.to(screen)},
+          child: Align(
+            alignment: Alignment.centerLeft,
+            child: Text(
+              text,
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 20,
+              ),
+            ),
+          )),
+      children: ListTile.divideTiles(
+        context: context,
+        color: popupDarkBlueColor,
+        tiles: children,
+      ).toList(),
+    );
+  }
+}
+
+// returns the first line of the menu which is
+// - the grey container
+// - name of the Club
+// - Arrows
+class MenuHeader extends StatelessWidget {
+  const MenuHeader({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
     // Header with Icon and Clubname
-    Row(
+    return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         // Icon
@@ -73,8 +224,8 @@ List<Widget> buildMenuList(BuildContext context, bool gameIsRunning) {
                 ),
                 // make round edges
                 borderRadius: BorderRadius.all(Radius.circular(menuRadius))),
-            margin: EdgeInsets.only(right: 20, left: 10),
-            padding: EdgeInsets.all(5),
+            margin: EdgeInsets.only(right: 20, left: 10, bottom: 15, top: 15),
+            padding: EdgeInsets.all(10),
             child: Text(
               "HC",
             )),
@@ -82,12 +233,15 @@ List<Widget> buildMenuList(BuildContext context, bool gameIsRunning) {
         // Use FittedBox to dynamically resize text
         Expanded(
           child: FittedBox(
-            fit: BoxFit.cover,
-            child: Text(
-              "Clubname",
-              style: TextStyle(color: Colors.white),
-            ),
-          ),
+              fit: BoxFit.cover,
+              child: GetBuilder<PersistentController>(
+                  id: "menu-club-display",
+                  builder: (persController) {
+                    return Text(
+                      persController.getLoggedInClub().name,
+                      style: TextStyle(color: Colors.white),
+                    );
+                  })),
         ),
         // Arrow Icon
         Container(
@@ -95,93 +249,8 @@ List<Widget> buildMenuList(BuildContext context, bool gameIsRunning) {
             child: Icon(Icons.keyboard_double_arrow_left,
                 color: Colors.white, size: 40))
       ],
-    ),
-
-    Divider(
-      color: Colors.white,
-    ),
-    // Dashboard
-    ListTile(
-      textColor: Colors.white,
-      title: Text(
-        " " * 2 + StringsGeneral.lDashboard,
-        style: TextStyle(fontSize: 20),
-      ),
-      onTap: () => {Get.to(Dashboard())},
-      minVerticalPadding: 0,
-    ),
-    Divider(
-      color: Colors.white,
-    ),
-    // Mannschaften
-    ExpansionTile(
-      iconColor: Colors.white,
-      collapsedIconColor: Colors.white,
-      title: TextButton(
-          onPressed: () => {
-                if (Get.currentRoute.toString() != "/")
-                  {Get.to(TeamSelectionScreen())}
-              },
-          child: Align(
-            alignment: Alignment.centerLeft,
-            child: Text(
-              StringsGeneral.lTeams,
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 20,
-              ),
-            ),
-          )),
-      children: buildTeamChildren(context),
-    ),
-    Divider(
-      color: Colors.white,
-    ),
-    // Statistics
-    ExpansionTile(
-      iconColor: Colors.white,
-      collapsedIconColor: Colors.white,
-      title: TextButton(
-          onPressed: () => {Get.to(DebugScreen())},
-          child: Align(
-            alignment: Alignment.centerLeft,
-            child: Text(
-              StringsGeneral.lStatistics,
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 20,
-              ),
-            ),
-          )),
-      children: [Text("")],
-    ),
-
-    Divider(
-      color: Colors.white,
-    ),
-    // Glossary
-    ExpansionTile(
-      iconColor: Colors.white,
-      collapsedIconColor: Colors.white,
-      title: TextButton(
-          onPressed: () => {Get.to(DebugScreen())},
-          child: Align(
-            alignment: Alignment.centerLeft,
-            child: Text(
-              StringsGeneral.lGlossary,
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 20,
-              ),
-            ),
-          )),
-      children: [Text("")],
-    ),
-  ];
-  if (gameIsRunning) {
-    menuList.add(GameIsRunningButton());
+    );
   }
-  return menuList;
 }
 
 //Button which takes you back to the game
@@ -219,7 +288,7 @@ class GameIsRunningButton extends StatelessWidget {
             Expanded(
               child: Text(
                 StringsGeneral.lBackToGameButton,
-                style: TextStyle(color: buttonDarkBlueColor, fontSize: 20),
+                style: TextStyle(color: buttonDarkBlueColor, fontSize: 18),
               ),
             )
           ],
@@ -234,18 +303,13 @@ class GameIsRunningButton extends StatelessWidget {
 List<Widget> buildTeamChildren(BuildContext context) {
   final PersistentController persController = Get.find<PersistentController>();
   List<Team> allTeams = persController.getAvailableTeams();
-  List<Widget> teamChildren = [];
-  Divider divider = Divider(
-    color: Colors.white,
-  );
+  List<Widget> teamChildren = [Divider()];
   for (Team team in allTeams) {
-    teamChildren.add(divider);
-    ListTile nextTile = ListTile(
-      textColor: Colors.white,
-      title: Text(" " * 5 + team.name),
-      onTap: () => {Get.to(DebugScreen())},
-    );
-    teamChildren.add(nextTile);
+    teamChildren.add(SimpleListEntry(
+      text: " " * 5 + team.name,
+      screen: TeamSettingsScreen(),
+      teamId: team.id,
+    ));
   }
   return teamChildren;
 }
