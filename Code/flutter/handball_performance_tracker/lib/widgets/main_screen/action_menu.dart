@@ -211,14 +211,16 @@ Widget buildDialogButtonMenu(BuildContext context, List<String> buttonTexts,
       buildDialogButton(context, buttonTexts[7], Colors.blue)
     ];
     buttonRow = Row(children: [
-      Column(
-        children: [dialogButtons[0], dialogButtons[1], dialogButtons[2]],
-      ),
-      Column(
-        children: [dialogButtons[3], dialogButtons[4], dialogButtons[5]],
-      ),
+      Column(children: [
+        Row(children: [dialogButtons[0], dialogButtons[1]]),
+        dialogButtons[5],
+        dialogButtons[2]
+      ]),
       Column(
         children: [dialogButtons[6], dialogButtons[7]],
+      ),
+      Column(
+        children: [dialogButtons[3], dialogButtons[4]],
       ),
     ]);
     header = StringsGameScreen.lOffensePopUpHeader;
