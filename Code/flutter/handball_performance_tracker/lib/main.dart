@@ -25,12 +25,22 @@ void main() async {
       ),
       scrollBehavior:
           AppScrollBehavior(), // add scrollbehaviour so swiping is possible in web
+    initialRoute: '/',
       getPages: [
+      GetPage(name: '/', page: () => Home()),
         GetPage(name: '/StartGameScreen', page: () => StartGameScreen()),
         GetPage(name: '/SettingsScreen', page: () => SettingsScreen()),
         GetPage(name: '/Dashboard', page: () => Dashboard()),
       ],
-      home: FutureBuilder<dynamic>(
+  ));
+}
+
+class Home extends StatelessWidget {
+  const Home({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<dynamic>(
         future: _startupCheck(),
         builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
           List<Widget> children;
@@ -85,7 +95,8 @@ void main() async {
             ),
           );
         },
-      )));
+    );
+  }
 }
 
 Future<dynamic> _startupCheck() async {
