@@ -40,6 +40,10 @@ class TeamDropdown extends StatelessWidget {
                   .getAvailableTeams()
                   .where((Team teamItem) => teamItem.id == newTeam?.id)
                   .first);
+              tempController.setPlayingTeam(persistentController
+                  .getAvailableTeams()
+                  .where((Team teamItem) => teamItem.id == newTeam?.id)
+                  .first);
             },
             // build dropdown item widgets
             items: persistentController.getAvailableTeams().map((Team team) {

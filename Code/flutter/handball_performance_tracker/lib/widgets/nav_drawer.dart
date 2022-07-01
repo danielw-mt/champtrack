@@ -17,6 +17,7 @@ import '../constants/stringsGeneral.dart';
 
 class NavDrawer extends StatelessWidget {
   // Navigation widget for Material app. Can be opend from the sidebar
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -93,8 +94,7 @@ class NavDrawer extends StatelessWidget {
 }
 
 // Build List of Menu entries to show. If gameIsRunning, add the button which takes you back to the game.
-List<Widget> buildMenuList(
-    BuildContext context, bool gameIsRunning,
+List<Widget> buildMenuList(BuildContext context, bool gameIsRunning,
     bool gameIsPaused, bool menuIsEllapsed) {
   List<Widget> menuList = <Widget>[
     MenuHeader(),
@@ -139,6 +139,9 @@ class SimpleListEntry extends StatelessWidget {
 
   void showSelectedTeam(teamId) {
     final TempController tempController = Get.find<TempController>();
+    final PersistentController persController =
+        Get.find<PersistentController>();
+    tempController.setSelectedTeam(persController.getSpecificTeam(teamId));
     Get.to(screen);
   }
 
@@ -150,8 +153,9 @@ class SimpleListEntry extends StatelessWidget {
         " " * 2 + text,
         style: TextStyle(fontSize: 20),
       ),
-      onTap: () =>
-          {(teamId == null) ? Get.to(() =>screen) : showSelectedTeam(teamId)},
+      onTap: () {
+        (teamId == null) ? Get.to(screen) : showSelectedTeam(teamId);
+      },
       minVerticalPadding: 0,
     );
   }
@@ -183,7 +187,9 @@ class CollabsibleListEntry extends StatelessWidget {
         tempController.setMenuIsEllapsed(value);
       },
       title: TextButton(
-          onPressed: () => {Get.to(() =>screen)},
+          onPressed: () {
+            Get.to(screen);
+          },
           child: Align(
             alignment: Alignment.centerLeft,
             child: Text(
@@ -261,6 +267,8 @@ class GameIsRunningButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final TempController tempController = Get.find<TempController>();
+
     // Back to Game Button
     return Container(
       decoration: BoxDecoration(
@@ -295,7 +303,11 @@ class GameIsRunningButton extends StatelessWidget {
             )
           ],
         ),
-        onPressed: () => {Get.to(() =>MainScreen())},
+        onPressed: () {
+          Team playingTeam = tempController.getPlayingTeam();
+          tempController.setSelectedTeam(playingTeam);
+          Get.to(MainScreen());
+        },
       ),
     );
   }

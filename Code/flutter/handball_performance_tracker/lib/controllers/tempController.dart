@@ -36,6 +36,18 @@ class TempController extends GetxController {
     ]);
   }
 
+  /// Temporary variable for storing the currently playing Team
+  Rx<Team> _playingTeam = Team(id: "-1", name: "Default team").obs;
+
+  /// getter for playingTeam
+  Team getPlayingTeam() => _playingTeam.value;
+
+  /// setter for playingTeam
+  void setPlayingTeam(Team team) {
+    _playingTeam.value = team;
+    //update();
+  }
+
   /// return the first player in selectedTeam with the given playerId
   Player getPlayerFromSelectedTeam(String playerId) {
     return _selectedTeam.value.players

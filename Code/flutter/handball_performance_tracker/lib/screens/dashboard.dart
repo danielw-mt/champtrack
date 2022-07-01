@@ -23,6 +23,12 @@ class Dashboard extends StatelessWidget {
             return Scaffold(
                 key: _scaffoldKey,
                 drawer: NavDrawer(),
+                // if drawer is closed notify, so if game is running the back to game button appears on next opening
+                onDrawerChanged: (isOpened) {
+                  if (!isOpened) {
+                    tempController.setMenuIsEllapsed(false);
+                  }
+                },
                 body: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
