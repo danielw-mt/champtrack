@@ -59,8 +59,8 @@ void callActionMenu(BuildContext context) {
       context: context,
       // alert contains a list of DialogButton objects
       content: Container(
-          width: MediaQuery.of(context).size.width * 0.5,
-          height: MediaQuery.of(context).size.height * 0.88,
+          width: MediaQuery.of(context).size.width * 0.6,
+          height: MediaQuery.of(context).size.height * 0.6,
           child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
@@ -72,7 +72,7 @@ void callActionMenu(BuildContext context) {
               ))).show();
 }
 
-/// determine if acktion was attack, defense, goalkeeper
+/// determine if action was attack, defense, goalkeeper
 String determineActionType() {
   logger.d("Determining which actions should be displayed...");
   final TempController tempController = Get.find<TempController>();
@@ -157,8 +157,8 @@ Widget buildDialogButtonMenu(BuildContext context, List<String> buttonTexts,
       Column(children: [
         Row(
           children: [
-            dialogButtons[0],
             dialogButtons[1],
+            dialogButtons[0],
             dialogButtons[2],
           ],
         ),
@@ -176,18 +176,20 @@ Widget buildDialogButtonMenu(BuildContext context, List<String> buttonTexts,
     header = StringsGameScreen.lGoalkeeperPopUpHeader;
   } else if (isAttack) {
     List<DialogButton> dialogButtons = [
-      buildDialogButton(context, buttonTexts[0], Colors.red, Icons.style),
-      buildDialogButton(context, buttonTexts[1], Colors.yellow, Icons.style),
-      buildDialogButton(context, buttonTexts[2], Colors.grey, Icons.timer),
-      buildDialogButton(context, buttonTexts[3], Colors.grey),
-      buildDialogButton(context, buttonTexts[4], Colors.grey),
-      buildDialogButton(context, buttonTexts[5], Colors.blue),
-      buildDialogButton(context, buttonTexts[6], Colors.blue),
-      buildDialogButton(context, buttonTexts[7], Colors.blue)
+      buildDialogButton(context, buttonTexts[0], Colors.red, Icons.style, 1.5, ""),
+      buildDialogButton(context, buttonTexts[1], Colors.yellow, Icons.style, 1.5, ""),
+      buildDialogButton(context, buttonTexts[2], Color.fromRGBO(199, 208, 244, 1), Icons.timer),
+      buildDialogButton(context, buttonTexts[3], Color.fromRGBO(99, 107, 171, 1)),
+      buildDialogButton(context, buttonTexts[4], Color.fromRGBO(99, 107, 171, 1)),
+      buildDialogButton(context, buttonTexts[5], Color.fromRGBO(199, 208, 244, 1)),
+      buildDialogButton(context, buttonTexts[6], Color.fromRGBO(203, 206, 227, 1)),
+      buildDialogButton(context, buttonTexts[7], Color.fromRGBO(203, 206, 227, 1))
     ];
-    buttonRow = Row(children: [
+    buttonRow = Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
       Column(children: [
-        Row(children: [dialogButtons[0], dialogButtons[1]]),
+        Row(children: [dialogButtons[1], dialogButtons[0]]),
         dialogButtons[5],
         dialogButtons[2]
       ]),
@@ -201,26 +203,35 @@ Widget buildDialogButtonMenu(BuildContext context, List<String> buttonTexts,
     header = StringsGameScreen.lOffensePopUpHeader;
   } else {
     List<DialogButton> dialogButtons = [
-      buildDialogButton(context, buttonTexts[0], Colors.red, Icons.style),
-      buildDialogButton(context, buttonTexts[1], Colors.yellow, Icons.style),
+      buildDialogButton(
+          context, buttonTexts[0], Colors.red, Icons.style, 1.5, ""),
+      buildDialogButton(
+          context, buttonTexts[1], Colors.yellow, Icons.style, 1.5, ""),
       buildDialogButton(context, buttonTexts[2],
-          const Color.fromRGBO(15, 66, 199, 32), Icons.timer),
-      buildDialogButton(context, buttonTexts[3], Colors.grey),
-      buildDialogButton(context, buttonTexts[4], Colors.grey),
-      buildDialogButton(context, buttonTexts[5], Colors.blue),
-      buildDialogButton(context, buttonTexts[6], Colors.blue)
+          Color.fromRGBO(203, 206, 227, 1)),
+      buildDialogButton(context, buttonTexts[3], Color.fromRGBO(199, 208, 244, 1), Icons.timer),
+      buildDialogButton(context, buttonTexts[4], Color.fromRGBO(99, 107, 171, 1)),
+      buildDialogButton(context, buttonTexts[5], Color.fromRGBO(99, 107, 171, 1)),
+      buildDialogButton(context, buttonTexts[6], Color.fromRGBO(203, 206, 227, 1)),
+      buildDialogButton(context, buttonTexts[7], Color.fromRGBO(199, 208, 244, 1))
     ];
-    buttonRow = Row(children: [
-      Column(
-        children: [dialogButtons[0], dialogButtons[1], dialogButtons[2]],
-      ),
-      Column(
-        children: [dialogButtons[3], dialogButtons[4]],
-      ),
-      Column(
-        children: [dialogButtons[5], dialogButtons[6]],
-      ),
-    ]);
+    buttonRow = Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          Column(
+            children: [
+              Row(children: [dialogButtons[1], dialogButtons[0]]),
+              dialogButtons[7],
+              dialogButtons[3]
+            ],
+          ),
+          Column(
+            children: [dialogButtons[2], dialogButtons[6]],
+          ),
+          Column(
+            children: [dialogButtons[4], dialogButtons[5]],
+          ),
+        ]);
     header = StringsGameScreen.lDeffensePopUpHeader;
   }
   return Column(children: [
@@ -315,7 +326,7 @@ DialogButton buildDialogButton(
       callSevenMeterMenu(context, false);
       return;
       // go to player menu for all other actions
-    } 
+    }
 
     // Save action directly if goalkeeper action
     if (actionType == goalkeeper) {
