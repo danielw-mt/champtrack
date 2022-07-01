@@ -327,6 +327,19 @@ class TempController extends GetxController {
     update(["start-stop-icon", "start-button", "game-is-running-button"]);
   }
 
+  /// True: game was started; False game did not start yet
+  RxBool _gameIsPaused = false.obs;
+
+  /// getter for gameRunning
+  getGameIsPaused() => _gameIsPaused.value;
+
+  /// setter for gameRunning
+  setGameIsPaused(bool gameIsPaused) {
+    _gameIsPaused.value = gameIsPaused;
+    update(["game-is-running-button"]);
+  }
+
+
   /// @return rx list
   /// after click on goal there is only one element "goal", otherwise
   /// first element is the sector as a string, second element distinguishes the distance ("<6", "6to9", ">9")

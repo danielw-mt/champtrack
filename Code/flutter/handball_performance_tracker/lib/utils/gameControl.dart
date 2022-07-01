@@ -59,6 +59,7 @@ void unpauseGame() {
   TempController tempController = Get.find<TempController>();
   PersistentController persistentController = Get.find<PersistentController>();
   tempController.setGameIsRunning(true);
+  tempController.setGameIsPaused(false);
   persistentController
       .getCurrentGame()
       .stopWatch
@@ -70,6 +71,7 @@ void pauseGame() {
   TempController tempController = Get.find<TempController>();
   PersistentController persistentController = Get.find<PersistentController>();
   tempController.setGameIsRunning(false);
+  tempController.setGameIsPaused(true);
   persistentController
       .getCurrentGame()
       .stopWatch
@@ -95,6 +97,7 @@ void stopGame() async {
   persistentController.getCurrentGame().stopWatch.onExecute.add(StopWatchExecute.stop);
 
   tempController.setGameIsRunning(false);
+  tempController.setGameIsPaused(false);
 }
 
 void _addGameToPlayers(Game game) {

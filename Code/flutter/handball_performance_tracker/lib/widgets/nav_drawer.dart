@@ -36,6 +36,7 @@ class NavDrawer extends StatelessWidget {
                       tiles: buildMenuList(
                           context,
                           tempController.getGameIsRunning(),
+                          tempController.getGameIsPaused(),
                           tempController.getMenuIsEllapsed()),
                     ).toList(),
                   );
@@ -93,7 +94,8 @@ class NavDrawer extends StatelessWidget {
 
 // Build List of Menu entries to show. If gameIsRunning, add the button which takes you back to the game.
 List<Widget> buildMenuList(
-    BuildContext context, bool gameIsRunning, bool menuIsEllapsed) {
+    BuildContext context, bool gameIsRunning,
+    bool gameIsPaused, bool menuIsEllapsed) {
   List<Widget> menuList = <Widget>[
     MenuHeader(),
     // Dashboard
@@ -115,7 +117,7 @@ List<Widget> buildMenuList(
         screen: DebugScreen(),
         children: [Text("")]),
   ];
-  if (gameIsRunning && !menuIsEllapsed) {
+  if ((gameIsRunning || gameIsPaused) && !menuIsEllapsed) {
     menuList.add(GameIsRunningButton());
   } else {
     // Add empty text so we have a divider after last list item
