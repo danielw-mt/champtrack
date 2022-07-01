@@ -74,12 +74,17 @@ class _StartGameScreenState extends State<StartGameScreen> {
       // 'Back' button
       ElevatedButton(
         onPressed: () {
+          print(startGameFlowStep);
           if (startGameFlowStep > 0) {
             setState(() {
               startGameFlowStep -= 1;
             });
           } else {
             Get.to(Dashboard());
+            print(startGameFlowStep);
+            setState(() {
+              startGameFlowStep -= 1;
+            });
           }
         },
         // when page 0 is reached change the text of the button
