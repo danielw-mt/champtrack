@@ -154,6 +154,7 @@ class SimpleListEntry extends StatelessWidget {
         style: TextStyle(fontSize: 20),
       ),
       onTap: () {
+        Navigator.pop(context);
         (teamId == null) ? Get.to(screen) : showSelectedTeam(teamId);
       },
       minVerticalPadding: 0,
@@ -188,6 +189,7 @@ class CollabsibleListEntry extends StatelessWidget {
       },
       title: TextButton(
           onPressed: () {
+            Navigator.pop(context);
             Get.to(screen);
           },
           child: Align(
@@ -304,8 +306,8 @@ class GameIsRunningButton extends StatelessWidget {
           ],
         ),
         onPressed: () {
-          Team playingTeam = tempController.getPlayingTeam();
-          tempController.setSelectedTeam(playingTeam);
+          tempController.setSelectedTeam(tempController.getPlayingTeam());
+          Navigator.pop(context);
           Get.to(MainScreen());
         },
       ),

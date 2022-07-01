@@ -8,7 +8,6 @@ import '../data/game.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 
-import '../constants/stringsGeneral.dart';
 import '../constants/stringsGameSettings.dart';
 
 void startGame(BuildContext context) async {
@@ -37,8 +36,6 @@ void startGame(BuildContext context) async {
       startTime: unixTimeStamp,
       players: tempController.chosenPlayers.cast<Player>());
   await persistentController.setCurrentGame(newGame, isNewGame: true);
-
-  print("start game, id: ${persistentController.getCurrentGame().id}");
 
   // add game to selected players
   _addGameToPlayers(newGame);

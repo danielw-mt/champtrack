@@ -3,8 +3,6 @@ import '../../controllers/persistentController.dart';
 import '../../controllers/tempController.dart';
 import 'package:get/get.dart';
 import '../../data/team.dart';
-import '../../utils/team_type_helpers.dart';
-import '../../constants/team_constants.dart';
 
 // dropdown that shows all available teams belonging to the selected team type
 class TeamDropdown extends StatelessWidget {
