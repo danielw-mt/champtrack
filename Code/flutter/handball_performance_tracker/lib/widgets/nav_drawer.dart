@@ -151,7 +151,7 @@ class SimpleListEntry extends StatelessWidget {
         style: TextStyle(fontSize: 20),
       ),
       onTap: () =>
-          {(teamId == null) ? Get.to(screen) : showSelectedTeam(teamId)},
+          {(teamId == null) ? Get.to(() =>screen) : showSelectedTeam(teamId)},
       minVerticalPadding: 0,
     );
   }
@@ -183,7 +183,7 @@ class CollabsibleListEntry extends StatelessWidget {
         tempController.setMenuIsEllapsed(value);
       },
       title: TextButton(
-          onPressed: () => {Get.to(screen)},
+          onPressed: () => {Get.to(() =>screen)},
           child: Align(
             alignment: Alignment.centerLeft,
             child: Text(
@@ -295,7 +295,7 @@ class GameIsRunningButton extends StatelessWidget {
             )
           ],
         ),
-        onPressed: () => {Get.to(MainScreen())},
+        onPressed: () => {Get.to(() =>MainScreen())},
       ),
     );
   }
