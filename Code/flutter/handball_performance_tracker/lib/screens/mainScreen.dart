@@ -35,8 +35,8 @@ class MainScreen extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              Flexible(
-                  child: Column(
+
+              Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -45,20 +45,18 @@ class MainScreen extends StatelessWidget {
                   //Spacer(flex: 1,),
                   Container()
                 ],
-              )),
+              ),
               Spacer(
                 flex: 1,
               ),
               // Player Bar
-              Flexible(
-                  flex: 4,
-                  child: Container(
+              Container(
                       width: efscorebar.scorebarWidth +
                           efscorebar.paddingWidth * 4,
                       height: fieldSizeParameter.fieldHeight +
                           fieldSizeParameter.toolbarHeight / 4,
                       alignment: Alignment.topCenter,
-                      child: EfScoreBar())),
+                  child: EfScoreBar()),
               // Field
               Flexible(
                   flex: 4,
