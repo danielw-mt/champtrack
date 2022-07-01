@@ -80,6 +80,9 @@ class _StartGameScreenState extends State<StartGameScreen> {
             });
           } else {
             Get.to(() => Dashboard());
+            setState(() {
+              startGameFlowStep -= 1;
+            });
           }
         },
         // when page 0 is reached change the text of the button
