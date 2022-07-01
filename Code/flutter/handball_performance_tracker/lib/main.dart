@@ -2,7 +2,6 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:handball_performance_tracker/screens/authenticationScreen.dart';
 import 'package:handball_performance_tracker/screens/dashboard.dart';
-import 'package:handball_performance_tracker/screens/settingsScreen.dart';
 import 'package:handball_performance_tracker/screens/startGameScreen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'config/firebase_options.dart';
@@ -27,8 +26,7 @@ void main() async {
     initialRoute: '/',
       getPages: [
       GetPage(name: '/', page: () => Home()),
-        GetPage(name: '/StartGameScreen', page: () => StartGameScreen()),
-        GetPage(name: '/SettingsScreen', page: () => SettingsScreen()),
+      GetPage(name: '/StartGameScreen', page: () => StartGameScreen()),
         GetPage(name: '/Dashboard', page: () => Dashboard()),
       ],
   ));
