@@ -31,7 +31,7 @@ class TeamSelectionScreen extends StatelessWidget {
                     TeamDropdown(),
                     TextButton(
                         onPressed: () {
-                          Get.to(TeamSettingsScreen());
+                          Get.to(() => TeamSettingsScreen());
                         },
                         child: Icon(Icons.edit))
                   ])),
