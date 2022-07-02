@@ -20,29 +20,30 @@ class Dashboard extends StatelessWidget {
         future: initializeLocalData(),
         builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
           if (snapshot.hasData) {
-            return Scaffold(
-                key: _scaffoldKey,
-                drawer: NavDrawer(),
-                body: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // Container for menu button on top left corner
-                      MenuButton(_scaffoldKey),
-                      Text("Dashboard"),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            return SafeArea(
+                child: Scaffold(
+                    key: _scaffoldKey,
+                    drawer: NavDrawer(),
+                    body: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          ElevatedButton(
-                              onPressed: () {},
-                              child: Text(StringsDashboard.lManageTeams)),
-                          ElevatedButton(
-                              onPressed: () {
-                                Get.to(() => StartGameScreen());
-                              },
-                              child: Text(StringsDashboard.lTrackNewGame)),
-                        ],
-                      ),
-                    ]));
+                          // Container for menu button on top left corner
+                          MenuButton(_scaffoldKey),
+                          Text("Dashboard"),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              ElevatedButton(
+                                  onPressed: () {},
+                                  child: Text(StringsDashboard.lManageTeams)),
+                              ElevatedButton(
+                                  onPressed: () {
+                                    Get.to(() => StartGameScreen());
+                                  },
+                                  child: Text(StringsDashboard.lTrackNewGame)),
+                            ],
+                          ),
+                        ])));
           }
           if (snapshot.hasError) {
             print(snapshot.error);

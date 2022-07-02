@@ -7,27 +7,28 @@ class DebugScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        key: _scaffoldKey,
-        drawer: NavDrawer(),
-        body: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+    return SafeArea(
+        child: Scaffold(
+            key: _scaffoldKey,
+            drawer: NavDrawer(),
+            body: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                // Container for menu button on top left corner
-                MenuButton(_scaffoldKey),
-                Row(
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Column(
-                      children: [],
+                    // Container for menu button on top left corner
+                    MenuButton(_scaffoldKey),
+                    Row(
+                      children: [
+                        Column(
+                          children: [],
+                        ),
+                      ],
                     ),
                   ],
                 ),
               ],
-            ),
-          ],
-        ));
+            )));
   }
 }
