@@ -12,7 +12,8 @@ class SettingsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return SafeArea(
+        child: Scaffold(
       key: _scaffoldKey,
       drawer: NavDrawer(),
       body: Column(
@@ -34,6 +35,6 @@ class SettingsScreen extends StatelessWidget {
               })
         ],
       ),
-    );
+    ));
   }
 }

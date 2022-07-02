@@ -24,18 +24,24 @@ class MainScreen extends StatelessWidget {
       DeviceOrientation.landscapeLeft,
     ]);
 
-    return Scaffold(
+    return SafeArea(
+        child: Scaffold(
       key: _scaffoldKey,
       drawer: NavDrawer(),
       backgroundColor: backgroundColor,
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          MenuButton(_scaffoldKey),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              MenuButton(_scaffoldKey),
+              StopWatchBar(),
+            ],
+          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-
               Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -51,33 +57,31 @@ class MainScreen extends StatelessWidget {
               ),
               // Player Bar
               Container(
-                      width: efscorebar.scorebarWidth +
-                          efscorebar.paddingWidth * 4,
-                      height: fieldSizeParameter.fieldHeight +
-                          fieldSizeParameter.toolbarHeight / 4,
-                      alignment: Alignment.topCenter,
+                  width: efscorebar.scorebarWidth + efscorebar.paddingWidth * 4,
+                  height: fieldSizeParameter.fieldHeight +
+                      fieldSizeParameter.toolbarHeight / 4,
+                  alignment: Alignment.topCenter,
                   child: EfScoreBar()),
               // Field
               Flexible(
-                  flex: 4,
-                  child: Column(
-                    children: [
-                      StopWatchBar(),
-                      Container(
-                        width: fieldSizeParameter.fieldWidth +
-                            fieldSizeParameter.toolbarHeight / 4,
-                        height: fieldSizeParameter.fieldHeight +
-                            fieldSizeParameter.toolbarHeight / 4,
-                        alignment: Alignment.topCenter,
-                        child: Container(
-                          decoration: BoxDecoration(
-                              // set border around field
-                              border: Border.all(
-                                  width: fieldSizeParameter.lineSize)),
-                          child: SizedBox(
-                            // FieldSwitch to swipe between right and left field side. SizedBox around it so there is no rendering error.
-                            width: fieldSizeParameter.fieldWidth,
-                            height: fieldSizeParameter.fieldHeight,
+                flex: 4,
+                child: Column(
+                  children: [
+                    Container(
+                      width: fieldSizeParameter.fieldWidth +
+                          fieldSizeParameter.toolbarHeight / 4,
+                      height: fieldSizeParameter.fieldHeight +
+                          fieldSizeParameter.toolbarHeight / 4,
+                      alignment: Alignment.topCenter,
+                      child: Container(
+                        decoration: BoxDecoration(
+                            // set border around field
+                            border:
+                                Border.all(width: fieldSizeParameter.lineSize)),
+                        child: SizedBox(
+                          // FieldSwitch to swipe between right and left field side. SizedBox around it so there is no rendering error.
+                          width: fieldSizeParameter.fieldWidth,
+                          height: fieldSizeParameter.fieldHeight,
                           // Use a LayoutBuilder to get the real size of SizedBox.
                           // As it is inside Flexible Widget, the size can vary depending on screen size.
                           child: new LayoutBuilder(
@@ -89,16 +93,16 @@ class MainScreen extends StatelessWidget {
                               return FieldSwitch();
                             },
                           ),
-                          ),
                         ),
                       ),
-                    ],
+                    ),
+                  ],
                 ),
               ),
             ],
           ),
         ],
       ),
-    );
+    ));
   }
 }
