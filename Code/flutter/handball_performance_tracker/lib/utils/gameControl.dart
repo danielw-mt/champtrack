@@ -26,6 +26,7 @@ void startGame(BuildContext context) async {
         .show();
     return;
   }
+  tempController.setPlayerBarPlayers();
 
   // start a new game in firebase
   print("starting new game");
@@ -52,7 +53,6 @@ void startGame(BuildContext context) async {
 
   print("start game, id: ${persistentController.getCurrentGame().id}");
   tempController.setGameIsRunning(true);
-  tempController.setPlayerBarPlayers();
 }
 
 void unpauseGame() {
