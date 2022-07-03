@@ -39,20 +39,10 @@ void startGame(BuildContext context) async {
       players: tempController.chosenPlayers.cast<Player>());
   await persistentController.setCurrentGame(newGame, isNewGame: true);
 
-  print("start game, id: ${persistentController.getCurrentGame().id}");
-
   // add game to selected players
   _addGameToPlayers(newGame);
 
-  // activate the game timer
-  persistentController
-      .getCurrentGame()
-      .stopWatch
-      .onExecute
-      .add(StopWatchExecute.start);
-
   print("start game, id: ${persistentController.getCurrentGame().id}");
-  tempController.setGameIsRunning(true);
 }
 
 void unpauseGame() {
