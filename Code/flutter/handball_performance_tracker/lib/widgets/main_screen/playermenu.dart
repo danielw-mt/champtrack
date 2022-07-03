@@ -327,6 +327,7 @@ GetBuilder<TempController> buildDialogButton(
                   // ButtonName
                   Text(
                     buttonText,
+                    overflow: TextOverflow.ellipsis,
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: (width * 0.02),
