@@ -31,6 +31,29 @@ class StartGameFormState extends State<StartGameForm> {
   String season = "";
   String location = "";
   String opponent = "";
+  bool isAtHome = true;
+
+  @override
+  void initState() {
+    // check if there was already a game initialized (e.g. we're entering the form via the 'back-button')
+    Game currentGame = Get.find<PersistentController>().getCurrentGame();
+    bool gameExists = (currentGame.id == null) ? false : true;
+
+    // if so, make sure data from current game object is used
+    if (gameExists) {
+      season = currentGame.season!;
+      location = currentGame.location!;
+      opponent = currentGame.opponent!;
+      isAtHome = currentGame.isAtHome!;
+      selectedDate = currentGame.date;
+      // display correct values
+      seasonController.text = season;
+      locationController.text = location;
+      opponentController.text = opponent;
+    }
+
+    super.initState();
+  }
 
   final _formKey = GlobalKey<FormState>();
 
@@ -49,21 +72,6 @@ class StartGameFormState extends State<StartGameForm> {
 
   @override
   Widget build(BuildContext context) {
-    PersistentController persistentController =
-        Get.find<PersistentController>();
-    // make sure data from current game object is used, but changes from user are not overwritten when rebuilding
-    season = (persistentController.getCurrentGame().season != "")
-        ? persistentController.getCurrentGame().season!
-        : season;
-    seasonController.text = season;
-    location = (persistentController.getCurrentGame().location != "")
-        ? persistentController.getCurrentGame().location!
-        : location;
-    locationController.text = location;
-    opponent = (persistentController.getCurrentGame().opponent != "")
-        ? persistentController.getCurrentGame().opponent!
-        : opponent;
-    opponentController.text = opponent;
     // Build a Form widget using the _formKey created above.
     return GetBuilder<TempController>(
       id: "start-game-form",
@@ -155,13 +163,25 @@ class StartGameFormState extends State<StartGameForm> {
                 children: [
                   Row(
                     children: [
-                      Checkbox(value: false, onChanged: (value) {}),
+                      Checkbox(
+                          value: isAtHome,
+                          onChanged: (bool? value) {
+                            setState(() {
+                              isAtHome = value!;
+                            });
+                          }),
                       Text(StringsGeneral.lHomeGame)
                     ],
                   ),
                   Row(
                     children: [
-                      Checkbox(value: false, onChanged: (value) {}),
+                      Checkbox(
+                          value: !isAtHome,
+                          onChanged: (bool? value) {
+                            setState(() {
+                              isAtHome = !value!;
+                            });
+                          }),
                       Text(StringsGeneral.lOutwardsGame)
                     ],
                   )
@@ -185,30 +205,35 @@ class StartGameFormState extends State<StartGameForm> {
                 padding: const EdgeInsets.symmetric(vertical: 16.0),
                 child: ElevatedButton(
                   onPressed: () async {
-                    // Validate returns true if the form is valid, or false otherwise.
-                    if (_formKey.currentState!.validate()) {
-                      // check if there was already a game created and information is only updated
-                      Game currentGame = persistentController.getCurrentGame();
-                      bool gameExists = (currentGame.id == null) ? false : true;
-                      if (gameExists) {
-                        // update information based on user input
-                        currentGame.date = selectedDate;
-                        currentGame.location = location;
-                        currentGame.opponent = opponent;
-                        currentGame.season = season;
-                        persistentController.setCurrentGame(currentGame);
-                      } else {
-                        // store entered data to a new game object that will be used when the game is started at the end of the flow
-                        Game preconfiguredGame = Game(
-                            date: selectedDate,
-                            clubId: persistentController.getLoggedInClub().id!,
-                            location: location,
-                            opponent: opponent,
-                            season: season);
-                        await persistentController
-                            .setCurrentGame(preconfiguredGame, isNewGame: true);
-                      }
+                    PersistentController persistentController =
+                        Get.find<PersistentController>();
+                    // check if there was already a game created and information is only updated
+                    Game currentGame = persistentController.getCurrentGame();
+                    bool gameExists = (currentGame.id == null) ? false : true;
+                    if (gameExists) {
+                      // update information based on user input
+                      currentGame.date = selectedDate;
+                      currentGame.location = location;
+                      currentGame.opponent = opponent;
+                      currentGame.season = season;
+                      currentGame.isAtHome = isAtHome;
+                      persistentController.setCurrentGame(currentGame);
+                    } else {
+                      // store entered data to a new game object that will be used when the game is started at the end of the flow
+                      Game preconfiguredGame = Game(
+                          date: selectedDate,
+                          clubId: persistentController.getLoggedInClub().id!,
+                          location: location,
+                          opponent: opponent,
+                          season: season,
+                          isAtHome: isAtHome);
+                      await persistentController
+                          .setCurrentGame(preconfiguredGame, isNewGame: true);
                     }
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                          content: Text(StringsGameSettings.lGameDataSaved)),
+                    );
                   },
                   child: const Text(StringsTeamManagement.lSubmitButton),
                 ),
