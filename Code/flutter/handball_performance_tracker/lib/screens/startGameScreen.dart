@@ -110,7 +110,7 @@ class _StartGameScreenState extends State<StartGameScreen> {
                     .show();
               } else {
                 tempController.updateOnFieldPlayers();
-                startGame(context);
+                startGame(context, preconfigured: true);
                 Get.to(MainScreen());
                 return;
               }

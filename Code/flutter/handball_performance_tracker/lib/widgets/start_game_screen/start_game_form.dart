@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:handball_performance_tracker/constants/stringsTeamManagement.dart';
+import 'package:handball_performance_tracker/data/game.dart';
 import 'package:handball_performance_tracker/data/team.dart';
 import 'package:handball_performance_tracker/widgets/team_selection_screen/team_dropdown.dart';
 import '../../constants/stringsGameSettings.dart';
+import '../../controllers/persistentController.dart';
 import '../../controllers/tempController.dart';
 import '../../constants/team_constants.dart';
 import '../../constants/stringsGeneral.dart';
@@ -28,6 +30,9 @@ class StartGameFormState extends State<StartGameForm> {
   TextEditingController locationController = TextEditingController();
 
   DateTime selectedDate = DateTime.now();
+  String season = "";
+  String location = "";
+  String opponent = "";
 
   final _formKey = GlobalKey<FormState>();
 
@@ -46,9 +51,6 @@ class StartGameFormState extends State<StartGameForm> {
 
   @override
   Widget build(BuildContext context) {
-    seasonController.text = "TODO";
-    locationController.text = "TODO";
-    opponentController.text = "TODO";
     // Build a Form widget using the _formKey created above.
     return GetBuilder<TempController>(
       id: "start-game-form",
@@ -71,6 +73,9 @@ class StartGameFormState extends State<StartGameForm> {
                           border: OutlineInputBorder(),
                           labelText: StringsGeneral.lSeason,
                         ),
+                        onSaved: (String? season) {
+                          if (season != null) this.season = season;
+                        },
                       )),
                   // team dropdown showing all available teams from teams collection
                   Column(
@@ -110,6 +115,9 @@ class StartGameFormState extends State<StartGameForm> {
                           border: OutlineInputBorder(),
                           labelText: StringsGeneral.lOpponent,
                         ),
+                        onSaved: (String? opponent) {
+                          if (opponent != null) this.opponent = opponent;
+                        },
                       )),
                   // Textfield for location
                   SizedBox(
@@ -120,6 +128,9 @@ class StartGameFormState extends State<StartGameForm> {
                           border: OutlineInputBorder(),
                           labelText: StringsGeneral.lLocation,
                         ),
+                        onSaved: (String? location) {
+                          if (location != null) this.location = location;
+                        },
                       )),
                 ],
               ),
@@ -160,16 +171,24 @@ class StartGameFormState extends State<StartGameForm> {
                 // TODO create a lock in button
                 padding: const EdgeInsets.symmetric(vertical: 16.0),
                 child: ElevatedButton(
-                  onPressed: () {
+                  onPressed: () async {
                     // TODO save these infos in Firebase using repository
 
                     // Validate returns true if the form is valid, or false otherwise.
                     if (_formKey.currentState!.validate()) {
-                      // If the form is valid, display a snackbar. In the real world,
-                      // you'd often call a server or save the information in a database.
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text(StringsGeneral.lProcessingData)),
-                      );
+                      // save input parameters
+                      _formKey.currentState!.save();
+                      // store entered data to a new game object that will be used when the game is started at the end of the flow 
+                      PersistentController persistentController =
+                          Get.find<PersistentController>();
+                      Game preconfiguredGame = Game(
+                          date: selectedDate,
+                          clubId: persistentController.getLoggedInClub().id!,
+                          location: location,
+                          opponent: opponent,
+                          season: season);
+                      await persistentController
+                          .setCurrentGame(preconfiguredGame, isNewGame: true);
                     }
                   },
                   child: const Text(StringsTeamManagement.lSubmitButton),

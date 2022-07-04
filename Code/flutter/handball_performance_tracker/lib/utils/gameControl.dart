@@ -11,7 +11,7 @@ import 'package:stop_watch_timer/stop_watch_timer.dart';
 import '../constants/stringsGeneral.dart';
 import '../constants/stringsGameSettings.dart';
 
-void startGame(BuildContext context) async {
+void startGame(BuildContext context, {bool preconfigured: false}) async {
   TempController tempController = Get.find<TempController>();
   PersistentController persistentController = Get.find<PersistentController>();
   // check if enough players have been selected
@@ -27,21 +27,31 @@ void startGame(BuildContext context) async {
     return;
   }
 
-  // start a new game in firebase
-  print("starting new game");
-  DateTime dateTime = DateTime.now();
-  int unixTimeStamp = dateTime.toUtc().millisecondsSinceEpoch;
-  Game newGame = Game(
-      clubId: tempController.getSelectedTeam().id!,
-      date: dateTime,
-      startTime: unixTimeStamp,
-      players: tempController.chosenPlayers.cast<Player>());
-  await persistentController.setCurrentGame(newGame, isNewGame: true);
+  if (preconfigured) {
+    // game has already been saved to firebase, only update relevant information
+    Game preconfiguredGame = persistentController.getCurrentGame();
+    preconfiguredGame.startTime = DateTime.now().toUtc().millisecondsSinceEpoch;
+    preconfiguredGame.players = tempController.chosenPlayers.cast<
+        Player>(); // TODO need to be changed to  onFieldPlayersById when merging with !82
+    persistentController.setCurrentGame(preconfiguredGame);
+    // add game to selected players
+    _addGameToPlayers(preconfiguredGame);
+  } else {
+    // start a new game in firebase
+    print("starting new game");
+    DateTime dateTime = DateTime.now();
+    int unixTimeStamp = dateTime.toUtc().millisecondsSinceEpoch;
+    Game newGame = Game(
+        clubId: tempController.getSelectedTeam().id!,
+        date: dateTime,
+        startTime: unixTimeStamp,
+        players: tempController.chosenPlayers.cast<Player>());
+    await persistentController.setCurrentGame(newGame, isNewGame: true);
+    print("start game, id: ${persistentController.getCurrentGame().id}");
 
-  print("start game, id: ${persistentController.getCurrentGame().id}");
-
-  // add game to selected players
-  _addGameToPlayers(newGame);
+    // add game to selected players
+    _addGameToPlayers(newGame);
+  }
 
   // activate the game timer
   persistentController
@@ -92,7 +102,11 @@ void stopGame() async {
   persistentController.setCurrentGame(currentGame);
 
   // stop the game timer
-  persistentController.getCurrentGame().stopWatch.onExecute.add(StopWatchExecute.stop);
+  persistentController
+      .getCurrentGame()
+      .stopWatch
+      .onExecute
+      .add(StopWatchExecute.stop);
 
   tempController.setGameIsRunning(false);
 }
