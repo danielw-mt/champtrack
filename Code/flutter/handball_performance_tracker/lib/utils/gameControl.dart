@@ -107,8 +107,9 @@ void stopGame() async {
       .stopWatch
       .onExecute
       .add(StopWatchExecute.stop);
-
+  // track stopping and reset current game object
   tempController.setGameIsRunning(false);
+  persistentController.resetCurrentGame();
 }
 
 void _addGameToPlayers(Game game) {

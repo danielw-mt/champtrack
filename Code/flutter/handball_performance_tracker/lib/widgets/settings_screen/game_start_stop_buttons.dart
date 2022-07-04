@@ -100,7 +100,6 @@ class GameStartStopButtons extends StatelessWidget {
     print("stop game, id: ${persistentController.getCurrentGame().id}");
 
     DateTime dateTime = DateTime.now();
-    currentGame.date = dateTime;
     currentGame.stopTime = dateTime.toUtc().millisecondsSinceEpoch;
     currentGame.players = tempController.chosenPlayers.cast<Player>();
 

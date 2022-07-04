@@ -2,12 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:handball_performance_tracker/constants/stringsTeamManagement.dart';
 import 'package:handball_performance_tracker/data/game.dart';
-import 'package:handball_performance_tracker/data/team.dart';
 import 'package:handball_performance_tracker/widgets/team_selection_screen/team_dropdown.dart';
 import '../../constants/stringsGameSettings.dart';
 import '../../controllers/persistentController.dart';
 import '../../controllers/tempController.dart';
-import '../../constants/team_constants.dart';
 import '../../constants/stringsGeneral.dart';
 
 // Create a Form widget.
@@ -51,6 +49,21 @@ class StartGameFormState extends State<StartGameForm> {
 
   @override
   Widget build(BuildContext context) {
+    PersistentController persistentController =
+        Get.find<PersistentController>();
+    // make sure data from current game object is used, but changes from user are not overwritten when rebuilding
+    season = (persistentController.getCurrentGame().season != "")
+        ? persistentController.getCurrentGame().season!
+        : season;
+    seasonController.text = season;
+    location = (persistentController.getCurrentGame().location != "")
+        ? persistentController.getCurrentGame().location!
+        : location;
+    locationController.text = location;
+    opponent = (persistentController.getCurrentGame().opponent != "")
+        ? persistentController.getCurrentGame().opponent!
+        : opponent;
+    opponentController.text = opponent;
     // Build a Form widget using the _formKey created above.
     return GetBuilder<TempController>(
       id: "start-game-form",
@@ -73,8 +86,8 @@ class StartGameFormState extends State<StartGameForm> {
                           border: OutlineInputBorder(),
                           labelText: StringsGeneral.lSeason,
                         ),
-                        onSaved: (String? season) {
-                          if (season != null) this.season = season;
+                        onChanged: (String? input) {
+                          if (input != null) season = input;
                         },
                       )),
                   // team dropdown showing all available teams from teams collection
@@ -115,8 +128,8 @@ class StartGameFormState extends State<StartGameForm> {
                           border: OutlineInputBorder(),
                           labelText: StringsGeneral.lOpponent,
                         ),
-                        onSaved: (String? opponent) {
-                          if (opponent != null) this.opponent = opponent;
+                        onChanged: (String? input) {
+                          if (input != null) opponent = input;
                         },
                       )),
                   // Textfield for location
@@ -128,8 +141,8 @@ class StartGameFormState extends State<StartGameForm> {
                           border: OutlineInputBorder(),
                           labelText: StringsGeneral.lLocation,
                         ),
-                        onSaved: (String? location) {
-                          if (location != null) this.location = location;
+                        onChanged: (String? input) {
+                          if (input != null) location = input;
                         },
                       )),
                 ],
@@ -172,23 +185,29 @@ class StartGameFormState extends State<StartGameForm> {
                 padding: const EdgeInsets.symmetric(vertical: 16.0),
                 child: ElevatedButton(
                   onPressed: () async {
-                    // TODO save these infos in Firebase using repository
-
                     // Validate returns true if the form is valid, or false otherwise.
                     if (_formKey.currentState!.validate()) {
-                      // save input parameters
-                      _formKey.currentState!.save();
-                      // store entered data to a new game object that will be used when the game is started at the end of the flow 
-                      PersistentController persistentController =
-                          Get.find<PersistentController>();
-                      Game preconfiguredGame = Game(
-                          date: selectedDate,
-                          clubId: persistentController.getLoggedInClub().id!,
-                          location: location,
-                          opponent: opponent,
-                          season: season);
-                      await persistentController
-                          .setCurrentGame(preconfiguredGame, isNewGame: true);
+                      // check if there was already a game created and information is only updated
+                      Game currentGame = persistentController.getCurrentGame();
+                      bool gameExists = (currentGame.id == null) ? false : true;
+                      if (gameExists) {
+                        // update information based on user input
+                        currentGame.date = selectedDate;
+                        currentGame.location = location;
+                        currentGame.opponent = opponent;
+                        currentGame.season = season;
+                        persistentController.setCurrentGame(currentGame);
+                      } else {
+                        // store entered data to a new game object that will be used when the game is started at the end of the flow
+                        Game preconfiguredGame = Game(
+                            date: selectedDate,
+                            clubId: persistentController.getLoggedInClub().id!,
+                            location: location,
+                            opponent: opponent,
+                            season: season);
+                        await persistentController
+                            .setCurrentGame(preconfiguredGame, isNewGame: true);
+                      }
                     }
                   },
                   child: const Text(StringsTeamManagement.lSubmitButton),
