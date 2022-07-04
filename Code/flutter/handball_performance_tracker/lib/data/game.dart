@@ -10,6 +10,10 @@ class Game {
   int? stopTime;
   int? scoreHome;
   int? scoreOpponent;
+  bool? isAtHome;
+  String? location;
+  String? opponent;
+  String? season;
   List<Player> players;
   StopWatchTimer stopWatch; 
 
@@ -21,6 +25,10 @@ class Game {
       this.stopTime,
       this.scoreHome = 0,
       this.scoreOpponent = 0,
+      this.isAtHome = true,
+      this.location = "",
+      this.opponent = "",
+      this.season = "",
       this.players = const []}):stopWatch = StopWatchTimer(mode: StopWatchMode.countUp);
 
 
@@ -33,6 +41,10 @@ class Game {
       'stopTime': stopTime,
       'scoreHome': scoreHome,
       'scoreOpponent': scoreOpponent,
+      'isAtHome': isAtHome,
+      'location': location,
+      'opponent': opponent,
+      'season': season,
       'players': players.map((player) => player.id).toList()
     };
   }
@@ -53,6 +65,10 @@ class Game {
         stopTime: map["stopTime"],
         scoreHome: map["scoreHome"],
         scoreOpponent: map["scoreOpponent"],
+        isAtHome: map["isAtHome"],
+        location: map["location"],
+        opponent: map["opponent"],
+        season: map["season"],
         players: map["players"].cast<String>());
   }
 }
