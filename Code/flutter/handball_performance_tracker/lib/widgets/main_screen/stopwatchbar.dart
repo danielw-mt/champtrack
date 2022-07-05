@@ -146,7 +146,15 @@ class StartStopIcon extends StatelessWidget {
                 unpauseGame();
               }
             },
-            child: gameRunning ? Icon(Icons.pause) : Icon(Icons.play_arrow),
+            child: gameRunning
+                ? Icon(
+                    Icons.pause,
+                    size: 40,
+                  )
+                : Icon(
+                    Icons.play_arrow,
+                    size: 40,
+                  ),
           );
         });
   }

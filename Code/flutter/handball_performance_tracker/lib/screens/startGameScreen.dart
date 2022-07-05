@@ -32,7 +32,8 @@ class _StartGameScreenState extends State<StartGameScreen> {
   Widget build(BuildContext context) {
     // after a hot reload the app crashes. This prevents it
     if (!Get.isRegistered<TempController>())
-      return Column(
+      return SafeArea(
+          child: Column(
         children: [
           Text(StringsGeneral.lHotReloadError),
           ElevatedButton(
@@ -41,19 +42,20 @@ class _StartGameScreenState extends State<StartGameScreen> {
               },
               child: Text("Home"))
         ],
-      );
-    return Scaffold(
-        key: _scaffoldKey,
-        drawer: NavDrawer(),
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Container for menu button on top left corner
-            MenuButton(_scaffoldKey),
-            buildStartScreenContent(),
-            buildBackNextButtons()
-          ],
-        ));
+      ));
+    return SafeArea(
+        child: Scaffold(
+            key: _scaffoldKey,
+            drawer: NavDrawer(),
+            body: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Container for menu button on top left corner
+                MenuButton(_scaffoldKey),
+                buildStartScreenContent(),
+                buildBackNextButtons()
+              ],
+            )));
   }
 
   /// Depending on what page of the screen you are render different main content
@@ -79,7 +81,10 @@ class _StartGameScreenState extends State<StartGameScreen> {
               startGameFlowStep -= 1;
             });
           } else {
-            Get.to(Dashboard());
+            Get.to(() => Dashboard());
+            setState(() {
+              startGameFlowStep -= 1;
+            });
           }
         },
         // when page 0 is reached change the text of the button
@@ -111,7 +116,7 @@ class _StartGameScreenState extends State<StartGameScreen> {
               } else {
                 tempController.updateOnFieldPlayers();
                 startGame(context);
-                Get.to(MainScreen());
+                Get.to(() => MainScreen());
                 return;
               }
             }

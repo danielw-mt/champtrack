@@ -63,18 +63,18 @@ Map<String, Map<String, String>> actionMapping = {
   goalkeeper: {
     StringsGameScreen.lRedCard: redCard,
     StringsGameScreen.lYellowCard: yellowCard,
+    StringsGameScreen.lTimePenalty: timePenalty,
     StringsGameScreen.lEmptyGoal: emptyGoal,
+    StringsGameScreen.lErrThrowGoalkeeper: errThrow,
     StringsGameScreen.lGoalGoalkeeper: goal,
-    StringsGameScreen.lErrThrow: errThrow,
-    StringsGameScreen.lAssist: assist,
     StringsGameScreen.lBadPass: badPass,
     StringsGameScreen.lParade: parade,
     StringsGameScreen.lGoalOtherSide: goalOthers,
   },
   seven_meter: {
     StringsGameScreen.lGoal: goal,
-    StringsGeneral.lMissedThrow: missed7m,
-    StringsGeneral.lOpponentGoal: goalOthers,
+    StringsGameScreen.lErrThrow: missed7m,
+    StringsGameScreen.lGoalOtherSide: goalOthers,
     StringsGeneral.lCaught: parade7m
   },
   allActions: {
@@ -94,7 +94,9 @@ Map<String, Map<String, String>> actionMapping = {
     StringsGameScreen.lGoalOtherSide: goalOthers,
     StringsGameScreen.lEmptyGoal: emptyGoal,
     StringsGameScreen.lGoalGoalkeeper: goal,
-    StringsGameScreen.lAssist: assist,
+    StringsGeneral.lCaught: parade7m,
+    StringsGameScreen.lErrThrowGoalkeeper: errThrow,
+
   }
 };
 
