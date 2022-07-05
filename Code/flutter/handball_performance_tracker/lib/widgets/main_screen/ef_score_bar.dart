@@ -362,6 +362,7 @@ Row getButton(Player player, TempController tempController) {
               : buttonColor,
           child: Text(
             player.lastName,
+            overflow: TextOverflow.ellipsis,
             style: TextStyle(color: Colors.black, fontSize: nameFontSize),
             textAlign: TextAlign.left,
           ),
