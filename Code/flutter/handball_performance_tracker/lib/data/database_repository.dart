@@ -17,9 +17,9 @@ var logger = Logger(
 );
 
 class DatabaseRepository {
-  //FirebaseApp devApp = await Firebase.initializeApp(name: "dev", options: DevFirebaseOptions.currentPlatform);
-  //final FirebaseFirestore _db = FirebaseFirestore.instance;
-  final FirebaseFirestore _db = FirebaseFirestore.instanceFor(app: Firebase.app('dev'));
+  
+  final FirebaseFirestore _db = FirebaseFirestore.instance;
+  // final FirebaseFirestore _db = FirebaseFirestore.instanceFor(app: Firebase.app('dev'));
 
   /// @return asynchronous reference to Player object that was saved to firebase
 
