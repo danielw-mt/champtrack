@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
-import '../../strings.dart';
+import 'package:handball_performance_tracker/data/player.dart';
+import 'package:handball_performance_tracker/utils/feed_logic.dart';
+import 'package:handball_performance_tracker/utils/player_helper.dart';
+import 'package:handball_performance_tracker/widgets/main_screen/field.dart';
+import '../../constants/stringsGameScreen.dart';
+import 'package:handball_performance_tracker/widgets/main_screen/seven_meter_menu.dart';
 import '../../controllers/persistentController.dart';
 import '../../controllers/tempController.dart';
 import 'package:get/get.dart';
@@ -25,11 +30,18 @@ void callActionMenu(BuildContext context) {
   logger.d("Calling action menu");
   final TempController tempController = Get.find<TempController>();
 
+  String actionType = determineActionType();
+
+  // do nothing if goal of others was clicked
+  if (actionType == otherGoalkeeper) {
+    return;
+  }
+
   // if game is not running give a warning
   if (tempController.getGameIsRunning() == false) {
     Alert(
       context: context,
-      title: Strings.lGameStartErrorMessage,
+      title: StringsGameScreen.lGameStartErrorMessage,
       type: AlertType.error,
     ).show();
     return;
@@ -55,196 +67,231 @@ void callActionMenu(BuildContext context) {
                 Expanded(
                     child: PageView(
                         controller: new PageController(),
-                        children: buildPageViewChildren(context))),
+                        children: buildPageViewChildren(context, actionType))),
               ] // Column of "Spieler", horizontal line and Button-Row
               ))).show();
 }
 
-///
-bool determineAttack() {
-  logger.d("Determining whether attack actions should be displayed...");
+/// determine if acktion was attack, defense, goalkeeper
+String determineActionType() {
+  logger.d("Determining which actions should be displayed...");
   final TempController tempController = Get.find<TempController>();
+  final PersistentController persistentController =
+      Get.find<PersistentController>();
   // decide whether attack or defense actions should be displayed depending
   //on what side the team goals is and whether they are attacking or defending
-  bool attacking = false;
+  String actionType = defense;
   bool attackIsLeft = tempController.getAttackIsLeft();
   bool fieldIsLeft = tempController.getFieldIsLeft();
-
+  GameAction lastAction = persistentController.getLastAction();
   // when our goal is to the right (= attackIsLeft) and the field is left
   //display attack options
-  if (attackIsLeft && fieldIsLeft) {
-    attacking = true;
-    // when our goal is to the left (=attack is right) and the field is to the
-    //right display attack options
-  } else if (attackIsLeft == false && fieldIsLeft == false) {
-    attacking = true;
+  if (tempController.getLastLocation()[0] == goal) {
+    actionType = goalkeeper;
+    if (attackIsLeft && fieldIsLeft) {
+      actionType = otherGoalkeeper;
+      // when our goal is to the left (=attack is right) and the field is to the
+      //right display attack options
+    } else if (attackIsLeft == false && fieldIsLeft == false) {
+      actionType = otherGoalkeeper;
+    }
+  } else {
+    if (attackIsLeft && fieldIsLeft) {
+      actionType = attack;
+      // when our goal is to the left (=attack is right) and the field is to the
+      //right display attack options
+    } else if (attackIsLeft == false && fieldIsLeft == false) {
+      actionType = attack;
+    }
   }
-  logger.d("Attack actions should be displayed: $attacking");
-  return attacking;
+  logger.d("Actions should be displayed: $actionType");
+  return actionType;
 }
 
 // a method for building the children of the pageview in the right order
 // by arranging either the attack menu or defense menu first
-List<Widget> buildPageViewChildren(BuildContext context) {
-  if (determineAttack() == true) {
+List<Widget> buildPageViewChildren(BuildContext context, String actionType) {
+  if (actionType == goalkeeper) {
     return [
       buildDialogButtonMenu(
-          context, actionMapping[attack]!.keys.toList(), true),
+          context, actionMapping[goalkeeper]!.keys.toList(), false, true),
+    ];
+  } else if (actionType == attack) {
+    return [
       buildDialogButtonMenu(
-          context, actionMapping[defense]!.keys.toList(), false),
+          context, actionMapping[attack]!.keys.toList(), true, false),
+      buildDialogButtonMenu(
+          context, actionMapping[defense]!.keys.toList(), false, false),
     ];
   } else {
     return [
       buildDialogButtonMenu(
-          context, actionMapping[defense]!.keys.toList(), false),
+          context, actionMapping[defense]!.keys.toList(), false, false),
       buildDialogButtonMenu(
-          context, actionMapping[attack]!.keys.toList(), true),
+          context, actionMapping[attack]!.keys.toList(), true, false),
     ];
   }
 }
 
 /// @return a menu of differently arranged buttons depending on action or defense
-Widget buildDialogButtonMenu(
-    BuildContext context, List<String> buttonTexts, isAttack) {
-  if (isAttack) {
+Widget buildDialogButtonMenu(BuildContext context, List<String> buttonTexts,
+    bool isAttack, bool isGoalkeeper) {
+  String header;
+  Row buttonRow;
+  if (isGoalkeeper) {
     List<DialogButton> dialogButtons = [
-      buildDialogButton(context, actionMapping[attack]!.keys.toList()[0],
-          Colors.red, Icons.style),
-      buildDialogButton(context, actionMapping[attack]!.keys.toList()[1],
-          Colors.yellow, Icons.style),
-      buildDialogButton(context, actionMapping[attack]!.keys.toList()[2],
-          Colors.grey, Icons.timer),
       buildDialogButton(
-          context, actionMapping[attack]!.keys.toList()[3], Colors.grey),
+          context, buttonTexts[0], Colors.red, Icons.style, 2, ""),
       buildDialogButton(
-          context, actionMapping[attack]!.keys.toList()[4], Colors.grey),
+          context, buttonTexts[1], Colors.yellow, Icons.style, 2, ""),
       buildDialogButton(
-          context, actionMapping[attack]!.keys.toList()[5], Colors.blue),
-      buildDialogButton(
-          context, actionMapping[attack]!.keys.toList()[6], Colors.blue),
-      buildDialogButton(
-          context, actionMapping[attack]!.keys.toList()[7], Colors.blue)
+          context, buttonTexts[2], Colors.grey, Icons.timer, 2, ""),
+      buildDialogButton(context, buttonTexts[3], Colors.grey),
+      buildDialogButton(context, buttonTexts[4], Colors.grey),
+      buildDialogButton(context, buttonTexts[5], Colors.blue),
+      buildDialogButton(context, buttonTexts[6], Colors.blue),
+      buildDialogButton(context, buttonTexts[7], Colors.blue),
+      buildDialogButton(context, buttonTexts[8], Colors.blue),
     ];
-    return Column(children: [
-      Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: const [
-          Align(
-            alignment: Alignment.topLeft,
-            child: Text(
-              Strings.lOffensePopUpHeader,
-              textAlign: TextAlign.left,
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 20,
-              ),
-            ),
-          ),
-        ],
+    buttonRow = Row(children: [
+      Column(children: [
+        Row(
+          children: [
+            dialogButtons[0],
+            dialogButtons[1],
+            dialogButtons[2],
+          ],
+        ),
+        dialogButtons[3],
+        dialogButtons[4],
+      ]),
+      Column(children: [
+        dialogButtons[5],
+        dialogButtons[6],
+      ]),
+      Column(
+        children: [dialogButtons[7], dialogButtons[8]],
       ),
-      // horizontal line
-      const Divider(
-        thickness: 2,
-        color: Colors.black,
-        height: 6,
-      ),
-      // Button-Row: one Row with 3 Columns of 3, 3 and 2 buttons
-      Row(children: [
-        Column(
-          children: [dialogButtons[0], dialogButtons[1], dialogButtons[2]],
-        ),
-        Column(
-          children: [dialogButtons[3], dialogButtons[4], dialogButtons[5]],
-        ),
-        Column(
-          children: [dialogButtons[6], dialogButtons[7]],
-        ),
-      ])
     ]);
+    header = StringsGameScreen.lGoalkeeperPopUpHeader;
+  } else if (isAttack) {
+    List<DialogButton> dialogButtons = [
+      buildDialogButton(context, buttonTexts[0], Colors.red, Icons.style),
+      buildDialogButton(context, buttonTexts[1], Colors.yellow, Icons.style),
+      buildDialogButton(context, buttonTexts[2], Colors.grey, Icons.timer),
+      buildDialogButton(context, buttonTexts[3], Colors.grey),
+      buildDialogButton(context, buttonTexts[4], Colors.grey),
+      buildDialogButton(context, buttonTexts[5], Colors.blue),
+      buildDialogButton(context, buttonTexts[6], Colors.blue),
+      buildDialogButton(context, buttonTexts[7], Colors.blue)
+    ];
+    buttonRow = Row(children: [
+      Column(
+        children: [dialogButtons[0], dialogButtons[1], dialogButtons[2]],
+      ),
+      Column(
+        children: [dialogButtons[3], dialogButtons[4], dialogButtons[5]],
+      ),
+      Column(
+        children: [dialogButtons[6], dialogButtons[7]],
+      ),
+    ]);
+    header = StringsGameScreen.lOffensePopUpHeader;
   } else {
     List<DialogButton> dialogButtons = [
-      buildDialogButton(context, actionMapping[defense]!.keys.toList()[0],
-          Colors.red, Icons.style),
-      buildDialogButton(context, actionMapping[defense]!.keys.toList()[1],
-          Colors.yellow, Icons.style),
-      buildDialogButton(context, actionMapping[defense]!.keys.toList()[2],
+      buildDialogButton(context, buttonTexts[0], Colors.red, Icons.style),
+      buildDialogButton(context, buttonTexts[1], Colors.yellow, Icons.style),
+      buildDialogButton(context, buttonTexts[2],
           const Color.fromRGBO(15, 66, 199, 32), Icons.timer),
-      buildDialogButton(
-          context, actionMapping[defense]!.keys.toList()[3], Colors.grey),
-      buildDialogButton(
-          context, actionMapping[defense]!.keys.toList()[4], Colors.grey),
-      buildDialogButton(
-          context, actionMapping[defense]!.keys.toList()[5], Colors.blue),
-      buildDialogButton(
-          context, actionMapping[defense]!.keys.toList()[6], Colors.blue)
+      buildDialogButton(context, buttonTexts[3], Colors.grey),
+      buildDialogButton(context, buttonTexts[4], Colors.grey),
+      buildDialogButton(context, buttonTexts[5], Colors.blue),
+      buildDialogButton(context, buttonTexts[6], Colors.blue)
     ];
-    return Column(children: [
-      Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          const Align(
-            alignment: Alignment.topLeft,
-            child: Text(
-              Strings.lDeffensePopUpHeader,
-              textAlign: TextAlign.left,
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 20,
-              ),
+    buttonRow = Row(children: [
+      Column(
+        children: [dialogButtons[0], dialogButtons[1], dialogButtons[2]],
+      ),
+      Column(
+        children: [dialogButtons[3], dialogButtons[4]],
+      ),
+      Column(
+        children: [dialogButtons[5], dialogButtons[6]],
+      ),
+    ]);
+    header = StringsGameScreen.lDeffensePopUpHeader;
+  }
+  return Column(children: [
+    Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Align(
+          alignment: Alignment.topLeft,
+          child: Text(
+            header,
+            textAlign: TextAlign.left,
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 20,
             ),
           ),
-        ],
-      ),
-      // horizontal line
-      const Divider(
-        thickness: 2,
-        color: Colors.black,
-        height: 6,
-      ),
-      // Button-Row: one Row with 3 Columns of 3, 2 and 2 buttons
-      Row(children: [
-        Column(
-          children: [dialogButtons[0], dialogButtons[1], dialogButtons[2]],
         ),
-        Column(
-          children: [dialogButtons[3], dialogButtons[4]],
-        ),
-        Column(
-          children: [dialogButtons[5], dialogButtons[6]],
-        ),
-      ])
-    ]);
-  }
+      ],
+    ),
+    // horizontal line
+    const Divider(
+      thickness: 2,
+      color: Colors.black,
+      height: 6,
+    ),
+    // Button-Row: one Row with 3 Columns of 3, 2 and 2 buttons
+    buttonRow
+  ]);
 }
 
 /// @return
 /// builds a single dialog button that logs its text (=action) to firestore
 //  and updates the game state. Its color and icon can be specified as parameters
 DialogButton buildDialogButton(
-    BuildContext context, String buttonText, Color color,
-    [icon]) {
+    BuildContext context, String buttonText, Color buttonColor,
+    [icon, sizeFactor, otherText]) {
   TempController tempController = Get.find<TempController>();
   PersistentController persistentController = Get.find<PersistentController>();
-  void logAction() async {
+  void logAction(String actionType) async {
     logger.d("logging an action");
     DateTime dateTime = DateTime.now();
     int unixTime = dateTime.toUtc().millisecondsSinceEpoch;
     int secondsSinceGameStart =
         persistentController.getCurrentGame().stopWatch.secondTime.value;
-
     // get most recent game id from DB
     String currentGameId = persistentController.getCurrentGame().id!;
-    String actionType = determineAttack() ? attack : defense;
 
+    // switch field side after hold of goalkeeper
+    if (actionMapping[allActions]![buttonText]! == parade ||
+        actionMapping[allActions]![buttonText]! == emptyGoal ||
+        actionMapping[allActions]![buttonText]! == goalOthers) {
+      while (FieldSwitch.pageController.positions.length > 1) {
+        FieldSwitch.pageController
+            .detach(FieldSwitch.pageController.positions.first);
+      }
+      if (tempController.getAttackIsLeft() == true) {
+        logger.d("Switching to left field after hold");
+        FieldSwitch.pageController.jumpToPage(0);
+      } else {
+        logger.d("Switching to right field after hold");
+        FieldSwitch.pageController.jumpToPage(1);
+      }
+    }
     GameAction action = GameAction(
         teamId: tempController.getSelectedTeam().id!,
         gameId: currentGameId,
         type: actionType,
-        actionType: actionMapping[actionType]![buttonText]!,
+        actionType: actionMapping[allActions]![buttonText]!,
         throwLocation: tempController.getLastLocation().cast<String>(),
         timestamp: unixTime,
         relativeTime: secondsSinceGameStart);
     logger.d("GameAction object created: ${action.actionType}");
+    logger.d(action.actionType);
 
     // add action to firebase
 
@@ -252,7 +299,48 @@ DialogButton buildDialogButton(
     // when a player was selected in that menu the action document can be
     // updated in firebase with their player_id using the action_id
     logger.d("Adding gameaction to firebase");
-    persistentController.addAction(action);
+    // repository
+    //     .addActionToGame(action)
+    //     .then((DocumentReference doc) => action.id = doc.id);
+
+    // if we perform a 7m foul go straight to 7m screen and skip player screen
+    if (action.actionType == foulWithSeven) {
+      logger.d("7m foul. Going to 7m screen");
+      // TODO add 7m action data to repository here and not in player screen
+      // TODO add action to feedItems (causes an error for some reason)
+      //addFeedItem(action);
+      Navigator.pop(context);
+      callSevenMeterMenu(context, false);
+      return;
+      // go to player menu for all other actions
+    } 
+
+    // Save action directly if goalkeeper action
+    if (actionType == goalkeeper) {
+      String? goalKeeperId = "goalkeeper";
+      // get id of goalkeeper by going through players on field and searching for position
+      for (int k in getOnFieldIndex()) {
+        Player player = tempController.getPlayersFromSelectedTeam()[k];
+        if (player.positions.contains("TW")) {
+          goalKeeperId = player.id;
+          break;
+        }
+      }
+
+      action.playerId = goalKeeperId.toString();
+      persistentController.addAction(action);
+      addFeedItem(action);
+      logger.d(
+          "last action saved in database: ${persistentController.getLastAction().toMap()}");
+    } else {
+      persistentController.addAction(action);
+    }
+    Navigator.pop(context);
+    // close action menu if goalkeeper action
+    if (actionType != goalkeeper) {
+      print("stepping in here: $actionType");
+      callPlayerMenu(context);
+    }
   }
 
   final double width = MediaQuery.of(context).size.width;
@@ -262,15 +350,16 @@ DialogButton buildDialogButton(
       // have round edges with same degree as Alert dialog
       radius: const BorderRadius.all(Radius.circular(15)),
       // set height and width of buttons so the shirt and name are fitting inside
-      height: width * 0.10,
-      width: width * 0.10,
-      color: color,
+      height: sizeFactor != null ? width * 0.10 / sizeFactor : width * 0.10,
+      width: sizeFactor != null ? width * 0.10 / sizeFactor : width * 0.10,
+      color: buttonColor,
       child: Center(
         child: Column(
           children: [
             (icon != null) ? Icon(icon) : Container(),
             Text(
-              buttonText,
+              otherText != null ? otherText : buttonText,
+              textAlign: TextAlign.center,
               style: TextStyle(color: Colors.white, fontSize: 20),
             )
           ],
@@ -279,8 +368,7 @@ DialogButton buildDialogButton(
       ),
       onPressed: () {
         // reset the feed timer
-        logAction();
-        Navigator.pop(context);
-        callPlayerMenu(context);
+        String actionType = determineActionType();
+        logAction(actionType);
       });
 }

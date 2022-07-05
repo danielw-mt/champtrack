@@ -1,8 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
-
-import '../strings.dart';
+import '../constants/stringsAuthentication.dart';
+import '../constants/stringsGeneral.dart';
 
 class AuthenticationScreen extends StatefulWidget {
   final BuildContext context;
@@ -30,7 +30,8 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
   @override
   Widget build(BuildContext context) {
     if (isLogin) {
-      return Scaffold(
+      return SafeArea(
+          child: Scaffold(
         body: SingleChildScrollView(
           padding: EdgeInsets.all(16),
           child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
@@ -52,16 +53,17 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
             SizedBox(
               height: 20,
             ),
-            ElevatedButton(onPressed: signIn, child: Text(Strings.lSignInButton)),
+            ElevatedButton(
+                onPressed: signIn, child: Text(StringsAuth.lSignInButton)),
             isLogin
                 ? TextButton(
                     onPressed: onClickedSignUp,
-                    child: Text(Strings.lSignUpButton),
+                    child: Text(StringsAuth.lSignUpButton),
                   )
                 : Container()
           ]),
         ),
-      );
+      ));
     }
     return Scaffold(
       body: SingleChildScrollView(
@@ -85,12 +87,13 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
           SizedBox(
             height: 20,
           ),
-          ElevatedButton(onPressed: signUp, child: Text(Strings.lSignInButton)),
+          ElevatedButton(
+              onPressed: signUp, child: Text(StringsAuth.lSignInButton)),
           isLogin
               ? Container()
               : TextButton(
                   onPressed: onClickedSignUp,
-                  child: Text(Strings.lLogInButton),
+                  child: Text(StringsAuth.lLogInButton),
                 )
         ]),
       ),
@@ -103,7 +106,7 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
         context: context,
         content: Column(
           children: [
-            Text(Strings.lLoggingIn),
+            Text(StringsAuth.lLoggingIn),
             CircularProgressIndicator(),
           ],
         ),
@@ -119,7 +122,7 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
       loadingAlert.dismiss();
       Alert(context: context, content: Text(e.message.toString())).show();
       // pop alert once it sign in is completed
-      
+
     }
   }
 
@@ -129,7 +132,7 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
         context: context,
         content: Column(
           children: [
-            Text(Strings.lSigningUp),
+            Text(StringsAuth.lSigningUp),
             CircularProgressIndicator(),
           ],
         ),
@@ -144,7 +147,6 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
     } on FirebaseAuthException catch (e) {
       loadingAlert.dismiss();
       Alert(context: context, content: Text(e.message.toString())).show();
-      
     }
   }
 

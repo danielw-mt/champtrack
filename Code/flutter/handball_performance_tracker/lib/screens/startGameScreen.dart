@@ -6,7 +6,9 @@ import 'package:handball_performance_tracker/screens/dashboard.dart';
 import 'package:handball_performance_tracker/utils/gameControl.dart';
 import 'package:handball_performance_tracker/widgets/start_game_screen/player_positioning.dart';
 import 'package:handball_performance_tracker/widgets/start_game_screen/start_game_form.dart';
-import 'package:handball_performance_tracker/strings.dart';
+import 'package:handball_performance_tracker/constants/stringsDashboard.dart';
+import 'package:handball_performance_tracker/constants/stringsGeneral.dart';
+import 'package:handball_performance_tracker/constants/stringsGameSettings.dart';
 import 'package:handball_performance_tracker/widgets/team_settings_screen/players_list.dart';
 import '../widgets/nav_drawer.dart';
 import '../widgets/settings_screen/game_start_stop_buttons.dart';
@@ -30,28 +32,30 @@ class _StartGameScreenState extends State<StartGameScreen> {
   Widget build(BuildContext context) {
     // after a hot reload the app crashes. This prevents it
     if (!Get.isRegistered<TempController>())
-      return Column(
+      return SafeArea(
+          child: Column(
         children: [
-          Text(Strings.lHotReloadError),
+          Text(StringsGeneral.lHotReloadError),
           ElevatedButton(
               onPressed: () {
                 Get.toNamed("Dashboard");
               },
               child: Text("Home"))
         ],
-      );
-    return Scaffold(
-        key: _scaffoldKey,
-        drawer: NavDrawer(),
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Container for menu button on top left corner
-            MenuButton(_scaffoldKey),
-            buildStartScreenContent(),
-            buildBackNextButtons()
-          ],
-        ));
+      ));
+    return SafeArea(
+        child: Scaffold(
+            key: _scaffoldKey,
+            drawer: NavDrawer(),
+            body: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Container for menu button on top left corner
+                MenuButton(_scaffoldKey),
+                buildStartScreenContent(),
+                buildBackNextButtons()
+              ],
+            )));
   }
 
   /// Depending on what page of the screen you are render different main content
@@ -61,14 +65,6 @@ class _StartGameScreenState extends State<StartGameScreen> {
     }
     if (startGameFlowStep == 1) {
       return PlayersList();
-    }
-    if (startGameFlowStep == 2) {
-      return PlayerPositioning();
-    }
-
-    if (startGameFlowStep == 3) {
-      // return
-      return Text("Verifiy inputs");
     }
     return Container();
   }
@@ -85,13 +81,16 @@ class _StartGameScreenState extends State<StartGameScreen> {
               startGameFlowStep -= 1;
             });
           } else {
-            Get.to(Dashboard());
+            Get.to(() => Dashboard());
+            setState(() {
+              startGameFlowStep -= 1;
+            });
           }
         },
         // when page 0 is reached change the text of the button
         child: startGameFlowStep == 0
-            ? Text(Strings.lDashboard)
-            : Text(Strings.lBack),
+            ? Text(StringsDashboard.lDashboard)
+            : Text(StringsGeneral.lBack),
       ),
       // 'Next' button
       ElevatedButton(
@@ -99,7 +98,6 @@ class _StartGameScreenState extends State<StartGameScreen> {
             // go to page 1
             if (startGameFlowStep == 0) {
               setState(() {
-                print("page 0 or 2");
                 startGameFlowStep = 1;
               });
               return;
@@ -111,35 +109,22 @@ class _StartGameScreenState extends State<StartGameScreen> {
               if (tempController.getOnFieldPlayers().length != 7) {
                 Alert(
                         context: context,
-                        title: Strings.lWarningPlayerNumberErrorMessage,
+                        title: StringsGameSettings.lStartGameAlertHeader,
                         type: AlertType.error,
-                        desc: Strings.lPlayerNumberErrorMessage)
+                        desc: StringsGameSettings.lStartGameAlert)
                     .show();
               } else {
-                setState(() {
-                  startGameFlowStep = 2;
-                });
+                tempController.updateOnFieldPlayers();
+                startGame(context);
+                Get.to(() => MainScreen());
                 return;
               }
             }
-            // go to page 3
-            if (startGameFlowStep == 2) {
-              setState(() {
-                startGameFlowStep = 3;
-              });
-              return;
-            }
-            // start game from last page and go to mainscreen
-            if (startGameFlowStep == 3) {
-              startGame(context);
-              Get.to(MainScreen());
-              return;
-            }
           },
           // when page 3 is reached change the text of the button
-          child: startGameFlowStep == 3
-              ? Text(Strings.lStartGameButton)
-              : Text(Strings.lNext))
+          child: startGameFlowStep == 1
+              ? Text(StringsGeneral.lStartGameButton)
+              : Text(StringsGeneral.lNext))
     ]);
   }
 }

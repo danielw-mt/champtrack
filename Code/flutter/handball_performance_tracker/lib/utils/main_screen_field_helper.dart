@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:handball_performance_tracker/utils/fieldSizeParameter.dart'
+import 'package:handball_performance_tracker/constants/game_actions.dart';
+import 'package:handball_performance_tracker/constants/fieldSizeParameter.dart'
     as fieldSizeParameter;
 import 'dart:math' as math;
 import 'dart:ui' as ui;
@@ -30,7 +31,9 @@ class SectorCalc {
   List<String> calculatePosition(Offset position) {
     num x = position.dx;
     num y = position.dy;
-
+    if (determineGoal(x, y)) {
+      return [goal];
+    }
     String sector = determineSector(x, y);
     String perimeters = determinePerimeter(x, y);
     return [sector, perimeters];
@@ -66,6 +69,26 @@ class SectorCalc {
                 (fieldSizeParameter.nineMeterRadiusY *
                     fieldSizeParameter.nineMeterRadiusY) <=
         1;
+  }
+
+  /* Calculates if a point (x,y) is inside the goal.
+  * 
+  * @return  true if (x,y) is inside and otherwise false.
+  */
+  bool determineGoal(num x, num y) {
+    bool inGoal = y >
+            fieldSizeParameter.fieldHeight / 2 -
+                fieldSizeParameter.goalHeight / 2 &&
+        y <
+            fieldSizeParameter.fieldHeight / 2 +
+                fieldSizeParameter.goalHeight / 2;
+    if (leftSide) {
+      inGoal = inGoal && x < fieldSizeParameter.goalWidth;
+    } else {
+      inGoal = inGoal &&
+          x > fieldSizeParameter.fieldWidth - fieldSizeParameter.goalWidth;
+    }
+    return inGoal;
   }
 
   /// deterime whether throw was from within 6m, 9m or further
@@ -138,23 +161,38 @@ class SectorCalc {
 */
 class FieldPainter extends CustomPainter {
   bool leftSide = true;
-  FieldPainter(this.leftSide);
+  Color nineMeterColor;
+  Color sixMeterColor;
+  Color fieldBackgroundColor;
+  FieldPainter(this.leftSide, this.nineMeterColor, this.sixMeterColor,
+      this.fieldBackgroundColor);
 
   @override
   void paint(Canvas canvas, Size size) {
     double xOffset;
     double startAngle;
     double sweepAngle;
+    double goalOffset;
     // set Parameters for field side
     if (leftSide) {
       xOffset = 0;
       startAngle = math.pi / 2;
       sweepAngle = -math.pi;
+      goalOffset = xOffset + fieldSizeParameter.goalWidth / 2;
     } else {
       xOffset = fieldSizeParameter.fieldWidth;
       startAngle = math.pi / 2;
       sweepAngle = math.pi;
+      goalOffset = xOffset - fieldSizeParameter.goalWidth / 2;
     }
+    // draw background
+    canvas.drawRect(
+        Rect.fromCenter(
+            center: Offset(fieldSizeParameter.fieldWidth / 2,
+                fieldSizeParameter.fieldHeight / 2),
+            width: fieldSizeParameter.fieldWidth,
+            height: fieldSizeParameter.fieldHeight),
+        Paint()..color = fieldBackgroundColor);
 
     // draw bigger 9m oval
     canvas.drawArc(
@@ -165,7 +203,7 @@ class FieldPainter extends CustomPainter {
         startAngle,
         sweepAngle,
         false,
-        Paint()..color = Color.fromARGB(103, 169, 172, 209));
+        Paint()..color = nineMeterColor);
 
     // draw smaller 6m oval
     canvas.drawArc(
@@ -176,7 +214,7 @@ class FieldPainter extends CustomPainter {
         startAngle,
         sweepAngle,
         false,
-        Paint()..color = Color.fromARGB(141, 129, 142, 216));
+        Paint()..color = sixMeterColor);
 
     // draw 7m line
     // To draw a line you need two points: (x1,y1) and (x2,y2)
@@ -206,6 +244,14 @@ class FieldPainter extends CustomPainter {
         Paint()
           ..color = Colors.black
           ..strokeWidth = fieldSizeParameter.lineSize);
+
+    // draw goal
+    canvas.drawRect(
+        Rect.fromCenter(
+            center: Offset(goalOffset, fieldSizeParameter.fieldHeight / 2),
+            width: fieldSizeParameter.goalWidth,
+            height: fieldSizeParameter.goalHeight),
+        Paint()..color = nineMeterColor);
   }
 
   // Since this painter has no fields, it always paints
@@ -223,6 +269,7 @@ class FieldPainter extends CustomPainter {
 // https://stackoverflow.com/questions/54019785/how-to-add-line-dash-in-flutter (25.05.22)
 class DashedPathPainter extends CustomPainter {
   late Path originalPath;
+  bool isEllipse; // false for goal rectangle
   final Color pathColor;
   final double strokeWidth = fieldSizeParameter.lineSize;
   final double dashGapLength;
@@ -232,6 +279,7 @@ class DashedPathPainter extends CustomPainter {
 
   DashedPathPainter({
     required this.leftSide,
+    required this.isEllipse,
     this.pathColor = Colors.black,
     this.dashGapLength = 7,
     this.dashLength = 7.3,
@@ -240,6 +288,7 @@ class DashedPathPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     double xOffset;
+    double goalOffset;
     double startAngle;
     double sweepAngle;
     // set Parameters for field side
@@ -247,23 +296,34 @@ class DashedPathPainter extends CustomPainter {
       xOffset = 0;
       startAngle = math.pi / 2;
       sweepAngle = -math.pi;
+      goalOffset = xOffset + fieldSizeParameter.goalWidth / 2;
     } else {
       xOffset = fieldSizeParameter.fieldWidth;
       startAngle = math.pi / 2;
       sweepAngle = math.pi;
+      goalOffset = xOffset - fieldSizeParameter.goalWidth / 2;
     }
 
-    // definde 9m oval
-    originalPath = Path()
-      ..addArc(
-        Rect.fromCenter(
-            center: Offset(xOffset, fieldSizeParameter.fieldHeight / 2),
-            width: fieldSizeParameter.nineMeterRadiusX * 2,
-            height: fieldSizeParameter.nineMeterRadiusY * 2),
-        startAngle,
-        sweepAngle,
-      );
-
+    if (isEllipse) {
+      // definde 9m oval
+      originalPath = Path()
+        ..addArc(
+          Rect.fromCenter(
+              center: Offset(xOffset, fieldSizeParameter.fieldHeight / 2),
+              width: fieldSizeParameter.nineMeterRadiusX * 2,
+              height: fieldSizeParameter.nineMeterRadiusY * 2),
+          startAngle,
+          sweepAngle,
+        );
+    } else {
+      originalPath = Path()
+        ..addRect(
+          Rect.fromCenter(
+              center: Offset(goalOffset, fieldSizeParameter.fieldHeight / 2),
+              width: fieldSizeParameter.goalWidth,
+              height: fieldSizeParameter.goalHeight),
+        );
+    }
     _dashedPathProperties = DashedPathProperties(
       path: Path(),
       dashLength: dashLength,

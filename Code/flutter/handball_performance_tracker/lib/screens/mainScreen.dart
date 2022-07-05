@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:handball_performance_tracker/utils/initializeLocalData.dart';
+import 'package:handball_performance_tracker/constants/colors.dart';
 import 'package:handball_performance_tracker/widgets/main_screen/ef_score_bar.dart';
 import 'package:handball_performance_tracker/widgets/main_screen/ef_score_bar.dart'
     as efscorebar;
 import 'package:handball_performance_tracker/widgets/main_screen/field.dart';
-import '../strings.dart';
-import '../controllers/persistentController.dart';
-import '../controllers/tempController.dart';
+import '../constants/stringsGeneral.dart';
 import './../widgets/nav_drawer.dart';
-import 'package:handball_performance_tracker/utils/fieldSizeParameter.dart'
+import 'package:handball_performance_tracker/constants/fieldSizeParameter.dart'
     as fieldSizeParameter;
 import 'package:flutter/services.dart';
 import '../widgets/main_screen/stopwatchbar.dart';
@@ -17,7 +14,7 @@ import '../widgets/main_screen/action_feed.dart';
 
 class MainScreen extends StatelessWidget {
   // screen where the game takes place
-  
+
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
@@ -27,13 +24,21 @@ class MainScreen extends StatelessWidget {
       DeviceOrientation.landscapeLeft,
     ]);
 
-    return Scaffold(
+    return SafeArea(
+        child: Scaffold(
       key: _scaffoldKey,
       drawer: NavDrawer(),
+      backgroundColor: backgroundColor,
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          MenuButton(_scaffoldKey),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              MenuButton(_scaffoldKey),
+              StopWatchBar(),
+            ],
+          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
@@ -41,7 +46,7 @@ class MainScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(Strings.lFeedHeader),
+                  Text(StringsGeneral.lFeedHeader),
                   ActionFeed(),
                   //Spacer(flex: 1,),
                   Container()
@@ -58,34 +63,46 @@ class MainScreen extends StatelessWidget {
                   alignment: Alignment.topCenter,
                   child: EfScoreBar()),
               // Field
-              Column(
-                children: [
-                  StopWatchBar(),
-                  Container(
-                    width: fieldSizeParameter.fieldWidth +
-                        fieldSizeParameter.toolbarHeight / 4,
-                    height: fieldSizeParameter.fieldHeight +
-                        fieldSizeParameter.toolbarHeight / 4,
-                    alignment: Alignment.topCenter,
-                    child: Container(
-                      decoration: BoxDecoration(
-                          // set border around field
-                          border:
-                              Border.all(width: fieldSizeParameter.lineSize)),
-                      child: SizedBox(
-                        // FieldSwitch to swipe between right and left field side. SizedBox around it so there is no rendering error.
-                        width: fieldSizeParameter.fieldWidth,
-                        height: fieldSizeParameter.fieldHeight,
-                        child: FieldSwitch(),
+              Flexible(
+                flex: 4,
+                child: Column(
+                  children: [
+                    Container(
+                      width: fieldSizeParameter.fieldWidth +
+                          fieldSizeParameter.toolbarHeight / 4,
+                      height: fieldSizeParameter.fieldHeight +
+                          fieldSizeParameter.toolbarHeight / 4,
+                      alignment: Alignment.topCenter,
+                      child: Container(
+                        decoration: BoxDecoration(
+                            // set border around field
+                            border:
+                                Border.all(width: fieldSizeParameter.lineSize)),
+                        child: SizedBox(
+                          // FieldSwitch to swipe between right and left field side. SizedBox around it so there is no rendering error.
+                          width: fieldSizeParameter.fieldWidth,
+                          height: fieldSizeParameter.fieldHeight,
+                          // Use a LayoutBuilder to get the real size of SizedBox.
+                          // As it is inside Flexible Widget, the size can vary depending on screen size.
+                          child: new LayoutBuilder(
+                            builder: (BuildContext context,
+                                BoxConstraints constraints) {
+                              // set Field size depending on Widget size
+                              fieldSizeParameter.setFieldSize(
+                                  constraints.maxWidth, constraints.maxHeight);
+                              return FieldSwitch();
+                            },
+                          ),
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ],
           ),
         ],
       ),
-    );
+    ));
   }
 }

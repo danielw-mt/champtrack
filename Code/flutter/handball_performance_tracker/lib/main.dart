@@ -10,7 +10,7 @@ import 'config/firebase_options.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
-import 'strings.dart';
+import 'constants/stringsGeneral.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 void main() async {
@@ -18,19 +18,29 @@ void main() async {
 
   // start app
   runApp(GetMaterialApp(
-      title: Strings.lAppTitle,
+      title: StringsGeneral.lAppTitle,
       theme: ThemeData(
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       scrollBehavior:
           AppScrollBehavior(), // add scrollbehaviour so swiping is possible in web
+    initialRoute: '/',
       getPages: [
+      GetPage(name: '/', page: () => Home()),
         GetPage(name: '/StartGameScreen', page: () => StartGameScreen()),
         GetPage(name: '/SettingsScreen', page: () => SettingsScreen()),
         GetPage(name: '/Dashboard', page: () => Dashboard()),
       ],
-      home: FutureBuilder<dynamic>(
+  ));
+}
+
+class Home extends StatelessWidget {
+  const Home({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<dynamic>(
         future: _startupCheck(),
         builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
           List<Widget> children;
@@ -62,7 +72,7 @@ void main() async {
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 16),
-                child: Text(Strings.lError + ': ${snapshot.error}'),
+                child: Text(StringsGeneral.lError + ': ${snapshot.error}'),
               )
             ];
           } else {
@@ -74,7 +84,7 @@ void main() async {
               ),
               Padding(
                 padding: EdgeInsets.only(top: 16),
-                child: Text(Strings.lConnectionCheck),
+                child: Text(StringsGeneral.lConnectionCheck),
               )
             ];
           }
@@ -85,7 +95,8 @@ void main() async {
             ),
           );
         },
-      )));
+    );
+  }
 }
 
 Future<dynamic> _startupCheck() async {
@@ -103,11 +114,11 @@ Future<dynamic> _startupCheck() async {
     // I am connected to a mobile network.
     FirebaseFirestore db = FirebaseFirestore.instance;
     db.enableNetwork();
-    print(Strings.lConnected);
+    print(StringsGeneral.lConnected);
     return "";
   } else {
     // TODO define behaviour for not connected i.e. wait 5 secs and try again
-    print(Strings.lNot + ' ' + Strings.lConnected);
+    print(StringsGeneral.lNot + ' ' + StringsGeneral.lConnected);
   }
 }
 

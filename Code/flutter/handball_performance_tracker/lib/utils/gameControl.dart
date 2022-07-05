@@ -8,24 +8,25 @@ import '../data/game.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 
-import '../strings.dart';
+import '../constants/stringsGeneral.dart';
+import '../constants/stringsGameSettings.dart';
 
 void startGame(BuildContext context) async {
   TempController tempController = Get.find<TempController>();
   PersistentController persistentController = Get.find<PersistentController>();
-  print("in start game");
   // check if enough players have been selected
   var numPlayersOnField = tempController.getOnFieldPlayers().length;
   if (numPlayersOnField != PLAYER_NUM) {
     // create alert if someone tries to start the game without enough players
     Alert(
             context: context,
-            title: Strings.lStartGameAlertHeader,
+            title: StringsGameSettings.lStartGameAlertHeader,
             type: AlertType.error,
-            desc: Strings.lStartGameAlert)
+            desc: StringsGameSettings.lStartGameAlert)
         .show();
     return;
   }
+  tempController.setPlayerBarPlayers();
 
   // start a new game in firebase
   print("starting new game");
@@ -38,21 +39,10 @@ void startGame(BuildContext context) async {
       players: tempController.chosenPlayers.cast<Player>());
   await persistentController.setCurrentGame(newGame, isNewGame: true);
 
-  print("start game, id: ${persistentController.getCurrentGame().id}");
-
   // add game to selected players
   _addGameToPlayers(newGame);
 
-  // activate the game timer
-  persistentController
-      .getCurrentGame()
-      .stopWatch
-      .onExecute
-      .add(StopWatchExecute.start);
-
   print("start game, id: ${persistentController.getCurrentGame().id}");
-  tempController.setGameIsRunning(true);
-  tempController.setPlayerBarPlayers();
 }
 
 void unpauseGame() {

@@ -1,8 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:handball_performance_tracker/data/game.dart';
+import 'package:handball_performance_tracker/data/team.dart';
 import 'package:handball_performance_tracker/data/game_action.dart';
 import 'package:handball_performance_tracker/data/player.dart';
+import 'package:handball_performance_tracker/data/club.dart';
 import 'package:logger/logger.dart';
 
 var logger = Logger(
@@ -21,9 +23,59 @@ class DatabaseRepository {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
   // final FirebaseFirestore _db = FirebaseFirestore.instanceFor(app: Firebase.app('dev'));
 
-  /// @return asynchronous reference to Player object that was saved to firebase
+  // TODO change this to logged in club
+  Future<Club> getClub() async {
+    QuerySnapshot querySnapshot = await _db.collection("clubs").limit(1).get();
+    QueryDocumentSnapshot<Object?> documentSnapshot = querySnapshot.docs[0];
+    return Club.fromDocumentSnapshot(documentSnapshot);
+  }
 
-  // @return asynchronous reference to Player object that was saved to firebase
+  Future<DocumentReference> getClubReference(Club club) async {
+    return await _db.collection("clubs").doc(club.id);
+  }
+
+  /// delete player from players collection and all the teams he belongs to
+  Future<void> deletePlayer(Player player) async {
+    // delete player from player collection
+    await _db.collection("players").doc(player.id).delete();
+    // delete player reference from selected team player references
+    List<String> teamReferenceStrings = player.teams;
+    // delete player from each team
+    teamReferenceStrings.forEach((String teamReferenceString) async {
+      DocumentReference<Map<String, dynamic>> relevantTeam =
+          _db.doc(teamReferenceString);
+
+      // get a list of player references from the document
+      DocumentSnapshot snapshot = await relevantTeam.get();
+      Map<String, dynamic> snapshotData =
+          snapshot.data() as Map<String, dynamic>;
+      List<DocumentReference> playerReferences =
+          snapshotData["players"].cast<DocumentReference>();
+
+      //get a reference of the player object from the players collection
+      DocumentReference<Map<String, dynamic>> relevantPlayer =
+          _db.collection("players").doc(player.id);
+      playerReferences.remove(relevantPlayer);
+      await relevantTeam.update({'players': playerReferences});
+      // if onFieldPlayer contains player remove him from onFieldplayer list as well
+      List<DocumentReference> onFieldPlayerReferences =
+          snapshotData["onFieldPlayers"].cast<DocumentReference>();
+      // only update onFieldPlayers if it is really necessary
+      bool onFieldPlayersNeedToBeUpdated = false;
+      onFieldPlayerReferences.forEach((DocumentReference reference) {
+        if (reference.id == player.id) {
+          onFieldPlayerReferences.remove(reference);
+          onFieldPlayersNeedToBeUpdated = true;
+        }
+      });
+      if (onFieldPlayersNeedToBeUpdated) {
+        await relevantTeam.update({'onFieldPlayer': onFieldPlayerReferences});
+      }
+    });
+  }
+
+  /// @return asynchronous reference to Player object that was saved to firebase
+  /// add player to players collection in firebase
   Future<DocumentReference> addPlayer(Player player) {
     return _db.collection("players").add(player.toMap());
   }
@@ -31,6 +83,41 @@ class DatabaseRepository {
   /// update a Player's firestore record according to @param player properties
   void updatePlayer(Player player) async {
     await _db.collection("players").doc(player.id).update(player.toMap());
+  }
+
+  /// add player to a team in firebase with teamReference string i.e. teams/ypunI6UsJmTr2LxKh1aw
+  void addPlayerToTeam(Player player, Team relevantTeam) async {
+    print("trying to add player ${player.id} to team ${relevantTeam.id}");
+    relevantTeam.players.add(player);
+    DocumentReference<Map<String, dynamic>> selectedTeam =
+        _db.collection("teams").doc(relevantTeam.id);
+    // get a list of player references from the document
+    DocumentSnapshot snapshot = await selectedTeam.get();
+    Map<String, dynamic> snapshotData = snapshot.data() as Map<String, dynamic>;
+    List<DocumentReference> playerReferences =
+        snapshotData["players"].cast<DocumentReference>();
+    //get a reference of the player object from the players collection
+    DocumentReference<Map<String, dynamic>> relevantPlayer =
+        _db.collection("players").doc(player.id);
+
+    // add player to reference list
+    playerReferences.add(relevantPlayer);
+    // update the list of references in the respective team
+    await selectedTeam.update({'players': playerReferences});
+  }
+
+  /// update all onFieldPlayers to the ones that are selected in the @param team
+  void updateOnFieldPlayers(List<Player> onFieldPlayers, Team team) {
+    List<DocumentReference> onFieldPlayerReferences = [];
+    onFieldPlayers.forEach((Player player) {
+      DocumentReference<Map<String, dynamic>> playerReference =
+          _db.collection("players").doc(player.id);
+      onFieldPlayerReferences.add(playerReference);
+    });
+    _db
+        .collection("teams")
+        .doc(team.id)
+        .update({'onFieldPlayers': onFieldPlayerReferences});
   }
 
   /// @return asynchronous reference to Game object that was saved to firebase
