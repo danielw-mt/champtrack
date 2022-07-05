@@ -100,12 +100,11 @@ class Home extends StatelessWidget {
 }
 
 Future<dynamic> _startupCheck() async {
-  print("startup check");
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  if (await Firebase.apps.length < 2) {
+  if (Firebase.apps.length < 2) {
     await Firebase.initializeApp(
         name: "dev", options: DevFirebaseOptions.currentPlatform);
   }
