@@ -104,6 +104,9 @@ Future<dynamic> _startupCheck() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
+  await Firebase.initializeApp(
+      name: "dev", options: DevFirebaseOptions.currentPlatform);
+
   // if connected force synchronization
   var connectivityResult = await (Connectivity().checkConnectivity());
   if (connectivityResult == ConnectivityResult.mobile ||
