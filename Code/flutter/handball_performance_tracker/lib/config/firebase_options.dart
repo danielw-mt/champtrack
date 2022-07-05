@@ -75,3 +75,63 @@ class DefaultFirebaseOptions {
     iosBundleId: 'mad.tf.fau.de.handballPerformanceTracker',
   );
 }
+
+class DevFirebaseOptions {
+  static FirebaseOptions get currentPlatform {
+    if (kIsWeb) {
+      return web;
+    }
+    switch (defaultTargetPlatform) {
+      case TargetPlatform.macOS:
+        throw UnsupportedError(
+          'DevFirebaseOptions have not been configured for macos - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
+      case TargetPlatform.windows:
+        throw UnsupportedError(
+          'DevFirebaseOptions have not been configured for windows - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
+      case TargetPlatform.linux:
+        throw UnsupportedError(
+          'DevFirebaseOptions have not been configured for linux - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
+      default:
+        throw UnsupportedError(
+          'DevFirebaseOptions are not supported for this platform.',
+        );
+    }
+  }
+
+  static const FirebaseOptions web = FirebaseOptions(
+    apiKey: 'AIzaSyDV7n7FmKrrNeLLiJ02nXGs8pIMLtjzHFs',
+    appId: '1:974814103289:web:851ef360793cebd006c428',
+    messagingSenderId: '910235672034',
+    projectId: 'handball-tracker-dev',
+    authDomain: 'handball-tracker-dev.appspot.com',
+    storageBucket: 'handball-performance-tracker.appspot.com',
+    measurementId: 'G-0BMS52683E',
+  );
+
+  /* TODO: does not work so far as firebase SDK setup needs to be adapted
+  
+  static const FirebaseOptions android = FirebaseOptions(
+    apiKey: 'AIzaSyDgjjjDLuQoL5CTGvlAVizQiqFfqdsXMow',
+    appId: '1:974814103289:android:7044af92503d46c606c428',
+    messagingSenderId: '910235672034',
+    projectId: 'handball-tracker-dev',
+    storageBucket: 'handball-tracker-dev.appspot.com',
+  );
+
+  static const FirebaseOptions ios = FirebaseOptions(
+    apiKey: 'AIzaSyBIopT3JQCid-K1_Ylcmc6Q7tfSVckVjLM',
+    appId: '1:974814103289:ios:2f609bd8d708d56a06c428',
+    messagingSenderId: '910235672034',
+    projectId: 'handball-tracker-dev',
+    storageBucket: 'handball-tracker-dev.appspot.com',
+    iosClientId: '910235672034-pnm1ks4onkhtst3h6st5n5cjep5o53di.apps.googleusercontent.com',
+    iosBundleId: 'com.mycompany.champtrackv2',
+  );*/
+}
+
