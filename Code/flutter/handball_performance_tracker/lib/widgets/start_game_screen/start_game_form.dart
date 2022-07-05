@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:handball_performance_tracker/constants/stringsTeamManagement.dart';
 import 'package:handball_performance_tracker/data/game.dart';
+import 'package:handball_performance_tracker/data/team.dart';
 import 'package:handball_performance_tracker/widgets/team_selection_screen/team_dropdown.dart';
 import '../../constants/stringsGameSettings.dart';
 import '../../controllers/persistentController.dart';
@@ -26,6 +27,7 @@ class StartGameFormState extends State<StartGameForm> {
   TextEditingController seasonController = TextEditingController();
   TextEditingController opponentController = TextEditingController();
   TextEditingController locationController = TextEditingController();
+  TextEditingController dateController = TextEditingController();
 
   DateTime selectedDate = DateTime.now();
   String teamId = "";
@@ -54,6 +56,7 @@ class StartGameFormState extends State<StartGameForm> {
       opponentController.text = opponent;
     }
 
+    dateController.text = "${selectedDate.toLocal()}".split(' ')[0];
     super.initState();
   }
 
@@ -66,9 +69,8 @@ class StartGameFormState extends State<StartGameForm> {
         firstDate: DateTime(2015, 8),
         lastDate: DateTime(2101));
     if (picked != null && picked != selectedDate) {
-      setState(() {
-        selectedDate = picked;
-      });
+      selectedDate = picked;
+      dateController.text = "${selectedDate.toLocal()}".split(' ')[0];
     }
   }
 
@@ -100,35 +102,6 @@ class StartGameFormState extends State<StartGameForm> {
                           if (input != null) season = input;
                         },
                       )),
-                  // team dropdown showing all available teams from teams collection
-                  Column(
-                    children: [
-                      Text(StringsGeneral.lTeam),
-                      TeamDropdown(),
-                    ],
-                  ),
-                  // DateTime Picker
-                  Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      Text("${selectedDate.toLocal()}".split(' ')[0]),
-                      SizedBox(
-                        height: 20.0,
-                      ),
-                      ElevatedButton(
-                        onPressed: () => selectDate(context),
-                        child: Text(StringsGameSettings.lSelectDate),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-              Container(
-                height: 20,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
                   // Textfield for opponent name
                   SizedBox(
                       width: width * 0.2,
@@ -163,44 +136,83 @@ class StartGameFormState extends State<StartGameForm> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Row(
-                    children: [
-                      Checkbox(
-                          value: isAtHome,
-                          onChanged: (bool? value) {
-                            setState(() {
-                              isAtHome = value!;
-                            });
-                          }),
-                      Text(StringsGeneral.lHomeGame)
-                    ],
+                  // DateTime Picker
+                  SizedBox(
+                      width: width * 0.2,
+                      child: TextFormField(
+                        controller: dateController,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(),
+                          labelText: StringsGameSettings.lSelectDate,
+                        ),
+                        onTap: () => selectDate(context),
+                      )),
+                  // team dropdown showing all available teams from teams collection
+                  SizedBox(
+                    width: width * 0.2,
+                    child: TeamDropdown(),
                   ),
-                  Row(
-                    children: [
-                      Checkbox(
-                          value: !isAtHome,
-                          onChanged: (bool? value) {
-                            setState(() {
-                              isAtHome = !value!;
-                            });
-                          }),
-                      Text(StringsGeneral.lOutwardsGame)
-                    ],
-                  )
+                  // Placeholder for proper alignment
+                  SizedBox(
+                    width: width * 0.2,
+                  ),
                 ],
               ),
               Container(
                 height: 20,
               ),
-              Column(
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  const Text(StringsGameSettings.lHomeSideIsRight),
-                  Switch(
-                      value: tempController.getAttackIsLeft(),
-                      onChanged: (bool value) {
-                        tempController.setAttackIsLeft(value);
-                      }),
+                  SizedBox(
+                    width: 0.2 * width,
+                    child: Row(
+                      children: [
+                        Checkbox(
+                            value: isAtHome,
+                            onChanged: (bool? value) {
+                              setState(() {
+                                isAtHome = value!;
+                              });
+                            }),
+                        Text(StringsGeneral.lHomeGame)
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    width: 0.2 * width,
+                    child: Row(
+                      children: [
+                        Checkbox(
+                            value: !isAtHome,
+                            onChanged: (bool? value) {
+                              setState(() {
+                                isAtHome = !value!;
+                              });
+                            }),
+                        Text(StringsGeneral.lOutwardsGame)
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    width: 0.2 * width,
+                    child: Row(
+                      children: [
+                        Checkbox(
+                            value: tempController.getAttackIsLeft(),
+                            onChanged: (bool? value) {
+                              setState(() {
+                                tempController.setAttackIsLeft(value!);
+                              });
+                            }),
+                        Text(StringsGameSettings.lHomeSideIsRight)
+                      ],
+                    ),
+                  ),
                 ],
+              ),
+              Container(
+                height: 20,
               ),
               Padding(
                 // TODO create a lock in button

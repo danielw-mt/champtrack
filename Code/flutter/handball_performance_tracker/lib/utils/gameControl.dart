@@ -7,8 +7,6 @@ import '../data/player.dart';
 import '../data/game.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
-
-import '../constants/stringsGeneral.dart';
 import '../constants/stringsGameSettings.dart';
 
 void startGame(BuildContext context, {bool preconfigured: false}) async {

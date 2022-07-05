@@ -1,17 +1,14 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:handball_performance_tracker/controllers/tempController.dart';
 import 'package:handball_performance_tracker/screens/dashboard.dart';
 import 'package:handball_performance_tracker/utils/gameControl.dart';
-import 'package:handball_performance_tracker/widgets/start_game_screen/player_positioning.dart';
 import 'package:handball_performance_tracker/widgets/start_game_screen/start_game_form.dart';
 import 'package:handball_performance_tracker/constants/stringsDashboard.dart';
 import 'package:handball_performance_tracker/constants/stringsGeneral.dart';
 import 'package:handball_performance_tracker/constants/stringsGameSettings.dart';
 import 'package:handball_performance_tracker/widgets/team_settings_screen/players_list.dart';
 import '../widgets/nav_drawer.dart';
-import '../widgets/settings_screen/game_start_stop_buttons.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import '../screens/mainScreen.dart';
 
