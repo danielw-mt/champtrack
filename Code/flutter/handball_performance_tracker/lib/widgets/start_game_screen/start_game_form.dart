@@ -28,6 +28,7 @@ class StartGameFormState extends State<StartGameForm> {
   TextEditingController locationController = TextEditingController();
 
   DateTime selectedDate = DateTime.now();
+  String teamId = "";
   String season = "";
   String location = "";
   String opponent = "";
@@ -41,6 +42,7 @@ class StartGameFormState extends State<StartGameForm> {
 
     // if so, make sure data from current game object is used
     if (gameExists) {
+      teamId = currentGame.teamId;
       season = currentGame.season!;
       location = currentGame.location!;
       opponent = currentGame.opponent!;
@@ -115,7 +117,7 @@ class StartGameFormState extends State<StartGameForm> {
                       ),
                       ElevatedButton(
                         onPressed: () => selectDate(context),
-                        child: Text('Select date'),
+                        child: Text(StringsGameSettings.lSelectDate),
                       ),
                     ],
                   ),
@@ -213,6 +215,7 @@ class StartGameFormState extends State<StartGameForm> {
                     if (gameExists) {
                       // update information based on user input
                       currentGame.date = selectedDate;
+                      currentGame.teamId = teamId;
                       currentGame.location = location;
                       currentGame.opponent = opponent;
                       currentGame.season = season;
@@ -223,6 +226,7 @@ class StartGameFormState extends State<StartGameForm> {
                       Game preconfiguredGame = Game(
                           date: selectedDate,
                           clubId: persistentController.getLoggedInClub().id!,
+                          teamId: tempController.getSelectedTeam().id!,
                           location: location,
                           opponent: opponent,
                           season: season,

@@ -5,6 +5,7 @@ import 'player.dart';
 class Game {
   String? id;
   final String clubId;
+  String teamId;
   DateTime date;
   int? startTime;
   int? stopTime;
@@ -20,6 +21,7 @@ class Game {
   Game(
       {this.id,
       this.clubId = "",
+      this.teamId = "",
       required this.date,
       this.startTime,
       this.stopTime,
@@ -36,6 +38,7 @@ class Game {
   Map<String, dynamic> toMap() {
     return {
       'clubId': clubId,
+      'teamId': teamId,
       'date': date,
       'startTime': startTime,
       'stopTime': stopTime,
@@ -60,6 +63,7 @@ class Game {
   factory Game.fromMap(Map<String, dynamic> map) {
     return Game(
         clubId: map["clubId"],
+        teamId: map["teamId"],
         date: map["date"],
         startTime: map["startTime"],
         stopTime: map["stopTime"],
