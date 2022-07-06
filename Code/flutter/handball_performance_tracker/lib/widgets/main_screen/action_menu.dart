@@ -65,9 +65,12 @@ void callActionMenu(BuildContext context) {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Expanded(
-                    child: PageView(
-                        controller: new PageController(),
-                        children: buildPageViewChildren(context, actionType))),
+                    child: Scrollbar(
+                  thumbVisibility: true,
+                  child: PageView(
+                      controller: new PageController(),
+                      children: buildPageViewChildren(context, actionType)),
+                )),
               ] // Column of "Spieler", horizontal line and Button-Row
               ))).show();
 }
