@@ -36,11 +36,11 @@ void startGame(BuildContext context) async {
       clubId: tempController.getSelectedTeam().id!,
       date: dateTime,
       startTime: unixTimeStamp,
-      players: tempController.chosenPlayers.cast<Player>());
+      players: tempController.getOnFieldPlayersById());
   await persistentController.setCurrentGame(newGame, isNewGame: true);
 
   // add game to selected players
-  _addGameToPlayers(newGame);
+  addGameToPlayers(newGame);
 
   print("start game, id: ${persistentController.getCurrentGame().id}");
 }
@@ -77,7 +77,7 @@ void stopGame() async {
   DateTime dateTime = DateTime.now();
   currentGame.date = dateTime;
   currentGame.stopTime = dateTime.toUtc().millisecondsSinceEpoch;
-  currentGame.players = tempController.chosenPlayers().cast<Player>();
+  currentGame.players = tempController.getOnFieldPlayersById();
 
   persistentController.setCurrentGame(currentGame);
 
@@ -87,13 +87,9 @@ void stopGame() async {
   tempController.setGameIsRunning(false);
 }
 
-void _addGameToPlayers(Game game) {
+void addGameToPlayers(Game game) {
   TempController tempController = Get.find<TempController>();
-  for (Player player in tempController.chosenPlayers) {
-    if (!player.games.contains(game.id)) {
-      player.games.add(game.id!);
-      // TODO implement this
-      //repository.updatePlayer(player); //TODO maybe only update on stop?
-    }
+  for (Player player in tempController.getOnFieldPlayers()) {
+    tempController.addGameToPlayer(player, game);
   }
 }
