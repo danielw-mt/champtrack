@@ -16,15 +16,15 @@ void main() async {
 
   // start app
   runApp(GetMaterialApp(
-      title: StringsGeneral.lAppTitle,
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
-      scrollBehavior:
-          AppScrollBehavior(), // add scrollbehaviour so swiping is possible in web
+    title: StringsGeneral.lAppTitle,
+    theme: ThemeData(
+      primarySwatch: Colors.blue,
+      visualDensity: VisualDensity.adaptivePlatformDensity,
+    ),
+    scrollBehavior:
+        AppScrollBehavior(), // add scrollbehaviour so swiping is possible in web
     initialRoute: '/',
-      getPages: [
+    getPages: [
       GetPage(name: '/', page: () => Home()),
       GetPage(name: '/StartGameScreen', page: () => StartGameScreen()),
         GetPage(name: '/Dashboard', page: () => Dashboard()),
@@ -38,60 +38,60 @@ class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<dynamic>(
-        future: _startupCheck(),
-        builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-          List<Widget> children;
-          if (snapshot.hasData) {
-            return StreamBuilder<User?>(
-                stream: FirebaseAuth.instance.authStateChanges(),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  } else if (snapshot.hasError) {
-                    return Center(
-                      child: Text("There was a problem with authentication"),
-                    );
-                  } else if (snapshot.hasData) {
-                    // if we have a User object we are logged in and can display the app
-                    return Dashboard();
-                  } else {
-                    return AuthenticationScreen(context: context);
-                  }
-                });
-          } else if (snapshot.hasError) {
-            children = <Widget>[
-              const Icon(
-                Icons.error_outline,
-                color: Colors.red,
-                size: 60,
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 16),
-                child: Text(StringsGeneral.lError + ': ${snapshot.error}'),
-              )
-            ];
-          } else {
-            children = const <Widget>[
-              SizedBox(
-                width: 60,
-                height: 60,
-                child: CircularProgressIndicator(),
-              ),
-              Padding(
-                padding: EdgeInsets.only(top: 16),
-                child: Text(StringsGeneral.lConnectionCheck),
-              )
-            ];
-          }
-          return Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: children,
+      future: _startupCheck(),
+      builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+        List<Widget> children;
+        if (snapshot.hasData) {
+          return StreamBuilder<User?>(
+              stream: FirebaseAuth.instance.authStateChanges(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+                } else if (snapshot.hasError) {
+                  return Center(
+                    child: Text("There was a problem with authentication"),
+                  );
+                } else if (snapshot.hasData) {
+                  // if we have a User object we are logged in and can display the app
+                  return Dashboard();
+                } else {
+                  return AuthenticationScreen(context: context);
+                }
+              });
+        } else if (snapshot.hasError) {
+          children = <Widget>[
+            const Icon(
+              Icons.error_outline,
+              color: Colors.red,
+              size: 60,
             ),
-          );
-        },
+            Padding(
+              padding: const EdgeInsets.only(top: 16),
+              child: Text(StringsGeneral.lError + ': ${snapshot.error}'),
+            )
+          ];
+        } else {
+          children = const <Widget>[
+            SizedBox(
+              width: 60,
+              height: 60,
+              child: CircularProgressIndicator(),
+            ),
+            Padding(
+              padding: EdgeInsets.only(top: 16),
+              child: Text(StringsGeneral.lConnectionCheck),
+            )
+          ];
+        }
+        return Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: children,
+          ),
+        );
+      },
     );
   }
 }
@@ -100,6 +100,11 @@ Future<dynamic> _startupCheck() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
+  if (Firebase.apps.length < 2) {
+    await Firebase.initializeApp(
+        name: "dev", options: DevFirebaseOptions.currentPlatform);
+  }
 
   // if connected force synchronization
   var connectivityResult = await (Connectivity().checkConnectivity());

@@ -25,6 +25,7 @@ void startGame(BuildContext context) async {
         .show();
     return;
   }
+  tempController.setPlayerBarPlayers();
 
   // start a new game in firebase
   print("starting new game");
@@ -40,16 +41,7 @@ void startGame(BuildContext context) async {
   // add game to selected players
   _addGameToPlayers(newGame);
 
-  // activate the game timer
-  persistentController
-      .getCurrentGame()
-      .stopWatch
-      .onExecute
-      .add(StopWatchExecute.start);
-
   print("start game, id: ${persistentController.getCurrentGame().id}");
-  tempController.setGameIsRunning(true);
-  tempController.setPlayerBarPlayers();
 }
 
 void unpauseGame() {

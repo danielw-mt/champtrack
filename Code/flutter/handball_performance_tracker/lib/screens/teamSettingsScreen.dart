@@ -14,7 +14,8 @@ class TeamSettingsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<TempController>(
+    return SafeArea(
+        child: GetBuilder<TempController>(
       id: "team-setting-screen",
       builder: (gameController) {
         return DefaultTabController(
@@ -44,6 +45,6 @@ class TeamSettingsScreen extends StatelessWidget {
                   ])),
         );
       },
-    );
+    ));
   }
 }
