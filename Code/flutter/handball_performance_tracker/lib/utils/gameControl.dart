@@ -26,7 +26,8 @@ void startGame(BuildContext context) async {
     return;
   }
   tempController.setPlayerBarPlayers();
-
+  // Don't start time running directly. Set game paused so "back to game" button appears in side menu.
+  tempController.setGameIsPaused(true);
   // start a new game in firebase
   print("starting new game");
   DateTime dateTime = DateTime.now();
