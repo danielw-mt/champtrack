@@ -257,8 +257,7 @@ class MenuHeader extends StatelessWidget {
         // Arrow Icon
         Container(
             margin: EdgeInsets.only(left: 20),
-            child: Icon(Icons.keyboard_double_arrow_left,
-                color: Colors.white, size: 40))
+            child: Text(""))
       ],
     );
   }
