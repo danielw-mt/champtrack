@@ -30,7 +30,8 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
   @override
   Widget build(BuildContext context) {
     if (isLogin) {
-      return Scaffold(
+      return SafeArea(
+          child: Scaffold(
         body: SingleChildScrollView(
           padding: EdgeInsets.all(16),
           child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
@@ -52,7 +53,8 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
             SizedBox(
               height: 20,
             ),
-            ElevatedButton(onPressed: signIn, child: Text(StringsAuth.lSignInButton)),
+            ElevatedButton(
+                onPressed: signIn, child: Text(StringsAuth.lSignInButton)),
             isLogin
                 ? TextButton(
                     onPressed: onClickedSignUp,
@@ -61,7 +63,7 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
                 : Container()
           ]),
         ),
-      );
+      ));
     }
     return Scaffold(
       body: SingleChildScrollView(
@@ -85,7 +87,8 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
           SizedBox(
             height: 20,
           ),
-          ElevatedButton(onPressed: signUp, child: Text(StringsAuth.lSignInButton)),
+          ElevatedButton(
+              onPressed: signUp, child: Text(StringsAuth.lSignInButton)),
           isLogin
               ? Container()
               : TextButton(
@@ -119,7 +122,7 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
       loadingAlert.dismiss();
       Alert(context: context, content: Text(e.message.toString())).show();
       // pop alert once it sign in is completed
-      
+
     }
   }
 
@@ -144,7 +147,6 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
     } on FirebaseAuthException catch (e) {
       loadingAlert.dismiss();
       Alert(context: context, content: Text(e.message.toString())).show();
-      
     }
   }
 

@@ -33,7 +33,7 @@ class ActionFeed extends StatelessWidget {
                     child: Column(
                       children: [
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Padding(
                               padding: const EdgeInsets.all(8.0),
@@ -49,11 +49,12 @@ class ActionFeed extends StatelessWidget {
                                     )),
                               ),
                             ),
-                            Container(
+                            Expanded(
                               child: Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Text(
                                   relevantPlayer.lastName,
+                                  overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
                                     fontSize: 20,
                                   ),
