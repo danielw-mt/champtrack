@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:handball_performance_tracker/constants/colors.dart';
+import 'package:handball_performance_tracker/controllers/persistentController.dart';
 import 'package:handball_performance_tracker/data/player.dart';
 import 'package:handball_performance_tracker/constants/fieldSizeParameter.dart'
     as fieldSizeParameter;
@@ -9,6 +10,7 @@ import 'dart:math';
 import 'package:rainbow_color/rainbow_color.dart';
 
 import '../../controllers/tempController.dart';
+import '../../data/game.dart';
 
 // Radius of round edges
 double menuRadius = 8.0;
@@ -205,6 +207,7 @@ Container buildPlayerButton(BuildContext context, int i, TempController tempCont
         .getPlayersFromSelectedTeam()[tempController.getPlayerBarPlayers()[i]]
         .positions);
     List<Container> buttons = [];
+
     for (int k = 0; k < players.length; k++) {
       int l = tempController.getPlayersFromSelectedTeam().indexOf(players[k]);
       Container button = buildPopupPlayerButton(context, l, tempController);
@@ -266,6 +269,7 @@ Container buildPopupPlayerButton(
   // Changes player which was pressed in the efscore bar (tempController.getPlayerToChange)
   // with a player which was pressed in a popup dialog.
   void changePlayer() {
+    final Game currentGame = Get.find<PersistentController>().getCurrentGame();
     // get index of player which was pressed in efscore bar in tempController.getOnFieldPlayers()
     int k = tempController
         .getOnFieldPlayers()
@@ -273,7 +277,7 @@ Container buildPopupPlayerButton(
     // Change the player which was pressed in efscore bar in tempController.getOnFieldPlayers()
     // to the player which was pressed in popup dialog.
     tempController.setOnFieldPlayer(
-        k, tempController.getPlayersFromSelectedTeam()[i]);
+        k, tempController.getPlayersFromSelectedTeam()[i], currentGame);
     // Update player bar players
     int l = tempController
         .getPlayersFromSelectedTeam()

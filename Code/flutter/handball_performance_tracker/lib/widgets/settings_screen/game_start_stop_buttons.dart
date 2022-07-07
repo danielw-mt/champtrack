@@ -7,7 +7,7 @@ import '../../data/game.dart';
 import '../../controllers/persistentController.dart';
 import '../../controllers/tempController.dart';
 import './../../data/game.dart';
-import './../../data/player.dart';
+import './../../utils/gameControl.dart';
 import 'package:get/get.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
@@ -72,14 +72,14 @@ class GameStartStopButtons extends StatelessWidget {
         clubId: tempController.getSelectedTeam().id!,
         date: dateTime,
         startTime: unixTimeStamp,
-        players: tempController.chosenPlayers.cast<Player>());
+        players: tempController.getOnFieldPlayersById());
 
     await persistentController.setCurrentGame(newGame, isNewGame: true);
     newGame = persistentController.getCurrentGame(); // id was updated during set
     print("start game, id: ${persistentController.getCurrentGame().id}");
 
     // add game to selected players
-    _addGameToPlayers(newGame, tempController);
+    addGameToPlayers(newGame);
 
     // activate the game timer
     persistentController
@@ -102,7 +102,7 @@ class GameStartStopButtons extends StatelessWidget {
     DateTime dateTime = DateTime.now();
     currentGame.date = dateTime;
     currentGame.stopTime = dateTime.toUtc().millisecondsSinceEpoch;
-    currentGame.players = tempController.chosenPlayers.cast<Player>();
+    currentGame.players = tempController.getOnFieldPlayersById();
 
     persistentController.setCurrentGame(currentGame);
 
@@ -114,15 +114,5 @@ class GameStartStopButtons extends StatelessWidget {
         .add(StopWatchExecute.stop);
 
     tempController.setGameIsRunning(false);
-  }
-
-  void _addGameToPlayers(Game game, TempController gc) {
-    for (Player player in gc.chosenPlayers) {
-      if (!player.games.contains(game.id)) {
-        player.games.add(game.id!);
-        // TODO implement this
-        //repository.updatePlayer(player); //TODO maybe only update on stop?
-      }
-    }
   }
 }
