@@ -150,7 +150,9 @@ GetBuilder<TempController> buildDialogButton(
   }
 
   void _setFieldBasedOnLastAction(GameAction lastAction) {
-    if (lastAction.actionType == goal || lastAction.actionType == errThrow) {
+    if (lastAction.actionType == goal ||
+        lastAction.actionType == errThrow ||
+        lastAction.actionType == trf) {
       while (FieldSwitch.pageController.positions.length > 1) {
         FieldSwitch.pageController
             .detach(FieldSwitch.pageController.positions.first);

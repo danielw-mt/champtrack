@@ -113,9 +113,12 @@ class TempController extends GetxController {
   /// get the players from selectedTeam that are currently marked as onFieldPlayers
   List<Player> getOnFieldPlayers() => _selectedTeam.value.onFieldPlayers;
 
+  List<String> getOnFieldPlayersById() => _selectedTeam.value.onFieldPlayers.map((player) => player.id!).toList();
+
   /// set the onFieldPlayer from selectedTeam stored at the given index
-  void setOnFieldPlayer(int index, Player player) {
+  void setOnFieldPlayer(int index, Player player, Game game) {
     _selectedTeam.value.onFieldPlayers[index] = player;
+    addGameToPlayer(player, game); // if a player is substituted during a game
     update(
         ["action-feed", "on-field-checkbox", "ef-score-bar", "players-list"]);
   }
@@ -138,6 +141,18 @@ class TempController extends GetxController {
     _selectedTeam.value.onFieldPlayers.remove(player);
     update(
         ["action-feed", "on-field-checkbox", "ef-score-bar", "players-list"]);
+  }
+  
+  /// if player gets active in a game, add the game's id to its games list as well as the player's id to the games players list
+  void addGameToPlayer(Player player, Game game) {
+    if (!player.games.contains(game.id)) {
+      player.games.add(game.id!);
+      repository.updatePlayer(player);
+    }
+    if(!game.players.contains(player.id)){
+      game.players.add(player.id!);
+      repository.updateGame(game);
+    }
   }
 
   /// 0: male, 1: female, 2: youth
@@ -172,10 +187,6 @@ class TempController extends GetxController {
   ////
   // settingsscreen
   ////
-
-  // TODO this might not be needed anymore when #192 is fixed
-  RxList<Player> chosenPlayers = <Player>[].obs;
-
   /// By default attack is at the left side of the screen
   /// during half time this can be switched
   RxBool _attackIsLeft = true.obs;
