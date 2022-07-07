@@ -59,15 +59,18 @@ void callActionMenu(BuildContext context) {
       context: context,
       // alert contains a list of DialogButton objects
       content: Container(
-          width: MediaQuery.of(context).size.width * 0.6,
-          height: MediaQuery.of(context).size.height * 0.6,
+          width: MediaQuery.of(context).size.width * 0.72,
+          height: MediaQuery.of(context).size.height * 0.7,
           child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Expanded(
-                    child: PageView(
-                        controller: new PageController(),
-                        children: buildPageViewChildren(context, actionType))),
+                    child: Scrollbar(
+                  thumbVisibility: true,
+                  child: PageView(
+                      controller: new PageController(),
+                      children: buildPageViewChildren(context, actionType)),
+                )),
               ] // Column of "Spieler", horizontal line and Button-Row
               ))).show();
 }
@@ -141,13 +144,13 @@ Widget buildDialogButtonMenu(BuildContext context, List<String> buttonTexts,
   if (isGoalkeeper) {
     List<DialogButton> dialogButtons = [
       buildDialogButton(
-          context, buttonTexts[0], Colors.red, Icons.style, 2, ""),
+          context, buttonTexts[0], Colors.red, 0, Icons.style, ""),
       buildDialogButton(
-          context, buttonTexts[1], Colors.yellow, Icons.style, 2, ""),
+          context, buttonTexts[1], Colors.yellow, 0, Icons.style, ""),
       buildDialogButton(
-          context, buttonTexts[2], Colors.grey, Icons.timer, 2, ""),
-      buildDialogButton(context, buttonTexts[3], Colors.grey),
-      buildDialogButton(context, buttonTexts[4], Colors.grey),
+          context, buttonTexts[2], Colors.grey, 0, Icons.timer, ""),
+      buildDialogButton(context, buttonTexts[3], Colors.grey, 2),
+      buildDialogButton(context, buttonTexts[4], Colors.grey, 2),
       buildDialogButton(context, buttonTexts[5], Colors.blue),
       buildDialogButton(context, buttonTexts[6], Colors.blue),
       buildDialogButton(context, buttonTexts[7], Colors.blue),
@@ -155,65 +158,93 @@ Widget buildDialogButtonMenu(BuildContext context, List<String> buttonTexts,
     ];
     buttonRow = Row(children: [
       Column(children: [
-        Row(
-          children: [
-            dialogButtons[1],
-            dialogButtons[0],
-            dialogButtons[2],
-          ],
+        Flexible(
+          child: Row(
+            children: [
+              dialogButtons[1],
+              dialogButtons[0],
+              dialogButtons[2],
+            ],
+          ),
         ),
         dialogButtons[3],
         dialogButtons[4],
       ]),
-      Column(children: [
-        dialogButtons[5],
-        dialogButtons[6],
+      Flexible(
+        child: Column(children: [
+          dialogButtons[5],
+          dialogButtons[6],
       ]),
-      Column(
-        children: [dialogButtons[7], dialogButtons[8]],
+      ),
+      Flexible(
+        child: Column(
+          children: [dialogButtons[7], dialogButtons[8]],
+        ),
       ),
     ]);
     header = StringsGameScreen.lGoalkeeperPopUpHeader;
   } else if (isAttack) {
     List<DialogButton> dialogButtons = [
-      buildDialogButton(context, buttonTexts[0], Colors.red, Icons.style, 1.5, ""),
-      buildDialogButton(context, buttonTexts[1], Colors.yellow, Icons.style, 1.5, ""),
-      buildDialogButton(context, buttonTexts[2], Color.fromRGBO(199, 208, 244, 1), Icons.timer),
-      buildDialogButton(context, buttonTexts[3], Color.fromRGBO(99, 107, 171, 1)),
-      buildDialogButton(context, buttonTexts[4], Color.fromRGBO(99, 107, 171, 1)),
-      buildDialogButton(context, buttonTexts[5], Color.fromRGBO(199, 208, 244, 1)),
-      buildDialogButton(context, buttonTexts[6], Color.fromRGBO(203, 206, 227, 1)),
-      buildDialogButton(context, buttonTexts[7], Color.fromRGBO(203, 206, 227, 1))
+      buildDialogButton(
+          context, buttonTexts[0], Colors.red, 0, Icons.style, ""),
+      buildDialogButton(
+          context, buttonTexts[1], Colors.yellow, 0, Icons.style, ""),
+      buildDialogButton(context, buttonTexts[2],
+          Color.fromRGBO(199, 208, 244, 1), 1, Icons.timer),
+      buildDialogButton(
+        context,
+        buttonTexts[3],
+        Color.fromRGBO(99, 107, 171, 1),
+      ),
+      buildDialogButton(
+        context,
+        buttonTexts[4],
+        Color.fromRGBO(99, 107, 171, 1),
+      ),
+      buildDialogButton(
+          context, buttonTexts[5], Color.fromRGBO(199, 208, 244, 1), 1),
+      buildDialogButton(
+          context, buttonTexts[6], Color.fromRGBO(203, 206, 227, 1)),
+      buildDialogButton(
+          context, buttonTexts[7], Color.fromRGBO(203, 206, 227, 1))
     ];
-    buttonRow = Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
+    buttonRow =
+        Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
       Column(children: [
         Row(children: [dialogButtons[1], dialogButtons[0]]),
         dialogButtons[5],
         dialogButtons[2]
       ]),
-      Column(
-        children: [dialogButtons[6], dialogButtons[7]],
+      Flexible(
+        child: Column(
+          children: [dialogButtons[6], dialogButtons[7]],
+        ),
       ),
-      Column(
-        children: [dialogButtons[3], dialogButtons[4]],
+      Flexible(
+        child: Column(
+          children: [dialogButtons[3], dialogButtons[4]],
+        ),
       ),
     ]);
     header = StringsGameScreen.lOffensePopUpHeader;
   } else {
     List<DialogButton> dialogButtons = [
       buildDialogButton(
-          context, buttonTexts[0], Colors.red, Icons.style, 1.5, ""),
+          context, buttonTexts[0], Colors.red, 0, Icons.style, ""),
       buildDialogButton(
-          context, buttonTexts[1], Colors.yellow, Icons.style, 1.5, ""),
-      buildDialogButton(context, buttonTexts[2],
-          Color.fromRGBO(203, 206, 227, 1)),
-      buildDialogButton(context, buttonTexts[3], Color.fromRGBO(199, 208, 244, 1), Icons.timer),
-      buildDialogButton(context, buttonTexts[4], Color.fromRGBO(99, 107, 171, 1)),
-      buildDialogButton(context, buttonTexts[5], Color.fromRGBO(99, 107, 171, 1)),
-      buildDialogButton(context, buttonTexts[6], Color.fromRGBO(203, 206, 227, 1)),
-      buildDialogButton(context, buttonTexts[7], Color.fromRGBO(199, 208, 244, 1))
+          context, buttonTexts[1], Colors.yellow, 0, Icons.style, ""),
+      buildDialogButton(
+          context, buttonTexts[2], Color.fromRGBO(203, 206, 227, 1)),
+      buildDialogButton(context, buttonTexts[3],
+          Color.fromRGBO(199, 208, 244, 1), 1, Icons.timer),
+      buildDialogButton(
+          context, buttonTexts[4], Color.fromRGBO(99, 107, 171, 1)),
+      buildDialogButton(
+          context, buttonTexts[5], Color.fromRGBO(99, 107, 171, 1)),
+      buildDialogButton(
+          context, buttonTexts[6], Color.fromRGBO(203, 206, 227, 1)),
+      buildDialogButton(
+          context, buttonTexts[7], Color.fromRGBO(199, 208, 244, 1), 1)
     ];
     buttonRow = Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -225,11 +256,15 @@ Widget buildDialogButtonMenu(BuildContext context, List<String> buttonTexts,
               dialogButtons[3]
             ],
           ),
-          Column(
+      Flexible(
+        child: Column(
             children: [dialogButtons[2], dialogButtons[6]],
           ),
-          Column(
-            children: [dialogButtons[4], dialogButtons[5]],
+      ),
+      Flexible(
+        child: Column(
+          children: [dialogButtons[4], dialogButtons[5]],
+        ),
           ),
         ]);
     header = StringsGameScreen.lDeffensePopUpHeader;
@@ -258,16 +293,18 @@ Widget buildDialogButtonMenu(BuildContext context, List<String> buttonTexts,
       height: 6,
     ),
     // Button-Row: one Row with 3 Columns of 3, 2 and 2 buttons
-    buttonRow
+    Expanded(child: buttonRow)
   ]);
 }
 
 /// @return
 /// builds a single dialog button that logs its text (=action) to firestore
 //  and updates the game state. Its color and icon can be specified as parameters
+// @params - sizeFactor: 0 for small buttons, 1 for middle big buttons, 2 for long buttons, anything else for big buttons
+//         - otherText: Text to display if it should not equal the text in actionMapping
 DialogButton buildDialogButton(
     BuildContext context, String buttonText, Color buttonColor,
-    [icon, sizeFactor, otherText]) {
+    [sizeFactor, icon, otherText]) {
   TempController tempController = Get.find<TempController>();
   PersistentController persistentController = Get.find<PersistentController>();
   void logAction(String actionType) async {
@@ -358,13 +395,34 @@ DialogButton buildDialogButton(
 
   final double width = MediaQuery.of(context).size.width;
   final double height = MediaQuery.of(context).size.height;
+  double buttonWidth;
+  double buttonHeight;
+  if (sizeFactor == 0) {
+    // Small buttons, eg red and yellow card
+    buttonWidth = width * 0.075;
+    buttonHeight = buttonWidth;
+  } else if (sizeFactor == 1) {
+    // Middle big buttons, eg 2m
+    buttonWidth = width * 0.14;
+    buttonHeight = buttonWidth;
+  } else if (sizeFactor == 2) {
+    // Long buttons like in goalkeeper menu
+    buttonWidth = width * 0.25;
+    buttonHeight = width * 0.14;
+  } else {
+    // Big buttons like goal
+    buttonWidth = width * 0.19;
+    buttonHeight = buttonWidth;
+  }
   return DialogButton(
-      margin: EdgeInsets.all(min(height, width) * 0.013),
+      margin: sizeFactor == 0 // less margin for smallest buttons
+          ? EdgeInsets.all(min(height, width) * 0.013)
+          : EdgeInsets.all(min(height, width) * 0.02),
       // have round edges with same degree as Alert dialog
       radius: const BorderRadius.all(Radius.circular(15)),
       // set height and width of buttons so the shirt and name are fitting inside
-      height: sizeFactor != null ? width * 0.10 / sizeFactor : width * 0.10,
-      width: sizeFactor != null ? width * 0.10 / sizeFactor : width * 0.10,
+      height: buttonHeight,
+      width: buttonWidth,
       color: buttonColor,
       child: Center(
         child: Column(
