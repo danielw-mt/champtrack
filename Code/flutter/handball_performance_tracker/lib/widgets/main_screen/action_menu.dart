@@ -158,22 +158,28 @@ Widget buildDialogButtonMenu(BuildContext context, List<String> buttonTexts,
     ];
     buttonRow = Row(children: [
       Column(children: [
-        Row(
-          children: [
-            dialogButtons[1],
-            dialogButtons[0],
-            dialogButtons[2],
-          ],
+        Flexible(
+          child: Row(
+            children: [
+              dialogButtons[1],
+              dialogButtons[0],
+              dialogButtons[2],
+            ],
+          ),
         ),
         dialogButtons[3],
         dialogButtons[4],
       ]),
-      Column(children: [
-        dialogButtons[5],
-        dialogButtons[6],
+      Flexible(
+        child: Column(children: [
+          dialogButtons[5],
+          dialogButtons[6],
       ]),
-      Column(
-        children: [dialogButtons[7], dialogButtons[8]],
+      ),
+      Flexible(
+        child: Column(
+          children: [dialogButtons[7], dialogButtons[8]],
+        ),
       ),
     ]);
     header = StringsGameScreen.lGoalkeeperPopUpHeader;
@@ -209,11 +215,15 @@ Widget buildDialogButtonMenu(BuildContext context, List<String> buttonTexts,
         dialogButtons[5],
         dialogButtons[2]
       ]),
-      Column(
-        children: [dialogButtons[6], dialogButtons[7]],
+      Flexible(
+        child: Column(
+          children: [dialogButtons[6], dialogButtons[7]],
+        ),
       ),
-      Column(
-        children: [dialogButtons[3], dialogButtons[4]],
+      Flexible(
+        child: Column(
+          children: [dialogButtons[3], dialogButtons[4]],
+        ),
       ),
     ]);
     header = StringsGameScreen.lOffensePopUpHeader;
@@ -246,11 +256,15 @@ Widget buildDialogButtonMenu(BuildContext context, List<String> buttonTexts,
               dialogButtons[3]
             ],
           ),
-          Column(
+      Flexible(
+        child: Column(
             children: [dialogButtons[2], dialogButtons[6]],
           ),
-          Column(
-            children: [dialogButtons[4], dialogButtons[5]],
+      ),
+      Flexible(
+        child: Column(
+          children: [dialogButtons[4], dialogButtons[5]],
+        ),
           ),
         ]);
     header = StringsGameScreen.lDeffensePopUpHeader;
@@ -279,7 +293,7 @@ Widget buildDialogButtonMenu(BuildContext context, List<String> buttonTexts,
       height: 6,
     ),
     // Button-Row: one Row with 3 Columns of 3, 2 and 2 buttons
-    buttonRow
+    Expanded(child: buttonRow)
   ]);
 }
 
