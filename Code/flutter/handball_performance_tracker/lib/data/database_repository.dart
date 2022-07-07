@@ -124,7 +124,7 @@ class DatabaseRepository {
   Future<DocumentReference> addGame(Game game) async {
     return _db.collection("games").add(game.toMap());
   }
-
+  
   /// update a Game's firestore record according to @param game properties
   void updateGame(Game game) async {
     await _db.collection("games").doc(game.id).update(game.toMap());
