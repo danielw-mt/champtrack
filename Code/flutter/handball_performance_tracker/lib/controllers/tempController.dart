@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:handball_performance_tracker/data/database_repository.dart';
+import 'package:handball_performance_tracker/data/game.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../constants/settings_config.dart';
@@ -319,31 +320,43 @@ class TempController extends GetxController {
   /// increaser for _ownScore
   incOwnScore() {
     _ownScore++;
-    update(["score-keeping"]);
+    update(["score-keeping", "score-keeping-own"]);
   }
 
-  ///  for _ownScore
+  /// decreaser for _ownScore
   decOwnScore() {
     _ownScore--;
-    update(["score-keeping"]);
+    update(["score-keeping", "score-keeping-own"]);
+  }
+
+  /// setter for _ownScore
+  setOwnScore(int score) {
+    _ownScore.value = score;
+    update(["score-keeping", "score-keeping-own"]);
   }
 
   /// Score of opponent team
   RxInt _opponentScore = 0.obs;
 
-  /// getter for lastClickedPlayer
+  /// getter for _opponentScore
   getOpponentScore() => _opponentScore.value;
 
-  /// increaser for lastClickedPlayer
+  /// increaser for _opponentScore
   incOpponentScore() {
     _opponentScore++;
-    update(["score-keeping"]);
+    update(["score-keeping", "score-keeping-opponent"]);
   }
 
-  /// increaser for lastClickedPlayer
+  /// decreaser for _opponentScore
   decOpponentScore() {
     _opponentScore--;
-    update(["score-keeping"]);
+    update(["score-keeping", "score-keeping-opponent"]);
+  }
+
+  /// setter for _opponentScore
+  setOpponentScore(int score) {
+    _opponentScore.value = score;
+    update(["score-keeping", "score-keeping-opponent"]);
   }
 
   ////
@@ -387,4 +400,4 @@ class TempController extends GetxController {
     _lastLocation.value = lastLocation;
     //update();
   }
-  }
+}
