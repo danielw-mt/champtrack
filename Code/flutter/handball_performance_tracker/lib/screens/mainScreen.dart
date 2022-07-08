@@ -32,12 +32,14 @@ class MainScreen extends StatelessWidget {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              MenuButton(_scaffoldKey),
-              StopWatchBar(),
-            ],
+          Flexible(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                MenuButton(_scaffoldKey),
+                StopWatchBar(),
+              ],
+            ),
           ),
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
