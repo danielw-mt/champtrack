@@ -1,16 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:handball_performance_tracker/constants/game_actions.dart';
 import 'package:handball_performance_tracker/utils/icons.dart';
 import 'package:handball_performance_tracker/widgets/main_screen/seven_meter_menu.dart';
-import 'package:handball_performance_tracker/widgets/main_screen/field.dart';
 import 'package:handball_performance_tracker/controllers/persistentController.dart';
-import '../../constants/stringsGameScreen.dart';
 import '../../constants/stringsGeneral.dart';
 import '../../controllers/tempController.dart';
 import 'package:get/get.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'dart:math';
-import '../../utils/feed_logic.dart';
 import '../../data/game_action.dart';
 import '../../data/player.dart';
 import 'package:logger/logger.dart';
@@ -180,7 +176,8 @@ DialogButton buildDialogButton(BuildContext context, Player associatedPlayer) {
   void logPlayerSelection() async {
     logger.d("Logging the player selection");
 
-    // TODO update the player's eff score, add feed item etc.
+    tempController.setLastClickedPlayer(
+        tempController.getPlayerFromSelectedTeam(associatedPlayer.id!));
   }
 
   return DialogButton(

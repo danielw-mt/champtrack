@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:handball_performance_tracker/constants/game_actions.dart';
 import 'package:handball_performance_tracker/utils/icons.dart';
+import 'package:handball_performance_tracker/widgets/main_screen/seven_meter_menu.dart';
 import '../../constants/stringsGeneral.dart';
 import '../../constants/stringsGameScreen.dart';
 import 'package:handball_performance_tracker/widgets/main_screen/seven_meter_player_menu.dart';
@@ -251,6 +252,13 @@ GetBuilder<TempController> buildDialogButton(
       tempController.setPlayerMenutText(StringsGeneral.lChooseSevenMeterPlayer);
       callSevenMeterPlayerMenu(context);
     }
+    // if we perform a 7m foul go straight to 7m screen
+    else if (lastAction.actionType == foulWithSeven) {
+      logger.d("7m foul. Going to 7m screen");
+      Navigator.pop(context);
+      callSevenMeterMenu(context, false);
+      return;
+    } 
     print("last action saved in database: ");
     // if the action was a 7 meter action we pop the screen above and go to 7m menu
     // for all other actions the player menu

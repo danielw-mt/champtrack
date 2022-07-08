@@ -303,18 +303,6 @@ DialogButton buildDialogButton(
     //     .addActionToGame(action)
     //     .then((DocumentReference doc) => action.id = doc.id);
 
-    // if we perform a 7m foul go straight to 7m screen and skip player screen
-    if (action.actionType == foulWithSeven) {
-      logger.d("7m foul. Going to 7m screen");
-      // TODO add 7m action data to repository here and not in player screen
-      // TODO add action to feedItems (causes an error for some reason)
-      //addFeedItem(action);
-      Navigator.pop(context);
-      callSevenMeterMenu(context, false);
-      return;
-      // go to player menu for all other actions
-    } 
-
     // Save action directly if goalkeeper action
     if (actionType == goalkeeper) {
       String? goalKeeperId = "goalkeeper";
