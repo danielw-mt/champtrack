@@ -310,6 +310,55 @@ class TempController extends GetxController {
     update(["efscorebar-players"]);
   }
 
+
+  /// Score of own team
+  RxInt _ownScore = 0.obs;
+
+  /// getter for _ownScore
+  getOwnScore() => _ownScore.value;
+
+  /// increaser for _ownScore
+  incOwnScore() {
+    _ownScore++;
+    update(["score-keeping", "score-keeping-own"]);
+  }
+
+  /// decreaser for _ownScore
+  decOwnScore() {
+    _ownScore--;
+    update(["score-keeping", "score-keeping-own"]);
+  }
+
+  /// setter for _ownScore
+  setOwnScore(int score) {
+    _ownScore.value = score;
+    update(["score-keeping", "score-keeping-own"]);
+  }
+
+  /// Score of opponent team
+  RxInt _opponentScore = 0.obs;
+
+  /// getter for _opponentScore
+  getOpponentScore() => _opponentScore.value;
+
+  /// increaser for _opponentScore
+  incOpponentScore() {
+    _opponentScore++;
+    update(["score-keeping", "score-keeping-opponent"]);
+  }
+
+  /// decreaser for _opponentScore
+  decOpponentScore() {
+    _opponentScore--;
+    update(["score-keeping", "score-keeping-opponent"]);
+  }
+
+  /// setter for _opponentScore
+  setOpponentScore(int score) {
+    _opponentScore.value = score;
+    update(["score-keeping", "score-keeping-opponent"]);
+  }
+
   ////
   // game tracking
   ////
@@ -351,4 +400,4 @@ class TempController extends GetxController {
     _lastLocation.value = lastLocation;
     //update();
   }
-  }
+}

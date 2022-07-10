@@ -44,6 +44,9 @@ class StringsGeneral {
   // playermenu.dart
   static const String lPlayer = "Player";
 
+  // score_keeping.dart
+  static const String lEditScore = "Spielstand bearbeiten";
+
   // globalController.dart
   static const String lGoalScreenText = "Assist2"; // not used
 
