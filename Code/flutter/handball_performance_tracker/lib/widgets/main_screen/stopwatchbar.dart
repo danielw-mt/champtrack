@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:handball_performance_tracker/constants/colors.dart';
+import 'package:handball_performance_tracker/widgets/main_screen/ef_score_bar.dart';
 import '../../controllers/persistentController.dart';
 import '../../controllers/tempController.dart';
 import 'package:get/get.dart';
@@ -10,6 +12,8 @@ class StopWatchBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    TempController tempController = Get.find<TempController>();
+
     return GetBuilder<PersistentController>(
       id: "stopwatch-bar",
       builder: (PersistentController persistentController) {
@@ -19,14 +23,15 @@ class StopWatchBar extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 4),
-              child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    primary: Colors.red,
-                    onPrimary: Colors.white,
-                    shape: const StadiumBorder(),
-                  ),
+            Container(
+              decoration: BoxDecoration(
+                  color: buttonGreyColor,
+                  borderRadius: BorderRadius.all(Radius.circular(menuRadius))),
+              height: buttonHeight * 0.8,
+              width: buttonHeight * 0.8,
+              alignment: Alignment.center,
+              margin: const EdgeInsets.only(bottom: 10, top: 4),
+              child: TextButton(
                   onPressed: () async {
                     int currentTime = stopWatchTimer.rawTime.value;
                     stopWatchTimer.clearPresetTime();
@@ -45,12 +50,22 @@ class StopWatchBar extends StatelessWidget {
                           .setPresetTime(mSec: currentTime + 1000);
                     }
                   },
-                  child: Icon(Icons.add)),
+                  child: Icon(
+                    Icons.add,
+                    color: Colors.black,
+                  )),
             ),
 
             // Display stop watch time
-            ConstrainedBox(
-                constraints: const BoxConstraints(minHeight: 50, minWidth: 100),
+            Container(
+                decoration: BoxDecoration(
+                    color: buttonGreyColor,
+                    borderRadius:
+                        BorderRadius.all(Radius.circular(menuRadius))),
+                padding: const EdgeInsets.only(right: 4),
+                margin: const EdgeInsets.only(
+                    top: 4, left: 4, right: 4, bottom: 10),
+                height: buttonHeight * 0.8,
                 child: StreamBuilder<int>(
                     stream: stopWatchTimer.rawTime,
                     initialData: stopWatchTimer.rawTime.value,
@@ -61,30 +76,29 @@ class StopWatchBar extends StatelessWidget {
                           minute: true,
                           second: true,
                           milliSecond: false);
-                      return Padding(
-                        padding: const EdgeInsets.all(8),
-                        child: Row(
+                      return Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            StartStopIcon(),
+                          Container(
+                              padding: const EdgeInsets.only(bottom: 1),
+                              child: StartStopIcon()),
                             Text(
                               snap.hasData ? displayTime : "",
                               style: const TextStyle(
-                                  fontSize: 40,
-                                  fontFamily: 'Helvetica',
-                                  fontWeight: FontWeight.bold),
+                                fontSize: 25),
                             ),
-                          ],
-                        ),
+                        ],
                       );
                     })),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 4),
-              child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    primary: Colors.red,
-                    onPrimary: Colors.white,
-                    shape: const StadiumBorder(),
-                  ),
+            Container(
+              decoration: BoxDecoration(
+                  color: buttonGreyColor,
+                  borderRadius: BorderRadius.all(Radius.circular(menuRadius))),
+              height: buttonHeight * 0.8,
+              width: buttonHeight * 0.8,
+              alignment: Alignment.center,
+              margin: const EdgeInsets.only(bottom: 10, top: 4),
+              child: TextButton(
                   onPressed: () async {
                     int currentTime = stopWatchTimer.rawTime.value;
                     // make sure the timer can't go negative
@@ -105,24 +119,32 @@ class StopWatchBar extends StatelessWidget {
                           .setPresetTime(mSec: currentTime - 1000);
                     }
                   },
-                  child: const Icon(Icons.remove)),
+                  child: const Icon(
+                    Icons.remove,
+                    color: Colors.black,
+                  )),
             ),
 
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 4),
-              child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    primary: Colors.red,
-                    onPrimary: Colors.white,
-                    shape: const StadiumBorder(),
-                  ),
+            Container(
+              decoration: BoxDecoration(
+                  color: buttonGreyColor,
+                  borderRadius: BorderRadius.all(Radius.circular(menuRadius))),
+              height: buttonHeight * 0.8,
+              width: buttonHeight * 0.8,
+              alignment: Alignment.center,
+              margin: const EdgeInsets.only(bottom: 10, top: 4, left: 20),
+              child: TextButton(
                   onPressed: () async {
                     stopWatchTimer.onExecute.add(StopWatchExecute.stop);
+                    tempController.setGameIsRunning(false);
                     stopWatchTimer.onExecute.add(StopWatchExecute.reset);
                     stopWatchTimer.clearPresetTime();
                     stopWatchTimer.setPresetTime(mSec: 0);
                   },
-                  child: Icon(Icons.history)),
+                  child: Icon(
+                    Icons.history,
+                    color: Colors.black,
+                  )),
             ),
           ],
         );
@@ -149,11 +171,11 @@ class StartStopIcon extends StatelessWidget {
             child: gameRunning
                 ? Icon(
                     Icons.pause,
-                    size: 40,
+                    size: 40, color: buttonDarkBlueColor
                   )
                 : Icon(
                     Icons.play_arrow,
-                    size: 40,
+                    size: 40, color: buttonDarkBlueColor
                   ),
           );
         });
