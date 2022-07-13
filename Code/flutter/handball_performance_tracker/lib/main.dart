@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:handball_performance_tracker/screens/authenticationScreen.dart';
@@ -100,6 +101,15 @@ Future<dynamic> _startupCheck() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  if (kIsWeb) {
+    // when the app is run in web, also initialize dev database
+    // this feature is however not supported for other platforms
+    if (Firebase.apps.length < 2) {
+      // only initialize for the first time and not on hot reload
+      await Firebase.initializeApp(
+          name: "dev", options: DevFirebaseOptions.currentPlatform);
+    }
+  }
 
   // if connected force synchronization
   var connectivityResult = await (Connectivity().checkConnectivity());
