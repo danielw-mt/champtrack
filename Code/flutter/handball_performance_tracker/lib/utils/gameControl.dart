@@ -38,7 +38,8 @@ void startGame(BuildContext context) async {
       startTime: unixTimeStamp,
       players: tempController.getOnFieldPlayersById());
   await persistentController.setCurrentGame(newGame, isNewGame: true);
-
+  tempController.setOpponentScore(0);
+  tempController.setOwnScore(0);
   // add game to selected players
   addGameToPlayers(newGame);
 
@@ -77,14 +78,18 @@ void stopGame() async {
   print("stop game, id: ${persistentController.getCurrentGame().id}");
 
   DateTime dateTime = DateTime.now();
-  currentGame.date = dateTime;
   currentGame.stopTime = dateTime.toUtc().millisecondsSinceEpoch;
-  currentGame.players = tempController.getOnFieldPlayersById();
+  currentGame.scoreHome = tempController.getOwnScore();
+  currentGame.scoreOpponent = tempController.getOpponentScore();
 
   persistentController.setCurrentGame(currentGame);
 
   // stop the game timer
-  persistentController.getCurrentGame().stopWatch.onExecute.add(StopWatchExecute.stop);
+  persistentController
+      .getCurrentGame()
+      .stopWatch
+      .onExecute
+      .add(StopWatchExecute.stop);
 
   tempController.setGameIsRunning(false);
   tempController.setGameIsPaused(false);

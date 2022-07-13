@@ -6,7 +6,7 @@ import 'package:handball_performance_tracker/widgets/main_screen/ef_score_bar.da
     as efscorebar;
 import 'package:handball_performance_tracker/widgets/main_screen/field.dart';
 import 'package:handball_performance_tracker/widgets/main_screen/score_keeping.dart';
-import '../constants/stringsGeneral.dart';
+import 'package:handball_performance_tracker/widgets/main_screen/stop_game.dart';
 import './../widgets/nav_drawer.dart';
 import 'package:handball_performance_tracker/constants/fieldSizeParameter.dart'
     as fieldSizeParameter;
@@ -39,70 +39,81 @@ class MainScreen extends StatelessWidget {
         }
       },
       backgroundColor: backgroundColor,
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      body: Stack(
         children: [
-          Flexible(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: [
-                    MenuButton(_scaffoldKey),
-                    ScoreKeeping(),
-                  ],
-                ),
-                StopWatchBar(),
-              ],
-            ),
+          Positioned(
+            child: StopGameButton(),
+            bottom: 3,
+            left: 3,
           ),
-          Row(
+          Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              ActionFeed(),
-              // Player Bar
-              Container(
-                  width: efscorebar.scorebarWidth + efscorebar.paddingWidth * 4,
-                  height: fieldSizeParameter.fieldHeight +
-                      fieldSizeParameter.toolbarHeight / 4,
-                  alignment: Alignment.topCenter,
-                  child: EfScoreBar()),
-              // Field
               Flexible(
-                flex: 4,
-                child: Column(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Container(
-                      width: fieldSizeParameter.fieldWidth +
-                          fieldSizeParameter.toolbarHeight / 4,
+                    Row(
+                      children: [
+                        MenuButton(_scaffoldKey),
+                        ScoreKeeping(),
+                      ],
+                    ),
+                    StopWatchBar(),
+                  ],
+                ),
+              ),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  ActionFeed(),
+                  // Player Bar
+                  Container(
+                      width: efscorebar.scorebarWidth +
+                          efscorebar.paddingWidth * 4,
                       height: fieldSizeParameter.fieldHeight +
                           fieldSizeParameter.toolbarHeight / 4,
                       alignment: Alignment.topCenter,
-                      child: Container(
-                        decoration: BoxDecoration(
-                            // set border around field
-                            border:
-                                Border.all(width: fieldSizeParameter.lineSize)),
-                        child: SizedBox(
-                          // FieldSwitch to swipe between right and left field side. SizedBox around it so there is no rendering error.
-                          width: fieldSizeParameter.fieldWidth,
-                          height: fieldSizeParameter.fieldHeight,
-                          // Use a LayoutBuilder to get the real size of SizedBox.
-                          // As it is inside Flexible Widget, the size can vary depending on screen size.
-                          child: new LayoutBuilder(
-                            builder: (BuildContext context,
-                                BoxConstraints constraints) {
-                              // set Field size depending on Widget size
-                              fieldSizeParameter.setFieldSize(
-                                  constraints.maxWidth, constraints.maxHeight);
-                              return FieldSwitch();
-                            },
+                      child: EfScoreBar()),
+                  // Field
+                  Flexible(
+                    flex: 4,
+                    child: Column(
+                      children: [
+                        Container(
+                          width: fieldSizeParameter.fieldWidth +
+                              fieldSizeParameter.toolbarHeight / 4,
+                          height: fieldSizeParameter.fieldHeight +
+                              fieldSizeParameter.toolbarHeight / 4,
+                          alignment: Alignment.topCenter,
+                          child: Container(
+                            decoration: BoxDecoration(
+                                // set border around field
+                                border: Border.all(
+                                    width: fieldSizeParameter.lineSize)),
+                            child: SizedBox(
+                              // FieldSwitch to swipe between right and left field side. SizedBox around it so there is no rendering error.
+                              width: fieldSizeParameter.fieldWidth,
+                              height: fieldSizeParameter.fieldHeight,
+                              // Use a LayoutBuilder to get the real size of SizedBox.
+                              // As it is inside Flexible Widget, the size can vary depending on screen size.
+                              child: new LayoutBuilder(
+                                builder: (BuildContext context,
+                                    BoxConstraints constraints) {
+                                  // set Field size depending on Widget size
+                                  fieldSizeParameter.setFieldSize(
+                                      constraints.maxWidth,
+                                      constraints.maxHeight);
+                                  return FieldSwitch();
+                                },
+                              ),
+                            ),
                           ),
                         ),
-                      ),
+                      ],
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ],
           ),
