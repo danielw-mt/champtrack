@@ -33,17 +33,19 @@ class MainScreen extends StatelessWidget {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
-                children: [
-                  MenuButton(_scaffoldKey),
-                  ScoreKeeping(),
-                ],
-              ),
-              StopWatchBar(),
-            ],
+          Flexible(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
+                    MenuButton(_scaffoldKey),
+                    ScoreKeeping(),
+                  ],
+                ),
+                StopWatchBar(),
+              ],
+            ),
           ),
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,

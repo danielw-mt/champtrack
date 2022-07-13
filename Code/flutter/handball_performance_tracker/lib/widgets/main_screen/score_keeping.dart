@@ -4,7 +4,6 @@ import 'package:handball_performance_tracker/constants/colors.dart';
 import 'package:handball_performance_tracker/constants/stringsGeneral.dart';
 import 'package:handball_performance_tracker/controllers/tempController.dart';
 import 'package:handball_performance_tracker/widgets/main_screen/ef_score_bar.dart';
-import 'package:rflutter_alert/rflutter_alert.dart';
 
 class ScoreKeeping extends StatelessWidget {
   const ScoreKeeping({Key? key}) : super(key: key);

@@ -83,8 +83,8 @@ class TempController extends GetxController {
     update(["players-list"]);
   }
 
-  /// adds player to the players collection and the selected teams in the teams 
-  /// collection. 
+  /// adds player to the players collection and the selected teams in the teams
+  /// collection.
   void addPlayer(Player player) async {
     PersistentController persistentController =
         Get.find<PersistentController>();
@@ -101,7 +101,8 @@ class TempController extends GetxController {
   /// get the players from selectedTeam that are currently marked as onFieldPlayers
   List<Player> getOnFieldPlayers() => _selectedTeam.value.onFieldPlayers;
 
-  List<String> getOnFieldPlayersById() => _selectedTeam.value.onFieldPlayers.map((player) => player.id!).toList();
+  List<String> getOnFieldPlayersById() =>
+      _selectedTeam.value.onFieldPlayers.map((player) => player.id!).toList();
 
   /// set the onFieldPlayer from selectedTeam stored at the given index
   void setOnFieldPlayer(int index, Player player, Game game) {
@@ -130,14 +131,14 @@ class TempController extends GetxController {
     update(
         ["action-feed", "on-field-checkbox", "ef-score-bar", "players-list"]);
   }
-  
+
   /// if player gets active in a game, add the game's id to its games list as well as the player's id to the games players list
   void addGameToPlayer(Player player, Game game) {
     if (!player.games.contains(game.id)) {
       player.games.add(game.id!);
       repository.updatePlayer(player);
     }
-    if(!game.players.contains(player.id)){
+    if (!game.players.contains(player.id)) {
       game.players.add(player.id!);
       repository.updateGame(game);
     }
@@ -259,7 +260,6 @@ class TempController extends GetxController {
   /// getter for playerMenuText
   String getPlayerMenuText() => _playerMenuText.value;
 
-   
   void setPlayerMenutText(String text) {
     _playerMenuText.value = text;
     update(["player-menu-text"]);
@@ -310,7 +310,6 @@ class TempController extends GetxController {
     update(["efscorebar-players"]);
   }
 
-
   /// Score of own team
   RxInt _ownScore = 0.obs;
 
@@ -325,13 +324,17 @@ class TempController extends GetxController {
 
   /// decreaser for _ownScore
   decOwnScore() {
-    _ownScore--;
+    if (_ownScore > 0) {
+      _ownScore--;
+    }
     update(["score-keeping", "score-keeping-own"]);
   }
 
   /// setter for _ownScore
   setOwnScore(int score) {
-    _ownScore.value = score;
+    if (score >= 0) {
+      _ownScore.value = score;
+    }
     update(["score-keeping", "score-keeping-own"]);
   }
 
@@ -349,13 +352,18 @@ class TempController extends GetxController {
 
   /// decreaser for _opponentScore
   decOpponentScore() {
-    _opponentScore--;
+    if (_opponentScore > 0) {
+      _opponentScore--;
+    }
     update(["score-keeping", "score-keeping-opponent"]);
   }
 
   /// setter for _opponentScore
   setOpponentScore(int score) {
-    _opponentScore.value = score;
+    if (score >= 0) {
+      _opponentScore.value = score;
+    }
+
     update(["score-keeping", "score-keeping-opponent"]);
   }
 
