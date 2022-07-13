@@ -46,21 +46,9 @@ class MainScreen extends StatelessWidget {
             ],
           ),
           Row(
-            mainAxisAlignment: MainAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(StringsGeneral.lFeedHeader),
-                  ActionFeed(),
-                  //Spacer(flex: 1,),
-                  Container()
-                ],
-              ),
-              Spacer(
-                flex: 1,
-              ),
+              ActionFeed(),
               // Player Bar
               Container(
                   width: efscorebar.scorebarWidth + efscorebar.paddingWidth * 4,

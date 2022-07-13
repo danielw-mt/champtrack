@@ -104,7 +104,6 @@ Future<dynamic> _startupCheck() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-
   // if connected force synchronization
   var connectivityResult = await (Connectivity().checkConnectivity());
   if (connectivityResult == ConnectivityResult.mobile ||
