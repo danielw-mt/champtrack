@@ -68,10 +68,8 @@ class PersistentController extends GetxController {
   }
 
   /// add action to actions list and firestore
-  Future<void> addAction(GameAction action) async {
+  void addAction(GameAction action) {
     _actions.add(action);
-    DocumentReference ref = await repository.addActionToGame(action);
-    _actions.last.id = ref.id;
   }
 
   /// return last action that was added
@@ -82,16 +80,11 @@ class PersistentController extends GetxController {
     return GameAction();
   }
 
-  /// update last added action in actions list and firestore
-  void setLastAction(GameAction lastAction) {
-    _actions.last = lastAction;
-    repository.updateAction(lastAction);
-  }
-
-  /// updates playerid of the last action and eff score of player according to last action
-  void setLastActionPlayer(Player player) {
+  /// updates playerid of the last action and adds it to firestore
+  Future<void> setLastActionPlayer(Player player) async {
     _actions.last.playerId = player.id!;
-    repository.updateAction(_actions.last);
+    DocumentReference ref = await repository.addActionToGame(_actions.last);
+    _actions.last.id = ref.id;
   }
 
   /// last game object written to firestore
