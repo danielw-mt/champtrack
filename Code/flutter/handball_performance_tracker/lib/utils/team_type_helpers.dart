@@ -22,9 +22,13 @@ void updateSelectedTeamAccordingToTeamType() {
   // if team type of previously selected team doesnt match update selected team with the first team that matches types
   if (availableTeams.length > 0) {
     tempController.setSelectedTeam(availableTeams[0]);
+    tempController.setPlayingTeam(availableTeams[0]);
+
     return;
   }
   // if no teams are available for the team type just take the first team in teams collection
   tempController.setSelectedTeam(persistentController.getAvailableTeams()[0]);
+  tempController.setPlayingTeam(persistentController.getAvailableTeams()[0]);
+
   return;
 }
