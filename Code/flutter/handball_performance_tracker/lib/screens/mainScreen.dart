@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:handball_performance_tracker/constants/colors.dart';
+import 'package:handball_performance_tracker/controllers/tempController.dart';
 import 'package:handball_performance_tracker/widgets/main_screen/ef_score_bar.dart';
 import 'package:handball_performance_tracker/widgets/main_screen/ef_score_bar.dart'
     as efscorebar;
@@ -11,11 +12,13 @@ import 'package:handball_performance_tracker/constants/fieldSizeParameter.dart'
 import 'package:flutter/services.dart';
 import '../widgets/main_screen/stopwatchbar.dart';
 import '../widgets/main_screen/action_feed.dart';
+import 'package:get/get.dart';
 
 class MainScreen extends StatelessWidget {
   // screen where the game takes place
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  final TempController tempController = Get.put(TempController());
 
   @override
   Widget build(BuildContext context) {
@@ -28,6 +31,12 @@ class MainScreen extends StatelessWidget {
         child: Scaffold(
       key: _scaffoldKey,
       drawer: NavDrawer(),
+      // if drawer is closed notify, so if game is running the back to game button appears on next opening
+      onDrawerChanged: (isOpened) {
+        if (!isOpened) {
+          tempController.setMenuIsEllapsed(false);
+        }
+      },
       backgroundColor: backgroundColor,
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

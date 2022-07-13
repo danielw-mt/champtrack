@@ -60,6 +60,8 @@ Future<bool> initializeLocalData() async {
     // set the default selected team to be the first one available
     TempController tempController = Get.find<TempController>();
     tempController.setSelectedTeam(persistentController.getAvailableTeams()[0]);
+    tempController.setPlayingTeam(persistentController.getAvailableTeams()[0]);
+
   }
   return true;
 }
