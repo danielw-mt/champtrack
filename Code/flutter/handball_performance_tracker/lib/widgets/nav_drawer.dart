@@ -5,6 +5,7 @@ import 'package:handball_performance_tracker/constants/stringsTeamManagement.dar
 import 'package:handball_performance_tracker/controllers/persistentController.dart';
 import 'package:handball_performance_tracker/controllers/tempController.dart';
 import 'package:handball_performance_tracker/data/team.dart';
+import 'package:handball_performance_tracker/main.dart';
 import 'package:handball_performance_tracker/screens/dashboard.dart';
 import 'package:handball_performance_tracker/screens/teamSettingsScreen.dart';
 import 'package:handball_performance_tracker/widgets/main_screen/ef_score_bar.dart';
@@ -71,6 +72,7 @@ class NavDrawer extends StatelessWidget {
                       ),
                       onPressed: () {
                         FirebaseAuth.instance.signOut();
+                        Get.to(Home());
                       },
                       icon: Icon(
                         Icons.logout,
@@ -255,9 +257,7 @@ class MenuHeader extends StatelessWidget {
                   })),
         ),
         // Arrow Icon
-        Container(
-            margin: EdgeInsets.only(left: 20),
-            child: Text(""))
+        Container(margin: EdgeInsets.only(left: 20), child: Text(""))
       ],
     );
   }

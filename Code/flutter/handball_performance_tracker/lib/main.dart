@@ -27,7 +27,7 @@ void main() async {
     getPages: [
       GetPage(name: '/', page: () => Home()),
       GetPage(name: '/StartGameScreen', page: () => StartGameScreen()),
-        GetPage(name: '/Dashboard', page: () => Dashboard()),
+      GetPage(name: '/Dashboard', page: () => Dashboard()),
       ],
   ));
 }
