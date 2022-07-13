@@ -36,6 +36,18 @@ class TempController extends GetxController {
     ]);
   }
 
+  /// Temporary variable for storing the currently playing Team
+  Rx<Team> _playingTeam = Team(id: "-1", name: "Default team").obs;
+
+  /// getter for playingTeam
+  Team getPlayingTeam() => _playingTeam.value;
+
+  /// setter for playingTeam
+  void setPlayingTeam(Team team) {
+    _playingTeam.value = team;
+    //update();
+  }
+
   /// return the first player in selectedTeam with the given playerId
   Player getPlayerFromSelectedTeam(String playerId) {
     return _selectedTeam.value.players
@@ -392,8 +404,21 @@ class TempController extends GetxController {
   /// setter for gameRunning
   setGameIsRunning(bool gameIsRunning) {
     _gameRunning.value = gameIsRunning;
-    update(["start-stop-icon", "start-button"]);
+    update(["start-stop-icon", "start-button", "game-is-running-button"]);
   }
+
+  /// True: game was paused; False game did not start yet or is running
+  RxBool _gameIsPaused = false.obs;
+
+  /// getter for _gameIsPaused
+  getGameIsPaused() => _gameIsPaused.value;
+
+  /// setter for _gameIsPaused
+  setGameIsPaused(bool gameIsPaused) {
+    _gameIsPaused.value = gameIsPaused;
+    update(["game-is-running-button"]);
+  }
+
 
   /// @return rx list
   /// after click on goal there is only one element "goal", otherwise
@@ -407,5 +432,20 @@ class TempController extends GetxController {
   setLastLocation(List<String> lastLocation) {
     _lastLocation.value = lastLocation;
     //update();
+  }
+
+  //////
+  /// Nav Drawer
+  //////
+  // true if a ListTile in drawer is ellapsed, false otherwise.
+  RxBool _menuIsEllapsed = false.obs;
+
+  /// getter for _menuIsEllapsed
+  getMenuIsEllapsed() => _menuIsEllapsed.value;
+
+  /// setter for _menuIsEllapsed
+  setMenuIsEllapsed(bool isEllapsed) {
+    _menuIsEllapsed.value = isEllapsed;
+    update(["game-is-running-button"]);
   }
 }

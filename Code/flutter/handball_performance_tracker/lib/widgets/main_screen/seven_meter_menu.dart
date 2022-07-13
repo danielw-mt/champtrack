@@ -1,8 +1,10 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:handball_performance_tracker/constants/stringsGeneral.dart';
 import 'package:handball_performance_tracker/data/database_repository.dart';
 import 'package:get/get.dart';
+import 'package:handball_performance_tracker/data/player.dart';
+import 'package:handball_performance_tracker/utils/feed_logic.dart';
+import 'package:handball_performance_tracker/utils/player_helper.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import '../../constants/stringsGameScreen.dart';
 import '../../data/game_action.dart';
@@ -10,8 +12,6 @@ import '../../data/database_repository.dart';
 import '../../constants/game_actions.dart';
 import '../../controllers/tempController.dart';
 import '../../controllers/persistentController.dart';
-import 'playermenu.dart';
-import 'package:stop_watch_timer/stop_watch_timer.dart';
 import 'dart:math';
 import 'package:logger/logger.dart';
 import '../../utils/field_control.dart';
@@ -172,17 +172,32 @@ DialogButton buildDialogButton(
         relativeTime: secondsSinceGameStart);
     logger.d("GameAction object created: ");
     logger.d(action);
-    persistentController.addAction(action);
-
+    String playerId;
+    if (actionType == goal || actionType == missed7m) {
+      // own player did 7m
+      playerId = tempController.getLastClickedPlayer().id;
+      tempController.setLastClickedPlayer(Player());
+    } else {
+      // opponent player did 7m
+      // get id of goalkeeper by going through players on field and searching for position
+      String goalKeeperId = "0";
+      for (int k in getOnFieldIndex()) {
+        Player player = tempController.getPlayersFromSelectedTeam()[k];
+        if (player.positions.contains("TW")) {
+          goalKeeperId = player.id.toString();
+          break;
+        }
+      }
+      playerId = goalKeeperId;
+    }
+    action.playerId = playerId;
     // add action to firebase
+    persistentController.addAction(action);
+    tempController.updatePlayerEfScore(
+        playerId, persistentController.getLastAction());
+    // add action to feed
+    addFeedItem(action);
 
-    // store most recent action id in game state for the player menu
-    // when a player was selected in that menu the action document can be
-    // updated in firebase with their player_id using the action_id
-    logger.d("Adding gameaction to firebase");
-    repository
-        .addActionToGame(action)
-        .then((DocumentReference doc) => action.id = doc.id);
 
     // goal
     if (actionType == actionMapping[seven_meter]!.values.toList()[0]) {
