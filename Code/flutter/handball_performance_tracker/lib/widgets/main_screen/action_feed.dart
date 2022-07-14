@@ -27,73 +27,78 @@ class ActionFeed extends StatelessWidget {
                   bottomRight: Radius.circular(menuRadius))),
           alignment: Alignment.centerLeft,
           width: MediaQuery.of(context).size.width * 0.23,
+          height: MediaQuery.of(context).size.height * 0.9,
           child: Column(
             children: [
               FeedHeader(),
-              ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: feedActions.length,
-                  itemBuilder: (context, index) {
-                    GameAction feedAction = feedActions[index];
-                    String actionType = feedAction.actionType;
-                    // get the player object whose id matches the playerId in the action Object
-                    Player relevantPlayer = tempController
-                        .getPlayerFromSelectedTeam(feedAction.playerId);
-                    return GestureDetector(
-                        onTap: () async {
-                          removeFeedItem(feedAction, tempController);
-                        },
-                        child: Column(
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Container(
-                                  margin: EdgeInsets.only(left: 5),
-                                  width: buttonHeight * 0.8,
-                                  height: buttonHeight * 0.8,
-                                  decoration: BoxDecoration(
-                                      color: buttonGreyColor,
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(menuRadius))),
-                                  child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Flexible(
-                                          child: Text(
-                                            actionType,
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                              fontSize: 12,
+              Expanded(
+                child: ListView.builder(
+                    controller: ScrollController(),
+                    physics: ClampingScrollPhysics(),
+                    shrinkWrap: true,
+                    itemCount: feedActions.length,
+                    itemBuilder: (context, index) {
+                      GameAction feedAction = feedActions[index];
+                      String actionType = feedAction.actionType;
+                      // get the player object whose id matches the playerId in the action Object
+                      Player relevantPlayer = tempController
+                          .getPlayerFromSelectedTeam(feedAction.playerId);
+                      return GestureDetector(
+                          onTap: () async {
+                            removeFeedItem(feedAction, tempController);
+                          },
+                          child: Column(
+                            children: [
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Container(
+                                    margin: EdgeInsets.only(left: 5),
+                                    width: buttonHeight * 0.8,
+                                    height: buttonHeight * 0.8,
+                                    decoration: BoxDecoration(
+                                        color: buttonGreyColor,
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(menuRadius))),
+                                    child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Flexible(
+                                            child: Text(
+                                              actionType,
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                fontSize: 12,
+                                              ),
                                             ),
                                           ),
+                                        ]),
+                                  ),
+                                  Expanded(
+                                    child: Container(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text(
+                                        relevantPlayer.lastName,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                          fontSize: 15,
                                         ),
-                                      ]),
-                                ),
-                                Expanded(
-                                  child: Container(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Text(
-                                      relevantPlayer.lastName,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: TextStyle(
-                                        fontSize: 15,
                                       ),
                                     ),
                                   ),
-                                ),
-                                Icon(
-                                  Icons.delete,
-                                  size: 18,
-                                )
-                              ],
-                            ),
-                            if (index != feedActions.length - 1)
-                              Divider()
-                          ],
-                        ));
-                  }),
+                                  Icon(
+                                    Icons.delete,
+                                    size: 18,
+                                  )
+                                ],
+                              ),
+                              if (index != feedActions.length - 1) Divider()
+                            ],
+                          ));
+                    }),
+              ),
             ],
           ),
         );
