@@ -42,8 +42,8 @@ void callSevenMeterMenu(BuildContext context, bool belongsToHomeTeam) {
 
             // alert contains a list of DialogButton objects
             content: Container(
-                width: MediaQuery.of(context).size.width * 0.5,
-                height: MediaQuery.of(context).size.height * 0.88,
+                width: MediaQuery.of(context).size.width * 0.4,
+                height: MediaQuery.of(context).size.height * 0.4,
                 child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
@@ -225,8 +225,8 @@ DialogButton buildDialogButton(
       // have round edges with same degree as Alert dialog
       radius: const BorderRadius.all(Radius.circular(15)),
       // set height and width of buttons so the shirt and name are fitting inside
-      height: width * 0.10,
-      width: width * 0.10,
+      height: width * 0.15,
+      width: width * 0.15,
       color: color,
       child: Center(
         child: Column(
