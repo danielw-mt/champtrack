@@ -242,6 +242,6 @@ DialogButton buildDialogButton(
       onPressed: () {
         logAction();
         Navigator.pop(context);
-        tempController.setPlayerMenutText("");
+        
       });
 }
