@@ -24,13 +24,13 @@ double toolbarHeight = AppBar().preferredSize.height * 1.3;
 double lineSize = 3;
 
 // just a parameter for manually adjusting the height
-double customHeightModifier = 0.9;
+double customHeightModifier = 0.99;
 // fieldHeigt takes all available screen height -> substract height of toolbar, size of border*2 and padding due to time, battery indicator etc
 double availableScreenHeight =
 (screenHeight - toolbarHeight - paddingBottom - paddingTop - lineSize * 2);
 // take ratio of screenwidth and height into account, so the field is not stretched
 double fieldHeight = min(availableScreenHeight, screenWidth)*customHeightModifier;
-double fieldWidth = fieldHeight * 0.85;
+double fieldWidth = fieldHeight * 0.92;
 
 // Radii of the ellipses for six meter and 9 meter
 double nineMeterRadiusX = fieldWidth / 1.5;
