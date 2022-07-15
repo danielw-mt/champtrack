@@ -44,11 +44,7 @@ class ActionFeed extends StatelessWidget {
                       // get the player object whose id matches the playerId in the action Object
                       Player relevantPlayer = tempController
                           .getPlayerFromSelectedTeam(feedAction.playerId);
-                      return GestureDetector(
-                          onTap: () async {
-                            removeFeedItem(feedAction, tempController);
-                          },
-                          child: Column(
+                      return Column(
                             children: [
                               Row(
                                 mainAxisAlignment:
@@ -89,15 +85,24 @@ class ActionFeed extends StatelessWidget {
                                       ),
                                     ),
                                   ),
-                                  Icon(
-                                    Icons.delete,
-                                    size: 18,
+                                  MouseRegion(
+                                    cursor: SystemMouseCursors.click,
+                                    child: GestureDetector(
+                                      onTap: () async {
+                                        removeFeedItem(
+                                            feedAction, tempController);
+                                      },
+                                      child: Icon(
+                                        Icons.delete,
+                                        size: 30,
+                                      ),
+                                    ),
                                   )
                                 ],
                               ),
                               if (index != feedActions.length - 1) Divider()
                             ],
-                          ));
+                          );
                     }),
               ),
             ],
