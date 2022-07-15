@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:handball_performance_tracker/constants/stringsTeamManagement.dart';
+import 'package:handball_performance_tracker/constants/positions.dart';
 import '../../constants/stringsGeneral.dart';
 import 'package:handball_performance_tracker/controllers/persistentController.dart';
 import 'package:handball_performance_tracker/data/team.dart';
@@ -258,7 +258,7 @@ class PlayerFormState extends State<PlayerForm> {
                         width: width * 0.25,
                         height: 100,
                         child: ListView.builder(
-                          itemCount: 7,
+                          itemCount: 8,
                           shrinkWrap: true,
                           itemBuilder: (context, item) {
                             List<String> positionNames = [
@@ -268,7 +268,8 @@ class PlayerFormState extends State<PlayerForm> {
                               StringsGeneral.lRightBack,
                               StringsGeneral.lLeftWinger,
                               StringsGeneral.lCenterForward,
-                              StringsGeneral.lRightWinger
+                              StringsGeneral.lRightWinger,
+                              defenseSpecialist
                             ];
                             return Row(
                               children: [

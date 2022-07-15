@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:handball_performance_tracker/constants/colors.dart';
+import 'package:handball_performance_tracker/constants/positions.dart';
 import 'package:handball_performance_tracker/controllers/persistentController.dart';
 import 'package:handball_performance_tracker/data/player.dart';
 import 'package:handball_performance_tracker/constants/fieldSizeParameter.dart'
@@ -184,10 +185,23 @@ Container buildPlayerButton(BuildContext context, int i, TempController tempCont
   // Get player which have at least one of the given positions.
   List<Player> playerWithSamePosition(List<String> positions) {
     List<Player> substitutePlayer = [];
+
+    // if we are on defense side, show defense specialists first
+    if ((tempController.getFieldIsLeft() &&
+            !tempController.getAttackIsLeft()) ||
+        (!tempController.getFieldIsLeft() && tempController.getAttackIsLeft()))
+      for (int k in getNotOnFieldIndex()) {
+        Player player = tempController.getPlayersFromSelectedTeam()[k];
+        if (player.positions.contains(defenseSpecialist)) {
+          substitutePlayer.add(player);
+        }
+      }
+    // add other players on same position
     for (int k in getNotOnFieldIndex()) {
       for (String position in positions) {
         Player player = tempController.getPlayersFromSelectedTeam()[k];
-        if (player.positions.contains(position)) {
+        if (player.positions.contains(position) &&
+            !substitutePlayer.contains(player)) {
           substitutePlayer.add(player);
           break;
         }
