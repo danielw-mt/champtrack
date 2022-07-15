@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:handball_performance_tracker/constants/colors.dart';
 import 'package:handball_performance_tracker/constants/stringsGeneral.dart';
 import 'package:handball_performance_tracker/widgets/main_screen/ef_score_bar.dart';
+import 'package:handball_performance_tracker/constants/fieldSizeParameter.dart' as fieldSizeParameter;
 import '../../controllers/tempController.dart';
 import 'package:get/get.dart';
 import '../../data/game_action.dart';
@@ -18,7 +19,7 @@ class ActionFeed extends StatelessWidget {
       builder: (tempController) {
         List<GameAction> feedActions = tempController.getFeedActions();
         return Container(
-          margin: EdgeInsets.only(right: 30),
+          margin: EdgeInsets.only(left: 10),
           padding: EdgeInsets.only(bottom: 5),
           decoration: BoxDecoration(
               color: Colors.white,
@@ -27,7 +28,7 @@ class ActionFeed extends StatelessWidget {
                   bottomRight: Radius.circular(menuRadius))),
           alignment: Alignment.centerLeft,
           width: MediaQuery.of(context).size.width * 0.23,
-          height: MediaQuery.of(context).size.height * 0.9,
+          height: fieldSizeParameter.fieldHeight,
           child: Column(
             children: [
               FeedHeader(),
