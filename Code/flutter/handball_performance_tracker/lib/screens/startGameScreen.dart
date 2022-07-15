@@ -42,6 +42,7 @@ class _StartGameScreenState extends State<StartGameScreen> {
       ));
     return SafeArea(
         child: Scaffold(
+            resizeToAvoidBottomInset: false,
             key: _scaffoldKey,
             drawer: NavDrawer(),
             body: Column(
