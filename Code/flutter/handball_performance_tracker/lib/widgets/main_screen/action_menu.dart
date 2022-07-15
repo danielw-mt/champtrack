@@ -169,13 +169,16 @@ Widget buildDialogButtonMenu(BuildContext context, List<String> buttonTexts,
       ]),
       Flexible(
         child: Column(children: [
-          dialogButtons[5],
-          dialogButtons[6],
+          Flexible(child: dialogButtons[5]),
+          Flexible(child: dialogButtons[6]),
       ]),
       ),
       Flexible(
         child: Column(
-          children: [dialogButtons[7], dialogButtons[8]],
+          children: [
+            Flexible(child: dialogButtons[7]),
+            Flexible(child: dialogButtons[8])
+          ],
         ),
       ),
     ]);
