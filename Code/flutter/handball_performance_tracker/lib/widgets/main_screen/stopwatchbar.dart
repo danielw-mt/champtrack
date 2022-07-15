@@ -154,7 +154,7 @@ class TimePopoupButton extends StatelessWidget {
 
 // calls popup to adapt time manually
 void callStopWatch(context) {
-  double buttonHeight = MediaQuery.of(context).size.height * 0.1;
+  double buttonHeight = MediaQuery.of(context).size.height * 0.08;
   PersistentController persistentController = Get.find<PersistentController>();
   StopWatchTimer stopWatchTimer =
       persistentController.getCurrentGame().stopWatch;
@@ -190,13 +190,15 @@ void callStopWatch(context) {
               ),
               Text(""),
 
-              IntrinsicHeight(
-                child: Row(
+              Row(
                   children: [
                     SetTimeButtons(),
                     StartStopIcon(),
                     Column(
-                      children: [
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Row(
+                          children: [
                         // Plus button for minutes
                         SizedBox(
                           height: buttonHeight,
@@ -206,9 +208,26 @@ void callStopWatch(context) {
                             ),
                             onPressed: () => changeTime(context, 1000 * 60),
                             child:
-                                Icon(Icons.add, size: 15, color: Colors.black),
+                                Icon(Icons.add, size: 17, color: Colors.black),
                           ),
                         ),
+                        Text(
+                          "   ",
+                        ),
+                        // Plus button of seconds
+                        SizedBox(
+                          height: buttonHeight,
+                          child: TextButton(
+                            style: TextButton.styleFrom(
+                              backgroundColor: buttonLightBlueColor,
+                            ),
+                            onPressed: () => changeTime(context, 1000),
+                            child:
+                                Icon(Icons.add, size: 17, color: Colors.black),
+                          ),
+                        ),
+                      ]),
+                      Row(children: [
                         // Container with Minutes
                         StreamBuilder<int>(
                             stream: stopWatchTimer.rawTime,
@@ -239,10 +258,51 @@ void callStopWatch(context) {
                                     ),
                                     style: TextStyle(
                                         fontWeight: FontWeight.bold,
-                                        fontSize: 28),
+                                        fontSize: 24),
                                   ));
                             }),
+                        // : between mins and secs
+                        Text(
+                          ":",
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 28),
+                        ),
 
+                        // Container with Seconds
+                        StreamBuilder<int>(
+                            stream: stopWatchTimer.rawTime,
+                            initialData: stopWatchTimer.rawTime.value,
+                            builder: (context, snap) {
+                              final value = snap.data!;
+                              String displayTime =
+                                  StopWatchTimer.getDisplayTime(value,
+                                      hours: false,
+                                      minute: false,
+                                      second: true,
+                                      milliSecond: false);
+                              return Container(
+                                  height: buttonHeight * 1.3,
+                                  width: buttonHeight,
+                                  margin: EdgeInsets.only(left: 5, right: 5),
+                                  padding: const EdgeInsets.all(10.0),
+                                  alignment: Alignment.center,
+                                  color: Colors.white,
+                                  child: TextField(
+                                    onChanged: (text) =>
+                                        setSeconds(context, int.parse(text)),
+                                    textAlign: TextAlign.center,
+                                    decoration: InputDecoration(
+                                      border: InputBorder.none,
+                                      hintText:
+                                          snap.hasData ? (displayTime) : "",
+                                    ),
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 24),
+                                  ));
+                            }),
+                      ]),
+                      Row(children: [
                         // Minus buttons of Minutes
                         SizedBox(
                           height: buttonHeight,
@@ -252,81 +312,30 @@ void callStopWatch(context) {
                             ),
                             onPressed: () => changeTime(context, -1000 * 60),
                             child: Icon(Icons.remove,
-                                size: 15, color: Colors.black),
+                                size: 17, color: Colors.black),
                           ),
                         ),
-                      ],
-                    ),
-                    // : between mins and secs
-                    Container(
-                      height: buttonHeight * 0.9,
-                      child: Text(
-                        ":",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 28),
-                      ),
-                    ),
-                    Column(children: [
-                      // Plus button of seconds
-                      SizedBox(
-                        height: buttonHeight,
-                        child: TextButton(
-                          style: TextButton.styleFrom(
-                            backgroundColor: buttonLightBlueColor,
-                          ),
-                          onPressed: () => changeTime(context, 1000),
-                          child: Icon(Icons.add, size: 15, color: Colors.black),
+                        Text(
+                          "   ",
                         ),
-                      ),
-                      // Container with Seconds
-                      StreamBuilder<int>(
-                          stream: stopWatchTimer.rawTime,
-                          initialData: stopWatchTimer.rawTime.value,
-                          builder: (context, snap) {
-                            final value = snap.data!;
-                            String displayTime = StopWatchTimer.getDisplayTime(
-                                value,
-                                hours: false,
-                                minute: false,
-                                second: true,
-                                milliSecond: false);
-                            return Container(
-                                height: buttonHeight * 1.3,
-                                width: buttonHeight,
-                                margin: EdgeInsets.only(left: 5, right: 5),
-                                padding: const EdgeInsets.all(10.0),
-                                alignment: Alignment.center,
-                                color: Colors.white,
-                                child: TextField(
-                                  onChanged: (text) =>
-                                      setSeconds(context, int.parse(text)),
-                                  textAlign: TextAlign.center,
-                                  decoration: InputDecoration(
-                                    border: InputBorder.none,
-                                    hintText: snap.hasData ? (displayTime) : "",
-                                  ),
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 28),
-                                ));
-                          }),
-                      // minus button of seconds
-                      SizedBox(
-                        height: buttonHeight,
-                        child: TextButton(
-                          style: TextButton.styleFrom(
-                            backgroundColor: buttonLightBlueColor,
+                        // minus button of seconds
+                        SizedBox(
+                          height: buttonHeight,
+                          child: TextButton(
+                            style: TextButton.styleFrom(
+                              backgroundColor: buttonLightBlueColor,
+                            ),
+                            onPressed: () => changeTime(context, -1000),
+                            child: Icon(Icons.remove,
+                                size: 17, color: Colors.black),
                           ),
-                          onPressed: () => changeTime(context, -1000),
-                          child:
-                              Icon(Icons.remove, size: 15, color: Colors.black),
-                        ),
-                      )
-                    ]),
-                  ],
-                ),
+                        )
+                      ]),
+                    ],
+                  ),
+                ],
               ),
+              
             ],
           ),
         );
@@ -427,8 +436,8 @@ class SetTimeButtons extends StatelessWidget {
       children: [
         Container(
           margin: EdgeInsets.all(20),
-          height: buttonHeight,
-          width: buttonHeight * 1.5,
+          height: buttonHeight * 0.8,
+          width: buttonHeight * 1.2,
           child: TextButton(
               style: TextButton.styleFrom(
                 backgroundColor: buttonGreyColor,
@@ -444,14 +453,14 @@ class SetTimeButtons extends StatelessWidget {
               child: Text(
                 "00:00",
                 style: TextStyle(
-                  fontSize: 25,
+                  fontSize: 23,
                 ),
               )),
         ),
         Container(
             margin: EdgeInsets.all(20),
-            height: buttonHeight,
-            width: buttonHeight * 1.5,
+            height: buttonHeight * 0.8,
+            width: buttonHeight * 1.2,
             child: TextButton(
               style: TextButton.styleFrom(
                 backgroundColor: buttonGreyColor,
@@ -466,7 +475,7 @@ class SetTimeButtons extends StatelessWidget {
               },
               child: Text("30:00",
                   style: TextStyle(
-                    fontSize: 25,
+                    fontSize: 23,
                   )),
             ))
       ],
