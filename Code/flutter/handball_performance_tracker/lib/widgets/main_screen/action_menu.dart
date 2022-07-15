@@ -3,8 +3,8 @@ import 'package:handball_performance_tracker/data/player.dart';
 import 'package:handball_performance_tracker/utils/feed_logic.dart';
 import 'package:handball_performance_tracker/utils/player_helper.dart';
 import 'package:handball_performance_tracker/widgets/main_screen/field.dart';
+import 'package:stop_watch_timer/stop_watch_timer.dart';
 import '../../constants/stringsGameScreen.dart';
-import 'package:handball_performance_tracker/widgets/main_screen/seven_meter_menu.dart';
 import '../../controllers/persistentController.dart';
 import '../../controllers/tempController.dart';
 import 'package:get/get.dart';
@@ -28,7 +28,7 @@ var logger = Logger(
 
 void callActionMenu(BuildContext context) {
   logger.d("Calling action menu");
-  final TempController tempController = Get.find<TempController>();
+  final PersistentController persController = Get.find<PersistentController>();
 
   String actionType = determineActionType();
 
@@ -36,9 +36,9 @@ void callActionMenu(BuildContext context) {
   if (actionType == otherGoalkeeper) {
     return;
   }
-
+  StopWatchTimer stopWatchTimer = persController.getCurrentGame().stopWatch;
   // if game is not running give a warning
-  if (tempController.getGameIsRunning() == false) {
+  if (stopWatchTimer.rawTime.value == 0) {
     Alert(
       context: context,
       title: StringsGameScreen.lGameStartErrorMessage,
@@ -79,14 +79,11 @@ void callActionMenu(BuildContext context) {
 String determineActionType() {
   logger.d("Determining which actions should be displayed...");
   final TempController tempController = Get.find<TempController>();
-  final PersistentController persistentController =
-      Get.find<PersistentController>();
   // decide whether attack or defense actions should be displayed depending
   //on what side the team goals is and whether they are attacking or defending
   String actionType = defense;
   bool attackIsLeft = tempController.getAttackIsLeft();
   bool fieldIsLeft = tempController.getFieldIsLeft();
-  GameAction lastAction = persistentController.getLastAction();
   // when our goal is to the right (= attackIsLeft) and the field is left
   //display attack options
   if (tempController.getLastLocation()[0] == goal) {
