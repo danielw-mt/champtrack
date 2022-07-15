@@ -293,6 +293,22 @@ Widget buildDialogButtonMenu(BuildContext context, List<String> buttonTexts,
             ),
           ),
         ),
+        Align(
+          alignment: Alignment.topRight,
+          // Change from "" to "Assist" after a goal.
+          child: GetBuilder<TempController>(
+              id: "action-menu-text",
+              builder: (tempController) {
+                return Text(
+                  tempController.getActionMenuText(),
+                  textAlign: TextAlign.right,
+                  style: const TextStyle(
+                    color: Colors.purple,
+                    fontSize: 20,
+                  ),
+                );
+              }),
+        ),
       ],
     ),
     // horizontal line

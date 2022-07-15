@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:handball_performance_tracker/constants/stringsGameScreen.dart';
 import 'package:handball_performance_tracker/constants/team_constants.dart';
 import '../controllers/persistentController.dart';
 import '../controllers/tempController.dart';
@@ -49,6 +50,7 @@ void startGame(BuildContext context) async {
 void unpauseGame() {
   TempController tempController = Get.find<TempController>();
   PersistentController persistentController = Get.find<PersistentController>();
+  tempController.setActionMenutText("");
   tempController.setGameIsRunning(true);
   tempController.setGameIsPaused(false);
   persistentController
@@ -61,6 +63,7 @@ void unpauseGame() {
 void pauseGame() {
   TempController tempController = Get.find<TempController>();
   PersistentController persistentController = Get.find<PersistentController>();
+  tempController.setActionMenutText(StringsGameScreen.lAttentionTimeIsPaused);
   tempController.setGameIsRunning(false);
   tempController.setGameIsPaused(true);
   persistentController
