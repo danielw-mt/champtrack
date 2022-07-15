@@ -7,6 +7,7 @@ import 'package:handball_performance_tracker/widgets/main_screen/ef_score_bar.da
 import 'package:handball_performance_tracker/widgets/main_screen/field.dart';
 import 'package:handball_performance_tracker/widgets/main_screen/score_keeping.dart';
 import 'package:handball_performance_tracker/widgets/main_screen/stop_game.dart';
+import 'package:handball_performance_tracker/widgets/main_screen/side_switch.dart';
 import './../widgets/nav_drawer.dart';
 import 'package:handball_performance_tracker/constants/fieldSizeParameter.dart'
     as fieldSizeParameter;
@@ -42,7 +43,11 @@ class MainScreen extends StatelessWidget {
       body: Stack(
         children: [
           Positioned(
-            child: StopGameButton(),
+            child: Row(
+              children: [
+                StopGameButton(),SideSwitch()
+              ],
+            ),
             bottom: 3,
             left: 3,
           ),
@@ -69,8 +74,7 @@ class MainScreen extends StatelessWidget {
                   ActionFeed(),
                   // Player Bar
                   Container(
-                      width: efscorebar.scorebarWidth +
-                          efscorebar.paddingWidth * 4,
+                      width: efscorebar.scorebarWidth + efscorebar.paddingWidth * 4,
                       height: fieldSizeParameter.fieldHeight +
                           fieldSizeParameter.toolbarHeight / 4,
                       alignment: Alignment.topCenter,
@@ -89,8 +93,8 @@ class MainScreen extends StatelessWidget {
                           child: Container(
                             decoration: BoxDecoration(
                                 // set border around field
-                                border: Border.all(
-                                    width: fieldSizeParameter.lineSize)),
+                                border:
+                                    Border.all(width: fieldSizeParameter.lineSize)),
                             child: SizedBox(
                               // FieldSwitch to swipe between right and left field side. SizedBox around it so there is no rendering error.
                               width: fieldSizeParameter.fieldWidth,
@@ -102,8 +106,7 @@ class MainScreen extends StatelessWidget {
                                     BoxConstraints constraints) {
                                   // set Field size depending on Widget size
                                   fieldSizeParameter.setFieldSize(
-                                      constraints.maxWidth,
-                                      constraints.maxHeight);
+                                      constraints.maxWidth, constraints.maxHeight);
                                   return FieldSwitch();
                                 },
                               ),
