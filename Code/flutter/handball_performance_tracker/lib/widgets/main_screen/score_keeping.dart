@@ -82,10 +82,10 @@ void callScoreKeeping(context) {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
+          scrollable: true,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(menuRadius),
           ),
-          insetPadding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 110.0),
           content:
               // Column of "Edit score", horizontal line and score
               Column(

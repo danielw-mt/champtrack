@@ -45,7 +45,7 @@ class MainScreen extends StatelessWidget {
           Positioned(
             child: Row(
               children: [
-                StopGameButton(),SideSwitch()
+                StopGameButton(), SideSwitch()
               ],
             ),
             bottom: 3,

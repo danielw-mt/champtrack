@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:handball_performance_tracker/constants/colors.dart';
+import 'package:handball_performance_tracker/constants/stringsGameScreen.dart';
 import 'package:handball_performance_tracker/constants/stringsGameSettings.dart';
 import 'package:get/get.dart';
 import 'package:handball_performance_tracker/screens/dashboard.dart';
@@ -10,45 +11,59 @@ class StopGameButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextButton(
-        style: TextButton.styleFrom(
-          backgroundColor: buttonLightBlueColor,
-          primary: Colors.black,
-        ),
-        onPressed: () {
-          showDialog<String>(
-            context: context,
-            builder: (BuildContext context) => AlertDialog(
-              title: const Text(StringsGameSettings.lStopGameButton),
-              actions: <Widget>[
-                TextButton(
-                  onPressed: () =>
-                      Navigator.pop(context, StringsGameSettings.lCancelButton),
-                  child: Text(
-                    StringsGameSettings.lCancelButton,
-                    style: TextStyle(
-                      color: buttonDarkBlueColor,
+    return Container(
+      margin: EdgeInsets.only(right: 3),
+      child: TextButton(
+          style: TextButton.styleFrom(
+            backgroundColor: buttonDarkBlueColor,
+            primary: Colors.black,
+          ),
+          onPressed: () {
+            showDialog<String>(
+              context: context,
+              builder: (BuildContext context) => AlertDialog(
+                title: const Text(StringsGameScreen.lStopGame),
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () => Navigator.pop(
+                        context, StringsGameSettings.lCancelButton),
+                    child: Text(
+                      StringsGameSettings.lCancelButton,
+                      style: TextStyle(
+                        color: buttonDarkBlueColor,
+                      ),
                     ),
                   ),
-                ),
-                TextButton(
-                  onPressed: () {
-                    stopGame();
-                    Get.to(Dashboard());
-                  },
-                  child: Text(
-                    'OK',
-                    style: TextStyle(
-                      color: buttonDarkBlueColor,
+                  TextButton(
+                    onPressed: () {
+                      stopGame();
+                      Get.to(Dashboard());
+                    },
+                    child: Text(
+                      'OK',
+                      style: TextStyle(
+                        color: buttonDarkBlueColor,
+                      ),
                     ),
                   ),
+                ],
+              ),
+            );
+          },
+          child: Row(
+            children: [
+              Icon(
+                Icons.exit_to_app,
+                color: Colors.white,
+              ),
+              Text(
+                StringsGameScreen.lStopGame,
+                style: TextStyle(
+                  color: Colors.white,
                 ),
-              ],
-            ),
-          );
-        },
-        child: Row(
-          children: [Text(StringsGameSettings.lStopGameButton)],
-        ));
+              ),
+            ],
+          )),
+    );
   }
 }
