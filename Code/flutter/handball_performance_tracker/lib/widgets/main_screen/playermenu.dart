@@ -170,11 +170,11 @@ GetBuilder<TempController> buildDialogButton(
         FieldSwitch.pageController.jumpToPage(0);
       }
     } else if (lastAction.actionType == blockAndSteal) {
-      // if our action is left (page 0) and we are defensing (on page 0) jump back to attack (page 1) after the action
       while (FieldSwitch.pageController.positions.length > 1) {
         FieldSwitch.pageController
             .detach(FieldSwitch.pageController.positions.first);
       }
+      // if our action is left (page 0) and we are defensing (on page 0) jump back to attack (page 1) after the action
       if (tempController.getFieldIsLeft() == true &&
           tempController.getAttackIsLeft() == false) {
         logger.d("Switching to right field after action");
@@ -210,6 +210,9 @@ GetBuilder<TempController> buildDialogButton(
       tempController.updatePlayerEfScore(
           lastClickedPlayer.id!, persistentController.getLastAction());
       addFeedItem(persistentController.getLastAction());
+      tempController.incOwnScore();
+      // add goal to feed
+      // if it was a solo goal the action type has to be updated to "Tor Solo"
 
       if (!_wasAssist()) {
         logger.d("Logging solo goal");

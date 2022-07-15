@@ -370,6 +370,12 @@ DialogButton buildDialogButton(
       addFeedItem(action);
       logger.d(
           "last action saved in database: ${persistentController.getLastAction().toMap()}");
+      if (action.actionType == goal) {
+        tempController.incOwnScore();
+      } else if (action.actionType == goalOthers ||
+          action.actionType == emptyGoal) {
+        tempController.incOpponentScore();
+      }
     } else {
       persistentController.addAction(action);
     }
