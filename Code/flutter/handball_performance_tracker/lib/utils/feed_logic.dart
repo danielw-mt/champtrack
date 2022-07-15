@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:handball_performance_tracker/constants/game_actions.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 import '../controllers/tempController.dart';
 import '../data/game_action.dart';
@@ -53,6 +54,10 @@ void onFeedTimerEnded() {
 void removeFeedItem(GameAction action, TempController tempController) {
   // delete action from game state and database
   tempController.removeFeedAction(action);
+  // decrease own score by one if a goal action was deleted
+  if (action.actionType == goal) {
+    tempController.decOwnScore();
+  }
   // update player's ef.score
   tempController.updatePlayerEfScore(action.playerId, action,
       removeAction: true);
