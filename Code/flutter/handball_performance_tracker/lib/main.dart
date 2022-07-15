@@ -1,10 +1,9 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:handball_performance_tracker/screens/authenticationScreen.dart';
 import 'package:handball_performance_tracker/screens/dashboard.dart';
-import 'package:handball_performance_tracker/screens/settingsScreen.dart';
 import 'package:handball_performance_tracker/screens/startGameScreen.dart';
-import 'screens/mainScreen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'config/firebase_options.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -29,9 +28,8 @@ void main() async {
     getPages: [
       GetPage(name: '/', page: () => Home()),
       GetPage(name: '/StartGameScreen', page: () => StartGameScreen()),
-      GetPage(name: '/SettingsScreen', page: () => SettingsScreen()),
       GetPage(name: '/Dashboard', page: () => Dashboard()),
-    ],
+      ],
   ));
 }
 
@@ -103,6 +101,15 @@ Future<dynamic> _startupCheck() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  if (kIsWeb) {
+    // when the app is run in web, also initialize dev database
+    // this feature is however not supported for other platforms
+    if (Firebase.apps.length < 2) {
+      // only initialize for the first time and not on hot reload
+      await Firebase.initializeApp(
+          name: "dev", options: DevFirebaseOptions.currentPlatform);
+    }
+  }
 
   // if connected force synchronization
   var connectivityResult = await (Connectivity().checkConnectivity());

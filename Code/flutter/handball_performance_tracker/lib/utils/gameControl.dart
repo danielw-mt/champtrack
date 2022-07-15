@@ -8,7 +8,6 @@ import '../data/game.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 
-import '../constants/stringsGeneral.dart';
 import '../constants/stringsGameSettings.dart';
 
 void startGame(BuildContext context) async {
@@ -27,7 +26,8 @@ void startGame(BuildContext context) async {
     return;
   }
   tempController.setPlayerBarPlayers();
-
+  // Don't start time running directly. Set game paused so "back to game" button appears in side menu.
+  tempController.setGameIsPaused(true);
   // start a new game in firebase
   print("starting new game");
   DateTime dateTime = DateTime.now();
@@ -38,7 +38,8 @@ void startGame(BuildContext context) async {
       startTime: unixTimeStamp,
       players: tempController.getOnFieldPlayersById());
   await persistentController.setCurrentGame(newGame, isNewGame: true);
-
+  tempController.setOpponentScore(0);
+  tempController.setOwnScore(0);
   // add game to selected players
   addGameToPlayers(newGame);
 
@@ -49,6 +50,7 @@ void unpauseGame() {
   TempController tempController = Get.find<TempController>();
   PersistentController persistentController = Get.find<PersistentController>();
   tempController.setGameIsRunning(true);
+  tempController.setGameIsPaused(false);
   persistentController
       .getCurrentGame()
       .stopWatch
@@ -60,6 +62,7 @@ void pauseGame() {
   TempController tempController = Get.find<TempController>();
   PersistentController persistentController = Get.find<PersistentController>();
   tempController.setGameIsRunning(false);
+  tempController.setGameIsPaused(true);
   persistentController
       .getCurrentGame()
       .stopWatch
@@ -75,16 +78,21 @@ void stopGame() async {
   print("stop game, id: ${persistentController.getCurrentGame().id}");
 
   DateTime dateTime = DateTime.now();
-  currentGame.date = dateTime;
   currentGame.stopTime = dateTime.toUtc().millisecondsSinceEpoch;
-  currentGame.players = tempController.getOnFieldPlayersById();
+  currentGame.scoreHome = tempController.getOwnScore();
+  currentGame.scoreOpponent = tempController.getOpponentScore();
 
   persistentController.setCurrentGame(currentGame);
 
   // stop the game timer
-  persistentController.getCurrentGame().stopWatch.onExecute.add(StopWatchExecute.stop);
+  persistentController
+      .getCurrentGame()
+      .stopWatch
+      .onExecute
+      .add(StopWatchExecute.stop);
 
   tempController.setGameIsRunning(false);
+  tempController.setGameIsPaused(false);
 }
 
 void addGameToPlayers(Game game) {

@@ -7,6 +7,10 @@ class StringsGameScreen{
   static const String lPlusOneTime = "+1 Sek";
   static const String lMinusOneTime = "-1 Sek";
 
+  // buttons -> side_switch.dart, stop_game.dart
+  static const String lSwitch = "Seitenwechsel";
+  static const String lStopGame = "Spiel beenden";
+
 // action_menu.dart
   static const String lGameStartErrorMessage =
       "Fehler: Spiel wurde noch nicht gesartet!";

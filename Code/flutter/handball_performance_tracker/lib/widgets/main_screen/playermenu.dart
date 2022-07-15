@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:handball_performance_tracker/constants/game_actions.dart';
 import 'package:handball_performance_tracker/utils/icons.dart';
+import 'package:handball_performance_tracker/widgets/main_screen/seven_meter_menu.dart';
 import '../../constants/stringsGeneral.dart';
 import '../../constants/stringsGameScreen.dart';
 import 'package:handball_performance_tracker/widgets/main_screen/seven_meter_player_menu.dart';
@@ -169,11 +170,11 @@ GetBuilder<TempController> buildDialogButton(
         FieldSwitch.pageController.jumpToPage(0);
       }
     } else if (lastAction.actionType == blockAndSteal) {
-      // if our action is left (page 0) and we are defensing (on page 0) jump back to attack (page 1) after the action
       while (FieldSwitch.pageController.positions.length > 1) {
         FieldSwitch.pageController
             .detach(FieldSwitch.pageController.positions.first);
       }
+      // if our action is left (page 0) and we are defensing (on page 0) jump back to attack (page 1) after the action
       if (tempController.getFieldIsLeft() == true &&
           tempController.getAttackIsLeft() == false) {
         logger.d("Switching to right field after action");
@@ -209,6 +210,9 @@ GetBuilder<TempController> buildDialogButton(
       tempController.updatePlayerEfScore(
           lastClickedPlayer.id!, persistentController.getLastAction());
       addFeedItem(persistentController.getLastAction());
+      tempController.incOwnScore();
+      // add goal to feed
+      // if it was a solo goal the action type has to be updated to "Tor Solo"
 
       if (!_wasAssist()) {
         logger.d("Logging solo goal");
@@ -251,6 +255,13 @@ GetBuilder<TempController> buildDialogButton(
       tempController.setPlayerMenutText(StringsGeneral.lChooseSevenMeterPlayer);
       callSevenMeterPlayerMenu(context);
     }
+    // if we perform a 7m foul go straight to 7m screen
+    else if (lastAction.actionType == foulWithSeven) {
+      logger.d("7m foul. Going to 7m screen");
+      Navigator.pop(context);
+      callSevenMeterMenu(context, false);
+      return;
+    } 
     print("last action saved in database: ");
     // if the action was a 7 meter action we pop the screen above and go to 7m menu
     // for all other actions the player menu
