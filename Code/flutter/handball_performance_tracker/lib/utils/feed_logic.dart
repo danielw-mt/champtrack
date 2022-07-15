@@ -58,6 +58,9 @@ void removeFeedItem(GameAction action, TempController tempController) {
   if (action.actionType == goal) {
     tempController.decOwnScore();
   }
+  else if (action.actionType == goalOthers) {
+    tempController.decOpponentScore();
+  }
   // update player's ef.score
   tempController.updatePlayerEfScore(action.playerId, action,
       removeAction: true);
