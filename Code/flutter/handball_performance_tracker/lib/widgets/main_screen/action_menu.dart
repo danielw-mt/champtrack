@@ -164,8 +164,8 @@ Widget buildDialogButtonMenu(BuildContext context, List<String> buttonTexts,
             ],
           ),
         ),
-        dialogButtons[3],
-        dialogButtons[4],
+        Flexible(child: dialogButtons[3]),
+        Flexible(child: dialogButtons[4]),
       ]),
       Flexible(
         child: Column(children: [
@@ -209,17 +209,23 @@ Widget buildDialogButtonMenu(BuildContext context, List<String> buttonTexts,
         Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
       Column(children: [
         Row(children: [dialogButtons[1], dialogButtons[0]]),
-        dialogButtons[5],
-        dialogButtons[2]
+        Flexible(child: dialogButtons[5]),
+        Flexible(child: dialogButtons[2])
       ]),
       Flexible(
         child: Column(
-          children: [dialogButtons[6], dialogButtons[7]],
+          children: [
+            Flexible(child: dialogButtons[6]),
+            Flexible(child: dialogButtons[7])
+          ],
         ),
       ),
       Flexible(
         child: Column(
-          children: [dialogButtons[3], dialogButtons[4]],
+          children: [
+            Flexible(child: dialogButtons[3]),
+            Flexible(child: dialogButtons[4])
+          ],
         ),
       ),
     ]);
@@ -249,18 +255,24 @@ Widget buildDialogButtonMenu(BuildContext context, List<String> buttonTexts,
           Column(
             children: [
               Row(children: [dialogButtons[1], dialogButtons[0]]),
-              dialogButtons[7],
-              dialogButtons[3]
+          Flexible(child: dialogButtons[7]),
+          Flexible(child: dialogButtons[3])
             ],
           ),
       Flexible(
         child: Column(
-            children: [dialogButtons[2], dialogButtons[6]],
+          children: [
+            Flexible(child: dialogButtons[2]),
+            Flexible(child: dialogButtons[6])
+          ],
           ),
       ),
       Flexible(
         child: Column(
-          children: [dialogButtons[4], dialogButtons[5]],
+          children: [
+            Flexible(child: dialogButtons[4]),
+            Flexible(child: dialogButtons[5])
+          ],
         ),
           ),
         ]);
@@ -390,19 +402,19 @@ DialogButton buildDialogButton(
   double buttonHeight;
   if (sizeFactor == 0) {
     // Small buttons, eg red and yellow card
-    buttonWidth = width * 0.075;
+    buttonWidth = width * 0.07;
     buttonHeight = buttonWidth;
   } else if (sizeFactor == 1) {
     // Middle big buttons, eg 2m
-    buttonWidth = width * 0.14;
+    buttonWidth = width * 0.13;
     buttonHeight = buttonWidth;
   } else if (sizeFactor == 2) {
     // Long buttons like in goalkeeper menu
     buttonWidth = width * 0.25;
-    buttonHeight = width * 0.14;
+    buttonHeight = width * 0.17;
   } else {
     // Big buttons like goal
-    buttonWidth = width * 0.19;
+    buttonWidth = width * 0.17;
     buttonHeight = buttonWidth;
   }
   return DialogButton(
