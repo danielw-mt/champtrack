@@ -28,7 +28,7 @@ class ActionFeed extends StatelessWidget {
                   bottomRight: Radius.circular(menuRadius))),
           alignment: Alignment.centerLeft,
           width: MediaQuery.of(context).size.width * 0.23,
-          height: fieldSizeParameter.fieldHeight,
+          height: fieldSizeParameter.fieldHeight * 0.95,
           child: Column(
             children: [
               FeedHeader(),
