@@ -172,29 +172,30 @@ DialogButton buildDialogButton(
         relativeTime: secondsSinceGameStart);
     logger.d("GameAction object created: ");
     logger.d(action);
-    String playerId;
+    Player activePlayer;
     if (actionType == goal || actionType == missed7m) {
       // own player did 7m
-      playerId = tempController.getLastClickedPlayer().id;
+      activePlayer = tempController.getLastClickedPlayer();
       tempController.setLastClickedPlayer(Player());
     } else {
       // opponent player did 7m
       // get id of goalkeeper by going through players on field and searching for position
-      String goalKeeperId = "0";
+      Player goalKeeperId = tempController.getPlayersFromSelectedTeam()[0];
       for (int k in getOnFieldIndex()) {
         Player player = tempController.getPlayersFromSelectedTeam()[k];
         if (player.positions.contains("TW")) {
-          goalKeeperId = player.id.toString();
+          goalKeeperId = player;
           break;
         }
       }
-      playerId = goalKeeperId;
+      activePlayer = goalKeeperId;
     }
-    action.playerId = playerId;
     // add action to firebase
     persistentController.addAction(action);
+    persistentController.setLastActionPlayer(activePlayer);
+
     tempController.updatePlayerEfScore(
-        playerId, persistentController.getLastAction());
+        activePlayer.id!, persistentController.getLastAction());
     // add action to feed
     addFeedItem(action);
 
