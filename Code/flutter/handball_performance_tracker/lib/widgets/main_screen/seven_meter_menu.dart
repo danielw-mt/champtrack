@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:handball_performance_tracker/constants/stringsGeneral.dart';
-import 'package:handball_performance_tracker/data/database_repository.dart';
 import 'package:get/get.dart';
 import 'package:handball_performance_tracker/data/player.dart';
 import 'package:handball_performance_tracker/utils/feed_logic.dart';
@@ -8,7 +7,6 @@ import 'package:handball_performance_tracker/utils/player_helper.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import '../../constants/stringsGameScreen.dart';
 import '../../data/game_action.dart';
-import '../../data/database_repository.dart';
 import '../../constants/game_actions.dart';
 import '../../controllers/tempController.dart';
 import '../../controllers/persistentController.dart';
@@ -151,7 +149,6 @@ DialogButton buildDialogButton(
   final PersistentController persistentController =
       Get.find<PersistentController>();
   final TempController tempController = Get.find<TempController>();
-  DatabaseRepository repository = persistentController.repository;
   void logAction() async {
     logger.d("logging an action");
     DateTime dateTime = DateTime.now();
