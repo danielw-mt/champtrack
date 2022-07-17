@@ -56,14 +56,6 @@ void startGame(BuildContext context, {bool preconfigured: false}) async {
     tempController.setOwnScore(0);
   }
   
-
-  // activate the game timer
-  persistentController
-      .getCurrentGame()
-      .stopWatch
-      .onExecute
-      .add(StopWatchExecute.start);
-
   print("start game, id: ${persistentController.getCurrentGame().id}");
 }
 
