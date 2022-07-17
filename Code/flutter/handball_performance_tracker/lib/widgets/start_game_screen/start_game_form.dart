@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:handball_performance_tracker/constants/stringsTeamManagement.dart';
 import 'package:handball_performance_tracker/data/game.dart';
 import 'package:handball_performance_tracker/data/team.dart';
+import 'package:handball_performance_tracker/screens/playerSelectionScreen.dart';
 import 'package:handball_performance_tracker/widgets/team_selection_screen/team_dropdown.dart';
 import '../../constants/stringsGameSettings.dart';
 import '../../controllers/persistentController.dart';
@@ -250,6 +251,7 @@ class StartGameFormState extends State<StartGameForm> {
                       const SnackBar(
                           content: Text(StringsGameSettings.lGameDataSaved)),
                     );
+                    Get.to(() => PlayerSelectionScreen());
                   },
                   child: const Text(StringsTeamManagement.lSubmitButton),
                 ),
