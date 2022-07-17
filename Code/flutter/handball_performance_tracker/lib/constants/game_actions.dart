@@ -73,7 +73,7 @@ Map<String, Map<String, String>> actionMapping = {
     StringsGameScreen.lGoalOtherSide: goalOthers,
   },
   seven_meter: {
-    StringsGameScreen.lGoal: goal,
+    StringsGameScreen.lGoal: goal7m,
     StringsGameScreen.lErrThrow: missed7m,
     StringsGameScreen.lGoalOtherSide: goalOthers,
     StringsGeneral.lCaught: parade7m
