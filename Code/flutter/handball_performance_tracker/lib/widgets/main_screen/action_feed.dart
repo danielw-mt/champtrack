@@ -36,6 +36,7 @@ class ActionFeed extends StatelessWidget {
                 child: ListView.builder(
                     controller: ScrollController(),
                     physics: ClampingScrollPhysics(),
+                    reverse: true,
                     shrinkWrap: true,
                     itemCount: feedActions.length,
                     itemBuilder: (context, index) {
@@ -100,7 +101,7 @@ class ActionFeed extends StatelessWidget {
                                   )
                                 ],
                               ),
-                              if (index != feedActions.length - 1) Divider()
+                              if (index != feedActions.length) Divider()
                             ],
                           );
                     }),
