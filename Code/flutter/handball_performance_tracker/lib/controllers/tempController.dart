@@ -156,6 +156,16 @@ class TempController extends GetxController {
     }
   }
 
+  /// after a game is ended, reset the LiveEfScores of all participating players and the feed
+  void resetGameData(Game game){
+    for (String playerId in game.players){
+      Player player = getPlayerFromSelectedTeam(playerId);
+      player.resetActions();
+    }
+    _feedActions.value = [];
+    update(["action-feed", "ef-score-bar"]);
+  }
+
   /// 0: male, 1: female, 2: youth
   RxInt _selectedTeamType = 0.obs;
 

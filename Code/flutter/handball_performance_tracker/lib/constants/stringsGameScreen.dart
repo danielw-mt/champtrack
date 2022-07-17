@@ -13,7 +13,7 @@ class StringsGameScreen{
 
 // action_menu.dart
   static const String lGameStartErrorMessage =
-      "Fehler: Spiel wurde noch nicht gesartet!";
+      "Fehler: Spiel wurde noch nicht gestartet!";
   static const String lOffensePopUpHeader = "Offensive Aktionen";
   static const String lDeffensePopUpHeader = "Defensive Aktionen";
   static const String lGoalkeeperPopUpHeader = "Torwart Aktionen";

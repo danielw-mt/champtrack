@@ -113,9 +113,10 @@ class PersistentController extends GetxController {
     }
   }
 
-  /// reset the current Game object to a game without id
+  /// reset the current Game object to a game without id and clean up the actions list
   void resetCurrentGame(){
     _currentGame.value = Game(date: DateTime.now()); 
+    _actions.value = [];
   }
 
 }

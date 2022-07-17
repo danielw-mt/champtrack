@@ -106,6 +106,10 @@ void stopGame() async {
 
   tempController.setGameIsRunning(false);
   tempController.setGameIsPaused(false);
+
+  //reset all data
+  tempController.resetGameData(persistentController.getCurrentGame());
+  persistentController.resetCurrentGame();
 }
 
 void _addGameToPlayers(Game game) {

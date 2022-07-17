@@ -15,7 +15,6 @@ class OnFieldCheckbox extends StatelessWidget {
         id: "on-field-checkbox",
         builder: (tempController) {
           List<Player> playersOnField = tempController.getOnFieldPlayers();
-          tempController.setPlayerBarPlayers(); // in case default settings are kept
           return Checkbox(
             value: playersOnField.contains(player), //playersOnField[index],
             onChanged: (value) {
