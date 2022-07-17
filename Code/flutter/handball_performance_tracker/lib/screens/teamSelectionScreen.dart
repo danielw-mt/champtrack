@@ -10,10 +10,12 @@ import 'teamSettingsScreen.dart';
 class TeamSelectionScreen extends StatelessWidget {
   // screen that allows players to be selected including what players are on the field or on the bench (non selected)
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  final TempController tempController = Get.put(TempController());
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<TempController>(
+    return SafeArea(
+        child: GetBuilder<TempController>(
       id: "team-selection-screen",
       builder: (gameController) {
         return DefaultTabController(
@@ -22,6 +24,12 @@ class TeamSelectionScreen extends StatelessWidget {
           child: Scaffold(
               key: _scaffoldKey,
               drawer: NavDrawer(),
+              // if drawer is closed notify, so if game is running the back to game button appears on next opening
+              onDrawerChanged: (isOpened) {
+                if (!isOpened) {
+                  tempController.setMenuIsEllapsed(false);
+                }
+              },
               bottomNavigationBar: TeamTypeSelectionBar(),
               body: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -31,12 +39,12 @@ class TeamSelectionScreen extends StatelessWidget {
                     TeamDropdown(),
                     TextButton(
                         onPressed: () {
-                          Get.to(TeamSettingsScreen());
+                          Get.to(() => TeamSettingsScreen());
                         },
                         child: Icon(Icons.edit))
                   ])),
         );
       },
-    );
+    ));
   }
 }

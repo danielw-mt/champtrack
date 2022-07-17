@@ -36,6 +36,18 @@ class TempController extends GetxController {
     ]);
   }
 
+  /// Temporary variable for storing the currently playing Team
+  Rx<Team> _playingTeam = Team(id: "-1", name: "Default team").obs;
+
+  /// getter for playingTeam
+  Team getPlayingTeam() => _playingTeam.value;
+
+  /// setter for playingTeam
+  void setPlayingTeam(Team team) {
+    _playingTeam.value = team;
+    //update();
+  }
+
   /// return the first player in selectedTeam with the given playerId
   Player getPlayerFromSelectedTeam(String playerId) {
     return _selectedTeam.value.players
@@ -83,8 +95,8 @@ class TempController extends GetxController {
     update(["players-list"]);
   }
 
-  /// adds player to the players collection and the selected teams in the teams 
-  /// collection. 
+  /// adds player to the players collection and the selected teams in the teams
+  /// collection.
   void addPlayer(Player player) async {
     PersistentController persistentController =
         Get.find<PersistentController>();
@@ -101,9 +113,13 @@ class TempController extends GetxController {
   /// get the players from selectedTeam that are currently marked as onFieldPlayers
   List<Player> getOnFieldPlayers() => _selectedTeam.value.onFieldPlayers;
 
+  List<String> getOnFieldPlayersById() =>
+      _selectedTeam.value.onFieldPlayers.map((player) => player.id!).toList();
+
   /// set the onFieldPlayer from selectedTeam stored at the given index
-  void setOnFieldPlayer(int index, Player player) {
+  void setOnFieldPlayer(int index, Player player, Game game) {
     _selectedTeam.value.onFieldPlayers[index] = player;
+    addGameToPlayer(player, game); // if a player is substituted during a game
     update(
         ["action-feed", "on-field-checkbox", "ef-score-bar", "players-list"]);
   }
@@ -126,6 +142,18 @@ class TempController extends GetxController {
     _selectedTeam.value.onFieldPlayers.remove(player);
     update(
         ["action-feed", "on-field-checkbox", "ef-score-bar", "players-list"]);
+  }
+
+  /// if player gets active in a game, add the game's id to its games list as well as the player's id to the games players list
+  void addGameToPlayer(Player player, Game game) {
+    if (!player.games.contains(game.id)) {
+      player.games.add(game.id!);
+      repository.updatePlayer(player);
+    }
+    if (!game.players.contains(player.id)) {
+      game.players.add(player.id!);
+      repository.updateGame(game);
+    }
   }
 
   /// 0: male, 1: female, 2: youth
@@ -160,10 +188,6 @@ class TempController extends GetxController {
   ////
   // settingsscreen
   ////
-
-  // TODO this might not be needed anymore when #192 is fixed
-  RxList<Player> chosenPlayers = <Player>[].obs;
-
   /// By default attack is at the left side of the screen
   /// during half time this can be switched
   RxBool _attackIsLeft = true.obs;
@@ -248,7 +272,6 @@ class TempController extends GetxController {
   /// getter for playerMenuText
   String getPlayerMenuText() => _playerMenuText.value;
 
-   
   void setPlayerMenutText(String text) {
     _playerMenuText.value = text;
     update(["player-menu-text"]);
@@ -299,6 +322,63 @@ class TempController extends GetxController {
     update(["efscorebar-players"]);
   }
 
+  /// Score of own team
+  RxInt _ownScore = 0.obs;
+
+  /// getter for _ownScore
+  getOwnScore() => _ownScore.value;
+
+  /// increaser for _ownScore
+  incOwnScore() {
+    _ownScore++;
+    update(["score-keeping", "score-keeping-own"]);
+  }
+
+  /// decreaser for _ownScore
+  decOwnScore() {
+    if (_ownScore > 0) {
+      _ownScore--;
+    }
+    update(["score-keeping", "score-keeping-own"]);
+  }
+
+  /// setter for _ownScore
+  setOwnScore(int score) {
+    if (score >= 0) {
+      _ownScore.value = score;
+    }
+    update(["score-keeping", "score-keeping-own"]);
+  }
+
+  /// Score of opponent team
+  RxInt _opponentScore = 0.obs;
+
+  /// getter for _opponentScore
+  getOpponentScore() => _opponentScore.value;
+
+  /// increaser for _opponentScore
+  incOpponentScore() {
+    _opponentScore++;
+    update(["score-keeping", "score-keeping-opponent"]);
+  }
+
+  /// decreaser for _opponentScore
+  decOpponentScore() {
+    if (_opponentScore > 0) {
+      _opponentScore--;
+    }
+    update(["score-keeping", "score-keeping-opponent"]);
+  }
+
+  /// setter for _opponentScore
+  setOpponentScore(int score) {
+    if (score >= 0) {
+      _opponentScore.value = score;
+    }
+
+    update(["score-keeping", "score-keeping-opponent"]);
+  }
+
   ////
   // game tracking
   ////
@@ -324,8 +404,21 @@ class TempController extends GetxController {
   /// setter for gameRunning
   setGameIsRunning(bool gameIsRunning) {
     _gameRunning.value = gameIsRunning;
-    update(["start-stop-icon", "start-button"]);
+    update(["start-stop-icon", "start-button", "game-is-running-button"]);
   }
+
+  /// True: game was paused; False game did not start yet or is running
+  RxBool _gameIsPaused = false.obs;
+
+  /// getter for _gameIsPaused
+  getGameIsPaused() => _gameIsPaused.value;
+
+  /// setter for _gameIsPaused
+  setGameIsPaused(bool gameIsPaused) {
+    _gameIsPaused.value = gameIsPaused;
+    update(["game-is-running-button"]);
+  }
+
 
   /// @return rx list
   /// after click on goal there is only one element "goal", otherwise
@@ -339,5 +432,20 @@ class TempController extends GetxController {
   setLastLocation(List<String> lastLocation) {
     _lastLocation.value = lastLocation;
     //update();
+  }
+
+  //////
+  /// Nav Drawer
+  //////
+  // true if a ListTile in drawer is ellapsed, false otherwise.
+  RxBool _menuIsEllapsed = false.obs;
+
+  /// getter for _menuIsEllapsed
+  getMenuIsEllapsed() => _menuIsEllapsed.value;
+
+  /// setter for _menuIsEllapsed
+  setMenuIsEllapsed(bool isEllapsed) {
+    _menuIsEllapsed.value = isEllapsed;
+    update(["game-is-running-button"]);
   }
 }

@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
-import 'player.dart';
 
 class Game {
   String? id;
@@ -15,7 +14,7 @@ class Game {
   String? location;
   String? opponent;
   String? season;
-  List<Player> players;
+  List<String> players;
   StopWatchTimer stopWatch; 
 
   Game(
@@ -48,7 +47,7 @@ class Game {
       'location': location,
       'opponent': opponent,
       'season': season,
-      'players': players.map((player) => player.id).toList()
+      'players': players
     };
   }
 

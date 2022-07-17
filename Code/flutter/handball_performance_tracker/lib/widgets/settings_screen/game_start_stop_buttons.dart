@@ -72,7 +72,7 @@ class GameStartStopButtons extends StatelessWidget {
         clubId: tempController.getSelectedTeam().id!,
         date: dateTime,
         startTime: unixTimeStamp,
-        players: tempController.chosenPlayers.cast<Player>());
+        players: tempController.getOnFieldPlayersById());
 
     await persistentController.setCurrentGame(newGame, isNewGame: true);
     newGame = persistentController.getCurrentGame(); // id was updated during set

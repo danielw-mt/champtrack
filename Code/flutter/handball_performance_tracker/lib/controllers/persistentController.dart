@@ -18,6 +18,7 @@ class PersistentController extends GetxController {
 
   void setLoggedInClub(Club club) {
     _loggedInClub.value = club;
+    update(["menu-club-display"]);
   }
 
   Club getLoggedInClub() {

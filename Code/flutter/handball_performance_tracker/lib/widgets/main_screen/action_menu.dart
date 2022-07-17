@@ -4,8 +4,6 @@ import 'package:handball_performance_tracker/utils/feed_logic.dart';
 import 'package:handball_performance_tracker/utils/player_helper.dart';
 import 'package:handball_performance_tracker/widgets/main_screen/field.dart';
 import '../../constants/stringsGameScreen.dart';
-import 'package:handball_performance_tracker/data/database_repository.dart';
-import 'package:handball_performance_tracker/utils/feed_logic.dart';
 import 'package:handball_performance_tracker/widgets/main_screen/seven_meter_menu.dart';
 import '../../controllers/persistentController.dart';
 import '../../controllers/tempController.dart';
@@ -61,43 +59,23 @@ void callActionMenu(BuildContext context) {
       context: context,
       // alert contains a list of DialogButton objects
       content: Container(
-          width: MediaQuery.of(context).size.width * 0.5,
-          height: MediaQuery.of(context).size.height * 0.88,
+          width: MediaQuery.of(context).size.width * 0.72,
+          height: MediaQuery.of(context).size.height * 0.7,
           child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Expanded(
-                    child: PageView(
-                        controller: new PageController(),
-                        children: buildPageViewChildren(context, actionType))),
+                    child: Scrollbar(
+                  thumbVisibility: true,
+                  child: PageView(
+                      controller: new PageController(),
+                      children: buildPageViewChildren(context, actionType)),
+                )),
               ] // Column of "Spieler", horizontal line and Button-Row
               ))).show();
 }
 
-/// determine if acktion was attack (true) or defense (false)
-bool determineAttack() {
-  logger.d("Determining whether attack actions should be displayed...");
-  final TempController tempController = Get.find<TempController>();
-  // decide whether attack or defense actions should be displayed depending
-  //on what side the team goals is and whether they are attacking or defending
-  bool attacking = false;
-  bool attackIsLeft = tempController.getAttackIsLeft();
-  bool fieldIsLeft = tempController.getFieldIsLeft();
-
-  // when our goal is to the right (= attackIsLeft) and the field is left
-  //display attack options
-  if (attackIsLeft && fieldIsLeft) {
-    attacking = true;
-    // when our goal is to the left (=attack is right) and the field is to the
-    //right display attack options
-  } else if (attackIsLeft == false && fieldIsLeft == false) {
-    attacking = true;
-  }
-  logger.d("Attack actions should be displayed: $attacking");
-  return attacking;
-}
-
-/// determine if acktion was attack, defense, goalkeeper or 7m action
+/// determine if action was attack, defense, goalkeeper
 String determineActionType() {
   logger.d("Determining which actions should be displayed...");
   final TempController tempController = Get.find<TempController>();
@@ -120,9 +98,6 @@ String determineActionType() {
     } else if (attackIsLeft == false && fieldIsLeft == false) {
       actionType = otherGoalkeeper;
     }
-    // TODO no idea how to do this anymore
-  } else if (lastAction.actionType == "foul") {
-    actionType = seven_meter;
   } else {
     if (attackIsLeft && fieldIsLeft) {
       actionType = attack;
@@ -168,11 +143,14 @@ Widget buildDialogButtonMenu(BuildContext context, List<String> buttonTexts,
   Row buttonRow;
   if (isGoalkeeper) {
     List<DialogButton> dialogButtons = [
-      buildDialogButton(context, buttonTexts[0], Colors.red, Icons.style),
-      buildDialogButton(context, buttonTexts[1], Colors.yellow, Icons.style),
-      buildDialogButton(context, buttonTexts[2], Colors.grey),
-      buildDialogButton(context, buttonTexts[3], Colors.grey),
-      buildDialogButton(context, buttonTexts[4], Colors.grey),
+      buildDialogButton(
+          context, buttonTexts[0], Colors.red, 0, Icons.style, ""),
+      buildDialogButton(
+          context, buttonTexts[1], Colors.yellow, 0, Icons.style, ""),
+      buildDialogButton(
+          context, buttonTexts[2], Colors.grey, 0, Icons.timer, ""),
+      buildDialogButton(context, buttonTexts[3], Colors.grey, 2),
+      buildDialogButton(context, buttonTexts[4], Colors.grey, 2),
       buildDialogButton(context, buttonTexts[5], Colors.blue),
       buildDialogButton(context, buttonTexts[6], Colors.blue),
       buildDialogButton(context, buttonTexts[7], Colors.blue),
@@ -180,70 +158,115 @@ Widget buildDialogButtonMenu(BuildContext context, List<String> buttonTexts,
     ];
     buttonRow = Row(children: [
       Column(children: [
-        Row(
-          children: [
-            dialogButtons[0],
-            dialogButtons[1],
-          ],
+        Flexible(
+          child: Row(
+            children: [
+              dialogButtons[1],
+              dialogButtons[0],
+              dialogButtons[2],
+            ],
+          ),
         ),
-        dialogButtons[2],
         dialogButtons[3],
         dialogButtons[4],
       ]),
-      Column(children: [
-        dialogButtons[5],
-        dialogButtons[6],
+      Flexible(
+        child: Column(children: [
+          dialogButtons[5],
+          dialogButtons[6],
       ]),
-      Column(
-        children: [dialogButtons[7], dialogButtons[8]],
+      ),
+      Flexible(
+        child: Column(
+          children: [dialogButtons[7], dialogButtons[8]],
+        ),
       ),
     ]);
     header = StringsGameScreen.lGoalkeeperPopUpHeader;
   } else if (isAttack) {
     List<DialogButton> dialogButtons = [
-      buildDialogButton(context, buttonTexts[0], Colors.red, Icons.style),
-      buildDialogButton(context, buttonTexts[1], Colors.yellow, Icons.style),
-      buildDialogButton(context, buttonTexts[2], Colors.grey, Icons.timer),
-      buildDialogButton(context, buttonTexts[3], Colors.grey),
-      buildDialogButton(context, buttonTexts[4], Colors.grey),
-      buildDialogButton(context, buttonTexts[5], Colors.blue),
-      buildDialogButton(context, buttonTexts[6], Colors.blue),
-      buildDialogButton(context, buttonTexts[7], Colors.blue)
+      buildDialogButton(
+          context, buttonTexts[0], Colors.red, 0, Icons.style, ""),
+      buildDialogButton(
+          context, buttonTexts[1], Colors.yellow, 0, Icons.style, ""),
+      buildDialogButton(context, buttonTexts[2],
+          Color.fromRGBO(199, 208, 244, 1), 1, Icons.timer),
+      buildDialogButton(
+        context,
+        buttonTexts[3],
+        Color.fromRGBO(99, 107, 171, 1),
+      ),
+      buildDialogButton(
+        context,
+        buttonTexts[4],
+        Color.fromRGBO(99, 107, 171, 1),
+      ),
+      buildDialogButton(
+          context, buttonTexts[5], Color.fromRGBO(199, 208, 244, 1), 1),
+      buildDialogButton(
+          context, buttonTexts[6], Color.fromRGBO(203, 206, 227, 1)),
+      buildDialogButton(
+          context, buttonTexts[7], Color.fromRGBO(203, 206, 227, 1))
     ];
-    buttonRow = Row(children: [
-      Column(
-        children: [dialogButtons[0], dialogButtons[1], dialogButtons[2]],
+    buttonRow =
+        Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+      Column(children: [
+        Row(children: [dialogButtons[1], dialogButtons[0]]),
+        dialogButtons[5],
+        dialogButtons[2]
+      ]),
+      Flexible(
+        child: Column(
+          children: [dialogButtons[6], dialogButtons[7]],
+        ),
       ),
-      Column(
-        children: [dialogButtons[3], dialogButtons[4], dialogButtons[5]],
-      ),
-      Column(
-        children: [dialogButtons[6], dialogButtons[7]],
+      Flexible(
+        child: Column(
+          children: [dialogButtons[3], dialogButtons[4]],
+        ),
       ),
     ]);
     header = StringsGameScreen.lOffensePopUpHeader;
   } else {
     List<DialogButton> dialogButtons = [
-      buildDialogButton(context, buttonTexts[0], Colors.red, Icons.style),
-      buildDialogButton(context, buttonTexts[1], Colors.yellow, Icons.style),
-      buildDialogButton(context, buttonTexts[2],
-          const Color.fromRGBO(15, 66, 199, 32), Icons.timer),
-      buildDialogButton(context, buttonTexts[3], Colors.grey),
-      buildDialogButton(context, buttonTexts[4], Colors.grey),
-      buildDialogButton(context, buttonTexts[5], Colors.blue),
-      buildDialogButton(context, buttonTexts[6], Colors.blue)
+      buildDialogButton(
+          context, buttonTexts[0], Colors.red, 0, Icons.style, ""),
+      buildDialogButton(
+          context, buttonTexts[1], Colors.yellow, 0, Icons.style, ""),
+      buildDialogButton(
+          context, buttonTexts[2], Color.fromRGBO(203, 206, 227, 1)),
+      buildDialogButton(context, buttonTexts[3],
+          Color.fromRGBO(199, 208, 244, 1), 1, Icons.timer),
+      buildDialogButton(
+          context, buttonTexts[4], Color.fromRGBO(99, 107, 171, 1)),
+      buildDialogButton(
+          context, buttonTexts[5], Color.fromRGBO(99, 107, 171, 1)),
+      buildDialogButton(
+          context, buttonTexts[6], Color.fromRGBO(203, 206, 227, 1)),
+      buildDialogButton(
+          context, buttonTexts[7], Color.fromRGBO(199, 208, 244, 1), 1)
     ];
-    buttonRow = Row(children: [
-      Column(
-        children: [dialogButtons[0], dialogButtons[1], dialogButtons[2]],
+    buttonRow = Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          Column(
+            children: [
+              Row(children: [dialogButtons[1], dialogButtons[0]]),
+              dialogButtons[7],
+              dialogButtons[3]
+            ],
+          ),
+      Flexible(
+        child: Column(
+            children: [dialogButtons[2], dialogButtons[6]],
+          ),
       ),
-      Column(
-        children: [dialogButtons[3], dialogButtons[4]],
-      ),
-      Column(
-        children: [dialogButtons[5], dialogButtons[6]],
-      ),
-    ]);
+      Flexible(
+        child: Column(
+          children: [dialogButtons[4], dialogButtons[5]],
+        ),
+          ),
+        ]);
     header = StringsGameScreen.lDeffensePopUpHeader;
   }
   return Column(children: [
@@ -270,16 +293,18 @@ Widget buildDialogButtonMenu(BuildContext context, List<String> buttonTexts,
       height: 6,
     ),
     // Button-Row: one Row with 3 Columns of 3, 2 and 2 buttons
-    buttonRow
+    Expanded(child: buttonRow)
   ]);
 }
 
 /// @return
 /// builds a single dialog button that logs its text (=action) to firestore
 //  and updates the game state. Its color and icon can be specified as parameters
+// @params - sizeFactor: 0 for small buttons, 1 for middle big buttons, 2 for long buttons, anything else for big buttons
+//         - otherText: Text to display if it should not equal the text in actionMapping
 DialogButton buildDialogButton(
-    BuildContext context, String buttonText, Color color,
-    [icon]) {
+    BuildContext context, String buttonText, Color buttonColor,
+    [sizeFactor, icon, otherText]) {
   TempController tempController = Get.find<TempController>();
   PersistentController persistentController = Get.find<PersistentController>();
   void logAction(String actionType) async {
@@ -328,23 +353,6 @@ DialogButton buildDialogButton(
     //     .addActionToGame(action)
     //     .then((DocumentReference doc) => action.id = doc.id);
 
-    // close action menu
-    Navigator.pop(context);
-    // if we perform a 7m foul go straight to 7m screen and skip player screen
-    if (action.actionType == "foul") {
-      logger.d("7m foul. Going to 7m screen");
-      // TODO add 7m action data to repository here and not in player screen
-      // TODO add action to feedItems (causes an error for some reason)
-      //addFeedItem(action);
-
-      callSevenMeterMenu(context, false);
-      return;
-      // go to player menu for all other actions
-    } else {
-      callPlayerMenu(context);
-    }
-    persistentController.addAction(action);
-
     // Save action directly if goalkeeper action
     if (actionType == goalkeeper) {
       String? goalKeeperId = "goalkeeper";
@@ -362,27 +370,61 @@ DialogButton buildDialogButton(
       addFeedItem(action);
       logger.d(
           "last action saved in database: ${persistentController.getLastAction().toMap()}");
+      if (action.actionType == goal) {
+        tempController.incOwnScore();
+      } else if (action.actionType == goalOthers ||
+          action.actionType == emptyGoal) {
+        tempController.incOpponentScore();
+      }
     } else {
       persistentController.addAction(action);
+    }
+    Navigator.pop(context);
+    // close action menu if goalkeeper action
+    if (actionType != goalkeeper) {
+      print("stepping in here: $actionType");
+      callPlayerMenu(context);
     }
   }
 
   final double width = MediaQuery.of(context).size.width;
   final double height = MediaQuery.of(context).size.height;
+  double buttonWidth;
+  double buttonHeight;
+  if (sizeFactor == 0) {
+    // Small buttons, eg red and yellow card
+    buttonWidth = width * 0.075;
+    buttonHeight = buttonWidth;
+  } else if (sizeFactor == 1) {
+    // Middle big buttons, eg 2m
+    buttonWidth = width * 0.14;
+    buttonHeight = buttonWidth;
+  } else if (sizeFactor == 2) {
+    // Long buttons like in goalkeeper menu
+    buttonWidth = width * 0.25;
+    buttonHeight = width * 0.14;
+  } else {
+    // Big buttons like goal
+    buttonWidth = width * 0.19;
+    buttonHeight = buttonWidth;
+  }
   return DialogButton(
-      margin: EdgeInsets.all(min(height, width) * 0.013),
+      margin: sizeFactor == 0 // less margin for smallest buttons
+          ? EdgeInsets.all(min(height, width) * 0.013)
+          : EdgeInsets.all(min(height, width) * 0.02),
       // have round edges with same degree as Alert dialog
       radius: const BorderRadius.all(Radius.circular(15)),
       // set height and width of buttons so the shirt and name are fitting inside
-      height: width * 0.10,
-      width: width * 0.10,
-      color: color,
+      height: buttonHeight,
+      width: buttonWidth,
+      color: buttonColor,
       child: Center(
         child: Column(
           children: [
             (icon != null) ? Icon(icon) : Container(),
             Text(
-              buttonText,
+              otherText != null ? otherText : buttonText,
+              textAlign: TextAlign.center,
               style: TextStyle(color: Colors.white, fontSize: 20),
             )
           ],
@@ -393,12 +435,5 @@ DialogButton buildDialogButton(
         // reset the feed timer
         String actionType = determineActionType();
         logAction(actionType);
-        Navigator.pop(context);
-        // close action menu if goalkeeper action
-        if (actionType != goalkeeper &&
-            persistentController.getLastAction().actionType != "foul") {
-          print("stepping in here: $actionType");
-          callPlayerMenu(context);
-        }
       });
 }

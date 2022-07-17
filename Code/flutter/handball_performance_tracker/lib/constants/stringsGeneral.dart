@@ -9,11 +9,13 @@ class StringsGeneral {
   static const String lNot = "not";
 
   // nav_drawer.dart
-  static const String lSideMenuHeader = "Side menu";
   static const String lSettings = "Settings";
   static const String lMainScreen = "Main Screen";
   static const String lHelperScreen = "Helper Screen";
   static const String lTeamSelectionScreen = "Team Auswahl";
+  static const String lBackToGameButton = "Zurück zum Spiel";
+  static const String lStatistics = "Statistiken";
+  static const String lGlossary = "Glossar";
 
   // game_actions.dart & action_feed.dart
   static const String lRedCard = "Rote Karte";
@@ -43,6 +45,9 @@ class StringsGeneral {
 
   // playermenu.dart
   static const String lPlayer = "Player";
+
+  // score_keeping.dart
+  static const String lEditScore = "Spielstand bearbeiten";
 
   // globalController.dart
   static const String lGoalScreenText = "Assist2"; // not used
@@ -84,8 +89,6 @@ class StringsGeneral {
   static const String lSubmitButton = "Speichern";
 
   // 7 meter
-  static const String lMissedThrow = "Fehlwurf";
-  static const String lOpponentGoal = "Gegentor";
   static const String lCaught = "Gehalten";
   static const String lSevenMeter = "7m";
   static const String lChooseSevenMeterPlayer = "7m Ausführung";

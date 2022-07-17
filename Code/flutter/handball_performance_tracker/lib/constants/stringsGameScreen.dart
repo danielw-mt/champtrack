@@ -7,6 +7,10 @@ class StringsGameScreen{
   static const String lPlusOneTime = "+1 Sek";
   static const String lMinusOneTime = "-1 Sek";
 
+  // buttons -> side_switch.dart, stop_game.dart
+  static const String lSwitch = "Seitenwechsel";
+  static const String lStopGame = "Spiel beenden";
+
 // action_menu.dart
   static const String lGameStartErrorMessage =
       "Fehler: Spiel wurde noch nicht gesartet!";
@@ -27,6 +31,7 @@ class StringsGameScreen{
   static const String lOneVsOneAnd7m = "1v1 & 7m";
   static const String lTwoMin = "2min ziehen";
   static const String lErrThrow = "Fehlwurf"; 
+  static const String lErrThrowGoalkeeper = "Fehlwurf Torwart"; 
   static const String lTrf = "TRF";
   static const String lFoul7m = "Foul => 7m";
   static const String lBlockNoBall = "Block ohne Ballgewinn";

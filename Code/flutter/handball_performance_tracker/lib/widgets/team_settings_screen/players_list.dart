@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:handball_performance_tracker/constants/stringsTeamManagement.dart';
 import '../../controllers/persistentController.dart';
 import '../../controllers/tempController.dart';
 import '../../data/player.dart';
@@ -54,7 +53,6 @@ class _PlayersListState extends State<PlayersList> {
                 ),
                 // data column displaying players
                 SizedBox(
-                  height: MediaQuery.of(context).size.height,
                   width: double.infinity,
                   child: Column(
                     children: [

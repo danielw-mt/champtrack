@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:handball_performance_tracker/data/game.dart';
 import 'package:handball_performance_tracker/data/team.dart';
 import 'package:handball_performance_tracker/data/game_action.dart';
@@ -18,7 +19,9 @@ var logger = Logger(
 );
 
 class DatabaseRepository {
+  
   final FirebaseFirestore _db = FirebaseFirestore.instance;
+  // final FirebaseFirestore _db = FirebaseFirestore.instanceFor(app: Firebase.app('dev'));
 
   // TODO change this to logged in club
   Future<Club> getClub() async {
@@ -121,7 +124,7 @@ class DatabaseRepository {
   Future<DocumentReference> addGame(Game game) async {
     return _db.collection("games").add(game.toMap());
   }
-
+  
   /// update a Game's firestore record according to @param game properties
   void updateGame(Game game) async {
     await _db.collection("games").doc(game.id).update(game.toMap());

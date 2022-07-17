@@ -7,6 +7,7 @@ import '../data/player.dart';
 import '../data/game.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
+
 import '../constants/stringsGameSettings.dart';
 
 void startGame(BuildContext context, {bool preconfigured: false}) async {
@@ -29,12 +30,14 @@ void startGame(BuildContext context, {bool preconfigured: false}) async {
     // game has already been saved to firebase, only update relevant information
     Game preconfiguredGame = persistentController.getCurrentGame();
     preconfiguredGame.startTime = DateTime.now().toUtc().millisecondsSinceEpoch;
-    preconfiguredGame.players = tempController.chosenPlayers.cast<
-        Player>(); // TODO need to be changed to  onFieldPlayersById when merging with !82
+    preconfiguredGame.players = tempController.getOnFieldPlayersById();
     persistentController.setCurrentGame(preconfiguredGame);
     // add game to selected players
     _addGameToPlayers(preconfiguredGame);
   } else {
+    tempController.setPlayerBarPlayers();
+    // Don't start time running directly. Set game paused so "back to game" button appears in side menu.
+    tempController.setGameIsPaused(true);
     // start a new game in firebase
     print("starting new game");
     DateTime dateTime = DateTime.now();
@@ -43,13 +46,16 @@ void startGame(BuildContext context, {bool preconfigured: false}) async {
         clubId: tempController.getSelectedTeam().id!,
         date: dateTime,
         startTime: unixTimeStamp,
-        players: tempController.chosenPlayers.cast<Player>());
+        players: tempController.getOnFieldPlayersById());
     await persistentController.setCurrentGame(newGame, isNewGame: true);
     print("start game, id: ${persistentController.getCurrentGame().id}");
 
     // add game to selected players
     _addGameToPlayers(newGame);
+    tempController.setOpponentScore(0);
+    tempController.setOwnScore(0);
   }
+  
 
   // activate the game timer
   persistentController
@@ -59,14 +65,13 @@ void startGame(BuildContext context, {bool preconfigured: false}) async {
       .add(StopWatchExecute.start);
 
   print("start game, id: ${persistentController.getCurrentGame().id}");
-  tempController.setGameIsRunning(true);
-  tempController.setPlayerBarPlayers();
 }
 
 void unpauseGame() {
   TempController tempController = Get.find<TempController>();
   PersistentController persistentController = Get.find<PersistentController>();
   tempController.setGameIsRunning(true);
+  tempController.setGameIsPaused(false);
   persistentController
       .getCurrentGame()
       .stopWatch
@@ -78,6 +83,7 @@ void pauseGame() {
   TempController tempController = Get.find<TempController>();
   PersistentController persistentController = Get.find<PersistentController>();
   tempController.setGameIsRunning(false);
+  tempController.setGameIsPaused(true);
   persistentController
       .getCurrentGame()
       .stopWatch
@@ -93,9 +99,9 @@ void stopGame() async {
   print("stop game, id: ${persistentController.getCurrentGame().id}");
 
   DateTime dateTime = DateTime.now();
-  currentGame.date = dateTime;
   currentGame.stopTime = dateTime.toUtc().millisecondsSinceEpoch;
-  currentGame.players = tempController.chosenPlayers().cast<Player>();
+  currentGame.scoreHome = tempController.getOwnScore();
+  currentGame.scoreOpponent = tempController.getOpponentScore();
 
   persistentController.setCurrentGame(currentGame);
 
@@ -105,18 +111,14 @@ void stopGame() async {
       .stopWatch
       .onExecute
       .add(StopWatchExecute.stop);
-  // track stopping and reset current game object
+
   tempController.setGameIsRunning(false);
-  persistentController.resetCurrentGame();
+  tempController.setGameIsPaused(false);
 }
 
 void _addGameToPlayers(Game game) {
   TempController tempController = Get.find<TempController>();
-  for (Player player in tempController.chosenPlayers) {
-    if (!player.games.contains(game.id)) {
-      player.games.add(game.id!);
-      // TODO implement this
-      //repository.updatePlayer(player); //TODO maybe only update on stop?
-    }
+  for (Player player in tempController.getOnFieldPlayers()) {
+    tempController.addGameToPlayer(player, game);
   }
 }

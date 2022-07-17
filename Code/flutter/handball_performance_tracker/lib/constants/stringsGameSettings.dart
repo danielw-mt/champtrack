@@ -6,6 +6,7 @@ class StringsGameSettings{
   // game_start_stop_buttons.dart
   static const String lStartGameButton = "Spiel starten";
   static const String lStopGameButton = "Spiel stoppen";
+  static const String lCancelButton = "Abbrechen";
   //static const String lWarningPlayerNumberErrorMessage = "Warnung";
   //static const String lPlayerNumberErrorMessage =
   //    "Sie können das Spiel nur mit 7 Playern auf dem Feld starten";
