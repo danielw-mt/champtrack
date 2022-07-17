@@ -314,12 +314,12 @@ class TempController extends GetxController {
     for (int i in getOnFieldIndex()) {
       _playerBarPlayers.add(i);
     }
-    update(["efscorebar-players"]);
+    update(["ef-score-bar"]);
   }
 
   void changePlayerBarPlayers(int indexToChange, int i) {
     _playerBarPlayers[indexToChange] = i;
-    update(["efscorebar-players"]);
+    update(["ef-score-bar"]);
   }
 
   /// Score of own team
