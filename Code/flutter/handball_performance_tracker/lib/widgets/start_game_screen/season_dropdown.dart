@@ -21,7 +21,7 @@ class SeasonDropdown extends StatelessWidget {
               focusColor: Colors.transparent,
               value: tempController.getSelectedSeason(),
               icon: const Icon(Icons.arrow_drop_down_circle_outlined),
-              iconEnabledColor: Colors.white, //Icon color
+              iconEnabledColor: Colors.white, 
               //elevation: 16,
               style: const TextStyle(color: Colors.white),
               dropdownColor: buttonDarkBlueColor,
@@ -38,8 +38,11 @@ class SeasonDropdown extends StatelessWidget {
               ].map<DropdownMenuItem<String>>((String value) {
                 return DropdownMenuItem<String>(
                   value: value,
-                  child:
-                      Center(child: Text(value, textAlign: TextAlign.center)),
+                  child: Center(
+                      child: Text(value,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.bold))),
                 );
               }).toList()),
         );
