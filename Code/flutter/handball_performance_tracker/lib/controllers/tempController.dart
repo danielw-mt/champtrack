@@ -419,7 +419,6 @@ class TempController extends GetxController {
     update(["game-is-running-button"]);
   }
 
-
   /// @return rx list
   /// after click on goal there is only one element "goal", otherwise
   /// first element is the sector as a string, second element distinguishes the distance ("<6", "6to9", ">9")
@@ -448,4 +447,12 @@ class TempController extends GetxController {
     _menuIsEllapsed.value = isEllapsed;
     update(["game-is-running-button"]);
   }
+
+  /// Season that is currently selected for games
+  /// TODO: still hardcoded, add to firestore
+  RxString _selectedSeason = "Saison 2021/22".obs;
+
+  String getSelectedSeason() => _selectedSeason.value;
+
+  void setSelectedSeason(String season) => _selectedSeason.value = season;
 }
