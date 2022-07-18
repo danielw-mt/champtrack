@@ -83,7 +83,7 @@ class _PlayerSelectionScreenState extends State<PlayerSelectionScreen> {
             } else {
               tempController.updateOnFieldPlayers();
               startGame(context, preconfigured: true);
-              Get.to(MainScreen());
+              Get.to(() => MainScreen());
               return;
             }
           },
