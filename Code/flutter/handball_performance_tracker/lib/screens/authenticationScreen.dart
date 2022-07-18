@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:handball_performance_tracker/widgets/authentication_screen/login_widget.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import '../constants/stringsAuthentication.dart';
 import '../constants/stringsGeneral.dart';
@@ -31,8 +32,8 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
   Widget build(BuildContext context) {
     if (isLogin) {
       return SafeArea(
-          child: Scaffold(
-        body: SingleChildScrollView(
+          child: Scaffold(body: LoginWidget()
+              /*SingleChildScrollView(
           padding: EdgeInsets.all(16),
           child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
             SizedBox(
@@ -62,8 +63,8 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
                   )
                 : Container()
           ]),
-        ),
-      ));
+        ),*/
+              ));
     }
     return Scaffold(
       body: SingleChildScrollView(
