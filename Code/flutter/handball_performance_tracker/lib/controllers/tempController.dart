@@ -198,8 +198,8 @@ class TempController extends GetxController {
   /// setter for attackIsLeft
   setAttackIsLeft(bool attackIsLeft) {
     _attackIsLeft.value = attackIsLeft;
-    update(["side-switch", "custom-field", "start-game-form"]);
-  }
+      update(["side-switch", "custom-field", "start-game-form"]);
+    }
 
   //////
   /// Main screen
@@ -392,7 +392,6 @@ class TempController extends GetxController {
   /// setter for fieldIsLeft
   setFieldIsLeft(bool fieldIsLeft) {
     _fieldIsLeft.value = fieldIsLeft;
-    update(["start-game-form"]);
   }
 
   /// True: game was started; False game did not start yet
@@ -454,5 +453,8 @@ class TempController extends GetxController {
 
   String getSelectedSeason() => _selectedSeason.value;
 
-  void setSelectedSeason(String season) => _selectedSeason.value = season;
+  void setSelectedSeason(String season) {
+    _selectedSeason.value = season;
+    update(["season-dropdown"]);
+  }
 }
