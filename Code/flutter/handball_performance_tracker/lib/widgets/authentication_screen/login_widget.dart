@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:handball_performance_tracker/constants/colors.dart';
 import 'package:handball_performance_tracker/constants/stringsAuthentication.dart';
+import 'package:handball_performance_tracker/widgets/authentication_screen/alert_widget.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
 class LoginWidget extends StatefulWidget {
@@ -263,60 +264,12 @@ class _LoginWidgetState extends State<LoginWidget> {
 
   Future signIn() async {
     // show an indication that user is signing in
-    var progress = Alert(
-      context: context,
-      content: Container(
-        alignment: AlignmentDirectional.center,
-        decoration: BoxDecoration(
-          color: Colors.white70,
-        ),
-        child: Container(
-          decoration: BoxDecoration(
-              color: Colors.blue[200],
-              borderRadius: BorderRadius.circular(10.0)),
-          width: 300.0,
-          height: 200.0,
-          alignment: AlignmentDirectional.center,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Center(
-                child: SizedBox(
-                  height: 50.0,
-                  width: 50.0,
-                  child: CircularProgressIndicator(
-                    value: null,
-                    strokeWidth: 7.0,
-                  ),
-                ),
-              ),
-              Container(
-                margin: const EdgeInsets.only(top: 25.0),
-                child: Center(
-                  child: Text(
-                    "loading.. wait...",
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-
     Alert loadingAlert = Alert(
         context: context,
-        content: Column(
-          children: [
-            Text(StringsAuth.lLoggingIn),
-            CircularProgressIndicator(color: buttonDarkBlueColor),
-          ],
-        ),
-        buttons: []);
+        buttons: [],
+        content: CustomAlertWidget(StringsAuth.lLoggingIn));
 
-    progress.show();
+    loadingAlert.show();
     try {
       await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: emailController.text.trim(),
@@ -325,7 +278,13 @@ class _LoginWidgetState extends State<LoginWidget> {
       loadingAlert.dismiss();
     } on FirebaseAuthException catch (e) {
       loadingAlert.dismiss();
-      Alert(context: context, content: Text(e.message.toString())).show();
+      Alert(
+              context: context,
+              buttons: [],
+              content: Text(e.message.toString(),
+                  style: TextStyle(color: Colors.grey.shade800)),
+              style: AlertStyle(backgroundColor: buttonLightBlueColor))
+          .show();
       // pop alert once it sign in is completed
 
     }
@@ -335,13 +294,9 @@ class _LoginWidgetState extends State<LoginWidget> {
     // show an indication that user is signing up
     Alert loadingAlert = Alert(
         context: context,
-        content: Column(
-          children: [
-            Text(StringsAuth.lSigningUp),
-            CircularProgressIndicator(),
-          ],
-        ),
-        buttons: []);
+        buttons: [],
+        content: CustomAlertWidget(StringsAuth.lSigningUp));
+
     loadingAlert.show();
     try {
       await FirebaseAuth.instance.createUserWithEmailAndPassword(
@@ -351,7 +306,13 @@ class _LoginWidgetState extends State<LoginWidget> {
       loadingAlert.dismiss();
     } on FirebaseAuthException catch (e) {
       loadingAlert.dismiss();
-      Alert(context: context, content: Text(e.message.toString())).show();
+      Alert(
+              context: context,
+              buttons: [],
+              content: Text(e.message.toString(),
+                  style: TextStyle(color: Colors.grey.shade800)),
+              style: AlertStyle(backgroundColor: buttonLightBlueColor))
+          .show();
     }
   }
 
@@ -373,13 +334,8 @@ class _LoginWidgetState extends State<LoginWidget> {
     // show an indication that user is signing up
     Alert loadingAlert = Alert(
         context: context,
-        content: Column(
-          children: [
-            Text(StringsAuth.lSendingResetMail),
-            CircularProgressIndicator(),
-          ],
-        ),
-        buttons: []);
+        buttons: [],
+        content: CustomAlertWidget(StringsAuth.lLoggingIn));
     loadingAlert.show();
     try {
       await FirebaseAuth.instance
@@ -387,7 +343,13 @@ class _LoginWidgetState extends State<LoginWidget> {
       loadingAlert.dismiss();
     } on FirebaseAuthException catch (e) {
       loadingAlert.dismiss();
-      Alert(context: context, content: Text(e.message.toString())).show();
+      Alert(
+              context: context,
+              buttons: [],
+              content: Text(e.message.toString(),
+                  style: TextStyle(color: Colors.grey.shade800)),
+              style: AlertStyle(backgroundColor: buttonLightBlueColor))
+          .show();
     }
     onClickedReset();
   }
