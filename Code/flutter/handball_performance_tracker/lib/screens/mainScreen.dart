@@ -5,8 +5,9 @@ import 'package:handball_performance_tracker/widgets/main_screen/ef_score_bar.da
 import 'package:handball_performance_tracker/widgets/main_screen/ef_score_bar.dart'
     as efscorebar;
 import 'package:handball_performance_tracker/widgets/main_screen/field.dart';
+import 'package:handball_performance_tracker/widgets/main_screen/score_keeping.dart';
+import 'package:handball_performance_tracker/widgets/main_screen/stop_game.dart';
 import 'package:handball_performance_tracker/widgets/main_screen/side_switch.dart';
-import '../constants/stringsGeneral.dart';
 import './../widgets/nav_drawer.dart';
 import 'package:handball_performance_tracker/constants/fieldSizeParameter.dart'
     as fieldSizeParameter;
@@ -40,7 +41,16 @@ class MainScreen extends StatelessWidget {
       },
       backgroundColor: backgroundColor,
       body: Stack(
-        children: [Positioned(child: SideSwitch(),bottom: 3,left: 3,),
+        children: [
+          Positioned(
+            child: Row(
+              children: [
+                StopGameButton(), SideSwitch()
+              ],
+            ),
+            bottom: 3,
+            left: 3,
+          ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -48,7 +58,12 @@ class MainScreen extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    MenuButton(_scaffoldKey),
+                    Row(
+                      children: [
+                        MenuButton(_scaffoldKey),
+                        ScoreKeeping(),
+                      ],
+                    ),
                     StopWatchBar(),
                   ],
                 ),
