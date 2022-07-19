@@ -1,6 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:handball_performance_tracker/constants/colors.dart';
 import 'package:handball_performance_tracker/constants/stringsAuthentication.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 
 class LoginWidget extends StatefulWidget {
   const LoginWidget({Key? key}) : super(key: key);
@@ -12,111 +14,253 @@ class LoginWidget extends StatefulWidget {
 class _LoginWidgetState extends State<LoginWidget> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  bool isLogin = true;
+  bool isReset = false;
 
   @override
   Widget build(BuildContext context) {
     final double height = MediaQuery.of(context).size.height;
     final double width = MediaQuery.of(context).size.height;
-    return Padding(
-        padding: const EdgeInsets.all(10),
-        child: ListView(
-          children: <Widget>[
-            Container(
-              alignment: Alignment.center,
-              child: new Image.asset(
-                "assets/champtrack_logo.png",
-                height: 250,
-                fit: BoxFit.cover,
+    List<Widget> loginHeader = [
+      Container(
+          alignment: Alignment.center,
+          padding: const EdgeInsets.all(10),
+          child: Text(
+            StringsAuth.lAppTitle,
+            style: TextStyle(
+                color: buttonDarkBlueColor,
+                fontSize: 30,
+                fontWeight: FontWeight.bold),
+          )),
+      SizedBox(
+        height: height * 0.05,
+      ),
+      Container(
+          alignment: Alignment.center,
+          padding: const EdgeInsets.all(10),
+          child: Text(
+            StringsAuth.lLogInButton,
+            style: TextStyle(color: buttonDarkBlueColor, fontSize: 30),
+          )),
+    ];
+    var eMailField = Container(
+      padding: const EdgeInsets.all(10),
+      child: TextField(
+        controller: emailController,
+        textInputAction: TextInputAction.next,
+        style: TextStyle(color: Colors.grey.shade800),
+        decoration: InputDecoration(
+            focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: buttonGreyColor)),
+            enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: buttonGreyColor)),
+            disabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: buttonGreyColor)),
+            labelStyle: TextStyle(color: Colors.grey.shade800),
+            labelText: StringsAuth.lEmail,
+            floatingLabelBehavior: FloatingLabelBehavior.never,
+            filled: true,
+            fillColor: buttonGreyColor),
+      ),
+    );
+    var passwordField = Container(
+      padding: const EdgeInsets.all(10),
+      child: TextField(
+        obscureText: true,
+        controller: passwordController,
+        textInputAction: TextInputAction.done,
+        decoration: InputDecoration(
+            focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: buttonGreyColor)),
+            enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: buttonGreyColor)),
+            disabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: buttonGreyColor)),
+            labelStyle: TextStyle(color: Colors.grey.shade800),
+            labelText: StringsAuth.lPassword,
+            floatingLabelBehavior: FloatingLabelBehavior.never,
+            filled: true,
+            fillColor: buttonGreyColor),
+      ),
+    );
+    if (isReset) {
+      // password reset mode
+      return Padding(
+          padding: const EdgeInsets.all(10),
+          child: ListView(
+            children: <Widget>[
+              Container(
+                alignment: Alignment.center,
+                child: new Image.asset(
+                  "assets/champtrack_logo.png",
+                  height: 250,
+                  fit: BoxFit.cover,
+                ),
               ),
+              Container(
+                alignment: Alignment.center,
+                child: SizedBox(
+                  width: 0.5 * width,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      loginHeader[0],
+                      loginHeader[1],
+                      loginHeader[2],
+                      eMailField,
+                      Container(
+                          width: 0.5 * width,
+                          height: 70,
+                          padding: const EdgeInsets.fromLTRB(10, 20, 10, 0),
+                          child: ElevatedButton(
+                              style: ButtonStyle(
+                                  backgroundColor:
+                                      MaterialStateProperty.all<Color>(
+                                          buttonLightBlueColor)),
+                              child: const Text(StringsAuth.lResetPassword,
+                                  style: TextStyle(
+                                      fontSize: 20, color: Colors.black)),
+                              onPressed: sendPasswordResetEmail)),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ));
+    } else if (isLogin) {
+      // sign in mode (default)
+      return Padding(
+          padding: const EdgeInsets.all(10),
+          child: ListView(
+            children: <Widget>[
+              Container(
+                alignment: Alignment.center,
+                child: new Image.asset(
+                  "assets/champtrack_logo.png",
+                  height: 250,
+                  fit: BoxFit.cover,
+                ),
+              ),
+              Container(
+                alignment: Alignment.center,
+                child: SizedBox(
+                  width: 0.5 * width,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      loginHeader[0],
+                      loginHeader[1],
+                      loginHeader[2],
+                      eMailField,
+                      passwordField,
+                      Container(
+                          width: 0.5 * width,
+                          height: 70,
+                          padding: const EdgeInsets.fromLTRB(10, 20, 10, 0),
+                          child: ElevatedButton(
+                              style: ButtonStyle(
+                                  backgroundColor:
+                                      MaterialStateProperty.all<Color>(
+                                          buttonLightBlueColor)),
+                              child: const Text(StringsAuth.lSignInButton,
+                                  style: TextStyle(
+                                      fontSize: 20, color: Colors.black)),
+                              onPressed: signIn)),
+                      TextButton(
+                        onPressed: onClickedReset,
+                        child: Text(
+                          StringsAuth.lForgotPassword,
+                          style: TextStyle(color: buttonDarkBlueColor),
+                        ),
+                      ),
+                      Row(
+                        children: <Widget>[
+                          const Text(StringsAuth.lNoAccount),
+                          TextButton(
+                              child: Text(
+                                StringsAuth.lSignUpButton,
+                                style: TextStyle(
+                                    fontSize: 20, color: buttonDarkBlueColor),
+                              ),
+                              onPressed:
+                                  onClickedSignUp // switch to sign up mode
+                              )
+                        ],
+                        mainAxisAlignment: MainAxisAlignment.center,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ));
+    } else {
+      // sign up mode
+      return Padding(
+        padding: const EdgeInsets.all(10),
+        child: ListView(children: <Widget>[
+          Container(
+            alignment: Alignment.center,
+            child: new Image.asset(
+              "assets/champtrack_logo.png",
+              height: 250,
+              fit: BoxFit.cover,
             ),
-            Container(
-              alignment: Alignment.center,
-              child: SizedBox(
-                width: 0.5 * width,
-                child: Column(
+          ),
+          Container(
+            alignment: Alignment.center,
+            child: SizedBox(
+              width: 0.5 * width,
+              child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
+                    loginHeader[0],
+                    loginHeader[1],
                     Container(
                         alignment: Alignment.center,
                         padding: const EdgeInsets.all(10),
                         child: Text(
-                          StringsAuth.lAppTitle,
-                          style: TextStyle(
-                              color: buttonDarkBlueColor,
-                              fontSize: 30,
-                              fontWeight: FontWeight.bold),
-                        )),
-                    SizedBox(
-                      height: height * 0.05,
-                    ),
-                    Container(
-                        alignment: Alignment.center,
-                        padding: const EdgeInsets.all(10),
-                        child: Text(
-                          StringsAuth.lLogInButton,
+                          StringsAuth.lSignUpButton,
                           style: TextStyle(
                               color: buttonDarkBlueColor, fontSize: 30),
                         )),
+                    eMailField,
+                    passwordField,
                     Container(
-                      padding: const EdgeInsets.all(10),
-                      child: TextField(
-                        controller: emailController,
-                        decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: StringsAuth.lEmail,
-                        ),
-                      ),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
-                      child: TextField(
-                        obscureText: true,
-                        controller: passwordController,
-                        decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: StringsAuth.lPassword,
-                        ),
-                      ),
-                    ),
-                    Container(
-                        height: 50,
-                        padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                        width: 0.5 * width,
+                        height: 70,
+                        padding: const EdgeInsets.fromLTRB(10, 20, 10, 0),
                         child: ElevatedButton(
-                          child: const Text(StringsAuth.lSignInButton),
-                          onPressed: () {
-                            print(emailController.text);
-                            print(passwordController.text);
-                          },
-                        )),
-                    TextButton(
-                      onPressed: () {
-                        //forgot password screen
-                      },
-                      child: const Text(
-                        StringsAuth.lForgotPassword,
-                      ),
-                    ),
+                            style: ButtonStyle(
+                                backgroundColor:
+                                    MaterialStateProperty.all<Color>(
+                                        buttonLightBlueColor)),
+                            child: const Text(StringsAuth.lSignUpButton,
+                                style: TextStyle(
+                                    fontSize: 20, color: Colors.black)),
+                            onPressed: signUp)),
                     Row(
                       children: <Widget>[
-                        const Text(StringsAuth.lNoAccount),
                         TextButton(
-                          child: const Text(
-                            StringsAuth.lSignUpButton,
-                            style: TextStyle(fontSize: 20),
-                          ),
-                          onPressed: () {
-                            //signup screen
-                          },
-                        )
+                            child: Text(
+                              StringsAuth.lSignInButton,
+                              style: TextStyle(
+                                  fontSize: 20, color: buttonDarkBlueColor),
+                            ),
+                            onPressed:
+                                onClickedSignUp // switch back to sign in mode
+                            )
                       ],
                       mainAxisAlignment: MainAxisAlignment.center,
                     ),
-                  ],
-                ),
-              ),
+                  ]),
             ),
-          ],
-        ));
+          )
+        ]),
+      );
+    }
+  }
+
   Future signIn() async {
     // show an indication that user is signing in
     var progress = Alert(

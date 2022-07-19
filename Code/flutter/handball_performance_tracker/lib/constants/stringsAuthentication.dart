@@ -12,7 +12,9 @@ class StringsAuth {
   static const String lEmail = "E-Mail";
   static const String lPassword = "Passwort";
   static const String lForgotPassword = "Passwort vergessen?";
+  static const String lResetPassword = "Passwort zurücksetzen";
   static const String lNoAccount = "Noch keinen Account?";
+  static const String lSendingResetMail = "Mail mit weiteren Anweisungen wird gesendet...";
 
   static const String lAppTitle = "- HB Performance App -";
 }
