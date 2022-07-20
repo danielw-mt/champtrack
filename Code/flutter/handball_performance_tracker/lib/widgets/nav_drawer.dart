@@ -347,6 +347,7 @@ class MenuButton extends StatelessWidget {
           color: Colors.white),
       child: IconButton(
         icon: const Icon(Icons.menu),
+        color: buttonDarkBlueColor,
         onPressed: () {
           scaffoldKey.currentState!.openDrawer();
         },
