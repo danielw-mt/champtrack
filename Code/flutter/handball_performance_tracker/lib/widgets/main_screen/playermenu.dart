@@ -301,7 +301,7 @@ GetBuilder<TempController> buildDialogButton(
     // if goal was pressed and a player was already clicked once
     if (lastAction.actionType == "goal") {
       // if it was a solo goal the action type has to be updated to "Tor Solo"
-      persistentController.setLastActionPlayer(lastClickedPlayer);
+      await persistentController.setLastActionPlayer(lastClickedPlayer);
       tempController.updatePlayerEfScore(
           lastClickedPlayer.id!, persistentController.getLastAction());
       addFeedItem(persistentController.getLastAction());
@@ -322,7 +322,7 @@ GetBuilder<TempController> buildDialogButton(
         persistentController.addAction(assistAction);
         Player assistPlayer = associatedPlayer;
         assistAction.playerId = assistPlayer.id!;
-        persistentController.setLastActionPlayer(assistPlayer);
+        await persistentController.setLastActionPlayer(assistPlayer);
         tempController.updatePlayerEfScore(
             assistPlayer.id!, persistentController.getLastAction());
 
@@ -332,7 +332,7 @@ GetBuilder<TempController> buildDialogButton(
       }
     } else {
       // if the action was not a goal just update the player id in firebase and gamestate
-      persistentController.setLastActionPlayer(associatedPlayer);
+      await persistentController.setLastActionPlayer(associatedPlayer);
       tempController.updatePlayerEfScore(
           associatedPlayer.id!, persistentController.getLastAction());
       // add action to feed
