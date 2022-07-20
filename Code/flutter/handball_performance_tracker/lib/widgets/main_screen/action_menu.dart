@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:handball_performance_tracker/data/player.dart';
 import 'package:handball_performance_tracker/utils/feed_logic.dart';
 import 'package:handball_performance_tracker/utils/player_helper.dart';
+import 'package:handball_performance_tracker/widgets/main_screen/ef_score_bar.dart';
 import 'package:handball_performance_tracker/widgets/main_screen/field.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 import '../../constants/stringsGameScreen.dart';
@@ -47,32 +48,32 @@ void callActionMenu(BuildContext context) {
     return;
   }
 
-  Alert(
-      style: AlertStyle(
-        // make round edges
-        alertBorder: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(15.0),
-        ),
-        // false so there is no big close-Button at the bottom
-        isButtonVisible: false,
-      ),
+  showDialog(
       context: context,
-      // alert contains a list of DialogButton objects
-      content: Container(
-          width: MediaQuery.of(context).size.width * 0.72,
-          height: MediaQuery.of(context).size.height * 0.7,
-          child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Expanded(
-                    child: Scrollbar(
+      builder: (BuildContext bcontext) {
+        return AlertDialog(
+            scrollable: true,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(menuRadius),
+            ),
+
+            // alert contains a list of DialogButton objects
+            content: Container(
+                width: MediaQuery.of(context).size.width * 0.72,
+                height: MediaQuery.of(context).size.height * 0.7,
+                child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Expanded(
+                          child:  Scrollbar(
                   thumbVisibility: true,
                   child: PageView(
                       controller: new PageController(),
                       children: buildPageViewChildren(context, actionType)),
-                )),
-              ] // Column of "Spieler", horizontal line and Button-Row
-              ))).show();
+                          )),
+                    ] // Column of "Spieler", horizontal line and Button-Row
+                    )));
+      });
 }
 
 /// determine if action was attack, defense, goalkeeper
