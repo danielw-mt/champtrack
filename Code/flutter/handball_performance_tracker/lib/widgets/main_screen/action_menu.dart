@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:handball_performance_tracker/data/player.dart';
 import 'package:handball_performance_tracker/utils/feed_logic.dart';
 import 'package:handball_performance_tracker/utils/player_helper.dart';
+import 'package:handball_performance_tracker/widgets/main_screen/ef_score_bar.dart';
 import 'package:handball_performance_tracker/widgets/main_screen/field.dart';
+import 'package:stop_watch_timer/stop_watch_timer.dart';
 import '../../constants/stringsGameScreen.dart';
-import 'package:handball_performance_tracker/widgets/main_screen/seven_meter_menu.dart';
 import '../../controllers/persistentController.dart';
 import '../../controllers/tempController.dart';
 import 'package:get/get.dart';
@@ -28,7 +29,7 @@ var logger = Logger(
 
 void callActionMenu(BuildContext context) {
   logger.d("Calling action menu");
-  final TempController tempController = Get.find<TempController>();
+  final PersistentController persController = Get.find<PersistentController>();
 
   String actionType = determineActionType();
 
@@ -36,9 +37,9 @@ void callActionMenu(BuildContext context) {
   if (actionType == otherGoalkeeper) {
     return;
   }
-
+  StopWatchTimer stopWatchTimer = persController.getCurrentGame().stopWatch;
   // if game is not running give a warning
-  if (tempController.getGameIsRunning() == false) {
+  if (stopWatchTimer.rawTime.value == 0) {
     Alert(
       context: context,
       title: StringsGameScreen.lGameStartErrorMessage,
@@ -47,46 +48,43 @@ void callActionMenu(BuildContext context) {
     return;
   }
 
-  Alert(
-      style: AlertStyle(
-        // make round edges
-        alertBorder: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(15.0),
-        ),
-        // false so there is no big close-Button at the bottom
-        isButtonVisible: false,
-      ),
+  showDialog(
       context: context,
-      // alert contains a list of DialogButton objects
-      content: Container(
-          width: MediaQuery.of(context).size.width * 0.72,
-          height: MediaQuery.of(context).size.height * 0.7,
-          child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Expanded(
-                    child: Scrollbar(
+      builder: (BuildContext bcontext) {
+        return AlertDialog(
+            scrollable: true,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(menuRadius),
+            ),
+
+            // alert contains a list of DialogButton objects
+            content: Container(
+                width: MediaQuery.of(context).size.width * 0.72,
+                height: MediaQuery.of(context).size.height * 0.7,
+                child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Expanded(
+                          child:  Scrollbar(
                   thumbVisibility: true,
                   child: PageView(
                       controller: new PageController(),
                       children: buildPageViewChildren(context, actionType)),
-                )),
-              ] // Column of "Spieler", horizontal line and Button-Row
-              ))).show();
+                          )),
+                    ] // Column of "Spieler", horizontal line and Button-Row
+                    )));
+      });
 }
 
 /// determine if action was attack, defense, goalkeeper
 String determineActionType() {
   logger.d("Determining which actions should be displayed...");
   final TempController tempController = Get.find<TempController>();
-  final PersistentController persistentController =
-      Get.find<PersistentController>();
   // decide whether attack or defense actions should be displayed depending
   //on what side the team goals is and whether they are attacking or defending
   String actionType = defense;
   bool attackIsLeft = tempController.getAttackIsLeft();
   bool fieldIsLeft = tempController.getFieldIsLeft();
-  GameAction lastAction = persistentController.getLastAction();
   // when our goal is to the right (= attackIsLeft) and the field is left
   //display attack options
   if (tempController.getLastLocation()[0] == goal) {
@@ -167,18 +165,21 @@ Widget buildDialogButtonMenu(BuildContext context, List<String> buttonTexts,
             ],
           ),
         ),
-        dialogButtons[3],
-        dialogButtons[4],
+        Flexible(child: dialogButtons[3]),
+        Flexible(child: dialogButtons[4]),
       ]),
       Flexible(
         child: Column(children: [
-          dialogButtons[5],
-          dialogButtons[6],
+          Flexible(child: dialogButtons[5]),
+          Flexible(child: dialogButtons[6]),
       ]),
       ),
       Flexible(
         child: Column(
-          children: [dialogButtons[7], dialogButtons[8]],
+          children: [
+            Flexible(child: dialogButtons[7]),
+            Flexible(child: dialogButtons[8])
+          ],
         ),
       ),
     ]);
@@ -212,17 +213,23 @@ Widget buildDialogButtonMenu(BuildContext context, List<String> buttonTexts,
         Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
       Column(children: [
         Row(children: [dialogButtons[1], dialogButtons[0]]),
-        dialogButtons[5],
-        dialogButtons[2]
+        Flexible(child: dialogButtons[5]),
+        Flexible(child: dialogButtons[2])
       ]),
       Flexible(
         child: Column(
-          children: [dialogButtons[6], dialogButtons[7]],
+          children: [
+            Flexible(child: dialogButtons[6]),
+            Flexible(child: dialogButtons[7])
+          ],
         ),
       ),
       Flexible(
         child: Column(
-          children: [dialogButtons[3], dialogButtons[4]],
+          children: [
+            Flexible(child: dialogButtons[3]),
+            Flexible(child: dialogButtons[4])
+          ],
         ),
       ),
     ]);
@@ -252,18 +259,24 @@ Widget buildDialogButtonMenu(BuildContext context, List<String> buttonTexts,
           Column(
             children: [
               Row(children: [dialogButtons[1], dialogButtons[0]]),
-              dialogButtons[7],
-              dialogButtons[3]
+          Flexible(child: dialogButtons[7]),
+          Flexible(child: dialogButtons[3])
             ],
           ),
       Flexible(
         child: Column(
-            children: [dialogButtons[2], dialogButtons[6]],
+          children: [
+            Flexible(child: dialogButtons[2]),
+            Flexible(child: dialogButtons[6])
+          ],
           ),
       ),
       Flexible(
         child: Column(
-          children: [dialogButtons[4], dialogButtons[5]],
+          children: [
+            Flexible(child: dialogButtons[4]),
+            Flexible(child: dialogButtons[5])
+          ],
         ),
           ),
         ]);
@@ -283,6 +296,22 @@ Widget buildDialogButtonMenu(BuildContext context, List<String> buttonTexts,
               fontSize: 20,
             ),
           ),
+        ),
+        Align(
+          alignment: Alignment.topRight,
+          // Change from "" to "Assist" after a goal.
+          child: GetBuilder<TempController>(
+              id: "action-menu-text",
+              builder: (tempController) {
+                return Text(
+                  tempController.getActionMenuText(),
+                  textAlign: TextAlign.right,
+                  style: const TextStyle(
+                    color: Colors.purple,
+                    fontSize: 20,
+                  ),
+                );
+              }),
         ),
       ],
     ),
@@ -393,19 +422,19 @@ DialogButton buildDialogButton(
   double buttonHeight;
   if (sizeFactor == 0) {
     // Small buttons, eg red and yellow card
-    buttonWidth = width * 0.075;
+    buttonWidth = width * 0.07;
     buttonHeight = buttonWidth;
   } else if (sizeFactor == 1) {
     // Middle big buttons, eg 2m
-    buttonWidth = width * 0.14;
+    buttonWidth = width * 0.13;
     buttonHeight = buttonWidth;
   } else if (sizeFactor == 2) {
     // Long buttons like in goalkeeper menu
     buttonWidth = width * 0.25;
-    buttonHeight = width * 0.14;
+    buttonHeight = width * 0.17;
   } else {
     // Big buttons like goal
-    buttonWidth = width * 0.19;
+    buttonWidth = width * 0.17;
     buttonHeight = buttonWidth;
   }
   return DialogButton(

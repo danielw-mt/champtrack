@@ -31,6 +31,7 @@ class MainScreen extends StatelessWidget {
 
     return SafeArea(
         child: Scaffold(
+      resizeToAvoidBottomInset: false,
       key: _scaffoldKey,
       drawer: NavDrawer(),
       // if drawer is closed notify, so if game is running the back to game button appears on next opening

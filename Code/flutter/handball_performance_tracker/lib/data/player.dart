@@ -78,6 +78,10 @@ class Player {
 
   void removeAction(GameAction action) =>
       efScore.removeAction(action, positions);
+
+  // clear all performed actions e.g. after a game ended
+  void resetActions() => efScore = LiveEfScore();
+
   @override
   String toString() {
     return "Player( +\n firstName: ${firstName}, +\n lastName: ${lastName}, +\n nickName: ${nickName} ";

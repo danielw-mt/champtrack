@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:handball_performance_tracker/constants/stringsGameScreen.dart';
 import 'package:handball_performance_tracker/constants/team_constants.dart';
 import '../controllers/persistentController.dart';
 import '../controllers/tempController.dart';
@@ -35,7 +36,6 @@ void startGame(BuildContext context, {bool preconfigured: false}) async {
     // add game to selected players
     _addGameToPlayers(preconfiguredGame);
   } else {
-    tempController.setPlayerBarPlayers();
     // Don't start time running directly. Set game paused so "back to game" button appears in side menu.
     tempController.setGameIsPaused(true);
     // start a new game in firebase
@@ -62,6 +62,7 @@ void startGame(BuildContext context, {bool preconfigured: false}) async {
 void unpauseGame() {
   TempController tempController = Get.find<TempController>();
   PersistentController persistentController = Get.find<PersistentController>();
+  tempController.setActionMenutText("");
   tempController.setGameIsRunning(true);
   tempController.setGameIsPaused(false);
   persistentController
@@ -74,6 +75,7 @@ void unpauseGame() {
 void pauseGame() {
   TempController tempController = Get.find<TempController>();
   PersistentController persistentController = Get.find<PersistentController>();
+  tempController.setActionMenutText(StringsGameScreen.lAttentionTimeIsPaused);
   tempController.setGameIsRunning(false);
   tempController.setGameIsPaused(true);
   persistentController
@@ -106,6 +108,10 @@ void stopGame() async {
 
   tempController.setGameIsRunning(false);
   tempController.setGameIsPaused(false);
+
+  //reset all data
+  tempController.resetGameData(persistentController.getCurrentGame());
+  persistentController.resetCurrentGame();
 }
 
 void _addGameToPlayers(Game game) {
