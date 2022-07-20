@@ -277,6 +277,17 @@ class TempController extends GetxController {
     update(["player-menu-text"]);
   }
 
+  /// text to be displayed in the action menu title on the right side, changes when time is paused
+  RxString _actionMenuText = "".obs;
+
+  /// getter for _actionMenuText
+  String getActionMenuText() => _actionMenuText.value;
+
+  void setActionMenutText(String text) {
+    _actionMenuText.value = text;
+    update(["action-menu-text"]);
+  }
+
   /// corresponding player object for last clicked player name in the player menu
   Rx<Player> _lastClickedPlayer = Player().obs;
 
@@ -404,7 +415,7 @@ class TempController extends GetxController {
   /// setter for gameRunning
   setGameIsRunning(bool gameIsRunning) {
     _gameRunning.value = gameIsRunning;
-    update(["start-stop-icon", "start-button", "game-is-running-button"]);
+    update(["start-stop-icon", "game-is-running-button"]);
   }
 
   /// True: game was paused; False game did not start yet or is running
