@@ -29,10 +29,10 @@ var logger = Logger(
       ),
 );
 
-// // Variable is true if the player menu is open. After a player was selected and Navigator.pop
-// // is called, it is set to false. This is used to know if the menu closes without choosing a player
-// // by clicking just anywhere in the screen.
-// bool playerMenuOpen = false;
+// Variable is true if the player menu is open. After a player was selected and Navigator.pop
+// is called, it is set to false. This is used to know if the menu closes without choosing a player
+// by clicking just anywhere in the screen.
+bool playerChanged = false;
 
 void callPlayerMenu(context, [substitute_menu]) {
   logger.d("Calling player menu");
@@ -72,7 +72,9 @@ void callPlayerMenu(context, [substitute_menu]) {
                             id: "player-menu-text",
                             builder: (tempController) {
                               return Text(
-                                tempController.getPlayerMenuText(),
+                                substitute_menu == null
+                                    ? tempController.getPlayerMenuText()
+                                    : StringsGameScreen.lSubstitute,
                                 textAlign: TextAlign.right,
                                 style: const TextStyle(
                                   color: Colors.purple,
@@ -99,7 +101,7 @@ void callPlayerMenu(context, [substitute_menu]) {
                     style: const TextStyle(
                         fontSize: 20, fontWeight: FontWeight.bold),
                   ),
-                   
+
                   // Button-Row: one Row with four Columns of one or two buttons
                   Scrollbar(
                     thumbVisibility: true,
@@ -122,6 +124,10 @@ void callPlayerMenu(context, [substitute_menu]) {
       .then((_) {
     tempController.setPlayerMenutText("");
     tempController.setLastClickedPlayer(Player());
+    (!playerChanged && substitute_menu != null)
+        ? tempController.getLastPlayerToChange()
+        : null; // delete player to change from list if player menu was closed
+    playerChanged = false;
   });
   ;
 }
@@ -332,11 +338,20 @@ GetBuilder<TempController> buildDialogButton(
       // add action to feed
       addFeedItem(persistentController.getLastAction());
     }
+    // Check if associated player or lastClickedPlayer are notOnFieldPlayer. If yes, player menu appears to change the player.
+    if (!tempController.getOnFieldPlayers().contains(associatedPlayer)) {
+      tempController.addPlayerToChange(associatedPlayer);
+    }
+    if (!tempController.getOnFieldPlayers().contains(lastClickedPlayer) &&
+        !(lastClickedPlayer.id! == "")) {
+      tempController.addPlayerToChange(lastClickedPlayer);
+    }
     _setFieldBasedOnLastAction(lastAction);
     if (lastAction.actionType == "1v1") {
       logger.d("1v1 detected");
       Navigator.pop(context);
       callSevenMeterPlayerMenu(context);
+      return;
     }
     // if we perform a 7m foul go straight to 7m screen
     else if (lastAction.actionType == foulWithSeven) {
@@ -349,19 +364,7 @@ GetBuilder<TempController> buildDialogButton(
     // if the action was a 7 meter action we pop the screen above and go to 7m menu
     // for all other actions the player menu
 
-    // Check if associated player or lastClickedPlayer are notOnFieldPlayer. If yes, player menu appears to change the player.
-    if (!tempController.getOnFieldPlayers().contains(associatedPlayer)) {
-      tempController.addPlayerToChange(associatedPlayer);
-      print("add asso");
-    }
-    if (!tempController.getOnFieldPlayers().contains(lastClickedPlayer) &&
-        !(lastClickedPlayer.id! == "")) {
-      print("add ao");
-      print(lastClickedPlayer.id);
-      tempController.addPlayerToChange(lastClickedPlayer);
-    }
     tempController.setLastClickedPlayer(Player());
-    print(tempController.getPlayersToChange());
     // If there were player clicked which are not on field, open substitute player menu
     if (!tempController.getPlayersToChange().isEmpty) {
       Navigator.pop(context);
@@ -369,14 +372,13 @@ GetBuilder<TempController> buildDialogButton(
       return;
     }
     tempController.setPlayerMenutText("");
-    if (lastAction.actionType != "1v1") {
-      Navigator.pop(context);
-    }
+    Navigator.pop(context);
   }
 
   // function which is called is substitute_player param is not null
   // after a player was chosen for an action who is not on field
   void substitutePlayer() {
+    playerChanged = true;
     // get player which was pressed in player menu in tempController.getOnFieldPlayers()
     Player playerToChange = tempController.getLastPlayerToChange();
 
@@ -385,8 +387,6 @@ GetBuilder<TempController> buildDialogButton(
     int k =
         tempController.getPlayersFromSelectedTeam().indexOf(associatedPlayer);
     int indexToChange = tempController.getPlayerBarPlayers().indexOf(k);
-    print(l);
-    print(indexToChange);
     tempController.changePlayerBarPlayers(indexToChange, l);
     // Change the player which was pressed in player menu in tempController.getOnFieldPlayers()
     // to the player which was pressed in popup dialog.

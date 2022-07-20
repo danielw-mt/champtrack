@@ -238,6 +238,10 @@ DialogButton buildDialogButton(BuildContext context, Player associatedPlayer,
 
     tempController.setLastClickedPlayer(
         tempController.getPlayerFromSelectedTeam(associatedPlayer.id!));
+    // Check if associated player or lastClickedPlayer are notOnFieldPlayer. If yes, player menu appears to change the player.
+    if (!tempController.getOnFieldPlayers().contains(associatedPlayer)) {
+      tempController.addPlayerToChange(associatedPlayer);
+    }
   }
 
   return DialogButton(

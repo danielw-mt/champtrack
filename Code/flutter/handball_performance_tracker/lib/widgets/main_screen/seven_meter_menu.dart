@@ -5,6 +5,7 @@ import 'package:handball_performance_tracker/data/player.dart';
 import 'package:handball_performance_tracker/utils/feed_logic.dart';
 import 'package:handball_performance_tracker/utils/player_helper.dart';
 import 'package:handball_performance_tracker/widgets/main_screen/ef_score_bar.dart';
+import 'package:handball_performance_tracker/widgets/main_screen/playermenu.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import '../../constants/stringsGameScreen.dart';
 import '../../data/game_action.dart';
@@ -47,7 +48,7 @@ void callSevenMeterMenu(BuildContext context, bool belongsToHomeTeam) {
                     children: <Widget>[
                       Expanded(
                           child: buildDialogButtonMenu(
-                              context, belongsToHomeTeam)),
+                              bcontext, belongsToHomeTeam)),
                     ] // Column of "Spieler", horizontal line and Button-Row
                     )));
       });
@@ -216,6 +217,15 @@ DialogButton buildDialogButton(
     if (actionType == actionMapping[seven_meter]!.values.toList()[3]) {
       defensiveFieldSwitch();
     }
+
+    // If there were player clicked which are not on field, open substitute player menu
+    if (!tempController.getPlayersToChange().isEmpty) {
+      Navigator.pop(context);
+      callPlayerMenu(context, true);
+      return;
+    }
+    Navigator.pop(context);
+
   }
 
   final double width = MediaQuery.of(context).size.width;
@@ -241,8 +251,6 @@ DialogButton buildDialogButton(
         ),
       ),
       onPressed: () {
-        logAction();
-        Navigator.pop(context);
-        
+        logAction();        
       });
 }
