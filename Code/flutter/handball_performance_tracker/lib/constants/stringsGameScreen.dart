@@ -21,6 +21,8 @@ class StringsGameScreen {
 
   // Pop ups
   static const String lNoAssist = "Kein Assist";
+  static const String lSubstitute1 = "Für wen soll ";
+  static const String lSubstitute2 = " eingewechselt werden?";
 
   // game_actions.dart & action_feed.dart
   static const String lRedCard = "Rote Karte";

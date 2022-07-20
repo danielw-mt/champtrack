@@ -81,7 +81,7 @@ void callSevenMeterPlayerMenu(context) {
                   height: MediaQuery.of(context).size.height * 0.6,
                   child: PageView(
                     controller: new PageController(),
-                    children: buildPageViewChildren(context),
+                    children: buildPageViewChildren(bcontext),
                   ),
                 ),
               )

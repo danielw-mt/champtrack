@@ -29,84 +29,108 @@ var logger = Logger(
       ),
 );
 
-void callPlayerMenu(context) {
-  logger.d("Calling player menu");
+// // Variable is true if the player menu is open. After a player was selected and Navigator.pop
+// // is called, it is set to false. This is used to know if the menu closes without choosing a player
+// // by clicking just anywhere in the screen.
+// bool playerMenuOpen = false;
 
+void callPlayerMenu(context, [substitute_menu]) {
+  logger.d("Calling player menu");
+  final TempController tempController = Get.find<TempController>();
   showDialog(
-      context: context,
-      builder: (BuildContext bcontext) {
-        return AlertDialog(
-          scrollable: true,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(menuRadius),
-          ),
-          // alert contains a list of DialogButton objects
-          content:
-              // Column of "Spieler", horizontal line and Button-Row
-              Column(
-            children: [
-              // upper row: "Spieler" Text on left and "Assist" will pop up on right after a goal.
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          context: context,
+          builder: (BuildContext bcontext) {
+            return AlertDialog(
+              scrollable: true,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(menuRadius),
+              ),
+              // alert contains a list of DialogButton objects
+              content:
+                  // Column of "Spieler", horizontal line and Button-Row
+                  Column(
                 children: [
-                  const Align(
-                    alignment: Alignment.topLeft,
-                    child: Text(
-                      StringsGeneral.lPlayer,
-                      textAlign: TextAlign.left,
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 20,
+                  // upper row: "Spieler" Text on left and "Assist" will pop up on right after a goal.
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Align(
+                        alignment: Alignment.topLeft,
+                        child: Text(
+                          StringsGeneral.lPlayer,
+                          textAlign: TextAlign.left,
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 20,
+                          ),
+                        ),
+                      ),
+                      Align(
+                        alignment: Alignment.topRight,
+                        // Change from "" to "Assist" after a goal.
+                        child: GetBuilder<TempController>(
+                            id: "player-menu-text",
+                            builder: (tempController) {
+                              return Text(
+                                tempController.getPlayerMenuText(),
+                                textAlign: TextAlign.right,
+                                style: const TextStyle(
+                                  color: Colors.purple,
+                                  fontSize: 20,
+                                ),
+                              );
+                            }),
+                      ),
+                    ],
+                  ),
+                  // horizontal line
+                  const Divider(
+                    thickness: 2,
+                    color: Colors.black,
+                    height: 6,
+                  ),
+                  // Substitute player text
+                  Text(
+                    substitute_menu == null
+                        ? ""
+                        : StringsGameScreen.lSubstitute1 +
+                            tempController.getPlayersToChange()[0].lastName +
+                            StringsGameScreen.lSubstitute2,
+                    style: const TextStyle(
+                        fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                   
+                  // Button-Row: one Row with four Columns of one or two buttons
+                  Scrollbar(
+                    thumbVisibility: true,
+                    child: SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.65,
+                      height: MediaQuery.of(context).size.height * 0.6,
+                      child: PageView(
+                        controller: new PageController(),
+                        children:
+                            buildPageViewChildren(bcontext, substitute_menu),
                       ),
                     ),
-                  ),
-                  Align(
-                    alignment: Alignment.topRight,
-                    // Change from "" to "Assist" after a goal.
-                    child: GetBuilder<TempController>(
-                        id: "player-menu-text",
-                        builder: (tempController) {
-                          return Text(
-                            tempController.getPlayerMenuText(),
-                            textAlign: TextAlign.right,
-                            style: const TextStyle(
-                              color: Colors.purple,
-                              fontSize: 20,
-                            ),
-                          );
-                        }),
-                  ),
+                  )
                 ],
               ),
-              // horizontal line
-              const Divider(
-                thickness: 2,
-                color: Colors.black,
-                height: 6,
-              ),
-              // Button-Row: one Row with four Columns of one or two buttons
-              Scrollbar(
-                thumbVisibility: true,
-                child: SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.65,
-                  height: MediaQuery.of(context).size.height * 0.6,
-                  child: PageView(
-                    controller: new PageController(),
-                    children: buildPageViewChildren(context),
-                  ),
-                ),
-              )
-            ],
-          ),
-        );
-      });
+            );
+          })
+      // When closing set player menu text to ""
+      // if just pressed anywhere in screen)
+      .then((_) {
+    tempController.setPlayerMenutText("");
+    tempController.setLastClickedPlayer(Player());
+  });
+  ;
 }
 
 // a method for building the children of the pageview with players on field on the first page and all others on the next.
-List<Widget> buildPageViewChildren(BuildContext context) {
+List<Widget> buildPageViewChildren(BuildContext context, [substitute_menu]) {
   final TempController tempController = Get.find<TempController>();
   List<GetBuilder<TempController>> onFieldButtons =
-      buildDialogButtonOnFieldList(context);
+      buildDialogButtonOnFieldList(context, substitute_menu);
   List<GetBuilder<TempController>> notOnFieldButtons =
       buildDialogButtonNotOnFieldList(context);
 
@@ -139,10 +163,15 @@ List<Widget> buildPageViewChildren(BuildContext context) {
     notOnFieldDisplay
         .add(Flexible(child: notOnFieldButtons[notOnFieldButtons.length - 1]));
   }
-  return [
-    Row(children: onFieldDisplay),
-    Row(children: notOnFieldDisplay),
-  ];
+  List<Widget> buttonRow = (substitute_menu == null)
+      ? [
+          Row(children: onFieldDisplay),
+          Row(children: notOnFieldDisplay),
+        ]
+      : [
+          Row(children: onFieldDisplay),
+        ];
+  return buttonRow;
 }
 
 /// builds a list of Dialog buttons with players which are not on field
@@ -157,7 +186,7 @@ List<GetBuilder<TempController>> buildDialogButtonNotOnFieldList(
             .contains(tempController.getSelectedTeam().players[i]) ==
         false) {
       GetBuilder<TempController> dialogButton = buildDialogButton(
-          context, tempController.getSelectedTeam().players[i], true);
+          context, tempController.getSelectedTeam().players[i], null, true);
       dialogButtons.add(dialogButton);
     }
   }
@@ -166,12 +195,13 @@ List<GetBuilder<TempController>> buildDialogButtonNotOnFieldList(
 
 /// builds a list of Dialog buttons with players which are on field
 List<GetBuilder<TempController>> buildDialogButtonOnFieldList(
-    BuildContext context) {
+    BuildContext context,
+    [substitute_menu]) {
   final TempController tempController = Get.find<TempController>();
   List<GetBuilder<TempController>> dialogButtons = [];
   for (Player player in tempController.getOnFieldPlayers()) {
     GetBuilder<TempController> dialogButton =
-        buildDialogButton(context, player);
+        buildDialogButton(context, player, substitute_menu);
     dialogButtons.add(dialogButton);
   }
   return dialogButtons;
@@ -181,7 +211,7 @@ List<GetBuilder<TempController>> buildDialogButtonOnFieldList(
 /// and updates the game state
 GetBuilder<TempController> buildDialogButton(
     BuildContext context, Player associatedPlayer,
-    [isNotOnField]) {
+    [substitute_menu, isNotOnField]) {
   String buttonText = associatedPlayer.lastName;
   String buttonNumber = (associatedPlayer.number).toString();
   PersistentController persistentController = Get.find<PersistentController>();
@@ -302,7 +332,6 @@ GetBuilder<TempController> buildDialogButton(
       // add action to feed
       addFeedItem(persistentController.getLastAction());
     }
-    tempController.setLastClickedPlayer(Player());
     _setFieldBasedOnLastAction(lastAction);
     if (lastAction.actionType == "1v1") {
       logger.d("1v1 detected");
@@ -319,10 +348,61 @@ GetBuilder<TempController> buildDialogButton(
     print("last action saved in database: ");
     // if the action was a 7 meter action we pop the screen above and go to 7m menu
     // for all other actions the player menu
+
+    // Check if associated player or lastClickedPlayer are notOnFieldPlayer. If yes, player menu appears to change the player.
+    if (!tempController.getOnFieldPlayers().contains(associatedPlayer)) {
+      tempController.addPlayerToChange(associatedPlayer);
+      print("add asso");
+    }
+    if (!tempController.getOnFieldPlayers().contains(lastClickedPlayer) &&
+        !(lastClickedPlayer.id! == "")) {
+      print("add ao");
+      print(lastClickedPlayer.id);
+      tempController.addPlayerToChange(lastClickedPlayer);
+    }
+    tempController.setLastClickedPlayer(Player());
+    print(tempController.getPlayersToChange());
+    // If there were player clicked which are not on field, open substitute player menu
+    if (!tempController.getPlayersToChange().isEmpty) {
+      Navigator.pop(context);
+      callPlayerMenu(context, true);
+      return;
+    }
     tempController.setPlayerMenutText("");
     if (lastAction.actionType != "1v1") {
       Navigator.pop(context);
     }
+  }
+
+  // function which is called is substitute_player param is not null
+  // after a player was chosen for an action who is not on field
+  void substitutePlayer() {
+    // get player which was pressed in player menu in tempController.getOnFieldPlayers()
+    Player playerToChange = tempController.getLastPlayerToChange();
+
+    // Update player bar players
+    int l = tempController.getPlayersFromSelectedTeam().indexOf(playerToChange);
+    int k =
+        tempController.getPlayersFromSelectedTeam().indexOf(associatedPlayer);
+    int indexToChange = tempController.getPlayerBarPlayers().indexOf(k);
+    print(l);
+    print(indexToChange);
+    tempController.changePlayerBarPlayers(indexToChange, l);
+    // Change the player which was pressed in player menu in tempController.getOnFieldPlayers()
+    // to the player which was pressed in popup dialog.
+    tempController.setOnFieldPlayer(
+        tempController.getOnFieldPlayers().indexOf(associatedPlayer),
+        playerToChange,
+        Get.find<PersistentController>().getCurrentGame());
+
+    // If there are still player to change, open menu again
+    if (!tempController.getPlayersToChange().isEmpty) {
+      Navigator.pop(context);
+      callPlayerMenu(context, true);
+      return;
+    }
+    tempController.setPlayerMenutText("");
+    Navigator.pop(context);
   }
 
   // Button with shirt with buttonNumber inside and buttonText below.
@@ -421,7 +501,9 @@ GetBuilder<TempController> buildDialogButton(
                   ? Colors.purple
                   : Color.fromARGB(255, 180, 211, 236),
               onPressed: () {
-                logPlayerSelection();
+                (substitute_menu == null)
+                    ? logPlayerSelection()
+                    : substitutePlayer();
               });
         }
       });

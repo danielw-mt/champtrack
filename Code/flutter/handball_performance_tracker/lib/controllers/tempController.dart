@@ -300,6 +300,33 @@ class TempController extends GetxController {
     update(["player-menu-button"]);
   }
 
+  /// corresponding player object for clicked player names in player menu which are not on field yet
+  RxList<Player> _playersToChange = <Player>[].obs;
+
+  /// getter for _playersToChange
+  List<Player> getPlayersToChange() => _playersToChange;
+
+  /// setter for _playersToChange
+  addPlayerToChange(Player playerToChange) {
+    _playersToChange.add(playerToChange);
+    //update();
+  }
+
+  removePlayerToChange(Player playerToChange) {
+    _playersToChange.remove(playerToChange);
+    //update();
+  }
+
+  getLastPlayerToChange() {
+    if (!_playersToChange.isEmpty) {
+      Player playerToChange = getPlayersToChange()[0];
+      removePlayerToChange(playerToChange);
+      return playerToChange;
+    } else
+      return null;
+    //update();
+  }
+
   /// corresponding player object for last clicked player name in the efscore player bar
   Rx<Player> _playerToChange = Player().obs;
 
@@ -429,7 +456,6 @@ class TempController extends GetxController {
     _gameIsPaused.value = gameIsPaused;
     update(["game-is-running-button"]);
   }
-
 
   /// @return rx list
   /// after click on goal there is only one element "goal", otherwise
