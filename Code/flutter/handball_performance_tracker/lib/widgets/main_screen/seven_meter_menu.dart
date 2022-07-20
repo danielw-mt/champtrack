@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:handball_performance_tracker/constants/stringsGeneral.dart';
-import 'package:handball_performance_tracker/data/database_repository.dart';
 import 'package:get/get.dart';
 import 'package:handball_performance_tracker/data/player.dart';
 import 'package:handball_performance_tracker/utils/feed_logic.dart';
@@ -8,7 +7,6 @@ import 'package:handball_performance_tracker/utils/player_helper.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import '../../constants/stringsGameScreen.dart';
 import '../../data/game_action.dart';
-import '../../data/database_repository.dart';
 import '../../constants/game_actions.dart';
 import '../../controllers/tempController.dart';
 import '../../controllers/persistentController.dart';
@@ -151,7 +149,6 @@ DialogButton buildDialogButton(
   final PersistentController persistentController =
       Get.find<PersistentController>();
   final TempController tempController = Get.find<TempController>();
-  DatabaseRepository repository = persistentController.repository;
   void logAction() async {
     logger.d("logging an action");
     DateTime dateTime = DateTime.now();
@@ -172,29 +169,30 @@ DialogButton buildDialogButton(
         relativeTime: secondsSinceGameStart);
     logger.d("GameAction object created: ");
     logger.d(action);
-    String playerId;
+    Player activePlayer;
     if (actionType == goal || actionType == missed7m) {
       // own player did 7m
-      playerId = tempController.getLastClickedPlayer().id;
+      activePlayer = tempController.getLastClickedPlayer();
       tempController.setLastClickedPlayer(Player());
     } else {
       // opponent player did 7m
       // get id of goalkeeper by going through players on field and searching for position
-      String goalKeeperId = "0";
+      Player goalKeeperId = tempController.getPlayersFromSelectedTeam()[0];
       for (int k in getOnFieldIndex()) {
         Player player = tempController.getPlayersFromSelectedTeam()[k];
         if (player.positions.contains("TW")) {
-          goalKeeperId = player.id.toString();
+          goalKeeperId = player;
           break;
         }
       }
-      playerId = goalKeeperId;
+      activePlayer = goalKeeperId;
     }
-    action.playerId = playerId;
     // add action to firebase
     persistentController.addAction(action);
+    persistentController.setLastActionPlayer(activePlayer);
+
     tempController.updatePlayerEfScore(
-        playerId, persistentController.getLastAction());
+        activePlayer.id!, persistentController.getLastAction());
     // add action to feed
     addFeedItem(action);
 
