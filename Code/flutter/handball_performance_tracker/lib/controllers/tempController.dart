@@ -1,14 +1,11 @@
 import 'package:get/get.dart';
 import 'package:handball_performance_tracker/data/database_repository.dart';
-import 'package:handball_performance_tracker/data/game.dart';
-import 'package:stop_watch_timer/stop_watch_timer.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../constants/settings_config.dart';
+import '../data/game.dart';
 import 'persistentController.dart';
 import '../data/game_action.dart';
 import '../data/player.dart';
 import '../data/team.dart';
-import '../utils/feed_logic.dart';
 import '../utils/player_helper.dart';
 
 /// Contains variables that are changed often throughout the app.
@@ -216,39 +213,6 @@ class TempController extends GetxController {
   //////
   /// Main screen
   //////
-  Rx<StopWatchTimer> _feedTimer = StopWatchTimer(
-      mode: StopWatchMode.countDown,
-      presetMillisecond: FEED_RESET_PERIOD * 1000,
-      onEnded: () {
-        onFeedTimerEnded();
-      }).obs;
-
-  /// getter for feedTimer
-  getFeedTimer() => _feedTimer.value;
-
-  // Variable to control periodic timer resets for feed
-  // makes sure that timer doesn't get reset twice
-  RxBool _periodicResetIsHappening = false.obs;
-
-  /// getter for periodicResetIsHappening
-  getPeriodicResetIsHappening() => _periodicResetIsHappening.value;
-
-  /// setter for periodicResetIsHappening
-  setPeriodicResetIsHappening(bool periodicResetIsHappening) {
-    _periodicResetIsHappening.value = periodicResetIsHappening;
-    //update();
-  }
-
-  RxBool _addingFeedItem = false.obs;
-
-  /// getter for addingFeedItem
-  getAddingFeedItem() => _addingFeedItem.value;
-
-  /// setter for addingFeedItem
-  setAddingFeedItem(bool addingFeedItem) {
-    _addingFeedItem.value = addingFeedItem;
-    //update();
-  }
 
   // List to store all the actions currently being displayed in the feed
   RxList<GameAction> _feedActions = <GameAction>[].obs;
