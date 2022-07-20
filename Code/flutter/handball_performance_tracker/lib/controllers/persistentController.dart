@@ -112,4 +112,10 @@ class PersistentController extends GetxController {
       repository.updateGame(game);
     }
   }
+
+  /// reset the current Game object to a game without id
+  void resetCurrentGame(){
+    _currentGame.value = Game(date: DateTime.now()); 
+  }
+
 }
