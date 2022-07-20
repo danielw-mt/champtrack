@@ -2,11 +2,12 @@ class StringsAuth {
   // AuthScreen
   static const String lSignUpButton = "Registrieren";
   static const String lSignInButton = "Anmelden";
+  static const String lBackToSignInButton = "Zurück zur Anmeldung";
   static const String lLogInButton = "Login";
   static const String lLoggingIn = "Logging in";
   static const String lSigningUp = "Signing up";
 
-  static const String lSignedInAs = "Angemeldet als: "; //TODO anwenden
+  static const String lSignedInAs = "Angemeldet als: "; 
   static const String lSignOutButton = "Abmelden";
 
   static const String lEmail = "E-Mail";

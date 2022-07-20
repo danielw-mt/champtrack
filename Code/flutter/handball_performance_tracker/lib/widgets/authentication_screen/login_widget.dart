@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:handball_performance_tracker/constants/colors.dart';
 import 'package:handball_performance_tracker/constants/stringsAuthentication.dart';
 import 'package:handball_performance_tracker/widgets/authentication_screen/alert_widget.dart';
+import 'package:handball_performance_tracker/widgets/nav_drawer.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
 class LoginWidget extends StatefulWidget {
@@ -122,6 +123,19 @@ class _LoginWidgetState extends State<LoginWidget> {
                                   style: TextStyle(
                                       fontSize: 20, color: Colors.black)),
                               onPressed: sendPasswordResetEmail)),
+                      Row(
+                        children: <Widget>[
+                          TextButton(
+                            child: Text(
+                              StringsAuth.lBackToSignInButton,
+                              style: TextStyle(
+                                  fontSize: 20, color: buttonDarkBlueColor),
+                            ),
+                            onPressed: onClickedReset, // deactivate reset mode
+                          )
+                        ],
+                        mainAxisAlignment: MainAxisAlignment.center,
+                      ),
                     ],
                   ),
                 ),
@@ -244,7 +258,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                       children: <Widget>[
                         TextButton(
                             child: Text(
-                              StringsAuth.lSignInButton,
+                              StringsAuth.lBackToSignInButton,
                               style: TextStyle(
                                   fontSize: 20, color: buttonDarkBlueColor),
                             ),
@@ -327,6 +341,7 @@ class _LoginWidgetState extends State<LoginWidget> {
     // switch to password reset view
     setState(() {
       isReset = !isReset;
+      print(isReset);
     });
   }
 
