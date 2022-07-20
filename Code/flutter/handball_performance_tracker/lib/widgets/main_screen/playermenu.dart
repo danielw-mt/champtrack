@@ -282,20 +282,16 @@ GetBuilder<TempController> buildDialogButton(
         // deep clone a new action from the most recent action
         GameAction assistAction = GameAction.clone(lastAction);
         print("assist action: $assistAction");
-        Player assistPlayer = associatedPlayer;
-        assistAction.playerId = assistPlayer.id!;
         assistAction.actionType = "assist";
         persistentController.addAction(assistAction);
+        Player assistPlayer = associatedPlayer;
+        assistAction.playerId = assistPlayer.id!;
         persistentController.setLastActionPlayer(assistPlayer);
         tempController.updatePlayerEfScore(
             assistPlayer.id!, persistentController.getLastAction());
 
         // add assist first to the feed and then the goal
         addFeedItem(assistAction);
-        // update player's ef-score
-        // TODO implement this
-        //assistPlayer.addAction(lastAction);
-
         tempController.setLastClickedPlayer(Player());
       }
     } else {

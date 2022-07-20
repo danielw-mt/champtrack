@@ -58,7 +58,7 @@ class Home extends StatelessWidget {
                   // if we have a User object we are logged in and can display the app
                   return Dashboard();
                 } else {
-                  return AuthenticationScreen(context: context);
+                  return AuthenticationScreen();
                 }
               });
         } else if (snapshot.hasError) {

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:handball_performance_tracker/constants/colors.dart';
 import 'package:handball_performance_tracker/constants/stringsGeneral.dart';
+import 'package:handball_performance_tracker/controllers/persistentController.dart';
 import 'package:handball_performance_tracker/controllers/tempController.dart';
 import 'package:handball_performance_tracker/widgets/main_screen/ef_score_bar.dart';
 
@@ -11,7 +12,8 @@ class ScoreKeeping extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final TempController tempController = Get.find<TempController>();
-
+final PersistentController persController =
+        Get.find<PersistentController>();
     return Container(
       margin: EdgeInsets.only(left: 30),
       decoration: BoxDecoration(
@@ -64,7 +66,7 @@ class ScoreKeeping extends StatelessWidget {
                 alignment: Alignment.center,
                 padding: const EdgeInsets.only(right: 5.0),
                 child: Text(
-                  StringsGeneral.lOpponent,
+                  persController.getCurrentGame().opponent!,
                   textAlign: TextAlign.center,
                 )),
           ],
