@@ -192,7 +192,7 @@ DialogButton buildDialogButton(
     }
     // add action to firebase
     persistentController.addAction(action);
-    persistentController.setLastActionPlayer(activePlayer);
+    await persistentController.setLastActionPlayer(activePlayer);
 
     tempController.updatePlayerEfScore(
         activePlayer.id!, persistentController.getLastAction());
