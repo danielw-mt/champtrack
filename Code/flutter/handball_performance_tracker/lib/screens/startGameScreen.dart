@@ -42,6 +42,7 @@ class _StartGameScreenState extends State<StartGameScreen> {
       ));
     return SafeArea(
         child: Scaffold(
+            resizeToAvoidBottomInset: false,
             key: _scaffoldKey,
             drawer: NavDrawer(),
             body: Column(
@@ -112,8 +113,8 @@ class _StartGameScreenState extends State<StartGameScreen> {
                     .show();
               } else {
                 tempController.updateOnFieldPlayers();
-                startGame(context);
-                Get.to(() => MainScreen());
+                startGame(context, preconfigured: true);
+                Get.to(MainScreen());
                 return;
               }
             }

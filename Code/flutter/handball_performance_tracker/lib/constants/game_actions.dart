@@ -59,6 +59,7 @@ Map<String, Map<String, String>> actionMapping = {
     StringsGameScreen.lBlockNoBall: blockNoBall,
     StringsGameScreen.lBlockAndSteal: blockAndSteal,
     StringsGameScreen.lTrf: trf,
+    StringsGameScreen.lTwoMin: twoMin,
   },
   goalkeeper: {
     StringsGameScreen.lRedCard: redCard,

@@ -113,7 +113,8 @@ class TempController extends GetxController {
   /// get the players from selectedTeam that are currently marked as onFieldPlayers
   List<Player> getOnFieldPlayers() => _selectedTeam.value.onFieldPlayers;
 
-  List<String> getOnFieldPlayersById() => _selectedTeam.value.onFieldPlayers.map((player) => player.id!).toList();
+  List<String> getOnFieldPlayersById() =>
+      _selectedTeam.value.onFieldPlayers.map((player) => player.id!).toList();
 
   /// set the onFieldPlayer from selectedTeam stored at the given index
   void setOnFieldPlayer(int index, Player player, Game game) {
@@ -142,14 +143,14 @@ class TempController extends GetxController {
     update(
         ["action-feed", "on-field-checkbox", "ef-score-bar", "players-list"]);
   }
-  
+
   /// if player gets active in a game, add the game's id to its games list as well as the player's id to the games players list
   void addGameToPlayer(Player player, Game game) {
     if (!player.games.contains(game.id)) {
       player.games.add(game.id!);
       repository.updatePlayer(player);
     }
-    if(!game.players.contains(player.id)){
+    if (!game.players.contains(player.id)) {
       game.players.add(player.id!);
       repository.updateGame(game);
     }
@@ -197,7 +198,7 @@ class TempController extends GetxController {
   /// setter for attackIsLeft
   setAttackIsLeft(bool attackIsLeft) {
     _attackIsLeft.value = attackIsLeft;
-    update(["side-switch", "custom-field"]);
+    update(["side-switch", "custom-field", "start-game-form"]);
   }
 
   //////
@@ -271,10 +272,20 @@ class TempController extends GetxController {
   /// getter for playerMenuText
   String getPlayerMenuText() => _playerMenuText.value;
 
-   
   void setPlayerMenutText(String text) {
     _playerMenuText.value = text;
     update(["player-menu-text"]);
+  }
+
+  /// text to be displayed in the action menu title on the right side, changes when time is paused
+  RxString _actionMenuText = "".obs;
+
+  /// getter for _actionMenuText
+  String getActionMenuText() => _actionMenuText.value;
+
+  void setActionMenutText(String text) {
+    _actionMenuText.value = text;
+    update(["action-menu-text"]);
   }
 
   /// corresponding player object for last clicked player name in the player menu
@@ -322,6 +333,63 @@ class TempController extends GetxController {
     update(["efscorebar-players"]);
   }
 
+  /// Score of own team
+  RxInt _ownScore = 0.obs;
+
+  /// getter for _ownScore
+  getOwnScore() => _ownScore.value;
+
+  /// increaser for _ownScore
+  incOwnScore() {
+    _ownScore++;
+    update(["score-keeping", "score-keeping-own"]);
+  }
+
+  /// decreaser for _ownScore
+  decOwnScore() {
+    if (_ownScore > 0) {
+      _ownScore--;
+    }
+    update(["score-keeping", "score-keeping-own"]);
+  }
+
+  /// setter for _ownScore
+  setOwnScore(int score) {
+    if (score >= 0) {
+      _ownScore.value = score;
+    }
+    update(["score-keeping", "score-keeping-own"]);
+  }
+
+  /// Score of opponent team
+  RxInt _opponentScore = 0.obs;
+
+  /// getter for _opponentScore
+  getOpponentScore() => _opponentScore.value;
+
+  /// increaser for _opponentScore
+  incOpponentScore() {
+    _opponentScore++;
+    update(["score-keeping", "score-keeping-opponent"]);
+  }
+
+  /// decreaser for _opponentScore
+  decOpponentScore() {
+    if (_opponentScore > 0) {
+      _opponentScore--;
+    }
+    update(["score-keeping", "score-keeping-opponent"]);
+  }
+
+  /// setter for _opponentScore
+  setOpponentScore(int score) {
+    if (score >= 0) {
+      _opponentScore.value = score;
+    }
+
+    update(["score-keeping", "score-keeping-opponent"]);
+  }
+
   ////
   // game tracking
   ////
@@ -347,7 +415,7 @@ class TempController extends GetxController {
   /// setter for gameRunning
   setGameIsRunning(bool gameIsRunning) {
     _gameRunning.value = gameIsRunning;
-    update(["start-stop-icon", "start-button", "game-is-running-button"]);
+    update(["start-stop-icon", "game-is-running-button"]);
   }
 
   /// True: game was paused; False game did not start yet or is running
