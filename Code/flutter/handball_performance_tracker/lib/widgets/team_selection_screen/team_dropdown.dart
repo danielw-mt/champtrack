@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:handball_performance_tracker/constants/positions.dart';
+import '../../constants/colors.dart';
 import '../../constants/stringsGeneral.dart';
 import '../../controllers/persistentController.dart';
 import '../../controllers/tempController.dart';
@@ -28,14 +28,24 @@ class TeamDropdown extends StatelessWidget {
         // end TODO
         return DropdownButtonFormField<Team>(
             value: tempController.getSelectedTeam(),
-            icon: const Icon(Icons.arrow_downward),
+            icon: const Icon(Icons.arrow_drop_down_circle_outlined),
+            iconEnabledColor: Colors.black,
             isExpanded: true,
             elevation: 16,
-            style: const TextStyle(color: Colors.deepPurple),
+            style: TextStyle(
+                fontSize: 18, color: Colors.black),
+            dropdownColor: Colors.white,
             decoration: InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: StringsGeneral.lTeam,
-                        ),
+                focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: buttonDarkBlueColor)),
+                enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: buttonDarkBlueColor)),
+                disabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: buttonDarkBlueColor)),
+                labelText: StringsGeneral.lTeam,
+                labelStyle: TextStyle(color: buttonDarkBlueColor),
+                filled: true,
+                fillColor: Colors.white),
             onChanged: (Team? newTeam) {
               tempController.setSelectedTeam(persistentController
                   .getAvailableTeams()
