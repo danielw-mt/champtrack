@@ -156,6 +156,18 @@ class TempController extends GetxController {
     }
   }
 
+  /// after a game is ended, reset the LiveEfScores of all participating players and the feed
+  void resetGameData(Game game) {
+    for (String playerId in game.players) {
+      Player player = getPlayerFromSelectedTeam(playerId);
+      player.resetActions();
+    }
+    setOwnScore(0);
+    setOpponentScore(0);
+    _feedActions.value = [];
+    update(["action-feed", "ef-score-bar"]);
+  }
+
   /// 0: male, 1: female, 2: youth
   RxInt _selectedTeamType = 0.obs;
 
@@ -325,12 +337,12 @@ class TempController extends GetxController {
     for (int i in getOnFieldIndex()) {
       _playerBarPlayers.add(i);
     }
-    update(["efscorebar-players"]);
+    update(["ef-score-bar"]);
   }
 
   void changePlayerBarPlayers(int indexToChange, int i) {
     _playerBarPlayers[indexToChange] = i;
-    update(["efscorebar-players"]);
+    update(["ef-score-bar"]);
   }
 
   /// Score of own team
@@ -429,7 +441,6 @@ class TempController extends GetxController {
     _gameIsPaused.value = gameIsPaused;
     update(["game-is-running-button"]);
   }
-
 
   /// @return rx list
   /// after click on goal there is only one element "goal", otherwise
