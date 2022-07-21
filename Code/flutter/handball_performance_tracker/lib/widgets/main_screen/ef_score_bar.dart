@@ -199,11 +199,13 @@ Container buildPlayerButton(BuildContext context, int i, TempController tempCont
     // add other players on same position
     for (int k in getNotOnFieldIndex()) {
       for (String position in positions) {
-        Player player = tempController.getPlayersFromSelectedTeam()[k];
-        if (player.positions.contains(position) &&
-            !substitutePlayer.contains(player)) {
-          substitutePlayer.add(player);
-          break;
+        if (position != defenseSpecialist) {
+          Player player = tempController.getPlayersFromSelectedTeam()[k];
+          if (player.positions.contains(position) &&
+              !substitutePlayer.contains(player)) {
+            substitutePlayer.add(player);
+            break;
+          }
         }
       }
     }
@@ -309,7 +311,8 @@ Container buildPopupPlayerButton(
     width: scorebarButtonWidth,
     child: Stack(
       children: [
-              getButton(tempController.getPlayersFromSelectedTeam()[i],
+        getButton(
+            tempController.getPlayersFromSelectedTeam()[i], 
                   tempController),
         SizedBox(
           height: buttonHeight,
