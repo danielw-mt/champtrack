@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:handball_performance_tracker/constants/colors.dart';
 import 'package:handball_performance_tracker/constants/fieldSizeParameter.dart';
-import 'package:handball_performance_tracker/screens/debugScreen.dart';
 import 'package:handball_performance_tracker/screens/startGameScreen.dart';
+import 'package:handball_performance_tracker/screens/statisticsScreen.dart';
 import 'package:handball_performance_tracker/screens/teamSelectionScreen.dart';
 import 'package:handball_performance_tracker/widgets/main_screen/ef_score_bar.dart';
 import 'package:handball_performance_tracker/widgets/nav_drawer.dart';
@@ -143,7 +143,7 @@ class StatisticsButton extends StatelessWidget {
           borderRadius: BorderRadius.all(Radius.circular(15))),
       child: TextButton(
           onPressed: () {
-            Get.to(() => DebugScreen());
+            Get.to(() => StatisticsScreen());
           },
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
