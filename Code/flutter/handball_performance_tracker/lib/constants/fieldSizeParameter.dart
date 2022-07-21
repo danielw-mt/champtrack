@@ -30,7 +30,7 @@ double availableScreenHeight =
 (screenHeight - toolbarHeight - paddingBottom - paddingTop - lineSize * 2);
 // take ratio of screenwidth and height into account, so the field is not stretched
 double fieldHeight = min(availableScreenHeight, screenWidth)*customHeightModifier;
-double fieldWidth = fieldHeight * 0.92;
+double fieldWidth = fieldHeight;
 
 // Radii of the ellipses for six meter and 9 meter
 double nineMeterRadiusX = fieldWidth / 1.5;
