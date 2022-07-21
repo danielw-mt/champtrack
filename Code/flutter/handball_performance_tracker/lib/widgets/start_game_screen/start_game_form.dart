@@ -1,20 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:handball_performance_tracker/constants/colors.dart';
 import 'package:handball_performance_tracker/constants/stringsTeamManagement.dart';
-import 'package:handball_performance_tracker/data/team.dart';
+import 'package:handball_performance_tracker/data/game.dart';
+import 'package:handball_performance_tracker/screens/playerSelectionScreen.dart';
+import 'package:handball_performance_tracker/widgets/start_game_screen/season_dropdown.dart';
 import 'package:handball_performance_tracker/widgets/team_selection_screen/team_dropdown.dart';
+import '../../constants/stringsDashboard.dart';
 import '../../constants/stringsGameSettings.dart';
+import '../../controllers/persistentController.dart';
 import '../../controllers/tempController.dart';
-import '../../constants/team_constants.dart';
 import '../../constants/stringsGeneral.dart';
+import '../../screens/dashboard.dart';
+import '../nav_drawer.dart';
 
 // Create a Form widget.
 class StartGameForm extends StatefulWidget {
-  const StartGameForm({super.key});
+  GlobalKey<ScaffoldState> scaffoldKey;
+
+  StartGameForm(scaffoldKey, {super.key}) : scaffoldKey = scaffoldKey;
 
   @override
   StartGameFormState createState() {
-    return StartGameFormState();
+    return StartGameFormState(scaffoldKey);
   }
 }
 
@@ -26,8 +34,41 @@ class StartGameFormState extends State<StartGameForm> {
   TextEditingController seasonController = TextEditingController();
   TextEditingController opponentController = TextEditingController();
   TextEditingController locationController = TextEditingController();
+  TextEditingController dateController = TextEditingController();
 
   DateTime selectedDate = DateTime.now();
+  String teamId = "";
+  String season = "";
+  String location = "";
+  String opponent = "";
+  bool isAtHome = true;
+
+  GlobalKey<ScaffoldState> scaffoldKey;
+
+  StartGameFormState(scaffoldKey) : scaffoldKey = scaffoldKey;
+
+  @override
+  void initState() {
+    // check if there was already a game initialized (e.g. we're entering the form via the 'back-button')
+    Game currentGame = Get.find<PersistentController>().getCurrentGame();
+    bool gameExists = (currentGame.id == null) ? false : true;
+
+    // if so, make sure data from current game object is used
+    if (gameExists) {
+      teamId = currentGame.teamId;
+      season = currentGame.season!;
+      location = currentGame.location!;
+      opponent = currentGame.opponent!;
+      isAtHome = currentGame.isAtHome!;
+      selectedDate = currentGame.date;
+      // display correct values
+      locationController.text = location;
+      opponentController.text = opponent;
+    }
+
+    dateController.text = "${selectedDate.toLocal()}".split(' ')[0];
+    super.initState();
+  }
 
   final _formKey = GlobalKey<FormState>();
 
@@ -36,148 +77,320 @@ class StartGameFormState extends State<StartGameForm> {
         context: context,
         initialDate: selectedDate,
         firstDate: DateTime(2015, 8),
-        lastDate: DateTime(2101));
+        lastDate: DateTime(2101),
+        builder: (context, child) {
+          return Theme(
+              data: ThemeData.light().copyWith(
+                  colorScheme:
+                      ColorScheme.fromSeed(seedColor: buttonDarkBlueColor)),
+              child: child!);
+        });
     if (picked != null && picked != selectedDate) {
-      setState(() {
-        selectedDate = picked;
-      });
+      selectedDate = picked;
+      dateController.text = "${selectedDate.toLocal()}".split(' ')[0];
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    seasonController.text = "TODO";
-    locationController.text = "TODO";
-    opponentController.text = "TODO";
+    // configure decoration for all input fields
+    InputDecoration getDecoration(String labelText) {
+      return InputDecoration(
+          focusedBorder: UnderlineInputBorder(
+              borderSide: BorderSide(color: buttonDarkBlueColor)),
+          enabledBorder: UnderlineInputBorder(
+              borderSide: BorderSide(color: buttonDarkBlueColor)),
+          disabledBorder: UnderlineInputBorder(
+              borderSide: BorderSide(color: buttonDarkBlueColor)),
+          labelText: labelText,
+          labelStyle: TextStyle(color: buttonDarkBlueColor),
+          filled: true,
+          fillColor: Colors.white);
+    }
+
     // Build a Form widget using the _formKey created above.
     return GetBuilder<TempController>(
       id: "start-game-form",
       builder: (TempController tempController) {
         double width = MediaQuery.of(context).size.width;
-        return Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  // Textfield allowing to set season. Later this should not be a textfield but a value from the club settings
-                  SizedBox(
-                      width: width * 0.2,
-                      child: TextFormField(
-                        controller: seasonController,
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: StringsGeneral.lSeason,
-                        ),
-                      )),
-                  // team dropdown showing all available teams from teams collection
-                  Column(
-                    children: [
-                      Text(StringsGeneral.lTeam),
-                      TeamDropdown(),
-                    ],
-                  ),
-                  // DateTime Picker
-                  Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      Text("${selectedDate.toLocal()}".split(' ')[0]),
-                      SizedBox(
-                        height: 20.0,
-                      ),
-                      ElevatedButton(
-                        onPressed: () => selectDate(context),
-                        child: Text('Select date'),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-              Container(
-                height: 20,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  // Textfield for opponent name
-                  SizedBox(
-                      width: width * 0.2,
-                      child: TextFormField(
-                        controller: opponentController,
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: StringsGeneral.lOpponent,
-                        ),
-                      )),
-                  // Textfield for location
-                  SizedBox(
-                      width: width * 0.2,
-                      child: TextFormField(
-                        controller: locationController,
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: StringsGeneral.lLocation,
-                        ),
-                      )),
-                ],
-              ),
-              Container(
-                height: 20,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Row(
-                    children: [
-                      Checkbox(value: false, onChanged: (value) {}),
-                      Text(StringsGeneral.lHomeGame)
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Checkbox(value: false, onChanged: (value) {}),
-                      Text(StringsGeneral.lOutwardsGame)
-                    ],
-                  )
-                ],
-              ),
-              Container(
-                height: 20,
-              ),
-              Column(
-                children: [
-                  const Text(StringsGameSettings.lHomeSideIsRight),
-                  Switch(
-                      value: tempController.getAttackIsLeft(),
-                      onChanged: (bool value) {
-                        tempController.setAttackIsLeft(value);
-                      }),
-                ],
-              ),
-              Padding(
-                // TODO create a lock in button
-                padding: const EdgeInsets.symmetric(vertical: 16.0),
-                child: ElevatedButton(
-                  onPressed: () {
-                    // TODO save these infos in Firebase using repository
-
-                    // Validate returns true if the form is valid, or false otherwise.
-                    if (_formKey.currentState!.validate()) {
-                      // If the form is valid, display a snackbar. In the real world,
-                      // you'd often call a server or save the information in a database.
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text(StringsGeneral.lProcessingData)),
-                      );
-                    }
-                  },
-                  child: const Text(StringsTeamManagement.lSubmitButton),
-                ),
-              ),
-            ],
+        double height = MediaQuery.of(context).size.height;
+        return Column(children: [
+          Padding(
+            padding: const EdgeInsets.all(5.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                MenuButton(scaffoldKey),
+                Icon(Icons.sports_handball, color: buttonDarkBlueColor),
+                Expanded(
+                    child: Text(StringsGeneral.lTrackNewGame,
+                        style: TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.bold))),
+                SizedBox(width: 0.2 * width, child: SeasonDropdown()),
+              ],
+            ),
           ),
-        );
+          Divider(),
+          Form(
+            key: _formKey,
+            child: Column(
+              children: [
+                SizedBox(
+                  height: 0.08 * height,
+                ),
+                Container(
+                  alignment: Alignment.topCenter,
+                  width: MediaQuery.of(context).size.width * 0.8,
+                  height: MediaQuery.of(context).size.height * 0.55,
+                  padding: EdgeInsets.all(50),
+                  decoration: BoxDecoration(
+                      color: backgroundColor,
+                      border: Border.all(
+                        color: backgroundColor,
+                      ),
+                      // make round edges
+                      borderRadius: BorderRadius.all(Radius.circular(20))),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Flexible(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            // Textfield for opponent name
+                            Flexible(
+                              child: SizedBox(
+                                  width: width * 0.3,
+                                  height: height * 0.15,
+                                  child: TextFormField(
+                                    controller: opponentController,
+                                    style: TextStyle(fontSize: 18),
+                                    decoration: getDecoration(
+                                        StringsGeneral.lOpponent),
+                                    onChanged: (String? input) {
+                                      if (input != null) opponent = input;
+                                    },
+                                  )),
+                            ),
+                            // Textfield for location
+                            Flexible(
+                              child: SizedBox(
+                                  width: width * 0.3,
+                                  height: height * 0.15,
+                                  child: TextFormField(
+                                    controller: locationController,
+                                    decoration: getDecoration(
+                                        StringsGeneral.lLocation),
+                                    onChanged: (String? input) {
+                                      if (input != null) location = input;
+                                    },
+                                  )),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Flexible(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            // DateTime Picker
+                            Flexible(
+                              child: SizedBox(
+                                  width: width * 0.3,
+                                  height: height * 0.15,
+                                  child: TextFormField(
+                                    controller: dateController,
+                                    decoration: getDecoration(
+                                        StringsGameSettings.lSelectDate),
+                                    onTap: () => selectDate(context),
+                                  )),
+                            ),
+                            // team dropdown showing all available teams from teams collection
+                            Flexible(
+                              child: SizedBox(
+                                width: width * 0.3,
+                                height: height * 0.15,
+                                child: TeamDropdown(),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Flexible(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Flexible(
+                              child: SizedBox(
+                                width: 0.3 * width,
+                                height: height * 0.15,
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    Flexible(
+                                      child: Checkbox(
+                                          fillColor: MaterialStateProperty
+                                              .all<Color>(
+                                                  buttonDarkBlueColor),
+                                          value: isAtHome,
+                                          onChanged: (bool? value) {
+                                            setState(() {
+                                              isAtHome = value!;
+                                            });
+                                          }),
+                                    ),
+                                    Flexible(
+                                        child:
+                                            Text(StringsGeneral.lHomeGame)),
+                                    Flexible(
+                                      child: Checkbox(
+                                          fillColor: MaterialStateProperty
+                                              .all<Color>(
+                                                  buttonDarkBlueColor),
+                                          value: !isAtHome,
+                                          onChanged: (bool? value) {
+                                            setState(() {
+                                              isAtHome = !value!;
+                                            });
+                                          }),
+                                    ),
+                                    Flexible(
+                                        child: Text(
+                                            StringsGeneral.lOutwardsGame))
+                                  ],
+                                ),
+                              ),
+                            ),
+                            Flexible(
+                              child: SizedBox(
+                                width: 0.3 * width,
+                                height: height * 0.15,
+                                child: Row(
+                                  children: [
+                                    Flexible(
+                                      child: Checkbox(
+                                          fillColor: MaterialStateProperty
+                                              .all<Color>(
+                                                  buttonDarkBlueColor),
+                                          value: tempController
+                                              .getAttackIsLeft(),
+                                          onChanged: (bool? value) {
+                                            setState(() {
+                                              tempController
+                                                  .setAttackIsLeft(value!);
+                                            });
+                                          }),
+                                    ),
+                                    Flexible(
+                                        child: Text(StringsGameSettings
+                                            .lHomeSideIsRight))
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height: 0.08 * height,
+                ),
+                Container(
+                  alignment: Alignment.bottomCenter,
+                  child: Padding(
+                    // TODO create a lock in button
+                    padding: const EdgeInsets.only(left: 20.0, right: 20.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Flexible(
+                          child: SizedBox(
+                            width: 0.15 * width,
+                            height: 0.08 * height,
+                            child: ElevatedButton(
+                                style: ButtonStyle(
+                                    backgroundColor:
+                                        MaterialStateProperty.all<Color>(
+                                            buttonGreyColor)),
+                                onPressed: () {
+                                  Get.to(() => Dashboard());
+                                },
+                                child: Text(StringsDashboard.lDashboard,
+                                    style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black))),
+                          ),
+                        ),
+                        Flexible(
+                          child: SizedBox(
+                            width: 0.15 * width,
+                            height: 0.08 * height,
+                            child: ElevatedButton(
+                              style: ButtonStyle(
+                                  backgroundColor:
+                                      MaterialStateProperty.all<Color>(
+                                          buttonLightBlueColor)),
+                              onPressed: () async {
+                                PersistentController persistentController =
+                                    Get.find<PersistentController>();
+                                // check if there was already a game created and information is only updated
+                                Game currentGame =
+                                    persistentController.getCurrentGame();
+                                bool gameExists =
+                                    (currentGame.id == null) ? false : true;
+                                if (gameExists) {
+                                  // update information based on user input
+                                  currentGame.date = selectedDate;
+                                  currentGame.teamId = teamId;
+                                  currentGame.location = location;
+                                  currentGame.opponent = opponent;
+                                  currentGame.season = season;
+                                  currentGame.isAtHome = isAtHome;
+                                  persistentController
+                                      .setCurrentGame(currentGame);
+                                } else {
+                                  // store entered data to a new game object that will be used when the game is started at the end of the flow
+                                  Game preconfiguredGame = Game(
+                                      date: selectedDate,
+                                      clubId: persistentController
+                                          .getLoggedInClub()
+                                          .id!,
+                                      teamId: tempController
+                                          .getSelectedTeam()
+                                          .id!,
+                                      location: location,
+                                      opponent: opponent,
+                                      season:
+                                          tempController.getSelectedSeason(),
+                                      isAtHome: isAtHome);
+                                  await persistentController.setCurrentGame(
+                                      preconfiguredGame,
+                                      isNewGame: true);
+                                }
+                                Get.to(() => PlayerSelectionScreen());
+                              },
+                              child: const Text(
+                                  StringsTeamManagement.lSubmitButton,
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black)),
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ]);
       },
     );
   }

@@ -4,22 +4,32 @@ import 'package:stop_watch_timer/stop_watch_timer.dart';
 class Game {
   String? id;
   final String clubId;
+  String teamId;
   DateTime date;
   int? startTime;
   int? stopTime;
   int? scoreHome;
   int? scoreOpponent;
+  bool? isAtHome;
+  String? location;
+  String? opponent;
+  String? season;
   List<String> players;
   StopWatchTimer stopWatch; 
 
   Game(
       {this.id,
       this.clubId = "",
+      this.teamId = "",
       required this.date,
       this.startTime,
       this.stopTime,
       this.scoreHome = 0,
       this.scoreOpponent = 0,
+      this.isAtHome = true,
+      this.location = "",
+      this.opponent = "",
+      this.season = "",
       this.players = const []}):stopWatch = StopWatchTimer(mode: StopWatchMode.countUp);
 
 
@@ -27,11 +37,16 @@ class Game {
   Map<String, dynamic> toMap() {
     return {
       'clubId': clubId,
+      'teamId': teamId,
       'date': date,
       'startTime': startTime,
       'stopTime': stopTime,
       'scoreHome': scoreHome,
       'scoreOpponent': scoreOpponent,
+      'isAtHome': isAtHome,
+      'location': location,
+      'opponent': opponent,
+      'season': season,
       'players': players
     };
   }
@@ -47,11 +62,16 @@ class Game {
   factory Game.fromMap(Map<String, dynamic> map) {
     return Game(
         clubId: map["clubId"],
+        teamId: map["teamId"],
         date: map["date"],
         startTime: map["startTime"],
         stopTime: map["stopTime"],
         scoreHome: map["scoreHome"],
         scoreOpponent: map["scoreOpponent"],
+        isAtHome: map["isAtHome"],
+        location: map["location"],
+        opponent: map["opponent"],
+        season: map["season"],
         players: map["players"].cast<String>());
   }
 }

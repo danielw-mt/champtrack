@@ -1,5 +1,4 @@
-class StringsGameScreen{
-
+class StringsGameScreen {
   // stopwatch.dart
   static const String lStartTime = "Start";
   static const String lStopTime = "Stop";
@@ -13,15 +12,18 @@ class StringsGameScreen{
 
 // action_menu.dart
   static const String lGameStartErrorMessage =
-      "Fehler: Spiel wurde noch nicht gesartet!";
+      "Fehler: Spiel wurde noch nicht gestartet!";
   static const String lOffensePopUpHeader = "Offensive Aktionen";
   static const String lDeffensePopUpHeader = "Defensive Aktionen";
   static const String lGoalkeeperPopUpHeader = "Torwart Aktionen";
   static const String lSelectActionDialogHeader = "Wählen Sie eine Aktion";
+  static const String lAttentionTimeIsPaused = "Achtung! Zeit ist pausiert.";
 
   // Pop ups
   static const String lNoAssist = "Kein Assist";
-
+  static const String lSubstitute1 = "Für wen soll ";
+  static const String lSubstitute2 = " eingewechselt werden?";
+  static const String lSubstitute = "Wechsel";
 
   // game_actions.dart & action_feed.dart
   static const String lRedCard = "Rote Karte";
@@ -30,8 +32,8 @@ class StringsGameScreen{
   static const String lGoal = "Tor";
   static const String lOneVsOneAnd7m = "1v1 & 7m";
   static const String lTwoMin = "2min ziehen";
-  static const String lErrThrow = "Fehlwurf"; 
-  static const String lErrThrowGoalkeeper = "Fehlwurf Torwart"; 
+  static const String lErrThrow = "Fehlwurf";
+  static const String lErrThrowGoalkeeper = "Fehlwurf Torwart";
   static const String lTrf = "TRF";
   static const String lFoul7m = "Foul => 7m";
   static const String lBlockNoBall = "Block ohne Ballgewinn";

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:handball_performance_tracker/constants/stringsGameScreen.dart';
 import 'package:handball_performance_tracker/constants/team_constants.dart';
 import '../controllers/persistentController.dart';
 import '../controllers/tempController.dart';
@@ -10,7 +11,7 @@ import 'package:stop_watch_timer/stop_watch_timer.dart';
 
 import '../constants/stringsGameSettings.dart';
 
-void startGame(BuildContext context) async {
+void startGame(BuildContext context, {bool preconfigured: false}) async {
   TempController tempController = Get.find<TempController>();
   PersistentController persistentController = Get.find<PersistentController>();
   // check if enough players have been selected
@@ -25,30 +26,43 @@ void startGame(BuildContext context) async {
         .show();
     return;
   }
-  tempController.setPlayerBarPlayers();
-  // Don't start time running directly. Set game paused so "back to game" button appears in side menu.
-  tempController.setGameIsPaused(true);
-  // start a new game in firebase
-  print("starting new game");
-  DateTime dateTime = DateTime.now();
-  int unixTimeStamp = dateTime.toUtc().millisecondsSinceEpoch;
-  Game newGame = Game(
-      clubId: tempController.getSelectedTeam().id!,
-      date: dateTime,
-      startTime: unixTimeStamp,
-      players: tempController.getOnFieldPlayersById());
-  await persistentController.setCurrentGame(newGame, isNewGame: true);
-  tempController.setOpponentScore(0);
-  tempController.setOwnScore(0);
-  // add game to selected players
-  addGameToPlayers(newGame);
 
+  if (preconfigured) {
+    // game has already been saved to firebase, only update relevant information
+    Game preconfiguredGame = persistentController.getCurrentGame();
+    preconfiguredGame.startTime = DateTime.now().toUtc().millisecondsSinceEpoch;
+    preconfiguredGame.players = tempController.getOnFieldPlayersById();
+    persistentController.setCurrentGame(preconfiguredGame);
+    // add game to selected players
+    _addGameToPlayers(preconfiguredGame);
+  } else {
+    // Don't start time running directly. Set game paused so "back to game" button appears in side menu.
+    tempController.setGameIsPaused(true);
+    // start a new game in firebase
+    print("starting new game");
+    DateTime dateTime = DateTime.now();
+    int unixTimeStamp = dateTime.toUtc().millisecondsSinceEpoch;
+    Game newGame = Game(
+        clubId: tempController.getSelectedTeam().id!,
+        date: dateTime,
+        startTime: unixTimeStamp,
+        players: tempController.getOnFieldPlayersById());
+    await persistentController.setCurrentGame(newGame, isNewGame: true);
+    print("start game, id: ${persistentController.getCurrentGame().id}");
+
+    // add game to selected players
+    _addGameToPlayers(newGame);
+    tempController.setOpponentScore(0);
+    tempController.setOwnScore(0);
+  }
+  
   print("start game, id: ${persistentController.getCurrentGame().id}");
 }
 
 void unpauseGame() {
   TempController tempController = Get.find<TempController>();
   PersistentController persistentController = Get.find<PersistentController>();
+  tempController.setActionMenutText("");
   tempController.setGameIsRunning(true);
   tempController.setGameIsPaused(false);
   persistentController
@@ -61,6 +75,7 @@ void unpauseGame() {
 void pauseGame() {
   TempController tempController = Get.find<TempController>();
   PersistentController persistentController = Get.find<PersistentController>();
+  tempController.setActionMenutText(StringsGameScreen.lAttentionTimeIsPaused);
   tempController.setGameIsRunning(false);
   tempController.setGameIsPaused(true);
   persistentController
@@ -93,9 +108,13 @@ void stopGame() async {
 
   tempController.setGameIsRunning(false);
   tempController.setGameIsPaused(false);
+
+  //reset all data
+  tempController.resetGameData(persistentController.getCurrentGame());
+  persistentController.resetCurrentGame();
 }
 
-void addGameToPlayers(Game game) {
+void _addGameToPlayers(Game game) {
   TempController tempController = Get.find<TempController>();
   for (Player player in tempController.getOnFieldPlayers()) {
     tempController.addGameToPlayer(player, game);

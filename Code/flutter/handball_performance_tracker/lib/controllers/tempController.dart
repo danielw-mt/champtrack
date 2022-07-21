@@ -1,14 +1,11 @@
 import 'package:get/get.dart';
 import 'package:handball_performance_tracker/data/database_repository.dart';
-import 'package:handball_performance_tracker/data/game.dart';
-import 'package:stop_watch_timer/stop_watch_timer.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../constants/settings_config.dart';
+import '../data/game.dart';
 import 'persistentController.dart';
 import '../data/game_action.dart';
 import '../data/player.dart';
 import '../data/team.dart';
-import '../utils/feed_logic.dart';
 import '../utils/player_helper.dart';
 
 /// Contains variables that are changed often throughout the app.
@@ -156,6 +153,18 @@ class TempController extends GetxController {
     }
   }
 
+  /// after a game is ended, reset the LiveEfScores of all participating players and the feed
+  void resetGameData(Game game) {
+    for (String playerId in game.players) {
+      Player player = getPlayerFromSelectedTeam(playerId);
+      player.resetActions();
+    }
+    setOwnScore(0);
+    setOpponentScore(0);
+    _feedActions.value = [];
+    update(["action-feed", "ef-score-bar"]);
+  }
+
   /// 0: male, 1: female, 2: youth
   RxInt _selectedTeamType = 0.obs;
 
@@ -198,45 +207,12 @@ class TempController extends GetxController {
   /// setter for attackIsLeft
   setAttackIsLeft(bool attackIsLeft) {
     _attackIsLeft.value = attackIsLeft;
-    update(["side-switch", "custom-field"]);
-  }
+      update(["side-switch", "custom-field", "start-game-form"]);
+    }
 
   //////
   /// Main screen
   //////
-  Rx<StopWatchTimer> _feedTimer = StopWatchTimer(
-      mode: StopWatchMode.countDown,
-      presetMillisecond: FEED_RESET_PERIOD * 1000,
-      onEnded: () {
-        onFeedTimerEnded();
-      }).obs;
-
-  /// getter for feedTimer
-  getFeedTimer() => _feedTimer.value;
-
-  // Variable to control periodic timer resets for feed
-  // makes sure that timer doesn't get reset twice
-  RxBool _periodicResetIsHappening = false.obs;
-
-  /// getter for periodicResetIsHappening
-  getPeriodicResetIsHappening() => _periodicResetIsHappening.value;
-
-  /// setter for periodicResetIsHappening
-  setPeriodicResetIsHappening(bool periodicResetIsHappening) {
-    _periodicResetIsHappening.value = periodicResetIsHappening;
-    //update();
-  }
-
-  RxBool _addingFeedItem = false.obs;
-
-  /// getter for addingFeedItem
-  getAddingFeedItem() => _addingFeedItem.value;
-
-  /// setter for addingFeedItem
-  setAddingFeedItem(bool addingFeedItem) {
-    _addingFeedItem.value = addingFeedItem;
-    //update();
-  }
 
   // List to store all the actions currently being displayed in the feed
   RxList<GameAction> _feedActions = <GameAction>[].obs;
@@ -277,6 +253,17 @@ class TempController extends GetxController {
     update(["player-menu-text"]);
   }
 
+  /// text to be displayed in the action menu title on the right side, changes when time is paused
+  RxString _actionMenuText = "".obs;
+
+  /// getter for _actionMenuText
+  String getActionMenuText() => _actionMenuText.value;
+
+  void setActionMenutText(String text) {
+    _actionMenuText.value = text;
+    update(["action-menu-text"]);
+  }
+
   /// corresponding player object for last clicked player name in the player menu
   Rx<Player> _lastClickedPlayer = Player().obs;
 
@@ -287,6 +274,33 @@ class TempController extends GetxController {
   setLastClickedPlayer(Player lastClickedPlayer) {
     _lastClickedPlayer.value = lastClickedPlayer;
     update(["player-menu-button"]);
+  }
+
+  /// corresponding player object for clicked player names in player menu which are not on field yet
+  RxList<Player> _playersToChange = <Player>[].obs;
+
+  /// getter for _playersToChange
+  List<Player> getPlayersToChange() => _playersToChange;
+
+  /// setter for _playersToChange
+  addPlayerToChange(Player playerToChange) {
+    _playersToChange.add(playerToChange);
+    //update();
+  }
+
+  removePlayerToChange(Player playerToChange) {
+    _playersToChange.remove(playerToChange);
+    //update();
+  }
+
+  getLastPlayerToChange() {
+    if (!_playersToChange.isEmpty) {
+      Player playerToChange = getPlayersToChange()[0];
+      removePlayerToChange(playerToChange);
+      return playerToChange;
+    } else
+      return null;
+    //update();
   }
 
   /// corresponding player object for last clicked player name in the efscore player bar
@@ -314,12 +328,12 @@ class TempController extends GetxController {
     for (int i in getOnFieldIndex()) {
       _playerBarPlayers.add(i);
     }
-    update(["efscorebar-players"]);
+    update(["ef-score-bar"]);
   }
 
   void changePlayerBarPlayers(int indexToChange, int i) {
     _playerBarPlayers[indexToChange] = i;
-    update(["efscorebar-players"]);
+    update(["ef-score-bar"]);
   }
 
   /// Score of own team
@@ -392,7 +406,6 @@ class TempController extends GetxController {
   /// setter for fieldIsLeft
   setFieldIsLeft(bool fieldIsLeft) {
     _fieldIsLeft.value = fieldIsLeft;
-    update(["start-game-form"]);
   }
 
   /// True: game was started; False game did not start yet
@@ -404,7 +417,7 @@ class TempController extends GetxController {
   /// setter for gameRunning
   setGameIsRunning(bool gameIsRunning) {
     _gameRunning.value = gameIsRunning;
-    update(["start-stop-icon", "start-button", "game-is-running-button"]);
+    update(["start-stop-icon", "game-is-running-button"]);
   }
 
   /// True: game was paused; False game did not start yet or is running
@@ -418,7 +431,6 @@ class TempController extends GetxController {
     _gameIsPaused.value = gameIsPaused;
     update(["game-is-running-button"]);
   }
-
 
   /// @return rx list
   /// after click on goal there is only one element "goal", otherwise
@@ -447,5 +459,16 @@ class TempController extends GetxController {
   setMenuIsEllapsed(bool isEllapsed) {
     _menuIsEllapsed.value = isEllapsed;
     update(["game-is-running-button"]);
+  }
+
+  /// Season that is currently selected for games
+  /// TODO: still hardcoded, add to firestore
+  RxString _selectedSeason = "Saison 2021/22".obs;
+
+  String getSelectedSeason() => _selectedSeason.value;
+
+  void setSelectedSeason(String season) {
+    _selectedSeason.value = season;
+    update(["season-dropdown"]);
   }
 }

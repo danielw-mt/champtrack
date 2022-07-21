@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:handball_performance_tracker/constants/stringsGeneral.dart';
-import 'package:handball_performance_tracker/data/database_repository.dart';
 import 'package:get/get.dart';
 import 'package:handball_performance_tracker/data/player.dart';
 import 'package:handball_performance_tracker/utils/feed_logic.dart';
 import 'package:handball_performance_tracker/utils/player_helper.dart';
+import 'package:handball_performance_tracker/widgets/main_screen/ef_score_bar.dart';
+import 'package:handball_performance_tracker/widgets/main_screen/playermenu.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import '../../constants/stringsGameScreen.dart';
 import '../../data/game_action.dart';
-import '../../data/database_repository.dart';
 import '../../constants/game_actions.dart';
 import '../../controllers/tempController.dart';
 import '../../controllers/persistentController.dart';
@@ -30,27 +30,28 @@ var logger = Logger(
 void callSevenMeterMenu(BuildContext context, bool belongsToHomeTeam) {
   logger.d("Calling 7m menu");
 
-  Alert(
-      style: AlertStyle(
-        // make round edges
-        alertBorder: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(15.0),
-        ),
-        // false so there is no big close-Button at the bottom
-        isButtonVisible: false,
-      ),
+  showDialog(
       context: context,
-      // alert contains a list of DialogButton objects
-      content: Container(
-          width: MediaQuery.of(context).size.width * 0.5,
-          height: MediaQuery.of(context).size.height * 0.88,
-          child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Expanded(
-                    child: buildDialogButtonMenu(context, belongsToHomeTeam)),
-              ] // Column of "Spieler", horizontal line and Button-Row
-              ))).show();
+      builder: (BuildContext bcontext) {
+        return AlertDialog(
+            scrollable: true,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(menuRadius),
+            ),
+
+            // alert contains a list of DialogButton objects
+            content: Container(
+                width: MediaQuery.of(context).size.width * 0.4,
+                height: MediaQuery.of(context).size.height * 0.4,
+                child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Expanded(
+                          child: buildDialogButtonMenu(
+                              bcontext, belongsToHomeTeam)),
+                    ] // Column of "Spieler", horizontal line and Button-Row
+                    )));
+      });
 }
 
 /// @return true if attacking false if defending
@@ -151,7 +152,6 @@ DialogButton buildDialogButton(
   final PersistentController persistentController =
       Get.find<PersistentController>();
   final TempController tempController = Get.find<TempController>();
-  DatabaseRepository repository = persistentController.repository;
   void logAction() async {
     logger.d("logging an action");
     DateTime dateTime = DateTime.now();
@@ -172,32 +172,32 @@ DialogButton buildDialogButton(
         relativeTime: secondsSinceGameStart);
     logger.d("GameAction object created: ");
     logger.d(action);
-    String playerId;
+    Player activePlayer;
     if (actionType == goal || actionType == missed7m) {
       // own player did 7m
-      playerId = tempController.getLastClickedPlayer().id;
+      activePlayer = tempController.getLastClickedPlayer();
       tempController.setLastClickedPlayer(Player());
     } else {
       // opponent player did 7m
       // get id of goalkeeper by going through players on field and searching for position
-      String goalKeeperId = "0";
+      Player goalKeeperId = tempController.getPlayersFromSelectedTeam()[0];
       for (int k in getOnFieldIndex()) {
         Player player = tempController.getPlayersFromSelectedTeam()[k];
         if (player.positions.contains("TW")) {
-          goalKeeperId = player.id.toString();
+          goalKeeperId = player;
           break;
         }
       }
-      playerId = goalKeeperId;
+      activePlayer = goalKeeperId;
     }
-    action.playerId = playerId;
     // add action to firebase
     persistentController.addAction(action);
+    await persistentController.setLastActionPlayer(activePlayer);
+
     tempController.updatePlayerEfScore(
-        playerId, persistentController.getLastAction());
+        activePlayer.id!, persistentController.getLastAction());
     // add action to feed
     addFeedItem(action);
-
 
     // goal
     if (actionType == actionMapping[seven_meter]!.values.toList()[0]) {
@@ -217,6 +217,15 @@ DialogButton buildDialogButton(
     if (actionType == actionMapping[seven_meter]!.values.toList()[3]) {
       defensiveFieldSwitch();
     }
+
+    // If there were player clicked which are not on field, open substitute player menu
+    if (!tempController.getPlayersToChange().isEmpty) {
+      Navigator.pop(context);
+      callPlayerMenu(context, true);
+      return;
+    }
+    Navigator.pop(context);
+
   }
 
   final double width = MediaQuery.of(context).size.width;
@@ -226,8 +235,8 @@ DialogButton buildDialogButton(
       // have round edges with same degree as Alert dialog
       radius: const BorderRadius.all(Radius.circular(15)),
       // set height and width of buttons so the shirt and name are fitting inside
-      height: width * 0.10,
-      width: width * 0.10,
+      height: width * 0.15,
+      width: width * 0.15,
       color: color,
       child: Center(
         child: Column(
@@ -242,8 +251,6 @@ DialogButton buildDialogButton(
         ),
       ),
       onPressed: () {
-        logAction();
-        Navigator.pop(context);
-        tempController.setPlayerMenutText("");
+        logAction();        
       });
 }
