@@ -7,6 +7,8 @@ import 'package:handball_performance_tracker/controllers/tempController.dart';
 import 'package:handball_performance_tracker/data/team.dart';
 import 'package:handball_performance_tracker/main.dart';
 import 'package:handball_performance_tracker/screens/dashboard.dart';
+import 'package:handball_performance_tracker/screens/glossaryScreen.dart';
+import 'package:handball_performance_tracker/screens/statisticsScreen.dart';
 import 'package:handball_performance_tracker/screens/teamSettingsScreen.dart';
 import 'package:handball_performance_tracker/widgets/main_screen/ef_score_bar.dart';
 import 'package:handball_performance_tracker/constants/stringsAuthentication.dart';
@@ -110,12 +112,12 @@ List<Widget> buildMenuList(BuildContext context, bool gameIsRunning,
     // Statistics
     CollabsibleListEntry(
         text: StringsGeneral.lStatistics,
-        screen: DebugScreen(),
+        screen: StatisticsScreen(),
         children: [Text("")]),
     // Glossary
     CollabsibleListEntry(
         text: StringsGeneral.lGlossary,
-        screen: DebugScreen(),
+        screen: GlossaryScreen(),
         children: [Text("")]),
   ];
   if ((gameIsRunning || gameIsPaused) && !menuIsEllapsed) {
