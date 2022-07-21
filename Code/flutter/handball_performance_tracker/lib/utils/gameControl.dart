@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:handball_performance_tracker/constants/stringsGameScreen.dart';
 import 'package:handball_performance_tracker/constants/team_constants.dart';
+import 'package:handball_performance_tracker/widgets/helper_screen/alert_message_widget.dart';
+import 'package:handball_performance_tracker/widgets/main_screen/ef_score_bar.dart';
 import '../controllers/persistentController.dart';
 import '../controllers/tempController.dart';
 import '../data/player.dart';
 import '../data/game.dart';
-import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 
 import '../constants/stringsGameSettings.dart';
@@ -18,12 +19,19 @@ void startGame(BuildContext context, {bool preconfigured: false}) async {
   var numPlayersOnField = tempController.getOnFieldPlayers().length;
   if (numPlayersOnField != PLAYER_NUM) {
     // create alert if someone tries to start the game without enough players
-    Alert(
-            context: context,
-            title: StringsGameSettings.lStartGameAlertHeader,
-            type: AlertType.error,
-            desc: StringsGameSettings.lStartGameAlert)
-        .show();
+    showDialog(
+        context: context,
+        builder: (BuildContext bcontext) {
+          return AlertDialog(
+              scrollable: true,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(menuRadius),
+              ),
+              content: CustomAlertMessageWidget(
+                  StringsGameSettings.lStartGameAlertHeader +
+                      "!\n" +
+                      StringsGameSettings.lStartGameAlert));
+        });
     return;
   }
 
