@@ -21,3 +21,7 @@ const List<String> sectors = [leftOutside, rightOutside, backcourtLeft, backcour
 ///
 const List<String> sectorsFieldIsLeft = [leftOutside, backcourtLeft, backcourtMiddle, backcourtRight, rightOutside];
 const List<String> sectorsFieldIsRight = [rightOutside, backcourtRight, backcourtMiddle, backcourtLeft, leftOutside];
+///
+// special player position
+///
+const String defenseSpecialist = "Abwehr Spezialist"; // links aussen
