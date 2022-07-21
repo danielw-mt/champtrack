@@ -4,6 +4,7 @@ import 'package:handball_performance_tracker/constants/fieldSizeParameter.dart';
 import 'package:handball_performance_tracker/screens/startGameScreen.dart';
 import 'package:handball_performance_tracker/screens/statisticsScreen.dart';
 import 'package:handball_performance_tracker/screens/teamSelectionScreen.dart';
+import 'package:handball_performance_tracker/widgets/authentication_screen/alert_widget.dart';
 import 'package:handball_performance_tracker/widgets/main_screen/ef_score_bar.dart';
 import 'package:handball_performance_tracker/widgets/nav_drawer.dart';
 import '../constants/stringsGeneral.dart';
@@ -106,20 +107,7 @@ class Dashboard extends StatelessWidget {
               ],
             );
           } else {
-            return Center(
-              child: Column(
-                children: [
-                  Text(
-                    "Loading data",
-                  ),
-                  SizedBox(
-                    height: 50,
-                    width: 50,
-                    child: CircularProgressIndicator(),
-                  ),
-                ],
-              ),
-            );
+            return CustomAlertWidget("Lade Daten");
           }
         });
   }

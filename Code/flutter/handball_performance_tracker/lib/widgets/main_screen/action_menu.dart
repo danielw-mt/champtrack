@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:handball_performance_tracker/data/player.dart';
 import 'package:handball_performance_tracker/utils/feed_logic.dart';
 import 'package:handball_performance_tracker/utils/player_helper.dart';
+import 'package:handball_performance_tracker/widgets/helper_screen/alert_message_widget.dart';
 import 'package:handball_performance_tracker/widgets/main_screen/ef_score_bar.dart';
 import 'package:handball_performance_tracker/widgets/main_screen/field.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
@@ -40,11 +41,17 @@ void callActionMenu(BuildContext context) {
   StopWatchTimer stopWatchTimer = persController.getCurrentGame().stopWatch;
   // if game is not running give a warning
   if (stopWatchTimer.rawTime.value == 0) {
-    Alert(
+    showDialog(
       context: context,
-      title: StringsGameScreen.lGameStartErrorMessage,
-      type: AlertType.error,
-    ).show();
+        builder: (BuildContext bcontext) {
+          return AlertDialog(
+              scrollable: true,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(menuRadius),
+              ),
+              content: CustomAlertMessageWidget(
+                  StringsGameScreen.lGameStartErrorMessage));
+        });
     return;
   }
 
@@ -65,12 +72,13 @@ void callActionMenu(BuildContext context) {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       Expanded(
-                          child:  Scrollbar(
-                  thumbVisibility: true,
-                  child: PageView(
-                      controller: new PageController(),
-                      children: buildPageViewChildren(context, actionType)),
-                          )),
+                          child: Scrollbar(
+                        thumbVisibility: true,
+                        child: PageView(
+                            controller: new PageController(),
+                            children:
+                                buildPageViewChildren(context, actionType)),
+                      )),
                     ] // Column of "Spieler", horizontal line and Button-Row
                     )));
       });
@@ -145,14 +153,20 @@ Widget buildDialogButtonMenu(BuildContext context, List<String> buttonTexts,
           context, buttonTexts[0], Colors.red, 0, Icons.style, ""),
       buildDialogButton(
           context, buttonTexts[1], Colors.yellow, 0, Icons.style, ""),
+      buildDialogButton(context, buttonTexts[2],
+          Color.fromRGBO(199, 208, 244, 1), 0, Icons.timer, ""),
       buildDialogButton(
-          context, buttonTexts[2],Color.fromRGBO(199, 208, 244, 1), 0, Icons.timer, ""),
-      buildDialogButton(context, buttonTexts[3], Color.fromRGBO(199, 208, 244, 1), 2),
-      buildDialogButton(context, buttonTexts[4], Color.fromRGBO(199, 208, 244, 1), 2),
-      buildDialogButton(context, buttonTexts[5], Color.fromRGBO(99, 107, 171, 1)),
-      buildDialogButton(context, buttonTexts[6], Color.fromRGBO(203, 206, 227, 1)),
-      buildDialogButton(context, buttonTexts[7], Color.fromRGBO(99, 107, 171, 1)),
-      buildDialogButton(context, buttonTexts[8], Color.fromRGBO(203, 206, 227, 1)),
+          context, buttonTexts[3], Color.fromRGBO(199, 208, 244, 1), 2),
+      buildDialogButton(
+          context, buttonTexts[4], Color.fromRGBO(199, 208, 244, 1), 2),
+      buildDialogButton(
+          context, buttonTexts[5], Color.fromRGBO(99, 107, 171, 1)),
+      buildDialogButton(
+          context, buttonTexts[6], Color.fromRGBO(203, 206, 227, 1)),
+      buildDialogButton(
+          context, buttonTexts[7], Color.fromRGBO(99, 107, 171, 1)),
+      buildDialogButton(
+          context, buttonTexts[8], Color.fromRGBO(203, 206, 227, 1)),
     ];
     buttonRow = Row(children: [
       Column(children: [
@@ -172,7 +186,7 @@ Widget buildDialogButtonMenu(BuildContext context, List<String> buttonTexts,
         child: Column(children: [
           Flexible(child: dialogButtons[5]),
           Flexible(child: dialogButtons[6]),
-      ]),
+        ]),
       ),
       Flexible(
         child: Column(
@@ -253,23 +267,22 @@ Widget buildDialogButtonMenu(BuildContext context, List<String> buttonTexts,
       buildDialogButton(
           context, buttonTexts[7], Color.fromRGBO(199, 208, 244, 1), 1)
     ];
-    buttonRow = Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+    buttonRow =
+        Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+      Column(
         children: [
-          Column(
-            children: [
-              Row(children: [dialogButtons[1], dialogButtons[0]]),
+          Row(children: [dialogButtons[1], dialogButtons[0]]),
           Flexible(child: dialogButtons[7]),
           Flexible(child: dialogButtons[3])
-            ],
-          ),
+        ],
+      ),
       Flexible(
         child: Column(
           children: [
             Flexible(child: dialogButtons[2]),
             Flexible(child: dialogButtons[6])
           ],
-          ),
+        ),
       ),
       Flexible(
         child: Column(
@@ -278,8 +291,8 @@ Widget buildDialogButtonMenu(BuildContext context, List<String> buttonTexts,
             Flexible(child: dialogButtons[5])
           ],
         ),
-          ),
-        ]);
+      ),
+    ]);
     header = StringsGameScreen.lDeffensePopUpHeader;
   }
   return Column(children: [

@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 
 import '../../constants/colors.dart';
 
-class CustomAlertWidget extends StatelessWidget {
+class CustomAlertMessageWidget extends StatelessWidget {
   late final String alertMessage;
 
-  CustomAlertWidget(alertMessage) : alertMessage = alertMessage;
+  CustomAlertMessageWidget(alertMessage) : alertMessage = alertMessage;
 
   @override
   Widget build(BuildContext context) {
@@ -25,8 +25,8 @@ class CustomAlertWidget extends StatelessWidget {
             child: SizedBox(
               height: 50,
               width: 50,
-              child: CircularProgressIndicator(
-                  strokeWidth: 7.0, color: buttonDarkBlueColor),
+              child: Icon(Icons.error_outline,
+                  color: buttonDarkBlueColor, size: 60),
             ),
           ),
           Container(
@@ -37,11 +37,12 @@ class CustomAlertWidget extends StatelessWidget {
                 style: TextStyle(),
                 child: Text(
                   alertMessage,
+                  textAlign: TextAlign.center,
                   style: TextStyle(color: Colors.grey.shade800, fontSize: 20),
                 ),
               ),
             ),
-          ),
+          )
         ],
       ),
     );
