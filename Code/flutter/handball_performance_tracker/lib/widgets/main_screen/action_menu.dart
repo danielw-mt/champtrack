@@ -146,13 +146,13 @@ Widget buildDialogButtonMenu(BuildContext context, List<String> buttonTexts,
       buildDialogButton(
           context, buttonTexts[1], Colors.yellow, 0, Icons.style, ""),
       buildDialogButton(
-          context, buttonTexts[2], Colors.grey, 0, Icons.timer, ""),
-      buildDialogButton(context, buttonTexts[3], Colors.grey, 2),
-      buildDialogButton(context, buttonTexts[4], Colors.grey, 2),
-      buildDialogButton(context, buttonTexts[5], Colors.blue),
-      buildDialogButton(context, buttonTexts[6], Colors.blue),
-      buildDialogButton(context, buttonTexts[7], Colors.blue),
-      buildDialogButton(context, buttonTexts[8], Colors.blue),
+          context, buttonTexts[2],Color.fromRGBO(199, 208, 244, 1), 0, Icons.timer, ""),
+      buildDialogButton(context, buttonTexts[3], Color.fromRGBO(199, 208, 244, 1), 2),
+      buildDialogButton(context, buttonTexts[4], Color.fromRGBO(199, 208, 244, 1), 2),
+      buildDialogButton(context, buttonTexts[5], Color.fromRGBO(99, 107, 171, 1)),
+      buildDialogButton(context, buttonTexts[6], Color.fromRGBO(203, 206, 227, 1)),
+      buildDialogButton(context, buttonTexts[7], Color.fromRGBO(99, 107, 171, 1)),
+      buildDialogButton(context, buttonTexts[8], Color.fromRGBO(203, 206, 227, 1)),
     ];
     buttonRow = Row(children: [
       Column(children: [
