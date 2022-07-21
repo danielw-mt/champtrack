@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:handball_performance_tracker/constants/colors.dart';
 import 'package:handball_performance_tracker/constants/stringsAuthentication.dart';
 import 'package:handball_performance_tracker/widgets/authentication_screen/alert_widget.dart';
-import 'package:handball_performance_tracker/widgets/nav_drawer.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
 class LoginWidget extends StatefulWidget {

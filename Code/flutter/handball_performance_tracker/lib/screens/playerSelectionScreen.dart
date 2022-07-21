@@ -5,9 +5,10 @@ import 'package:handball_performance_tracker/screens/startGameScreen.dart';
 import 'package:handball_performance_tracker/utils/gameControl.dart';
 import 'package:handball_performance_tracker/constants/stringsGeneral.dart';
 import 'package:handball_performance_tracker/constants/stringsGameSettings.dart';
+import 'package:handball_performance_tracker/widgets/helper_screen/alert_message_widget.dart';
+import 'package:handball_performance_tracker/widgets/main_screen/ef_score_bar.dart';
 import 'package:handball_performance_tracker/widgets/team_settings_screen/players_list.dart';
 import '../widgets/nav_drawer.dart';
-import 'package:rflutter_alert/rflutter_alert.dart';
 import '../screens/mainScreen.dart';
 
 /// Screen that is displayed after startGameScreen and allows to select, add, and remove players before starting the game
@@ -74,12 +75,20 @@ class _PlayerSelectionScreenState extends State<PlayerSelectionScreen> {
             TempController tempController = Get.find<TempController>();
             // display alert if less than 7 have been selected
             if (tempController.getOnFieldPlayers().length != 7) {
-              Alert(
-                      context: context,
-                      title: StringsGameSettings.lStartGameAlertHeader,
-                      type: AlertType.error,
-                      desc: StringsGameSettings.lStartGameAlert)
-                  .show();
+
+              showDialog(
+                  context: context,
+                  builder: (BuildContext bcontext) {
+                    return AlertDialog(
+                        scrollable: true,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(menuRadius),
+                        ),
+                        content: CustomAlertMessageWidget(
+                            StringsGameSettings.lStartGameAlertHeader +
+                                "!\n" +
+                                StringsGameSettings.lStartGameAlert));
+                  });
             } else {
               tempController.updateOnFieldPlayers();
               tempController.setPlayerBarPlayers();
