@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:handball_performance_tracker/constants/colors.dart';
 import '../../controllers/tempController.dart';
 import 'package:get/get.dart';
 import '../../constants/stringsGeneral.dart';
@@ -17,10 +18,10 @@ class TeamTypeSelectionBar extends StatelessWidget {
             unselectedLabelColor: Colors.white70,
             indicatorSize: TabBarIndicatorSize.tab,
             indicatorPadding: EdgeInsets.all(5.0),
-            indicatorColor: Colors.blue,
+            indicatorColor: buttonDarkBlueColor,
             onTap: (int tabNumber) {
-                gameController.setSelectedTeamType(tabNumber);
-                updateSelectedTeamAccordingToTeamType();
+              gameController.setSelectedTeamType(tabNumber);
+              updateSelectedTeamAccordingToTeamType();
             },
             tabs: [
               Tab(
