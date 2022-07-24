@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:handball_performance_tracker/constants/colors.dart';
+import '../../constants/colors.dart';
 import '../../controllers/persistentController.dart';
 import '../../controllers/tempController.dart';
 import '../../data/player.dart';
@@ -47,7 +49,8 @@ class _PlayersListState extends State<PlayersList> {
                         ),
                       ).show();
                     },
-                    backgroundColor: Colors.black,
+                    backgroundColor: buttonDarkBlueColor,
+                    focusColor: buttonDarkBlueColor,
                     child: Icon(Icons.add),
                   ),
                 ),
@@ -90,7 +93,7 @@ class _PlayersListState extends State<PlayersList> {
                                 }
                                 // Even rows will have a grey color.
                                 if (index.isEven) {
-                                  return Colors.grey.withOpacity(0.3);
+                                  return buttonGreyColor;
                                 }
                                 return null; // Use default value for other states and odd rows.
                               }),
