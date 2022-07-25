@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:handball_performance_tracker/constants/colors.dart';
 import 'package:handball_performance_tracker/widgets/nav_drawer.dart';
 import '../controllers/tempController.dart';
 import '../widgets/team_selection_screen/team_dropdown.dart';
@@ -41,7 +42,7 @@ class TeamSelectionScreen extends StatelessWidget {
                         onPressed: () {
                           Get.to(() => TeamSettingsScreen());
                         },
-                        child: Icon(Icons.edit))
+                        child: Icon(Icons.edit, color: buttonDarkBlueColor))
                   ])),
         );
       },

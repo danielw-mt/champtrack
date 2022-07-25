@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:handball_performance_tracker/constants/colors.dart';
+import '../../constants/colors.dart';
 import '../../controllers/persistentController.dart';
 import '../../controllers/tempController.dart';
 import '../../data/player.dart';
@@ -37,17 +39,19 @@ class _PlayersListState extends State<PlayersList> {
                     onPressed: () {
                       Alert(
                         context: context,
+                        buttons: [],
                         content: SizedBox(
                           width: MediaQuery.of(context).size.width * 0.7,
-                          height: MediaQuery.of(context).size.height * 0.8,
+                          height: MediaQuery.of(context).size.height * 0.7,
                           child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [PlayerForm()],
                           ),
                         ),
                       ).show();
                     },
-                    backgroundColor: Colors.black,
+                    backgroundColor: buttonDarkBlueColor,
+                    focusColor: buttonDarkBlueColor,
                     child: Icon(Icons.add),
                   ),
                 ),
@@ -66,7 +70,8 @@ class _PlayersListState extends State<PlayersList> {
                           ),
                           DataColumn(label: Text(StringsGeneral.lPosition)),
                           DataColumn(
-                              label: Text(StringsGeneral.lPlayerStartingOnField)),
+                              label:
+                                  Text(StringsGeneral.lPlayerStartingOnField)),
                           DataColumn(label: Text(StringsGeneral.lEdit))
                         ],
                         rows: List<DataRow>.generate(
@@ -90,7 +95,7 @@ class _PlayersListState extends State<PlayersList> {
                                 }
                                 // Even rows will have a grey color.
                                 if (index.isEven) {
-                                  return Colors.grey.withOpacity(0.3);
+                                  return buttonGreyColor;
                                 }
                                 return null; // Use default value for other states and odd rows.
                               }),
@@ -108,6 +113,7 @@ class _PlayersListState extends State<PlayersList> {
                                   onTap: () {
                                     Alert(
                                       context: context,
+                                      buttons: [],
                                       content: SizedBox(
                                         width:
                                             MediaQuery.of(context).size.width *
