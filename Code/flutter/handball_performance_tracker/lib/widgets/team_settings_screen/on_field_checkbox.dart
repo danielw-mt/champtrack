@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:handball_performance_tracker/constants/team_constants.dart';
+import '../../constants/colors.dart';
 import '../../controllers/tempController.dart';
 import 'package:get/get.dart';
 import '../../data/player.dart';
@@ -16,6 +17,7 @@ class OnFieldCheckbox extends StatelessWidget {
         builder: (tempController) {
           List<Player> playersOnField = tempController.getOnFieldPlayers();
           return Checkbox(
+            fillColor: MaterialStateProperty.all<Color>(buttonDarkBlueColor),
             value: playersOnField.contains(player), //playersOnField[index],
             onChanged: (value) {
               // count how many players are selected as starting players

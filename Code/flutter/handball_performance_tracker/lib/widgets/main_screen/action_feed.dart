@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:handball_performance_tracker/constants/colors.dart';
 import 'package:handball_performance_tracker/constants/stringsGeneral.dart';
 import 'package:handball_performance_tracker/widgets/main_screen/ef_score_bar.dart';
-import 'package:handball_performance_tracker/constants/fieldSizeParameter.dart' as fieldSizeParameter;
+import 'package:handball_performance_tracker/constants/fieldSizeParameter.dart'
+    as fieldSizeParameter;
 import '../../controllers/tempController.dart';
 import 'package:get/get.dart';
 import '../../data/game_action.dart';
@@ -12,6 +13,8 @@ import '../../utils/feed_logic.dart';
 /// A widget that displays the newest actions. It can be tweaked in lib/const/settings_config
 /// GameActions are periodically removed and can also be removed by clicking on them
 class ActionFeed extends StatelessWidget {
+  ScrollController _controller = ScrollController();
+
   @override
   Widget build(BuildContext context) {
     return GetBuilder<TempController>(
@@ -34,76 +37,77 @@ class ActionFeed extends StatelessWidget {
               FeedHeader(),
               Expanded(
                 child: ListView.builder(
-                    controller: ScrollController(),
-                    physics: ClampingScrollPhysics(),
+                    controller: _controller,
+                    //physics: ClampingScrollPhysics(),
                     reverse: true,
                     shrinkWrap: true,
                     itemCount: feedActions.length,
                     itemBuilder: (context, index) {
-                      GameAction feedAction = feedActions.reversed.toList()[index];
+                      GameAction feedAction =
+                          feedActions.reversed.toList()[index];
                       String actionType = feedAction.actionType;
                       // get the player object whose id matches the playerId in the action Object
                       Player relevantPlayer = tempController
                           .getPlayerFromSelectedTeam(feedAction.playerId);
+                      if (_controller.hasClients) _controller.jumpTo(0);
                       return Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Container(
-                                    margin: EdgeInsets.only(left: 5),
-                                    width: buttonHeight * 0.8,
-                                    height: buttonHeight * 0.8,
-                                    decoration: BoxDecoration(
-                                        color: buttonGreyColor,
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(menuRadius))),
-                                    child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Flexible(
-                                            child: Text(
-                                              actionType,
-                                              textAlign: TextAlign.center,
-                                              style: TextStyle(
-                                                fontSize: 12,
-                                              ),
-                                            ),
+                              Container(
+                                margin: EdgeInsets.only(left: 5),
+                                width: buttonHeight * 0.8,
+                                height: buttonHeight * 0.8,
+                                decoration: BoxDecoration(
+                                    color: buttonGreyColor,
+                                    borderRadius: BorderRadius.all(
+                                        Radius.circular(menuRadius))),
+                                child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.center,
+                                    children: [
+                                      Flexible(
+                                        child: Text(
+                                          actionType,
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                            fontSize: 12,
                                           ),
-                                        ]),
-                                  ),
-                                  Expanded(
-                                    child: Container(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Text(
-                                        relevantPlayer.lastName,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: TextStyle(
-                                          fontSize: 15,
                                         ),
                                       ),
+                                    ]),
+                              ),
+                              Expanded(
+                                child: Container(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                    relevantPlayer.lastName,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                      fontSize: 15,
                                     ),
                                   ),
-                                  MouseRegion(
-                                    cursor: SystemMouseCursors.click,
-                                    child: GestureDetector(
-                                      onTap: () async {
-                                        removeFeedItem(
-                                            feedAction, tempController);
-                                      },
-                                      child: Icon(
-                                        Icons.delete,
-                                        size: 30,
-                                      ),
-                                    ),
-                                  )
-                                ],
+                                ),
                               ),
-                              if (index != feedActions.length) Divider()
+                              MouseRegion(
+                                cursor: SystemMouseCursors.click,
+                                child: GestureDetector(
+                                  onTap: () async {
+                                    removeFeedItem(
+                                        feedAction, tempController);
+                                  },
+                                  child: Icon(
+                                    Icons.delete,
+                                    size: 30,
+                                  ),
+                                ),
+                              )
                             ],
-                          );
+                          ),
+                          if (index != feedActions.length) Divider()
+                        ],
+                      );
                     }),
               ),
             ],
