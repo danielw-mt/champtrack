@@ -13,7 +13,6 @@ import '../../utils/feed_logic.dart';
 /// A widget that displays the newest actions. It can be tweaked in lib/const/settings_config
 /// GameActions are periodically removed and can also be removed by clicking on them
 class ActionFeed extends StatelessWidget {
-  ScrollController _controller = ScrollController();
 
   @override
   Widget build(BuildContext context) {
@@ -37,19 +36,17 @@ class ActionFeed extends StatelessWidget {
               FeedHeader(),
               Expanded(
                 child: ListView.builder(
-                    controller: _controller,
-                    //physics: ClampingScrollPhysics(),
+                    physics: ClampingScrollPhysics(),
                     reverse: true,
                     shrinkWrap: true,
                     itemCount: feedActions.length,
                     itemBuilder: (context, index) {
                       GameAction feedAction =
                           feedActions.reversed.toList()[index];
-                      String actionType = feedAction.actionType;
+                      String actionType = feedAction.throwLocation[0];
                       // get the player object whose id matches the playerId in the action Object
                       Player relevantPlayer = tempController
                           .getPlayerFromSelectedTeam(feedAction.playerId);
-                      if (_controller.hasClients) _controller.jumpTo(0);
                       return Column(
                         children: [
                           Row(

@@ -379,7 +379,7 @@ DialogButton buildDialogButton(
         gameId: currentGameId,
         type: actionType,
         actionType: actionMapping[allActions]![buttonText]!,
-        throwLocation: tempController.getLastLocation().cast<String>(),
+        throwLocation: List.from(tempController.getLastLocation().cast<String>()),
         timestamp: unixTime,
         relativeTime: secondsSinceGameStart);
     logger.d("GameAction object created: ${action.actionType}");

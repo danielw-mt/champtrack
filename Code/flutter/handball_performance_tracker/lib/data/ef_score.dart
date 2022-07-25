@@ -116,7 +116,7 @@ class LiveEfScore extends EfScore {
     if (actionType != null) {
       if (actionStats[actionType]! >= 1) {
         actionStats[actionType] = actionStats[actionType]! - 1;
-        numOfActions--;
+        numOfActions--; 
         logger.d("Action deleted: $actionType, old ef-score: $score");
         calculate();
         logger.d("New ef-score: $score");

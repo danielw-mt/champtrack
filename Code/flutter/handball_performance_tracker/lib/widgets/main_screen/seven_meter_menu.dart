@@ -167,7 +167,8 @@ DialogButton buildDialogButton(
         gameId: currentGameId,
         type: determineAttack() ? 'attack' : 'defense',
         actionType: actionType,
-        throwLocation: tempController.getLastLocation().cast<String>(),
+        throwLocation:
+            List.from(tempController.getLastLocation().cast<String>()),
         timestamp: unixTime,
         relativeTime: secondsSinceGameStart);
     logger.d("GameAction object created: ");
@@ -225,7 +226,6 @@ DialogButton buildDialogButton(
       return;
     }
     Navigator.pop(context);
-
   }
 
   final double width = MediaQuery.of(context).size.width;
@@ -251,6 +251,6 @@ DialogButton buildDialogButton(
         ),
       ),
       onPressed: () {
-        logAction();        
+        logAction();
       });
 }
