@@ -238,7 +238,7 @@ class TempController extends GetxController {
   void addFeedAction(GameAction action) {
     _feedActions.add(action);
     // update feed item to database (playerid was added)
-    repository.updateAction(action);
+    //repository.updateAction(action);
     update(["action-feed"]);
   }
 
