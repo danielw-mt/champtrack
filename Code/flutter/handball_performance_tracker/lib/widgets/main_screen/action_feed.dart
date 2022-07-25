@@ -43,7 +43,7 @@ class ActionFeed extends StatelessWidget {
                     itemBuilder: (context, index) {
                       GameAction feedAction =
                           feedActions.reversed.toList()[index];
-                      String actionType = feedAction.throwLocation[0];
+                      String actionType = feedAction.actionType;
                       // get the player object whose id matches the playerId in the action Object
                       Player relevantPlayer = tempController
                           .getPlayerFromSelectedTeam(feedAction.playerId);
