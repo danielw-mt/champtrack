@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:handball_performance_tracker/constants/positions.dart';
+import '../../constants/colors.dart';
 import '../../constants/stringsGeneral.dart';
 import 'package:handball_performance_tracker/controllers/persistentController.dart';
 import 'package:handball_performance_tracker/data/team.dart';
@@ -87,28 +88,53 @@ class PlayerFormState extends State<PlayerForm> {
 
   @override
   Widget build(BuildContext context) {
+    InputDecoration getDecoration(String labelText) {
+      return InputDecoration(
+          focusedBorder: UnderlineInputBorder(
+              borderSide: BorderSide(color: buttonDarkBlueColor)),
+          enabledBorder: UnderlineInputBorder(
+              borderSide: BorderSide(color: buttonDarkBlueColor)),
+          disabledBorder: UnderlineInputBorder(
+              borderSide: BorderSide(color: buttonDarkBlueColor)),
+          labelText: labelText,
+          labelStyle: TextStyle(color: buttonDarkBlueColor),
+          filled: true,
+          fillColor: Colors.white);
+    }
+
     // Build a Form widget using the _formKey created above.
     double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
     return Column(children: [
-      Center(
-          child: editModeEnabled
-              ? Text(StringsGeneral.lPlayerEditMode)
-              : Text(StringsGeneral.lPlayerCreateMode)),
       Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-        Text(StringsGeneral.lEditPlayer),
-        ElevatedButton(
-            onPressed: () {
-              tempController.deletePlayer(player);
-              Navigator.pop(context);
-              tempController.update(["players-list"]);
-            },
-            child: Text(StringsGeneral.lDeletePlayer)),
+        editModeEnabled
+            ? Text(StringsGeneral.lPlayerEditMode,
+                style: TextStyle(fontWeight: FontWeight.bold))
+            : Text(StringsGeneral.lPlayerCreateMode,
+                style: TextStyle(fontWeight: FontWeight.bold)),
+        SizedBox(
+          width: 0.15 * width,
+          height: 0.08 * height,
+          child: ElevatedButton(
+              style: ButtonStyle(
+                  backgroundColor:
+                      MaterialStateProperty.all<Color>(buttonGreyColor)),
+              onPressed: () {
+                tempController.deletePlayer(player);
+                Navigator.pop(context);
+                tempController.update(["players-list"]);
+              },
+              child: Text(StringsGeneral.lDeletePlayer,
+                  style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black))),
+        ),
       ]),
       Form(
         key: _formKey,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -116,11 +142,9 @@ class PlayerFormState extends State<PlayerForm> {
                 SizedBox(
                   width: width * 0.25,
                   child: TextFormField(
+                    style: TextStyle(fontSize: 18),
+                    decoration: getDecoration(StringsGeneral.lFirstName),
                     controller: firstNameController,
-                    decoration: InputDecoration(
-                        border: OutlineInputBorder(),
-                        labelText: StringsGeneral.lFirstName,
-                        hintText: "*"),
                     // The validator receives the text that the user has entered.
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -134,10 +158,8 @@ class PlayerFormState extends State<PlayerForm> {
                   width: width * 0.25,
                   child: TextFormField(
                     controller: lastNameController,
-                    decoration: InputDecoration(
-                        border: OutlineInputBorder(),
-                        labelText: StringsGeneral.lLastName,
-                        hintText: "*"),
+                    style: TextStyle(fontSize: 18),
+                    decoration: getDecoration(StringsGeneral.lLastName),
                     // The validator receives the text that the user has entered.
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -159,10 +181,8 @@ class PlayerFormState extends State<PlayerForm> {
                   width: width * 0.25,
                   child: TextFormField(
                     controller: nickNameController,
-                    decoration: InputDecoration(
-                        border: OutlineInputBorder(),
-                        labelText: StringsGeneral.lNickName,
-                        hintText: StringsGeneral.lOptional),
+                    style: TextStyle(fontSize: 18),
+                    decoration: getDecoration(StringsGeneral.lNickName),
                     // The validator receives the text that the user has entered.
                     validator: (value) {
                       // if (value == null || value.isEmpty) {
@@ -177,10 +197,8 @@ class PlayerFormState extends State<PlayerForm> {
                   child: TextFormField(
                     controller: shirtNumberController,
                     keyboardType: TextInputType.number,
-                    decoration: InputDecoration(
-                        border: OutlineInputBorder(),
-                        labelText: StringsGeneral.lShirtNumber,
-                        hintText: '*'),
+                    style: TextStyle(fontSize: 18),
+                    decoration: getDecoration(StringsGeneral.lShirtNumber),
                     // The validator receives the text that the user has entered.
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -199,13 +217,14 @@ class PlayerFormState extends State<PlayerForm> {
               ],
             ),
             Container(
-              height: 20,
+              height: 40,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 FormField(
                   builder: (state) => Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(StringsGeneral.lTeams),
                       SizedBox(
@@ -219,6 +238,9 @@ class PlayerFormState extends State<PlayerForm> {
                                   children: [
                                     Text(relevantTeam.name),
                                     Checkbox(
+                                        fillColor:
+                                            MaterialStateProperty.all<Color>(
+                                                buttonDarkBlueColor),
                                         value: isPlayerPartOfTeam(
                                             relevantTeam.id.toString()),
                                         onChanged: (value) {
@@ -275,6 +297,8 @@ class PlayerFormState extends State<PlayerForm> {
                               children: [
                                 Text(positionNames[item]),
                                 Checkbox(
+                                    fillColor: MaterialStateProperty.all<Color>(
+                                        buttonDarkBlueColor),
                                     value: player.positions
                                         .contains(positionNames[item]),
                                     onChanged: (value) {
@@ -314,31 +338,79 @@ class PlayerFormState extends State<PlayerForm> {
               height: 20,
             ),
             // Submit button
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16.0),
-              child: ElevatedButton(
-                onPressed: () {
-                  // Validate returns true if the form is valid, or false otherwise.
-                  if (_formKey.currentState!.validate()) {
-                    player.firstName = firstNameController.text;
-                    player.lastName = lastNameController.text;
-                    player.nickName = nickNameController.text;
-                    player.number = int.parse(shirtNumberController.text);
-                    // pop alert
-                    Navigator.pop(context);
-                    // display snackbar while data is stored in db
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text(StringsGeneral.lProcessingData)),
-                    );
-                    // Edit mode
-                    if (editModeEnabled) {
-                      tempController.setPlayer(player);
-                    } else {
-                      tempController.addPlayer(player);
-                    }
-                  }
-                },
-                child: const Text(StringsGeneral.lSubmitButton),
+            Container(
+              alignment: Alignment.bottomCenter,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Flexible(
+                      child: SizedBox(
+                        width: 0.15 * width,
+                        height: 0.08 * height,
+                        child: ElevatedButton(
+                          style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all<Color>(
+                                  buttonLightBlueColor)),
+                          onPressed: () {
+                            // Validate returns true if the form is valid, or false otherwise.
+                            if (_formKey.currentState!.validate()) {
+                              player.firstName = firstNameController.text;
+                              player.lastName = lastNameController.text;
+                              player.nickName = nickNameController.text;
+                              player.number =
+                                  int.parse(shirtNumberController.text);
+                              // pop alert
+                              Navigator.pop(context);
+                              // display snackbar while data is stored in db
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                    content:
+                                        Text(StringsGeneral.lProcessingData)),
+                              );
+                              // Edit mode
+                              if (editModeEnabled) {
+                                tempController.setPlayer(player);
+                              } else {
+                                tempController.addPlayer(player);
+                              }
+                            }
+                          },
+                          child: const Text(
+                            StringsGeneral.lSubmitButton,
+                            style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Flexible(
+                        // Cancel-Button
+                        child: SizedBox(
+                      width: 0.15 * width,
+                      height: 0.08 * height,
+                      child: ElevatedButton(
+                        style: ButtonStyle(
+                            backgroundColor: MaterialStateProperty.all<Color>(
+                                buttonGreyColor)),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: const Text(
+                          StringsGeneral.lBack,
+                          style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black),
+                        ),
+                      ),
+                    ))
+                  ],
+                ),
               ),
             ),
           ],

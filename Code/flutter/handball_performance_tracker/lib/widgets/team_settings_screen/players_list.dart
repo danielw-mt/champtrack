@@ -39,11 +39,12 @@ class _PlayersListState extends State<PlayersList> {
                     onPressed: () {
                       Alert(
                         context: context,
+                        buttons: [],
                         content: SizedBox(
                           width: MediaQuery.of(context).size.width * 0.7,
-                          height: MediaQuery.of(context).size.height * 0.8,
+                          height: MediaQuery.of(context).size.height * 0.7,
                           child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [PlayerForm()],
                           ),
                         ),
@@ -69,7 +70,8 @@ class _PlayersListState extends State<PlayersList> {
                           ),
                           DataColumn(label: Text(StringsGeneral.lPosition)),
                           DataColumn(
-                              label: Text(StringsGeneral.lPlayerStartingOnField)),
+                              label:
+                                  Text(StringsGeneral.lPlayerStartingOnField)),
                           DataColumn(label: Text(StringsGeneral.lEdit))
                         ],
                         rows: List<DataRow>.generate(
@@ -111,6 +113,7 @@ class _PlayersListState extends State<PlayersList> {
                                   onTap: () {
                                     Alert(
                                       context: context,
+                                      buttons: [],
                                       content: SizedBox(
                                         width:
                                             MediaQuery.of(context).size.width *
