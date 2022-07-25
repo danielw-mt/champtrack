@@ -7,7 +7,7 @@ class StringsAuth {
   static const String lLoggingIn = "Logging in";
   static const String lSigningUp = "Signing up";
 
-  static const String lSignedInAs = "Angemeldet als: "; 
+  static const String lSignedInAs = "Angemeldet als "; 
   static const String lSignOutButton = "Abmelden";
 
   static const String lEmail = "E-Mail";

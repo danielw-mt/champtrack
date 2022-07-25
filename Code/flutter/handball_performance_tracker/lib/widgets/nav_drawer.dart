@@ -54,7 +54,7 @@ class NavDrawer extends StatelessWidget {
                 children: [
                   RichText(
                     text: TextSpan(
-                      text: "Signed in as ",
+                      text: StringsAuth.lSignedInAs,
                       style: TextStyle(
                         color: Colors.white,
                       ),
