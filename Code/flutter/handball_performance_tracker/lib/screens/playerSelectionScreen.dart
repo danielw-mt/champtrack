@@ -49,6 +49,7 @@ class _PlayerSelectionScreenState extends State<PlayerSelectionScreen> {
                 // Container for menu button on top left corner
                 MenuButton(_scaffoldKey),
                 buildStartScreenContent(),
+                SizedBox(height: 20),
                 buildBackNextButtons()
               ],
             )));
@@ -67,62 +68,70 @@ class _PlayerSelectionScreenState extends State<PlayerSelectionScreen> {
       alignment: Alignment.bottomCenter,
       child: Padding(
         // TODO create a lock in button
-        padding: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
+        padding: const EdgeInsets.only(left: 20, right: 20, bottom: 20),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             Flexible(
-              child: ElevatedButton(
+              child: SizedBox(
+                width: 0.15 * width,
+                height: 0.08 * height,
+                child: ElevatedButton(
+                    style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStateProperty.all<Color>(buttonGreyColor)),
+                    onPressed: () {
+                      Get.to(() => StartGameScreen());
+                    },
+                    child: Text(StringsGeneral.lBack,
+                        style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black))),
+              ),
+            ),
+            Flexible(
+              child: SizedBox(
+                width: 0.15 * width,
+                height: 0.08 * height,
+                child: ElevatedButton(
                   style: ButtonStyle(
-                      backgroundColor:
-                          MaterialStateProperty.all<Color>(buttonGreyColor)),
-                  onPressed: () {
-                    Get.to(() => StartGameScreen());
+                      backgroundColor: MaterialStateProperty.all<Color>(
+                          buttonLightBlueColor)),
+                  onPressed: () async {
+                    // validate whether 7 players were selected on this page
+                    TempController tempController = Get.find<TempController>();
+                    // display alert if less than 7 have been selected
+                    if (tempController.getOnFieldPlayers().length != 7) {
+                      showDialog(
+                          context: context,
+                          builder: (BuildContext bcontext) {
+                            return AlertDialog(
+                                scrollable: true,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius:
+                                      BorderRadius.circular(menuRadius),
+                                ),
+                                content: CustomAlertMessageWidget(
+                                    StringsGameSettings.lStartGameAlertHeader +
+                                        "!\n" +
+                                        StringsGameSettings.lStartGameAlert));
+                          });
+                    } else {
+                      tempController.updateOnFieldPlayers();
+                      tempController.setPlayerBarPlayers();
+                      startGame(context, preconfigured: true);
+                      Get.to(() => MainScreen());
+                      return;
+                    }
                   },
-                  child: Text(StringsGeneral.lBack,
+                  child: Text(StringsGeneral.lStartGameButton,
                       style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
-                          color: Colors.black))),
-            ),
-            Flexible(
-              child: ElevatedButton(
-                style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all<Color>(
-                        buttonLightBlueColor)),
-                onPressed: () async {
-                  // validate whether 7 players were selected on this page
-                  TempController tempController = Get.find<TempController>();
-                  // display alert if less than 7 have been selected
-                  if (tempController.getOnFieldPlayers().length != 7) {
-                    showDialog(
-                        context: context,
-                        builder: (BuildContext bcontext) {
-                          return AlertDialog(
-                              scrollable: true,
-                              shape: RoundedRectangleBorder(
-                                borderRadius:
-                                    BorderRadius.circular(menuRadius),
-                              ),
-                              content: CustomAlertMessageWidget(
-                                  StringsGameSettings.lStartGameAlertHeader +
-                                      "!\n" +
-                                      StringsGameSettings.lStartGameAlert));
-                        });
-                  } else {
-                    tempController.updateOnFieldPlayers();
-                    tempController.setPlayerBarPlayers();
-                    startGame(context, preconfigured: true);
-                    Get.to(() => MainScreen());
-                    return;
-                  }
-                },
-                child: Text(StringsGeneral.lStartGameButton,
-                    style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black)),
+                          color: Colors.black)),
+                ),
               ),
             )
           ],
