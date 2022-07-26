@@ -73,7 +73,7 @@ Map<String, Map<String, String>> actionMapping = {
     StringsGameScreen.lGoalOtherSide: goalOthers,
   },
   seven_meter: {
-    StringsGameScreen.lGoal: goal,
+    StringsGameScreen.lGoal: goal7m,
     StringsGameScreen.lErrThrow: missed7m,
     StringsGameScreen.lGoalOtherSide: goalOthers,
     StringsGeneral.lCaught: parade7m
@@ -107,16 +107,16 @@ const Map<String, Map<String, int>> efScoreParameters = {
     goalUnderNine: 4,
     goalOutsideNine: 5,
     goalLastFive: 9,
-    assist: 7,
-    oneVsOne: 7,
-    blockNoBall: 3,
-    blockAndSteal: 8,
-    twoMin: 9
+    assist: 6,
+    oneVsOne: 6,
+    blockNoBall: 2,
+    blockAndSteal: 7,
+    twoMin: 8
   },
   negativeAction: {
     errThrowPos: 6,
     errThrowUnderNine: 8,
-    errThrowOutsideNine: 6,
+    errThrowOutsideNine: 5,
     errThrowLastFive: 10,
     trf: 8,
     foulWithSeven: 7,

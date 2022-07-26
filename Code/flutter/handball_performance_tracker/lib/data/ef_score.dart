@@ -69,6 +69,12 @@ class EfScore {
       } else {
         actionType = errThrowOutsideNine;
       }
+    } else if (actionType == goal7m){ 
+      // 7m goal is weighted identically to goal under nine
+      actionType = goalUnderNine;
+    } else if (actionType == missed7m){
+      // 7m error throw is weighted identically to errow throw under nine
+      actionType = goalUnderNine;
     } else if (!actionStats.containsKey(actionType)) {
       actionType = null;
     }
