@@ -1,7 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:handball_performance_tracker/controllers/tempController.dart';
 import 'package:handball_performance_tracker/widgets/nav_drawer.dart';
+import 'package:handball_performance_tracker/widgets/statistic_screen/charts.dart';
 
 // a screen that holds widgets that can be useful for debugging and game control
 class StatisticsScreen extends StatelessWidget {
@@ -24,36 +27,27 @@ class StatisticsScreen extends StatelessWidget {
         body: Stack(
           children: [
             // Container for menu button on top left corner
-
-            Center(
-              child: SizedBox.expand(
-                //  height: availableScreenHeight,
-                //  width: screenWidth * 0.8,
-                child: PageView(
-                  children: <Widget>[
-                    Container(
-                      child: new Image.asset(
-                        "assets/statistics1.png",
-                        fit: BoxFit.fitHeight,
-                      ),
-                    ),
-                    Container(
-                      child: new Image.asset(
-                        "assets/statistics2.png",
-                        fit: BoxFit.fitHeight,
-                      ),
-                    ),
-                    Container(
-                      child: new Image.asset(
-                        "assets/statistics3.png",
-                        fit: BoxFit.fitHeight,
-                      ),
-                    ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    MenuButton(_scaffoldKey),
                   ],
                 ),
-              ),
-            ),
-            MenuButton(_scaffoldKey),
+                Expanded(
+                  child: Card(
+                      child: AspectRatio(
+                          aspectRatio: 0.2 / 0.2, child: LineChartWidget())),
+                ),
+                Expanded(
+                  child: Card(
+                      child: AspectRatio(
+                          aspectRatio: 0.2 / 0.2, child: LineChartWidget())),
+                )
+              ],
+            )
           ],
         ),
       ),
