@@ -25,7 +25,7 @@ class PlayerStatistics extends StatelessWidget {
                       ),
                       Flexible(
                         flex: 2,
-                        child: QuotesCard(),
+                        child: QuotesPosition(),
                       )
                     ],
                   )),
@@ -67,13 +67,143 @@ class PlayerStatistics extends StatelessWidget {
   }
 }
 
-class QuotesCard extends StatefulWidget{
+class QuotesPosition extends StatelessWidget {
+  const QuotesPosition({Key? key}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return Card(child: ListView.builder(
+      //padding: EdgeInsets.symmetric(vertical: 5.0),
+      itemBuilder: (BuildContext context, int index) {
+        if (index == 0) {
+          return _buildCarousel(context, index ~/ 2);
+        } else {
+          return Divider();
+        }
+      },
+    ));
+  }
+
+  Widget _buildCarousel(BuildContext context, int carouselIndex) {
+    return Column(
+      mainAxisSize: MainAxisSize.max,
+      children: <Widget>[
+        SizedBox(
+          // you may want to use an aspect ratio here for tablet support
+          height: 200.0,
+          child: PageView.builder(
+            // store this controller in a State to save the carousel scroll position
+            controller: PageController(viewportFraction: 0.9),
+            itemBuilder: (BuildContext context, int itemIndex) {
+              if (itemIndex == 0) {
+                return _buildCarouselItemQuotes(
+                    context, carouselIndex, itemIndex);
+              } else {
+                return _buildCarouselItem(context, carouselIndex, itemIndex);
+              }
+            },
+          ),
+        )
+      ],
+    );
+  }
+
+  Widget _buildCarouselItemQuotes(BuildContext context, int carouselIndex, int itemIndex) {
+    return Card(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Flexible(
+            flex: 1,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Flexible(
+                  flex: 1,
+                  child: Text("Wurfqoute"),
+                ),
+                Flexible(
+                  flex: 2,
+                  child: PieChartQuotesWidget(),
+                ),
+                Flexible(
+                  flex: 2,
+                  child: Text("20 Wuerfe"),
+                )
+              ],
+            ),
+          ),
+          Flexible(
+            flex: 1,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Flexible(
+                  flex: 1,
+                  child: Text("Quote Postition"),
+                ),
+                Flexible(
+                  flex: 2,
+                  child: PieChartQuotesWidget(),
+                ),
+                Flexible(
+                  flex: 2,
+                  child: Text("15 Wuerfe"),
+                )
+              ],
+            ),
+          ),
+          Flexible(
+            flex: 1,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Flexible(
+                  flex: 1,
+                  child: Text("7m Quote"),
+                ),
+                Flexible(
+                  flex: 2,
+                  child: PieChartQuotesWidget(),
+                ),
+                Flexible(
+                  flex: 2,
+                  child: Text("7 Wuerfe"),
+                )
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCarouselItem(
+      BuildContext context, int carouselIndex, int itemIndex) {
+    return Column(
+      children: [
+        Flexible(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            Text("Quotes"),
+            Text("Würfe"),
+            Text("Position"),
+            Text("7m"),
+          ],
+        )),
+        Expanded(child: LineChartWidget())
+      ],
+    );
+  }
+}
+
+class QuotesCard extends StatefulWidget {
   const QuotesCard({Key? key}) : super(key: key);
   @override
   _QuotesCardState createState() => _QuotesCardState();
 }
 
-class _QuotesCardState extends State<QuotesCard>{
+class _QuotesCardState extends State<QuotesCard> {
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -144,7 +274,6 @@ class _QuotesCardState extends State<QuotesCard>{
       ),
     );
   }
-
 }
 
 class PerformanceCard extends StatefulWidget {
@@ -160,12 +289,8 @@ class _PerformanceCardState extends State<PerformanceCard> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Flexible(
-            flex:1,
-            child: PerformanceDropDownButton()),
-          Flexible(
-            flex: 4,
-            child: LineChartWidget())
+          Flexible(flex: 1, child: PerformanceDropDownButton()),
+          Flexible(flex: 4, child: LineChartWidget())
         ],
       ),
     );
@@ -175,7 +300,8 @@ class _PerformanceCardState extends State<PerformanceCard> {
 class PerformanceDropDownButton extends StatefulWidget {
   const PerformanceDropDownButton({Key? key}) : super(key: key);
   @override
-  _PerformanceDropDownButtonState createState() => _PerformanceDropDownButtonState();
+  _PerformanceDropDownButtonState createState() =>
+      _PerformanceDropDownButtonState();
 }
 
 class _PerformanceDropDownButtonState extends State<PerformanceDropDownButton> {
