@@ -25,7 +25,7 @@ class PlayerStatistics extends StatelessWidget {
                       ),
                       Flexible(
                         flex: 2,
-                        child: Card(),
+                        child: QuotesCard(),
                       )
                     ],
                   )),
@@ -65,6 +65,86 @@ class PlayerStatistics extends StatelessWidget {
       ],
     ));
   }
+}
+
+class QuotesCard extends StatefulWidget{
+  const QuotesCard({Key? key}) : super(key: key);
+  @override
+  _QuotesCardState createState() => _QuotesCardState();
+}
+
+class _QuotesCardState extends State<QuotesCard>{
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Flexible(
+            flex: 1,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Flexible(
+                  flex: 1,
+                  child: Text("Wurfqoute"),
+                ),
+                Flexible(
+                  flex: 2,
+                  child: PieChartQuotesWidget(),
+                ),
+                Flexible(
+                  flex: 2,
+                  child: Text("20 Wuerfe"),
+                )
+              ],
+            ),
+          ),
+          Flexible(
+            flex: 1,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Flexible(
+                  flex: 1,
+                  child: Text("Quote Postition"),
+                ),
+                Flexible(
+                  flex: 2,
+                  child: PieChartQuotesWidget(),
+                ),
+                Flexible(
+                  flex: 2,
+                  child: Text("15 Wuerfe"),
+                )
+              ],
+            ),
+          ),
+          Flexible(
+            flex: 1,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Flexible(
+                  flex: 1,
+                  child: Text("7m Quote"),
+                ),
+                Flexible(
+                  flex: 2,
+                  child: PieChartQuotesWidget(),
+                ),
+                Flexible(
+                  flex: 2,
+                  child: Text("7 Wuerfe"),
+                )
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
 }
 
 class PerformanceCard extends StatefulWidget {
@@ -154,7 +234,11 @@ class _ActionsCardState extends State<ActionsCard> {
           ),
           Flexible(
             flex: 4,
-            child: LineChartWidget(),
+            child: PieChartActionsWidget(),
+          ),
+          Flexible(
+            flex: 4,
+            child: PieChartActionsWidget(),
           )
         ],
       ),
