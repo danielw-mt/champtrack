@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'charts.dart';
 
-
 class CardsInfoCard extends StatelessWidget {
   const CardsInfoCard({Key? key}) : super(key: key);
   @override
@@ -200,7 +199,8 @@ class QuotesPosition extends StatelessWidget {
     );
   }
 
-  Widget _buildCarouselItemQuotes(BuildContext context, int carouselIndex, int itemIndex) {
+  Widget _buildCarouselItemQuotes(
+      BuildContext context, int carouselIndex, int itemIndex) {
     return Card(
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -276,7 +276,7 @@ class QuotesPosition extends StatelessWidget {
       children: [
         Flexible(
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             Text("Quotes"),
             Text("Würfe"),
@@ -290,6 +290,44 @@ class QuotesPosition extends StatelessWidget {
   }
 }
 
+class PlayerList extends StatefulWidget {
+  const PlayerList({Key? key}) : super(key: key);
+  @override
+  _PlayerListState createState() => _PlayerListState();
+}
 
+class _PlayerListState extends State<PlayerList> {
+  List<String> playerNames = [
+    "Player 1",
+    "Player 2",
+    "Player 3",
+    "Player 4",
+    "Player 5",
+    "Player 6",
+    "Player 7",
+    "Player 8",
+    "Player 9",
+    "Player 10",
+    "Player 11",
+    "Player 12"
+  ];
 
-
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+        child: ListView.builder(
+      itemBuilder: (BuildContext, index) {
+        return Card(
+          child: ListTile(
+            title: Text(playerNames[index]),
+            subtitle: Text("This is subtitle"),
+          ),
+        );
+      },
+      itemCount: playerNames.length,
+      shrinkWrap: true,
+      padding: EdgeInsets.all(5),
+      scrollDirection: Axis.vertical,
+    ));
+  }
+}

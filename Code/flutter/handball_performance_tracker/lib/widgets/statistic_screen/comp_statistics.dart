@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'charts.dart';
-
 
 
 class ComparisonStatistics extends StatelessWidget {

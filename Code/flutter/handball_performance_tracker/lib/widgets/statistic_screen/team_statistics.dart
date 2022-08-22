@@ -12,28 +12,9 @@ class TeamStatistics extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           // Payer List in this Team
-          Flexible(
+          Expanded(
               flex: 1,
-              child: ListView(
-                padding: const EdgeInsets.all(8),
-                children: <Widget>[
-                  Container(
-                    height: 50,
-                    color: Colors.amber[600],
-                    child: const Center(child: Text('Spieler A')),
-                  ),
-                  Container(
-                    height: 50,
-                    color: Colors.amber[500],
-                    child: const Center(child: Text('Spieler B')),
-                  ),
-                  Container(
-                    height: 50,
-                    color: Colors.amber[100],
-                    child: const Center(child: Text('Spieler C')),
-                  ),
-                ],
-              )),
+              child: PlayerList()),
           // Quotes
           Flexible(
               flex: 2,

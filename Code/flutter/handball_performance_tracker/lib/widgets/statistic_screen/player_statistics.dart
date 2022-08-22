@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'charts.dart';
 import 'statistic_card_elements.dart';
 
 class PlayerStatistics extends StatelessWidget {
