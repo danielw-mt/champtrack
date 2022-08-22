@@ -50,10 +50,12 @@ class PlayerStatistics extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Flexible(
-                  child: Card(child: LineChartWidget()),
-                ),
                 Expanded(
+                  flex: 1,
+                  child: CardsInfoCard(),
+                ),
+                Flexible(
+                  flex: 4,
                   child: LineChartWidget(),
                 )
               ],
@@ -62,6 +64,70 @@ class PlayerStatistics extends StatelessWidget {
     ));
   }
 }
+
+
+class CardsInfoCard extends StatelessWidget {
+  const CardsInfoCard({Key? key}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Flexible(
+            flex: 1,
+            child: Column(
+              children: [
+                Flexible(
+                  flex: 1,
+                  child: Text('2min'),
+                ),
+                Flexible(
+                  flex: 1,
+                  // TODO read from database
+                  child: Text('0'),
+                ),
+              ],
+            ),
+          ),
+          Flexible(
+            flex: 1,
+            child: Column(
+              children: [
+                Flexible(
+                  flex: 1,
+                  child: Text('Yellow Cards'),
+                ),
+                Flexible(
+                  flex: 1,
+                  // TODO read from database
+                  child: Text('0'),
+                ),
+              ],
+            ),
+          ),
+          Flexible(
+            flex: 1,
+            child: Column(
+              children: [
+                Flexible(
+                  flex: 1,
+                  child: Text('Red Cards'),
+                ),
+                Flexible(
+                  flex: 1,
+                  // TODO read from database
+                  child: Text('0'),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 
 class PlayerInfoCard extends StatefulWidget {
   const PlayerInfoCard({Key? key}) : super(key: key);
