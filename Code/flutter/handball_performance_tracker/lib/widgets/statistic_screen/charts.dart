@@ -35,6 +35,8 @@ Map<String, double> dataMap = {
   "Fehlwurf": 2,
 };
 
+Map<String, double> dataMap2 = {"Tor": 5, "Assist": 3};
+
 class PieChartActionsWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -53,5 +55,35 @@ class PieChartQuotesWidget extends StatelessWidget {
           showLegends: false,
         ),
         dataMap: dataMap);
+  }
+}
+
+class OwnPieChart extends StatelessWidget {
+  OwnPieChart({required this.ring_form});
+
+  final bool ring_form;
+
+  final colorListQuotes = <Color>[
+    Colors.greenAccent,
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return pie.PieChart(
+      chartType: ring_form ? pie.ChartType.ring : pie.ChartType.disc,
+      legendOptions: pie.LegendOptions(
+        showLegendsInRow: ring_form ? false : true,
+        legendPosition: pie.LegendPosition.right,
+        showLegends: ring_form ? false : true,
+      ),
+      chartValuesOptions: pie.ChartValuesOptions(
+        showChartValueBackground: true,
+        showChartValues: true,
+        showChartValuesInPercentage: ring_form ? true : false,
+        showChartValuesOutside: ring_form ? true : false,
+        decimalPlaces: 1,
+      ),
+      dataMap: ring_form ? dataMap2 : dataMap,
+    );
   }
 }

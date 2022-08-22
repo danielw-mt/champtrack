@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'charts.dart';
 import 'statistic_card_elements.dart';
 
 class TeamStatistics extends StatelessWidget {
@@ -23,7 +22,7 @@ class TeamStatistics extends StatelessWidget {
                 children: [
                   Flexible(
                     flex: 1,
-                    child: Card(child: QuotesPosition()),
+                    child: Card(child: QuotesPosition(ring_form: true,)),
                   ),
                   Flexible(
                     flex: 2,

@@ -25,7 +25,7 @@ class PlayerStatistics extends StatelessWidget {
                       ),
                       Flexible(
                         flex: 2,
-                        child: QuotesPosition(),
+                        child: QuotesPosition(ring_form: true,),
                       )
                     ],
                   )),

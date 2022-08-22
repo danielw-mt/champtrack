@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:handball_performance_tracker/widgets/statistic_screen/bar_chart_example.dart';
 import 'charts.dart';
 
 class CardsInfoCard extends StatelessWidget {
@@ -101,6 +102,9 @@ class PerformanceCard extends StatefulWidget {
 }
 
 class _PerformanceCardState extends State<PerformanceCard> {
+  int currentGraph = 0;
+  List graphs = [LineChartWidget(), BarChartSample2State()];
+
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -108,7 +112,7 @@ class _PerformanceCardState extends State<PerformanceCard> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Flexible(flex: 1, child: PerformanceDropDownButton()),
-          Flexible(flex: 4, child: LineChartWidget())
+          Flexible(flex: 4, child: graphs[currentGraph]),
         ],
       ),
     );
@@ -135,6 +139,7 @@ class _PerformanceDropDownButtonState extends State<PerformanceDropDownButton> {
   @override
   Widget build(BuildContext context) {
     return DropdownButton(
+      isExpanded: true,
       // Initial Value
       value: dropdownvalue,
 
@@ -160,14 +165,18 @@ class _PerformanceDropDownButtonState extends State<PerformanceDropDownButton> {
 }
 
 class QuotesPosition extends StatelessWidget {
-  const QuotesPosition({Key? key}) : super(key: key);
+  const QuotesPosition({Key? key,
+  required this.ring_form}) : super(key: key);
+  
+  final ring_form;
+
   @override
   Widget build(BuildContext context) {
     return Card(child: ListView.builder(
       //padding: EdgeInsets.symmetric(vertical: 5.0),
       itemBuilder: (BuildContext context, int index) {
         if (index == 0) {
-          return _buildCarousel(context, index ~/ 2);
+          return _buildCarousel(context, index ~/ 2, ring_form);
         } else {
           return Divider();
         }
@@ -175,7 +184,7 @@ class QuotesPosition extends StatelessWidget {
     ));
   }
 
-  Widget _buildCarousel(BuildContext context, int carouselIndex) {
+  Widget _buildCarousel(BuildContext context, int carouselIndex, bool ring_form) {
     return Column(
       mainAxisSize: MainAxisSize.max,
       children: <Widget>[
@@ -188,7 +197,7 @@ class QuotesPosition extends StatelessWidget {
             itemBuilder: (BuildContext context, int itemIndex) {
               if (itemIndex == 0) {
                 return _buildCarouselItemQuotes(
-                    context, carouselIndex, itemIndex);
+                    context, carouselIndex, itemIndex, ring_form);
               } else {
                 return _buildCarouselItem(context, carouselIndex, itemIndex);
               }
@@ -200,7 +209,7 @@ class QuotesPosition extends StatelessWidget {
   }
 
   Widget _buildCarouselItemQuotes(
-      BuildContext context, int carouselIndex, int itemIndex) {
+      BuildContext context, int carouselIndex, int itemIndex, bool ring_form) {
     return Card(
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -216,7 +225,7 @@ class QuotesPosition extends StatelessWidget {
                 ),
                 Flexible(
                   flex: 2,
-                  child: PieChartQuotesWidget(),
+                  child: OwnPieChart(ring_form: true),
                 ),
                 Flexible(
                   flex: 2,
@@ -236,7 +245,7 @@ class QuotesPosition extends StatelessWidget {
                 ),
                 Flexible(
                   flex: 2,
-                  child: PieChartQuotesWidget(),
+                  child: OwnPieChart(ring_form: true),
                 ),
                 Flexible(
                   flex: 2,
@@ -256,7 +265,7 @@ class QuotesPosition extends StatelessWidget {
                 ),
                 Flexible(
                   flex: 2,
-                  child: PieChartQuotesWidget(),
+                  child: OwnPieChart(ring_form: true),
                 ),
                 Flexible(
                   flex: 2,
