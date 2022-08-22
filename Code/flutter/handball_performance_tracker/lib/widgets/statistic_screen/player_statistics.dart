@@ -36,10 +36,10 @@ class PlayerStatistics extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Flexible(
-                        child: Card(child: LineChartWidget()),
+                        child: PerformanceCard(),
                       ),
                       Expanded(
-                        child: LineChartWidget(),
+                        child: ActionsCard(),
                       )
                     ],
                   ))
@@ -54,9 +54,11 @@ class PlayerStatistics extends StatelessWidget {
                   flex: 1,
                   child: CardsInfoCard(),
                 ),
-                Flexible(
+                Expanded(
                   flex: 4,
-                  child: LineChartWidget(),
+                  child: Card(
+                    child: Center(child: Text("Game field coming soon")),
+                  ),
                 )
               ],
             )),
@@ -65,6 +67,100 @@ class PlayerStatistics extends StatelessWidget {
   }
 }
 
+class PerformanceCard extends StatefulWidget {
+  const PerformanceCard({Key? key}) : super(key: key);
+  @override
+  _PerformanceCardState createState() => _PerformanceCardState();
+}
+
+class _PerformanceCardState extends State<PerformanceCard> {
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Flexible(
+            flex:1,
+            child: PerformanceDropDownButton()),
+          Flexible(
+            flex: 4,
+            child: LineChartWidget())
+        ],
+      ),
+    );
+  }
+}
+
+class PerformanceDropDownButton extends StatefulWidget {
+  const PerformanceDropDownButton({Key? key}) : super(key: key);
+  @override
+  _PerformanceDropDownButtonState createState() => _PerformanceDropDownButtonState();
+}
+
+class _PerformanceDropDownButtonState extends State<PerformanceDropDownButton> {
+  // Initial Selected Value
+  String dropdownvalue = 'Ef-Score';
+
+  // List of items in our dropdown menu
+  var items = [
+    'Ef-Score',
+    'Tore-Spiel',
+    'Tore letzes Spiel',
+  ];
+  @override
+  Widget build(BuildContext context) {
+    return DropdownButton(
+      // Initial Value
+      value: dropdownvalue,
+
+      // Down Arrow Icon
+      icon: const Icon(Icons.keyboard_arrow_down),
+
+      // Array list of items
+      items: items.map((String items) {
+        return DropdownMenuItem(
+          value: items,
+          child: Text(items),
+        );
+      }).toList(),
+      // After selecting the desired option,it will
+      // change button value to selected value
+      onChanged: (String? newValue) {
+        setState(() {
+          dropdownvalue = newValue!;
+        });
+      },
+    );
+  }
+}
+
+class ActionsCard extends StatefulWidget {
+  const ActionsCard({Key? key}) : super(key: key);
+  @override
+  _ActionsCardState createState() => _ActionsCardState();
+}
+
+class _ActionsCardState extends State<ActionsCard> {
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Flexible(
+            flex: 1,
+            child: Text("% Actions"),
+          ),
+          Flexible(
+            flex: 4,
+            child: LineChartWidget(),
+          )
+        ],
+      ),
+    );
+  }
+}
 
 class CardsInfoCard extends StatelessWidget {
   const CardsInfoCard({Key? key}) : super(key: key);
@@ -127,7 +223,6 @@ class CardsInfoCard extends StatelessWidget {
     );
   }
 }
-
 
 class PlayerInfoCard extends StatefulWidget {
   const PlayerInfoCard({Key? key}) : super(key: key);
