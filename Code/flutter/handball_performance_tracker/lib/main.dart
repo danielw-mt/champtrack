@@ -20,13 +20,17 @@ import 'package:get_it/get_it.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  //move initialization from startupCheck to here because otherwise Analytics crashes
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   setUp();
   // start app
   runApp(GetMaterialApp(
     title: StringsGeneral.lAppTitle,
-    //navigatorObservers: [
-    //  serviceLocator<FirebaseAnalyticsService>().appAnalyticsObserver()
-    //],
+    navigatorObservers: [
+      serviceLocator<FirebaseAnalyticsService>().appAnalyticsObserver(),
+    ],
     theme: ThemeData(
       primarySwatch: Colors.blue,
       visualDensity: VisualDensity.adaptivePlatformDensity,
@@ -103,9 +107,7 @@ class Home extends StatelessWidget {
 }
 
 Future<dynamic> _startupCheck() async {
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+
   if (kIsWeb) {
     // when the app is run in web, also initialize dev database
     // this feature is however not supported for other platforms
