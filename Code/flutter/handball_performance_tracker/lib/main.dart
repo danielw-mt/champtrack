@@ -6,7 +6,7 @@ import 'package:handball_performance_tracker/screens/dashboard.dart';
 import 'package:handball_performance_tracker/screens/startGameScreen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:handball_performance_tracker/widgets/authentication_screen/alert_widget.dart';
-import 'config/firebase_options.dart';
+import 'firebase_options.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
