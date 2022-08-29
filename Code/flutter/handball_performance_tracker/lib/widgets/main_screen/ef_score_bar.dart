@@ -248,9 +248,9 @@ Container buildPlayerButton(
     child: Stack(
       children: [
         getButton(
-            tempController.getPlayersFromSelectedTeam()[
-                tempController.getPlayerBarPlayers()[i]],
-            tempController),
+          tempController.getPlayersFromSelectedTeam()[
+              tempController.getPlayerBarPlayers()[i]],
+        ),
         SizedBox(
           height: buttonHeight,
           width: scorebarButtonWidth,
@@ -312,8 +312,7 @@ Container buildPopupPlayerButton(
     width: scorebarButtonWidth,
     child: Stack(
       children: [
-        getButton(
-            tempController.getPlayersFromSelectedTeam()[i], tempController),
+        getButton(tempController.getPlayersFromSelectedTeam()[i]),
         SizedBox(
           height: buttonHeight,
           width: scorebarButtonWidth,
@@ -341,96 +340,88 @@ Container buildPopupPlayerButton(
   );
 }
 
-Row getButton(Player player, TempController tempController) {
-  // TODO implement GetBuilder with id associated to time penalty
+getButton(Player player) {
+  return GetBuilder<TempController>(
+    id: "player-bar-button",
+    builder: (tempController) {
+      // deal with penalized players here
+      if (tempController.isPlayerPenalized(player)) {
+        buttonColor = Colors.grey;
+      } else {
+        buttonColor = Colors.white;
+      }
 
-  // start: deal with penalized players
-  final PersistentController persController = Get.find<PersistentController>();
-  bool penaltyIsActive = false;
-  if (tempController.isPlayerPenalized(player)) {
-    int penaltySince = tempController.playerIsPenalizedSince(player);
-    if (persController.getCurrentGame().stopWatch.rawTime.value - penaltySince <
-        60000) {
-      penaltyIsActive = true;
-    } else {
-      tempController.removePenalizedPlayer(player);
-    }
-  }
-  // end: deal with penalized players
-  if (penaltyIsActive) {
-    buttonColor = Colors.grey;
-  } else {
-    buttonColor = Colors.white;
-  }
-  return Row(
-    children: [
-      // Playernumber
-      Container(
-        // width is 1/5 of button width
-        width: scorebarButtonWidth / 5,
-        height: buttonHeight,
-        alignment: Alignment.center,
+      return Row(
+        children: [
+          // Playernumber
+          Container(
+            // width is 1/5 of button width
+            width: scorebarButtonWidth / 5,
+            height: buttonHeight,
+            alignment: Alignment.center,
 
-        decoration: BoxDecoration(
-            color: tempController.getPlayerToChange() == player
-                ? pressedButtonColor
-                : buttonColor,
-            // make round edges
-            borderRadius: BorderRadius.only(
-              bottomLeft: Radius.circular(buttonRadius),
-              topLeft: Radius.circular(buttonRadius),
-            )),
-        child: Text(
-          (player.number).toString(),
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: numberFontSize,
-            fontWeight: FontWeight.bold,
+            decoration: BoxDecoration(
+                color: tempController.getPlayerToChange() == player
+                    ? pressedButtonColor
+                    : buttonColor,
+                // make round edges
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(buttonRadius),
+                  topLeft: Radius.circular(buttonRadius),
+                )),
+            child: Text(
+              (player.number).toString(),
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: numberFontSize,
+                fontWeight: FontWeight.bold,
+              ),
+              textAlign: TextAlign.left,
+            ),
           ),
-          textAlign: TextAlign.left,
-        ),
-      ),
 
-      // Playername
-      Expanded(
-        child: Container(
-          // width is 3/5 of button width
-          width: scorebarButtonWidth / 5 * 3,
-          height: buttonHeight,
-          alignment: Alignment.center,
-          color: tempController.getPlayerToChange() == player
-              ? pressedButtonColor
-              : buttonColor,
-          child: Text(
-            player.lastName,
-            overflow: TextOverflow.ellipsis,
-            style: TextStyle(color: Colors.black, fontSize: nameFontSize),
-            textAlign: TextAlign.left,
+          // Playername
+          Expanded(
+            child: Container(
+              // width is 3/5 of button width
+              width: scorebarButtonWidth / 5 * 3,
+              height: buttonHeight,
+              alignment: Alignment.center,
+              color: tempController.getPlayerToChange() == player
+                  ? pressedButtonColor
+                  : buttonColor,
+              child: Text(
+                player.lastName,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(color: Colors.black, fontSize: nameFontSize),
+                textAlign: TextAlign.left,
+              ),
+            ),
           ),
-        ),
-      ),
 
-      Container(
-        width: scorebarButtonWidth / 5,
-        height: buttonHeight,
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-            color: rb[player.efScore.score],
-            // make round edges
-            borderRadius: BorderRadius.only(
-              bottomRight: Radius.circular(buttonRadius),
-              topRight: Radius.circular(buttonRadius),
-            )),
-        child: Text(
-          player.efScore.score.toStringAsFixed(1),
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: nameFontSize,
+          Container(
+            width: scorebarButtonWidth / 5,
+            height: buttonHeight,
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+                color: rb[player.efScore.score],
+                // make round edges
+                borderRadius: BorderRadius.only(
+                  bottomRight: Radius.circular(buttonRadius),
+                  topRight: Radius.circular(buttonRadius),
+                )),
+            child: Text(
+              player.efScore.score.toStringAsFixed(1),
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: nameFontSize,
+              ),
+              textAlign: TextAlign.left,
+            ),
           ),
-          textAlign: TextAlign.left,
-        ),
-      ),
-    ],
+        ],
+      );
+    },
   );
 }
 

@@ -7,6 +7,7 @@ import '../data/game_action.dart';
 import '../data/player.dart';
 import '../data/team.dart';
 import '../utils/player_helper.dart';
+import 'dart:async';
 
 /// Contains variables that are changed often throughout the app.
 /// Stores mostly ephemeral state
@@ -485,12 +486,15 @@ class TempController extends GetxController {
     PersistentController persistentController =
         Get.find<PersistentController>();
     penalizedPlayers[player.id] =
-        persistentController.getCurrentGame().stopWatch.rawTime.value;
+        Timer(Duration(milliseconds: 5000), () =>removePenalizedPlayer);
     print(penalizedPlayers);
+    update(["player-bar-button"]);
+
   }
 
   void removePenalizedPlayer(Player player) {
     penalizedPlayers.remove(player.id);
+    update(["player-bar-button"]);
   }
 
   bool isPlayerPenalized(Player player) =>
