@@ -486,10 +486,19 @@ class TempController extends GetxController {
     PersistentController persistentController =
         Get.find<PersistentController>();
     penalizedPlayers[player.id] =
-        Timer(Duration(milliseconds: 5000), () =>removePenalizedPlayer);
+        persistentController.getCurrentGame().stopWatch.rawTime.value;
     print(penalizedPlayers);
     update(["player-bar-button"]);
-
+    // check whether the penalty for the player ran out every 5 seconds of the stopwatch
+    Timer.periodic(Duration(seconds: 5), (Timer t) {
+      int stopWatchTime =
+          persistentController.getCurrentGame().stopWatch.rawTime.value;
+      int penaltyStartStopWatchTime = penalizedPlayers[player.id];
+      if (stopWatchTime - penaltyStartStopWatchTime >= 120000) {
+        removePenalizedPlayer(player);
+        t.cancel();
+      }
+    });
   }
 
   void removePenalizedPlayer(Player player) {
