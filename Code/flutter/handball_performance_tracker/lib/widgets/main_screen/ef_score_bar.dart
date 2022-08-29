@@ -257,6 +257,11 @@ Container buildPlayerButton(
           child: TextButton(
             child: const Text(""),
             onPressed: () {
+              Player player = tempController.getPlayersFromSelectedTeam()[
+                  tempController.getPlayerBarPlayers()[i]];
+              if (tempController.isPlayerPenalized(player)) {
+                tempController.removePenalizedPlayer(player);
+              }
               popupSubstitutePlayer(tempController);
             },
             style: TextButton.styleFrom(

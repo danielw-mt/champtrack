@@ -491,6 +491,10 @@ class TempController extends GetxController {
     update(["player-bar-button"]);
     // check whether the penalty for the player ran out every 5 seconds of the stopwatch
     Timer.periodic(Duration(seconds: 5), (Timer t) {
+      if (!penalizedPlayers.containsKey(player.id)) {
+        t.cancel();
+        return;
+      }
       int stopWatchTime =
           persistentController.getCurrentGame().stopWatch.rawTime.value;
       int penaltyStartStopWatchTime = penalizedPlayers[player.id];
@@ -502,8 +506,10 @@ class TempController extends GetxController {
   }
 
   void removePenalizedPlayer(Player player) {
-    penalizedPlayers.remove(player.id);
-    update(["player-bar-button"]);
+    if (penalizedPlayers.containsKey(player.id)) {
+      penalizedPlayers.remove(player.id);
+      update(["player-bar-button"]);
+    }
   }
 
   bool isPlayerPenalized(Player player) =>
