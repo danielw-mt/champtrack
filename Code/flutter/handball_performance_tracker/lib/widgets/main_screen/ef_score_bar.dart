@@ -261,8 +261,9 @@ Container buildPlayerButton(
                   tempController.getPlayerBarPlayers()[i]];
               if (tempController.isPlayerPenalized(player)) {
                 tempController.removePenalizedPlayer(player);
+              } else {
+                popupSubstitutePlayer(tempController);
               }
-              popupSubstitutePlayer(tempController);
             },
             style: TextButton.styleFrom(
               // Color of pressed player changes on efscore bar.
