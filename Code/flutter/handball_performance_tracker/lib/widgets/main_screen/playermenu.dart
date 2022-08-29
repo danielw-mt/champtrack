@@ -284,7 +284,7 @@ GetBuilder<TempController> buildDialogButton(
     }
   }
 
-  void logPlayerSelection() async {
+  void handlePlayerSelection() async {
     logger.d("Logging the player selection");
     GameAction lastAction = persistentController.getLastAction();
     Player lastClickedPlayer = tempController.getLastClickedPlayer();
@@ -333,10 +333,16 @@ GetBuilder<TempController> buildDialogButton(
     } else {
       // if the action was not a goal just update the player id in firebase and gamestate
       await persistentController.setLastActionPlayer(associatedPlayer);
+      tempController.setLastClickedPlayer(associatedPlayer);
       tempController.updatePlayerEfScore(
           associatedPlayer.id!, persistentController.getLastAction());
       // add action to feed
       addFeedItem(persistentController.getLastAction());
+    }
+    if (lastAction.actionType == timePenalty) {
+      Player player = tempController.getLastClickedPlayer();
+      print(player);
+      logger.d("Penality for player: " + player.id.toString());
     }
     // Check if associated player or lastClickedPlayer are notOnFieldPlayer. If yes, player menu appears to change the player.
     if (!tempController.getOnFieldPlayers().contains(associatedPlayer)) {
@@ -440,7 +446,7 @@ GetBuilder<TempController> buildDialogButton(
                   ? Colors.purple
                   : Color.fromARGB(255, 180, 211, 236),
               onPressed: () {
-                logPlayerSelection();
+                handlePlayerSelection();
               });
         } else {
           return DialogButton(
@@ -502,7 +508,7 @@ GetBuilder<TempController> buildDialogButton(
                   : Color.fromARGB(255, 180, 211, 236),
               onPressed: () {
                 (substitute_menu == null)
-                    ? logPlayerSelection()
+                    ? handlePlayerSelection()
                     : substitutePlayer();
               });
         }
