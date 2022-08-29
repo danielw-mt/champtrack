@@ -341,7 +341,7 @@ GetBuilder<TempController> buildDialogButton(
     }
     if (lastAction.actionType == timePenalty) {
       Player player = tempController.getLastClickedPlayer();
-      print(player);
+      tempController.addPenalizedPlayer(player);
       logger.d("Penality for player: " + player.id.toString());
     }
     // Check if associated player or lastClickedPlayer are notOnFieldPlayer. If yes, player menu appears to change the player.
