@@ -42,7 +42,7 @@ void callActionMenu(BuildContext context) {
   // if game is not running give a warning
   if (stopWatchTimer.rawTime.value == 0) {
     showDialog(
-      context: context,
+        context: context,
         builder: (BuildContext bcontext) {
           return AlertDialog(
               scrollable: true,
@@ -349,7 +349,7 @@ DialogButton buildDialogButton(
     [sizeFactor, icon, otherText]) {
   TempController tempController = Get.find<TempController>();
   PersistentController persistentController = Get.find<PersistentController>();
-  void logAction(String actionType) async {
+  void handleAction(String actionType) async {
     logger.d("logging an action");
     DateTime dateTime = DateTime.now();
     int unixTime = dateTime.toUtc().millisecondsSinceEpoch;
@@ -379,7 +379,8 @@ DialogButton buildDialogButton(
         gameId: currentGameId,
         type: actionType,
         actionType: actionMapping[allActions]![buttonText]!,
-        throwLocation: List.from(tempController.getLastLocation().cast<String>()),
+        throwLocation:
+            List.from(tempController.getLastLocation().cast<String>()),
         timestamp: unixTime,
         relativeTime: secondsSinceGameStart);
     logger.d("GameAction object created: ${action.actionType}");
@@ -476,6 +477,6 @@ DialogButton buildDialogButton(
       onPressed: () {
         // reset the feed timer
         String actionType = determineActionType();
-        logAction(actionType);
+        handleAction(actionType);
       });
 }
