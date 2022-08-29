@@ -476,4 +476,25 @@ class TempController extends GetxController {
   /// A map of players is stored that currently serve a penalty
   /// {"playerID":"timeOfPenalty"}
   RxMap penalizedPlayers = {}.obs;
+
+  void addPenalizedPlayer(Player player) {
+    // don't add a player to the map if they already have a penalty
+    if (isPlayerPenalized(player)) {
+      return;
+    }
+    PersistentController persistentController =
+        Get.find<PersistentController>();
+    penalizedPlayers[player.id] =
+        persistentController.getCurrentGame().stopWatch.rawTime.value;
+    print(penalizedPlayers);
+  }
+
+  void removePenalizedPlayer(Player player) {
+    penalizedPlayers.remove(player.id);
+  }
+
+  bool isPlayerPenalized(Player player) =>
+      penalizedPlayers.containsKey(player.id);
+
+  int playerIsPenalizedSince(Player player) => penalizedPlayers[player.id];
 }
