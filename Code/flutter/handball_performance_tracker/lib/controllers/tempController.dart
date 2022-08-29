@@ -207,8 +207,8 @@ class TempController extends GetxController {
   /// setter for attackIsLeft
   setAttackIsLeft(bool attackIsLeft) {
     _attackIsLeft.value = attackIsLeft;
-      update(["side-switch", "custom-field", "start-game-form"]);
-    }
+    update(["side-switch", "custom-field", "start-game-form"]);
+  }
 
   //////
   /// Main screen
@@ -268,10 +268,10 @@ class TempController extends GetxController {
   Rx<Player> _lastClickedPlayer = Player().obs;
 
   /// getter for lastClickedPlayer
-  getLastClickedPlayer() => _lastClickedPlayer.value;
+  Player getLastClickedPlayer() => _lastClickedPlayer.value;
 
   /// setter for lastClickedPlayer
-  setLastClickedPlayer(Player lastClickedPlayer) {
+  void setLastClickedPlayer(Player lastClickedPlayer) {
     _lastClickedPlayer.value = lastClickedPlayer;
     update(["player-menu-button"]);
   }
@@ -283,12 +283,12 @@ class TempController extends GetxController {
   List<Player> getPlayersToChange() => _playersToChange;
 
   /// setter for _playersToChange
-  addPlayerToChange(Player playerToChange) {
+  void addPlayerToChange(Player playerToChange) {
     _playersToChange.add(playerToChange);
     //update();
   }
 
-  removePlayerToChange(Player playerToChange) {
+  void removePlayerToChange(Player playerToChange) {
     _playersToChange.remove(playerToChange);
     //update();
   }
@@ -471,4 +471,9 @@ class TempController extends GetxController {
     _selectedSeason.value = season;
     update(["season-dropdown"]);
   }
+
+  /// Penalty Functionality
+  /// A map of players is stored that currently serve a penalty
+  /// {"playerID":"timeOfPenalty"}
+  RxMap penalizedPlayers = {}.obs;
 }
