@@ -1,10 +1,13 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:handball_performance_tracker/locator.dart';
 import 'package:handball_performance_tracker/screens/authenticationScreen.dart';
 import 'package:handball_performance_tracker/screens/dashboard.dart';
 import 'package:handball_performance_tracker/screens/startGameScreen.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:handball_performance_tracker/services/analytics_service.dart';
 import 'package:handball_performance_tracker/widgets/authentication_screen/alert_widget.dart';
 import 'firebase_options.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -12,13 +15,18 @@ import 'package:get/get.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'constants/stringsGeneral.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'locator.dart';
+import 'package:get_it/get_it.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
+  setUp();
   // start app
   runApp(GetMaterialApp(
     title: StringsGeneral.lAppTitle,
+    //navigatorObservers: [
+    //  serviceLocator<FirebaseAnalyticsService>().appAnalyticsObserver()
+    //],
     theme: ThemeData(
       primarySwatch: Colors.blue,
       visualDensity: VisualDensity.adaptivePlatformDensity,
@@ -36,6 +44,8 @@ void main() async {
 
 class Home extends StatelessWidget {
   const Home({Key? key}) : super(key: key);
+
+  
 
   @override
   Widget build(BuildContext context) {

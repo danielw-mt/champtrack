@@ -40,6 +40,10 @@ dependencies:
   rflutter_alert: ^2.0.4
   rainbow_color: ^2.0.1
   firebase_auth: ^3.3.19
+  firebase_analytics: ^9.3.3
+  firebase_core: ^1.21.1
+  get_it: ^7.2.0
+  logger: ^1.1.0
 
 dev_dependencies:
   flutter_test:
