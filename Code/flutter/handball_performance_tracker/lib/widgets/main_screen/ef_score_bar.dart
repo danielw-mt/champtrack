@@ -257,6 +257,8 @@ Container buildPlayerButton(
           child: TextButton(
             child: const Text(""),
             onPressed: () {
+              // check whether the player is penalized. If yes, cancel the penalty
+              // only open the popup when there is no penalty
               Player player = tempController.getPlayersFromSelectedTeam()[
                   tempController.getPlayerBarPlayers()[i]];
               if (tempController.isPlayerPenalized(player)) {

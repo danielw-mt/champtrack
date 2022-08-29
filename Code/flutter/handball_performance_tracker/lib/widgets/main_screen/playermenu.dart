@@ -339,11 +339,16 @@ GetBuilder<TempController> buildDialogButton(
       // add action to feed
       addFeedItem(persistentController.getLastAction());
     }
+    // start: time penalty logic
+    if (tempController.isPlayerPenalized(associatedPlayer)) {
+      tempController.removePenalizedPlayer(associatedPlayer);
+    }
     if (lastAction.actionType == timePenalty) {
       Player player = tempController.getLastClickedPlayer();
       tempController.addPenalizedPlayer(player);
       logger.d("Penality for player: " + player.id.toString());
     }
+    // end: time penalty logic
     // Check if associated player or lastClickedPlayer are notOnFieldPlayer. If yes, player menu appears to change the player.
     if (!tempController.getOnFieldPlayers().contains(associatedPlayer)) {
       tempController.addPlayerToChange(associatedPlayer);
@@ -416,6 +421,14 @@ GetBuilder<TempController> buildDialogButton(
   return GetBuilder<TempController>(
       id: "player-menu-button",
       builder: (tempController) {
+        Color buttonColor = Color(0);
+        if (tempController.getLastClickedPlayer() == associatedPlayer) {
+          buttonColor = Colors.purple;
+        } else if (tempController.isPlayerPenalized(associatedPlayer)) {
+          buttonColor = Colors.grey;
+        } else {
+          buttonColor = Color.fromARGB(255, 180, 211, 236);
+        }
         // Dialog button that shows "No Assist" instead of the player name and shirt
         // at the place where the first player was clicked
         if (tempController.getLastClickedPlayer().lastName == buttonText) {
@@ -442,9 +455,7 @@ GetBuilder<TempController> buildDialogButton(
               // set height and width of buttons so the shirt and name are fitting inside
               height: width * 0.14,
               width: width * 0.14,
-              color: tempController.getLastClickedPlayer() == associatedPlayer
-                  ? Colors.purple
-                  : Color.fromARGB(255, 180, 211, 236),
+              color: buttonColor,
               onPressed: () {
                 handlePlayerSelection();
               });
@@ -503,9 +514,7 @@ GetBuilder<TempController> buildDialogButton(
               // set height and width of buttons so the shirt and name are fitting inside
               height: width * 0.14,
               width: width * 0.14,
-              color: tempController.getLastClickedPlayer() == associatedPlayer
-                  ? Colors.purple
-                  : Color.fromARGB(255, 180, 211, 236),
+              color: buttonColor,
               onPressed: () {
                 (substitute_menu == null)
                     ? handlePlayerSelection()

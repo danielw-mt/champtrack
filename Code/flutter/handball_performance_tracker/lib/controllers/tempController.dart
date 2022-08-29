@@ -514,6 +514,4 @@ class TempController extends GetxController {
 
   bool isPlayerPenalized(Player player) =>
       penalizedPlayers.containsKey(player.id);
-
-  int playerIsPenalizedSince(Player player) => penalizedPlayers[player.id];
 }
