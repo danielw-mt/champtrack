@@ -20,6 +20,7 @@ class MainScreen extends StatelessWidget {
   // screen where the game takes place
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  // TODO Get.find instead of Get.put?
   final TempController tempController = Get.put(TempController());
 
   @override
