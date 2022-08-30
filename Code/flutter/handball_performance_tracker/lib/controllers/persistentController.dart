@@ -80,12 +80,27 @@ class PersistentController extends GetxController {
     return GameAction();
   }
 
-  /// updates playerid of the last action and adds it to firestore
+  List<GameAction> getActionsNewerThan(int timestamp) {
+    List<GameAction> newActions = [];
+    _actions.forEach((action) {
+      if (action.timestamp > timestamp) {
+        newActions.add(action);
+      }
+    });
+    return newActions;
+  }
+
+  /// updates playerid of the last action
   Future<void> setLastActionPlayer(Player player) async {
     _actions.last.playerId = player.id!;
-    DocumentReference ref = await repository.addActionToGame(_actions.last);
+  }
+
+  /// adds actions to the collection in firestore
+  Future<void> addActionToFirebase(GameAction action) async {
+    DocumentReference ref = await repository.addActionToGame(action);
     _actions.last.id = ref.id;
   }
+
 
   /// last game object written to firestore
   Rx<Game> _currentGame = Game(date: DateTime.now()).obs;
@@ -107,9 +122,8 @@ class PersistentController extends GetxController {
   }
 
   /// reset the current Game object to a game without id and clean up the actions list
-  void resetCurrentGame(){
-    _currentGame.value = Game(date: DateTime.now()); 
+  void resetCurrentGame() {
+    _currentGame.value = Game(date: DateTime.now());
     _actions.value = [];
   }
-
 }
