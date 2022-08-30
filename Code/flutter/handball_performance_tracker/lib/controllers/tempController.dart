@@ -207,8 +207,8 @@ class TempController extends GetxController {
   /// setter for attackIsLeft
   setAttackIsLeft(bool attackIsLeft) {
     _attackIsLeft.value = attackIsLeft;
-      update(["side-switch", "custom-field", "start-game-form"]);
-    }
+    update(["side-switch", "custom-field", "start-game-form"]);
+  }
 
   //////
   /// Main screen
@@ -248,7 +248,7 @@ class TempController extends GetxController {
   /// getter for playerMenuText
   String getPlayerMenuText() => _playerMenuText.value;
 
-  void setPlayerMenutText(String text) {
+  void setPlayerMenuText(String text) {
     _playerMenuText.value = text;
     update(["player-menu-text"]);
   }

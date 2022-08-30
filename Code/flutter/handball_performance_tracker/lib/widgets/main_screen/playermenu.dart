@@ -122,7 +122,7 @@ void callPlayerMenu(context, [substitute_menu]) {
       // When closing set player menu text to ""
       // if just pressed anywhere in screen)
       .then((_) {
-    tempController.setPlayerMenutText("");
+    tempController.setPlayerMenuText("");
     tempController.setLastClickedPlayer(Player());
     (!playerChanged && substitute_menu != null)
         ? tempController.getLastPlayerToChange()
@@ -291,7 +291,7 @@ GetBuilder<TempController> buildDialogButton(
     // if goal was pressed but no player was selected yet
     //(lastClickedPlayer is default Player Object) do nothing
     if (lastAction.actionType == "goal" && lastClickedPlayer.id! == "") {
-      tempController.setPlayerMenutText("Assist");
+      tempController.setPlayerMenuText("Assist");
       // update last Clicked player value with the Player from selected team
       // who was clicked
       tempController.setLastClickedPlayer(
@@ -371,7 +371,7 @@ GetBuilder<TempController> buildDialogButton(
       callPlayerMenu(context, true);
       return;
     }
-    tempController.setPlayerMenutText("");
+    tempController.setPlayerMenuText("");
     Navigator.pop(context);
   }
 
@@ -401,7 +401,7 @@ GetBuilder<TempController> buildDialogButton(
       callPlayerMenu(context, true);
       return;
     }
-    tempController.setPlayerMenutText("");
+    tempController.setPlayerMenuText("");
     Navigator.pop(context);
   }
 
