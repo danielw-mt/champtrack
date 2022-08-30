@@ -80,6 +80,10 @@ class PersistentController extends GetxController {
     return GameAction();
   }
 
+  List<GameAction> getAllActions() {
+    return _actions;
+  }
+
   List<GameAction> getActionsNewerThan(int timestamp) {
     List<GameAction> newActions = [];
     _actions.forEach((action) {
@@ -100,7 +104,6 @@ class PersistentController extends GetxController {
     DocumentReference ref = await repository.addActionToGame(action);
     _actions.last.id = ref.id;
   }
-
 
   /// last game object written to firestore
   Rx<Game> _currentGame = Game(date: DateTime.now()).obs;
