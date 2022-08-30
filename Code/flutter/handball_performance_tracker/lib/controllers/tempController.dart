@@ -141,7 +141,8 @@ class TempController extends GetxController {
         ["action-feed", "on-field-checkbox", "ef-score-bar", "players-list"]);
   }
 
-  /// if player gets active in a game, add the game's id to its games list as well as the player's id to the games players list
+  /// if player gets active in a game, add the game's id to its games list
+  ///  as well as the player's id to the games players list
   void addGameToPlayer(Player player, Game game) {
     if (!player.games.contains(game.id)) {
       player.games.add(game.id!);
