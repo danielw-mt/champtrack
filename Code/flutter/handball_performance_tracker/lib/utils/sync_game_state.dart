@@ -44,7 +44,6 @@ runGameStateSync() {
       "stopWatchTime": currentGame.stopWatch.rawTime.value
     });
 
-
     // if there are any actions in the gameState without an ID
     //(not added to FB yet), add those actions and assign them the id (happens in repository)
     persistentController
@@ -54,14 +53,13 @@ runGameStateSync() {
       persistentController.addActionToFirebase(action_in_loop);
     });
 
-
     /// start: sync players (on field)
     // check if there is a difference between players set in firebase and in gameState
     List<Player> onFieldPlayers = tempController.getOnFieldPlayers();
     List firebasePlayerIds = gameData["players"];
     bool changeInIDs = false;
-    onFieldPlayers.forEach((Player player) {
-      if (!firebasePlayerIds.contains(player.id)) {
+    firebasePlayerIds.forEach((element) {
+      if (!onFieldPlayers.any((player) => player.id == element)) {
         changeInIDs = true;
       }
     });
