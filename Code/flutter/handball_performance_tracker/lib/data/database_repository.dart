@@ -142,7 +142,7 @@ class DatabaseRepository {
   /// @return asynchronous reference to GameAction object that was saved to firebase
   Future<DocumentReference> addActionToGame(GameAction action) async {
     return _db
-        .collection("gameData")
+        .collection("games")
         .doc(action.gameId)
         .collection("actions")
         .add(action.toMap());
@@ -151,7 +151,7 @@ class DatabaseRepository {
   /// update a GameAction's firestore record according to @param action properties
   void updateAction(GameAction action) async {
     await _db
-        .collection("gameData")
+        .collection("games")
         .doc(action.gameId)
         .collection("actions")
         .doc(action.id)
@@ -161,7 +161,7 @@ class DatabaseRepository {
   /// delete a the firestore record of a given @param action
   void deleteAction(GameAction action) async {
     await _db
-        .collection("gameData")
+        .collection("games")
         .doc(action.gameId)
         .collection("actions")
         .doc(action.id)
@@ -178,7 +178,7 @@ class DatabaseRepository {
     DocumentSnapshot mostRecentGame = mostRecentGameQuery.docs[0];
     // look inside gameActions for the lastest action for that game
     QuerySnapshot mostRecentActionQuery = await _db
-        .collection("gameData")
+        .collection("games")
         .doc(mostRecentGame.id)
         .collection("actions")
         .orderBy("timestamp", descending: true)
@@ -188,7 +188,7 @@ class DatabaseRepository {
     DocumentSnapshot mostRecentAction = mostRecentActionQuery.docs[0];
     // delete most recent doc
     _db
-        .collection("gameData")
+        .collection("games")
         .doc(mostRecentGame.id)
         .collection("actions")
         .doc(mostRecentAction.id)
