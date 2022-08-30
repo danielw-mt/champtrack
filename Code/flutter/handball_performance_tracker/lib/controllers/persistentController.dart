@@ -84,16 +84,6 @@ class PersistentController extends GetxController {
     return _actions;
   }
 
-  List<GameAction> getActionsNewerThan(int timestamp) {
-    List<GameAction> newActions = [];
-    _actions.forEach((action) {
-      if (action.timestamp > timestamp) {
-        newActions.add(action);
-      }
-    });
-    return newActions;
-  }
-
   /// updates playerid of the last action
   Future<void> setLastActionPlayer(Player player) async {
     _actions.last.playerId = player.id!;
