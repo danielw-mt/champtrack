@@ -9,7 +9,7 @@ import '../controllers/tempController.dart';
 import '../data/player.dart';
 import '../data/game.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
-
+import 'sync_game_state.dart';
 import '../constants/stringsGameSettings.dart';
 
 void startGame(BuildContext context, {bool preconfigured: false}) async {
@@ -63,8 +63,9 @@ void startGame(BuildContext context, {bool preconfigured: false}) async {
     tempController.setOpponentScore(0);
     tempController.setOwnScore(0);
   }
-  
+
   print("start game, id: ${persistentController.getCurrentGame().id}");
+  runGameStateSync();
 }
 
 void unpauseGame() {

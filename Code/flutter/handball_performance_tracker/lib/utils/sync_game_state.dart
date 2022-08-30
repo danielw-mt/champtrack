@@ -9,9 +9,8 @@ import '../controllers/persistentController.dart';
 import '../controllers/tempController.dart';
 import 'dart:async';
 
-
 /// Syncs game state with firebase every x minutes via timer
-/// changes between data in firebase and local game state are detected. 
+/// changes between data in firebase and local game state are detected.
 /// The 'games' collection is updated accordingly with new gameActions for example
 runGameStateSync() {
   TempController tempController = Get.find<TempController>();
@@ -29,7 +28,6 @@ runGameStateSync() {
   // TODO check if the current game id exists in the database
   Game currentGame = persistentController.getCurrentGame();
   Team currentTeam = tempController.getSelectedTeam();
-
   DocumentReference currentGameFirebaseReference =
       _db.collection("games").doc(currentGame.id);
   Timer.periodic(const Duration(seconds: 10), (timer) async {
@@ -38,36 +36,42 @@ runGameStateSync() {
     // get most recent gameData from Firebase as usable object in dart
     DocumentSnapshot gameDocument = await currentGameFirebaseReference.get();
     final gameData = gameDocument.data() as Map<String, dynamic>;
-
     // sync selected team id, score, stopwatchtime,
     await currentGameFirebaseReference.update({
       "selectedTeam": currentTeam.id,
-      "scoreHome": currentGame.scoreHome,
-      "scoreOpponent": currentGame.scoreOpponent,
+      "scoreHome": tempController.getOwnScore(),
+      "scoreOpponent": tempController.getOpponentScore(),
       "stopWatchTime": currentGame.stopWatch.rawTime.value
     });
 
-    // sync new gameActions
+    // start: sync new gameActions
     // get the timestamp of the last action that is stored in FB
-    QuerySnapshot lastActionSaved = await currentGameFirebaseReference
-        .collection("actions")
-        .orderBy("timestamp", descending: true)
-        .limitToLast(1)
-        .get();
-    // get all actions in the action list that are newer than the timestamp
-    List<GameAction> newActions = persistentController
-        .getActionsNewerThan(lastActionSaved.docs.first["timestamp"]);
-    // sync all newActions to FB
-    newActions.forEach((GameAction action) {
-      persistentController.addActionToFirebase(action);
-    });
-
+    // check if an action collection exists. If there is no action collection
+    final snapshot =
+        await currentGameFirebaseReference.collection("actions").get();
+    List<GameAction> newActions = [];
+    if (snapshot.docs.length != 0) {
+      QuerySnapshot lastActionSaved = await currentGameFirebaseReference
+          .collection("actions")
+          .orderBy("timestamp", descending: true)
+          .limitToLast(1)
+          .get();
+      // if there are already gameActions stored new actions are the difference to those stored already
+      newActions = persistentController
+          .getActionsNewerThan(lastActionSaved.docs.first["timestamp"]);
+    } else {
+      // if there are no actions stored yet new actions are all the actions that exist
+      newActions = persistentController.getAllActions();
+      newActions.forEach((GameAction action) {
+        persistentController.addActionToFirebase(action);
+      });
+    }
     /// end: sync new actions
-
+    
     /// start: sync players (on field)
     // check if there is a difference between players set in firebase and in gameState
     List<Player> onFieldPlayers = tempController.getOnFieldPlayers();
-    List<String> firebasePlayerIds = gameData["players"];
+    List firebasePlayerIds = gameData["players"];
     bool changeInIDs = false;
     onFieldPlayers.forEach((Player player) {
       if (!firebasePlayerIds.contains(player.id)) {
@@ -82,14 +86,13 @@ runGameStateSync() {
       });
       await currentGameFirebaseReference.update({"players": newIDs});
     }
-
     /// end: sync players
   });
 }
 
-/// Recreates the gameState when for example a crash has occured. 
+/// Recreates the gameState when for example a crash has occured.
 /// Checks if the gameState is empty but should be filled because there is a gameRunning
-/// 
-/// If applicable recreates 
+///
+/// If applicable recreates
 /// onFieldPlayers, their ef-scores, stopwatch and gameActions from Firebase data
 recreateGameStateFromFirebase() {}
