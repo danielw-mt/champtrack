@@ -44,30 +44,17 @@ runGameStateSync() {
       "stopWatchTime": currentGame.stopWatch.rawTime.value
     });
 
-    // start: sync new gameActions
-    // get the timestamp of the last action that is stored in FB
-    // check if an action collection exists. If there is no action collection
-    final snapshot =
-        await currentGameFirebaseReference.collection("actions").get();
-    List<GameAction> newActions = [];
-    if (snapshot.docs.length != 0) {
-      QuerySnapshot lastActionSaved = await currentGameFirebaseReference
-          .collection("actions")
-          .orderBy("timestamp", descending: true)
-          .limitToLast(1)
-          .get();
-      // if there are already gameActions stored new actions are the difference to those stored already
-      newActions = persistentController
-          .getActionsNewerThan(lastActionSaved.docs.first["timestamp"]);
-    } else {
-      // if there are no actions stored yet new actions are all the actions that exist
-      newActions = persistentController.getAllActions();
-      newActions.forEach((GameAction action) {
-        persistentController.addActionToFirebase(action);
-      });
-    }
-    /// end: sync new actions
-    
+
+    // if there are any actions in the gameState without an ID
+    //(not added to FB yet), add those actions and assign them the id (happens in repository)
+    persistentController
+        .getAllActions()
+        .where((GameAction action) => action.id == null)
+        .forEach((GameAction action_in_loop) {
+      persistentController.addActionToFirebase(action_in_loop);
+    });
+
+
     /// start: sync players (on field)
     // check if there is a difference between players set in firebase and in gameState
     List<Player> onFieldPlayers = tempController.getOnFieldPlayers();
@@ -86,6 +73,7 @@ runGameStateSync() {
       });
       await currentGameFirebaseReference.update({"players": newIDs});
     }
+
     /// end: sync players
   });
 }
