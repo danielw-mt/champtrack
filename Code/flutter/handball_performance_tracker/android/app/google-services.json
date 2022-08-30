@@ -7,12 +7,20 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:910235672034:android:9f6e014a8d7d1b4bbeedbb",
+        "mobilesdk_app_id": "1:910235672034:android:1938e8b9cc1e14acbeedbb",
         "android_client_info": {
-          "package_name": "mad.tf.fau.de.handball_performance_tracker"
+          "package_name": "com.mycompany.champtrackv2"
         }
       },
       "oauth_client": [
+        {
+          "client_id": "910235672034-8mcki93emjgr7j491u6vli0evj9a6ull.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mycompany.champtrackv2",
+            "certificate_hash": "9bbb3186b2189ef16d8f272bdab59362c395cbb4"
+          }
+        },
         {
           "client_id": "910235672034-hsh3oenm45ejpudtc2ob49gu17bukbgj.apps.googleusercontent.com",
           "client_type": 3
@@ -29,6 +37,57 @@
             {
               "client_id": "910235672034-hsh3oenm45ejpudtc2ob49gu17bukbgj.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "910235672034-4mck3ekqslbnvbln3fd6i0mgbebmf34h.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.mycompany.champtrackv2"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:910235672034:android:9f6e014a8d7d1b4bbeedbb",
+        "android_client_info": {
+          "package_name": "mad.tf.fau.de.handball_performance_tracker"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "910235672034-7php0dr36ip0so2hid1sf0ooic4c0v62.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "mad.tf.fau.de.handball_performance_tracker",
+            "certificate_hash": "9bbb3186b2189ef16d8f272bdab59362c395cbb4"
+          }
+        },
+        {
+          "client_id": "910235672034-hsh3oenm45ejpudtc2ob49gu17bukbgj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBQFdpe1IL5Vrh5sAyAIWaY4isy0LdDUc8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "910235672034-hsh3oenm45ejpudtc2ob49gu17bukbgj.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "910235672034-4mck3ekqslbnvbln3fd6i0mgbebmf34h.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.mycompany.champtrackv2"
+              }
             }
           ]
         }

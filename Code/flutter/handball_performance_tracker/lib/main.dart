@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
@@ -17,6 +19,7 @@ import 'constants/stringsGeneral.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'locator.dart';
 import 'package:get_it/get_it.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -24,6 +27,8 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
+
   setUp();
   // start app
   runApp(GetMaterialApp(
@@ -42,14 +47,12 @@ void main() async {
       GetPage(name: '/', page: () => Home()),
       GetPage(name: '/StartGameScreen', page: () => StartGameScreen()),
       GetPage(name: '/Dashboard', page: () => Dashboard()),
-      ],
+    ],
   ));
 }
 
 class Home extends StatelessWidget {
   const Home({Key? key}) : super(key: key);
-
-  
 
   @override
   Widget build(BuildContext context) {
@@ -91,8 +94,6 @@ class Home extends StatelessWidget {
         } else {
           children = <Widget>[
             CustomAlertWidget("Suche Verbindung..."),
-            
-            
           ];
         }
         return Center(
@@ -107,14 +108,13 @@ class Home extends StatelessWidget {
 }
 
 Future<dynamic> _startupCheck() async {
-
   if (kIsWeb) {
     // when the app is run in web, also initialize dev database
     // this feature is however not supported for other platforms
     if (Firebase.apps.length < 2) {
       // only initialize for the first time and not on hot reload
-      await Firebase.initializeApp(
-          name: "dev", options: DevFirebaseOptions.currentPlatform);
+      //await Firebase.initializeApp(
+      //    name: "dev", options: DevFirebaseOptions.currentPlatform);
     }
   }
 

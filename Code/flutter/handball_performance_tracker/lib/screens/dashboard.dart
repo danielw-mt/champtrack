@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:handball_performance_tracker/constants/colors.dart';
 import 'package:handball_performance_tracker/constants/fieldSizeParameter.dart';
@@ -85,6 +86,11 @@ class Dashboard extends StatelessWidget {
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
                                       children: [
+                                        TextButton(
+                                          onPressed: () => throw Exception(),
+                                          child: const Text(
+                                              "Throw Test Exception"),
+                                        ),
                                         SquareDashboardButton(
                                             startButton: false),
                                         SquareDashboardButton(
