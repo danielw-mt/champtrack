@@ -391,10 +391,6 @@ DialogButton buildDialogButton(
     // when a player was selected in that menu the action document can be
     // updated in firebase with their player_id using the action_id
     logger.d("Adding gameaction to firebase");
-    // repository
-    //     .addActionToGame(action)
-    //     .then((DocumentReference doc) => action.id = doc.id);
-
     // Save action directly if goalkeeper action
     if (actionType == goalkeeper) {
       String? goalKeeperId = "goalkeeper";
