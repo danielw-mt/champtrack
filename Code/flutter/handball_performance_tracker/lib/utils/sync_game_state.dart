@@ -71,8 +71,8 @@ runGameStateSync() {
       });
       await currentGameFirebaseReference.update({"players": newIDs});
     }
-
     /// end: sync players
+    await currentGameFirebaseReference.update({"lastSync": DateTime.now().toIso8601String()});
   });
 }
 

@@ -19,7 +19,6 @@ var logger = Logger(
 );
 
 class DatabaseRepository {
-  
   final FirebaseFirestore _db = FirebaseFirestore.instance;
   // final FirebaseFirestore _db = FirebaseFirestore.instanceFor(app: Firebase.app('dev'));
 
@@ -124,7 +123,7 @@ class DatabaseRepository {
   Future<DocumentReference> addGame(Game game) async {
     return _db.collection("games").add(game.toMap());
   }
-  
+
   /// update a Game's firestore record according to @param game properties
   void updateGame(Game game) async {
     await _db.collection("games").doc(game.id).update(game.toMap());
@@ -193,5 +192,12 @@ class DatabaseRepository {
         .collection("actions")
         .doc(mostRecentAction.id)
         .delete();
+  }
+
+  List<Game> getGamesWithinLastMinutes(int minutes) {
+    DateTime now = DateTime.now();
+    DateTime then = now.subtract(Duration(minutes: minutes));
+    // return _db.collection("games").
+    return [];
   }
 }
