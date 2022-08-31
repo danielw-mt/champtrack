@@ -472,4 +472,13 @@ class TempController extends GetxController {
     _selectedSeason.value = season;
     update(["season-dropdown"]);
   }
+
+  /// Whether a game was synced in the last 20 minutes after opening the app
+  RxBool oldGameStateExists = false.obs;
+
+  void setOldGameStateExists(bool oldGameStateExists) {
+    this.oldGameStateExists.value = oldGameStateExists;
+  }
+
+  bool getOldGameStateExists() => oldGameStateExists.value;
 }

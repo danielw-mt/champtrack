@@ -75,10 +75,3 @@ runGameStateSync() {
     await currentGameFirebaseReference.update({"lastSync": DateTime.now().toIso8601String()});
   });
 }
-
-/// Recreates the gameState when for example a crash has occured.
-/// Checks if the gameState is empty but should be filled because there is a gameRunning
-///
-/// If applicable recreates
-/// onFieldPlayers, their ef-scores, stopwatch and gameActions from Firebase data
-recreateGameStateFromFirebase() {}

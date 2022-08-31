@@ -89,6 +89,12 @@ class Dashboard extends StatelessWidget {
                                             startButton: false),
                                         SquareDashboardButton(
                                             startButton: true),
+                                        tempController.oldGameStateExists()
+                                            ? Card(
+                                                child: Text(
+                                                    "Do you want to resume an old game?"),
+                                              )
+                                            : Container(),
                                       ],
                                     ),
                                   ],
@@ -107,7 +113,7 @@ class Dashboard extends StatelessWidget {
               ],
             );
           } else {
-            return CustomAlertWidget("Lade Daten");
+            return CustomAlertWidget("Initializing local data");
           }
         });
   }

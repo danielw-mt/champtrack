@@ -194,10 +194,18 @@ class DatabaseRepository {
         .delete();
   }
 
-  List<Game> getGamesWithinLastMinutes(int minutes) {
+  /// @return true if there is a game sync within the last @param minutes
+  Future<bool> isThereAGameWithinLastMinutes(int minutes) async {
     DateTime now = DateTime.now();
     DateTime then = now.subtract(Duration(minutes: minutes));
-    // return _db.collection("games").
-    return [];
+    QuerySnapshot snapshot = await _db
+        .collection("games")
+        .where("lastSync", isGreaterThan: then.toIso8601String())
+        .get();
+    if (snapshot.docs.length > 0) {
+      return true;
+    } else {
+      return false;
+    }
   }
 }
