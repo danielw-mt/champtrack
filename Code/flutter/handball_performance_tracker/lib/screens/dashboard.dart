@@ -14,6 +14,7 @@ import '../controllers/persistentController.dart';
 import '../controllers/tempController.dart';
 import '../utils/initializeLocalData.dart';
 
+
 class Dashboard extends StatelessWidget {
   final PersistentController persistentController =
       Get.put(PersistentController());
