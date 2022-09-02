@@ -1,19 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:handball_performance_tracker/constants/colors.dart';
-import 'package:handball_performance_tracker/constants/fieldSizeParameter.dart';
-import 'package:handball_performance_tracker/screens/startGameScreen.dart';
-import 'package:handball_performance_tracker/screens/statisticsScreen.dart';
-import 'package:handball_performance_tracker/screens/teamSelectionScreen.dart';
 import 'package:handball_performance_tracker/widgets/authentication_screen/alert_widget.dart';
 import 'package:handball_performance_tracker/widgets/main_screen/ef_score_bar.dart';
 import 'package:handball_performance_tracker/widgets/nav_drawer.dart';
-import '../constants/stringsGeneral.dart';
-import '../constants/stringsDashboard.dart';
 import 'package:get/get.dart';
 import '../controllers/persistentController.dart';
 import '../controllers/tempController.dart';
 import '../utils/initializeLocalData.dart';
-
+import '../widgets/dashboard/start_new_game_button.dart';
+import '../widgets/dashboard/manage_teams_button.dart';
+import '../widgets/dashboard/statistics_button.dart';
 
 class Dashboard extends StatelessWidget {
   final PersistentController persistentController =
@@ -86,16 +82,8 @@ class Dashboard extends StatelessWidget {
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
                                       children: [
-                                        SquareDashboardButton(
-                                            startButton: false),
-                                        SquareDashboardButton(
-                                            startButton: true),
-                                        tempController.oldGameStateExists()
-                                            ? Card(
-                                                child: Text(
-                                                    "Do you want to resume an old game?"),
-                                              )
-                                            : Container(),
+                                        ManageTeamsButton(),
+                                        StartNewGameButton()
                                       ],
                                     ),
                                   ],
@@ -120,85 +108,4 @@ class Dashboard extends StatelessWidget {
   }
 }
 
-class StatisticsButton extends StatelessWidget {
-  const StatisticsButton({Key? key}) : super(key: key);
 
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.all(20),
-      width: screenWidth * 0.85,
-      height: availableScreenHeight * 0.4,
-      decoration: BoxDecoration(
-          color: Colors.white,
-          // set border so corners can be made round
-          border: Border.all(
-            color: Colors.white,
-          ),
-          borderRadius: BorderRadius.all(Radius.circular(15))),
-      child: TextButton(
-          onPressed: () {
-            Get.to(() => StatisticsScreen());
-          },
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(
-                Icons.bar_chart,
-                color: Colors.black,
-                size: 50,
-              ),
-              Text(
-                StringsGeneral.lStatistics,
-                style: TextStyle(color: Colors.black, fontSize: 30),
-              )
-            ],
-          )),
-    );
-  }
-}
-
-class SquareDashboardButton extends StatelessWidget {
-  bool startButton = false;
-  SquareDashboardButton({Key? key, required this.startButton})
-      : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.all(20),
-      width: screenWidth * 0.4,
-      height: availableScreenHeight * 0.4,
-      decoration: BoxDecoration(
-          color: Colors.white,
-          // set border so corners can be made round
-          border: Border.all(
-            color: Colors.white,
-          ),
-          borderRadius: BorderRadius.all(Radius.circular(15))),
-      child: TextButton(
-          onPressed: () {
-            startButton
-                ? Get.to(() => StartGameScreen())
-                : Get.to(() => TeamSelectionScreen());
-          },
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(
-                startButton ? Icons.add : Icons.edit,
-                color: Colors.black,
-                size: 50,
-              ),
-              Text("   "),
-              Text(
-                startButton
-                    ? StringsDashboard.lTrackNewGame
-                    : StringsDashboard.lManageTeams,
-                style: TextStyle(color: Colors.black, fontSize: 30),
-              )
-            ],
-          )),
-    );
-  }
-}
