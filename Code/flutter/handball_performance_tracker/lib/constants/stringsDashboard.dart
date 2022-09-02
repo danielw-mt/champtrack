@@ -7,4 +7,6 @@ class StringsDashboard{
   static const String lLastGames = "Letzte Spiele";
   static const String lRecreateOldGame = "Letzes Spiel wiederherstellen";
   static const String lSkipGameRecreation = "Es existiert ein bestehendes Spiel. Beim Fortfahren kann dieses nicht mehr fortgesetzt werden.";
+  static const String lContinue = "Fortfahren";
+  static const String lWarning = "Warnung";
 }
