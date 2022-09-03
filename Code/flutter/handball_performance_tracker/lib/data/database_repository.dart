@@ -125,11 +125,13 @@ class DatabaseRepository {
 
   /// @return asynchronous reference to Game object that was saved to firebase
   Future<DocumentReference> addGame(Game game) async {
+    print("adding game");
     return _db.collection("games").add(game.toMap());
   }
 
   /// update a Game's firestore record according to @param game properties
   void updateGame(Game game) async {
+    print("updating game");
     await _db.collection("games").doc(game.id).update(game.toMap());
   }
 
@@ -140,6 +142,10 @@ class DatabaseRepository {
 
   Future<QuerySnapshot> getAllTeams() async {
     return await _db.collection("teams").get();
+  }
+
+  Future<QuerySnapshot> getAllPlayers() async {
+    return await _db.collection("players").get();
   }
 
   /// @return asynchronous reference to GameAction object that was saved to firebase

@@ -16,32 +16,32 @@ Future<bool> initializeLocalData() async {
     List<Team> teamsList = [];
     // initialize all teams with corresponding player objects first and wait
     //for them to be built
-    QuerySnapshot snapshot = await repository.getAllTeams();
+    QuerySnapshot teamsSnapshot = await repository.getAllTeams();
+    QuerySnapshot playersSnapshot = await repository.getAllPlayers();
     // go through every team document
-    for (var element in snapshot.docs) {
+    for (var element in teamsSnapshot.docs) {
       Map<String, dynamic> docData = element.data() as Map<String, dynamic>;
       List<Player> playerList = [];
       List<Player> onFieldList = [];
       // add all players in each team to the players list
-      List<DocumentReference> players =
+      List<DocumentReference> playerReferences =
           docData["players"].cast<DocumentReference>();
-      for (var documentReference in players) {
-        DocumentSnapshot documentSnapshot = await documentReference.get();
-        if (documentSnapshot.exists) {
-          playerList.add(Player.fromDocumentSnapshot(documentSnapshot));
-        }
+      for (DocumentReference playerReference in playerReferences) {
+        playersSnapshot.docs.forEach((playerSnapshot) {
+          if (playerSnapshot.id == playerReference.id.toString()) {
+            playerList.add(Player.fromDocumentSnapshot(playerSnapshot));
+          }
+        });
       }
       // add each onFieldPlayer to the onFieldPlayers list
       List<DocumentReference> onFieldPlayers =
           docData["onFieldPlayers"].cast<DocumentReference>();
-      for (var documentReference in onFieldPlayers) {
-        DocumentSnapshot documentSnapshot = await documentReference.get();
-        if (documentSnapshot.exists) {
-          String playerId = documentSnapshot.reference.id;
-          // add references from playerList to onFieldList
-          onFieldList
-              .add(playerList.firstWhere((player) => player.id == playerId));
-        }
+      for (DocumentReference playerReference in onFieldPlayers) {
+        playersSnapshot.docs.forEach((playerSnapshot) {
+          if (playerSnapshot.id == playerReference.id.toString()) {
+            onFieldList.add(Player.fromDocumentSnapshot(playerSnapshot));
+          }
+        });
       }
       print("adding team" + docData["name"]);
       teamsList.add(Team(
@@ -65,7 +65,8 @@ Future<bool> initializeLocalData() async {
     tempController.setPlayingTeam(persistentController.getAvailableTeams()[0]);
 
     // run a test whether a previous game exists already
-    bool gameWithinLast20Mins = await repository.isThereAGameWithinLastMinutes(20);
+    bool gameWithinLast20Mins =
+        await repository.isThereAGameWithinLastMinutes(20);
     if (gameWithinLast20Mins) {
       tempController.setOldGameStateExists(true);
     }

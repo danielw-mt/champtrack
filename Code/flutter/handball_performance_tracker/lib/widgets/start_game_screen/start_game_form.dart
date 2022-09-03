@@ -379,7 +379,6 @@ class StartGameFormState extends State<StartGameForm> {
                                           season: tempController
                                               .getSelectedSeason(),
                                           isAtHome: isAtHome);
-                                      print("got here");
                                       await persistentController.setCurrentGame(
                                           preconfiguredGame,
                                           isNewGame: true);

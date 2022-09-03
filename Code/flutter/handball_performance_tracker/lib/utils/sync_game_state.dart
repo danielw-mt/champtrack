@@ -34,7 +34,6 @@ runGameStateSync() {
     // get most recent gameData from Firebase as usable object in dart
     DocumentSnapshot gameDocument = await currentGameFirebaseReference.get();
     final gameData = gameDocument.data() as Map<String, dynamic>;
-    print("syncing stopwatchtime: ${currentGame.stopWatchTimer.rawTime.value}");
     // sync selected team id, score, stopwatchtime,
     await currentGameFirebaseReference.update({
       "selectedTeam": currentTeam.id,
