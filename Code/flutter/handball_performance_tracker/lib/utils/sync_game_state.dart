@@ -81,8 +81,10 @@ Future<void> recreateGameStateFromFirebase() async {
   Game mostRecentGame = await repository.getMostRecentGame();
   // current game id
   // stopwatchtime
-  // TODO probably the stop watch time get's set to zero when the game is started
+  // store stopwatchtime
+  int stopwatchTime = mostRecentGame.stopWatchTimer.rawTime.value;
   persistentController.setCurrentGame(mostRecentGame);
+  persistentController.setStopWatchTime(stopwatchTime);
   // season
   tempController.setSelectedSeason(mostRecentGame.season.toString());
 

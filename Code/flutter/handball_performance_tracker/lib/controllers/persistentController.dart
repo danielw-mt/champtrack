@@ -120,6 +120,10 @@ class PersistentController extends GetxController {
     }
   }
 
+  void setStopWatchTime(int time) {
+    _currentGame.value.stopWatchTimer.setPresetTime(mSec: time);
+  }
+
   /// reset the current Game object to a game without id and clean up the actions list
   void resetCurrentGame() {
     _currentGame.value = Game(date: DateTime.now());
