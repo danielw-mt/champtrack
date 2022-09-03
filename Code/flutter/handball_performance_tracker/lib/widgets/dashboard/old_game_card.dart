@@ -18,13 +18,6 @@ class OldGameCard extends StatelessWidget {
             await recreateGameStateFromFirebase();
             PersistentController persistentController =
                 Get.find<PersistentController>();
-            print("most recent stopwatchtime: " +
-                persistentController
-                    .getCurrentGame()
-                    .stopWatchTimer
-                    .rawTime
-                    .value
-                    .toString());
             // move to main Screen
             Get.to(() => MainScreen());
             tempController.update(["action-feed", "ef-score-bar"]);

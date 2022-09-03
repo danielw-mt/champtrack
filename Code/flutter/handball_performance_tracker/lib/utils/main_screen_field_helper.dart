@@ -137,7 +137,6 @@ class SectorCalc {
       // check if (x,y) is below this line and still above the line below
       bool inSector = (gradient * x + yIntercept <= y) &&
           (lowerGradient * x + lowerIntercept > y);
-      //print("is in Sector $i : $inSector");
       lowerGradient = gradient;
       lowerIntercept = yIntercept;
       if (inSector == true) {

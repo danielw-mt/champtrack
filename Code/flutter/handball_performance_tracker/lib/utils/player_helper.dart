@@ -3,12 +3,10 @@ import 'package:get/get.dart';
 import '../controllers/tempController.dart';
 
 // Function to get list of indices where the list playersOnField is true.
-// Those are the indices of players on field in chosenPlayers.
+// Those are the indices of onFieldPlayer within the list of all players.
 List<int> getOnFieldIndex() {
   TempController tempController = Get.find<TempController>();
   List<int> ind = [];
-  print("getonfieldindex: " +
-      tempController.getSelectedTeam().players.length.toString());
   for (int i = 0; i < tempController.getSelectedTeam().players.length; i++) {
     if (tempController
         .getOnFieldPlayers()

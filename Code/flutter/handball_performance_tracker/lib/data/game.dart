@@ -68,9 +68,6 @@ class Game {
     StopWatchTimer stopWatchTimer = StopWatchTimer(mode: StopWatchMode.countUp);
     stopWatchTimer.onExecute.add(StopWatchExecute.reset);
     stopWatchTimer.setPresetTime(mSec: lastStopWatchTime);
-    // TODO make sure way of setting time is correct here
-    print("recreated game with time: " +
-        stopWatchTimer.initialPresetTime.toString());
     // convert date
     Timestamp dateTimestamp = map["date"];
     DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(

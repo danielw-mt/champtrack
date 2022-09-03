@@ -110,7 +110,9 @@ Future<void> recreateGameStateFromFirebase() async {
       .first;
   selectedTeam.onFieldPlayers = onFieldPlayersFromLastGame;
   tempController.setSelectedTeam(selectedTeam);
-  tempController.setPlayingTeam(selectedTeam);
+  tempController.setOnFieldPlayers(onFieldPlayersFromLastGame);
+  // tempController.setPlayerBarPlayersOrder();
+  // tempController.setPlayingTeam(selectedTeam);
   // tempController
   // scores
 

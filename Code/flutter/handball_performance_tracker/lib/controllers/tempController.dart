@@ -55,6 +55,11 @@ class TempController extends GetxController {
 
   void updatePlayerEfScore(String playerId, GameAction action,
       {removeAction = false}) {
+    if (_selectedTeam.value.players
+        .where((Player player) => player.id == playerId)
+        .isEmpty) {
+      return;
+    }
     if (removeAction) {
       _selectedTeam.value.players
           .where((Player player) => player.id == playerId)

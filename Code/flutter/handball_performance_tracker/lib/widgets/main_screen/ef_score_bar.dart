@@ -102,10 +102,8 @@ class EfScoreBar extends StatelessWidget {
     return GetBuilder<TempController>(
         id: "ef-score-bar",
         builder: (tempController) {
-          print("building ef-score bar");
           List<Container> buttons = [];
-          for (int i = 0; i < getOnFieldIndex().length; i++) {
-            print("building button for player " + i.toString());
+          for (int i = 0; i < tempController.getOnFieldPlayers().length; i++) {
             Container button = buildPlayerButton(context, i, tempController);
             buttons.add(button);
           }
