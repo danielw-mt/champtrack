@@ -14,6 +14,12 @@ import 'dart:async';
 /// The 'games' collection is updated accordingly with new gameActions for example
 runGameStateSync() {
   TempController tempController = Get.find<TempController>();
+  // if the game sync was already triggered somewhere else don't start another game sync loop
+  if (tempController.isGameSyncActivated()) {
+    return;
+  } else {
+    tempController.activateGameSync();
+  }
   PersistentController persistentController = Get.find<PersistentController>();
   DatabaseRepository repository = persistentController.repository;
   final FirebaseFirestore _db = FirebaseFirestore.instance;

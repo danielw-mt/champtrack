@@ -487,4 +487,10 @@ class TempController extends GetxController {
   }
 
   bool getOldGameStateExists() => oldGameStateExists.value;
+
+  RxBool gameSyncActivatedOnce = false.obs;
+  bool isGameSyncActivated() => gameSyncActivatedOnce.value;
+  void activateGameSync() {
+    gameSyncActivatedOnce.value = true;
+  }
 }

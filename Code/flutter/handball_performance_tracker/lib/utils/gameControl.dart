@@ -63,9 +63,8 @@ void startGame(BuildContext context, {bool preconfigured: false}) async {
     tempController.setOpponentScore(0);
     tempController.setOwnScore(0);
   }
-
-  print("start game, id: ${persistentController.getCurrentGame().id}");
   runGameStateSync();
+  print("start game, id: ${persistentController.getCurrentGame().id}");
 }
 
 void unpauseGame() {
@@ -79,6 +78,7 @@ void unpauseGame() {
       .stopWatchTimer
       .onExecute
       .add(StopWatchExecute.start);
+  runGameStateSync();
 }
 
 void pauseGame() {
