@@ -354,12 +354,14 @@ DialogButton buildDialogButton(
     logger.d("logging an action");
     DateTime dateTime = DateTime.now();
     int unixTime = dateTime.toUtc().millisecondsSinceEpoch;
+    print(persistentController.getCurrentGame().id);
     int secondsSinceGameStart =
         persistentController.getCurrentGame().stopWatchTimer.secondTime.value;
     // get most recent game id from DB
     String currentGameId = persistentController.getCurrentGame().id!;
 
     // switch field side after hold of goalkeeper
+    logger.d("switching field side if applicable");
     if (actionMapping[allActions]![buttonText]! == parade ||
         actionMapping[allActions]![buttonText]! == emptyGoal ||
         actionMapping[allActions]![buttonText]! == goalOthers) {

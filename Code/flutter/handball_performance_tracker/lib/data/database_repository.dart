@@ -6,6 +6,7 @@ import 'package:handball_performance_tracker/data/game_action.dart';
 import 'package:handball_performance_tracker/data/player.dart';
 import 'package:handball_performance_tracker/data/club.dart';
 import 'package:logger/logger.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 
 var logger = Logger(
   printer: PrettyPrinter(
@@ -125,8 +126,19 @@ class DatabaseRepository {
 
   /// @return asynchronous reference to Game object that was saved to firebase
   Future<DocumentReference> addGame(Game game) async {
-    print("adding game");
-    return _db.collection("games").add(game.toMap());
+    // if we are offline this future will never complete and block our app
+    // thus we need to differentiate between online and offline mode
+    var result = await Connectivity().checkConnectivity();
+    // if there is no internet create the reference id for the object manually
+    if (result == ConnectivityResult.none) {
+      // _db.collection("games").add(game.toMap());
+      DocumentReference docRef = _db.collection('games').doc();
+      docRef.set(game.toMap()).then(
+          (value) => print("Game Added on backend after coming back online"));
+      return docRef;
+    } else {
+      return _db.collection("games").add(game.toMap());
+    }
   }
 
   /// update a Game's firestore record according to @param game properties
