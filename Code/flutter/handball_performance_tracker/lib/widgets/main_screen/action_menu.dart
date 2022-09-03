@@ -38,11 +38,12 @@ void callActionMenu(BuildContext context) {
   if (actionType == otherGoalkeeper) {
     return;
   }
-  StopWatchTimer stopWatchTimer = persController.getCurrentGame().stopWatch;
+  StopWatchTimer stopWatchTimer =
+      persController.getCurrentGame().stopWatchTimer;
   // if game is not running give a warning
   if (stopWatchTimer.rawTime.value == 0) {
     showDialog(
-      context: context,
+        context: context,
         builder: (BuildContext bcontext) {
           return AlertDialog(
               scrollable: true,
@@ -353,12 +354,14 @@ DialogButton buildDialogButton(
     logger.d("logging an action");
     DateTime dateTime = DateTime.now();
     int unixTime = dateTime.toUtc().millisecondsSinceEpoch;
+    print(persistentController.getCurrentGame().id);
     int secondsSinceGameStart =
-        persistentController.getCurrentGame().stopWatch.secondTime.value;
+        persistentController.getCurrentGame().stopWatchTimer.secondTime.value;
     // get most recent game id from DB
     String currentGameId = persistentController.getCurrentGame().id!;
 
     // switch field side after hold of goalkeeper
+    logger.d("switching field side if applicable");
     if (actionMapping[allActions]![buttonText]! == parade ||
         actionMapping[allActions]![buttonText]! == emptyGoal ||
         actionMapping[allActions]![buttonText]! == goalOthers) {
@@ -379,7 +382,8 @@ DialogButton buildDialogButton(
         gameId: currentGameId,
         type: actionType,
         actionType: actionMapping[allActions]![buttonText]!,
-        throwLocation: List.from(tempController.getLastLocation().cast<String>()),
+        throwLocation:
+            List.from(tempController.getLastLocation().cast<String>()),
         timestamp: unixTime,
         relativeTime: secondsSinceGameStart);
     logger.d("GameAction object created: ${action.actionType}");
@@ -391,10 +395,6 @@ DialogButton buildDialogButton(
     // when a player was selected in that menu the action document can be
     // updated in firebase with their player_id using the action_id
     logger.d("Adding gameaction to firebase");
-    // repository
-    //     .addActionToGame(action)
-    //     .then((DocumentReference doc) => action.id = doc.id);
-
     // Save action directly if goalkeeper action
     if (actionType == goalkeeper) {
       String? goalKeeperId = "goalkeeper";

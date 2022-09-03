@@ -43,12 +43,11 @@ class Team {
     List<Player> playerList = [];
     List<Player> onFieldList = [];
     List<DocumentReference> players = map["players"].cast<DocumentReference>();
-    players.forEach((dynamic documentReference) {
-      documentReference.get().then((DocumentSnapshot documentSnapshot) {
-        if (documentSnapshot.exists) {
-          playerList.add(Player.fromDocumentSnapshot(documentSnapshot));
-        }
-      });
+    players.forEach((dynamic documentReference) async {
+      DocumentSnapshot playerSnapshot = await documentReference.get();
+      if (playerSnapshot.exists) {
+        playerList.add(Player.fromDocumentSnapshot(playerSnapshot));
+      }
     });
     return Team(
         name: map["name"],

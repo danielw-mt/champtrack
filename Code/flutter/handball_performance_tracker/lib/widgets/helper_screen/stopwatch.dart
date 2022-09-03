@@ -11,7 +11,8 @@ class StopWatch extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    StopWatchTimer stopWatchTimer = persistentController.getCurrentGame().stopWatch;
+    StopWatchTimer stopWatchTimer =
+        persistentController.getCurrentGame().stopWatchTimer;
 
     return Scrollbar(
         child: SingleChildScrollView(
@@ -94,7 +95,7 @@ class StopWatch extends StatelessWidget {
                                 onPressed: () async {
                                   persistentController
                                       .getCurrentGame()
-                                      .stopWatch
+                                      .stopWatchTimer
                                       .onExecute
                                       .add(StopWatchExecute.stop);
                                 },
@@ -145,7 +146,7 @@ class StopWatch extends StatelessWidget {
                                         .add(StopWatchExecute.reset);
                                     persistentController
                                         .getCurrentGame()
-                                        .stopWatch
+                                        .stopWatchTimer
                                         .setPresetTime(
                                             mSec: currentTime + 1000);
                                     stopWatchTimer.onExecute
@@ -155,7 +156,7 @@ class StopWatch extends StatelessWidget {
                                         .add(StopWatchExecute.reset);
                                     persistentController
                                         .getCurrentGame()
-                                        .stopWatch
+                                        .stopWatchTimer
                                         .setPresetTime(
                                             mSec: currentTime + 1000);
                                   }
@@ -186,7 +187,7 @@ class StopWatch extends StatelessWidget {
                                         .add(StopWatchExecute.reset);
                                     persistentController
                                         .getCurrentGame()
-                                        .stopWatch
+                                        .stopWatchTimer
                                         .setPresetTime(
                                             mSec: currentTime - 1000);
                                     stopWatchTimer.onExecute
@@ -196,7 +197,7 @@ class StopWatch extends StatelessWidget {
                                         .add(StopWatchExecute.reset);
                                     persistentController
                                         .getCurrentGame()
-                                        .stopWatch
+                                        .stopWatchTimer
                                         .setPresetTime(
                                             mSec: currentTime - 1000);
                                   }

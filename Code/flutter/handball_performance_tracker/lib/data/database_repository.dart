@@ -6,6 +6,7 @@ import 'package:handball_performance_tracker/data/game_action.dart';
 import 'package:handball_performance_tracker/data/player.dart';
 import 'package:handball_performance_tracker/data/club.dart';
 import 'package:logger/logger.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 
 var logger = Logger(
   printer: PrettyPrinter(
@@ -19,7 +20,6 @@ var logger = Logger(
 );
 
 class DatabaseRepository {
-  
   final FirebaseFirestore _db = FirebaseFirestore.instance;
   // final FirebaseFirestore _db = FirebaseFirestore.instanceFor(app: Firebase.app('dev'));
 
@@ -32,6 +32,10 @@ class DatabaseRepository {
 
   Future<DocumentReference> getClubReference(Club club) async {
     return await _db.collection("clubs").doc(club.id);
+  }
+
+  Future<DocumentSnapshot> getPlayer(String playerId) async {
+    return await _db.collection("players").doc(playerId).get();
   }
 
   /// delete player from players collection and all the teams he belongs to
@@ -122,11 +126,24 @@ class DatabaseRepository {
 
   /// @return asynchronous reference to Game object that was saved to firebase
   Future<DocumentReference> addGame(Game game) async {
-    return _db.collection("games").add(game.toMap());
+    // if we are offline this future will never complete and block our app
+    // thus we need to differentiate between online and offline mode
+    var result = await Connectivity().checkConnectivity();
+    // if there is no internet create the reference id for the object manually
+    if (result == ConnectivityResult.none) {
+      // _db.collection("games").add(game.toMap());
+      DocumentReference docRef = _db.collection('games').doc();
+      docRef.set(game.toMap()).then(
+          (value) => print("Game Added on backend after coming back online"));
+      return docRef;
+    } else {
+      return _db.collection("games").add(game.toMap());
+    }
   }
-  
+
   /// update a Game's firestore record according to @param game properties
   void updateGame(Game game) async {
+    print("updating game");
     await _db.collection("games").doc(game.id).update(game.toMap());
   }
 
@@ -139,19 +156,39 @@ class DatabaseRepository {
     return await _db.collection("teams").get();
   }
 
+  Future<QuerySnapshot> getAllPlayers() async {
+    return await _db.collection("players").get();
+  }
+
   /// @return asynchronous reference to GameAction object that was saved to firebase
   Future<DocumentReference> addActionToGame(GameAction action) async {
-    return _db
-        .collection("gameData")
-        .doc(action.gameId)
-        .collection("actions")
-        .add(action.toMap());
+    // if we are offline this future will never complete and block our app
+    // thus we need to differentiate between online and offline mode
+    var result = await Connectivity().checkConnectivity();
+    // if there is no internet create the reference id for the object manually
+    if (result == ConnectivityResult.none) {
+      // _db.collection("games").add(game.toMap());
+      DocumentReference docRef = _db
+          .collection('games')
+          .doc(action.gameId)
+          .collection("actions")
+          .doc();
+      docRef.set(action.toMap()).then(
+          (value) => print("Game Added on backend after coming back online"));
+      return docRef;
+    } else {
+      return _db
+          .collection("games")
+          .doc(action.gameId)
+          .collection("actions")
+          .add(action.toMap());
+    }
   }
 
   /// update a GameAction's firestore record according to @param action properties
   void updateAction(GameAction action) async {
     await _db
-        .collection("gameData")
+        .collection("games")
         .doc(action.gameId)
         .collection("actions")
         .doc(action.id)
@@ -161,7 +198,7 @@ class DatabaseRepository {
   /// delete a the firestore record of a given @param action
   void deleteAction(GameAction action) async {
     await _db
-        .collection("gameData")
+        .collection("games")
         .doc(action.gameId)
         .collection("actions")
         .doc(action.id)
@@ -178,7 +215,7 @@ class DatabaseRepository {
     DocumentSnapshot mostRecentGame = mostRecentGameQuery.docs[0];
     // look inside gameActions for the lastest action for that game
     QuerySnapshot mostRecentActionQuery = await _db
-        .collection("gameData")
+        .collection("games")
         .doc(mostRecentGame.id)
         .collection("actions")
         .orderBy("timestamp", descending: true)
@@ -188,10 +225,56 @@ class DatabaseRepository {
     DocumentSnapshot mostRecentAction = mostRecentActionQuery.docs[0];
     // delete most recent doc
     _db
-        .collection("gameData")
+        .collection("games")
         .doc(mostRecentGame.id)
         .collection("actions")
         .doc(mostRecentAction.id)
         .delete();
+  }
+
+  Future<List<GameAction>> getGameActionsFromGame(String gameId) async {
+    QuerySnapshot querySnapshot = await _db
+        .collection("games")
+        .doc(gameId)
+        .collection("actions")
+        .orderBy("timestamp", descending: true)
+        .get();
+    List<GameAction> gameActions = [];
+    querySnapshot.docs.forEach((DocumentSnapshot documentSnapshot) {
+      gameActions.add(
+          GameAction.fromMap(documentSnapshot.data() as Map<String, dynamic>));
+    });
+    return gameActions;
+  }
+
+  /// @return true if there is a game sync within the last @param minutes
+  Future<bool> isThereAGameWithinLastMinutes(int minutes) async {
+    DateTime now = DateTime.now();
+    DateTime then = now.subtract(Duration(minutes: minutes));
+    QuerySnapshot snapshot = await _db
+        .collection("games")
+        .where("lastSync", isGreaterThan: then.toIso8601String())
+        .get();
+    if (snapshot.docs.length > 0) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  /// @return json data of the most recent game
+  Future<Game> getMostRecentGame() async {
+    QuerySnapshot snapshot = await _db
+        .collection("games")
+        .orderBy("lastSync", descending: true)
+        .limit(1)
+        .get();
+    DocumentSnapshot mostRecentGame = snapshot.docs[0];
+    return Game.fromDocumentSnapshot(mostRecentGame);
+  }
+
+  Future<DocumentSnapshot> getTeam(String id) async {
+    DocumentSnapshot snapshot = await _db.collection("teams").doc(id).get();
+    return snapshot;
   }
 }

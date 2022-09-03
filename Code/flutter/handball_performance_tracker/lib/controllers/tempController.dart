@@ -34,6 +34,7 @@ class TempController extends GetxController {
   }
 
   /// Temporary variable for storing the currently playing Team
+  /// TODO why is this needed? can't we just use selectedTeam?
   Rx<Team> _playingTeam = Team(id: "-1", name: "Default team").obs;
 
   /// getter for playingTeam
@@ -54,6 +55,11 @@ class TempController extends GetxController {
 
   void updatePlayerEfScore(String playerId, GameAction action,
       {removeAction = false}) {
+    if (_selectedTeam.value.players
+        .where((Player player) => player.id == playerId)
+        .isEmpty) {
+      return;
+    }
     if (removeAction) {
       _selectedTeam.value.players
           .where((Player player) => player.id == playerId)
@@ -110,6 +116,11 @@ class TempController extends GetxController {
   /// get the players from selectedTeam that are currently marked as onFieldPlayers
   List<Player> getOnFieldPlayers() => _selectedTeam.value.onFieldPlayers;
 
+  void setOnFieldPlayers(List<Player> players) {
+    _selectedTeam.value.onFieldPlayers = players;
+    update(["players-list"]);
+  }
+
   List<String> getOnFieldPlayersById() =>
       _selectedTeam.value.onFieldPlayers.map((player) => player.id!).toList();
 
@@ -141,7 +152,8 @@ class TempController extends GetxController {
         ["action-feed", "on-field-checkbox", "ef-score-bar", "players-list"]);
   }
 
-  /// if player gets active in a game, add the game's id to its games list as well as the player's id to the games players list
+  /// if player gets active in a game, add the game's id to its games list
+  ///  as well as the player's id to the games players list
   void addGameToPlayer(Player player, Game game) {
     if (!player.games.contains(game.id)) {
       player.games.add(game.id!);
@@ -207,8 +219,8 @@ class TempController extends GetxController {
   /// setter for attackIsLeft
   setAttackIsLeft(bool attackIsLeft) {
     _attackIsLeft.value = attackIsLeft;
-      update(["side-switch", "custom-field", "start-game-form"]);
-    }
+    update(["side-switch", "custom-field", "start-game-form"]);
+  }
 
   //////
   /// Main screen
@@ -248,7 +260,7 @@ class TempController extends GetxController {
   /// getter for playerMenuText
   String getPlayerMenuText() => _playerMenuText.value;
 
-  void setPlayerMenutText(String text) {
+  void setPlayerMenuText(String text) {
     _playerMenuText.value = text;
     update(["player-menu-text"]);
   }
@@ -316,23 +328,23 @@ class TempController extends GetxController {
   }
 
   // list of 7 or less Integer, give the indices of players on field in the order in which they appear on efscore player bar
-  RxList<int> _playerBarPlayers = <int>[0, 1, 2, 3, 4, 5, 6].obs;
+  RxList<int> _playerBarPlayersOrder = <int>[0, 1, 2, 3, 4, 5, 6].obs;
 
   /// getter for playerBarPlayers
-  List<int> getPlayerBarPlayers() => _playerBarPlayers;
+  List<int> getPlayerBarPlayers() => _playerBarPlayersOrder;
 
   // set the order of players displayed in player bar:
   // The first player that was added to the game it the first in the player bar and so on.
-  void setPlayerBarPlayers() {
-    _playerBarPlayers.clear();
+  void setPlayerBarPlayersOrder() {
+    _playerBarPlayersOrder.clear();
     for (int i in getOnFieldIndex()) {
-      _playerBarPlayers.add(i);
+      _playerBarPlayersOrder.add(i);
     }
     update(["ef-score-bar"]);
   }
 
   void changePlayerBarPlayers(int indexToChange, int i) {
-    _playerBarPlayers[indexToChange] = i;
+    _playerBarPlayersOrder[indexToChange] = i;
     update(["ef-score-bar"]);
   }
 
@@ -470,5 +482,20 @@ class TempController extends GetxController {
   void setSelectedSeason(String season) {
     _selectedSeason.value = season;
     update(["season-dropdown"]);
+  }
+
+  /// Whether a game was synced in the last 20 minutes after opening the app
+  RxBool oldGameStateExists = false.obs;
+
+  void setOldGameStateExists(bool oldGameStateExists) {
+    this.oldGameStateExists.value = oldGameStateExists;
+  }
+
+  bool getOldGameStateExists() => oldGameStateExists.value;
+
+  RxBool gameSyncActivatedOnce = false.obs;
+  bool isGameSyncActivated() => gameSyncActivatedOnce.value;
+  void activateGameSync() {
+    gameSyncActivatedOnce.value = true;
   }
 }

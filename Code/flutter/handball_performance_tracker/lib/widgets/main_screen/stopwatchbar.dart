@@ -19,7 +19,7 @@ class StopWatchBar extends StatelessWidget {
       id: "stopwatch-bar",
       builder: (PersistentController persistentController) {
         StopWatchTimer stopWatchTimer =
-            persistentController.getCurrentGame().stopWatch;
+            persistentController.getCurrentGame().stopWatchTimer;
         return Row(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -118,7 +118,7 @@ class TimePopoupButton extends StatelessWidget {
     PersistentController persistentController =
         Get.find<PersistentController>();
     StopWatchTimer stopWatchTimer =
-        persistentController.getCurrentGame().stopWatch;
+        persistentController.getCurrentGame().stopWatchTimer;
     return Container(
         decoration: BoxDecoration(
             color: buttonGreyColor,
@@ -157,7 +157,7 @@ void callStopWatch(context) {
   double buttonHeight = MediaQuery.of(context).size.height * 0.08;
   PersistentController persistentController = Get.find<PersistentController>();
   StopWatchTimer stopWatchTimer =
-      persistentController.getCurrentGame().stopWatch;
+      persistentController.getCurrentGame().stopWatchTimer;
   showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -191,14 +191,13 @@ void callStopWatch(context) {
               Text(""),
 
               Row(
-                  children: [
-                    SetTimeButtons(),
-                    StartStopIcon(),
-                    Column(
+                children: [
+                  SetTimeButtons(),
+                  StartStopIcon(),
+                  Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Row(
-                          children: [
+                      Row(children: [
                         // Plus button for minutes
                         SizedBox(
                           height: buttonHeight,
@@ -335,7 +334,6 @@ void callStopWatch(context) {
                   ),
                 ],
               ),
-              
             ],
           ),
         );
@@ -346,7 +344,7 @@ void callStopWatch(context) {
 void changeTime(context, int offset) async {
   PersistentController persistentController = Get.find<PersistentController>();
   StopWatchTimer stopWatchTimer =
-      persistentController.getCurrentGame().stopWatch;
+      persistentController.getCurrentGame().stopWatchTimer;
   int currentTime = stopWatchTimer.rawTime.value;
   // make sure the timer can't go negative
   if (currentTime < -offset && offset < 0) return;
@@ -355,14 +353,14 @@ void changeTime(context, int offset) async {
     stopWatchTimer.onExecute.add(StopWatchExecute.reset);
     persistentController
         .getCurrentGame()
-        .stopWatch
+        .stopWatchTimer
         .setPresetTime(mSec: currentTime + offset);
     stopWatchTimer.onExecute.add(StopWatchExecute.start);
   } else {
     stopWatchTimer.onExecute.add(StopWatchExecute.reset);
     persistentController
         .getCurrentGame()
-        .stopWatch
+        .stopWatchTimer
         .setPresetTime(mSec: currentTime + offset);
   }
 }
@@ -371,7 +369,7 @@ void changeTime(context, int offset) async {
 void setMinutes(context, int minutes) async {
   PersistentController persistentController = Get.find<PersistentController>();
   StopWatchTimer stopWatchTimer =
-      persistentController.getCurrentGame().stopWatch;
+      persistentController.getCurrentGame().stopWatchTimer;
   // get current seconds
   int currentSecs = getCurrentSecs(context);
   // make sure the timer can't go negative
@@ -391,7 +389,7 @@ void setMinutes(context, int minutes) async {
 void setSeconds(context, int secs) async {
   PersistentController persistentController = Get.find<PersistentController>();
   StopWatchTimer stopWatchTimer =
-      persistentController.getCurrentGame().stopWatch;
+      persistentController.getCurrentGame().stopWatchTimer;
   // get current minutes
   int currentMins = getCurrentMins(context);
   // make sure the timer can't go negative
@@ -410,7 +408,7 @@ void setSeconds(context, int secs) async {
 int getCurrentMins(context) {
   PersistentController persistentController = Get.find<PersistentController>();
   StopWatchTimer stopWatchTimer =
-      persistentController.getCurrentGame().stopWatch;
+      persistentController.getCurrentGame().stopWatchTimer;
   int currentTime = stopWatchTimer.rawTime.value;
   return (currentTime / 60000).floor();
 }
@@ -418,7 +416,7 @@ int getCurrentMins(context) {
 int getCurrentSecs(context) {
   PersistentController persistentController = Get.find<PersistentController>();
   StopWatchTimer stopWatchTimer =
-      persistentController.getCurrentGame().stopWatch;
+      persistentController.getCurrentGame().stopWatchTimer;
   int currentTime = stopWatchTimer.rawTime.value;
   return (currentTime % 60000 / 1000).floor();
 }
@@ -431,7 +429,7 @@ class SetTimeButtons extends StatelessWidget {
     PersistentController persistentController =
         Get.find<PersistentController>();
     StopWatchTimer stopWatchTimer =
-        persistentController.getCurrentGame().stopWatch;
+        persistentController.getCurrentGame().stopWatchTimer;
     return Column(
       children: [
         Container(

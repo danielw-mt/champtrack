@@ -8,6 +8,7 @@ import 'package:handball_performance_tracker/widgets/nav_drawer.dart';
 // a screen that holds widgets that can be useful for debugging and game control
 class GlossaryScreen extends StatelessWidget {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  // TODO Get.find instead of Get.put?
   final TempController tempController = Get.put(TempController());
 
   @override
