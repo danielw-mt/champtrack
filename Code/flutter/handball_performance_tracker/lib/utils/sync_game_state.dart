@@ -86,30 +86,27 @@ void recreateGameStateFromFirebase() async {
   // TODO stopwatchtime gets reset to 0 once the game gets loaded
   // season
   tempController.setSelectedSeason(mostRecentGame.season.toString());
-  // selected team
-  Map<String, dynamic> teamDocData = await repository.getTeamDataById(mostRecentGame.teamId);
-  // TODO build team like in init data
+
   // players
+  List<Player> playersFromLastGame = [];
+  mostRecentGame.players.forEach((String playerId) async {
+    DocumentSnapshot playerSnapshot = await repository.getPlayer(playerId);
+    if (playerSnapshot.exists) {
+      playersFromLastGame.add(Player.fromDocumentSnapshot(playerSnapshot));
+    }
+  });
+  // team
+  DocumentSnapshot teamSnapshot =
+      await repository.getTeam(mostRecentGame.teamId);
+  if (teamSnapshot.exists) {
+    Team team = Team.fromDocumentSnapshot(teamSnapshot);
+    team.onFieldPlayers = playersFromLastGame;
+    tempController.setSelectedTeam(team);
+    tempController.setPlayingTeam(team);
+  }
+  // tempController
+  // scores
 
-  // List<Player> playersFromLastGame = [];
-  // List<DocumentReference> playerReferences = [];
-  // // mostRecentGame.players.forEach((playerId) {
-  // //   playerReferences.add();
-  // // });
-  // print("got here: " + playerReferences.toString());
-  // playerReferences.forEach((DocumentReference reference) async {
-  //   DocumentSnapshot documentSnapshot = await reference.get();
-  //   print(documentSnapshot.id);
-  //   if (documentSnapshot.exists) {
-  //     playersFromLastGame.add(Player.fromDocumentSnapshot(documentSnapshot));
-  //     print("player from last game: " + playersFromLastGame.last.firstName);
-  //   }
-  // });
-  // tempController.setOnFieldPlayers(playersFromLastGame);
-  // // tempController
-  // // scores
-
-  
   tempController.setOwnScore(mostRecentGame.scoreHome!.toInt());
   tempController.setOpponentScore(mostRecentGame.scoreOpponent!.toInt());
 
@@ -119,6 +116,6 @@ void recreateGameStateFromFirebase() async {
   actionsFromLastGame.forEach((GameAction action) {
     persistentController.addAction(action);
     tempController.addFeedAction(action);
-    tempController.updatePlayerEfScore(action.playerId, action);
+    // tempController.updatePlayerEfScore(action.playerId, action);
   });
 }

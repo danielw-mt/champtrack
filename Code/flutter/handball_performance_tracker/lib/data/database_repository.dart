@@ -33,6 +33,10 @@ class DatabaseRepository {
     return await _db.collection("clubs").doc(club.id);
   }
 
+  Future<DocumentSnapshot> getPlayer(String playerId) async {
+    return await _db.collection("players").doc(playerId).get();
+  }
+
   /// delete player from players collection and all the teams he belongs to
   Future<void> deletePlayer(Player player) async {
     // delete player from player collection
@@ -235,8 +239,8 @@ class DatabaseRepository {
     return Game.fromDocumentSnapshot(mostRecentGame);
   }
 
-  Future<Map<String, dynamic>> getTeamDataById(String id) async {
+  Future<DocumentSnapshot> getTeam(String id) async {
     DocumentSnapshot snapshot = await _db.collection("teams").doc(id).get();
-    return snapshot.data() as Map<String, dynamic>;
+    return snapshot;
   }
 }
