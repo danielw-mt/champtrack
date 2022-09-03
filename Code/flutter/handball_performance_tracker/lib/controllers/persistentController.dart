@@ -112,8 +112,8 @@ class PersistentController extends GetxController {
   Future<void> setCurrentGame(Game game, {isNewGame: false}) async {
     _currentGame.value = game;
     if (isNewGame) {
-      DocumentReference ref = await repository.addGame(game);
-      _currentGame.value.id = ref.id;
+      repository.addGame(game).then((DocumentReference reference) =>
+          _currentGame.value.id = reference.id);
     } else {
       repository.updateGame(game);
     }
