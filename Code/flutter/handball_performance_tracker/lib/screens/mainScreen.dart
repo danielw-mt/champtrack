@@ -28,10 +28,6 @@ class MainScreen extends StatelessWidget {
       DeviceOrientation.landscapeRight,
       DeviceOrientation.landscapeLeft,
     ]);
-    print("score: " + tempController.getOwnScore().toString());
-    // print("players: " +
-    //     tempController.getPlayersFromSelectedTeam().length.toString());
-    // print("actions: " + tempController.getFeedActions().length.toString());
     return SafeArea(
         child: Scaffold(
       resizeToAvoidBottomInset: false,

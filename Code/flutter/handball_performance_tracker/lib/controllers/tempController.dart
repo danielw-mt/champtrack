@@ -323,23 +323,23 @@ class TempController extends GetxController {
   }
 
   // list of 7 or less Integer, give the indices of players on field in the order in which they appear on efscore player bar
-  RxList<int> _playerBarPlayers = <int>[0, 1, 2, 3, 4, 5, 6].obs;
+  RxList<int> _playerBarPlayersOrder = <int>[0, 1, 2, 3, 4, 5, 6].obs;
 
   /// getter for playerBarPlayers
-  List<int> getPlayerBarPlayers() => _playerBarPlayers;
+  List<int> getPlayerBarPlayers() => _playerBarPlayersOrder;
 
   // set the order of players displayed in player bar:
   // The first player that was added to the game it the first in the player bar and so on.
   void setPlayerBarPlayersOrder() {
-    _playerBarPlayers.clear();
+    _playerBarPlayersOrder.clear();
     for (int i in getOnFieldIndex()) {
-      _playerBarPlayers.add(i);
+      _playerBarPlayersOrder.add(i);
     }
     update(["ef-score-bar"]);
   }
 
   void changePlayerBarPlayers(int indexToChange, int i) {
-    _playerBarPlayers[indexToChange] = i;
+    _playerBarPlayersOrder[indexToChange] = i;
     update(["ef-score-bar"]);
   }
 

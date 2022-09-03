@@ -71,7 +71,7 @@ runGameStateSync() {
   });
 }
 
-void recreateGameStateFromFirebase() async {
+Future<void> recreateGameStateFromFirebase() async {
   TempController tempController = Get.find<TempController>();
   PersistentController persistentController = Get.find<PersistentController>();
   DatabaseRepository repository = persistentController.repository;
@@ -81,29 +81,28 @@ void recreateGameStateFromFirebase() async {
   Game mostRecentGame = await repository.getMostRecentGame();
   // current game id
   // stopwatchtime
+  // TODO probably the stop watch time get's set to zero when the game is started
   persistentController.setCurrentGame(mostRecentGame);
-  print("new id: " + mostRecentGame.id.toString());
-  // TODO stopwatchtime gets reset to 0 once the game gets loaded
   // season
   tempController.setSelectedSeason(mostRecentGame.season.toString());
 
   // players
-  List<Player> playersFromLastGame = [];
+  List<Player> onFieldPlayersFromLastGame = [];
   mostRecentGame.players.forEach((String playerId) async {
     DocumentSnapshot playerSnapshot = await repository.getPlayer(playerId);
     if (playerSnapshot.exists) {
-      playersFromLastGame.add(Player.fromDocumentSnapshot(playerSnapshot));
+      onFieldPlayersFromLastGame
+          .add(Player.fromDocumentSnapshot(playerSnapshot));
     }
   });
   // team
-  DocumentSnapshot teamSnapshot =
-      await repository.getTeam(mostRecentGame.teamId);
-  if (teamSnapshot.exists) {
-    Team team = Team.fromDocumentSnapshot(teamSnapshot);
-    team.onFieldPlayers = playersFromLastGame;
-    tempController.setSelectedTeam(team);
-    tempController.setPlayingTeam(team);
-  }
+  Team selectedTeam = persistentController
+      .getAvailableTeams()
+      .where((Team team) => team.id == mostRecentGame.teamId)
+      .first;
+  selectedTeam.onFieldPlayers = onFieldPlayersFromLastGame;
+  tempController.setSelectedTeam(selectedTeam);
+  tempController.setPlayingTeam(selectedTeam);
   // tempController
   // scores
 
@@ -116,6 +115,7 @@ void recreateGameStateFromFirebase() async {
   actionsFromLastGame.forEach((GameAction action) {
     persistentController.addAction(action);
     tempController.addFeedAction(action);
-    // tempController.updatePlayerEfScore(action.playerId, action);
+    tempController.updatePlayerEfScore(action.playerId, action);
   });
+  return;
 }

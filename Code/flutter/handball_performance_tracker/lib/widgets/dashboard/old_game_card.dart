@@ -13,9 +13,9 @@ class OldGameCard extends StatelessWidget {
     return GetBuilder<TempController>(builder: (tempController) {
       if (tempController.oldGameStateExists()) {
         return GestureDetector(
-          onTap: () {
+          onTap: () async {
             // restore old game state
-            recreateGameStateFromFirebase();
+            await recreateGameStateFromFirebase();
             PersistentController persistentController =
                 Get.find<PersistentController>();
             print("most recent stopwatchtime: " +
@@ -27,6 +27,7 @@ class OldGameCard extends StatelessWidget {
                     .toString());
             // move to main Screen
             Get.to(() => MainScreen());
+            tempController.update(["action-feed", "ef-score-bar"]);
           },
           child: Card(child: Text(StringsDashboard.lRecreateOldGame)),
         );

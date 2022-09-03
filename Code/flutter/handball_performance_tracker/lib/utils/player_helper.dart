@@ -7,6 +7,8 @@ import '../controllers/tempController.dart';
 List<int> getOnFieldIndex() {
   TempController tempController = Get.find<TempController>();
   List<int> ind = [];
+  print("getonfieldindex: " +
+      tempController.getSelectedTeam().players.length.toString());
   for (int i = 0; i < tempController.getSelectedTeam().players.length; i++) {
     if (tempController
         .getOnFieldPlayers()
