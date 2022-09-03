@@ -91,10 +91,11 @@ class PersistentController extends GetxController {
 
   /// adds actions to the collection in firestore
   Future<void> addActionToFirebase(GameAction action) async {
+    print("add action to firebase");
     DocumentReference ref = await repository.addActionToGame(action);
     _actions.forEach((element) {
       if (element.hashCode == action.hashCode) {
-        print(element);
+        print("adding action to db: " + element.toString());
         element.id = ref.id;
       }
     });
@@ -110,7 +111,6 @@ class PersistentController extends GetxController {
 
   /// set game object and either add is to firestore with new id or update the existing one
   Future<void> setCurrentGame(Game game, {isNewGame: false}) async {
-
     _currentGame.value = game;
     if (isNewGame) {
       DocumentReference ref = await repository.addGame(game);

@@ -162,11 +162,27 @@ class DatabaseRepository {
 
   /// @return asynchronous reference to GameAction object that was saved to firebase
   Future<DocumentReference> addActionToGame(GameAction action) async {
-    return _db
-        .collection("games")
-        .doc(action.gameId)
-        .collection("actions")
-        .add(action.toMap());
+    // if we are offline this future will never complete and block our app
+    // thus we need to differentiate between online and offline mode
+    var result = await Connectivity().checkConnectivity();
+    // if there is no internet create the reference id for the object manually
+    if (result == ConnectivityResult.none) {
+      // _db.collection("games").add(game.toMap());
+      DocumentReference docRef = _db
+          .collection('games')
+          .doc(action.gameId)
+          .collection("actions")
+          .doc();
+      docRef.set(action.toMap()).then(
+          (value) => print("Game Added on backend after coming back online"));
+      return docRef;
+    } else {
+      return _db
+          .collection("games")
+          .doc(action.gameId)
+          .collection("actions")
+          .add(action.toMap());
+    }
   }
 
   /// update a GameAction's firestore record according to @param action properties

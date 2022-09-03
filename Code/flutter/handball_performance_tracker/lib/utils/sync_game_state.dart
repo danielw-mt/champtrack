@@ -21,7 +21,6 @@ runGameStateSync() {
     tempController.activateGameSync();
   }
   PersistentController persistentController = Get.find<PersistentController>();
-  DatabaseRepository repository = persistentController.repository;
   final FirebaseFirestore _db = FirebaseFirestore.instance;
 
   Game currentGame = persistentController.getCurrentGame();
