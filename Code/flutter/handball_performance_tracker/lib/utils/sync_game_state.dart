@@ -18,14 +18,6 @@ runGameStateSync() {
   DatabaseRepository repository = persistentController.repository;
   final FirebaseFirestore _db = FirebaseFirestore.instance;
 
-  // check if a game exists already
-  bool currentGameExists = false;
-  // filter for games with sync property that happened 20 minutes ago
-
-  // was there a game started in the last 20 minutes
-
-  // yes? => loadFBDataIntoGameState
-  // TODO check if the current game id exists in the database
   Game currentGame = persistentController.getCurrentGame();
   Team currentTeam = tempController.getSelectedTeam();
   DocumentReference currentGameFirebaseReference =
@@ -36,12 +28,13 @@ runGameStateSync() {
     // get most recent gameData from Firebase as usable object in dart
     DocumentSnapshot gameDocument = await currentGameFirebaseReference.get();
     final gameData = gameDocument.data() as Map<String, dynamic>;
+    print("syncing stopwatchtime: ${currentGame.stopWatchTimer.rawTime.value}");
     // sync selected team id, score, stopwatchtime,
     await currentGameFirebaseReference.update({
       "selectedTeam": currentTeam.id,
       "scoreHome": tempController.getOwnScore(),
       "scoreOpponent": tempController.getOpponentScore(),
-      "stopWatchTime": currentGame.stopWatch.rawTime.value
+      "stopWatchTime": currentGame.stopWatchTimer.rawTime.value
     });
 
     // if there are any actions in the gameState without an ID
@@ -71,7 +64,61 @@ runGameStateSync() {
       });
       await currentGameFirebaseReference.update({"players": newIDs});
     }
+
     /// end: sync players
-    await currentGameFirebaseReference.update({"lastSync": DateTime.now().toIso8601String()});
+    await currentGameFirebaseReference
+        .update({"lastSync": DateTime.now().toIso8601String()});
+  });
+}
+
+void recreateGameStateFromFirebase() async {
+  TempController tempController = Get.find<TempController>();
+  PersistentController persistentController = Get.find<PersistentController>();
+  DatabaseRepository repository = persistentController.repository;
+  final FirebaseFirestore _db = FirebaseFirestore.instance;
+
+  // get latest game data from firebase
+  Game mostRecentGame = await repository.getMostRecentGame();
+  // current game id
+  // stopwatchtime
+  persistentController.setCurrentGame(mostRecentGame);
+  print("new id: " + mostRecentGame.id.toString());
+  // TODO stopwatchtime gets reset to 0 once the game gets loaded
+  // season
+  tempController.setSelectedSeason(mostRecentGame.season.toString());
+  // selected team
+  Map<String, dynamic> teamDocData = await repository.getTeamDataById(mostRecentGame.teamId);
+  // TODO build team like in init data
+  // players
+
+  // List<Player> playersFromLastGame = [];
+  // List<DocumentReference> playerReferences = [];
+  // // mostRecentGame.players.forEach((playerId) {
+  // //   playerReferences.add();
+  // // });
+  // print("got here: " + playerReferences.toString());
+  // playerReferences.forEach((DocumentReference reference) async {
+  //   DocumentSnapshot documentSnapshot = await reference.get();
+  //   print(documentSnapshot.id);
+  //   if (documentSnapshot.exists) {
+  //     playersFromLastGame.add(Player.fromDocumentSnapshot(documentSnapshot));
+  //     print("player from last game: " + playersFromLastGame.last.firstName);
+  //   }
+  // });
+  // tempController.setOnFieldPlayers(playersFromLastGame);
+  // // tempController
+  // // scores
+
+  
+  tempController.setOwnScore(mostRecentGame.scoreHome!.toInt());
+  tempController.setOpponentScore(mostRecentGame.scoreOpponent!.toInt());
+
+  // add all old actions, update feed, update ef-score
+  List<GameAction> actionsFromLastGame =
+      await repository.getGameActionsFromGame(mostRecentGame.id.toString());
+  actionsFromLastGame.forEach((GameAction action) {
+    persistentController.addAction(action);
+    tempController.addFeedAction(action);
+    tempController.updatePlayerEfScore(action.playerId, action);
   });
 }

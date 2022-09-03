@@ -4,7 +4,6 @@ import 'package:handball_performance_tracker/widgets/authentication_screen/alert
 import 'package:handball_performance_tracker/widgets/main_screen/ef_score_bar.dart';
 import 'package:handball_performance_tracker/widgets/nav_drawer.dart';
 import 'package:get/get.dart';
-import 'package:rflutter_alert/rflutter_alert.dart';
 import '../controllers/persistentController.dart';
 import '../controllers/tempController.dart';
 import '../utils/initializeLocalData.dart';

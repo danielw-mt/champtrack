@@ -194,6 +194,21 @@ class DatabaseRepository {
         .delete();
   }
 
+  Future<List<GameAction>> getGameActionsFromGame(String gameId) async {
+    QuerySnapshot querySnapshot = await _db
+        .collection("games")
+        .doc(gameId)
+        .collection("actions")
+        .orderBy("timestamp", descending: true)
+        .get();
+    List<GameAction> gameActions = [];
+    querySnapshot.docs.forEach((DocumentSnapshot documentSnapshot) {
+      gameActions.add(
+          GameAction.fromMap(documentSnapshot.data() as Map<String, dynamic>));
+    });
+    return gameActions;
+  }
+
   /// @return true if there is a game sync within the last @param minutes
   Future<bool> isThereAGameWithinLastMinutes(int minutes) async {
     DateTime now = DateTime.now();
@@ -207,5 +222,21 @@ class DatabaseRepository {
     } else {
       return false;
     }
+  }
+
+  /// @return json data of the most recent game
+  Future<Game> getMostRecentGame() async {
+    QuerySnapshot snapshot = await _db
+        .collection("games")
+        .orderBy("lastSync", descending: true)
+        .limit(1)
+        .get();
+    DocumentSnapshot mostRecentGame = snapshot.docs[0];
+    return Game.fromDocumentSnapshot(mostRecentGame);
+  }
+
+  Future<Map<String, dynamic>> getTeamDataById(String id) async {
+    DocumentSnapshot snapshot = await _db.collection("teams").doc(id).get();
+    return snapshot.data() as Map<String, dynamic>;
   }
 }

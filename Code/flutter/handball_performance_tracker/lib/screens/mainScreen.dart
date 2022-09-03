@@ -20,8 +20,7 @@ class MainScreen extends StatelessWidget {
   // screen where the game takes place
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  // TODO Get.find instead of Get.put?
-  final TempController tempController = Get.put(TempController());
+  final TempController tempController = Get.find<TempController>();
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +28,10 @@ class MainScreen extends StatelessWidget {
       DeviceOrientation.landscapeRight,
       DeviceOrientation.landscapeLeft,
     ]);
-
+    print("score: " + tempController.getOwnScore().toString());
+    // print("players: " +
+    //     tempController.getPlayersFromSelectedTeam().length.toString());
+    // print("actions: " + tempController.getFeedActions().length.toString());
     return SafeArea(
         child: Scaffold(
       resizeToAvoidBottomInset: false,
@@ -46,9 +48,7 @@ class MainScreen extends StatelessWidget {
         children: [
           Positioned(
             child: Row(
-              children: [
-                StopGameButton(), SideSwitch()
-              ],
+              children: [StopGameButton(), SideSwitch()],
             ),
             bottom: 3,
             left: 3,
@@ -76,7 +76,8 @@ class MainScreen extends StatelessWidget {
                   ActionFeed(),
                   // Player Bar
                   Container(
-                      width: efscorebar.scorebarWidth + efscorebar.paddingWidth * 4,
+                      width: efscorebar.scorebarWidth +
+                          efscorebar.paddingWidth * 4,
                       height: fieldSizeParameter.fieldHeight +
                           fieldSizeParameter.toolbarHeight / 4,
                       alignment: Alignment.topCenter,
@@ -95,8 +96,8 @@ class MainScreen extends StatelessWidget {
                           child: Container(
                             decoration: BoxDecoration(
                                 // set border around field
-                                border:
-                                    Border.all(width: fieldSizeParameter.lineSize)),
+                                border: Border.all(
+                                    width: fieldSizeParameter.lineSize)),
                             child: SizedBox(
                               // FieldSwitch to swipe between right and left field side. SizedBox around it so there is no rendering error.
                               width: fieldSizeParameter.fieldWidth,
@@ -108,7 +109,8 @@ class MainScreen extends StatelessWidget {
                                     BoxConstraints constraints) {
                                   // set Field size depending on Widget size
                                   fieldSizeParameter.setFieldSize(
-                                      constraints.maxWidth, constraints.maxHeight);
+                                      constraints.maxWidth,
+                                      constraints.maxHeight);
                                   return FieldSwitch();
                                 },
                               ),

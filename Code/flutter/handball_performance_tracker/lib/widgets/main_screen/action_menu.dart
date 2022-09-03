@@ -38,11 +38,12 @@ void callActionMenu(BuildContext context) {
   if (actionType == otherGoalkeeper) {
     return;
   }
-  StopWatchTimer stopWatchTimer = persController.getCurrentGame().stopWatch;
+  StopWatchTimer stopWatchTimer =
+      persController.getCurrentGame().stopWatchTimer;
   // if game is not running give a warning
   if (stopWatchTimer.rawTime.value == 0) {
     showDialog(
-      context: context,
+        context: context,
         builder: (BuildContext bcontext) {
           return AlertDialog(
               scrollable: true,
@@ -354,7 +355,7 @@ DialogButton buildDialogButton(
     DateTime dateTime = DateTime.now();
     int unixTime = dateTime.toUtc().millisecondsSinceEpoch;
     int secondsSinceGameStart =
-        persistentController.getCurrentGame().stopWatch.secondTime.value;
+        persistentController.getCurrentGame().stopWatchTimer.secondTime.value;
     // get most recent game id from DB
     String currentGameId = persistentController.getCurrentGame().id!;
 
@@ -379,7 +380,8 @@ DialogButton buildDialogButton(
         gameId: currentGameId,
         type: actionType,
         actionType: actionMapping[allActions]![buttonText]!,
-        throwLocation: List.from(tempController.getLastLocation().cast<String>()),
+        throwLocation:
+            List.from(tempController.getLastLocation().cast<String>()),
         timestamp: unixTime,
         relativeTime: secondsSinceGameStart);
     logger.d("GameAction object created: ${action.actionType}");

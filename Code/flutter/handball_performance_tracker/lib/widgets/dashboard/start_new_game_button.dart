@@ -30,7 +30,6 @@ class StartNewGameButton extends StatelessWidget {
         child: TextButton(
             onPressed: () {
               if (tempController.getOldGameStateExists()) {
-                print("are you sure you want to start a new game?");
                 Get.defaultDialog(
                     title: StringsDashboard.lWarning,
                     content: Column(

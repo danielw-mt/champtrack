@@ -76,7 +76,7 @@ void unpauseGame() {
   tempController.setGameIsPaused(false);
   persistentController
       .getCurrentGame()
-      .stopWatch
+      .stopWatchTimer
       .onExecute
       .add(StopWatchExecute.start);
 }
@@ -89,7 +89,7 @@ void pauseGame() {
   tempController.setGameIsPaused(true);
   persistentController
       .getCurrentGame()
-      .stopWatch
+      .stopWatchTimer
       .onExecute
       .add(StopWatchExecute.stop);
 }
@@ -111,7 +111,7 @@ void stopGame() async {
   // stop the game timer
   persistentController
       .getCurrentGame()
-      .stopWatch
+      .stopWatchTimer
       .onExecute
       .add(StopWatchExecute.stop);
 

@@ -14,8 +14,9 @@ class Game {
   String? location;
   String? opponent;
   String? season;
+  String? lastSync;
   List<String> players;
-  StopWatchTimer stopWatch; 
+  StopWatchTimer stopWatchTimer;
 
   Game(
       {this.id,
@@ -30,8 +31,9 @@ class Game {
       this.location = "",
       this.opponent = "",
       this.season = "",
-      this.players = const []}):stopWatch = StopWatchTimer(mode: StopWatchMode.countUp);
-
+      this.lastSync = "",
+      this.players = const []})
+      : stopWatchTimer = StopWatchTimer(mode: StopWatchMode.countUp);
 
   // @return Map<String,dynamic> as representation of Game object that can be saved to firestore
   Map<String, dynamic> toMap() {
@@ -47,7 +49,9 @@ class Game {
       'location': location,
       'opponent': opponent,
       'season': season,
-      'players': players
+      'players': players,
+      'lastSync': lastSync,
+      'stopWatchTime': stopWatchTimer.rawTime.value
     };
   }
 
@@ -60,10 +64,21 @@ class Game {
 
   // @return Game object created from map representation of Game
   factory Game.fromMap(Map<String, dynamic> map) {
-    return Game(
+    int lastStopWatchTime = map['stopWatchTime'];
+    StopWatchTimer stopWatchTimer = StopWatchTimer(mode: StopWatchMode.countUp);
+    stopWatchTimer.onExecute.add(StopWatchExecute.reset);
+    stopWatchTimer.setPresetTime(mSec: lastStopWatchTime);
+    // TODO make sure way of setting time is correct here
+    print("recreated game with time: " +
+        stopWatchTimer.initialPresetTime.toString());
+    // convert date
+    Timestamp dateTimestamp = map["date"];
+    DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(
+        dateTimestamp.millisecondsSinceEpoch);
+    Game game = Game(
         clubId: map["clubId"],
         teamId: map["teamId"],
-        date: map["date"],
+        date: dateTime,
         startTime: map["startTime"],
         stopTime: map["stopTime"],
         scoreHome: map["scoreHome"],
@@ -72,6 +87,9 @@ class Game {
         location: map["location"],
         opponent: map["opponent"],
         season: map["season"],
+        lastSync: map["lastSync"],
         players: map["players"].cast<String>());
+    game.stopWatchTimer = stopWatchTimer;
+    return game;
   }
 }

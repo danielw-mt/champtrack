@@ -34,6 +34,7 @@ class TempController extends GetxController {
   }
 
   /// Temporary variable for storing the currently playing Team
+  /// TODO why is this needed? can't we just use selectedTeam?
   Rx<Team> _playingTeam = Team(id: "-1", name: "Default team").obs;
 
   /// getter for playingTeam
@@ -109,6 +110,11 @@ class TempController extends GetxController {
 
   /// get the players from selectedTeam that are currently marked as onFieldPlayers
   List<Player> getOnFieldPlayers() => _selectedTeam.value.onFieldPlayers;
+
+  void setOnFieldPlayers(List<Player> players) {
+    _selectedTeam.value.onFieldPlayers = players;
+    update(["players-list"]);
+  }
 
   List<String> getOnFieldPlayersById() =>
       _selectedTeam.value.onFieldPlayers.map((player) => player.id!).toList();
@@ -324,7 +330,7 @@ class TempController extends GetxController {
 
   // set the order of players displayed in player bar:
   // The first player that was added to the game it the first in the player bar and so on.
-  void setPlayerBarPlayers() {
+  void setPlayerBarPlayersOrder() {
     _playerBarPlayers.clear();
     for (int i in getOnFieldIndex()) {
       _playerBarPlayers.add(i);
