@@ -77,11 +77,12 @@ runGameStateSync() {
   });
 }
 
+/// Loads data from most recent game in games collection and recreates the game state
+/// in terms of score, stopwatchtime, players, ef-score and gameActions
 Future<void> recreateGameStateFromFirebase() async {
   TempController tempController = Get.find<TempController>();
   PersistentController persistentController = Get.find<PersistentController>();
   DatabaseRepository repository = persistentController.repository;
-  final FirebaseFirestore _db = FirebaseFirestore.instance;
 
   // get latest game data from firebase
   Game mostRecentGame = await repository.getMostRecentGame();
@@ -94,7 +95,8 @@ Future<void> recreateGameStateFromFirebase() async {
   // season
   tempController.setSelectedSeason(mostRecentGame.season.toString());
 
-  // players
+  // build list of player to restore manually from firebase based on players list
+  // stored in games collection
   List<Player> onFieldPlayersFromLastGame = [];
   mostRecentGame.players.forEach((String playerId) async {
     DocumentSnapshot playerSnapshot = await repository.getPlayer(playerId);
@@ -103,7 +105,8 @@ Future<void> recreateGameStateFromFirebase() async {
           .add(Player.fromDocumentSnapshot(playerSnapshot));
     }
   });
-  // team
+  // recreate team from already stored teams in persistentController 
+  //(those teams were created in initialize local data)
   Team selectedTeam = persistentController
       .getAvailableTeams()
       .where((Team team) => team.id == mostRecentGame.teamId)
@@ -111,11 +114,7 @@ Future<void> recreateGameStateFromFirebase() async {
   selectedTeam.onFieldPlayers = onFieldPlayersFromLastGame;
   tempController.setSelectedTeam(selectedTeam);
   tempController.setOnFieldPlayers(onFieldPlayersFromLastGame);
-  // tempController.setPlayerBarPlayersOrder();
-  // tempController.setPlayingTeam(selectedTeam);
-  // tempController
   // scores
-
   tempController.setOwnScore(mostRecentGame.scoreHome!.toInt());
   tempController.setOpponentScore(mostRecentGame.scoreOpponent!.toInt());
 
