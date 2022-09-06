@@ -107,9 +107,25 @@ class PersistentController extends GetxController {
   }
 
   /// reset the current Game object to a game without id and clean up the actions list
-  void resetCurrentGame(){
-    _currentGame.value = Game(date: DateTime.now()); 
+  void resetCurrentGame() {
+    _currentGame.value = Game(date: DateTime.now());
     _actions.value = [];
   }
 
+
+  /// if there are more than @param actionLimit actions that a player performed
+  /// return true otherwise false
+  bool playerEfScoreShouldDisplay(int actionLimit, Player player) {
+    int actionsPlayerPerformed = 0;
+    _actions.forEach((GameAction action) {
+      if (action.playerId == player.id) {
+        actionsPlayerPerformed++;
+      }
+    });
+    if (actionsPlayerPerformed >= actionLimit) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 }
