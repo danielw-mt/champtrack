@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:handball_performance_tracker/controllers/tempController.dart';
 import 'package:handball_performance_tracker/widgets/nav_drawer.dart';
+import 'package:flutter/services.dart';
 
 // a screen that holds widgets that can be useful for debugging and game control
 class StatisticsScreen extends StatelessWidget {
@@ -10,6 +11,10 @@ class StatisticsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.landscapeRight,
+    ]);
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.white,

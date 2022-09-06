@@ -11,6 +11,7 @@ import 'package:handball_performance_tracker/widgets/team_settings_screen/player
 import '../constants/colors.dart';
 import '../widgets/nav_drawer.dart';
 import '../screens/mainScreen.dart';
+import 'package:flutter/services.dart';
 
 /// Screen that is displayed after startGameScreen and allows to select, add, and remove players before starting the game
 class PlayerSelectionScreen extends StatefulWidget {
@@ -26,6 +27,10 @@ class _PlayerSelectionScreenState extends State<PlayerSelectionScreen> {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.landscapeRight,
+    ]);
     // after a hot reload the app crashes. This prevents it
     if (!Get.isRegistered<TempController>())
       return SafeArea(

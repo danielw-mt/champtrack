@@ -12,6 +12,7 @@ import 'package:get/get.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'constants/stringsGeneral.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/services.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -30,7 +31,7 @@ void main() async {
       GetPage(name: '/', page: () => Home()),
       GetPage(name: '/StartGameScreen', page: () => StartGameScreen()),
       GetPage(name: '/Dashboard', page: () => Dashboard()),
-      ],
+    ],
   ));
 }
 
@@ -39,6 +40,11 @@ class Home extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.landscapeRight,
+    ]);
+
     return FutureBuilder<dynamic>(
       future: _startupCheck(),
       builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
@@ -77,8 +83,6 @@ class Home extends StatelessWidget {
         } else {
           children = <Widget>[
             CustomAlertWidget("Suche Verbindung..."),
-            
-            
           ];
         }
         return Center(

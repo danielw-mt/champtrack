@@ -4,6 +4,7 @@ import 'package:handball_performance_tracker/constants/fieldSizeParameter.dart';
 import 'package:handball_performance_tracker/constants/game_actions.dart';
 import 'package:handball_performance_tracker/controllers/tempController.dart';
 import 'package:handball_performance_tracker/widgets/nav_drawer.dart';
+import 'package:flutter/services.dart';
 
 // a screen that holds widgets that can be useful for debugging and game control
 class GlossaryScreen extends StatelessWidget {
@@ -12,6 +13,10 @@ class GlossaryScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.landscapeRight,
+    ]);
     return SafeArea(
         child: Scaffold(
             key: _scaffoldKey,

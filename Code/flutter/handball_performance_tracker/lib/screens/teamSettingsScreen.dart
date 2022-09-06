@@ -5,6 +5,7 @@ import '../controllers/tempController.dart';
 import '../widgets/team_settings_screen/players_list.dart';
 import '../widgets/team_settings_screen/team_settings_bar.dart';
 import '../widgets/team_settings_screen/team_details_form.dart';
+import 'package:flutter/services.dart';
 
 // A screen where all relevant Infos of a team can be edited (players, game history and team details like name)
 // screen that allows players to be selected including what players are on the field or on the bench (non selected)
@@ -14,6 +15,10 @@ class TeamSettingsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.landscapeRight,
+    ]);
     return SafeArea(
         child: GetBuilder<TempController>(
       id: "team-setting-screen",

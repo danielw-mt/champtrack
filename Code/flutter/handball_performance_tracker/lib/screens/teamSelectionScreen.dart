@@ -6,6 +6,7 @@ import '../controllers/tempController.dart';
 import '../widgets/team_selection_screen/team_dropdown.dart';
 import '../widgets/team_selection_screen/team_type_selection_bar.dart';
 import 'teamSettingsScreen.dart';
+import 'package:flutter/services.dart';
 
 // A screen where all the available teams are listed for men, women and youth teams
 class TeamSelectionScreen extends StatelessWidget {
@@ -15,6 +16,10 @@ class TeamSelectionScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.landscapeRight,
+    ]);
     return SafeArea(
         child: GetBuilder<TempController>(
       id: "team-selection-screen",

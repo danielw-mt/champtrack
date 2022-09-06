@@ -13,6 +13,7 @@ import 'package:get/get.dart';
 import '../controllers/persistentController.dart';
 import '../controllers/tempController.dart';
 import '../utils/initializeLocalData.dart';
+import 'package:flutter/services.dart';
 
 class Dashboard extends StatelessWidget {
   final PersistentController persistentController =
@@ -22,6 +23,10 @@ class Dashboard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.landscapeRight,
+    ]);
     return FutureBuilder(
         future: initializeLocalData(),
         builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
