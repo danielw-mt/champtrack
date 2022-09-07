@@ -19,12 +19,30 @@ var logger = Logger(
 );
 
 class DatabaseRepository {
-  
   final FirebaseFirestore _db = FirebaseFirestore.instance;
   // final FirebaseFirestore _db = FirebaseFirestore.instanceFor(app: Firebase.app('dev'));
 
   Future<DocumentReference> addTeam(Team team) async {
     return await _db.collection('teams').add(team.toMap());
+  }
+
+  Future<void> deleteTeam(Team team) async {
+    // delete team from teams collection
+    await _db.collection('teams').doc(team.id).delete();
+    // delete all players associated with team
+    _db
+        .collection("players")
+        .where("teams", arrayContains: team.id)
+        .get()
+        .then((querySnapshot) {
+      querySnapshot.docs.forEach((doc) {
+        doc.reference.delete();
+      });
+    });
+  }
+
+  Future<void> updateTeam(Team team) async {
+    return await _db.collection('teams').doc(team.id).update(team.toMap());
   }
 
   // TODO change this to logged in club
@@ -128,7 +146,7 @@ class DatabaseRepository {
   Future<DocumentReference> addGame(Game game) async {
     return _db.collection("games").add(game.toMap());
   }
-  
+
   /// update a Game's firestore record according to @param game properties
   void updateGame(Game game) async {
     await _db.collection("games").doc(game.id).update(game.toMap());

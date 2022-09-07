@@ -16,6 +16,10 @@ class TempController extends GetxController {
   /// Database instance for automatically updating instances in firestore
   DatabaseRepository repository = Get.find<PersistentController>().repository;
 
+  void updateItem(String itemName) {
+    update([itemName]);
+  }
+
   /// Temporary variable for storing the currently selected Team
   Rx<Team> _selectedTeam = Team(id: "-1", name: "Default team").obs;
 
@@ -24,7 +28,24 @@ class TempController extends GetxController {
 
   /// setter for selectedTeam
   void setSelectedTeam(Team team) {
+    PersistentController persistentController =
+        Get.find<PersistentController>();
+    persistentController.updateTeam(team);
     _selectedTeam.value = team;
+    update([
+      "team-type-selection-bar",
+      "players-list",
+      "team-details-form-state",
+      "team-dropdown",
+      "team-list"
+    ]);
+  }
+
+  void deleteSelectedTeam() {
+    PersistentController persistentController =
+        Get.find<PersistentController>();
+    persistentController.deleteTeam(_selectedTeam.value);
+    _selectedTeam.value = persistentController.getAvailableTeams()[0];
     update([
       "team-type-selection-bar",
       "players-list",
@@ -94,11 +115,12 @@ class TempController extends GetxController {
 
   /// adds player to the players collection and the selected teams in the teams
   /// collection.
-  void addPlayer(Player player) async {
+  void addPlayerToSelectedTeam(Player player) async {
     PersistentController persistentController =
         Get.find<PersistentController>();
     DocumentReference docRef = await repository.addPlayer(player);
     player.id = docRef.id;
+    player.teams.add(_selectedTeam.value.id.toString());
     // add player to each team inside references
     player.teams.forEach((String teamReference) {
       Team relevantTeam = persistentController.getSpecificTeam(teamReference);
@@ -207,8 +229,8 @@ class TempController extends GetxController {
   /// setter for attackIsLeft
   setAttackIsLeft(bool attackIsLeft) {
     _attackIsLeft.value = attackIsLeft;
-      update(["side-switch", "custom-field", "start-game-form"]);
-    }
+    update(["side-switch", "custom-field", "start-game-form"]);
+  }
 
   //////
   /// Main screen

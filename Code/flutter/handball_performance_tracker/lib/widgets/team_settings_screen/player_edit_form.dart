@@ -122,7 +122,6 @@ class PlayerFormState extends State<PlayerForm> {
               onPressed: () {
                 tempController.deletePlayer(player);
                 Navigator.pop(context);
-                tempController.update(["players-list"]);
               },
               child: Text(StringsGeneral.lDeletePlayer,
                   style: TextStyle(
@@ -374,7 +373,7 @@ class PlayerFormState extends State<PlayerForm> {
                               if (editModeEnabled) {
                                 tempController.setPlayer(player);
                               } else {
-                                tempController.addPlayer(player);
+                                tempController.addPlayerToSelectedTeam(player);
                               }
                             }
                           },
