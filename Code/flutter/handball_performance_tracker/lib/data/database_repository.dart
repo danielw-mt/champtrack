@@ -23,6 +23,10 @@ class DatabaseRepository {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
   // final FirebaseFirestore _db = FirebaseFirestore.instanceFor(app: Firebase.app('dev'));
 
+  Future<DocumentReference> addTeam(Team team) async {
+    return await _db.collection('teams').add(team.toMap());
+  }
+
   // TODO change this to logged in club
   Future<Club> getClub() async {
     QuerySnapshot querySnapshot = await _db.collection("clubs").limit(1).get();

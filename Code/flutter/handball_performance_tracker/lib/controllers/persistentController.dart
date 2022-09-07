@@ -39,6 +39,14 @@ class PersistentController extends GetxController {
     return _cachedTeamsList;
   }
 
+  void addTeam(String name, String type) async {
+    
+    Team newTeam = Team(name: name, type: type, clubId: getLoggedInClub().id!);
+    DocumentReference docRef = await repository.addTeam(newTeam);
+    newTeam.id = docRef.id;
+    _cachedTeamsList.add(newTeam);
+  }
+
   /// get a team object from cachedTeamsList from reference string
   /// i.e teams/ypunI6UsJmTr2LxKh1aw
   Team getSpecificTeam(String teamReference) {
