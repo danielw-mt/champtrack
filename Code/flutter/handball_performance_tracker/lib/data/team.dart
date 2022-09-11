@@ -24,7 +24,8 @@ class Team {
       'name': name,
       'clubId': clubId,
       'players': players,
-      'onFieldPlayers': onFieldPlayers
+      'onFieldPlayers': onFieldPlayers,
+      'type': type,
     };
   }
 

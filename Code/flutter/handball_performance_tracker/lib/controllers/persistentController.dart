@@ -6,6 +6,7 @@ import '../data/game_action.dart';
 import '../data/player.dart';
 import '../data/team.dart';
 import '../data/club.dart';
+import './tempController.dart';
 
 /// stores more persistent state
 /// generally more complex variables and data structure that are
@@ -37,6 +38,31 @@ class PersistentController extends GetxController {
   /// Getter for cachedTeamsList
   List<Team> getAvailableTeams() {
     return _cachedTeamsList;
+  }
+
+  void addTeam(String name, String type) async {
+    TempController tempController = Get.find<TempController>();
+    Team newTeam = Team(name: name, type: type, clubId: getLoggedInClub().id!);
+    DocumentReference docRef = await repository.addTeam(newTeam);
+    newTeam.id = docRef.id;
+    _cachedTeamsList.add(newTeam);
+    tempController.updateItem("team-list");
+    tempController.updateItem("team-selection-screen");
+    tempController.updateItem("team-dropdown");
+  }
+
+  void deleteTeam(Team team) async {
+    await repository.deleteTeam(team);
+    _cachedTeamsList.remove(team);
+  }
+
+  void updateTeam(Team team) async {
+    await repository.updateTeam(team);
+    _cachedTeamsList.forEach((Team cachedTeam) {
+      if (cachedTeam.id == team.id) {
+        cachedTeam = team;
+      }
+    });
   }
 
   /// get a team object from cachedTeamsList from reference string
@@ -107,9 +133,8 @@ class PersistentController extends GetxController {
   }
 
   /// reset the current Game object to a game without id and clean up the actions list
-  void resetCurrentGame(){
-    _currentGame.value = Game(date: DateTime.now()); 
+  void resetCurrentGame() {
+    _currentGame.value = Game(date: DateTime.now());
     _actions.value = [];
   }
-
 }
