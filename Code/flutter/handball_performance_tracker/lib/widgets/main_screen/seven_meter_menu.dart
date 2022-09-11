@@ -157,7 +157,7 @@ DialogButton buildDialogButton(
     DateTime dateTime = DateTime.now();
     int unixTime = dateTime.toUtc().millisecondsSinceEpoch;
     int secondsSinceGameStart =
-        persistentController.getCurrentGame().stopWatch.secondTime.value;
+        persistentController.getCurrentGame().stopWatchTimer.secondTime.value;
 
     // get most recent game id from DB
     String currentGameId = persistentController.getCurrentGame().id!;
