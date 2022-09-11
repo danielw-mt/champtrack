@@ -34,7 +34,7 @@ class TempController extends GetxController {
     _selectedTeam.value = team;
     update([
       "team-type-selection-bar",
-      "players-list",
+      // "players-list",
       "team-details-form-state",
       "team-dropdown",
       "team-list"
@@ -116,11 +116,17 @@ class TempController extends GetxController {
   /// adds player to the players collection and the selected teams in the teams
   /// collection.
   void addPlayerToSelectedTeam(Player player) async {
+    print("add player to selected team");
     PersistentController persistentController =
         Get.find<PersistentController>();
     DocumentReference docRef = await repository.addPlayer(player);
     player.id = docRef.id;
-    player.teams.add(_selectedTeam.value.id.toString());
+    // if the player is not already in the selected team add the selected team
+    if (!player.teams.contains('teams/' + _selectedTeam.value.id.toString())) {
+      print("player not already in selected team");
+      player.teams.add(_selectedTeam.value.id.toString());
+    }
+
     // add player to each team inside references
     player.teams.forEach((String teamReference) {
       Team relevantTeam = persistentController.getSpecificTeam(teamReference);
