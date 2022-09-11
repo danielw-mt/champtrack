@@ -72,10 +72,9 @@ class TeamDetailsFormState extends State<TeamDetailsForm> {
                 builder: (state) => Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(StringsGeneral.lTeamTypes),
                     SizedBox(
                         width: width * 0.25,
-                        height: 100,
+                        height: 200,
                         child: ListView.builder(
                             itemCount: teamTypes.length,
                             itemBuilder: (context, index) {
@@ -133,11 +132,12 @@ class TeamDetailsFormState extends State<TeamDetailsForm> {
                           tempController.setSelectedTeam(newTeam);
                         }
                       },
-                      child: const Text(StringsTeamManagement.lSubmitButton),
+                      child: const Text(StringsGeneral.lSubmitButton),
                     ),
                   ),
                   Container(
                     height: 20,
+                    width: 20,
                   ),
                   // delete button
                   Padding(
