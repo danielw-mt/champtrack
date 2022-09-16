@@ -7,6 +7,7 @@ import '../data/game_action.dart';
 import '../data/player.dart';
 import '../data/team.dart';
 import '../utils/player_helper.dart';
+import 'dart:async';
 
 /// Contains variables that are changed often throughout the app.
 /// Stores mostly ephemeral state
@@ -280,10 +281,10 @@ class TempController extends GetxController {
   Rx<Player> _lastClickedPlayer = Player().obs;
 
   /// getter for lastClickedPlayer
-  getLastClickedPlayer() => _lastClickedPlayer.value;
+  Player getLastClickedPlayer() => _lastClickedPlayer.value;
 
   /// setter for lastClickedPlayer
-  setLastClickedPlayer(Player lastClickedPlayer) {
+  void setLastClickedPlayer(Player lastClickedPlayer) {
     _lastClickedPlayer.value = lastClickedPlayer;
     update(["player-menu-button"]);
   }
@@ -295,12 +296,12 @@ class TempController extends GetxController {
   List<Player> getPlayersToChange() => _playersToChange;
 
   /// setter for _playersToChange
-  addPlayerToChange(Player playerToChange) {
+  void addPlayerToChange(Player playerToChange) {
     _playersToChange.add(playerToChange);
     //update();
   }
 
-  removePlayerToChange(Player playerToChange) {
+  void removePlayerToChange(Player playerToChange) {
     _playersToChange.remove(playerToChange);
     //update();
   }
@@ -498,4 +499,46 @@ class TempController extends GetxController {
   void activateGameSync() {
     gameSyncActivatedOnce.value = true;
   }
+
+  /// Penalty Functionality
+  /// A map of players is stored that currently serve a penalty
+  /// {"playerID":"timeOfPenalty"}
+  RxMap penalizedPlayers = {}.obs;
+
+  void addPenalizedPlayer(Player player) {
+    // don't add a player to the map if they already have a penalty
+    if (isPlayerPenalized(player)) {
+      return;
+    }
+    PersistentController persistentController =
+        Get.find<PersistentController>();
+    penalizedPlayers[player.id] =
+        persistentController.getCurrentGame().stopWatchTimer.rawTime.value;
+    print(penalizedPlayers);
+    update(["player-bar-button"]);
+    // check whether the penalty for the player ran out every 5 seconds of the stopwatch
+    Timer.periodic(Duration(seconds: 5), (Timer t) {
+      if (!penalizedPlayers.containsKey(player.id)) {
+        t.cancel();
+        return;
+      }
+      int stopWatchTime =
+          persistentController.getCurrentGame().stopWatchTimer.rawTime.value;
+      int penaltyStartStopWatchTime = penalizedPlayers[player.id];
+      if (stopWatchTime - penaltyStartStopWatchTime >= 120000) {
+        removePenalizedPlayer(player);
+        t.cancel();
+      }
+    });
+  }
+
+  void removePenalizedPlayer(Player player) {
+    if (penalizedPlayers.containsKey(player.id)) {
+      penalizedPlayers.remove(player.id);
+      update(["player-bar-button"]);
+    }
+  }
+
+  bool isPlayerPenalized(Player player) =>
+      penalizedPlayers.containsKey(player.id);
 }
