@@ -22,10 +22,12 @@ var logger = Logger(
 class DatabaseRepository {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
   // final FirebaseFirestore _db = FirebaseFirestore.instanceFor(app: Firebase.app('dev'));
+  // QuerySnapshot club = await _db.collection("clubs").get();
 
   // TODO change this to logged in club
-  Future<Club> getClub() async {
-    QuerySnapshot querySnapshot = await _db.collection("clubs").limit(1).get();
+  Future<Club> getLoggedInClub() async {
+    print("Logged In Club");
+    QuerySnapshot querySnapshot = await _db.collection("clubs").get();
     QueryDocumentSnapshot<Object?> documentSnapshot = querySnapshot.docs[0];
     return Club.fromDocumentSnapshot(documentSnapshot);
   }

@@ -6,11 +6,14 @@ import '../data/database_repository.dart';
 import 'package:get/get.dart';
 import '../controllers/persistentController.dart';
 import '../controllers/tempController.dart';
+import '../data/club.dart';
 
 Future<bool> initializeLocalData() async {
   PersistentController persistentController = Get.find<PersistentController>();
   DatabaseRepository repository = persistentController.repository;
   if (!persistentController.isInitialized) {
+    Club club = await repository.getLoggedInClub();
+    print(club.name);
     //
     print("initializing local data");
     List<Team> teamsList = [];
@@ -57,7 +60,7 @@ Future<bool> initializeLocalData() async {
 
     // initialize club
     // comment: this is not needed yet
-    persistentController.setLoggedInClub(await repository.getClub());
+    persistentController.setLoggedInClub(await repository.getLoggedInClub());
 
     // set the default selected team to be the first one available
     TempController tempController = Get.find<TempController>();
