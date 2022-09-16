@@ -3,7 +3,6 @@ import 'package:stop_watch_timer/stop_watch_timer.dart';
 
 class Game {
   String? id;
-  final String clubId;
   String teamId;
   DateTime date;
   int? startTime;
@@ -20,7 +19,6 @@ class Game {
 
   Game(
       {this.id,
-      this.clubId = "",
       this.teamId = "",
       required this.date,
       this.startTime,
@@ -38,7 +36,6 @@ class Game {
   // @return Map<String,dynamic> as representation of Game object that can be saved to firestore
   Map<String, dynamic> toMap() {
     return {
-      'clubId': clubId,
       'teamId': teamId,
       'date': date,
       'startTime': startTime,
@@ -73,7 +70,6 @@ class Game {
     DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(
         dateTimestamp.millisecondsSinceEpoch);
     Game game = Game(
-        clubId: map["clubId"],
         teamId: map["teamId"],
         date: dateTime,
         startTime: map["startTime"],

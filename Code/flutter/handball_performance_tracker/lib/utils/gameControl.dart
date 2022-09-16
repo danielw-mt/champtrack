@@ -51,7 +51,6 @@ void startGame(BuildContext context, {bool preconfigured: false}) async {
     DateTime dateTime = DateTime.now();
     int unixTimeStamp = dateTime.toUtc().millisecondsSinceEpoch;
     Game newGame = Game(
-        clubId: tempController.getSelectedTeam().id!,
         date: dateTime,
         startTime: unixTimeStamp,
         players: tempController.getOnFieldPlayersById());
