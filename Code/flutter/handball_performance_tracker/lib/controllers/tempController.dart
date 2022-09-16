@@ -7,6 +7,7 @@ import '../data/game_action.dart';
 import '../data/player.dart';
 import '../data/team.dart';
 import '../utils/player_helper.dart';
+import 'dart:async';
 
 /// Contains variables that are changed often throughout the app.
 /// Stores mostly ephemeral state
@@ -34,6 +35,7 @@ class TempController extends GetxController {
   }
 
   /// Temporary variable for storing the currently playing Team
+  /// TODO why is this needed? can't we just use selectedTeam?
   Rx<Team> _playingTeam = Team(id: "-1", name: "Default team").obs;
 
   /// getter for playingTeam
@@ -54,6 +56,11 @@ class TempController extends GetxController {
 
   void updatePlayerEfScore(String playerId, GameAction action,
       {removeAction = false}) {
+    if (_selectedTeam.value.players
+        .where((Player player) => player.id == playerId)
+        .isEmpty) {
+      return;
+    }
     if (removeAction) {
       _selectedTeam.value.players
           .where((Player player) => player.id == playerId)
@@ -110,6 +117,11 @@ class TempController extends GetxController {
   /// get the players from selectedTeam that are currently marked as onFieldPlayers
   List<Player> getOnFieldPlayers() => _selectedTeam.value.onFieldPlayers;
 
+  void setOnFieldPlayers(List<Player> players) {
+    _selectedTeam.value.onFieldPlayers = players;
+    update(["players-list"]);
+  }
+
   List<String> getOnFieldPlayersById() =>
       _selectedTeam.value.onFieldPlayers.map((player) => player.id!).toList();
 
@@ -141,7 +153,8 @@ class TempController extends GetxController {
         ["action-feed", "on-field-checkbox", "ef-score-bar", "players-list"]);
   }
 
-  /// if player gets active in a game, add the game's id to its games list as well as the player's id to the games players list
+  /// if player gets active in a game, add the game's id to its games list
+  ///  as well as the player's id to the games players list
   void addGameToPlayer(Player player, Game game) {
     if (!player.games.contains(game.id)) {
       player.games.add(game.id!);
@@ -207,8 +220,8 @@ class TempController extends GetxController {
   /// setter for attackIsLeft
   setAttackIsLeft(bool attackIsLeft) {
     _attackIsLeft.value = attackIsLeft;
-      update(["side-switch", "custom-field", "start-game-form"]);
-    }
+    update(["side-switch", "custom-field", "start-game-form"]);
+  }
 
   //////
   /// Main screen
@@ -248,7 +261,7 @@ class TempController extends GetxController {
   /// getter for playerMenuText
   String getPlayerMenuText() => _playerMenuText.value;
 
-  void setPlayerMenutText(String text) {
+  void setPlayerMenuText(String text) {
     _playerMenuText.value = text;
     update(["player-menu-text"]);
   }
@@ -268,10 +281,10 @@ class TempController extends GetxController {
   Rx<Player> _lastClickedPlayer = Player().obs;
 
   /// getter for lastClickedPlayer
-  getLastClickedPlayer() => _lastClickedPlayer.value;
+  Player getLastClickedPlayer() => _lastClickedPlayer.value;
 
   /// setter for lastClickedPlayer
-  setLastClickedPlayer(Player lastClickedPlayer) {
+  void setLastClickedPlayer(Player lastClickedPlayer) {
     _lastClickedPlayer.value = lastClickedPlayer;
     update(["player-menu-button"]);
   }
@@ -283,12 +296,12 @@ class TempController extends GetxController {
   List<Player> getPlayersToChange() => _playersToChange;
 
   /// setter for _playersToChange
-  addPlayerToChange(Player playerToChange) {
+  void addPlayerToChange(Player playerToChange) {
     _playersToChange.add(playerToChange);
     //update();
   }
 
-  removePlayerToChange(Player playerToChange) {
+  void removePlayerToChange(Player playerToChange) {
     _playersToChange.remove(playerToChange);
     //update();
   }
@@ -316,23 +329,23 @@ class TempController extends GetxController {
   }
 
   // list of 7 or less Integer, give the indices of players on field in the order in which they appear on efscore player bar
-  RxList<int> _playerBarPlayers = <int>[0, 1, 2, 3, 4, 5, 6].obs;
+  RxList<int> _playerBarPlayersOrder = <int>[0, 1, 2, 3, 4, 5, 6].obs;
 
   /// getter for playerBarPlayers
-  List<int> getPlayerBarPlayers() => _playerBarPlayers;
+  List<int> getPlayerBarPlayers() => _playerBarPlayersOrder;
 
   // set the order of players displayed in player bar:
   // The first player that was added to the game it the first in the player bar and so on.
-  void setPlayerBarPlayers() {
-    _playerBarPlayers.clear();
+  void setPlayerBarPlayersOrder() {
+    _playerBarPlayersOrder.clear();
     for (int i in getOnFieldIndex()) {
-      _playerBarPlayers.add(i);
+      _playerBarPlayersOrder.add(i);
     }
     update(["ef-score-bar"]);
   }
 
   void changePlayerBarPlayers(int indexToChange, int i) {
-    _playerBarPlayers[indexToChange] = i;
+    _playerBarPlayersOrder[indexToChange] = i;
     update(["ef-score-bar"]);
   }
 
@@ -471,4 +484,61 @@ class TempController extends GetxController {
     _selectedSeason.value = season;
     update(["season-dropdown"]);
   }
+
+  /// Whether a game was synced in the last 20 minutes after opening the app
+  RxBool oldGameStateExists = false.obs;
+
+  void setOldGameStateExists(bool oldGameStateExists) {
+    this.oldGameStateExists.value = oldGameStateExists;
+  }
+
+  bool getOldGameStateExists() => oldGameStateExists.value;
+
+  RxBool gameSyncActivatedOnce = false.obs;
+  bool isGameSyncActivated() => gameSyncActivatedOnce.value;
+  void activateGameSync() {
+    gameSyncActivatedOnce.value = true;
+  }
+
+  /// Penalty Functionality
+  /// A map of players is stored that currently serve a penalty
+  /// {"playerID":"timeOfPenalty"}
+  RxMap penalizedPlayers = {}.obs;
+
+  void addPenalizedPlayer(Player player) {
+    // don't add a player to the map if they already have a penalty
+    if (isPlayerPenalized(player)) {
+      return;
+    }
+    PersistentController persistentController =
+        Get.find<PersistentController>();
+    penalizedPlayers[player.id] =
+        persistentController.getCurrentGame().stopWatchTimer.rawTime.value;
+    print(penalizedPlayers);
+    update(["player-bar-button"]);
+    // check whether the penalty for the player ran out every 5 seconds of the stopwatch
+    Timer.periodic(Duration(seconds: 5), (Timer t) {
+      if (!penalizedPlayers.containsKey(player.id)) {
+        t.cancel();
+        return;
+      }
+      int stopWatchTime =
+          persistentController.getCurrentGame().stopWatchTimer.rawTime.value;
+      int penaltyStartStopWatchTime = penalizedPlayers[player.id];
+      if (stopWatchTime - penaltyStartStopWatchTime >= 120000) {
+        removePenalizedPlayer(player);
+        t.cancel();
+      }
+    });
+  }
+
+  void removePenalizedPlayer(Player player) {
+    if (penalizedPlayers.containsKey(player.id)) {
+      penalizedPlayers.remove(player.id);
+      update(["player-bar-button"]);
+    }
+  }
+
+  bool isPlayerPenalized(Player player) =>
+      penalizedPlayers.containsKey(player.id);
 }

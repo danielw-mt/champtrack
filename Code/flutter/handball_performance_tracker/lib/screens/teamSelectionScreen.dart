@@ -11,6 +11,7 @@ import 'teamSettingsScreen.dart';
 class TeamSelectionScreen extends StatelessWidget {
   // screen that allows players to be selected including what players are on the field or on the bench (non selected)
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  // TODO Get.find instead of Get.put?
   final TempController tempController = Get.put(TempController());
 
   @override

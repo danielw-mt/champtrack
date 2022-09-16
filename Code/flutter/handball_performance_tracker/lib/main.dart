@@ -117,20 +117,27 @@ Future<dynamic> _startupCheck() async {
       //    name: "dev", options: DevFirebaseOptions.currentPlatform);
     }
   }
-
   // if connected force synchronization
   var connectivityResult = await (Connectivity().checkConnectivity());
-  if (connectivityResult == ConnectivityResult.mobile ||
-      connectivityResult == ConnectivityResult.wifi) {
-    // I am connected to a mobile network.
-    FirebaseFirestore db = FirebaseFirestore.instance;
-    db.enableNetwork();
-    print(StringsGeneral.lConnected);
-    return "";
-  } else {
-    // TODO define behaviour for not connected i.e. wait 5 secs and try again
-    print(StringsGeneral.lNot + ' ' + StringsGeneral.lConnected);
-  }
+  // if (connectivityResult == ConnectivityResult.mobile ||
+  //     connectivityResult == ConnectivityResult.wifi) {
+  //   // I am connected to a mobile network.
+  //   FirebaseFirestore db = FirebaseFirestore.instance;
+  //   db.enableNetwork();
+  //   print(StringsGeneral.lConnected);
+  // } else {
+  //   // TODO define behaviour for not connected i.e. wait 5 secs and try again
+  //   print(StringsGeneral.lNot + ' ' + StringsGeneral.lConnected);
+
+  // }
+  FirebaseFirestore db = FirebaseFirestore.instance;
+  db.settings = const Settings(
+    persistenceEnabled: true,
+    cacheSizeBytes: Settings.CACHE_SIZE_UNLIMITED,
+  );
+  // TODO if platform is web implement this line
+  // await db.enablePersistence(const PersistenceSettings(synchronizeTabs: true));
+  return "";
 }
 
 onTimeout() {

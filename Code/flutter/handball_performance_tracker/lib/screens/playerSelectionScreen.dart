@@ -120,7 +120,7 @@ class _PlayerSelectionScreenState extends State<PlayerSelectionScreen> {
                           });
                     } else {
                       tempController.updateOnFieldPlayers();
-                      tempController.setPlayerBarPlayers();
+                      tempController.setPlayerBarPlayersOrder();
                       startGame(context, preconfigured: true);
                       Get.to(() => MainScreen());
                       return;
