@@ -27,8 +27,27 @@ class DatabaseRepository {
   // final FirebaseFirestore _db = FirebaseFirestore.instanceFor(app: Firebase.app('dev'));
   // QuerySnapshot club = await _db.collection("clubs").get();
 
-  // TODO change this to logged in club
+  // @return Club object according to Club data fetched from firestore where the user id is in the roles map
   Future<Club> getLoggedInClub() async {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user == null) {
+      print("no user logged in");
+      //return null;
+    }
+    print(user!.uid);
+    QuerySnapshot club = await _db
+        .collection("clubs")
+        .where("roles.${user!.uid}", isEqualTo: "admin")
+        .get();
+    if (club.docs.length == 0) {
+      print("no club found");
+      //return null;
+    }
+    return Club.fromDocumentSnapshot(club.docs[0]);
+  }
+
+  // TODO change this to logged in club
+  /*Future<Club> getLoggedInClub() async {
 
     final FirebaseAuth auth = FirebaseAuth.instance;
     final User? user = auth.currentUser;
@@ -42,7 +61,7 @@ class DatabaseRepository {
     print("Was here");
     QueryDocumentSnapshot<Object?> documentSnapshot = querySnapshot.docs[0];
     return Club.fromDocumentSnapshot(documentSnapshot);
-  }
+  }*/
 
   Future<DocumentReference> getClubReference(Club club) async {
     return await _db.collection("clubs").doc(club.id);
