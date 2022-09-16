@@ -10,7 +10,6 @@ class Player {
   int number;
   List<String> positions;
   List<String> games;
-  String clubId;
   List<String> teams;
   LiveEfScore efScore;
 
@@ -21,7 +20,6 @@ class Player {
       this.nickName = "",
       this.number = 0,
       this.positions = const [],
-      this.clubId = "",
       this.teams = const [],
       this.games = const []})
       : efScore = LiveEfScore();
@@ -34,7 +32,6 @@ class Player {
       'nickName': nickName,
       'number': number,
       'positions': positions,
-      'clubId': clubId,
       'teams': teams,
       'games': games
     };
@@ -42,6 +39,7 @@ class Player {
 
   // @return Player object according to Player data fetched from firestore
   factory Player.fromDocumentSnapshot(DocumentSnapshot doc) {
+    logger.d("creating player from document snapshot");
     final newPlayer =
         Player.fromMap(Map.from(doc.data() as Map<String, dynamic>));
     newPlayer.id = doc.reference.id;
@@ -54,8 +52,8 @@ class Player {
     String lastName = map["lastName"];
     String nickName = map["nickName"];
     int number = map["number"];
+    logger.d("got here");
     List<String> positions = map["positions"].cast<String>();
-    String clubId = map["clubId"];
     List<String> teams = map["teams"].cast<String>();
     List<String> games = map["games"].cast<String>();
     return Player(
@@ -64,7 +62,6 @@ class Player {
         nickName: nickName,
         number: number,
         positions: positions,
-        clubId: clubId,
         teams: teams,
         games: games);
   }

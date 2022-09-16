@@ -56,7 +56,7 @@ class PlayerFormState extends State<PlayerForm> {
       // otherwise if get a playerID it is edit mode for that specified player
     } else {
       this.player = Player();
-      assignPlayerClubId();
+      // assignPlayerClubId();
       // replace the constant lists in player (in default constructor) with dynamic ones
       this.player.teams = <String>[];
       this.player.positions = <String>[];
@@ -80,14 +80,14 @@ class PlayerFormState extends State<PlayerForm> {
     return playerIsPartOfTeam;
   }
 
-  void assignPlayerClubId() async {
-    // TODO change this once we can use different clubs
-    Club loggedInClub = persistentController.getLoggedInClub();
-    if (loggedInClub.id != null){
-      this.player.clubId = loggedInClub.id!;
-    }
+  // void assignPlayerClubId() async {
+  //   // TODO change this once we can use different clubs
+  //   Club loggedInClub = persistentController.getLoggedInClub();
+  //   if (loggedInClub.id != null){
+  //     this.player.clubId = loggedInClub.id!;
+  //   }
     
-  }
+  // }
 
   @override
   Widget build(BuildContext context) {
