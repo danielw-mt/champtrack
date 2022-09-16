@@ -8,6 +8,7 @@ import 'package:handball_performance_tracker/data/club.dart';
 import 'package:logger/logger.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'dart:io';
 
 var logger = Logger(
   printer: PrettyPrinter(
@@ -23,7 +24,10 @@ var logger = Logger(
 class DatabaseRepository {
   // is set once initializeLoggedInClub is being called
   late DocumentReference<Map<String, dynamic>> _loggedInClubReference;
-
+  DatabaseRepository(){
+    initializeLoggedInClub();
+    // dirty: just to make sure _loggedInClubReference really is initialized
+  }
   // way of specifying what db to use. Can be used to switch between dev and prod db
   // final FirebaseFirestore _db = FirebaseFirestore.instanceFor(app: Firebase.app('dev'));
 
@@ -47,6 +51,7 @@ class DatabaseRepository {
       DocumentSnapshot documentSnapshot = querySnapshot.docs[0];
       _loggedInClubReference = documentSnapshot.reference
           as DocumentReference<Map<String, dynamic>>;
+      print("logged in club reference: "+_loggedInClubReference.toString());
       return Club.fromDocumentSnapshot(documentSnapshot);
     }
     if (querySnapshot.docs.length == 0) {
@@ -235,6 +240,13 @@ class DatabaseRepository {
         .update(action.toMap());
   }
 
+  void syncGameMetaData(Map<String, dynamic> gameMetaData) async {
+    await _loggedInClubReference
+        .collection("games")
+        .doc(gameMetaData["id"])
+        .update(gameMetaData);
+  }
+
   /// delete a the firestore record of a given @param action
   void deleteAction(GameAction action) async {
     await _loggedInClubReference
@@ -270,6 +282,14 @@ class DatabaseRepository {
         .collection("actions")
         .doc(mostRecentAction.id)
         .delete();
+  }
+
+  Future<Game> getGame(String gameId)async{
+    DocumentSnapshot documentSnapshot = await _loggedInClubReference
+        .collection("games")
+        .doc(gameId)
+        .get();
+    return Game.fromDocumentSnapshot(documentSnapshot);
   }
 
   Future<List<GameAction>> getGameActionsFromGame(String gameId) async {
