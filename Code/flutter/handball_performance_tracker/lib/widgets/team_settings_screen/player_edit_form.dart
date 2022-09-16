@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:handball_performance_tracker/constants/positions.dart';
 import '../../constants/colors.dart';
@@ -82,8 +83,10 @@ class PlayerFormState extends State<PlayerForm> {
   void assignPlayerClubId() async {
     // TODO change this once we can use different clubs
     Club loggedInClub = persistentController.getLoggedInClub();
-    this.player.clubId =
-        await DatabaseRepository().getClubReference(loggedInClub);
+    if (loggedInClub.id != null){
+      this.player.clubId = loggedInClub.id!;
+    }
+    
   }
 
   @override

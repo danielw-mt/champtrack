@@ -10,7 +10,7 @@ class Player {
   int number;
   List<String> positions;
   List<String> games;
-  DocumentReference? clubId;
+  String clubId;
   List<String> teams;
   LiveEfScore efScore;
 
@@ -21,7 +21,7 @@ class Player {
       this.nickName = "",
       this.number = 0,
       this.positions = const [],
-      this.clubId = null,
+      this.clubId = "",
       this.teams = const [],
       this.games = const []})
       : efScore = LiveEfScore();
@@ -55,7 +55,7 @@ class Player {
     String nickName = map["nickName"];
     int number = map["number"];
     List<String> positions = map["positions"].cast<String>();
-    DocumentReference clubId = map["clubId"];
+    String clubId = map["clubId"];
     List<String> teams = map["teams"].cast<String>();
     List<String> games = map["games"].cast<String>();
     return Player(

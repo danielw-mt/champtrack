@@ -11,15 +11,16 @@ import '../data/club.dart';
 Future<bool> initializeLocalData() async {
   PersistentController persistentController = Get.find<PersistentController>();
   DatabaseRepository repository = persistentController.repository;
+  // if the isInitialized variable is false in persistentController the initializeLocalData method has not finished successfully before
   if (!persistentController.isInitialized) {
-    Club club = await repository.getLoggedInClub();
-    print(club.name);
-    //
+    Club loggedInClub = await repository.initializeLoggedInClub();
+    print(loggedInClub.name);
+    persistentController.setLoggedInClub(loggedInClub);
     print("initializing local data");
     List<Team> teamsList = [];
     // initialize all teams with corresponding player objects first and wait
     //for them to be built
-    QuerySnapshot teamsSnapshot = await repository.getAllTeams();
+    QuerySnapshot teamsSnapshot = await repository.getTeams();
     QuerySnapshot playersSnapshot = await repository.getAllPlayers();
     // go through every team document
     for (var element in teamsSnapshot.docs) {
@@ -60,7 +61,8 @@ Future<bool> initializeLocalData() async {
 
     // initialize club
     // comment: this is not needed yet
-    persistentController.setLoggedInClub(await repository.getLoggedInClub());
+    persistentController
+        .setLoggedInClub(await repository.initializeLoggedInClub());
 
     // set the default selected team to be the first one available
     TempController tempController = Get.find<TempController>();

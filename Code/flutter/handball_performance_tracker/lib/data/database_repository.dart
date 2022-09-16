@@ -21,70 +21,64 @@ var logger = Logger(
 );
 
 class DatabaseRepository {
-  late Query _db;
+  // is set once initializeLoggedInClub is being called
+  late DocumentReference<Map<String, dynamic>> _loggedInClubReference;
 
-  DatabaseRepository() {
-    User? user = FirebaseAuth.instance.currentUser;
-    _db = FirebaseFirestore.instance.collection("clubs").where("roles.${user!.uid}", isEqualTo: "admin");
-  }
-
+  // way of specifying what db to use. Can be used to switch between dev and prod db
   // final FirebaseFirestore _db = FirebaseFirestore.instanceFor(app: Firebase.app('dev'));
-  // QuerySnapshot club = await _db.collection("clubs").get();
 
   // @return Club object according to Club data fetched from firestore where the user id is in the roles map
-  Future<Club> getLoggedInClub() async {
+  Future<Club> initializeLoggedInClub() async {
+    logger.d("initializing logged in club");
+    // get uuid of logged in user
     User? user = FirebaseAuth.instance.currentUser;
     if (user == null) {
-      print("no user logged in");
-      //return null;
+      logger.e("User is null");
     }
-    print(user!.uid);
-    QuerySnapshot club = await _db
+    // get reference to club where the user is admin. There should only be one club where this is the case
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
         .collection("clubs")
-        .where("roles.${user.uid}", isEqualTo: "admin")
+        .where("roles.${user!.uid}", isEqualTo: "admin")
         .get();
-    if (club.docs.length == 0) {
-      print("no club found");
-      //return null;
+    // there should only be one club that corresponds to a user
+    if (querySnapshot.docs.length == 1) {
+      print("club found");
+      // store a reference to the logged in Club so all other methods can reference its children documents
+      DocumentSnapshot documentSnapshot = querySnapshot.docs[0];
+      _loggedInClubReference = documentSnapshot.reference
+          as DocumentReference<Map<String, dynamic>>;
+      return Club.fromDocumentSnapshot(documentSnapshot);
     }
-    return Club.fromDocumentSnapshot(club.docs[0]);
+    if (querySnapshot.docs.length == 0) {
+      throw new Exception("logged in user is associated with no club");
+    } else {
+      throw new Exception(
+          "logged in user is associated with more than one club");
+    }
   }
 
-  // TODO change this to logged in club
-  /*Future<Club> getLoggedInClub() async {
-
-    final FirebaseAuth auth = FirebaseAuth.instance;
-    final User? user = auth.currentUser;
-    final uid = user!.uid;
-    print("Logged In Club");
-    print("roles.${uid.toString()}");
-    DocumentSnapshot ds = await _db.collection("clubs").doc("uxQnElFbpjK7yYgOcZKL").get();
-    Map<String, dynamic> data = ds.data() as Map<String, dynamic>;
-    print(data["roles"]);
-    QuerySnapshot querySnapshot = await _db.collection("clubs").where("roles.${uid.toString()}", isEqualTo: "admin").get();
-    print("Was here");
-    QueryDocumentSnapshot<Object?> documentSnapshot = querySnapshot.docs[0];
-    return Club.fromDocumentSnapshot(documentSnapshot);
-  }*/
-
-  Future<DocumentReference> getClubReference(Club club) async {
-    return await _db.collection("clubs").doc(club.id);
-  }
+  // TODO remove this as it is saved in the Club
+  // Future<DocumentReference> getClubReference(Club club) async {
+  //   return await _db.collection("clubs").doc(club.id);
+  // }
 
   Future<DocumentSnapshot> getPlayer(String playerId) async {
-    return await _db.collection("players").doc(playerId).get();
+    return await _loggedInClubReference
+        .collection("players")
+        .doc(playerId)
+        .get();
   }
 
   /// delete player from players collection and all the teams he belongs to
   Future<void> deletePlayer(Player player) async {
     // delete player from player collection
-    await _db.collection("players").doc(player.id).delete();
+    await _loggedInClubReference.collection("players").doc(player.id).delete();
     // delete player reference from selected team player references
     List<String> teamReferenceStrings = player.teams;
     // delete player from each team
     teamReferenceStrings.forEach((String teamReferenceString) async {
       DocumentReference<Map<String, dynamic>> relevantTeam =
-          _db.doc(teamReferenceString);
+          _loggedInClubReference; //.doc(teamReferenceString);
 
       // get a list of player references from the document
       DocumentSnapshot snapshot = await relevantTeam.get();
@@ -95,7 +89,7 @@ class DatabaseRepository {
 
       //get a reference of the player object from the players collection
       DocumentReference<Map<String, dynamic>> relevantPlayer =
-          _db.collection("players").doc(player.id);
+          _loggedInClubReference.collection("players").doc(player.id);
       playerReferences.remove(relevantPlayer);
       await relevantTeam.update({'players': playerReferences});
       // if onFieldPlayer contains player remove him from onFieldplayer list as well
@@ -118,12 +112,15 @@ class DatabaseRepository {
   /// @return asynchronous reference to Player object that was saved to firebase
   /// add player to players collection in firebase
   Future<DocumentReference> addPlayer(Player player) {
-    return _db.collection("players").add(player.toMap());
+    return _loggedInClubReference.collection("players").add(player.toMap());
   }
 
   /// update a Player's firestore record according to @param player properties
   void updatePlayer(Player player) async {
-    await _db.collection("players").doc(player.id).update(player.toMap());
+    await _loggedInClubReference
+        .collection("players")
+        .doc(player.id)
+        .update(player.toMap());
   }
 
   /// add player to a team in firebase with teamReference string i.e. teams/ypunI6UsJmTr2LxKh1aw
@@ -131,7 +128,7 @@ class DatabaseRepository {
     print("trying to add player ${player.id} to team ${relevantTeam.id}");
     relevantTeam.players.add(player);
     DocumentReference<Map<String, dynamic>> selectedTeam =
-        _db.collection("teams").doc(relevantTeam.id);
+        _loggedInClubReference.collection("teams").doc(relevantTeam.id);
     // get a list of player references from the document
     DocumentSnapshot snapshot = await selectedTeam.get();
     Map<String, dynamic> snapshotData = snapshot.data() as Map<String, dynamic>;
@@ -139,7 +136,7 @@ class DatabaseRepository {
         snapshotData["players"].cast<DocumentReference>();
     //get a reference of the player object from the players collection
     DocumentReference<Map<String, dynamic>> relevantPlayer =
-        _db.collection("players").doc(player.id);
+        _loggedInClubReference.collection("players").doc(player.id);
 
     // add player to reference list
     playerReferences.add(relevantPlayer);
@@ -152,10 +149,10 @@ class DatabaseRepository {
     List<DocumentReference> onFieldPlayerReferences = [];
     onFieldPlayers.forEach((Player player) {
       DocumentReference<Map<String, dynamic>> playerReference =
-          _db.collection("players").doc(player.id);
+          _loggedInClubReference.collection("players").doc(player.id);
       onFieldPlayerReferences.add(playerReference);
     });
-    _db
+    _loggedInClubReference
         .collection("teams")
         .doc(team.id)
         .update({'onFieldPlayers': onFieldPlayerReferences});
@@ -169,32 +166,38 @@ class DatabaseRepository {
     // if there is no internet create the reference id for the object manually
     if (result == ConnectivityResult.none) {
       // _db.collection("games").add(game.toMap());
-      DocumentReference docRef = _db.collection('games').doc();
+      DocumentReference docRef =
+          _loggedInClubReference.collection('games').doc();
       docRef.set(game.toMap()).then(
           (value) => print("Game Added on backend after coming back online"));
       return docRef;
     } else {
-      return _db.collection("games").add(game.toMap());
+      return _loggedInClubReference.collection("games").add(game.toMap());
     }
   }
 
   /// update a Game's firestore record according to @param game properties
   void updateGame(Game game) async {
     print("updating game");
-    await _db.collection("games").doc(game.id).update(game.toMap());
+    await _loggedInClubReference
+        .collection("games")
+        .doc(game.id)
+        .update(game.toMap());
   }
 
   // query all teams in db
   Stream<QuerySnapshot> getAllTeamsStream() {
-    return _db.collection("teams").snapshots();
+    return _loggedInClubReference.collection("teams").snapshots();
   }
 
-  Future<QuerySnapshot> getAllTeams() async {
-    return await _db.collection("teams").get();
+  Future<QuerySnapshot> getTeams() async {
+    logger.d("getting all teams");
+    return await _loggedInClubReference.collection("teams").get();
   }
 
   Future<QuerySnapshot> getAllPlayers() async {
-    return await _db.collection("players").get();
+    logger.d("getting all players");
+    return await _loggedInClubReference.collection("players").get();
   }
 
   /// @return asynchronous reference to GameAction object that was saved to firebase
@@ -205,7 +208,7 @@ class DatabaseRepository {
     // if there is no internet create the reference id for the object manually
     if (result == ConnectivityResult.none) {
       // _db.collection("games").add(game.toMap());
-      DocumentReference docRef = _db
+      DocumentReference docRef = _loggedInClubReference
           .collection('games')
           .doc(action.gameId)
           .collection("actions")
@@ -214,7 +217,7 @@ class DatabaseRepository {
           (value) => print("Game Added on backend after coming back online"));
       return docRef;
     } else {
-      return _db
+      return _loggedInClubReference
           .collection("games")
           .doc(action.gameId)
           .collection("actions")
@@ -224,7 +227,7 @@ class DatabaseRepository {
 
   /// update a GameAction's firestore record according to @param action properties
   void updateAction(GameAction action) async {
-    await _db
+    await _loggedInClubReference
         .collection("games")
         .doc(action.gameId)
         .collection("actions")
@@ -234,7 +237,7 @@ class DatabaseRepository {
 
   /// delete a the firestore record of a given @param action
   void deleteAction(GameAction action) async {
-    await _db
+    await _loggedInClubReference
         .collection("games")
         .doc(action.gameId)
         .collection("actions")
@@ -244,14 +247,14 @@ class DatabaseRepository {
 
   void deleteLastAction() async {
     // get the latest game
-    QuerySnapshot mostRecentGameQuery = await _db
+    QuerySnapshot mostRecentGameQuery = await _loggedInClubReference
         .collection("games")
         .orderBy("date", descending: true)
         .limit(1)
         .get();
     DocumentSnapshot mostRecentGame = mostRecentGameQuery.docs[0];
     // look inside gameActions for the lastest action for that game
-    QuerySnapshot mostRecentActionQuery = await _db
+    QuerySnapshot mostRecentActionQuery = await _loggedInClubReference
         .collection("games")
         .doc(mostRecentGame.id)
         .collection("actions")
@@ -261,7 +264,7 @@ class DatabaseRepository {
 
     DocumentSnapshot mostRecentAction = mostRecentActionQuery.docs[0];
     // delete most recent doc
-    _db
+    _loggedInClubReference
         .collection("games")
         .doc(mostRecentGame.id)
         .collection("actions")
@@ -270,7 +273,7 @@ class DatabaseRepository {
   }
 
   Future<List<GameAction>> getGameActionsFromGame(String gameId) async {
-    QuerySnapshot querySnapshot = await _db
+    QuerySnapshot querySnapshot = await _loggedInClubReference
         .collection("games")
         .doc(gameId)
         .collection("actions")
@@ -288,7 +291,7 @@ class DatabaseRepository {
   Future<bool> isThereAGameWithinLastMinutes(int minutes) async {
     DateTime now = DateTime.now();
     DateTime then = now.subtract(Duration(minutes: minutes));
-    QuerySnapshot snapshot = await _db
+    QuerySnapshot snapshot = await _loggedInClubReference
         .collection("games")
         .where("lastSync", isGreaterThan: then.toIso8601String())
         .get();
@@ -301,7 +304,7 @@ class DatabaseRepository {
 
   /// @return json data of the most recent game
   Future<Game> getMostRecentGame() async {
-    QuerySnapshot snapshot = await _db
+    QuerySnapshot snapshot = await _loggedInClubReference
         .collection("games")
         .orderBy("lastSync", descending: true)
         .limit(1)
@@ -311,7 +314,8 @@ class DatabaseRepository {
   }
 
   Future<DocumentSnapshot> getTeam(String id) async {
-    DocumentSnapshot snapshot = await _db.collection("teams").doc(id).get();
+    DocumentSnapshot snapshot =
+        await _loggedInClubReference.collection("teams").doc(id).get();
     return snapshot;
   }
 }
