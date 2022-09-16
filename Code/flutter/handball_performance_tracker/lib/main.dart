@@ -1,24 +1,41 @@
+import 'dart:async';
+
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:handball_performance_tracker/locator.dart';
 import 'package:handball_performance_tracker/screens/authenticationScreen.dart';
 import 'package:handball_performance_tracker/screens/dashboard.dart';
 import 'package:handball_performance_tracker/screens/startGameScreen.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:handball_performance_tracker/services/analytics_service.dart';
 import 'package:handball_performance_tracker/widgets/authentication_screen/alert_widget.dart';
-import 'config/firebase_options.dart';
+import 'firebase_options.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'constants/stringsGeneral.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'locator.dart';
+import 'package:get_it/get_it.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  //move initialization from startupCheck to here because otherwise Analytics crashes
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
 
+  setUp();
   // start app
   runApp(GetMaterialApp(
     title: StringsGeneral.lAppTitle,
+    navigatorObservers: [
+      serviceLocator<FirebaseAnalyticsService>().appAnalyticsObserver(),
+    ],
     theme: ThemeData(
       primarySwatch: Colors.blue,
       visualDensity: VisualDensity.adaptivePlatformDensity,
@@ -91,16 +108,13 @@ class Home extends StatelessWidget {
 }
 
 Future<dynamic> _startupCheck() async {
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
   if (kIsWeb) {
     // when the app is run in web, also initialize dev database
     // this feature is however not supported for other platforms
     if (Firebase.apps.length < 2) {
       // only initialize for the first time and not on hot reload
-      await Firebase.initializeApp(
-          name: "dev", options: DevFirebaseOptions.currentPlatform);
+      //await Firebase.initializeApp(
+      //    name: "dev", options: DevFirebaseOptions.currentPlatform);
     }
   }
   // if connected force synchronization
