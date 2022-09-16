@@ -7,6 +7,7 @@ import 'package:handball_performance_tracker/data/player.dart';
 import 'package:handball_performance_tracker/data/club.dart';
 import 'package:logger/logger.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 var logger = Logger(
   printer: PrettyPrinter(
@@ -20,14 +21,25 @@ var logger = Logger(
 );
 
 class DatabaseRepository {
+  
+
   final FirebaseFirestore _db = FirebaseFirestore.instance;
   // final FirebaseFirestore _db = FirebaseFirestore.instanceFor(app: Firebase.app('dev'));
   // QuerySnapshot club = await _db.collection("clubs").get();
 
   // TODO change this to logged in club
   Future<Club> getLoggedInClub() async {
+
+    final FirebaseAuth auth = FirebaseAuth.instance;
+    final User? user = auth.currentUser;
+    final uid = user!.uid;
     print("Logged In Club");
-    QuerySnapshot querySnapshot = await _db.collection("clubs").get();
+    print("roles.${uid.toString()}");
+    DocumentSnapshot ds = await _db.collection("clubs").doc("uxQnElFbpjK7yYgOcZKL").get();
+    Map<String, dynamic> data = ds.data() as Map<String, dynamic>;
+    print(data["roles"]);
+    QuerySnapshot querySnapshot = await _db.collection("clubs").where("roles.${uid.toString()}", isEqualTo: "admin").get();
+    print("Was here");
     QueryDocumentSnapshot<Object?> documentSnapshot = querySnapshot.docs[0];
     return Club.fromDocumentSnapshot(documentSnapshot);
   }
