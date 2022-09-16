@@ -342,6 +342,7 @@ Container buildPopupPlayerButton(
 }
 
 Row getButton(Player player, TempController tempController) {
+  PersistentController persistentController = Get.find<PersistentController>();
   return Row(
     children: [
       // Playernumber
@@ -370,7 +371,6 @@ Row getButton(Player player, TempController tempController) {
           textAlign: TextAlign.left,
         ),
       ),
-
       // Playername
       Expanded(
         child: Container(
@@ -389,7 +389,8 @@ Row getButton(Player player, TempController tempController) {
           ),
         ),
       ),
-
+      // Ef-score
+      // only display it, if a player already has 5 actions
       Container(
         width: scorebarButtonWidth / 5,
         height: buttonHeight,
@@ -401,15 +402,17 @@ Row getButton(Player player, TempController tempController) {
               bottomRight: Radius.circular(buttonRadius),
               topRight: Radius.circular(buttonRadius),
             )),
-        child: Text(
-          player.efScore.score.toStringAsFixed(1),
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: nameFontSize,
-          ),
-          textAlign: TextAlign.left,
-        ),
-      ),
+        child: persistentController.playerEfScoreShouldDisplay(5, player)
+            ? Text(
+                player.efScore.score.toStringAsFixed(1),
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: nameFontSize,
+                ),
+                textAlign: TextAlign.left,
+              )
+            : Container(),
+      )
     ],
   );
 }
