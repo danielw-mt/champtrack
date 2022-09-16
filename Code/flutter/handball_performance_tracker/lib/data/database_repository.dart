@@ -21,9 +21,13 @@ var logger = Logger(
 );
 
 class DatabaseRepository {
-  
+  late Query _db;
 
-  final FirebaseFirestore _db = FirebaseFirestore.instance;
+  DatabaseRepository() {
+    User? user = FirebaseAuth.instance.currentUser;
+    _db = FirebaseFirestore.instance.collection("clubs").where("roles.${user!.uid}", isEqualTo: "admin");
+  }
+
   // final FirebaseFirestore _db = FirebaseFirestore.instanceFor(app: Firebase.app('dev'));
   // QuerySnapshot club = await _db.collection("clubs").get();
 
@@ -37,7 +41,7 @@ class DatabaseRepository {
     print(user!.uid);
     QuerySnapshot club = await _db
         .collection("clubs")
-        .where("roles.${user!.uid}", isEqualTo: "admin")
+        .where("roles.${user.uid}", isEqualTo: "admin")
         .get();
     if (club.docs.length == 0) {
       print("no club found");

@@ -12,7 +12,7 @@ Future<bool> initializeLocalData() async {
   PersistentController persistentController = Get.find<PersistentController>();
   DatabaseRepository repository = persistentController.repository;
   if (!persistentController.isInitialized) {
-    Club? club = await repository.getLoggedInClub();
+    Club club = await repository.getLoggedInClub();
     print(club.name);
     //
     print("initializing local data");
