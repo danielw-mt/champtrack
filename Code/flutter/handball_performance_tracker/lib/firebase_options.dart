@@ -47,31 +47,30 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyAoprvB5-e1kupebLSzAKkPy4tF3-QzCng',
-    appId: '1:910235672034:web:7b8f3be5f636eb3bbeedbb',
-    messagingSenderId: '910235672034',
-    projectId: 'handball-performance-tracker',
-    authDomain: 'handball-performance-tracker.firebaseapp.com',
-    storageBucket: 'handball-performance-tracker.appspot.com',
-    measurementId: 'G-8YM5J1DHGX',
+    apiKey: 'AIzaSyDV7n7FmKrrNeLLiJ02nXGs8pIMLtjzHFs',
+    appId: '1:974814103289:web:851ef360793cebd006c428',
+    messagingSenderId: '974814103289',
+    projectId: 'handball-tracker-dev',
+    authDomain: 'handball-tracker-dev.firebaseapp.com',
+    storageBucket: 'handball-tracker-dev.appspot.com',
+    measurementId: 'G-0BMS52683E',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyBQFdpe1IL5Vrh5sAyAIWaY4isy0LdDUc8',
-    appId: '1:910235672034:android:9f6e014a8d7d1b4bbeedbb',
-    messagingSenderId: '910235672034',
-    projectId: 'handball-performance-tracker',
-    storageBucket: 'handball-performance-tracker.appspot.com',
+    apiKey: 'AIzaSyDgjjjDLuQoL5CTGvlAVizQiqFfqdsXMow',
+    appId: '1:974814103289:android:7044af92503d46c606c428',
+    messagingSenderId: '974814103289',
+    projectId: 'handball-tracker-dev',
+    storageBucket: 'handball-tracker-dev.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyBaokiMdJKekw0hT1AYwPZ-QoLOhiLpgAw',
-    appId: '1:910235672034:ios:20dddb6aa5121578beedbb',
-    messagingSenderId: '910235672034',
-    projectId: 'handball-performance-tracker',
-    storageBucket: 'handball-performance-tracker.appspot.com',
-    androidClientId: '910235672034-7php0dr36ip0so2hid1sf0ooic4c0v62.apps.googleusercontent.com',
-    iosClientId: '910235672034-ls5n9hmfh7ca7soh6oo50jbdc178ouff.apps.googleusercontent.com',
+    apiKey: 'AIzaSyBIopT3JQCid-K1_Ylcmc6Q7tfSVckVjLM',
+    appId: '1:974814103289:ios:3b8f55c5a58d414306c428',
+    messagingSenderId: '974814103289',
+    projectId: 'handball-tracker-dev',
+    storageBucket: 'handball-tracker-dev.appspot.com',
+    iosClientId: '974814103289-aatra0lucgs28illj3v3ln7fr0phhhot.apps.googleusercontent.com',
     iosBundleId: 'mad.tf.fau.de.HBPerformanceTracker',
   );
 }
