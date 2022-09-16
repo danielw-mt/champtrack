@@ -52,7 +52,6 @@ class Player {
     String lastName = map["lastName"];
     String nickName = map["nickName"];
     int number = map["number"];
-    logger.d("got here");
     List<String> positions = map["positions"].cast<String>();
     List<String> teams = map["teams"].cast<String>();
     List<String> games = map["games"].cast<String>();

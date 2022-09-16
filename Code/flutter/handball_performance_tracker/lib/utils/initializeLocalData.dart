@@ -23,8 +23,8 @@ Future<bool> initializeLocalData() async {
     QuerySnapshot teamsSnapshot = await repository.getTeams();
     QuerySnapshot playersSnapshot = await repository.getAllPlayers();
     // go through every team document
-    for (var element in teamsSnapshot.docs) {
-      Map<String, dynamic> docData = element.data() as Map<String, dynamic>;
+    for (DocumentSnapshot teamDocumentSnapshot in teamsSnapshot.docs) {
+      Map<String, dynamic> docData = teamDocumentSnapshot.data() as Map<String, dynamic>;
       List<Player> playerList = [];
       List<Player> onFieldList = [];
       // add all players in each team to the players list
@@ -47,22 +47,16 @@ Future<bool> initializeLocalData() async {
           }
         });
       }
-      print("adding team" + docData["name"]);
+      logger.d("adding team: " + docData["name"]);
       teamsList.add(Team(
-          id: element.reference.id,
+          id: teamDocumentSnapshot.reference.id,
           type: docData["type"],
           name: docData["name"],
-          clubId: docData["clubId"],
           players: playerList,
           onFieldPlayers: onFieldList));
     }
     persistentController.updateAvailableTeams(teamsList);
     persistentController.isInitialized = true;
-
-    // initialize club
-    // comment: this is not needed yet
-    persistentController
-        .setLoggedInClub(await repository.initializeLoggedInClub());
 
     // set the default selected team to be the first one available
     TempController tempController = Get.find<TempController>();
