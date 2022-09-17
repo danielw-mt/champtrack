@@ -9,6 +9,7 @@ done
 
 if [ "$Database" == "dev" ]; then
     echo "Switching to dev"
+    flutter clean
     # firebase commands
     firebase use dev 
     flutterfire configure --project handball-tracker-dev -y
@@ -17,6 +18,7 @@ if [ "$Database" == "dev" ]; then
     echo "Switched to dev"
 elif [ "$Database" == "live" ]; then
     echo "Switching to live"
+    flutter clean
     # firebase command
     firebase use live
     flutterfire configure --project handball-performance-tracker -y
