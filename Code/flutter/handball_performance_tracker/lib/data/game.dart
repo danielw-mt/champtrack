@@ -14,7 +14,7 @@ class Game {
   String? opponent;
   String? season;
   String? lastSync;
-  List<String> players;
+  List<String> onFieldPlayers;
   StopWatchTimer stopWatchTimer;
 
   Game(
@@ -30,7 +30,7 @@ class Game {
       this.opponent = "",
       this.season = "",
       this.lastSync = "",
-      this.players = const []})
+      this.onFieldPlayers = const []})
       : stopWatchTimer = StopWatchTimer(mode: StopWatchMode.countUp);
 
   // @return Map<String,dynamic> as representation of Game object that can be saved to firestore
@@ -46,7 +46,7 @@ class Game {
       'location': location,
       'opponent': opponent,
       'season': season,
-      'players': players,
+      'onFieldPlayers': onFieldPlayers,
       'lastSync': lastSync,
       'stopWatchTime': stopWatchTimer.rawTime.value
     };
@@ -81,7 +81,7 @@ class Game {
         opponent: map["opponent"],
         season: map["season"],
         lastSync: map["lastSync"],
-        players: map["players"].cast<String>());
+        onFieldPlayers: map["onFieldPlayers"].cast<String>());
     game.stopWatchTimer = stopWatchTimer;
     return game;
   }
