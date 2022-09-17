@@ -25,6 +25,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   //move initialization from startupCheck to here because otherwise Analytics crashes
   await Firebase.initializeApp(
+    name: "handball-performance-tracker",
     options: DefaultFirebaseOptions.currentPlatform,
   );
   FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
