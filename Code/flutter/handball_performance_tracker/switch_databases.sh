@@ -19,7 +19,7 @@ if [ "$Database" == "dev" ]; then
       flutterfire configure --project handball-tracker-dev -y
     fi
     # replace database name in main.dart
-    sed -i 's/handball-performance-tracker/handball-tracker-dev/' lib/main.dart
+    #sed -i 's/handball-performance-tracker/handball-tracker-dev/' lib/main.dart
     echo "Switched to dev"
 elif [ "$Database" == "live" ]; then
     echo "Switching to live"
@@ -33,7 +33,7 @@ elif [ "$Database" == "live" ]; then
       flutterfire configure --project handball-performance-tracker -y
     fi
     # replace database name in main.dart
-    sed -i 's/handball-tracker-dev/handball-performance-tracker/' lib/main.dart
+    #sed -i 's/handball-tracker-dev/handball-performance-tracker/' lib/main.dart
     echo "Switched to live"
 else
   echo "Invalid database"
