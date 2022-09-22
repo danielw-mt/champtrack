@@ -11,14 +11,8 @@ import '../../constants/stringsGeneral.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'player_edit_form.dart';
 
-class PlayersList extends StatefulWidget {
-  const PlayersList({Key? key}) : super(key: key);
 
-  @override
-  State<PlayersList> createState() => _PlayersListState();
-}
-
-class _PlayersListState extends State<PlayersList> {
+class PlayersList extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return GetBuilder<TempController>(
@@ -28,121 +22,74 @@ class _PlayersListState extends State<PlayersList> {
               tempController.getPlayersFromSelectedTeam().length;
           List<Player> playersList =
               tempController.getPlayersFromSelectedTeam();
-          return Expanded(
-            child: SingleChildScrollView(
-              child: Stack(children: [
-                // add player button
-                Positioned(
-                  right: 30,
-                  bottom: 30,
-                  child: FloatingActionButton(
-                    onPressed: () {
-                      Alert(
-                        context: context,
-                        buttons: [],
-                        content: SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.7,
-                          height: MediaQuery.of(context).size.height * 0.7,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [PlayerForm()],
-                          ),
-                        ),
-                      ).show();
-                    },
-                    backgroundColor: buttonDarkBlueColor,
-                    focusColor: buttonDarkBlueColor,
-                    child: Icon(Icons.add),
-                  ),
+          return SingleChildScrollView(
+            child: DataTable(
+              columns: const <DataColumn>[
+                DataColumn(
+                  label: Text(StringsGeneral.lName),
                 ),
-                // data column displaying players
-                SizedBox(
-                  width: double.infinity,
-                  child: Column(
-                    children: [
-                      DataTable(
-                        columns: const <DataColumn>[
-                          DataColumn(
-                            label: Text(StringsGeneral.lName),
-                          ),
-                          DataColumn(
-                            label: Text(StringsGeneral.lNumber),
-                          ),
-                          DataColumn(label: Text(StringsGeneral.lPosition)),
-                          DataColumn(
-                              label:
-                                  Text(StringsGeneral.lPlayerStartingOnField)),
-                          DataColumn(label: Text(StringsGeneral.lEdit))
-                        ],
-                        rows: List<DataRow>.generate(
-                          numberOfPlayers,
-                          (int index) {
-                            String positionsString = playersList[index]
-                                .positions
-                                .reduce(
-                                    (value, element) => value + ", " + element);
-                            String playerId = playersList[index].id.toString();
+                DataColumn(
+                  label: Text(StringsGeneral.lNumber),
+                ),
+                DataColumn(label: Text(StringsGeneral.lPosition)),
+                DataColumn(label: Text(StringsGeneral.lPlayerStartingOnField)),
+                DataColumn(label: Text(StringsGeneral.lEdit))
+              ],
+              rows: List<DataRow>.generate(
+                numberOfPlayers,
+                (int index) {
+                  String positionsString = playersList[index]
+                      .positions
+                      .reduce((value, element) => value + ", " + element);
+                  String playerId = playersList[index].id.toString();
 
-                            return DataRow(
-                              color: MaterialStateProperty.resolveWith<Color?>(
-                                  (Set<MaterialState> states) {
-                                // All rows will have the same selected color.
-                                if (states.contains(MaterialState.selected)) {
-                                  return Theme.of(context)
-                                      .colorScheme
-                                      .primary
-                                      .withOpacity(0.08);
-                                }
-                                // Even rows will have a grey color.
-                                if (index.isEven) {
-                                  return buttonGreyColor;
-                                }
-                                return null; // Use default value for other states and odd rows.
-                              }),
-                              cells: <DataCell>[
-                                DataCell(Text(
-                                    "${playersList[index].firstName} ${playersList[index].lastName}")),
-                                DataCell(
-                                    Text(playersList[index].number.toString())),
-                                DataCell(Text(positionsString)),
-                                DataCell(OnFieldCheckbox(
-                                  player: playersList[index],
-                                )),
-                                DataCell(GestureDetector(
-                                  child: Icon(Icons.edit),
-                                  onTap: () {
-                                    Alert(
-                                      context: context,
-                                      buttons: [],
-                                      content: SizedBox(
-                                        width:
-                                            MediaQuery.of(context).size.width *
-                                                0.7,
-                                        height:
-                                            MediaQuery.of(context).size.height *
-                                                0.8,
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            PlayerForm(playersList[index]
-                                                .id
-                                                .toString())
-                                          ],
-                                        ),
-                                      ),
-                                    ).show();
-                                  },
-                                ))
-                              ],
-                            );
-                          },
-                        ),
-                      ),
+                  return DataRow(
+                    color: MaterialStateProperty.resolveWith<Color?>(
+                        (Set<MaterialState> states) {
+                      // All rows will have the same selected color.
+                      if (states.contains(MaterialState.selected)) {
+                        return Theme.of(context)
+                            .colorScheme
+                            .primary
+                            .withOpacity(0.08);
+                      }
+                      // Even rows will have a grey color.
+                      if (index.isEven) {
+                        return buttonGreyColor;
+                      }
+                      return null; // Use default value for other states and odd rows.
+                    }),
+                    cells: <DataCell>[
+                      DataCell(Text(
+                          "${playersList[index].firstName} ${playersList[index].lastName}")),
+                      DataCell(Text(playersList[index].number.toString())),
+                      DataCell(Text(positionsString)),
+                      DataCell(OnFieldCheckbox(
+                        player: playersList[index],
+                      )),
+                      DataCell(GestureDetector(
+                        child: Icon(Icons.edit),
+                        onTap: () {
+                          Alert(
+                            context: context,
+                            buttons: [],
+                            content: SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.7,
+                              height: MediaQuery.of(context).size.height * 0.8,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  PlayerForm(playersList[index].id.toString())
+                                ],
+                              ),
+                            ),
+                          ).show();
+                        },
+                      ))
                     ],
-                  ),
-                )
-              ]),
+                  );
+                },
+              ),
             ),
           );
         });

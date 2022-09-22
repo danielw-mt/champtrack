@@ -3,7 +3,6 @@ import 'player.dart';
 
 class Team {
   String? id;
-  String clubId;
   String name;
   List<Player> players;
   List<Player> onFieldPlayers;
@@ -11,7 +10,6 @@ class Team {
 
   Team({
     this.id,
-    this.clubId = "",
     this.name = "Default Team",
     this.players = const [],
     this.onFieldPlayers = const [],
@@ -22,9 +20,9 @@ class Team {
   Map<String, dynamic> toMap() {
     return {
       'name': name,
-      'clubId': clubId,
       'players': players,
-      'onFieldPlayers': onFieldPlayers
+      'onFieldPlayers': onFieldPlayers,
+      'type': type,
     };
   }
 
@@ -43,16 +41,14 @@ class Team {
     List<Player> playerList = [];
     List<Player> onFieldList = [];
     List<DocumentReference> players = map["players"].cast<DocumentReference>();
-    players.forEach((dynamic documentReference) {
-      documentReference.get().then((DocumentSnapshot documentSnapshot) {
-        if (documentSnapshot.exists) {
-          playerList.add(Player.fromDocumentSnapshot(documentSnapshot));
-        }
-      });
+    players.forEach((dynamic documentReference) async {
+      DocumentSnapshot playerSnapshot = await documentReference.get();
+      if (playerSnapshot.exists) {
+        playerList.add(Player.fromDocumentSnapshot(playerSnapshot));
+      }
     });
     return Team(
         name: map["name"],
-        clubId: map["clubId"],
         players: playerList,
         onFieldPlayers: onFieldList);
   }

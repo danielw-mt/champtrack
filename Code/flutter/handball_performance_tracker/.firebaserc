@@ -1,0 +1,6 @@
+{
+  "projects": {
+    "live": "handball-performance-tracker",
+    "dev": "handball-tracker-dev"
+  }
+}

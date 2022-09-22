@@ -9,7 +9,7 @@ import '../controllers/tempController.dart';
 import '../data/player.dart';
 import '../data/game.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
-
+import 'sync_game_state.dart';
 import '../constants/stringsGameSettings.dart';
 
 void startGame(BuildContext context, {bool preconfigured: false}) async {
@@ -39,7 +39,7 @@ void startGame(BuildContext context, {bool preconfigured: false}) async {
     // game has already been saved to firebase, only update relevant information
     Game preconfiguredGame = persistentController.getCurrentGame();
     preconfiguredGame.startTime = DateTime.now().toUtc().millisecondsSinceEpoch;
-    preconfiguredGame.players = tempController.getOnFieldPlayersById();
+    preconfiguredGame.onFieldPlayers = tempController.getOnFieldPlayersById();
     persistentController.setCurrentGame(preconfiguredGame);
     // add game to selected players
     _addGameToPlayers(preconfiguredGame);
@@ -51,10 +51,9 @@ void startGame(BuildContext context, {bool preconfigured: false}) async {
     DateTime dateTime = DateTime.now();
     int unixTimeStamp = dateTime.toUtc().millisecondsSinceEpoch;
     Game newGame = Game(
-        clubId: tempController.getSelectedTeam().id!,
         date: dateTime,
         startTime: unixTimeStamp,
-        players: tempController.getOnFieldPlayersById());
+        onFieldPlayers: tempController.getOnFieldPlayersById());
     await persistentController.setCurrentGame(newGame, isNewGame: true);
     print("start game, id: ${persistentController.getCurrentGame().id}");
 
@@ -63,7 +62,7 @@ void startGame(BuildContext context, {bool preconfigured: false}) async {
     tempController.setOpponentScore(0);
     tempController.setOwnScore(0);
   }
-  
+  runGameStateSync();
   print("start game, id: ${persistentController.getCurrentGame().id}");
 }
 
@@ -75,9 +74,10 @@ void unpauseGame() {
   tempController.setGameIsPaused(false);
   persistentController
       .getCurrentGame()
-      .stopWatch
+      .stopWatchTimer
       .onExecute
       .add(StopWatchExecute.start);
+  runGameStateSync();
 }
 
 void pauseGame() {
@@ -88,7 +88,7 @@ void pauseGame() {
   tempController.setGameIsPaused(true);
   persistentController
       .getCurrentGame()
-      .stopWatch
+      .stopWatchTimer
       .onExecute
       .add(StopWatchExecute.stop);
 }
@@ -110,7 +110,7 @@ void stopGame() async {
   // stop the game timer
   persistentController
       .getCurrentGame()
-      .stopWatch
+      .stopWatchTimer
       .onExecute
       .add(StopWatchExecute.stop);
 

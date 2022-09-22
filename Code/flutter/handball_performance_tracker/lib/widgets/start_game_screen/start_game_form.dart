@@ -353,6 +353,7 @@ class StartGameFormState extends State<StartGameForm> {
                                     bool gameExists =
                                         (currentGame.id == null) ? false : true;
                                     if (gameExists) {
+                                      print("game exists");
                                       // update information based on user input
                                       currentGame.date = selectedDate;
                                       currentGame.teamId = teamId;
@@ -363,12 +364,10 @@ class StartGameFormState extends State<StartGameForm> {
                                       persistentController
                                           .setCurrentGame(currentGame);
                                     } else {
+                                      print("game does not exist");
                                       // store entered data to a new game object that will be used when the game is started at the end of the flow
                                       Game preconfiguredGame = Game(
                                           date: selectedDate,
-                                          clubId: persistentController
-                                              .getLoggedInClub()
-                                              .id!,
                                           teamId: tempController
                                               .getSelectedTeam()
                                               .id!,

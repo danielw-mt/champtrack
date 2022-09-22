@@ -4,6 +4,8 @@ import 'package:handball_performance_tracker/constants/colors.dart';
 import 'package:handball_performance_tracker/constants/stringsAuthentication.dart';
 import 'package:handball_performance_tracker/widgets/authentication_screen/alert_widget.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
+import '../../data/database_repository.dart';
+import '../../controllers/persistentController.dart';
 
 class LoginWidget extends StatefulWidget {
   const LoginWidget({Key? key}) : super(key: key);
@@ -13,8 +15,10 @@ class LoginWidget extends StatefulWidget {
 }
 
 class _LoginWidgetState extends State<LoginWidget> {
+  PersistentController persistentController = PersistentController();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  TextEditingController clubNameController = TextEditingController();
   bool isLogin = true;
   bool isReset = false;
 
@@ -79,6 +83,26 @@ class _LoginWidgetState extends State<LoginWidget> {
                 borderSide: BorderSide(color: buttonGreyColor)),
             labelStyle: TextStyle(color: Colors.grey.shade800),
             labelText: StringsAuth.lPassword,
+            floatingLabelBehavior: FloatingLabelBehavior.never,
+            filled: true,
+            fillColor: buttonGreyColor),
+      ),
+    );
+    var clubField = Container(
+      padding: const EdgeInsets.all(10),
+      child: TextField(
+        obscureText: false,
+        controller: clubNameController,
+        textInputAction: TextInputAction.done,
+        decoration: InputDecoration(
+            focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: buttonGreyColor)),
+            enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: buttonGreyColor)),
+            disabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: buttonGreyColor)),
+            labelStyle: TextStyle(color: Colors.grey.shade800),
+            labelText: StringsAuth.lClubName,
             floatingLabelBehavior: FloatingLabelBehavior.never,
             filled: true,
             fillColor: buttonGreyColor),
@@ -208,8 +232,8 @@ class _LoginWidgetState extends State<LoginWidget> {
               ),
             ],
           ));
-    } else {
       // sign up mode
+    } else {
       return Padding(
         padding: const EdgeInsets.all(10),
         child: ListView(children: <Widget>[
@@ -238,6 +262,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                           style: TextStyle(
                               color: buttonDarkBlueColor, fontSize: 30),
                         )),
+                    clubField,
                     eMailField,
                     passwordField,
                     Container(
@@ -304,6 +329,7 @@ class _LoginWidgetState extends State<LoginWidget> {
   }
 
   Future signUp() async {
+    DatabaseRepository repository = persistentController.repository;
     // show an indication that user is signing up
     Alert loadingAlert = Alert(
         context: context,
@@ -312,13 +338,15 @@ class _LoginWidgetState extends State<LoginWidget> {
 
     loadingAlert.show();
     try {
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(
-          email: emailController.text.trim(),
-          password: passwordController.text.trim());
+      await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(
+              email: emailController.text.trim(),
+              password: passwordController.text.trim());
+      repository.createClub(clubNameController.text.trim());
+      loadingAlert.dismiss();
       // pop the indicator after account has been created
-      loadingAlert.dismiss();
     } on FirebaseAuthException catch (e) {
-      loadingAlert.dismiss();
+      await loadingAlert.dismiss();
       Alert(
               context: context,
               buttons: [],

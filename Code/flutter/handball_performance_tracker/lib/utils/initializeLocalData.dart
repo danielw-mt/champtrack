@@ -6,62 +6,82 @@ import '../data/database_repository.dart';
 import 'package:get/get.dart';
 import '../controllers/persistentController.dart';
 import '../controllers/tempController.dart';
+import '../data/club.dart';
 
 Future<bool> initializeLocalData() async {
   PersistentController persistentController = Get.find<PersistentController>();
   DatabaseRepository repository = persistentController.repository;
+  // if the isInitialized variable is false in persistentController the initializeLocalData method has not finished successfully before
+  Club loggedInClub = await repository.getClub();
   if (!persistentController.isInitialized) {
+    print(loggedInClub.name);
+    persistentController.setLoggedInClub(loggedInClub);
     print("initializing local data");
     List<Team> teamsList = [];
     // initialize all teams with corresponding player objects first and wait
     //for them to be built
-    QuerySnapshot snapshot = await repository.getAllTeams();
+    QuerySnapshot teamsSnapshot = await repository.getTeams();
+    // make sure initialization doesn't break if there are no teams
+    if (teamsSnapshot.docs.isEmpty) {
+      print("no teams found");
+      return false;
+    }
+    QuerySnapshot playersSnapshot = await repository.getAllPlayers();
+    // make sure initialization doesn't break if there are no players
+    if (playersSnapshot.docs.isEmpty){
+      print("no players found");
+      return false;
+    }
     // go through every team document
-    for (var element in snapshot.docs) {
-      Map<String, dynamic> docData = element.data() as Map<String, dynamic>;
+    for (DocumentSnapshot teamDocumentSnapshot in teamsSnapshot.docs) {
+      Map<String, dynamic> docData =
+          teamDocumentSnapshot.data() as Map<String, dynamic>;
       List<Player> playerList = [];
       List<Player> onFieldList = [];
       // add all players in each team to the players list
-      List<DocumentReference> players =
+      List<DocumentReference> playerReferences =
           docData["players"].cast<DocumentReference>();
-      for (var documentReference in players) {
-        DocumentSnapshot documentSnapshot = await documentReference.get();
-        if (documentSnapshot.exists) {
-          playerList.add(Player.fromDocumentSnapshot(documentSnapshot));
-        }
+      for (DocumentReference playerReference in playerReferences) {
+        playersSnapshot.docs.forEach((playerSnapshot) {
+          if (playerSnapshot.id == playerReference.id.toString()) {
+            playerList.add(Player.fromDocumentSnapshot(playerSnapshot));
+          }
+        });
       }
       // add each onFieldPlayer to the onFieldPlayers list
       List<DocumentReference> onFieldPlayers =
           docData["onFieldPlayers"].cast<DocumentReference>();
-      for (var documentReference in onFieldPlayers) {
-        DocumentSnapshot documentSnapshot = await documentReference.get();
-        if (documentSnapshot.exists) {
-          String playerId = documentSnapshot.reference.id;
-          // add references from playerList to onFieldList
-          onFieldList
-              .add(playerList.firstWhere((player) => player.id == playerId));
-        }
+      for (DocumentReference playerReference in onFieldPlayers) {
+        playersSnapshot.docs.forEach((playerSnapshot) {
+          if (playerSnapshot.id == playerReference.id.toString()) {
+            onFieldList.add(Player.fromDocumentSnapshot(playerSnapshot));
+          }
+        });
       }
-      print("adding team" + docData["name"]);
+      logger.d("adding team: " + docData["name"]);
       teamsList.add(Team(
-          id: element.reference.id,
+          id: teamDocumentSnapshot.reference.id,
           type: docData["type"],
           name: docData["name"],
-          clubId: docData["clubId"],
           players: playerList,
           onFieldPlayers: onFieldList));
     }
     persistentController.updateAvailableTeams(teamsList);
     persistentController.isInitialized = true;
 
-    // initialize club
-    persistentController.setLoggedInClub(await repository.getClub());
-
     // set the default selected team to be the first one available
     TempController tempController = Get.find<TempController>();
     tempController.setSelectedTeam(persistentController.getAvailableTeams()[0]);
     tempController.setPlayingTeam(persistentController.getAvailableTeams()[0]);
 
+    // run a test whether a previous game exists already
+    bool gameWithinLast20Mins =
+        await repository.isThereAGameWithinLastMinutes(20);
+    if (gameWithinLast20Mins) {
+      tempController.setOldGameStateExists(true);
+    }
   }
   return true;
 }
+
+void recreateLocalState() {}
