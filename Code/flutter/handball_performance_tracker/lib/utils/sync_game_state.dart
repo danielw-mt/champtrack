@@ -21,7 +21,7 @@ runGameStateSync() {
     tempController.activateGameSync();
   }
   PersistentController persistentController = Get.find<PersistentController>();
-  DatabaseRepository databaseRepository = DatabaseRepository();
+  DatabaseRepository databaseRepository = persistentController.repository;
 
   Game currentGame = persistentController.getCurrentGame();
   Team currentTeam = tempController.getSelectedTeam();

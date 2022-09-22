@@ -12,7 +12,7 @@ Future<bool> initializeLocalData() async {
   PersistentController persistentController = Get.find<PersistentController>();
   DatabaseRepository repository = persistentController.repository;
   // if the isInitialized variable is false in persistentController the initializeLocalData method has not finished successfully before
-  Club loggedInClub = await repository.initializeLoggedInClub();
+  Club loggedInClub = await repository.getClub();
   if (!persistentController.isInitialized) {
     print(loggedInClub.name);
     persistentController.setLoggedInClub(loggedInClub);
@@ -21,10 +21,21 @@ Future<bool> initializeLocalData() async {
     // initialize all teams with corresponding player objects first and wait
     //for them to be built
     QuerySnapshot teamsSnapshot = await repository.getTeams();
+    // make sure initialization doesn't break if there are no teams
+    if (teamsSnapshot.docs.isEmpty) {
+      print("no teams found");
+      return false;
+    }
     QuerySnapshot playersSnapshot = await repository.getAllPlayers();
+    // make sure initialization doesn't break if there are no players
+    if (playersSnapshot.docs.isEmpty){
+      print("no players found");
+      return false;
+    }
     // go through every team document
     for (DocumentSnapshot teamDocumentSnapshot in teamsSnapshot.docs) {
-      Map<String, dynamic> docData = teamDocumentSnapshot.data() as Map<String, dynamic>;
+      Map<String, dynamic> docData =
+          teamDocumentSnapshot.data() as Map<String, dynamic>;
       List<Player> playerList = [];
       List<Player> onFieldList = [];
       // add all players in each team to the players list

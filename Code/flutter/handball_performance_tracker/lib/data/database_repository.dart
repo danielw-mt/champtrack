@@ -24,15 +24,11 @@ var logger = Logger(
 class DatabaseRepository {
   // is set once initializeLoggedInClub is being called
   late DocumentReference<Map<String, dynamic>> _loggedInClubReference;
-  DatabaseRepository(){
-    initializeLoggedInClub();
-    // dirty: just to make sure _loggedInClubReference really is initialized
-  }
   // way of specifying what db to use. Can be used to switch between dev and prod db
   // final FirebaseFirestore _db = FirebaseFirestore.instanceFor(app: Firebase.app('dev'));
 
   // @return Club object according to Club data fetched from firestore where the user id is in the roles map
-  Future<Club> initializeLoggedInClub() async {
+  Future<Club> getClub() async {
     logger.d("initializing logged in club");
     // get uuid of logged in user
     User? user = FirebaseAuth.instance.currentUser;
@@ -49,23 +45,39 @@ class DatabaseRepository {
       print("club found");
       // store a reference to the logged in Club so all other methods can reference its children documents
       DocumentSnapshot documentSnapshot = querySnapshot.docs[0];
-      _loggedInClubReference = documentSnapshot.reference
-          as DocumentReference<Map<String, dynamic>>;
-      print("logged in club reference: "+_loggedInClubReference.toString());
+      _loggedInClubReference =
+          documentSnapshot.reference as DocumentReference<Map<String, dynamic>>;
+      print("logged in club reference: " + _loggedInClubReference.toString());
       return Club.fromDocumentSnapshot(documentSnapshot);
     }
     if (querySnapshot.docs.length == 0) {
-      throw new Exception("logged in user is associated with no club");
+      // logger.d("logged in user not associated with any club. Creating new club");
+      // DocumentReference clubReference = await FirebaseFirestore.instance.collection("clubs").add({
+      //   "name": "default club",
+      //   "roles": {user.uid: "admin"}
+      // });
+      // DocumentSnapshot clubSnapshot = await clubReference.get();
+      // return Club.fromDocumentSnapshot(clubSnapshot);
+      throw new Exception("logged in user not associated with any club");
     } else {
       throw new Exception(
           "logged in user is associated with more than one club");
     }
   }
 
-  // TODO remove this as it is saved in the Club
-  // Future<DocumentReference> getClubReference(Club club) async {
-  //   return await _db.collection("clubs").doc(club.id);
-  // }
+  /// create club for the current user thats logged in
+  Future<DocumentReference<Map<String, dynamic>>> createClub(String clubName) async {
+    logger.d("creating club");
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user == null) {
+      logger.e("User is null");
+    }
+    DocumentReference<Map<String, dynamic>> clubReference = await FirebaseFirestore.instance
+        .collection("clubs")
+        .add({"name": clubName, "roles": {user!.uid: "admin"}});
+    _loggedInClubReference = clubReference;
+    return clubReference;
+  }
 
   Future<DocumentSnapshot> getPlayer(String playerId) async {
     return await _loggedInClubReference
@@ -284,11 +296,9 @@ class DatabaseRepository {
         .delete();
   }
 
-  Future<Game> getGame(String gameId)async{
-    DocumentSnapshot documentSnapshot = await _loggedInClubReference
-        .collection("games")
-        .doc(gameId)
-        .get();
+  Future<Game> getGame(String gameId) async {
+    DocumentSnapshot documentSnapshot =
+        await _loggedInClubReference.collection("games").doc(gameId).get();
     return Game.fromDocumentSnapshot(documentSnapshot);
   }
 
