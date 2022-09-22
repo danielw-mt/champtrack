@@ -160,15 +160,15 @@ class TempController extends GetxController {
       player.games.add(game.id!);
       repository.updatePlayer(player);
     }
-    if (!game.players.contains(player.id)) {
-      game.players.add(player.id!);
+    if (!game.onFieldPlayers.contains(player.id)) {
+      game.onFieldPlayers.add(player.id!);
       repository.updateGame(game);
     }
   }
 
   /// after a game is ended, reset the LiveEfScores of all participating players and the feed
   void resetGameData(Game game) {
-    for (String playerId in game.players) {
+    for (String playerId in game.onFieldPlayers) {
       Player player = getPlayerFromSelectedTeam(playerId);
       player.resetActions();
     }

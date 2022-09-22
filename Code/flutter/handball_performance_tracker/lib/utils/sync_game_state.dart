@@ -21,24 +21,26 @@ runGameStateSync() {
     tempController.activateGameSync();
   }
   PersistentController persistentController = Get.find<PersistentController>();
-  final FirebaseFirestore _db = FirebaseFirestore.instance;
+  DatabaseRepository databaseRepository = persistentController.repository;
 
   Game currentGame = persistentController.getCurrentGame();
   Team currentTeam = tempController.getSelectedTeam();
-  DocumentReference currentGameFirebaseReference =
-      _db.collection("games").doc(currentGame.id);
+
   Timer.periodic(const Duration(seconds: 10), (timer) async {
     // update currentGame in case the score changed
     currentGame = persistentController.getCurrentGame();
     // get most recent gameData from Firebase as usable object in dart
-    DocumentSnapshot gameDocument = await currentGameFirebaseReference.get();
-    final gameData = gameDocument.data() as Map<String, dynamic>;
+    Game gameDocument =
+        await databaseRepository.getGame(currentGame.id.toString());
+    Map<String, dynamic> gameData = gameDocument.toMap();
     // sync selected team id, score, stopwatchtime,
-    await currentGameFirebaseReference.update({
+    databaseRepository.syncGameMetaData({
+      "id": currentGame.id,
       "selectedTeam": currentTeam.id,
       "scoreHome": tempController.getOwnScore(),
       "scoreOpponent": tempController.getOpponentScore(),
-      "stopWatchTime": currentGame.stopWatchTimer.rawTime.value
+      "stopWatchTime": currentGame.stopWatchTimer.rawTime.value,
+      "lastSync": DateTime.now().toIso8601String()
     });
 
     // if there are any actions in the gameState without an ID
@@ -53,7 +55,7 @@ runGameStateSync() {
     /// start: sync players (on field)
     // check if there is a difference between players set in firebase and in gameState
     List<Player> onFieldPlayers = tempController.getOnFieldPlayers();
-    List firebasePlayerIds = gameData["players"];
+    List firebasePlayerIds = gameData["onFieldPlayers"];
     bool changeInIDs = false;
     firebasePlayerIds.forEach((element) {
       if (!onFieldPlayers.any((player) => player.id == element)) {
@@ -66,12 +68,11 @@ runGameStateSync() {
       onFieldPlayers.forEach((Player player) {
         newIDs.add(player.id);
       });
-      await currentGameFirebaseReference.update({"players": newIDs});
+      // TODO implement this
+      // await currentGameFirebaseReference.update({"players": newIDs});
     }
 
     /// end: sync players
-    await currentGameFirebaseReference
-        .update({"lastSync": DateTime.now().toIso8601String()});
   });
 }
 
@@ -96,14 +97,14 @@ Future<void> recreateGameStateFromFirebase() async {
   // build list of player to restore manually from firebase based on players list
   // stored in games collection
   List<Player> onFieldPlayersFromLastGame = [];
-  mostRecentGame.players.forEach((String playerId) async {
+  mostRecentGame.onFieldPlayers.forEach((String playerId) async {
     DocumentSnapshot playerSnapshot = await repository.getPlayer(playerId);
     if (playerSnapshot.exists) {
       onFieldPlayersFromLastGame
           .add(Player.fromDocumentSnapshot(playerSnapshot));
     }
   });
-  // recreate team from already stored teams in persistentController 
+  // recreate team from already stored teams in persistentController
   //(those teams were created in initialize local data)
   Team selectedTeam = persistentController
       .getAvailableTeams()

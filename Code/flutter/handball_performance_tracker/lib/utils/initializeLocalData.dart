@@ -6,21 +6,36 @@ import '../data/database_repository.dart';
 import 'package:get/get.dart';
 import '../controllers/persistentController.dart';
 import '../controllers/tempController.dart';
+import '../data/club.dart';
 
 Future<bool> initializeLocalData() async {
   PersistentController persistentController = Get.find<PersistentController>();
   DatabaseRepository repository = persistentController.repository;
+  // if the isInitialized variable is false in persistentController the initializeLocalData method has not finished successfully before
+  Club loggedInClub = await repository.getClub();
   if (!persistentController.isInitialized) {
-    //
+    print(loggedInClub.name);
+    persistentController.setLoggedInClub(loggedInClub);
     print("initializing local data");
     List<Team> teamsList = [];
     // initialize all teams with corresponding player objects first and wait
     //for them to be built
-    QuerySnapshot teamsSnapshot = await repository.getAllTeams();
+    QuerySnapshot teamsSnapshot = await repository.getTeams();
+    // make sure initialization doesn't break if there are no teams
+    if (teamsSnapshot.docs.isEmpty) {
+      print("no teams found");
+      return false;
+    }
     QuerySnapshot playersSnapshot = await repository.getAllPlayers();
+    // make sure initialization doesn't break if there are no players
+    if (playersSnapshot.docs.isEmpty){
+      print("no players found");
+      return false;
+    }
     // go through every team document
-    for (var element in teamsSnapshot.docs) {
-      Map<String, dynamic> docData = element.data() as Map<String, dynamic>;
+    for (DocumentSnapshot teamDocumentSnapshot in teamsSnapshot.docs) {
+      Map<String, dynamic> docData =
+          teamDocumentSnapshot.data() as Map<String, dynamic>;
       List<Player> playerList = [];
       List<Player> onFieldList = [];
       // add all players in each team to the players list
@@ -43,21 +58,16 @@ Future<bool> initializeLocalData() async {
           }
         });
       }
-      print("adding team" + docData["name"]);
+      logger.d("adding team: " + docData["name"]);
       teamsList.add(Team(
-          id: element.reference.id,
+          id: teamDocumentSnapshot.reference.id,
           type: docData["type"],
           name: docData["name"],
-          clubId: docData["clubId"],
           players: playerList,
           onFieldPlayers: onFieldList));
     }
     persistentController.updateAvailableTeams(teamsList);
     persistentController.isInitialized = true;
-
-    // initialize club
-    // comment: this is not needed yet
-    persistentController.setLoggedInClub(await repository.getClub());
 
     // set the default selected team to be the first one available
     TempController tempController = Get.find<TempController>();

@@ -49,6 +49,7 @@ class PersistentController extends GetxController {
 
   /// Setter for cachedTeamsList
   void updateAvailableTeams(List<Team> teamsList) {
+    logger.d("update available teams");
     _cachedTeamsList.value = teamsList;
     update(["team-dropdown", "team-type-selection-bar", "players-list"]);
   }
