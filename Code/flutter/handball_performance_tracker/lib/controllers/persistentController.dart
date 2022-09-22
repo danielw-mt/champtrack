@@ -42,7 +42,7 @@ class PersistentController extends GetxController {
 
   void addTeam(String name, String type) async {
     TempController tempController = Get.find<TempController>();
-    Team newTeam = Team(name: name, type: type, clubId: getLoggedInClub().id!);
+    Team newTeam = Team(name: name, type: type);
     DocumentReference docRef = await repository.addTeam(newTeam);
     newTeam.id = docRef.id;
     _cachedTeamsList.add(newTeam);

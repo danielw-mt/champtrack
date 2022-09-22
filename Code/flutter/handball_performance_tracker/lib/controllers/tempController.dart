@@ -133,12 +133,12 @@ class TempController extends GetxController {
       print("player not already in selected team");
       player.teams.add(_selectedTeam.value.id.toString());
     }
-
     // add player to each team inside references
     player.teams.forEach((String teamReference) {
       Team relevantTeam = persistentController.getSpecificTeam(teamReference);
       repository.addPlayerToTeam(player, relevantTeam);
     });
+    _selectedTeam.value.players.add(player);
     update(["players-list"]);
   }
 

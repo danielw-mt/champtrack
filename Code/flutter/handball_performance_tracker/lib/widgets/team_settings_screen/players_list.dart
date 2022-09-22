@@ -11,14 +11,8 @@ import '../../constants/stringsGeneral.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'player_edit_form.dart';
 
-class PlayersList extends StatefulWidget {
-  const PlayersList({Key? key}) : super(key: key);
 
-  @override
-  State<PlayersList> createState() => _PlayersListState();
-}
-
-class _PlayersListState extends State<PlayersList> {
+class PlayersList extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return GetBuilder<TempController>(

@@ -25,21 +25,16 @@ class DatabaseRepository {
   // is set once initializeLoggedInClub is being called
   late DocumentReference<Map<String, dynamic>> _loggedInClubReference;
   // way of specifying what db to use. Can be used to switch between dev and prod db
-  // final FirebaseFirestore _db = FirebaseFirestore.instanceFor(app: Firebase.app('dev'));
-
-  // @return Club object according to Club data fetched from firestore where the user id is in the roles map
-  final FirebaseFirestore _db = FirebaseFirestore.instance;
-  // final FirebaseFirestore _db = FirebaseFirestore.instanceFor(app: Firebase.app('dev'));
 
   Future<DocumentReference> addTeam(Team team) async {
-    return await _db.collection('teams').add(team.toMap());
+    return await _loggedInClubReference.collection('teams').add(team.toMap());
   }
 
   Future<void> deleteTeam(Team team) async {
     // delete team from teams collection
-    await _db.collection('teams').doc(team.id).delete();
+    await _loggedInClubReference.collection('teams').doc(team.id).delete();
     // delete all players associated with team
-    _db
+    _loggedInClubReference
         .collection("players")
         .where("teams", arrayContains: team.id)
         .get()
@@ -51,10 +46,10 @@ class DatabaseRepository {
   }
 
   Future<void> updateTeam(Team team) async {
-    return await _db.collection('teams').doc(team.id).update(team.toMap());
+    return await _loggedInClubReference.collection('teams').doc(team.id).update(team.toMap());
   }
 
-  // TODO change this to logged in club
+  // @return Club object according to Club data fetched from firestore where the user id is in the roles map
   Future<Club> getClub() async {
     logger.d("initializing logged in club");
     // get uuid of logged in user
@@ -170,7 +165,6 @@ class DatabaseRepository {
   /// add player to a team in firebase with teamReference string i.e. teams/ypunI6UsJmTr2LxKh1aw
   void addPlayerToTeam(Player player, Team relevantTeam) async {
     print("trying to add player ${player.id} to team ${relevantTeam.id}");
-    relevantTeam.players.add(player);
     DocumentReference<Map<String, dynamic>> selectedTeam =
         _loggedInClubReference.collection("teams").doc(relevantTeam.id);
     // get a list of player references from the document
@@ -209,7 +203,6 @@ class DatabaseRepository {
     var result = await Connectivity().checkConnectivity();
     // if there is no internet create the reference id for the object manually
     if (result == ConnectivityResult.none) {
-      // _db.collection("games").add(game.toMap());
       DocumentReference docRef =
           _loggedInClubReference.collection('games').doc();
       docRef.set(game.toMap()).then(
@@ -251,7 +244,6 @@ class DatabaseRepository {
     var result = await Connectivity().checkConnectivity();
     // if there is no internet create the reference id for the object manually
     if (result == ConnectivityResult.none) {
-      // _db.collection("games").add(game.toMap());
       DocumentReference docRef = _loggedInClubReference
           .collection('games')
           .doc(action.gameId)
