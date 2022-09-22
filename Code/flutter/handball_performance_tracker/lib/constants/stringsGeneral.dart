@@ -130,4 +130,8 @@ class StringsGeneral {
   static const String lNumberTooLong = "Bitte kürzere Nummer eingeben";
   static const String lPositionMissing = "Bitte Position auswählen";
   static const String lTeamMissing = "Bitte Team auswählen";
+  
+  // team selection screen
+  static const String lAddTeam = "Team hinzufügen";
+  static const String lTeamTypes = "Teamtypen";
 }

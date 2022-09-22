@@ -28,6 +28,33 @@ class DatabaseRepository {
   // final FirebaseFirestore _db = FirebaseFirestore.instanceFor(app: Firebase.app('dev'));
 
   // @return Club object according to Club data fetched from firestore where the user id is in the roles map
+  final FirebaseFirestore _db = FirebaseFirestore.instance;
+  // final FirebaseFirestore _db = FirebaseFirestore.instanceFor(app: Firebase.app('dev'));
+
+  Future<DocumentReference> addTeam(Team team) async {
+    return await _db.collection('teams').add(team.toMap());
+  }
+
+  Future<void> deleteTeam(Team team) async {
+    // delete team from teams collection
+    await _db.collection('teams').doc(team.id).delete();
+    // delete all players associated with team
+    _db
+        .collection("players")
+        .where("teams", arrayContains: team.id)
+        .get()
+        .then((querySnapshot) {
+      querySnapshot.docs.forEach((doc) {
+        doc.reference.delete();
+      });
+    });
+  }
+
+  Future<void> updateTeam(Team team) async {
+    return await _db.collection('teams').doc(team.id).update(team.toMap());
+  }
+
+  // TODO change this to logged in club
   Future<Club> getClub() async {
     logger.d("initializing logged in club");
     // get uuid of logged in user

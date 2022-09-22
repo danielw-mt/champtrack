@@ -21,7 +21,8 @@ class Team {
     return {
       'name': name,
       'players': players,
-      'onFieldPlayers': onFieldPlayers
+      'onFieldPlayers': onFieldPlayers,
+      'type': type,
     };
   }
 
