@@ -1,7 +1,9 @@
+# build folders
 ./windows/
 ./linux/
 ./web/
-
+**/node_modules/
+**/public/
 
 # Miscellaneous
 *.class
@@ -38,7 +40,6 @@ migrate_working_dir/
 /build/
 
 # Web related
-lib/generated_plugin_registrant.dart
 
 # Symbolication related
 app.*.symbols
@@ -175,6 +176,8 @@ captures/
 
 # Google Services (e.g. APIs or Firebase)
 google-services.json
+firebase.json
+.firebaserc
 
 # Freeline
 freeline.py

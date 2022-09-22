@@ -164,3 +164,8 @@ Code/flutter/handball_performance_tracker/macos/firebase_app_id_file.json
 Code/flutter/handball_performance_tracker/macos/Runner/GoogleService-Info.plist
 Code/flutter/handball_performance_tracker/lib/firebase_options.dart
 .gitignore
+Code/flutter/handball_performance_tracker/package-lock.json
+Code/flutter/handball_performance_tracker/package.json
+Code/flutter/handball_performance_tracker/firebase.json
+.gitignore
+.gitignore
