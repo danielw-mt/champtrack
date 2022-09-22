@@ -3,7 +3,6 @@ import 'package:stop_watch_timer/stop_watch_timer.dart';
 
 class Game {
   String? id;
-  final String clubId;
   String teamId;
   DateTime date;
   int? startTime;
@@ -15,12 +14,11 @@ class Game {
   String? opponent;
   String? season;
   String? lastSync;
-  List<String> players;
+  List<String> onFieldPlayers;
   StopWatchTimer stopWatchTimer;
 
   Game(
       {this.id,
-      this.clubId = "",
       this.teamId = "",
       required this.date,
       this.startTime,
@@ -32,13 +30,12 @@ class Game {
       this.opponent = "",
       this.season = "",
       this.lastSync = "",
-      this.players = const []})
+      this.onFieldPlayers = const []})
       : stopWatchTimer = StopWatchTimer(mode: StopWatchMode.countUp);
 
   // @return Map<String,dynamic> as representation of Game object that can be saved to firestore
   Map<String, dynamic> toMap() {
     return {
-      'clubId': clubId,
       'teamId': teamId,
       'date': date,
       'startTime': startTime,
@@ -49,7 +46,7 @@ class Game {
       'location': location,
       'opponent': opponent,
       'season': season,
-      'players': players,
+      'onFieldPlayers': onFieldPlayers,
       'lastSync': lastSync,
       'stopWatchTime': stopWatchTimer.rawTime.value
     };
@@ -73,7 +70,6 @@ class Game {
     DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(
         dateTimestamp.millisecondsSinceEpoch);
     Game game = Game(
-        clubId: map["clubId"],
         teamId: map["teamId"],
         date: dateTime,
         startTime: map["startTime"],
@@ -85,7 +81,7 @@ class Game {
         opponent: map["opponent"],
         season: map["season"],
         lastSync: map["lastSync"],
-        players: map["players"].cast<String>());
+        onFieldPlayers: map["onFieldPlayers"].cast<String>());
     game.stopWatchTimer = stopWatchTimer;
     return game;
   }

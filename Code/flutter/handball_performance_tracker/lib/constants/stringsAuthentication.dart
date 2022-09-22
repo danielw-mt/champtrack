@@ -18,4 +18,5 @@ class StringsAuth {
   static const String lSendingResetMail = "Mail mit weiteren Anweisungen wird gesendet...";
 
   static const String lAppTitle = "- HB Performance App -";
+  static const String lClubName = "Vereinsname";
 }

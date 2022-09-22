@@ -368,9 +368,6 @@ class StartGameFormState extends State<StartGameForm> {
                                       // store entered data to a new game object that will be used when the game is started at the end of the flow
                                       Game preconfiguredGame = Game(
                                           date: selectedDate,
-                                          clubId: persistentController
-                                              .getLoggedInClub()
-                                              .id!,
                                           teamId: tempController
                                               .getSelectedTeam()
                                               .id!,

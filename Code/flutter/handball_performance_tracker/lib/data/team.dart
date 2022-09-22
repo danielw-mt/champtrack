@@ -3,7 +3,6 @@ import 'player.dart';
 
 class Team {
   String? id;
-  String clubId;
   String name;
   List<Player> players;
   List<Player> onFieldPlayers;
@@ -11,7 +10,6 @@ class Team {
 
   Team({
     this.id,
-    this.clubId = "",
     this.name = "Default Team",
     this.players = const [],
     this.onFieldPlayers = const [],
@@ -22,7 +20,6 @@ class Team {
   Map<String, dynamic> toMap() {
     return {
       'name': name,
-      'clubId': clubId,
       'players': players,
       'onFieldPlayers': onFieldPlayers
     };
@@ -51,7 +48,6 @@ class Team {
     });
     return Team(
         name: map["name"],
-        clubId: map["clubId"],
         players: playerList,
         onFieldPlayers: onFieldList);
   }

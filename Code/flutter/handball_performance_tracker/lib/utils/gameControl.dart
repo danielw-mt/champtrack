@@ -39,7 +39,7 @@ void startGame(BuildContext context, {bool preconfigured: false}) async {
     // game has already been saved to firebase, only update relevant information
     Game preconfiguredGame = persistentController.getCurrentGame();
     preconfiguredGame.startTime = DateTime.now().toUtc().millisecondsSinceEpoch;
-    preconfiguredGame.players = tempController.getOnFieldPlayersById();
+    preconfiguredGame.onFieldPlayers = tempController.getOnFieldPlayersById();
     persistentController.setCurrentGame(preconfiguredGame);
     // add game to selected players
     _addGameToPlayers(preconfiguredGame);
@@ -51,10 +51,9 @@ void startGame(BuildContext context, {bool preconfigured: false}) async {
     DateTime dateTime = DateTime.now();
     int unixTimeStamp = dateTime.toUtc().millisecondsSinceEpoch;
     Game newGame = Game(
-        clubId: tempController.getSelectedTeam().id!,
         date: dateTime,
         startTime: unixTimeStamp,
-        players: tempController.getOnFieldPlayersById());
+        onFieldPlayers: tempController.getOnFieldPlayersById());
     await persistentController.setCurrentGame(newGame, isNewGame: true);
     print("start game, id: ${persistentController.getCurrentGame().id}");
 
