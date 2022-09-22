@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:handball_performance_tracker/controllers/persistentController.dart';
 import 'package:handball_performance_tracker/widgets/statistic_screen/bar_chart_example.dart';
 import 'charts.dart';
+import 'package:get/get.dart';
 
 class CardsInfoCard extends StatelessWidget {
   const CardsInfoCard({Key? key}) : super(key: key);
@@ -71,27 +73,80 @@ class ActionsCard extends StatefulWidget {
 }
 
 class _ActionsCardState extends State<ActionsCard> {
+  PersistentController persistentController = Get.find<PersistentController>();
+  int currentTab = 0;
+
   @override
   Widget build(BuildContext context) {
-    return Card(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Flexible(
-            flex: 1,
-            child: Text("% Actions"),
-          ),
-          Flexible(
-            flex: 4,
-            child: PieChartActionsWidget(),
-          ),
-          Flexible(
-            flex: 4,
-            child: PieChartActionsWidget(),
-          )
-        ],
-      ),
-    );
+    if (currentTab == 0) {
+      return Card(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Flexible(
+                flex: 1,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ElevatedButton(onPressed: () {setState(() {
+                      currentTab = 1;
+                    });}, child: Text("Table View")),
+                  ],
+                )),
+            Flexible(
+              flex: 1,
+              child: Text("% Actions"),
+            ),
+            Flexible(
+              flex: 4,
+              child: PieChartActionsWidget(),
+            ),
+            Flexible(
+              flex: 4,
+              child: PieChartActionsWidget(),
+            )
+          ],
+        ),
+      );
+    }
+    if (currentTab == 1) {
+      return Card(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Flexible(
+                flex: 1,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ElevatedButton(
+                        onPressed: () {
+                          setState(() {
+                            currentTab = 0;
+                          });
+                        },
+                        child: Text("Pie Chart View")),
+                  ],
+                )),
+            Flexible(
+              flex: 4,
+              child: DataTable(columns: const <DataColumn>[
+                DataColumn(
+                  label: Text("Action"),
+                ),
+                DataColumn(
+                  label: Text("Count"),
+                ),
+              ], rows: [
+                DataRow(cells: [DataCell(Text("Yo")), DataCell(Text("Bro"))]),
+                DataRow(cells: [DataCell(Text("Bro")), DataCell(Text("Yo"))])
+              ]),
+            )
+          ],
+        ),
+      );
+    }
+    return Container();
   }
 }
 
@@ -165,9 +220,8 @@ class _PerformanceDropDownButtonState extends State<PerformanceDropDownButton> {
 }
 
 class QuotesPosition extends StatelessWidget {
-  const QuotesPosition({Key? key,
-  required this.ring_form}) : super(key: key);
-  
+  const QuotesPosition({Key? key, required this.ring_form}) : super(key: key);
+
   final ring_form;
 
   @override
@@ -184,7 +238,8 @@ class QuotesPosition extends StatelessWidget {
     ));
   }
 
-  Widget _buildCarousel(BuildContext context, int carouselIndex, bool ring_form) {
+  Widget _buildCarousel(
+      BuildContext context, int carouselIndex, bool ring_form) {
     return Column(
       mainAxisSize: MainAxisSize.max,
       children: <Widget>[

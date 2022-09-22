@@ -28,6 +28,7 @@ class Team {
 
   // @return Team object according to Team data fetched from firestore
   factory Team.fromDocumentSnapshot(DocumentSnapshot doc) {
+    print("team from document snapshot");
     Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
     final newTeam = Team.fromMap(data);
 

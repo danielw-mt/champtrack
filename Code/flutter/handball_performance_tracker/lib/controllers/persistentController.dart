@@ -7,6 +7,7 @@ import '../data/player.dart';
 import '../data/team.dart';
 import '../data/club.dart';
 import './tempController.dart';
+import '../utils/statistics_engine.dart';
 
 /// stores more persistent state
 /// generally more complex variables and data structure that are
@@ -14,6 +15,7 @@ import './tempController.dart';
 class PersistentController extends GetxController {
   /// handles teams initialization when building MainScreen
   var isInitialized = false;
+  Rx<StatisticsEngine> _statisticsEngine = StatisticsEngine().obs;
 
   Rx<Club> _loggedInClub = Club().obs;
 
@@ -92,6 +94,11 @@ class PersistentController extends GetxController {
   /// check whether there were game actions entered already
   bool actionsIsEmpty() {
     return _actions.isEmpty;
+  }
+
+  generateStatistics() async {
+    List<Map<String, dynamic>> gamesData = await repository.getGamesData();
+    _statisticsEngine.value.generateStatistics(gamesData);
   }
 
   /// add action to actions list and firestore

@@ -80,6 +80,7 @@ Future<bool> initializeLocalData() async {
     if (gameWithinLast20Mins) {
       tempController.setOldGameStateExists(true);
     }
+    persistentController.generateStatistics();
   }
   return true;
 }

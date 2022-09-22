@@ -46,7 +46,10 @@ class DatabaseRepository {
   }
 
   Future<void> updateTeam(Team team) async {
-    return await _loggedInClubReference.collection('teams').doc(team.id).update(team.toMap());
+    return await _loggedInClubReference
+        .collection('teams')
+        .doc(team.id)
+        .update(team.toMap());
   }
 
   // @return Club object according to Club data fetched from firestore where the user id is in the roles map
@@ -88,15 +91,18 @@ class DatabaseRepository {
   }
 
   /// create club for the current user thats logged in
-  Future<DocumentReference<Map<String, dynamic>>> createClub(String clubName) async {
+  Future<DocumentReference<Map<String, dynamic>>> createClub(
+      String clubName) async {
     logger.d("creating club");
     User? user = FirebaseAuth.instance.currentUser;
     if (user == null) {
       logger.e("User is null");
     }
-    DocumentReference<Map<String, dynamic>> clubReference = await FirebaseFirestore.instance
-        .collection("clubs")
-        .add({"name": clubName, "roles": {user!.uid: "admin"}});
+    DocumentReference<Map<String, dynamic>> clubReference =
+        await FirebaseFirestore.instance.collection("clubs").add({
+      "name": clubName,
+      "roles": {user!.uid: "admin"}
+    });
     _loggedInClubReference = clubReference;
     return clubReference;
   }
@@ -194,6 +200,24 @@ class DatabaseRepository {
         .collection("teams")
         .doc(team.id)
         .update({'onFieldPlayers': onFieldPlayerReferences});
+  }
+
+  // get a List of game objects in the form of Maps
+  Future<List<Map<String, dynamic>>> getGamesData() async {
+    QuerySnapshot gamesQuerySnapshot =
+        await _loggedInClubReference.collection("games").get();
+    // add all the fields of the game document to a Map and all these Maps into a list of Maps
+    List<Map<String, dynamic>> gamesData = gamesQuerySnapshot.docs.map((QueryDocumentSnapshot e) => e.data() as Map<String, dynamic>).toList();
+    // add the actions collections to the Maps
+    for (int i = 0; i < gamesData.length; i++) {
+      QuerySnapshot actionsSnapshot = await _loggedInClubReference
+          .collection("games")
+          .doc(gamesData[i]["id"])
+          .collection("actions")
+          .get();
+      gamesData[i]["actions"] = actionsSnapshot.docs.map((QueryDocumentSnapshot e) => e.data() as Map<String, dynamic>).toList();
+    }
+    return gamesData;
   }
 
   /// @return asynchronous reference to Game object that was saved to firebase
