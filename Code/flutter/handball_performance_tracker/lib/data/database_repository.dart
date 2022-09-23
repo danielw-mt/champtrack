@@ -202,7 +202,9 @@ class DatabaseRepository {
         .update({'onFieldPlayers': onFieldPlayerReferences});
   }
 
-  // get a List of game objects in the form of Maps
+  /// get a List of game objects in the form of Maps
+  /// 
+  /// [{"id": "fghjkl", "oppenent": "ghjk", "startTime": 16789290, "actions": []}, {...}]
   Future<List<Map<String, dynamic>>> getGamesData() async {
     QuerySnapshot gamesQuerySnapshot =
         await _loggedInClubReference.collection("games").get();
