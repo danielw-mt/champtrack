@@ -16,11 +16,11 @@ class Game {
   String? lastSync;
   List<String> onFieldPlayers;
   StopWatchTimer stopWatchTimer;
+  
 
   Game(
       {this.id,
       this.teamId = "",
-      required this.date,
       this.startTime,
       this.stopTime,
       this.scoreHome = 0,
@@ -31,7 +31,7 @@ class Game {
       this.season = "",
       this.lastSync = "",
       this.onFieldPlayers = const []})
-      : stopWatchTimer = StopWatchTimer(mode: StopWatchMode.countUp);
+      : stopWatchTimer = StopWatchTimer(mode: StopWatchMode.countUp), date = DateTime.fromMicrosecondsSinceEpoch(0);
 
   // @return Map<String,dynamic> as representation of Game object that can be saved to firestore
   Map<String, dynamic> toMap() {
@@ -71,7 +71,6 @@ class Game {
         dateTimestamp.millisecondsSinceEpoch);
     Game game = Game(
         teamId: map["teamId"],
-        date: dateTime,
         startTime: map["startTime"],
         stopTime: map["stopTime"],
         scoreHome: map["scoreHome"],
@@ -83,6 +82,7 @@ class Game {
         lastSync: map["lastSync"],
         onFieldPlayers: map["onFieldPlayers"].cast<String>());
     game.stopWatchTimer = stopWatchTimer;
+    game.date = dateTime;
     return game;
   }
 }
