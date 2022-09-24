@@ -5,8 +5,8 @@ import '../data/team.dart';
 import '../data/game.dart';
 import '../data/database_repository.dart';
 import 'package:get/get.dart';
-import '../controllers/persistentController.dart';
-import '../controllers/tempController.dart';
+import '../controllers/persistent_controller.dart';
+import '../controllers/temp_controller.dart';
 import 'dart:async';
 
 /// Syncs game state with firebase every x minutes via timer

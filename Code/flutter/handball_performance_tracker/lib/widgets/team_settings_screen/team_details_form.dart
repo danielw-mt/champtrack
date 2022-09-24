@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:handball_performance_tracker/constants/stringsTeamManagement.dart';
-import 'package:handball_performance_tracker/controllers/persistentController.dart';
+import 'package:handball_performance_tracker/controllers/persistent_controller.dart';
 import '../../constants/stringsGeneral.dart';
-import '../../controllers/tempController.dart';
+import '../../controllers/temp_controller.dart';
 import '../../constants/colors.dart';
 import '../../data/team.dart';
 

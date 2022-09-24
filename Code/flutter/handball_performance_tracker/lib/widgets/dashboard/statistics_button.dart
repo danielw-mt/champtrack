@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:handball_performance_tracker/constants/fieldSizeParameter.dart';
-import 'package:handball_performance_tracker/screens/startGameScreen.dart';
-import 'package:handball_performance_tracker/screens/teamSelectionScreen.dart';
+import 'package:handball_performance_tracker/screens/start_game_screen.dart';
+import 'package:handball_performance_tracker/screens/team_selection_screen.dart';
 import 'package:get/get.dart';
 import 'package:handball_performance_tracker/constants/stringsDashboard.dart';
 import 'package:handball_performance_tracker/constants/stringsGeneral.dart';
-import 'package:handball_performance_tracker/screens/statisticsScreen.dart';
+import 'package:handball_performance_tracker/screens/statistics_screen.dart';
 
 class StatisticsButton extends StatelessWidget {
   const StatisticsButton({Key? key}) : super(key: key);

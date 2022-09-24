@@ -7,8 +7,8 @@ import 'package:handball_performance_tracker/widgets/main_screen/ef_score_bar.da
 import 'package:handball_performance_tracker/widgets/main_screen/field.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 import '../../constants/stringsGameScreen.dart';
-import '../../controllers/persistentController.dart';
-import '../../controllers/tempController.dart';
+import '../../controllers/persistent_controller.dart';
+import '../../controllers/temp_controller.dart';
 import 'package:get/get.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import '../../data/game_action.dart';

@@ -6,7 +6,7 @@ import '../data/game_action.dart';
 import '../data/player.dart';
 import '../data/team.dart';
 import '../data/club.dart';
-import './tempController.dart';
+import 'temp_controller.dart';
 import '../utils/statistics_engine.dart';
 
 /// stores more persistent state

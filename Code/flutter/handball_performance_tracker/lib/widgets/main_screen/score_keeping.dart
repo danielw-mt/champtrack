@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:handball_performance_tracker/constants/colors.dart';
 import 'package:handball_performance_tracker/constants/stringsGeneral.dart';
-import 'package:handball_performance_tracker/controllers/persistentController.dart';
-import 'package:handball_performance_tracker/controllers/tempController.dart';
+import 'package:handball_performance_tracker/controllers/persistent_controller.dart';
+import 'package:handball_performance_tracker/controllers/temp_controller.dart';
 import 'package:handball_performance_tracker/widgets/main_screen/ef_score_bar.dart';
 
 class ScoreKeeping extends StatelessWidget {

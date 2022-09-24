@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:handball_performance_tracker/constants/colors.dart';
 import 'package:handball_performance_tracker/constants/positions.dart';
-import 'package:handball_performance_tracker/controllers/persistentController.dart';
+import 'package:handball_performance_tracker/controllers/persistent_controller.dart';
 import 'package:handball_performance_tracker/data/player.dart';
 import 'package:handball_performance_tracker/constants/fieldSizeParameter.dart'
     as fieldSizeParameter;
@@ -10,7 +10,7 @@ import 'package:handball_performance_tracker/utils/player_helper.dart';
 import 'dart:math';
 import 'package:rainbow_color/rainbow_color.dart';
 
-import '../../controllers/tempController.dart';
+import '../../controllers/temp_controller.dart';
 import '../../data/game.dart';
 
 // Radius of round edges

@@ -4,8 +4,8 @@ import '../data/player.dart';
 import '../data/team.dart';
 import '../data/database_repository.dart';
 import 'package:get/get.dart';
-import '../controllers/persistentController.dart';
-import '../controllers/tempController.dart';
+import '../controllers/persistent_controller.dart';
+import '../controllers/temp_controller.dart';
 import '../data/club.dart';
 
 Future<bool> initializeLocalData() async {

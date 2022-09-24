@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:handball_performance_tracker/controllers/persistentController.dart';
+import 'package:handball_performance_tracker/controllers/persistent_controller.dart';
 import 'package:handball_performance_tracker/widgets/statistic_screen/bar_chart_example.dart';
 import 'charts.dart';
 import 'package:get/get.dart';

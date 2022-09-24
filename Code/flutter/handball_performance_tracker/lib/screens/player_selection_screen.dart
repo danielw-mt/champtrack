@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:handball_performance_tracker/controllers/tempController.dart';
-import 'package:handball_performance_tracker/screens/startGameScreen.dart';
+import 'package:handball_performance_tracker/controllers/temp_controller.dart';
+import 'package:handball_performance_tracker/screens/start_game_screen.dart';
 import 'package:handball_performance_tracker/utils/game_control.dart';
 import 'package:handball_performance_tracker/constants/stringsGeneral.dart';
 import 'package:handball_performance_tracker/constants/stringsGameSettings.dart';
@@ -10,7 +10,7 @@ import 'package:handball_performance_tracker/widgets/main_screen/ef_score_bar.da
 import 'package:handball_performance_tracker/widgets/team_settings_screen/players_list.dart';
 import '../constants/colors.dart';
 import '../widgets/nav_drawer.dart';
-import '../screens/mainScreen.dart';
+import 'main_screen.dart';
 
 /// Screen that is displayed after startGameScreen and allows to select, add, and remove players before starting the game
 class PlayerSelectionScreen extends StatefulWidget {

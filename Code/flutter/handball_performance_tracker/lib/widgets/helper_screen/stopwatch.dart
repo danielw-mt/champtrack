@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../constants/stringsGeneral.dart';
 import '../../constants/stringsGameScreen.dart';
-import '../../controllers/persistentController.dart';
+import '../../controllers/persistent_controller.dart';
 import 'package:get/get.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 
