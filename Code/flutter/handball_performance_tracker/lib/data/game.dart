@@ -72,6 +72,7 @@ class Game {
         dateTimestamp.millisecondsSinceEpoch);
     Game game = Game(
         teamId: map["teamId"],
+        date: dateTime,
         startTime: map["startTime"],
         stopTime: map["stopTime"],
         scoreHome: map["scoreHome"],
@@ -83,7 +84,7 @@ class Game {
         lastSync: map["lastSync"],
         onFieldPlayers: map["onFieldPlayers"].cast<String>());
     game.stopWatchTimer = stopWatchTimer;
-    game.date = dateTime;
+    
     return game;
   }
 }
