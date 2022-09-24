@@ -1,11 +1,39 @@
 import 'package:flutter/material.dart';
+import 'package:handball_performance_tracker/controllers/persistentController.dart';
+import 'package:handball_performance_tracker/controllers/tempController.dart';
 import 'statistic_card_elements.dart';
+import '../../data/player.dart';
+import '../../data/game.dart';
+import '../../controllers/tempController.dart';
+import 'package:get/get.dart';
 
-class PlayerStatistics extends StatelessWidget {
+
+class PlayerStatistics extends StatefulWidget {
   const PlayerStatistics({Key? key}) : super(key: key);
 
   @override
+  State<PlayerStatistics> createState() => _PlayerStatisticsState();
+}
+
+class _PlayerStatisticsState extends State<PlayerStatistics> {
+  TempController tempController = Get.put(TempController());
+  PersistentController
+  List<Player> players = [];
+  Player selectedPlayer = Player();
+  Game selectedGame = Game();
+
+  @override
+  void initState() {
+    players = tempController.getPlayersFromSelectedTeam();
+    selectedPlayer = players[0];
+    super.initState();
+  }
+
+
+
+  @override
   Widget build(BuildContext context) {
+    
     return Scaffold(
         body: Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -19,10 +47,10 @@ class PlayerStatistics extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Flexible(
+                      Flexible(
                         flex: 1,
-                        child: PlayerInfoCard(),
-                      ),
+                        child: buildPlayerSelectionCard(selectedPlayer)                      
+                        ),
                       Flexible(
                         flex: 2,
                         child: QuotesPosition(ring_form: true,),
@@ -64,6 +92,74 @@ class PlayerStatistics extends StatelessWidget {
             )),
       ],
     ));
+  }
+
+  Card buildPlayerSelectionCard(Player selectedPlayer){
+    return Card(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Center(
+            child: DropdownButton<Player>(
+      value: selectedPlayer,
+      icon: const Icon(Icons.arrow_downward),
+      elevation: 16,
+      style: const TextStyle(color: Colors.deepPurple),
+      underline: Container(
+        height: 2,
+        color: Colors.deepPurpleAccent,
+      ),
+      onChanged: (Player? newPlayer) {
+        // This is called when the user selects an item.
+        setState(() {
+            selectedPlayer = newPlayer!;
+        });
+      },
+      items: players.map<DropdownMenuItem<Player>>((Player player) {
+        return DropdownMenuItem<Player>(
+            value: player,
+            child: Text(player.firstName+" "+player.lastName),
+        );
+      }).toList(),
+    ),
+          )
+        ],
+      ),
+    );
+  }
+
+  Card buildGameSelectionCard(Player selectedPlayer){
+    return Card(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Center(
+            child: DropdownButton<Player>(
+      value: selectedPlayer,
+      icon: const Icon(Icons.arrow_downward),
+      elevation: 16,
+      style: const TextStyle(color: Colors.deepPurple),
+      underline: Container(
+        height: 2,
+        color: Colors.deepPurpleAccent,
+      ),
+      onChanged: (Player? newPlayer) {
+        // This is called when the user selects an item.
+        setState(() {
+            selectedPlayer = newPlayer!;
+        });
+      },
+      items: players.map<DropdownMenuItem<Player>>((Player player) {
+        return DropdownMenuItem<Player>(
+            value: player,
+            child: Text(player.firstName+" "+player.lastName),
+        );
+      }).toList(),
+    ),
+          )
+        ],
+      ),
+    );
   }
 }
 
@@ -148,33 +244,4 @@ class _QuotesCardState extends State<QuotesCard> {
   }
 }
 */
-class PlayerInfoCard extends StatefulWidget {
-  const PlayerInfoCard({Key? key}) : super(key: key);
 
-  @override
-  State<StatefulWidget> createState() => _PlayerInfoCardState();
-}
-
-class _PlayerInfoCardState extends State<PlayerInfoCard> {
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-        child: Column(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [Text("Number"), Text("Name"), Text("Score")],
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [Text("1"), Text("Player 1"), Text("0")],
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [Text("2"), Text("Player 2"), Text("0")],
-        ),
-      ],
-    ));
-  }
-}

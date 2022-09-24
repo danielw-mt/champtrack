@@ -9,7 +9,7 @@ import 'package:handball_performance_tracker/controllers/tempController.dart';
 import 'package:handball_performance_tracker/widgets/nav_drawer.dart';
 import 'package:handball_performance_tracker/widgets/statistic_screen/charts.dart';
 
-
+// TODO move these to the constant strings
 const String page1 = "Mannschaft";
 const String page2 = "Player";
 const String page3 = "Vergleich";

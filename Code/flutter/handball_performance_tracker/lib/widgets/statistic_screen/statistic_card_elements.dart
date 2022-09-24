@@ -3,6 +3,7 @@ import 'package:handball_performance_tracker/controllers/persistentController.da
 import 'package:handball_performance_tracker/widgets/statistic_screen/bar_chart_example.dart';
 import 'charts.dart';
 import 'package:get/get.dart';
+import '../../data/player.dart';
 
 class CardsInfoCard extends StatelessWidget {
   const CardsInfoCard({Key? key}) : super(key: key);
@@ -67,14 +68,18 @@ class CardsInfoCard extends StatelessWidget {
 }
 
 class ActionsCard extends StatefulWidget {
-  const ActionsCard({Key? key}) : super(key: key);
+  Map<String, int> actionCounts;
+  ActionsCard({Key? key, required this.actionCounts}) : super(key: key);
   @override
-  _ActionsCardState createState() => _ActionsCardState();
+  _ActionsCardState createState() => _ActionsCardState(actionCounts);
 }
 
 class _ActionsCardState extends State<ActionsCard> {
+  Map<String, int> _actionCounts = {};
+  _ActionsCardState(this._actionCounts);
   PersistentController persistentController = Get.find<PersistentController>();
   int currentTab = 0;
+  Map<String, int> actionCounts = {};
 
   @override
   Widget build(BuildContext context) {
@@ -137,10 +142,12 @@ class _ActionsCardState extends State<ActionsCard> {
                 DataColumn(
                   label: Text("Count"),
                 ),
-              ], rows: [
-                DataRow(cells: [DataCell(Text("Yo")), DataCell(Text("Bro"))]),
-                DataRow(cells: [DataCell(Text("Bro")), DataCell(Text("Yo"))])
-              ]),
+              ], rows: 
+                List<DataRow>.generate(actionCounts.length, (index) => DataRow(cells: [
+                  DataCell(Text(actionCounts.keys.elementAt(index).toString())),
+                  DataCell(Text(actionCounts.values.elementAt(index).toString()))
+                ]))
+              ),
             )
           ],
         ),

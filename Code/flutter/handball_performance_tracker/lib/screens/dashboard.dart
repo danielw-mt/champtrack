@@ -7,7 +7,7 @@ import 'package:handball_performance_tracker/widgets/nav_drawer.dart';
 import 'package:get/get.dart';
 import '../controllers/persistentController.dart';
 import '../controllers/tempController.dart';
-import '../utils/initializeLocalData.dart';
+import '../utils/initialize_local_data.dart';
 import '../widgets/dashboard/start_new_game_button.dart';
 import '../widgets/dashboard/manage_teams_button.dart';
 import '../widgets/dashboard/statistics_button.dart';

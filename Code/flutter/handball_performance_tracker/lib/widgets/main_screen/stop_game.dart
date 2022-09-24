@@ -4,7 +4,7 @@ import 'package:handball_performance_tracker/constants/stringsGameScreen.dart';
 import 'package:handball_performance_tracker/constants/stringsGameSettings.dart';
 import 'package:get/get.dart';
 import 'package:handball_performance_tracker/screens/dashboard.dart';
-import 'package:handball_performance_tracker/utils/gameControl.dart';
+import 'package:handball_performance_tracker/utils/game_control.dart';
 
 class StopGameButton extends StatelessWidget {
   const StopGameButton({Key? key}) : super(key: key);
