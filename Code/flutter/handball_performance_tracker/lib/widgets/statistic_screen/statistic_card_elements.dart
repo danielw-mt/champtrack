@@ -68,21 +68,20 @@ class CardsInfoCard extends StatelessWidget {
 }
 
 class ActionsCard extends StatefulWidget {
-  Map<String, int> actionCounts;
-  ActionsCard({Key? key, required this.actionCounts}) : super(key: key);
+  final Map<String, int> actionCounts;
+  const ActionsCard(this.actionCounts);
+
   @override
-  _ActionsCardState createState() => _ActionsCardState(actionCounts);
+  _ActionsCardState createState() => _ActionsCardState();
 }
 
 class _ActionsCardState extends State<ActionsCard> {
-  Map<String, int> _actionCounts = {};
-  _ActionsCardState(this._actionCounts);
   PersistentController persistentController = Get.find<PersistentController>();
   int currentTab = 0;
-  Map<String, int> actionCounts = {};
 
   @override
   Widget build(BuildContext context) {
+    print("Rebuilding actions card: "+widget.actionCounts.toString());
     if (currentTab == 0) {
       return Card(
         child: Column(
@@ -93,9 +92,13 @@ class _ActionsCardState extends State<ActionsCard> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    ElevatedButton(onPressed: () {setState(() {
-                      currentTab = 1;
-                    });}, child: Text("Table View")),
+                    ElevatedButton(
+                        onPressed: () {
+                          setState(() {
+                            currentTab = 1;
+                          });
+                        },
+                        child: Text("Table View")),
                   ],
                 )),
             Flexible(
@@ -134,21 +137,29 @@ class _ActionsCardState extends State<ActionsCard> {
                   ],
                 )),
             Flexible(
-              flex: 4,
-              child: DataTable(columns: const <DataColumn>[
-                DataColumn(
-                  label: Text("Action"),
-                ),
-                DataColumn(
-                  label: Text("Count"),
-                ),
-              ], rows: 
-                List<DataRow>.generate(actionCounts.length, (index) => DataRow(cells: [
-                  DataCell(Text(actionCounts.keys.elementAt(index).toString())),
-                  DataCell(Text(actionCounts.values.elementAt(index).toString()))
-                ]))
-              ),
-            )
+                flex: 4,
+                child: widget.actionCounts != {}
+                    ? DataTable(
+                        columns: const <DataColumn>[
+                            DataColumn(
+                              label: Text("Action"),
+                            ),
+                            DataColumn(
+                              label: Text("Count"),
+                            ),
+                          ],
+                        rows: List<DataRow>.generate(
+                            widget.actionCounts.length,
+                            (index) => DataRow(cells: [
+                                  DataCell(Text(widget.actionCounts.keys
+                                      .elementAt(index)
+                                      .toString())),
+                                  DataCell(Text(widget.actionCounts.values
+                                      .elementAt(index)
+                                      .toString()))
+                                ])))
+                    : Text(
+                        "No actions recorded for the selected player and game"))
           ],
         ),
       );

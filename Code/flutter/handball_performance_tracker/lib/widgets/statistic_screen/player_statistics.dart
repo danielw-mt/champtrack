@@ -6,7 +6,18 @@ import '../../data/player.dart';
 import '../../data/game.dart';
 import '../../controllers/temp_controller.dart';
 import 'package:get/get.dart';
+import 'package:logger/logger.dart';
 
+var logger = Logger(
+  printer: PrettyPrinter(
+      methodCount: 2, // number of method calls to be displayed
+      errorMethodCount: 8, // number of method calls if stacktrace is provided
+      lineLength: 120, // width of the output
+      colors: true, // Colorful log messages
+      printEmojis: true, // Print an emoji for each log message
+      printTime: true // Should each log print contain a timestamp
+      ),
+);
 
 class PlayerStatistics extends StatefulWidget {
   const PlayerStatistics({Key? key}) : super(key: key);
@@ -16,24 +27,37 @@ class PlayerStatistics extends StatefulWidget {
 }
 
 class _PlayerStatisticsState extends State<PlayerStatistics> {
-  TempController tempController = Get.put(TempController());
-  PersistentController
-  List<Player> players = [];
-  Player selectedPlayer = Player();
-  Game selectedGame = Game();
+  TempController _tempController = Get.put(TempController());
+  PersistentController _persistentController = Get.put(PersistentController());
+  List<Player> _players = [];
+  Player _selectedPlayer = Player();
+  Game _selectedGame = Game(date: DateTime.fromMicrosecondsSinceEpoch(0));
+  List<Game> _games = [];
+  Map<String, dynamic> _statistics = {};
+
 
   @override
   void initState() {
-    players = tempController.getPlayersFromSelectedTeam();
-    selectedPlayer = players[0];
+    _players = _tempController.getPlayersFromSelectedTeam();
+    _selectedPlayer = _players[0];
+    _games = _persistentController.getAllGames();
+    _selectedGame = _games[0];
+    _statistics = _persistentController.getStatistics();
     super.initState();
   }
 
-
-
   @override
   Widget build(BuildContext context) {
-    
+    Map<String, int> actionCounts = {};
+    try {
+       actionCounts= _statistics[_selectedGame.id]
+        ["player_stats"][_selectedPlayer.id]["action_counts"];
+    } on Exception catch (e) {
+      logger.e(e);
+    } catch (e) {
+      logger.e(e);
+    }
+    logger.d(actionCounts);
     return Scaffold(
         body: Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -48,12 +72,21 @@ class _PlayerStatisticsState extends State<PlayerStatistics> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Flexible(
-                        flex: 1,
-                        child: buildPlayerSelectionCard(selectedPlayer)                      
-                        ),
+                          flex: 1,
+                          child: Column(
+                            children: [
+                              buildPlayerSelectionCard(),
+                              Container(
+                                height: 20,
+                              ),
+                              buildGameSelectionCard(),
+                            ],
+                          )),
                       Flexible(
                         flex: 2,
-                        child: QuotesPosition(ring_form: true,),
+                        child: QuotesPosition(
+                          ring_form: true,
+                        ),
                       )
                     ],
                   )),
@@ -67,7 +100,10 @@ class _PlayerStatisticsState extends State<PlayerStatistics> {
                         child: PerformanceCard(),
                       ),
                       Expanded(
-                        child: ActionsCard(),
+                        // TODO change ActionCards to stateless widget
+                        child: ActionsCard(
+                          actionCounts
+                        ),
                       )
                     ],
                   ))
@@ -94,68 +130,68 @@ class _PlayerStatisticsState extends State<PlayerStatistics> {
     ));
   }
 
-  Card buildPlayerSelectionCard(Player selectedPlayer){
+  Card buildPlayerSelectionCard() {
     return Card(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Center(
             child: DropdownButton<Player>(
-      value: selectedPlayer,
-      icon: const Icon(Icons.arrow_downward),
-      elevation: 16,
-      style: const TextStyle(color: Colors.deepPurple),
-      underline: Container(
-        height: 2,
-        color: Colors.deepPurpleAccent,
-      ),
-      onChanged: (Player? newPlayer) {
-        // This is called when the user selects an item.
-        setState(() {
-            selectedPlayer = newPlayer!;
-        });
-      },
-      items: players.map<DropdownMenuItem<Player>>((Player player) {
-        return DropdownMenuItem<Player>(
-            value: player,
-            child: Text(player.firstName+" "+player.lastName),
-        );
-      }).toList(),
-    ),
+              value: _selectedPlayer,
+              icon: const Icon(Icons.arrow_downward),
+              elevation: 16,
+              style: const TextStyle(color: Colors.deepPurple),
+              underline: Container(
+                height: 2,
+                color: Colors.deepPurpleAccent,
+              ),
+              onChanged: (Player? newPlayer) {
+                // This is called when the user selects an item.
+                setState(() {
+                  _selectedPlayer = newPlayer!;
+                });
+              },
+              items: _players.map<DropdownMenuItem<Player>>((Player player) {
+                return DropdownMenuItem<Player>(
+                  value: player,
+                  child: Text(player.firstName + " " + player.lastName),
+                );
+              }).toList(),
+            ),
           )
         ],
       ),
     );
   }
 
-  Card buildGameSelectionCard(Player selectedPlayer){
+  Card buildGameSelectionCard() {
     return Card(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Center(
-            child: DropdownButton<Player>(
-      value: selectedPlayer,
-      icon: const Icon(Icons.arrow_downward),
-      elevation: 16,
-      style: const TextStyle(color: Colors.deepPurple),
-      underline: Container(
-        height: 2,
-        color: Colors.deepPurpleAccent,
-      ),
-      onChanged: (Player? newPlayer) {
-        // This is called when the user selects an item.
-        setState(() {
-            selectedPlayer = newPlayer!;
-        });
-      },
-      items: players.map<DropdownMenuItem<Player>>((Player player) {
-        return DropdownMenuItem<Player>(
-            value: player,
-            child: Text(player.firstName+" "+player.lastName),
-        );
-      }).toList(),
-    ),
+            child: DropdownButton<Game>(
+              value: _selectedGame,
+              icon: const Icon(Icons.arrow_downward),
+              elevation: 16,
+              style: const TextStyle(color: Colors.deepPurple),
+              underline: Container(
+                height: 2,
+                color: Colors.deepPurpleAccent,
+              ),
+              onChanged: (Game? newGame) {
+                // This is called when the user selects an item.
+                setState(() {
+                  _selectedGame = newGame!;
+                });
+              },
+              items: _games.map<DropdownMenuItem<Game>>((Game game) {
+                return DropdownMenuItem<Game>(
+                  value: game,
+                  child: Text(game.date.toString()),
+                );
+              }).toList(),
+            ),
           )
         ],
       ),

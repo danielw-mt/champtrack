@@ -22,10 +22,7 @@ class StatisticsEngine {
     logger.d("generate game statistics");
     gameDocuments.forEach((Map<String, dynamic> gameDocument) {
       List<Map<String, dynamic>> actions = gameDocument["actions"];
-      Map<String, dynamic> gameStats = _statistics[gameDocument["id"]];
-      gameStats["player_stats"] = generatePlayerStatistics(actions);
-      // update parent
-      _statistics[gameDocument["id"]] = gameStats;
+      _statistics[gameDocument["id"]] = {"player_stats": generatePlayerStatistics(actions)};
     });
     _statistics_ready = true;
     logger.d(_statistics);

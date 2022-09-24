@@ -11,9 +11,7 @@ class TeamStatistics extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           // Payer List in this Team
-          Expanded(
-              flex: 1,
-              child: PlayerList()),
+          Expanded(flex: 1, child: PlayerList()),
           // Quotes
           Flexible(
               flex: 2,
@@ -22,7 +20,10 @@ class TeamStatistics extends StatelessWidget {
                 children: [
                   Flexible(
                     flex: 1,
-                    child: Card(child: QuotesPosition(ring_form: true,)),
+                    child: Card(
+                        child: QuotesPosition(
+                      ring_form: true,
+                    )),
                   ),
                   Flexible(
                     flex: 2,
@@ -38,7 +39,9 @@ class TeamStatistics extends StatelessWidget {
                                   child: PerformanceCard(),
                                 ),
                                 Expanded(
-                                  child: ActionsCard(),
+                                  child: ActionsCard(
+                                    {},
+                                  ),
                                 )
                               ],
                             )),
