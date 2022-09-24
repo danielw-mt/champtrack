@@ -3,36 +3,39 @@ import 'package:flutter/material.dart';
 import 'package:pie_chart/pie_chart.dart' as pie;
 
 class LineChartWidget extends StatelessWidget {
+  // TODO so far only for timestamp only charts. Add support for timeseries with values
+  List<int> timeStamps;
+  LineChartWidget(this.timeStamps);
+
   final List<Color> gradientColors = [
     const Color(0xff23b6e6),
     const Color(0xff02d39a),
   ];
 
   @override
-  Widget build(BuildContext context) => LineChart(LineChartData(
-        minX: 0,
-        maxX: 60,
-        minY: -20,
-        maxY: 20,
-        lineBarsData: [
-          LineChartBarData(spots: [
-            FlSpot(0, 0),
-            FlSpot(10, 1),
-            FlSpot(20, 2),
-            FlSpot(30, 3),
-            FlSpot(40, 4),
-            FlSpot(50, 5),
-            FlSpot(60, 6),
-          ], isCurved: true),
-        ],
-      ));
+  Widget build(BuildContext context) => timeStamps != []
+      ? LineChart(LineChartData(
+          minX: 0,
+          maxX: 60,
+          minY: -20,
+          maxY: 20,
+          lineBarsData: [
+            LineChartBarData(
+                spots: List.generate(
+                    timeStamps.length,
+                    (index) =>
+                        FlSpot(timeStamps[index].toDouble(), index.toDouble())),
+                isCurved: true)
+          ],
+        ))
+      : Text("No data for selected inputs");
 }
 
 Map<String, double> dataMap = {
-  "Tor": 5,
-  "Assist": 3,
-  "TRF": 2,
-  "Fehlwurf": 2,
+  "Test 1": 5,
+  "Test 2": 3,
+  "Test 3": 2,
+  "Test 4": 2,
 };
 
 Map<String, double> dataMap2 = {"Tor": 5, "Assist": 3};

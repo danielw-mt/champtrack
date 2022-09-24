@@ -22,7 +22,7 @@ class ComparisonStatistics extends StatelessWidget {
             children: [
               Flexible(
                 flex: 1,
-                child: Card(child: LineChartWidget()),
+                child: Card(child: LineChartWidget([])),
               ),
               Flexible(
                 flex: 1,
