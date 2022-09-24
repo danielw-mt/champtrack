@@ -38,9 +38,16 @@ Map<String, double> dataMap = {
 Map<String, double> dataMap2 = {"Tor": 5, "Assist": 3};
 
 class PieChartActionsWidget extends StatelessWidget {
+  Map<String, int> actionCounts = {};
+  PieChartActionsWidget(this.actionCounts);
+
   @override
   Widget build(BuildContext context) {
-    return pie.PieChart(dataMap: dataMap);
+    if (actionCounts.isEmpty) {
+      return Text("No Data for selected player and game");
+    } else {
+      return pie.PieChart(dataMap: actionCounts.cast());
+    }
   }
 }
 

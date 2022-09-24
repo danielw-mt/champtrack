@@ -107,12 +107,8 @@ class _ActionsCardState extends State<ActionsCard> {
             ),
             Flexible(
               flex: 4,
-              child: PieChartActionsWidget(),
+              child: PieChartActionsWidget(widget.actionCounts),
             ),
-            Flexible(
-              flex: 4,
-              child: PieChartActionsWidget(),
-            )
           ],
         ),
       );
