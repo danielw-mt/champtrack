@@ -21,6 +21,7 @@ class Game {
   Game(
       {this.id,
       this.teamId = "",
+      required this.date,
       this.startTime,
       this.stopTime,
       this.scoreHome = 0,
@@ -31,7 +32,7 @@ class Game {
       this.season = "",
       this.lastSync = "",
       this.onFieldPlayers = const []})
-      : stopWatchTimer = StopWatchTimer(mode: StopWatchMode.countUp), date = DateTime.fromMicrosecondsSinceEpoch(0);
+      : stopWatchTimer = StopWatchTimer(mode: StopWatchMode.countUp);
 
   // @return Map<String,dynamic> as representation of Game object that can be saved to firestore
   Map<String, dynamic> toMap() {
