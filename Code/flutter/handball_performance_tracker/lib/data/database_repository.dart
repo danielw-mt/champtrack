@@ -341,6 +341,10 @@ class DatabaseRepository {
         .delete();
   }
 
+  Future<QuerySnapshot> getAllGames(){
+    return _loggedInClubReference.collection("games").get();
+  }
+
   Future<Game> getGame(String gameId) async {
     DocumentSnapshot documentSnapshot =
         await _loggedInClubReference.collection("games").doc(gameId).get();

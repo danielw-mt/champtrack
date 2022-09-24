@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import '../controllers/persistent_controller.dart';
 import '../controllers/temp_controller.dart';
 import '../data/club.dart';
+import '../data/game.dart';
 
 Future<bool> initializeLocalData() async {
   PersistentController persistentController = Get.find<PersistentController>();
@@ -31,6 +32,18 @@ Future<bool> initializeLocalData() async {
     if (playersSnapshot.docs.isEmpty){
       print("no players found");
       return false;
+    }
+    QuerySnapshot gamesSnapshot = await repository.getAllGames();
+    // make sure initialization doesn't break if there are no games
+    if (gamesSnapshot.docs.isEmpty){
+      print("no games found");
+      return false;
+    } else {
+      List<Game> gamesList = [];
+      for (QueryDocumentSnapshot game in gamesSnapshot.docs) {
+        gamesList.add(Game.fromDocumentSnapshot(game));
+      }
+      persistentController.setAllGames(gamesList);
     }
     // go through every team document
     for (DocumentSnapshot teamDocumentSnapshot in teamsSnapshot.docs) {

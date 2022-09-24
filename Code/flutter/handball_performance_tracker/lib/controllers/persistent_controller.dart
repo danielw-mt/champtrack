@@ -16,7 +16,7 @@ class PersistentController extends GetxController {
   /// handles teams initialization when building MainScreen
   var isInitialized = false;
   Rx<StatisticsEngine> _statisticsEngine = StatisticsEngine().obs;
-
+  RxList<Game> _allGames = <Game>[].obs;
   Rx<Club> _loggedInClub = Club().obs;
 
   void setLoggedInClub(Club club) {
@@ -158,6 +158,14 @@ class PersistentController extends GetxController {
     _currentGame.value.stopWatchTimer.setPresetTime(mSec: time);
   }
 
+  setAllGames(List<Game> games) {
+    _allGames.value = games;
+  }
+
+  getAllGames() {
+    return _allGames;
+  }
+
   /// reset the current Game object to a game without id and clean up the actions list
   void resetCurrentGame() {
     _currentGame.value = Game(date: DateTime.now());
@@ -178,5 +186,9 @@ class PersistentController extends GetxController {
     } else {
       return false;
     }
+  }
+
+  Map<String, dynamic> getStatistics(){
+    return _statisticsEngine.value.getStatistics();
   }
 }
