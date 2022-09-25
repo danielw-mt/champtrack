@@ -50,11 +50,15 @@ class _PlayerStatisticsState extends State<PlayerStatistics> {
   Widget build(BuildContext context) {
     Map<String, int> actionCounts = {};
     Map<String, List<int>> actionSeries = {};
+    int startTime = 0;
+    int stopTime = 0;
     try {
        actionCounts= _statistics[_selectedGame.id]
         ["player_stats"][_selectedPlayer.id]["action_counts"];
       actionSeries = _statistics[_selectedGame.id]
         ["player_stats"][_selectedPlayer.id]["action_series"];
+      startTime = _statistics[_selectedGame.id]["start_time"];
+      stopTime = _statistics[_selectedGame.id]["stop_time"];
     } on Exception catch (e) {
       logger.e(e);
     } catch (e) {
@@ -100,7 +104,7 @@ class _PlayerStatisticsState extends State<PlayerStatistics> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Flexible(
-                        child: PerformanceCard(actionSeries: actionSeries,),
+                        child: PerformanceCard(actionSeries: actionSeries, startTime: startTime, stopTime: stopTime),
                       ),
                       Expanded(
                         // TODO change ActionCards to stateless widget

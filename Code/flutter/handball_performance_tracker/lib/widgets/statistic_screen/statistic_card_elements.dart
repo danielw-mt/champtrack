@@ -165,7 +165,14 @@ class _ActionsCardState extends State<ActionsCard> {
 
 class PerformanceCard extends StatefulWidget {
   final Map<String, List<int>> actionSeries;
-  const PerformanceCard({Key? key, required this.actionSeries})
+  final int startTime;
+  final int stopTime;
+
+  const PerformanceCard(
+      {Key? key,
+      required this.actionSeries,
+      required this.startTime,
+      required this.stopTime})
       : super(key: key);
   @override
   _PerformanceCardState createState() => _PerformanceCardState();
@@ -177,7 +184,7 @@ class _PerformanceCardState extends State<PerformanceCard> {
 
   @override
   Widget build(BuildContext context) {
-    print("rebuilding performance card: "+widget.actionSeries.toString());
+    print("rebuilding performance card: " + widget.actionSeries.toString());
     if (widget.actionSeries.length == 0) {
       return Text("No data available");
     }
@@ -189,7 +196,9 @@ class _PerformanceCardState extends State<PerformanceCard> {
           Flexible(
               flex: 4,
               child: LineChartWidget(
+                startTime: widget.startTime,
                 timeStamps: widget.actionSeries[_selectedActionType]!,
+                stopTime: widget.stopTime,
                 values: [],
               )),
         ],
@@ -198,7 +207,8 @@ class _PerformanceCardState extends State<PerformanceCard> {
   }
 
   DropdownButton buildActionTypeDropdown() {
-    if (_selectedActionType == "" || widget.actionSeries.containsKey(_selectedActionType) == false)  {
+    if (_selectedActionType == "" ||
+        widget.actionSeries.containsKey(_selectedActionType) == false) {
       _selectedActionType = widget.actionSeries.keys.elementAt(0);
     }
     return DropdownButton<String>(
@@ -358,6 +368,8 @@ class QuotesPosition extends StatelessWidget {
         )),
         Expanded(
             child: LineChartWidget(
+          startTime: 0,
+          stopTime: 0,
           timeStamps: [],
           values: [],
         ))

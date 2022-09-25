@@ -2,13 +2,20 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:pie_chart/pie_chart.dart' as pie;
 import 'dart:math';
+import 'dart:core';
 
 class LineChartWidget extends StatelessWidget {
-  List<int> timeStamps;
-  List<int> values;
+  final List<int> timeStamps;
+  final List<int> values;
+  final int startTime;
+  final int stopTime;
 
   /// generate a line chart from @param timeStamps and @param values
-  LineChartWidget({required this.timeStamps, required this.values});
+  LineChartWidget(
+      {required this.startTime,
+      required this.timeStamps,
+      required this.values,
+      required this.stopTime});
 
   final List<Color> gradientColors = [
     const Color(0xff23b6e6),
@@ -16,12 +23,20 @@ class LineChartWidget extends StatelessWidget {
   ];
 
   List<double> generateMinMaxValues() {
-    double minX = timeStamps.reduce(min).toDouble();
-    double maxX = timeStamps.reduce(max).toDouble();
+    // by default the chart should go from 0 to 60
+    int end_minutes = 60;
+    // if the stop watch time in minutes is larger than 60 then extend the chart to that value
+    // for example if the game lasted 70 minutes extend the chart to that value
+    int stop_time_in_minutes =
+        DateTime.fromMillisecondsSinceEpoch(stopTime).minute;
+    if (stop_time_in_minutes > 60) {
+      end_minutes = stop_time_in_minutes;
+    }
+    double minX = 0;
+    double maxX = end_minutes.toDouble();
     double minY = 0;
     double maxY = 0;
-    // when there are no y values provided just increase y for every x
-    // => maximum y is the number of x values
+    // when there are no y values provided just increase y by 1 for every x and provide that as the y values
     if (values.isEmpty) {
       maxY = timeStamps.length.toDouble();
     } else {
@@ -34,20 +49,25 @@ class LineChartWidget extends StatelessWidget {
   FlTitlesData buildTitleData() {
     return FlTitlesData(
         show: true,
+        leftTitles: AxisTitles(
+          // if there are no values provided (i.e. ef-score data) then only display Action Count
+          axisNameWidget:
+              values.isEmpty ? Text("Action Count") : Text("Values"),
+          sideTitles:
+              SideTitles(interval: 1, showTitles: true, reservedSize: 40),
+        ),
+        topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+        rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
         bottomTitles: AxisTitles(
+            axisNameWidget: Text("Minutes since start"),
             sideTitles: SideTitles(
-          showTitles: true,
-          getTitlesWidget: (double value, TitleMeta meta) {
-            // get the difference in minutes between the first and the current timestamp
-            
-
-            final DateTime date =
-                DateTime.fromMillisecondsSinceEpoch(value.toInt());
-            final parts = date.toIso8601String().split("T");
-            return Text(parts.first);
-          },
-          //interval: (widget.spots[widget.spots.length - 1].x - widget.spots[0].x),
-        )));
+              showTitles: true,
+              getTitlesWidget: (double value, TitleMeta meta) {
+                return Text(value.toString());
+              },
+              // set marker every 5 minutes
+              interval: 5,
+            )));
   }
 
   @override
@@ -62,10 +82,22 @@ class LineChartWidget extends StatelessWidget {
             titlesData: buildTitleData(),
             lineBarsData: [
               LineChartBarData(
-                  spots: List.generate(
-                      timeStamps.length,
-                      (index) => FlSpot(timeStamps[index].toDouble(),
-                          (index + 1).toDouble())),
+                  spots: List.generate(timeStamps.length,
+                      // each spot is the difference in minutes from the startTime
+                      (index) {
+                    int difference_in_minutes =
+                        DateTime.fromMillisecondsSinceEpoch(timeStamps[index])
+                            .difference(
+                                DateTime.fromMillisecondsSinceEpoch(startTime))
+                            .inMinutes;
+                    if (values.isEmpty) {
+                      return FlSpot(difference_in_minutes.toDouble(),
+                          (index + 1).toDouble());
+                    } else {
+                      return FlSpot(difference_in_minutes.toDouble(),
+                          values[index].toDouble());
+                    }
+                  }),
                   isCurved: true)
             ],
           ))

@@ -21,8 +21,20 @@ class StatisticsEngine {
   generateStatistics(List<Map<String, dynamic>> gameDocuments) {
     logger.d("generate game statistics");
     gameDocuments.forEach((Map<String, dynamic> gameDocument) {
+      DateTime stopWatchTimeAsDateTime = DateTime.fromMillisecondsSinceEpoch(
+          (DateTime.fromMillisecondsSinceEpoch(0).millisecond +
+                  gameDocument["stopWatchTime"])
+              .toInt());
+      // timestamp like 1664014756081
+      int stopTimeAsIsoTimeStamp =
+          stopWatchTimeAsDateTime.millisecondsSinceEpoch;
       List<Map<String, dynamic>> actions = gameDocument["actions"];
-      _statistics[gameDocument["id"]] = {"player_stats": generatePlayerStatistics(actions)};
+      Map<String, dynamic> playerStats = generatePlayerStatistics(actions);
+      _statistics[gameDocument["id"]] = {
+        "start_time": gameDocument["startTime"],
+        "stop_time": stopTimeAsIsoTimeStamp,
+        "player_stats": playerStats
+      };
     });
     _statistics_ready = true;
     logger.d(_statistics);
@@ -30,7 +42,8 @@ class StatisticsEngine {
 
   Map<String, dynamic> generatePlayerStatistics(actions) {
     Map<String, dynamic> player_stats = {};
-    Map<String, int> updatePlayerActionCounts(Map<String, dynamic> action, Map<String, int> action_counts) {
+    Map<String, int> updatePlayerActionCounts(
+        Map<String, dynamic> action, Map<String, int> action_counts) {
       logger.d("update action counts");
       String actionType = action["actionType"];
       if (!action_counts.containsKey(actionType)) {
@@ -41,7 +54,8 @@ class StatisticsEngine {
       return action_counts;
     }
 
-    Map<String, List<int>> updatePlayerActionSeries(Map<String, dynamic> action, Map<String, List<int>> action_series) {
+    Map<String, List<int>> updatePlayerActionSeries(
+        Map<String, dynamic> action, Map<String, List<int>> action_series) {
       logger.d("update action series");
       String actionType = action["actionType"];
       if (!action_series.containsKey(actionType)) {
@@ -51,9 +65,10 @@ class StatisticsEngine {
       }
       return action_series;
     }
-    
-    /// update the action_coordinates map with the throwLocation item of the 
-    updateActionCoordinates(Map<String, dynamic> action, Map<String, dynamic> action_coordinates) {
+
+    /// update the action_coordinates map with the throwLocation item of the
+    updateActionCoordinates(
+        Map<String, dynamic> action, Map<String, dynamic> action_coordinates) {
       // if there is no throw location object inside the action
       if (action["throwLocation"] == null) return action_coordinates;
       String actionType = action["actionType"];
@@ -65,9 +80,9 @@ class StatisticsEngine {
       return action_coordinates;
     }
 
-    updateAllEfScores(){
+    updateAllEfScores() {
       // TODO simulate the live ef-score using the actions stored in the map already
-      player_stats.forEach((playerId, playerStatistic) { 
+      player_stats.forEach((playerId, playerStatistic) {
         LiveEfScore playerEfScore = LiveEfScore();
       });
     }
@@ -89,13 +104,17 @@ class StatisticsEngine {
         }
         Map<String, dynamic> player_statistic = player_stats[playerId];
         Map<String, int> action_counts = player_statistic["action_counts"];
-        Map<String, List<int>> action_series = player_statistic["action_series"];
-        Map<String, dynamic> action_coordinates = player_statistic["action_coordinates"];
-        List<int> all_action_timestamps = player_statistic["all_action_timestamps"];
+        Map<String, List<int>> action_series =
+            player_statistic["action_series"];
+        Map<String, dynamic> action_coordinates =
+            player_statistic["action_coordinates"];
+        List<int> all_action_timestamps =
+            player_statistic["all_action_timestamps"];
         // update all maps
         action_counts = updatePlayerActionCounts(action, action_counts);
         action_series = updatePlayerActionSeries(action, action_series);
-        action_coordinates = updateActionCoordinates(action, action_coordinates);
+        action_coordinates =
+            updateActionCoordinates(action, action_coordinates);
         logger.d("adding a new action timestamp");
         all_action_timestamps.add(action["timestamp"]);
         // TODO calculate updated ef-score

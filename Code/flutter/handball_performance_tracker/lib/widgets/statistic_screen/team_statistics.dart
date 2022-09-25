@@ -36,7 +36,11 @@ class TeamStatistics extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Flexible(
-                                  child: PerformanceCard(actionSeries: {},),
+                                  child: PerformanceCard(
+                                    startTime: 0,
+                                    stopTime: 0,
+                                    actionSeries: {},
+                                  ),
                                 ),
                                 Expanded(
                                   child: ActionsCard(
