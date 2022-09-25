@@ -86,6 +86,7 @@ flutter:
     - assets/statistics1.png
     - assets/statistics2.png
     - assets/statistics3.png
+    - assets/
 
 
   # An image asset can refer to one or more resolution-specific "variants", see
