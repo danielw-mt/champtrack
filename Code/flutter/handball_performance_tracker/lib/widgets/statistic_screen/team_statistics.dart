@@ -21,7 +21,7 @@ class TeamStatistics extends StatelessWidget {
                   Flexible(
                     flex: 1,
                     child: Card(
-                        child: QuotesPosition(
+                        child: QuotaCard(
                       ring_form: true,
                     )),
                   ),

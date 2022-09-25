@@ -237,20 +237,21 @@ class _PerformanceCardState extends State<PerformanceCard> {
   }
 }
 
-class QuotesPosition extends StatelessWidget {
-  const QuotesPosition({Key? key, required this.ring_form}) : super(key: key);
+class QuotaCard extends StatelessWidget {
+  const QuotaCard({Key? key, required this.ring_form}) : super(key: key);
 
   final ring_form;
 
   @override
   Widget build(BuildContext context) {
+    // TODO this is an infinite list. Very dangerous. Can we remove this?
     return Card(child: ListView.builder(
       //padding: EdgeInsets.symmetric(vertical: 5.0),
       itemBuilder: (BuildContext context, int index) {
         if (index == 0) {
           return _buildCarousel(context, index ~/ 2, ring_form);
         } else {
-          return Divider();
+          return Text("What is this?");
         }
       },
     ));
@@ -283,72 +284,70 @@ class QuotesPosition extends StatelessWidget {
 
   Widget _buildCarouselItemQuotes(
       BuildContext context, int carouselIndex, int itemIndex, bool ring_form) {
-    return Card(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Flexible(
-            flex: 1,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Flexible(
-                  flex: 1,
-                  child: Text("Wurfqoute"),
-                ),
-                Flexible(
-                  flex: 2,
-                  child: OwnPieChart(ring_form: true),
-                ),
-                Flexible(
-                  flex: 2,
-                  child: Text("20 Wuerfe"),
-                )
-              ],
-            ),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Flexible(
+          flex: 1,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Flexible(
+                flex: 1,
+                child: Text("Wurfqoute"),
+              ),
+              Flexible(
+                flex: 2,
+                child: OwnPieChart(ring_form: true),
+              ),
+              Flexible(
+                flex: 2,
+                child: Text("20 Wuerfe"),
+              )
+            ],
           ),
-          Flexible(
-            flex: 1,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Flexible(
-                  flex: 1,
-                  child: Text("Quote Postition"),
-                ),
-                Flexible(
-                  flex: 2,
-                  child: OwnPieChart(ring_form: true),
-                ),
-                Flexible(
-                  flex: 2,
-                  child: Text("15 Wuerfe"),
-                )
-              ],
-            ),
+        ),
+        Flexible(
+          flex: 1,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Flexible(
+                flex: 1,
+                child: Text("Quote Postition"),
+              ),
+              Flexible(
+                flex: 2,
+                child: OwnPieChart(ring_form: true),
+              ),
+              Flexible(
+                flex: 2,
+                child: Text("15 Wuerfe"),
+              )
+            ],
           ),
-          Flexible(
-            flex: 1,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Flexible(
-                  flex: 1,
-                  child: Text("7m Quote"),
-                ),
-                Flexible(
-                  flex: 2,
-                  child: OwnPieChart(ring_form: true),
-                ),
-                Flexible(
-                  flex: 2,
-                  child: Text("7 Wuerfe"),
-                )
-              ],
-            ),
+        ),
+        Flexible(
+          flex: 1,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Flexible(
+                flex: 1,
+                child: Text("7m Quote"),
+              ),
+              Flexible(
+                flex: 2,
+                child: OwnPieChart(ring_form: true),
+              ),
+              Flexible(
+                flex: 2,
+                child: Text("7 Wuerfe"),
+              )
+            ],
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
