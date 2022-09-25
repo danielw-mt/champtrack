@@ -319,7 +319,7 @@ class _QuotaCardState extends State<QuotaCard> {
                   children: [
                     const Flexible(
                       flex: 1,
-                      child: Text("7m Quote"),
+                      child: Text("7m Quota"),
                     ),
                     Flexible(
                       flex: 2,
@@ -333,8 +333,8 @@ class _QuotaCardState extends State<QuotaCard> {
                     ),
                     Flexible(
                       flex: 2,
-                      child:
-                          Text(widget.quotas[0][1].toString() + " 7m throws"),
+                      child: Text(
+                          widget.quotas[0][1].toString() + "total 7m throws"),
                     )
                   ],
                 )
@@ -348,7 +348,7 @@ class _QuotaCardState extends State<QuotaCard> {
                   children: [
                     const Flexible(
                       flex: 1,
-                      child: Text("Quote Postition"),
+                      child: Text("Postition Quota"),
                     ),
                     Flexible(
                       flex: 2,
@@ -362,12 +362,12 @@ class _QuotaCardState extends State<QuotaCard> {
                     ),
                     Flexible(
                       flex: 2,
-                      child: Text(
-                          widget.quotas[1][1].toString() + " position throws"),
+                      child: Text(widget.quotas[1][1].toString() +
+                          "total position throws"),
                     )
                   ],
                 )
-              : Text("No position throws recorded"),
+              : Text("No throws from position recorded"),
         ),
         Flexible(
           flex: 1,
@@ -388,8 +388,8 @@ class _QuotaCardState extends State<QuotaCard> {
                     ),
                     Flexible(
                       flex: 2,
-                      child: Text(
-                          widget.quotas[2][1].toString() + " total throws"),
+                      child: Text(widget.quotas[2][1].toString() +
+                          " total throws onto goal"),
                     )
                   ],
                 )
