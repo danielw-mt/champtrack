@@ -276,7 +276,7 @@ class _QuotaCardState extends State<QuotaCard> {
                 return _buildCarouselItemQuotes(
                     context, carouselIndex, itemIndex, ring_form);
               } else {
-                return _buildCarouselItem(context, carouselIndex, itemIndex);
+                return Container(); // TODO this is not ready yet //_buildCarouselItem(context, carouselIndex, itemIndex);
               }
             },
           ),
