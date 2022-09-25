@@ -167,27 +167,38 @@ class PerformanceCard extends StatefulWidget {
   final Map<String, List<int>> actionSeries;
   final int startTime;
   final int stopTime;
+  final List<double> efScoreSeries;
+  final List<int> allActionTimeStamps;
 
   const PerformanceCard(
       {Key? key,
       required this.actionSeries,
       required this.startTime,
-      required this.stopTime})
+      required this.stopTime,
+      required this.efScoreSeries,
+      required this.allActionTimeStamps})
       : super(key: key);
   @override
   _PerformanceCardState createState() => _PerformanceCardState();
 }
 
 class _PerformanceCardState extends State<PerformanceCard> {
-  int currentGraph = 0;
-  String _selectedActionType = "";
+  int _currentGraph = 0;
+  String _selectedDropdownElement = "";
+  List<String> _dropDownElements = [];
 
   @override
   Widget build(BuildContext context) {
-    print("rebuilding performance card: " + widget.actionSeries.toString());
     if (widget.actionSeries.length == 0) {
       return Text("No data available");
     }
+    // add the ef-score option to the dropdown elements
+    _dropDownElements = [];
+    _dropDownElements.add("Ef-Score");
+    widget.actionSeries.keys.toList().forEach((element) {
+      _dropDownElements.add(element);
+    });
+
     return Card(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -195,42 +206,52 @@ class _PerformanceCardState extends State<PerformanceCard> {
           Flexible(flex: 1, child: buildActionTypeDropdown()),
           Flexible(
               flex: 4,
-              child: LineChartWidget(
-                startTime: widget.startTime,
-                timeStamps: widget.actionSeries[_selectedActionType]!,
-                stopTime: widget.stopTime,
-                values: [],
-              )),
+              // when we selected ef-score in the dropdown use the timestamps from all the actions and not the series timestamps
+              // also use the values from the ef-score series that lign up with the timestamps for all actions
+              child: _selectedDropdownElement == "Ef-Score"
+                  ? LineChartWidget(
+                      startTime: widget.startTime,
+                      timeStamps: widget.allActionTimeStamps,
+                      values: widget.efScoreSeries,
+                      stopTime: widget.stopTime,
+                    )
+                  : LineChartWidget(
+                      startTime: widget.startTime,
+                      timeStamps:
+                          widget.actionSeries[_selectedDropdownElement]!,
+                      stopTime: widget.stopTime,
+                      values: [],
+                    )),
         ],
       ),
     );
   }
 
   DropdownButton buildActionTypeDropdown() {
-    if (_selectedActionType == "" ||
-        widget.actionSeries.containsKey(_selectedActionType) == false) {
-      _selectedActionType = widget.actionSeries.keys.elementAt(0);
+    if (_selectedDropdownElement == "") {
+      _selectedDropdownElement = _dropDownElements[0];
     }
     return DropdownButton<String>(
       isExpanded: true,
       // Initial Value
-      value: _selectedActionType,
+      value: _selectedDropdownElement,
 
       // Down Arrow Icon
       icon: const Icon(Icons.keyboard_arrow_down),
 
       // Array list of items
-      items: widget.actionSeries.keys.map((String actionType) {
+
+      items: _dropDownElements.map((String dropdownElement) {
         return DropdownMenuItem(
-          value: actionType,
-          child: Text(actionType),
+          value: dropdownElement,
+          child: Text(dropdownElement),
         );
       }).toList(),
       // After selecting the desired option,it will
       // change button value to selected value
-      onChanged: (String? newActionType) {
+      onChanged: (String? newDropdownElement) {
         setState(() {
-          _selectedActionType = newActionType!;
+          _selectedDropdownElement = newDropdownElement!;
         });
       },
     );
@@ -312,7 +333,8 @@ class _QuotaCardState extends State<QuotaCard> {
                     ),
                     Flexible(
                       flex: 2,
-                      child: Text(widget.quotas[0][1].toString() + " 7m throws"),
+                      child:
+                          Text(widget.quotas[0][1].toString() + " 7m throws"),
                     )
                   ],
                 )
@@ -366,8 +388,8 @@ class _QuotaCardState extends State<QuotaCard> {
                     ),
                     Flexible(
                       flex: 2,
-                      child:
-                          Text(widget.quotas[2][1].toString() + " total throws"),
+                      child: Text(
+                          widget.quotas[2][1].toString() + " total throws"),
                     )
                   ],
                 )

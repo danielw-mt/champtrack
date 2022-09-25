@@ -49,8 +49,11 @@ class StatisticsEngine {
   }
 
   /// create the map that contains all statistics for an individual player from all the actions in the game
-  Map<String, dynamic> generatePlayerStatistics(actions, players) {
+  Map<String, dynamic> generatePlayerStatistics(actions, List<Player> players) {
+    // map with statistics for all player by id of the player
     Map<String, dynamic> player_stats = {};
+
+    /// update the action_counts entry for the current action
     Map<String, int> updatePlayerActionCounts(
         Map<String, dynamic> action, Map<String, int> action_counts) {
       String actionType = action["actionType"];
@@ -62,6 +65,7 @@ class StatisticsEngine {
       return action_counts;
     }
 
+    /// update the action_series entry for the current action
     Map<String, List<int>> updatePlayerActionSeries(
         Map<String, dynamic> action, Map<String, List<int>> action_series) {
       String actionType = action["actionType"];
@@ -95,7 +99,8 @@ class StatisticsEngine {
     /// quotas[1][1]: shots from position
     /// quotas[2][0]: total goals
     /// quotas[2][1]: total shots
-    List<List<double>> updateQuotas(Map<String, dynamic> action, List<List<double>> quotas) {
+    List<List<double>> updateQuotas(
+        Map<String, dynamic> action, List<List<double>> quotas) {
       switch (action["actionType"]) {
         // TODO use constants here instead of strings
         case "missed7m":
@@ -160,9 +165,10 @@ class StatisticsEngine {
       });
     }
 
+    /// go over all actions and update the player statistics map using the sub-methods above within generatePlayerStatistics()
     actions.forEach((Map<String, dynamic> action) {
       String playerId = action["playerId"];
-      // only if a playerId is set the action can be associated
+      // only if a playerId is set the action can be associated. Sometimes the action is not associated with a player
       if (playerId != "") {
         // if there is no player with that id in the player_stats map, create a map for that player
         if (!player_stats.containsKey(playerId)) {
@@ -174,8 +180,9 @@ class StatisticsEngine {
             "action_counts": Map<String, int>(),
             "action_series": Map<String, List<int>>(),
             "action_coordinates": Map<String, dynamic>(),
+            "all_actions": <String>[],
             "all_action_timestamps": <int>[],
-            "ef_score_series": <int>[]
+            "ef_score_series": <double>[]
           };
         }
         // get the reference to an individual player's statistics
@@ -187,8 +194,8 @@ class StatisticsEngine {
             updatePlayerActionSeries(action, player_statistic["action_series"]);
         player_statistic["action_coordinates"] = updateActionCoordinates(
             action, player_statistic["action_coordinates"]);
+        player_statistic["all_actions"].add(action["actionType"]);
         player_statistic["all_action_timestamps"].add(action["timestamp"]);
-        // TODO calculate updated ef-score
         List quotas = updateQuotas(action, [
           player_statistic["seven_meter_quota"],
           player_statistic["position_quota"],
@@ -201,6 +208,29 @@ class StatisticsEngine {
         player_stats[playerId] = player_statistic;
       }
     });
+    // after all the actions where processed, create the ef-score series for each individual player
+    player_stats.forEach((String playerId, playerStatistic) {
+      logger.d(playerStatistic);
+      // TODO maybe incorporate timestamps later when the ef-score has a time component
+      LiveEfScore playerEfScore = LiveEfScore();
+      List<String> allActions = playerStatistic["all_actions"];
+      allActions.forEach((String actionType) {
+        // for some of our action tags the ef-score does not know what to do. So just keep the ef-score the same for those
+        try {
+          playerEfScore.addAction(GameAction(actionType: actionType),
+              players.where((player) => player.id == playerId).first.positions);
+        } catch (e) {
+          logger.d("ef-score does not know what to do with action $actionType" +
+              "\n" +
+              e.toString());
+        }
+        playerStatistic["ef_score_series"].add(playerEfScore.score);
+        logger.d("got here");
+      });
+      logger.d("ef-score for player $playerId: ${playerEfScore.score}}");
+      player_stats[playerId] = playerStatistic;
+    });
+
     return player_stats;
   }
 

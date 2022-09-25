@@ -6,7 +6,7 @@ import 'dart:core';
 
 class LineChartWidget extends StatelessWidget {
   final List<int> timeStamps;
-  final List<int> values;
+  final List<double> values;
   final int startTime;
   final int stopTime;
 

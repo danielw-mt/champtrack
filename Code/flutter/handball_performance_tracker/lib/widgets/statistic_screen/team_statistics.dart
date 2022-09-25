@@ -42,6 +42,8 @@ class TeamStatistics extends StatelessWidget {
                               children: [
                                 Flexible(
                                   child: PerformanceCard(
+                                    efScoreSeries: [],
+                                    allActionTimeStamps: [],
                                     startTime: 0,
                                     stopTime: 0,
                                     actionSeries: {},

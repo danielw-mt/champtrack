@@ -51,32 +51,56 @@ class _PlayerStatisticsState extends State<PlayerStatistics> {
     Map<String, List<int>> actionSeries = {};
     int startTime = 0;
     int stopTime = 0;
-    List<List<double>> quotas = [[0,0], [0,0], [0,0]]; 
+    List<List<double>> quotas = [
+      [0, 0],
+      [0, 0],
+      [0, 0]
+    ];
+    List<double> efScoreSeries = [];
+    List<int> timeStamps = [];
     try {
+      // try to get action counts for the player
       actionCounts = _statistics[_selectedGame.id]["player_stats"]
           [_selectedPlayer.id]["action_counts"];
+      // try to get action_series for player
       actionSeries = _statistics[_selectedGame.id]["player_stats"]
           [_selectedPlayer.id]["action_series"];
+
+      // try to get ef-score series for player
+      efScoreSeries = _statistics[_selectedGame.id]["player_stats"]
+          [_selectedPlayer.id]["ef_score_series"];
+      // try to get all action timestamps for player
+      timeStamps = _statistics[_selectedGame.id]["player_stats"]
+          [_selectedPlayer.id]["all_action_timestamps"];
+      // try to get start time for game
       startTime = _statistics[_selectedGame.id]["start_time"];
       stopTime = _statistics[_selectedGame.id]["stop_time"];
+
+      // try to get quotas for player
       quotas[0][0] = double.parse(_statistics[_selectedGame.id]["player_stats"]
-          [_selectedPlayer.id]["seven_meter_quota"][0].toString());
+              [_selectedPlayer.id]["seven_meter_quota"][0]
+          .toString());
       quotas[0][1] = double.parse(_statistics[_selectedGame.id]["player_stats"]
-          [_selectedPlayer.id]["seven_meter_quota"][1].toString());
+              [_selectedPlayer.id]["seven_meter_quota"][1]
+          .toString());
       quotas[1][0] = double.parse(_statistics[_selectedGame.id]["player_stats"]
-          [_selectedPlayer.id]["position_quota"][0].toString());
+              [_selectedPlayer.id]["position_quota"][0]
+          .toString());
       quotas[1][1] = double.parse(_statistics[_selectedGame.id]["player_stats"]
-          [_selectedPlayer.id]["position_quota"][1].toString());    
+              [_selectedPlayer.id]["position_quota"][1]
+          .toString());
       quotas[2][0] = double.parse(_statistics[_selectedGame.id]["player_stats"]
-          [_selectedPlayer.id]["throw_quota"][0].toString());
+              [_selectedPlayer.id]["throw_quota"][0]
+          .toString());
       quotas[2][1] = double.parse(_statistics[_selectedGame.id]["player_stats"]
-          [_selectedPlayer.id]["throw_quota"][1].toString());        
+              [_selectedPlayer.id]["throw_quota"][1]
+          .toString());
     } on Exception catch (e) {
       logger.e(e);
     } catch (e) {
       logger.e(e);
     }
-    logger.d(quotas);
+    logger.d(efScoreSeries);
     return Scaffold(
         body: Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -119,6 +143,8 @@ class _PlayerStatisticsState extends State<PlayerStatistics> {
                       Flexible(
                         child: PerformanceCard(
                             actionSeries: actionSeries,
+                            efScoreSeries: efScoreSeries,
+                            allActionTimeStamps: timeStamps,
                             startTime: startTime,
                             stopTime: stopTime),
                       ),
