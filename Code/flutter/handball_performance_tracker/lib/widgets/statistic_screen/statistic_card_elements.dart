@@ -81,7 +81,6 @@ class _ActionsCardState extends State<ActionsCard> {
 
   @override
   Widget build(BuildContext context) {
-    print("Rebuilding actions card: "+widget.actionCounts.toString());
     if (currentTab == 0) {
       return Card(
         child: Column(
@@ -165,69 +164,63 @@ class _ActionsCardState extends State<ActionsCard> {
 }
 
 class PerformanceCard extends StatefulWidget {
-  
-  const PerformanceCard({Key? key}) : super(key: key);
+  final Map<String, List<int>> actionSeries;
+  const PerformanceCard({Key? key, required this.actionSeries})
+      : super(key: key);
   @override
   _PerformanceCardState createState() => _PerformanceCardState();
 }
 
 class _PerformanceCardState extends State<PerformanceCard> {
   int currentGraph = 0;
-  List graphs = [LineChartWidget(), BarChartSample2State()];
+  String _selectedActionType = "";
 
   @override
   Widget build(BuildContext context) {
+    print("rebuilding performance card: "+widget.actionSeries.toString());
+    if (widget.actionSeries.length == 0) {
+      return Text("No data available");
+    }
     return Card(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Flexible(flex: 1, child: PerformanceDropDownButton()),
-          Flexible(flex: 4, child: graphs[currentGraph]),
+          Flexible(flex: 1, child: buildActionTypeDropdown()),
+          Flexible(
+              flex: 4,
+              child: LineChartWidget(
+                timeStamps: widget.actionSeries[_selectedActionType]!,
+                values: [],
+              )),
         ],
       ),
     );
   }
-}
 
-class PerformanceDropDownButton extends StatefulWidget {
-  const PerformanceDropDownButton({Key? key}) : super(key: key);
-  @override
-  _PerformanceDropDownButtonState createState() =>
-      _PerformanceDropDownButtonState();
-}
-
-class _PerformanceDropDownButtonState extends State<PerformanceDropDownButton> {
-  // Initial Selected Value
-  String dropdownvalue = 'Ef-Score';
-
-  // List of items in our dropdown menu
-  var items = [
-    'Ef-Score',
-    'Tore-Spiel',
-    'Tore letzes Spiel',
-  ];
-  @override
-  Widget build(BuildContext context) {
-    return DropdownButton(
+  DropdownButton buildActionTypeDropdown() {
+    if (_selectedActionType == "" || widget.actionSeries.containsKey(_selectedActionType) == false)  {
+      _selectedActionType = widget.actionSeries.keys.elementAt(0);
+    }
+    return DropdownButton<String>(
       isExpanded: true,
       // Initial Value
-      value: dropdownvalue,
+      value: _selectedActionType,
 
       // Down Arrow Icon
       icon: const Icon(Icons.keyboard_arrow_down),
 
       // Array list of items
-      items: items.map((String items) {
+      items: widget.actionSeries.keys.map((String actionType) {
         return DropdownMenuItem(
-          value: items,
-          child: Text(items),
+          value: actionType,
+          child: Text(actionType),
         );
       }).toList(),
       // After selecting the desired option,it will
       // change button value to selected value
-      onChanged: (String? newValue) {
+      onChanged: (String? newActionType) {
         setState(() {
-          dropdownvalue = newValue!;
+          _selectedActionType = newActionType!;
         });
       },
     );
@@ -363,7 +356,11 @@ class QuotesPosition extends StatelessWidget {
             Text("7m"),
           ],
         )),
-        Expanded(child: LineChartWidget())
+        Expanded(
+            child: LineChartWidget(
+          timeStamps: [],
+          values: [],
+        ))
       ],
     );
   }

@@ -49,9 +49,12 @@ class _PlayerStatisticsState extends State<PlayerStatistics> {
   @override
   Widget build(BuildContext context) {
     Map<String, int> actionCounts = {};
+    Map<String, List<int>> actionSeries = {};
     try {
        actionCounts= _statistics[_selectedGame.id]
         ["player_stats"][_selectedPlayer.id]["action_counts"];
+      actionSeries = _statistics[_selectedGame.id]
+        ["player_stats"][_selectedPlayer.id]["action_series"];
     } on Exception catch (e) {
       logger.e(e);
     } catch (e) {
@@ -97,7 +100,7 @@ class _PlayerStatisticsState extends State<PlayerStatistics> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Flexible(
-                        child: PerformanceCard(),
+                        child: PerformanceCard(actionSeries: actionSeries,),
                       ),
                       Expanded(
                         // TODO change ActionCards to stateless widget

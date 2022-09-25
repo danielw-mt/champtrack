@@ -1,34 +1,76 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:pie_chart/pie_chart.dart' as pie;
+import 'dart:math';
 
 class LineChartWidget extends StatelessWidget {
-  // TODO so far only for timestamp only charts. Add support for timeseries with values
   List<int> timeStamps;
-  LineChartWidget(this.timeStamps);
+  List<int> values;
+
+  /// generate a line chart from @param timeStamps and @param values
+  LineChartWidget({required this.timeStamps, required this.values});
 
   final List<Color> gradientColors = [
     const Color(0xff23b6e6),
     const Color(0xff02d39a),
   ];
 
+  List<double> generateMinMaxValues() {
+    double minX = timeStamps.reduce(min).toDouble();
+    double maxX = timeStamps.reduce(max).toDouble();
+    double minY = 0;
+    double maxY = 0;
+    // when there are no y values provided just increase y for every x
+    // => maximum y is the number of x values
+    if (values.isEmpty) {
+      maxY = timeStamps.length.toDouble();
+    } else {
+      minY = values.reduce(min).toDouble();
+      maxY = values.reduce(max).toDouble();
+    }
+    return [minX, maxX, minY, maxY];
+  }
+
+  FlTitlesData buildTitleData() {
+    return FlTitlesData(
+        show: true,
+        bottomTitles: AxisTitles(
+            sideTitles: SideTitles(
+          showTitles: true,
+          getTitlesWidget: (double value, TitleMeta meta) {
+            // get the difference in minutes between the first and the current timestamp
+            
+
+            final DateTime date =
+                DateTime.fromMillisecondsSinceEpoch(value.toInt());
+            final parts = date.toIso8601String().split("T");
+            return Text(parts.first);
+          },
+          //interval: (widget.spots[widget.spots.length - 1].x - widget.spots[0].x),
+        )));
+  }
+
   @override
-  Widget build(BuildContext context) => timeStamps != []
-      ? LineChart(LineChartData(
-          minX: 0,
-          maxX: 60,
-          minY: -20,
-          maxY: 20,
-          lineBarsData: [
-            LineChartBarData(
-                spots: List.generate(
-                    timeStamps.length,
-                    (index) =>
-                        FlSpot(timeStamps[index].toDouble(), index.toDouble())),
-                isCurved: true)
-          ],
-        ))
-      : Text("No data for selected inputs");
+  Widget build(BuildContext context) {
+    List<double> minMaxValues = generateMinMaxValues();
+    return timeStamps != []
+        ? LineChart(LineChartData(
+            minX: minMaxValues[0],
+            maxX: minMaxValues[1],
+            minY: minMaxValues[2],
+            maxY: minMaxValues[3],
+            titlesData: buildTitleData(),
+            lineBarsData: [
+              LineChartBarData(
+                  spots: List.generate(
+                      timeStamps.length,
+                      (index) => FlSpot(timeStamps[index].toDouble(),
+                          (index + 1).toDouble())),
+                  isCurved: true)
+            ],
+          ))
+        : Text("No data for selected inputs");
+  }
 }
 
 Map<String, double> dataMap = {
