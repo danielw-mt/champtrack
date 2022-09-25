@@ -67,6 +67,15 @@ class PersistentController extends GetxController {
     });
   }
 
+  Future<List<Player>> getAllPlayers() async {
+    QuerySnapshot allPlayersSnapshot = await repository.getAllPlayers();
+    List<Player> allPlayers = [];
+    allPlayersSnapshot.docs.forEach((playerSnapshot) {
+      allPlayers.add(Player.fromDocumentSnapshot(playerSnapshot));
+    });
+    return allPlayers;
+  }
+
   /// get a team object from cachedTeamsList from reference string
   /// i.e teams/ypunI6UsJmTr2LxKh1aw
   Team getSpecificTeam(String teamReference) {
@@ -98,7 +107,7 @@ class PersistentController extends GetxController {
 
   generateStatistics() async {
     List<Map<String, dynamic>> gamesData = await repository.getGamesData();
-    _statisticsEngine.value.generateStatistics(gamesData);
+    _statisticsEngine.value.generateStatistics(gamesData, await getAllPlayers());
   }
 
   /// add action to actions list and firestore

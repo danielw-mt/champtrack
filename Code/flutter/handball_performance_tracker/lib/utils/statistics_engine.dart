@@ -2,6 +2,7 @@ import '../data/game_action.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:logger/logger.dart';
 import '../data/ef_score.dart';
+import '../data/player.dart';
 
 class StatisticsEngine {
   var logger = Logger(
@@ -18,7 +19,13 @@ class StatisticsEngine {
   Map<String, dynamic> _statistics = {};
   bool _statistics_ready = false;
 
-  generateStatistics(List<Map<String, dynamic>> gameDocuments) {
+  /// Generate entire statistics map from
+  ///
+  /// @param gameDocuments: a map for the club for all games that are stored in the games collection
+  ///
+  /// @param players: a list of all players that correspond to the logged in club
+  generateStatistics(
+      List<Map<String, dynamic>> gameDocuments, List<Player> players) {
     logger.d("generate game statistics");
     gameDocuments.forEach((Map<String, dynamic> gameDocument) {
       DateTime stopWatchTimeAsDateTime = DateTime.fromMillisecondsSinceEpoch(
@@ -29,22 +36,23 @@ class StatisticsEngine {
       int stopTimeAsIsoTimeStamp =
           stopWatchTimeAsDateTime.millisecondsSinceEpoch;
       List<Map<String, dynamic>> actions = gameDocument["actions"];
-      Map<String, dynamic> playerStats = generatePlayerStatistics(actions);
+      Map<String, dynamic> playerStats =
+          generatePlayerStatistics(actions, players);
       _statistics[gameDocument["id"]] = {
         "start_time": gameDocument["startTime"],
         "stop_time": stopTimeAsIsoTimeStamp,
         "player_stats": playerStats
       };
     });
-    _statistics_ready = true;
     logger.d(_statistics);
+    _statistics_ready = true;
   }
 
-  Map<String, dynamic> generatePlayerStatistics(actions) {
+  /// create the map that contains all statistics for an individual player from all the actions in the game
+  Map<String, dynamic> generatePlayerStatistics(actions, players) {
     Map<String, dynamic> player_stats = {};
     Map<String, int> updatePlayerActionCounts(
         Map<String, dynamic> action, Map<String, int> action_counts) {
-      logger.d("update action counts");
       String actionType = action["actionType"];
       if (!action_counts.containsKey(actionType)) {
         action_counts[actionType] = 1;
@@ -56,7 +64,6 @@ class StatisticsEngine {
 
     Map<String, List<int>> updatePlayerActionSeries(
         Map<String, dynamic> action, Map<String, List<int>> action_series) {
-      logger.d("update action series");
       String actionType = action["actionType"];
       if (!action_series.containsKey(actionType)) {
         action_series[actionType] = [action["timestamp"]];
@@ -80,6 +87,72 @@ class StatisticsEngine {
       return action_coordinates;
     }
 
+    /// @param quotes is [(List<double> <<seven_meter_quota>>, List<double> <<position_quota>>, List<double> <<throw_quota>>]
+    /// the quotas are stored as a list of the two components for each quota ratio i.e. quotas[0][1, 2] for 1/2 7m quota
+    /// quotas[0][0]: 7m goals
+    /// quotas[0][1]: 7m shots
+    /// quotas[1][0]: goals from position
+    /// quotas[1][1]: shots from position
+    /// quotas[2][0]: total goals
+    /// quotas[2][1]: total shots
+    List<List<double>> updateQuotas(Map<String, dynamic> action, List<List<double>> quotas) {
+      switch (action["actionType"]) {
+        // TODO use constants here instead of strings
+        case "missed7m":
+          {
+            // incrase 7m shots
+            quotas[0][1] = quotas[0][1] + 1;
+            return quotas;
+          }
+        case "goal7m":
+          {
+            // incrase 7m shots
+            quotas[0][1] = quotas[0][1] + 1;
+            // increase 7m goals
+            quotas[0][0] = quotas[0][0] + 1;
+            return quotas;
+          }
+        case "goal":
+          {
+            // increase total shots
+            quotas[2][1] = quotas[2][1] + 1;
+            // increase total goals
+            quotas[2][0] = quotas[2][0] + 1;
+            return quotas;
+          }
+        case "goalPos":
+          {
+            // increase total shots
+            quotas[2][1] = quotas[2][1] + 1;
+            // increase total goals
+            quotas[2][0] = quotas[2][0] + 1;
+            // increase position shots
+            quotas[1][1] = quotas[1][1] + 1;
+            return quotas;
+          }
+        case "err":
+          {
+            // increase total shots
+            quotas[2][1] = quotas[2][1] + 1;
+            return quotas;
+          }
+        case "err_pos":
+          {
+            // increase total shots
+            quotas[2][1] = quotas[2][1] + 1;
+            // increase position shots
+            quotas[1][1] = quotas[1][1] + 1;
+            return quotas;
+          }
+        // TODO check if there are any other statuses missing that could increase total shots
+        default:
+          {
+            // don't do anything
+            return quotas;
+          }
+      }
+    }
+
     updateAllEfScores() {
       // TODO simulate the live ef-score using the actions stored in the map already
       player_stats.forEach((playerId, playerStatistic) {
@@ -95,6 +168,9 @@ class StatisticsEngine {
         if (!player_stats.containsKey(playerId)) {
           logger.d("creating player $playerId");
           player_stats[playerId] = {
+            "seven_meter_quota": <double>[0, 0],
+            "position_quota": <double>[0, 0],
+            "throw_quota": <double>[0, 0],
             "action_counts": Map<String, int>(),
             "action_series": Map<String, List<int>>(),
             "action_coordinates": Map<String, dynamic>(),
@@ -102,29 +178,25 @@ class StatisticsEngine {
             "ef_score_series": <int>[]
           };
         }
+        // get the reference to an individual player's statistics
         Map<String, dynamic> player_statistic = player_stats[playerId];
-        Map<String, int> action_counts = player_statistic["action_counts"];
-        Map<String, List<int>> action_series =
-            player_statistic["action_series"];
-        Map<String, dynamic> action_coordinates =
-            player_statistic["action_coordinates"];
-        List<int> all_action_timestamps =
-            player_statistic["all_action_timestamps"];
-        // update all maps
-        action_counts = updatePlayerActionCounts(action, action_counts);
-        action_series = updatePlayerActionSeries(action, action_series);
-        action_coordinates =
-            updateActionCoordinates(action, action_coordinates);
-        logger.d("adding a new action timestamp");
-        all_action_timestamps.add(action["timestamp"]);
+        // update all fields for an individual player's statistics
+        player_statistic["action_counts"] =
+            updatePlayerActionCounts(action, player_statistic["action_counts"]);
+        player_statistic["action_series"] =
+            updatePlayerActionSeries(action, player_statistic["action_series"]);
+        player_statistic["action_coordinates"] = updateActionCoordinates(
+            action, player_statistic["action_coordinates"]);
+        player_statistic["all_action_timestamps"].add(action["timestamp"]);
         // TODO calculate updated ef-score
-
-        // pass the maps to the player_statistic map
-        player_statistic["action_counts"] = action_counts;
-        player_statistic["action_series"] = action_series;
-        player_statistic["action_coordinates"] = action_coordinates;
-        player_statistic["all_action_timestamps"] = all_action_timestamps;
-
+        List quotas = updateQuotas(action, [
+          player_statistic["seven_meter_quota"],
+          player_statistic["position_quota"],
+          player_statistic["throw_quota"]
+        ]);
+        player_statistic["seven_meter_quota"] = quotas[0];
+        player_statistic["position_quota"] = quotas[1];
+        player_statistic["throw_quota"] = quotas[2];
         // update the player_stats map with the new action that was added
         player_stats[playerId] = player_statistic;
       }

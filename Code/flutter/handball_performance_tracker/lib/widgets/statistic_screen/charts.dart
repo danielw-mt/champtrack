@@ -105,17 +105,8 @@ class LineChartWidget extends StatelessWidget {
   }
 }
 
-Map<String, double> dataMap = {
-  "Test 1": 5,
-  "Test 2": 3,
-  "Test 3": 2,
-  "Test 4": 2,
-};
-
-Map<String, double> dataMap2 = {"Tor": 5, "Assist": 3};
-
 class PieChartActionsWidget extends StatelessWidget {
-  Map<String, int> actionCounts = {};
+  final Map<String, int> actionCounts;
   PieChartActionsWidget(this.actionCounts);
 
   @override
@@ -128,24 +119,27 @@ class PieChartActionsWidget extends StatelessWidget {
   }
 }
 
-class PieChartQuotesWidget extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return pie.PieChart(
-        chartType: pie.ChartType.ring,
-        legendOptions: pie.LegendOptions(
-          showLegendsInRow: false,
-          legendPosition: pie.LegendPosition.right,
-          showLegends: false,
-        ),
-        dataMap: dataMap);
-  }
-}
+// TODO Not used in code right now => clarify with Vincent
 
-class OwnPieChart extends StatelessWidget {
-  OwnPieChart({required this.ring_form});
+// class PieChartQuotesWidget extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return pie.PieChart(
+//         chartType: pie.ChartType.ring,
+//         legendOptions: pie.LegendOptions(
+//           showLegendsInRow: false,
+//           legendPosition: pie.LegendPosition.right,
+//           showLegends: false,
+//         ),
+//         dataMap: dataMap);
+//   }
+// }
 
-  final bool ring_form;
+class QuotaPieChart extends StatelessWidget {
+  final Map<String, double> dataMap;
+  QuotaPieChart({required this.ringForm, required this.dataMap});
+
+  final bool ringForm;
 
   final colorListQuotes = <Color>[
     Colors.greenAccent,
@@ -154,20 +148,20 @@ class OwnPieChart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return pie.PieChart(
-      chartType: ring_form ? pie.ChartType.ring : pie.ChartType.disc,
+      chartType: ringForm ? pie.ChartType.ring : pie.ChartType.disc,
       legendOptions: pie.LegendOptions(
-        showLegendsInRow: ring_form ? false : true,
+        showLegendsInRow: ringForm ? false : true,
         legendPosition: pie.LegendPosition.right,
-        showLegends: ring_form ? false : true,
+        showLegends: ringForm ? false : true,
       ),
       chartValuesOptions: pie.ChartValuesOptions(
         showChartValueBackground: true,
         showChartValues: true,
-        showChartValuesInPercentage: ring_form ? true : false,
-        showChartValuesOutside: ring_form ? true : false,
+        showChartValuesInPercentage: ringForm ? true : false,
+        showChartValuesOutside: ringForm ? true : false,
         decimalPlaces: 1,
       ),
-      dataMap: ring_form ? dataMap2 : dataMap,
+      dataMap: ringForm ? dataMap : dataMap,
     );
   }
 }

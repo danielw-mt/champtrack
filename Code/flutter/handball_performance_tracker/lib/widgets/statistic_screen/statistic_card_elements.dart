@@ -238,9 +238,10 @@ class _PerformanceCardState extends State<PerformanceCard> {
 }
 
 class QuotaCard extends StatefulWidget {
-  const QuotaCard({Key? key, required this.ring_form}) : super(key: key);
-
+  final List<List<double>> quotas;
   final ring_form;
+  const QuotaCard({Key? key, required this.ring_form, required this.quotas})
+      : super(key: key);
 
   @override
   State<QuotaCard> createState() => _QuotaCardState();
@@ -251,10 +252,10 @@ class _QuotaCardState extends State<QuotaCard> {
 
   @override
   Widget build(BuildContext context) {
-    return Card(child: 
-          _buildCarousel(context, _selectedCarousalIndex ~/ 2, widget.ring_form));
-       
-      }
+    return Card(
+        child: _buildCarousel(
+            context, _selectedCarousalIndex ~/ 2, widget.ring_form));
+  }
 
   Widget _buildCarousel(
       BuildContext context, int carouselIndex, bool ring_form) {
@@ -284,7 +285,6 @@ class _QuotaCardState extends State<QuotaCard> {
     );
   }
 
-
   Widget _buildCarouselItemQuotes(
       BuildContext context, int carouselIndex, int itemIndex, bool ring_form) {
     return Row(
@@ -292,63 +292,86 @@ class _QuotaCardState extends State<QuotaCard> {
       children: [
         Flexible(
           flex: 1,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Flexible(
-                flex: 1,
-                child: Text("Wurfqoute"),
-              ),
-              Flexible(
-                flex: 2,
-                child: OwnPieChart(ring_form: true),
-              ),
-              Flexible(
-                flex: 2,
-                child: Text("20 Wuerfe"),
-              )
-            ],
-          ),
+          child: widget.quotas[0][1] != 0
+              ? Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Flexible(
+                      flex: 1,
+                      child: Text("7m Quote"),
+                    ),
+                    Flexible(
+                      flex: 2,
+                      child: QuotaPieChart(
+                        ringForm: true,
+                        dataMap: {
+                          "7m goals": widget.quotas[0][0],
+                          "7 meters": widget.quotas[0][1]
+                        },
+                      ),
+                    ),
+                    Flexible(
+                      flex: 2,
+                      child: Text(widget.quotas[0][1].toString() + " 7m throws"),
+                    )
+                  ],
+                )
+              : Text("No 7m throws recorded"),
         ),
         Flexible(
           flex: 1,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Flexible(
-                flex: 1,
-                child: Text("Quote Postition"),
-              ),
-              Flexible(
-                flex: 2,
-                child: OwnPieChart(ring_form: true),
-              ),
-              Flexible(
-                flex: 2,
-                child: Text("15 Wuerfe"),
-              )
-            ],
-          ),
+          child: widget.quotas[1][1] != 0
+              ? Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Flexible(
+                      flex: 1,
+                      child: Text("Quote Postition"),
+                    ),
+                    Flexible(
+                      flex: 2,
+                      child: QuotaPieChart(
+                        ringForm: true,
+                        dataMap: {
+                          "Goals": widget.quotas[1][0],
+                          "Position throws": widget.quotas[1][1]
+                        },
+                      ),
+                    ),
+                    Flexible(
+                      flex: 2,
+                      child: Text(
+                          widget.quotas[1][1].toString() + " position throws"),
+                    )
+                  ],
+                )
+              : Text("No position throws recorded"),
         ),
         Flexible(
           flex: 1,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Flexible(
-                flex: 1,
-                child: Text("7m Quote"),
-              ),
-              Flexible(
-                flex: 2,
-                child: OwnPieChart(ring_form: true),
-              ),
-              Flexible(
-                flex: 2,
-                child: Text("7 Wuerfe"),
-              )
-            ],
-          ),
+          child: widget.quotas[2][1] != 0
+              ? Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Flexible(
+                      flex: 1,
+                      child: Text("Throw Quota"),
+                    ),
+                    Flexible(
+                      flex: 2,
+                      child: QuotaPieChart(ringForm: true, dataMap: {
+                        "Total goals": widget.quotas[2][0],
+                        "Total throws": widget.quotas[2][1]
+                      }),
+                    ),
+                    Flexible(
+                      flex: 2,
+                      child:
+                          Text(widget.quotas[2][1].toString() + " total throws"),
+                    )
+                  ],
+                )
+              : Text("No goal attempts recorded"),
         ),
       ],
     );

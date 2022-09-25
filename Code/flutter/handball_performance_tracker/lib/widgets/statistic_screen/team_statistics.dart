@@ -22,6 +22,11 @@ class TeamStatistics extends StatelessWidget {
                     flex: 1,
                     child: Card(
                         child: QuotaCard(
+                      quotas: [
+                        [0, 0],
+                        [0, 0],
+                        [0, 0]
+                      ],
                       ring_form: true,
                     )),
                   ),

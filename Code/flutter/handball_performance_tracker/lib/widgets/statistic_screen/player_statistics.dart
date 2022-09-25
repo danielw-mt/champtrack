@@ -51,6 +51,7 @@ class _PlayerStatisticsState extends State<PlayerStatistics> {
     Map<String, List<int>> actionSeries = {};
     int startTime = 0;
     int stopTime = 0;
+    List<List<double>> quotas = [[0,0], [0,0], [0,0]]; 
     try {
       actionCounts = _statistics[_selectedGame.id]["player_stats"]
           [_selectedPlayer.id]["action_counts"];
@@ -58,12 +59,24 @@ class _PlayerStatisticsState extends State<PlayerStatistics> {
           [_selectedPlayer.id]["action_series"];
       startTime = _statistics[_selectedGame.id]["start_time"];
       stopTime = _statistics[_selectedGame.id]["stop_time"];
+      quotas[0][0] = double.parse(_statistics[_selectedGame.id]["player_stats"]
+          [_selectedPlayer.id]["seven_meter_quota"][0].toString());
+      quotas[0][1] = double.parse(_statistics[_selectedGame.id]["player_stats"]
+          [_selectedPlayer.id]["seven_meter_quota"][1].toString());
+      quotas[1][0] = double.parse(_statistics[_selectedGame.id]["player_stats"]
+          [_selectedPlayer.id]["position_quota"][0].toString());
+      quotas[1][1] = double.parse(_statistics[_selectedGame.id]["player_stats"]
+          [_selectedPlayer.id]["position_quota"][1].toString());    
+      quotas[2][0] = double.parse(_statistics[_selectedGame.id]["player_stats"]
+          [_selectedPlayer.id]["throw_quota"][0].toString());
+      quotas[2][1] = double.parse(_statistics[_selectedGame.id]["player_stats"]
+          [_selectedPlayer.id]["throw_quota"][1].toString());        
     } on Exception catch (e) {
       logger.e(e);
     } catch (e) {
       logger.e(e);
     }
-    logger.d(actionCounts);
+    logger.d(quotas);
     return Scaffold(
         body: Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -92,6 +105,7 @@ class _PlayerStatisticsState extends State<PlayerStatistics> {
                         flex: 2,
                         child: QuotaCard(
                           ring_form: true,
+                          quotas: quotas,
                         ),
                       )
                     ],

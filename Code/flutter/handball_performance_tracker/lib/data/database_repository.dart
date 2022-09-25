@@ -107,6 +107,16 @@ class DatabaseRepository {
     return clubReference;
   }
 
+  // Future<List<Player>> getAllPlayers(){
+  //   return _loggedInClubReference.collection("players").get().then((querySnapshot) {
+  //     List<Player> players = [];
+  //     querySnapshot.docs.forEach((doc) {
+  //       players.add(Player.fromDocumentSnapshot(doc));
+  //     });
+  //     return players;
+  //   });
+  // }
+
   Future<DocumentSnapshot> getPlayer(String playerId) async {
     return await _loggedInClubReference
         .collection("players")
