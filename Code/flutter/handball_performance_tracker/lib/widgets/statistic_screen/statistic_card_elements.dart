@@ -237,25 +237,24 @@ class _PerformanceCardState extends State<PerformanceCard> {
   }
 }
 
-class QuotaCard extends StatelessWidget {
+class QuotaCard extends StatefulWidget {
   const QuotaCard({Key? key, required this.ring_form}) : super(key: key);
 
   final ring_form;
 
   @override
+  State<QuotaCard> createState() => _QuotaCardState();
+}
+
+class _QuotaCardState extends State<QuotaCard> {
+  int _selectedCarousalIndex = 0;
+
+  @override
   Widget build(BuildContext context) {
-    // TODO this is an infinite list. Very dangerous. Can we remove this?
-    return Card(child: ListView.builder(
-      //padding: EdgeInsets.symmetric(vertical: 5.0),
-      itemBuilder: (BuildContext context, int index) {
-        if (index == 0) {
-          return _buildCarousel(context, index ~/ 2, ring_form);
-        } else {
-          return Text("What is this?");
-        }
-      },
-    ));
-  }
+    return Card(child: 
+          _buildCarousel(context, _selectedCarousalIndex ~/ 2, widget.ring_form));
+       
+      }
 
   Widget _buildCarousel(
       BuildContext context, int carouselIndex, bool ring_form) {
@@ -266,6 +265,9 @@ class QuotaCard extends StatelessWidget {
           // you may want to use an aspect ratio here for tablet support
           height: 200.0,
           child: PageView.builder(
+            onPageChanged: (pageIndex) => setState(() {
+              _selectedCarousalIndex = pageIndex;
+            }),
             // store this controller in a State to save the carousel scroll position
             controller: PageController(viewportFraction: 0.9),
             itemBuilder: (BuildContext context, int itemIndex) {
@@ -281,6 +283,7 @@ class QuotaCard extends StatelessWidget {
       ],
     );
   }
+
 
   Widget _buildCarouselItemQuotes(
       BuildContext context, int carouselIndex, int itemIndex, bool ring_form) {
