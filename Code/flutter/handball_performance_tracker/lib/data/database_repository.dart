@@ -225,7 +225,7 @@ class DatabaseRepository {
       QuerySnapshot actionsSnapshot = await _loggedInClubReference
           .collection("games")
           .doc(gamesData[i]["id"])
-          .collection("actions")
+          .collection("actions").orderBy("timestamp", descending: false)
           .get();
       gamesData[i]["actions"] = actionsSnapshot.docs.map((QueryDocumentSnapshot e) => e.data() as Map<String, dynamic>).toList();
     }

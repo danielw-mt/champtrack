@@ -98,7 +98,7 @@ class LineChartWidget extends StatelessWidget {
                           values[index].toDouble());
                     }
                   }),
-                  isCurved: true)
+                  isCurved: false)
             ],
           ))
         : Text("No data for selected inputs");
