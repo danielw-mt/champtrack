@@ -114,7 +114,12 @@ class PieChartActionsWidget extends StatelessWidget {
     if (actionCounts.isEmpty) {
       return Text("No Data for selected player and game");
     } else {
-      return pie.PieChart(dataMap: actionCounts.cast());
+      // convert int values in map to double
+      Map<String, double> actionCountsAsDouble = {};
+      actionCounts.forEach((key, value) {
+        actionCountsAsDouble[key] = value.toDouble();
+      });
+      return pie.PieChart(dataMap: actionCountsAsDouble);
     }
   }
 }
