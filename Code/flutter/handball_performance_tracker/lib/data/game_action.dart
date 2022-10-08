@@ -5,7 +5,7 @@ class GameAction {
   final String teamId;
   final String gameId;
   String playerId;
-  String type;
+  String tag;
   String actionType;
   List<String> throwLocation;
   int timestamp;
@@ -16,7 +16,7 @@ class GameAction {
       this.teamId = "",
       this.gameId = "",
       this.playerId = "",
-      this.type = "",
+      this.tag = "",
       this.actionType = "",
       this.throwLocation = const [],
       this.timestamp = 0,
@@ -28,14 +28,14 @@ class GameAction {
       'teamId': teamId,
       'gameId': gameId,
       'playerId': playerId,
-      'type': type,
+      'tag': tag,
       'actionType': actionType,
       'throwLocation': throwLocation,
       'timestamp': timestamp,
       'relativeTime': relativeTime
     };
   }
-  
+
   // @return GameAction object according to GameAction data fetched from firestore
   factory GameAction.fromDocumentSnapshot(DocumentSnapshot doc) {
     final newAction = GameAction.fromMap(doc.data() as Map<String, dynamic>);
@@ -49,7 +49,7 @@ class GameAction {
         teamId: map['teamId'],
         gameId: map['gameId'],
         playerId: map['playerId'],
-        type: map['type'],
+        tag: map['type'],
         actionType: map['actionType'],
         throwLocation: map['throwLocation'].cast<String>(),
         timestamp: map['timestamp'],
@@ -66,5 +66,5 @@ class GameAction {
             relativeTime: action.relativeTime,
             throwLocation: action.throwLocation,
             timestamp: action.timestamp,
-            type: action.type);
+            tag: action.tag);
 }

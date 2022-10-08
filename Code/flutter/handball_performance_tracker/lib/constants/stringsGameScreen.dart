@@ -14,7 +14,7 @@ class StringsGameScreen {
   static const String lGameStartErrorMessage =
       "Fehler: Spiel wurde noch nicht gestartet!";
   static const String lOffensePopUpHeader = "Offensive Aktionen";
-  static const String lDeffensePopUpHeader = "Defensive Aktionen";
+  static const String lDefensePopUpHeader = "Defensive Aktionen";
   static const String lGoalkeeperPopUpHeader = "Torwart Aktionen";
   static const String lSelectActionDialogHeader = "Wählen Sie eine Aktion";
   static const String lAttentionTimeIsPaused = "Achtung! Zeit ist pausiert.";

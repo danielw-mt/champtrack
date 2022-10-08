@@ -1,12 +1,13 @@
 import 'package:handball_performance_tracker/constants/stringsGameScreen.dart';
 import 'package:handball_performance_tracker/constants/stringsGeneral.dart';
 
-const String attack = "attack";
-const String defense = "defense";
-const String seven_meter = "seven_meter";
-const String goalkeeper = "goalkeeper";
-const String otherGoalkeeper = "otherGoalkeeper";
-const String allActions = "allActions";
+// action types
+const String actionStateAttack = "attack";
+const String actionStateDefense = "defense";
+const String actionStateSevenMeter_meter = "seven_meter";
+const String actionStateGoalkeeper = "goalkeeper";
+const String actionStateOtherGoalkeeper = "otherGoalkeeper";
+const String actionStateAllActions = "allActions";
 
 const String goal = "goal";
 const String goalPos = "goal_pos";
@@ -41,7 +42,7 @@ const String missed7m = "missed7m";
 const String parade7m = "parade7m";
 
 Map<String, Map<String, String>> actionMapping = {
-  attack: {
+  actionStateAttack: {
     StringsGameScreen.lRedCard: redCard,
     StringsGameScreen.lYellowCard: yellowCard,
     StringsGameScreen.lTimePenalty: timePenalty,
@@ -51,7 +52,7 @@ Map<String, Map<String, String>> actionMapping = {
     StringsGameScreen.lErrThrow: errThrow,
     StringsGameScreen.lTrf: trf,
   },
-  defense: {
+  actionStateDefense: {
     StringsGameScreen.lRedCard: redCard,
     StringsGameScreen.lYellowCard: yellowCard,
     StringsGameScreen.lFoul7m: foulWithSeven,
@@ -61,7 +62,7 @@ Map<String, Map<String, String>> actionMapping = {
     StringsGameScreen.lTrf: trf,
     StringsGameScreen.lTwoMin: twoMin,
   },
-  goalkeeper: {
+  actionStateGoalkeeper: {
     StringsGameScreen.lRedCard: redCard,
     StringsGameScreen.lYellowCard: yellowCard,
     StringsGameScreen.lTimePenalty: timePenalty,
@@ -72,13 +73,13 @@ Map<String, Map<String, String>> actionMapping = {
     StringsGameScreen.lParade: parade,
     StringsGameScreen.lGoalOtherSide: goalOthers,
   },
-  seven_meter: {
+  actionStateSevenMeter_meter: {
     StringsGameScreen.lGoal: goal7m,
     StringsGameScreen.lErrThrow: missed7m,
     StringsGameScreen.lGoalOtherSide: goalOthers,
     StringsGeneral.lCaught: parade7m
   },
-  allActions: {
+  actionStateAllActions: {
     StringsGameScreen.lRedCard: redCard,
     StringsGameScreen.lYellowCard: yellowCard,
     StringsGameScreen.lTimePenalty: timePenalty,
@@ -97,7 +98,6 @@ Map<String, Map<String, String>> actionMapping = {
     StringsGameScreen.lGoalGoalkeeper: goal,
     StringsGeneral.lCaught: parade7m,
     StringsGameScreen.lErrThrowGoalkeeper: errThrow,
-
   }
 };
 

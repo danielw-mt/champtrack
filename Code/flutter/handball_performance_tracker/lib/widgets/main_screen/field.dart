@@ -3,7 +3,7 @@ import 'package:handball_performance_tracker/constants/colors.dart';
 import 'package:handball_performance_tracker/utils/main_screen_field_helper.dart';
 import '../../controllers/tempController.dart';
 import 'package:get/get.dart';
-import 'action_menu.dart';
+import 'action_menu/action_menu.dart';
 
 // Class that returns a FieldPainter with a GestureDetecture, i.e. the Painted halffield with the possibility to get coordinates on click.
 class CustomField extends StatelessWidget {

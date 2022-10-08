@@ -85,14 +85,14 @@ Widget buildDialogButtonMenu(BuildContext context, bool belongsToHomeTeam) {
     dialogButtons = [
       buildDialogButton(
           context,
-          actionMapping[seven_meter]!.values.toList()[0],
-          actionMapping[seven_meter]!.keys.toList()[0],
+          actionMapping[actionStateSevenMeter_meter]!.values.toList()[0],
+          actionMapping[actionStateSevenMeter_meter]!.keys.toList()[0],
           Colors.lightBlue,
           Icons.style),
       buildDialogButton(
           context,
-          actionMapping[seven_meter]!.values.toList()[1],
-          actionMapping[seven_meter]!.keys.toList()[1],
+          actionMapping[actionStateSevenMeter_meter]!.values.toList()[1],
+          actionMapping[actionStateSevenMeter_meter]!.keys.toList()[1],
           Colors.deepPurple,
           Icons.style),
     ];
@@ -100,14 +100,14 @@ Widget buildDialogButtonMenu(BuildContext context, bool belongsToHomeTeam) {
     dialogButtons = [
       buildDialogButton(
           context,
-          actionMapping[seven_meter]!.values.toList()[2],
-          actionMapping[seven_meter]!.keys.toList()[2],
+          actionMapping[actionStateSevenMeter_meter]!.values.toList()[2],
+          actionMapping[actionStateSevenMeter_meter]!.keys.toList()[2],
           Colors.red,
           Icons.style),
       buildDialogButton(
           context,
-          actionMapping[seven_meter]!.values.toList()[3],
-          actionMapping[seven_meter]!.keys.toList()[3],
+          actionMapping[actionStateSevenMeter_meter]!.values.toList()[3],
+          actionMapping[actionStateSevenMeter_meter]!.keys.toList()[3],
           Colors.yellow,
           Icons.style)
     ];
@@ -165,7 +165,7 @@ DialogButton buildDialogButton(
     GameAction action = GameAction(
         teamId: tempController.getSelectedTeam().id!,
         gameId: currentGameId,
-        type: determineAttack() ? 'attack' : 'defense',
+        tag: determineAttack() ? 'attack' : 'defense',
         actionType: actionType,
         throwLocation:
             List.from(tempController.getLastLocation().cast<String>()),
@@ -201,21 +201,25 @@ DialogButton buildDialogButton(
     addFeedItem(action);
 
     // goal
-    if (actionType == actionMapping[seven_meter]!.values.toList()[0]) {
+    if (actionType ==
+        actionMapping[actionStateSevenMeter_meter]!.values.toList()[0]) {
       tempController.incOwnScore();
       offensiveFieldSwitch();
     }
     // missed 7m
-    if (actionType == actionMapping[seven_meter]!.values.toList()[1]) {
+    if (actionType ==
+        actionMapping[actionStateSevenMeter_meter]!.values.toList()[1]) {
       offensiveFieldSwitch();
     }
     // opponent goal
-    if (actionType == actionMapping[seven_meter]!.values.toList()[2]) {
+    if (actionType ==
+        actionMapping[actionStateSevenMeter_meter]!.values.toList()[2]) {
       tempController.incOpponentScore();
       defensiveFieldSwitch();
     }
     // opponent missed
-    if (actionType == actionMapping[seven_meter]!.values.toList()[3]) {
+    if (actionType ==
+        actionMapping[actionStateSevenMeter_meter]!.values.toList()[3]) {
       defensiveFieldSwitch();
     }
 
