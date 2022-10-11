@@ -27,4 +27,5 @@ class StringsTeamManagement{
   static const String lNo = "Nein";
 
   static const String lAddTeam = "Team hinzufügen";
+  static const String lEditTeam = "Team bearbeiten";
 }
