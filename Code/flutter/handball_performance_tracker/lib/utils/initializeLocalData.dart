@@ -30,7 +30,6 @@ Future<bool> initializeLocalData() async {
     // make sure initialization doesn't break if there are no players
     if (playersSnapshot.docs.isEmpty){
       print("no players found");
-      return false;
     }
     // go through every team document
     for (DocumentSnapshot teamDocumentSnapshot in teamsSnapshot.docs) {
