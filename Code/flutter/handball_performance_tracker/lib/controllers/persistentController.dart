@@ -52,8 +52,14 @@ class PersistentController extends GetxController {
   }
 
   void deleteTeam(Team team) async {
+    logger.d("deleting team: " + team.name);
     await repository.deleteTeam(team);
     _cachedTeamsList.remove(team);
+    // update the teams list after update
+    TempController tempController = Get.find<TempController>();
+    tempController.updateItem("team-list");
+    tempController.updateItem("team-selection-screen");
+    tempController.updateItem("team-dropdown");
   }
 
   void updateTeam(Team team) async {

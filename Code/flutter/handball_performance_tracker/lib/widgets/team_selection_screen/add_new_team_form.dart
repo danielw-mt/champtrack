@@ -165,6 +165,14 @@ class NewTeamFormState extends State<NewTeamForm> {
                                   teamNameController.text,
                                   TEAM_TYPE_MAPPING[selectedTeamType]);
                               Navigator.pop(context);
+                              if (persistentController
+                                      .getAvailableTeams()
+                                      .length ==
+                                  1) {
+                                tempController.setSelectedTeam(
+                                    persistentController
+                                        .getAvailableTeams()[0]);
+                              }
                             }
                           },
                           child: const Text(

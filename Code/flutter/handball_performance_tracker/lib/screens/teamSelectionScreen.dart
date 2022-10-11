@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:handball_performance_tracker/constants/colors.dart';
 import 'package:handball_performance_tracker/constants/stringsGeneral.dart';
+import 'package:handball_performance_tracker/constants/stringsTeamManagement.dart';
+import 'package:handball_performance_tracker/controllers/persistentController.dart';
 import 'package:handball_performance_tracker/widgets/nav_drawer.dart';
 import '../controllers/tempController.dart';
 import '../widgets/team_selection_screen/team_dropdown.dart';
@@ -15,7 +17,8 @@ class TeamSelectionScreen extends StatelessWidget {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   // TODO Get.find instead of Get.put?
   final TempController tempController = Get.put(TempController());
-
+  final PersistentController persistentController =
+      Get.find<PersistentController>();
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -40,22 +43,31 @@ class TeamSelectionScreen extends StatelessWidget {
                   children: [
                     MenuButton(_scaffoldKey),
                     // TODO implement team cards here instead of dropdown
-                    TeamDropdown(),
-                    TextButton(
-                        onPressed: () {
-                          Get.to(() => TeamSettingsScreen());
-                        },
-                        child: Icon(Icons.edit, color: buttonDarkBlueColor)),
-                    Spacer(),
-                    FloatingActionButton(
-                        onPressed: (() => showDialog(
-                            context: context,
-                            builder: (context) => AlertDialog(
-                                  title: Text(StringsGeneral.lAddTeam),
-                                  content: NewTeamForm(),
-                                ))),
-                        child: Icon(Icons.add),
-                        backgroundColor: buttonDarkBlueColor)
+                    Flexible(child: TeamDropdown()),
+                    // don't display edit button if there are no teams
+                    persistentController.getAvailableTeams().length == 0
+                        ? Container()
+                        : Flexible(
+                            child: TextButton(
+                                onPressed: () {
+                                  Get.to(() => TeamSettingsScreen());
+                                },
+                                child: Icon(Icons.edit,
+                                    color: buttonDarkBlueColor)),
+                          ),
+                    Flexible(
+                      child: Center(
+                        child: ElevatedButton(
+                          onPressed: (() => showDialog(
+                              context: context,
+                              builder: (context) => AlertDialog(
+                                    title: Text(StringsGeneral.lAddTeam),
+                                    content: NewTeamForm(),
+                                  ))),
+                          child: Text(StringsTeamManagement.lAddTeam),
+                        ),
+                      ),
+                    )
                   ])),
         );
       },
