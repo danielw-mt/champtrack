@@ -5,8 +5,18 @@ import 'charts.dart';
 import 'package:get/get.dart';
 import '../../data/player.dart';
 
-class CardsInfoCard extends StatelessWidget {
-  const CardsInfoCard({Key? key}) : super(key: key);
+class PenaltyInfoCard extends StatelessWidget {
+  final int redCards;
+  final int yellowCards;
+  final int timePenalties;
+
+  // initialize card values by default with 0
+  const PenaltyInfoCard(
+      {Key? key,
+      this.redCards = 0,
+      this.yellowCards = 0,
+      this.timePenalties = 0})
+      : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -19,28 +29,15 @@ class CardsInfoCard extends StatelessWidget {
               children: [
                 Flexible(
                   flex: 1,
-                  child: Text('2min'),
+                  child: IconButton(
+                      icon: Image.asset('statistic_screen/yellow_card_button.png'),
+                      onPressed: () {
+                        // do nothing
+                      }),
                 ),
                 Flexible(
                   flex: 1,
-                  // TODO read from database
-                  child: Text('0'),
-                ),
-              ],
-            ),
-          ),
-          Flexible(
-            flex: 1,
-            child: Column(
-              children: [
-                Flexible(
-                  flex: 1,
-                  child: Text('Yellow Cards'),
-                ),
-                Flexible(
-                  flex: 1,
-                  // TODO read from database
-                  child: Text('0'),
+                  child: Text(yellowCards.toString()),
                 ),
               ],
             ),
@@ -51,12 +48,38 @@ class CardsInfoCard extends StatelessWidget {
               children: [
                 Flexible(
                   flex: 1,
-                  child: Text('Red Cards'),
+                  child: IconButton(
+                    icon: Image.asset(
+                        'statistic_screen/red_card_button.png'),
+                    onPressed: () {
+                      // do nothing
+                    },
+                  ),
                 ),
                 Flexible(
                   flex: 1,
-                  // TODO read from database
-                  child: Text('0'),
+                  child: Text(redCards.toString()),
+                ),
+              ],
+            ),
+          ),
+          Flexible(
+            flex: 1,
+            child: Column(
+              children: [
+                Flexible(
+                  flex: 1,
+                  child: IconButton(
+                    icon: Image.asset(
+                        'statistic_screen/time_penalty_button.png'),
+                    onPressed: () {
+                      // do nothing
+                    },
+                  ),
+                ),
+                Flexible(
+                  flex: 1,
+                  child: Text(timePenalties.toString()),
                 ),
               ],
             ),

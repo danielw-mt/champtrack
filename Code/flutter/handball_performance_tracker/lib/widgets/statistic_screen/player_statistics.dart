@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:handball_performance_tracker/constants/game_actions.dart';
 import 'package:handball_performance_tracker/controllers/persistent_controller.dart';
 import 'package:handball_performance_tracker/controllers/temp_controller.dart';
 import 'statistic_card_elements.dart';
@@ -163,7 +164,19 @@ class _PlayerStatisticsState extends State<PlayerStatistics> {
               children: [
                 Expanded(
                   flex: 1,
-                  child: CardsInfoCard(),
+                  // only pass the penalty values if they can be found in the actionCounts map
+                  // if there is no value for that penalty pass 0
+                  child: PenaltyInfoCard(
+                    redCards: actionCounts[redCard] == null
+                        ? 0
+                        : actionCounts[redCard]!,
+                    yellowCards: actionCounts[yellowCard] == null
+                        ? 0
+                        : actionCounts[yellowCard]!,
+                    timePenalties: actionCounts[timePenalty] == null
+                        ? 0
+                        : actionCounts[timePenalty]!,
+                  ),
                 ),
                 Expanded(
                   flex: 4,

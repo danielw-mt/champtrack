@@ -68,7 +68,7 @@ class TeamStatistics extends StatelessWidget {
                 children: [
                   Expanded(
                     flex: 1,
-                    child: CardsInfoCard(),
+                    child: PenaltyInfoCard(),
                   ),
                   Expanded(
                     flex: 4,
