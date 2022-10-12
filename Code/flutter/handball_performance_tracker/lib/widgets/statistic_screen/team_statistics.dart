@@ -44,9 +44,6 @@ class _TeamStatisticsState extends State<TeamStatistics> {
   void initState() {
     _teams = _persistentController.getAvailableTeams();
     // index access safety
-    if (_games.length > 0){
-      _selectedGame = _games[0];
-    }
     if (_teams.length > 0){
       _selectedTeam = _tempController.getSelectedTeam();
       _games = _persistentController.getAllGames(teamId: _selectedTeam.id);
@@ -54,7 +51,9 @@ class _TeamStatisticsState extends State<TeamStatistics> {
     } else {
       _games = [];
     }
-    
+    if (_games.length > 0){
+      _selectedGame = _games[0];
+    }
     _statistics = _persistentController.getStatistics();
     super.initState();
   }
@@ -74,6 +73,7 @@ class _TeamStatisticsState extends State<TeamStatistics> {
     List<double> efScoreSeries = [];
     List<int> timeStamps = [];
     try {
+      logger.d(_statistics[_selectedGame.id]["team_stats"]);
       Map<String, dynamic> teamStats = _statistics[_selectedGame.id]["team_stats"][_selectedTeam.id];
       // try to get action counts for the player
       actionCounts = teamStats["action_counts"];
