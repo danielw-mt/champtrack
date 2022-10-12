@@ -113,6 +113,9 @@ class _GameSelectorState extends State<GameSelector> {
     if (widget.games.length == 0){
       return Text("No games found");
     }
+    if (!widget.games.contains(_selectedGame)){
+      _selectedGame = widget.games[0];
+    }
     return DropdownButton<Game>(
       value: _selectedGame,
       icon: const Icon(Icons.arrow_downward),
@@ -156,7 +159,11 @@ class _TeamSelectorState extends State<TeamSelector> {
   void initState() {
     TempController tempController = Get.find<TempController>();
     if (widget.teams.length > 0) {
-      _selectedTeam = tempController.getSelectedTeam();
+      if (widget.teams.contains(tempController.getSelectedTeam())) {
+        _selectedTeam = tempController.getSelectedTeam();
+      } else {
+        _selectedTeam = widget.teams[0];
+      }
     }
     super.initState();
   }
@@ -165,7 +172,13 @@ class _TeamSelectorState extends State<TeamSelector> {
   Widget build(BuildContext context) {
     if (_selectedTeam == null) {
       logger.d("Team selector cannot be displayer because there are no teams");
-      return Container();
+      return Text("No teams found");
+    }
+    if (widget.teams.length == 0){
+      return Text("No teams found");
+    }
+    if (!widget.teams.contains(_selectedTeam)){
+      _selectedTeam = widget.teams[0];
     }
     return DropdownButton<Team>(
       value: _selectedTeam,
