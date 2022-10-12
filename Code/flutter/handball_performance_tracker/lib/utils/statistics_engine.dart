@@ -41,7 +41,7 @@ class StatisticsEngine {
       // 
     });
     _statistics["team_stats"] = _updateTeamStatistics(gameDocuments, playerStats);
-    logger.d(_statistics);
+    // logger.d(_statistics);
     _statistics_ready = true;
   }
 
@@ -132,7 +132,6 @@ class StatisticsEngine {
         teamStats["position_quota"][1] += playerStatistic["position_quota"][1];
         teamStats["throw_quota"][0] += playerStatistic["throw_quota"][0];
         teamStats["throw_quota"][1] += playerStatistic["throw_quota"][1];
-        logger.d("done with quotas");
         // update action counts by summing up all action counts of every player
         playerStatistic["action_counts"].forEach((String actionType, int count) {
           if (teamStats["action_counts"].containsKey(actionType)) {
@@ -141,7 +140,6 @@ class StatisticsEngine {
             teamStats["action_counts"][actionType] = count;
           }
         });
-        logger.d("done with action counts");
         // add each player's action series timestamp to the team's action series timestamp and sort them afterwards
         playerStatistic["action_series"].forEach((String actionType, List<int> timestamps) {
           if (teamStats["action_series"].containsKey(actionType)) {
@@ -151,7 +149,6 @@ class StatisticsEngine {
           }
           teamStats["action_series"][actionType].sort();
         });
-        logger.d("done with action series");
         // add each player's action coordinates to the team's action coordinates do not sort these
         playerStatistic["action_coordinates"].forEach((String actionType, dynamic coordinates) {
           if (teamStats["action_coordinates"].containsKey(actionType)) {
@@ -160,7 +157,6 @@ class StatisticsEngine {
             teamStats["action_coordinates"][actionType] = coordinates;
           }
         });
-        logger.d("done with action coordinates");
         // add all actions and all action timestamps to a Splaytreemap. 
         // This map will guarantee that the keys (timestamps) and the corresponding values (actions) stay sorted
         SplayTreeMap<int, String> allActions = SplayTreeMap<int, String>();
@@ -169,8 +165,10 @@ class StatisticsEngine {
         }
         teamStats["all_actions"].addAll(allActions.values);
         teamStats["all_action_timestamps"].addAll(allActions.keys);
-        logger.d("done with all actions");
-        // TODO calculate the ef-score series for the team by iterating through each action
+        // TODO calculate the ef-score series for the team by building the average through all players through time
+        // go through every player and update the ef-score by adding to the global ef score average at the time when a new action is added
+        // ef score depends on the player position which is why we need to do this
+        
       });
       // update overall statistics
       String teamID = gameDocuments[i]["teamId"];

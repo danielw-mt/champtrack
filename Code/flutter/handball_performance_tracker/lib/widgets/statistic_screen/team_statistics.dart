@@ -1,11 +1,19 @@
 import 'package:flutter/material.dart';
 import 'statistic_card_elements.dart';
+import 'package:get/get.dart';
+import '../../controllers/persistent_controller.dart';
 
-class TeamStatistics extends StatelessWidget {
+class TeamStatistics extends StatefulWidget {
   const TeamStatistics({Key? key}) : super(key: key);
 
   @override
+  State<TeamStatistics> createState() => _TeamStatisticsState();
+}
+
+class _TeamStatisticsState extends State<TeamStatistics> {
+  @override
   Widget build(BuildContext context) {
+    PersistentController _persistentController = Get.put(PersistentController());
     return Scaffold(
       body: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,

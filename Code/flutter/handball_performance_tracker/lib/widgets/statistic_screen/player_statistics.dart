@@ -5,9 +5,11 @@ import 'package:handball_performance_tracker/controllers/temp_controller.dart';
 import 'statistic_card_elements.dart';
 import '../../data/player.dart';
 import '../../data/game.dart';
+import '../../data/team.dart';
 import '../../controllers/temp_controller.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
+import 'statistic_dropdowns.dart';
 
 var logger = Logger(
   printer: PrettyPrinter(
@@ -31,19 +33,65 @@ class _PlayerStatisticsState extends State<PlayerStatistics> {
   TempController _tempController = Get.put(TempController());
   PersistentController _persistentController = Get.put(PersistentController());
   List<Player> _players = [];
+  List<Game> _games = [];
+  List<Team> _teams = [];
+  Map<String, dynamic> _statistics = {};
+  Team _selectedTeam = Team();
   Player _selectedPlayer = Player();
   Game _selectedGame = Game(date: DateTime.fromMicrosecondsSinceEpoch(0));
-  List<Game> _games = [];
-  Map<String, dynamic> _statistics = {};
-
   @override
   void initState() {
     _players = _tempController.getPlayersFromSelectedTeam();
-    _selectedPlayer = _players[0];
-    _games = _persistentController.getAllGames();
-    _selectedGame = _games[0];
+    
+    _teams = _persistentController.getAvailableTeams();
+    // if's are for index safety
+    if (_players.length > 0){
+       _selectedPlayer = _players[0];
+    // if there are no players don't display any games
+    } else {
+      _games = [];
+    }
+    if (_games.length > 0){
+      _selectedGame = _games[0];
+    }
+    if (_teams.length > 0){
+      _selectedTeam = _tempController.getSelectedTeam();
+      _games = _persistentController.getAllGames(teamId: _selectedTeam.id);
+    // if there are no teams ofc there are no players and no games
+    } else {
+      _players = [];
+      _games = [];
+    }
+    
     _statistics = _persistentController.getStatistics();
     super.initState();
+  }
+
+  void onPlayerSelected(Player player) {
+    setState(() {
+      _selectedPlayer = player;
+    });
+  }
+
+  void onGameSelected(Game game) {
+    setState(() {
+      _selectedGame = game;
+    });
+  }
+
+  void onTeamSelected(Team team) {
+    setState(() {
+      _selectedTeam = team;
+      _games = _persistentController.getAllGames(teamId: _selectedTeam.id);
+      _players = _persistentController.getAllPlayers(teamId: _selectedTeam.id);
+      logger.d("players: $_players");
+      if (_players.length > 0){
+      _selectedPlayer = _players[0];
+      }
+      if (_games.length > 0){
+        _selectedGame = _games[0];
+      }
+    });
   }
 
   @override
@@ -60,42 +108,27 @@ class _PlayerStatisticsState extends State<PlayerStatistics> {
     List<double> efScoreSeries = [];
     List<int> timeStamps = [];
     try {
+      Map<String, dynamic> playerStats = _statistics[_selectedGame.id]["player_stats"][_selectedPlayer.id];
       // try to get action counts for the player
-      actionCounts = _statistics[_selectedGame.id]["player_stats"]
-          [_selectedPlayer.id]["action_counts"];
+      actionCounts = playerStats["action_counts"];
       // try to get action_series for player
-      actionSeries = _statistics[_selectedGame.id]["player_stats"]
-          [_selectedPlayer.id]["action_series"];
+      actionSeries = playerStats["action_series"];
 
       // try to get ef-score series for player
-      efScoreSeries = _statistics[_selectedGame.id]["player_stats"]
-          [_selectedPlayer.id]["ef_score_series"];
+      efScoreSeries = playerStats["ef_score_series"];
       // try to get all action timestamps for player
-      timeStamps = _statistics[_selectedGame.id]["player_stats"]
-          [_selectedPlayer.id]["all_action_timestamps"];
+      timeStamps = playerStats["all_action_timestamps"];
       // try to get start time for game
       startTime = _statistics[_selectedGame.id]["start_time"];
       stopTime = _statistics[_selectedGame.id]["stop_time"];
 
       // try to get quotas for player
-      quotas[0][0] = double.parse(_statistics[_selectedGame.id]["player_stats"]
-              [_selectedPlayer.id]["seven_meter_quota"][0]
-          .toString());
-      quotas[0][1] = double.parse(_statistics[_selectedGame.id]["player_stats"]
-              [_selectedPlayer.id]["seven_meter_quota"][1]
-          .toString());
-      quotas[1][0] = double.parse(_statistics[_selectedGame.id]["player_stats"]
-              [_selectedPlayer.id]["position_quota"][0]
-          .toString());
-      quotas[1][1] = double.parse(_statistics[_selectedGame.id]["player_stats"]
-              [_selectedPlayer.id]["position_quota"][1]
-          .toString());
-      quotas[2][0] = double.parse(_statistics[_selectedGame.id]["player_stats"]
-              [_selectedPlayer.id]["throw_quota"][0]
-          .toString());
-      quotas[2][1] = double.parse(_statistics[_selectedGame.id]["player_stats"]
-              [_selectedPlayer.id]["throw_quota"][1]
-          .toString());
+      quotas[0][0] = double.parse(playerStats["seven_meter_quota"][0].toString());
+      quotas[0][1] = double.parse(playerStats["seven_meter_quota"][1].toString());
+      quotas[1][0] = double.parse(playerStats["position_quota"][0].toString());
+      quotas[1][1] = double.parse(playerStats["position_quota"][1].toString());
+      quotas[2][0] = double.parse(playerStats["throw_quota"][0].toString());
+      quotas[2][1] = double.parse(playerStats["throw_quota"][1].toString());
     } on Exception catch (e) {
       logger.e(e);
     } catch (e) {
@@ -119,11 +152,15 @@ class _PlayerStatisticsState extends State<PlayerStatistics> {
                           flex: 1,
                           child: Column(
                             children: [
-                              buildPlayerSelectionCard(),
+                              PlayerSelector(players: _players, onPlayerSelected: onPlayerSelected),
                               Container(
                                 height: 20,
                               ),
-                              buildGameSelectionCard(),
+                              GameSelector(games: _games, onGameSelected: onGameSelected),
+                              Container(
+                                height: 20,
+                              ),
+                              TeamSelector(teams: _teams, onTeamSelected: onTeamSelected)
                             ],
                           )),
                       Flexible(
@@ -167,15 +204,9 @@ class _PlayerStatisticsState extends State<PlayerStatistics> {
                   // only pass the penalty values if they can be found in the actionCounts map
                   // if there is no value for that penalty pass 0
                   child: PenaltyInfoCard(
-                    redCards: actionCounts[redCard] == null
-                        ? 0
-                        : actionCounts[redCard]!,
-                    yellowCards: actionCounts[yellowCard] == null
-                        ? 0
-                        : actionCounts[yellowCard]!,
-                    timePenalties: actionCounts[timePenalty] == null
-                        ? 0
-                        : actionCounts[timePenalty]!,
+                    redCards: actionCounts[redCard] == null ? 0 : actionCounts[redCard]!,
+                    yellowCards: actionCounts[yellowCard] == null ? 0 : actionCounts[yellowCard]!,
+                    timePenalties: actionCounts[timePenalty] == null ? 0 : actionCounts[timePenalty]!,
                   ),
                 ),
                 Expanded(
@@ -188,74 +219,6 @@ class _PlayerStatisticsState extends State<PlayerStatistics> {
             )),
       ],
     ));
-  }
-
-  Card buildPlayerSelectionCard() {
-    return Card(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Center(
-            child: DropdownButton<Player>(
-              value: _selectedPlayer,
-              icon: const Icon(Icons.arrow_downward),
-              elevation: 16,
-              style: const TextStyle(color: Colors.deepPurple),
-              underline: Container(
-                height: 2,
-                color: Colors.deepPurpleAccent,
-              ),
-              onChanged: (Player? newPlayer) {
-                // This is called when the user selects an item.
-                setState(() {
-                  _selectedPlayer = newPlayer!;
-                });
-              },
-              items: _players.map<DropdownMenuItem<Player>>((Player player) {
-                return DropdownMenuItem<Player>(
-                  value: player,
-                  child: Text(player.firstName + " " + player.lastName),
-                );
-              }).toList(),
-            ),
-          )
-        ],
-      ),
-    );
-  }
-
-  Card buildGameSelectionCard() {
-    return Card(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Center(
-            child: DropdownButton<Game>(
-              value: _selectedGame,
-              icon: const Icon(Icons.arrow_downward),
-              elevation: 16,
-              style: const TextStyle(color: Colors.deepPurple),
-              underline: Container(
-                height: 2,
-                color: Colors.deepPurpleAccent,
-              ),
-              onChanged: (Game? newGame) {
-                // This is called when the user selects an item.
-                setState(() {
-                  _selectedGame = newGame!;
-                });
-              },
-              items: _games.map<DropdownMenuItem<Game>>((Game game) {
-                return DropdownMenuItem<Game>(
-                  value: game,
-                  child: Text(game.date.toString()),
-                );
-              }).toList(),
-            ),
-          )
-        ],
-      ),
-    );
   }
 }
 
