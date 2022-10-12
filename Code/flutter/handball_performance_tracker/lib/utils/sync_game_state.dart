@@ -24,7 +24,7 @@ runGameStateSync() {
   DatabaseRepository databaseRepository = persistentController.repository;
 
   Game currentGame = persistentController.getCurrentGame();
-  Team currentTeam = tempController.getSelectedTeam();
+  // Team currentTeam = tempController.getSelectedTeam();
 
   Timer.periodic(const Duration(seconds: 10), (timer) async {
     // update currentGame in case the score changed
@@ -36,7 +36,6 @@ runGameStateSync() {
     // sync selected team id, score, stopwatchtime,
     databaseRepository.syncGameMetaData({
       "id": currentGame.id,
-      "selectedTeam": currentTeam.id,
       "scoreHome": tempController.getOwnScore(),
       "scoreOpponent": tempController.getOpponentScore(),
       "stopWatchTime": currentGame.stopWatchTimer.rawTime.value,
