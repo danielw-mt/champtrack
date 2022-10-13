@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:pie_chart/pie_chart.dart' as pie;
 import 'dart:math';
 import 'dart:core';
+import '../../utils/action_mapping.dart';
 
 class LineChartWidget extends StatelessWidget {
   final List<int> timeStamps;
@@ -118,6 +119,10 @@ class PieChartActionsWidget extends StatelessWidget {
       Map<String, double> actionCountsAsDouble = {};
       actionCounts.forEach((key, value) {
         actionCountsAsDouble[key] = value.toDouble();
+      });
+      // convert action tag keys to the correct string specified in the strings
+      actionCountsAsDouble = actionCountsAsDouble.map((key, value) {
+        return MapEntry(realActionType(key), value);
       });
       return pie.PieChart(dataMap: actionCountsAsDouble);
     }

@@ -11,6 +11,7 @@ import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 import 'statistic_dropdowns.dart';
 
+
 var logger = Logger(
   printer: PrettyPrinter(
       methodCount: 2, // number of method calls to be displayed

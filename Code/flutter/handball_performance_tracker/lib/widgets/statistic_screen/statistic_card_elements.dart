@@ -4,6 +4,7 @@ import 'package:handball_performance_tracker/widgets/statistic_screen/bar_chart_
 import 'charts.dart';
 import 'package:get/get.dart';
 import '../../data/player.dart';
+import '../../utils/action_mapping.dart';
 
 class PenaltyInfoCard extends StatelessWidget {
   final int redCards;
@@ -11,12 +12,7 @@ class PenaltyInfoCard extends StatelessWidget {
   final int timePenalties;
 
   // initialize card values by default with 0
-  const PenaltyInfoCard(
-      {Key? key,
-      this.redCards = 0,
-      this.yellowCards = 0,
-      this.timePenalties = 0})
-      : super(key: key);
+  const PenaltyInfoCard({Key? key, this.redCards = 0, this.yellowCards = 0, this.timePenalties = 0}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -49,8 +45,7 @@ class PenaltyInfoCard extends StatelessWidget {
                 Flexible(
                   flex: 1,
                   child: IconButton(
-                    icon: Image.asset(
-                        'statistic_screen/red_card_button.png'),
+                    icon: Image.asset('statistic_screen/red_card_button.png'),
                     onPressed: () {
                       // do nothing
                     },
@@ -70,8 +65,7 @@ class PenaltyInfoCard extends StatelessWidget {
                 Flexible(
                   flex: 1,
                   child: IconButton(
-                    icon: Image.asset(
-                        'statistic_screen/time_penalty_button.png'),
+                    icon: Image.asset('statistic_screen/time_penalty_button.png'),
                     onPressed: () {
                       // do nothing
                     },
@@ -169,15 +163,11 @@ class _ActionsCardState extends State<ActionsCard> {
                         rows: List<DataRow>.generate(
                             widget.actionCounts.length,
                             (index) => DataRow(cells: [
-                                  DataCell(Text(widget.actionCounts.keys
-                                      .elementAt(index)
-                                      .toString())),
-                                  DataCell(Text(widget.actionCounts.values
-                                      .elementAt(index)
-                                      .toString()))
+                                  // convert action tag to the correct string specified in the strings using realActionType
+                                  DataCell(Text(realActionType(widget.actionCounts.keys.elementAt(index)))),
+                                  DataCell(Text(widget.actionCounts.values.elementAt(index).toString()))
                                 ])))
-                    : Text(
-                        "No actions recorded for the selected player and game"))
+                    : Text("No actions recorded for the selected player and game"))
           ],
         ),
       );
@@ -218,8 +208,9 @@ class _PerformanceCardState extends State<PerformanceCard> {
     // add the ef-score option to the dropdown elements
     _dropDownElements = [];
     _dropDownElements.add("Ef-Score");
-    widget.actionSeries.keys.toList().forEach((element) {
-      _dropDownElements.add(element);
+    widget.actionSeries.keys.toList().forEach((String actionType) {
+      // convert action tag to the correct string specified in the strings using realActionType
+      _dropDownElements.add(actionType);
     });
 
     return Card(
@@ -240,8 +231,7 @@ class _PerformanceCardState extends State<PerformanceCard> {
                     )
                   : LineChartWidget(
                       startTime: widget.startTime,
-                      timeStamps:
-                          widget.actionSeries[_selectedDropdownElement]!,
+                      timeStamps: widget.actionSeries[_selectedDropdownElement]!,
                       stopTime: widget.stopTime,
                       values: [],
                     )),
@@ -267,7 +257,9 @@ class _PerformanceCardState extends State<PerformanceCard> {
       items: _dropDownElements.map((String dropdownElement) {
         return DropdownMenuItem(
           value: dropdownElement,
-          child: Text(dropdownElement),
+          // if the element is Ef-score don't do anything. 
+          //If it is one of the action type series then convert the tag to the correct string using realActionType
+          child: dropdownElement == "Ef-score" ? Text(dropdownElement) : Text(realActionType(dropdownElement)),
         );
       }).toList(),
       // After selecting the desired option,it will
@@ -284,8 +276,7 @@ class _PerformanceCardState extends State<PerformanceCard> {
 class QuotaCard extends StatefulWidget {
   final List<List<double>> quotas;
   final ring_form;
-  const QuotaCard({Key? key, required this.ring_form, required this.quotas})
-      : super(key: key);
+  const QuotaCard({Key? key, required this.ring_form, required this.quotas}) : super(key: key);
 
   @override
   State<QuotaCard> createState() => _QuotaCardState();
@@ -296,13 +287,10 @@ class _QuotaCardState extends State<QuotaCard> {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-        child: _buildCarousel(
-            context, _selectedCarousalIndex ~/ 2, widget.ring_form));
+    return Card(child: _buildCarousel(context, _selectedCarousalIndex ~/ 2, widget.ring_form));
   }
 
-  Widget _buildCarousel(
-      BuildContext context, int carouselIndex, bool ring_form) {
+  Widget _buildCarousel(BuildContext context, int carouselIndex, bool ring_form) {
     return Column(
       mainAxisSize: MainAxisSize.max,
       children: <Widget>[
@@ -317,8 +305,7 @@ class _QuotaCardState extends State<QuotaCard> {
             controller: PageController(viewportFraction: 0.9),
             itemBuilder: (BuildContext context, int itemIndex) {
               if (itemIndex == 0) {
-                return _buildCarouselItemQuotes(
-                    context, carouselIndex, itemIndex, ring_form);
+                return _buildCarouselItemQuotes(context, carouselIndex, itemIndex, ring_form);
               } else {
                 return Container(); // TODO this is not ready yet //_buildCarouselItem(context, carouselIndex, itemIndex);
               }
@@ -329,8 +316,7 @@ class _QuotaCardState extends State<QuotaCard> {
     );
   }
 
-  Widget _buildCarouselItemQuotes(
-      BuildContext context, int carouselIndex, int itemIndex, bool ring_form) {
+  Widget _buildCarouselItemQuotes(BuildContext context, int carouselIndex, int itemIndex, bool ring_form) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -348,16 +334,12 @@ class _QuotaCardState extends State<QuotaCard> {
                       flex: 2,
                       child: QuotaPieChart(
                         ringForm: true,
-                        dataMap: {
-                          "7m goals": widget.quotas[0][0],
-                          "7 meters": widget.quotas[0][1]
-                        },
+                        dataMap: {"7m goals": widget.quotas[0][0], "7 meters": widget.quotas[0][1]},
                       ),
                     ),
                     Flexible(
                       flex: 2,
-                      child: Text(
-                          widget.quotas[0][1].toString() + "total 7m throws"),
+                      child: Text(widget.quotas[0][1].toString() + "total 7m throws"),
                     )
                   ],
                 )
@@ -377,16 +359,12 @@ class _QuotaCardState extends State<QuotaCard> {
                       flex: 2,
                       child: QuotaPieChart(
                         ringForm: true,
-                        dataMap: {
-                          "Goals": widget.quotas[1][0],
-                          "Position throws": widget.quotas[1][1]
-                        },
+                        dataMap: {"Goals": widget.quotas[1][0], "Position throws": widget.quotas[1][1]},
                       ),
                     ),
                     Flexible(
                       flex: 2,
-                      child: Text(widget.quotas[1][1].toString() +
-                          "total position throws"),
+                      child: Text(widget.quotas[1][1].toString() + "total position throws"),
                     )
                   ],
                 )
@@ -404,15 +382,11 @@ class _QuotaCardState extends State<QuotaCard> {
                     ),
                     Flexible(
                       flex: 2,
-                      child: QuotaPieChart(ringForm: true, dataMap: {
-                        "Total goals": widget.quotas[2][0],
-                        "Total throws": widget.quotas[2][1]
-                      }),
+                      child: QuotaPieChart(ringForm: true, dataMap: {"Total goals": widget.quotas[2][0], "Total throws": widget.quotas[2][1]}),
                     ),
                     Flexible(
                       flex: 2,
-                      child: Text(widget.quotas[2][1].toString() +
-                          " total throws onto goal"),
+                      child: Text(widget.quotas[2][1].toString() + " total throws onto goal"),
                     )
                   ],
                 )
@@ -422,8 +396,7 @@ class _QuotaCardState extends State<QuotaCard> {
     );
   }
 
-  Widget _buildCarouselItem(
-      BuildContext context, int carouselIndex, int itemIndex) {
+  Widget _buildCarouselItem(BuildContext context, int carouselIndex, int itemIndex) {
     return Column(
       children: [
         Flexible(

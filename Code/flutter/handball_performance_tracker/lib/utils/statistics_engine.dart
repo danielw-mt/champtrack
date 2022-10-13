@@ -1,9 +1,9 @@
 import '../data/game_action.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:logger/logger.dart';
 import '../data/ef_score.dart';
 import '../data/player.dart';
 import "dart:collection";
+import '../utils/action_mapping.dart';
 
 class StatisticsEngine {
   var logger = Logger(
@@ -52,8 +52,116 @@ class StatisticsEngine {
 
   /// create the map that contains all statistics for an individual player from all the actions in the game
   Map<String, dynamic> _generatePlayerStatistics(actions, List<Player> players) {
+
     // map with statistics for all player by id of the player
     Map<String, dynamic> player_stats = {};
+
+    /// @return updated @param actions_counts from @param action
+    ///
+    /// called for every action
+    Map<String, int> updateActionCounts(Map<String, dynamic> action, Map<String, int> action_counts) {
+      String actionType = action["actionType"];
+      if (!action_counts.containsKey(actionType)) {
+        action_counts[actionType] = 1;
+      } else {
+        action_counts[actionType] = action_counts[actionType]! + 1;
+      }
+      return action_counts;
+    }
+
+    /// @return updated @param action_series from @param action
+    ///
+    /// Called for every action.
+    Map<String, List<int>> updateActionSeries(Map<String, dynamic> action, Map<String, List<int>> action_series) {
+      String actionType = action["actionType"];
+      if (!action_series.containsKey(actionType)) {
+        action_series[actionType] = [action["timestamp"]];
+      } else {
+        action_series[actionType]?.add(action["timestamp"]);
+      }
+      return action_series;
+    }
+
+    /// @return updated @param action_coordinates from @param action
+    ///
+    /// Called for every action
+    Map<String, dynamic> updateActionCoordinates(Map<String, dynamic> action, Map<String, dynamic> action_coordinates) {
+      // if there is no throw location object inside the action
+      if (action["throwLocation"] == null) return action_coordinates;
+      String actionType = action["actionType"];
+      if (!action_coordinates.containsKey(actionType)) {
+        action_coordinates[actionType] = [action["throwLocation"]];
+      } else {
+        action_coordinates[actionType].add(action["throwLocation"]);
+      }
+      return action_coordinates;
+    }
+
+    /// @param quotes is [(List<double> <<seven_meter_quota>>, List<double> <<position_quota>>, List<double> <<throw_quota>>]
+    /// the quotas are stored as a list of the two components for each quota ratio i.e. quotas[0][1, 2] for 1/2 7m quota
+    /// quotas[0][0]: 7m goals
+    /// quotas[0][1]: 7m shots
+    /// quotas[1][0]: goals from position
+    /// quotas[1][1]: shots from position
+    /// quotas[2][0]: total goals
+    /// quotas[2][1]: total shots
+    List<List<double>> updateQuotas(Map<String, dynamic> action, List<List<double>> quotas) {
+      switch (action["actionType"]) {
+        // TODO use constants here instead of strings
+        case "missed7m":
+          {
+            // incrase 7m shots
+            quotas[0][1] = quotas[0][1] + 1;
+            return quotas;
+          }
+        case "goal7m":
+          {
+            // incrase 7m shots
+            quotas[0][1] = quotas[0][1] + 1;
+            // increase 7m goals
+            quotas[0][0] = quotas[0][0] + 1;
+            return quotas;
+          }
+        case "goal":
+          {
+            // increase total shots
+            quotas[2][1] = quotas[2][1] + 1;
+            // increase total goals
+            quotas[2][0] = quotas[2][0] + 1;
+            return quotas;
+          }
+        case "goalPos":
+          {
+            // increase total shots
+            quotas[2][1] = quotas[2][1] + 1;
+            // increase total goals
+            quotas[2][0] = quotas[2][0] + 1;
+            // increase position shots
+            quotas[1][1] = quotas[1][1] + 1;
+            return quotas;
+          }
+        case "err":
+          {
+            // increase total shots
+            quotas[2][1] = quotas[2][1] + 1;
+            return quotas;
+          }
+        case "err_pos":
+          {
+            // increase total shots
+            quotas[2][1] = quotas[2][1] + 1;
+            // increase position shots
+            quotas[1][1] = quotas[1][1] + 1;
+            return quotas;
+          }
+        // TODO check if there are any other statuses missing that could increase total shots
+        default:
+          {
+            // don't do anything
+            return quotas;
+          }
+      }
+    }
 
     /// go over all actions and update the player statistics map using the sub-methods above within generatePlayerStatistics()
     actions.forEach((Map<String, dynamic> action) {
@@ -174,113 +282,6 @@ class StatisticsEngine {
     });
     // update overall statistics
     return teamStats;
-  }
-
-  /// @return updated @param actions_counts from @param action
-  ///
-  /// called for every action
-  Map<String, int> updateActionCounts(Map<String, dynamic> action, Map<String, int> action_counts) {
-    String actionType = action["actionType"];
-    if (!action_counts.containsKey(actionType)) {
-      action_counts[actionType] = 1;
-    } else {
-      action_counts[actionType] = action_counts[actionType]! + 1;
-    }
-    return action_counts;
-  }
-
-  /// @return updated @param action_series from @param action
-  ///
-  /// Called for every action.
-  Map<String, List<int>> updateActionSeries(Map<String, dynamic> action, Map<String, List<int>> action_series) {
-    String actionType = action["actionType"];
-    if (!action_series.containsKey(actionType)) {
-      action_series[actionType] = [action["timestamp"]];
-    } else {
-      action_series[actionType]?.add(action["timestamp"]);
-    }
-    return action_series;
-  }
-
-  /// @return updated @param action_coordinates from @param action
-  ///
-  /// Called for every action
-  Map<String, dynamic> updateActionCoordinates(Map<String, dynamic> action, Map<String, dynamic> action_coordinates) {
-    // if there is no throw location object inside the action
-    if (action["throwLocation"] == null) return action_coordinates;
-    String actionType = action["actionType"];
-    if (!action_coordinates.containsKey(actionType)) {
-      action_coordinates[actionType] = [action["throwLocation"]];
-    } else {
-      action_coordinates[actionType].add(action["throwLocation"]);
-    }
-    return action_coordinates;
-  }
-
-  /// @param quotes is [(List<double> <<seven_meter_quota>>, List<double> <<position_quota>>, List<double> <<throw_quota>>]
-  /// the quotas are stored as a list of the two components for each quota ratio i.e. quotas[0][1, 2] for 1/2 7m quota
-  /// quotas[0][0]: 7m goals
-  /// quotas[0][1]: 7m shots
-  /// quotas[1][0]: goals from position
-  /// quotas[1][1]: shots from position
-  /// quotas[2][0]: total goals
-  /// quotas[2][1]: total shots
-  List<List<double>> updateQuotas(Map<String, dynamic> action, List<List<double>> quotas) {
-    switch (action["actionType"]) {
-      // TODO use constants here instead of strings
-      case "missed7m":
-        {
-          // incrase 7m shots
-          quotas[0][1] = quotas[0][1] + 1;
-          return quotas;
-        }
-      case "goal7m":
-        {
-          // incrase 7m shots
-          quotas[0][1] = quotas[0][1] + 1;
-          // increase 7m goals
-          quotas[0][0] = quotas[0][0] + 1;
-          return quotas;
-        }
-      case "goal":
-        {
-          // increase total shots
-          quotas[2][1] = quotas[2][1] + 1;
-          // increase total goals
-          quotas[2][0] = quotas[2][0] + 1;
-          return quotas;
-        }
-      case "goalPos":
-        {
-          // increase total shots
-          quotas[2][1] = quotas[2][1] + 1;
-          // increase total goals
-          quotas[2][0] = quotas[2][0] + 1;
-          // increase position shots
-          quotas[1][1] = quotas[1][1] + 1;
-          return quotas;
-        }
-      case "err":
-        {
-          // increase total shots
-          quotas[2][1] = quotas[2][1] + 1;
-          return quotas;
-        }
-      case "err_pos":
-        {
-          // increase total shots
-          quotas[2][1] = quotas[2][1] + 1;
-          // increase position shots
-          quotas[1][1] = quotas[1][1] + 1;
-          return quotas;
-        }
-      // TODO check if there are any other statuses missing that could increase total shots
-      default:
-        {
-          // don't do anything
-          return quotas;
-        }
-    }
   }
 
   /// getter for the statistics map
