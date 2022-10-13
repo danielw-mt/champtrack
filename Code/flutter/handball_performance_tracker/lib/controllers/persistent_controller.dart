@@ -6,7 +6,8 @@ import '../data/game_action.dart';
 import '../data/player.dart';
 import '../data/team.dart';
 import '../data/club.dart';
-import './tempController.dart';
+import 'temp_controller.dart';
+import '../utils/statistics_engine.dart';
 
 /// stores more persistent state
 /// generally more complex variables and data structure that are
@@ -14,8 +15,13 @@ import './tempController.dart';
 class PersistentController extends GetxController {
   /// handles teams initialization when building MainScreen
   var isInitialized = false;
-
+  Rx<StatisticsEngine> _statisticsEngine = StatisticsEngine().obs;
+  RxList<Game> _allGames = <Game>[].obs;
+  RxList<Player> _allPlayers = <Player>[].obs;
   Rx<Club> _loggedInClub = Club().obs;
+
+  /// Storing game actions as GameAction objects inside this list
+  RxList<GameAction> _actions = <GameAction>[].obs;
 
   void setLoggedInClub(Club club) {
     _loggedInClub.value = club;
@@ -75,12 +81,23 @@ class PersistentController extends GetxController {
     });
   }
 
+  void setAllPlayers(List<Player> players) {
+    _allPlayers.value = players;
+  }
+
+  /// Get all players belonging to the logged in club. Optional: all players that belong to team with @param teamId
+  List<Player> getAllPlayers({String? teamId}) {
+    // if team id is provided filter all players for players that are part of the given team
+    if (teamId != null){
+      return _allPlayers.where((Player player) => player.teams.contains('teams/'+teamId)).toList();
+    }
+    return _allPlayers;
+  }
+
   /// get a team object from cachedTeamsList from reference string
   /// i.e teams/ypunI6UsJmTr2LxKh1aw
   Team getSpecificTeam(String teamReference) {
-    return _cachedTeamsList
-        .where((Team team) => teamReference.contains(team.id.toString()))
-        .first;
+    return _cachedTeamsList.where((Team team) => teamReference.contains(team.id.toString())).first;
   }
 
   /// Setter for cachedTeamsList
@@ -89,9 +106,6 @@ class PersistentController extends GetxController {
     _cachedTeamsList.value = teamsList;
     update(["team-dropdown", "team-type-selection-bar", "players-list"]);
   }
-
-  /// Storing game actions as GameAction objects inside this list
-  RxList<GameAction> _actions = <GameAction>[].obs;
 
   /// remove last added entry from actions list and firestore
   void removeLastAction() {
@@ -102,6 +116,11 @@ class PersistentController extends GetxController {
   /// check whether there were game actions entered already
   bool actionsIsEmpty() {
     return _actions.isEmpty;
+  }
+
+  generateStatistics() async {
+    List<Map<String, dynamic>> gamesData = await repository.getGamesData();
+    _statisticsEngine.value.generateStatistics(gamesData, getAllPlayers());
   }
 
   /// add action to actions list and firestore
@@ -161,6 +180,19 @@ class PersistentController extends GetxController {
     _currentGame.value.stopWatchTimer.setPresetTime(mSec: time);
   }
 
+  void setAllGames(List<Game> games) {
+    _allGames.value = games;
+  }
+
+  List<Game> getAllGames({String? teamId}) {
+    // if there is a teamId provided only get the games corresponding to that team
+    if (teamId != null) {
+      List<Game> correspondingGames = _allGames.where((Game game) => game.teamId == teamId).toList();
+      return correspondingGames;
+    }
+    return _allGames;
+  }
+
   /// reset the current Game object to a game without id and clean up the actions list
   void resetCurrentGame() {
     _currentGame.value = Game(date: DateTime.now());
@@ -181,5 +213,9 @@ class PersistentController extends GetxController {
     } else {
       return false;
     }
+  }
+
+  Map<String, dynamic> getStatistics() {
+    return _statisticsEngine.value.getStatistics();
   }
 }

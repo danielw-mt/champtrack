@@ -16,6 +16,7 @@ class Game {
   String? lastSync;
   List<String> onFieldPlayers;
   StopWatchTimer stopWatchTimer;
+  
 
   Game(
       {this.id,
@@ -83,6 +84,7 @@ class Game {
         lastSync: map["lastSync"],
         onFieldPlayers: map["onFieldPlayers"].cast<String>());
     game.stopWatchTimer = stopWatchTimer;
+    
     return game;
   }
 }

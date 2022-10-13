@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:handball_performance_tracker/constants/colors.dart';
 import 'package:handball_performance_tracker/constants/stringsGeneral.dart';
 import 'package:handball_performance_tracker/widgets/main_screen/ef_score_bar.dart';
-import '../../controllers/persistentController.dart';
-import '../../controllers/tempController.dart';
+import '../../controllers/persistent_controller.dart';
+import '../../controllers/temp_controller.dart';
 import 'package:get/get.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
-import '../../utils/gameControl.dart';
+import '../../utils/game_control.dart';
 
 class StopWatchBar extends StatelessWidget {
   // stop watch widget that allows to the time to be started, stopped, resetted and in-/decremented by 1 sec

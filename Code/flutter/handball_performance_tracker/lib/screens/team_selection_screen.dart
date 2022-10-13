@@ -5,11 +5,11 @@ import 'package:handball_performance_tracker/constants/stringsGeneral.dart';
 import 'package:handball_performance_tracker/constants/stringsTeamManagement.dart';
 import 'package:handball_performance_tracker/controllers/persistentController.dart';
 import 'package:handball_performance_tracker/widgets/nav_drawer.dart';
-import '../controllers/tempController.dart';
+import '../controllers/temp_controller.dart';
 import '../widgets/team_selection_screen/team_dropdown.dart';
 import '../widgets/team_selection_screen/team_type_selection_bar.dart';
 import '../widgets/team_selection_screen/add_new_team_form.dart';
-import 'teamSettingsScreen.dart';
+import 'team_settings_screen.dart';
 
 // A screen where all the available teams are listed for men, women and youth teams
 class TeamSelectionScreen extends StatelessWidget {

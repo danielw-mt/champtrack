@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:handball_performance_tracker/controllers/tempController.dart';
+import 'package:handball_performance_tracker/controllers/temp_controller.dart';
 import 'package:handball_performance_tracker/widgets/start_game_screen/start_game_form.dart';
 import 'package:handball_performance_tracker/constants/stringsGeneral.dart';
 import '../widgets/nav_drawer.dart';

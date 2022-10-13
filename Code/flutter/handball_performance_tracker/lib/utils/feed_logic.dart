@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
 import 'package:handball_performance_tracker/constants/game_actions.dart';
-import '../controllers/tempController.dart';
+import '../controllers/temp_controller.dart';
 import '../data/game_action.dart';
 import '../constants/settings_config.dart';
 

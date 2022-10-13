@@ -40,12 +40,14 @@ dependencies:
   rflutter_alert: ^2.0.4
   rainbow_color: ^2.0.1
   firebase_auth: ^3.3.19
+  fl_chart: ^0.55.1
+  pie_chart: ^5.3.2
+  firebase_performance: ^0.8.2+4
   firebase_analytics: ^9.3.3
   firebase_core: ^1.21.1
   get_it: ^7.2.0
   logger: ^1.1.0
   firebase_crashlytics: ^2.8.9
-  firebase_performance: ^0.8.2+4
 
 dev_dependencies:
   flutter_test:
@@ -87,6 +89,9 @@ flutter:
     - assets/statistics2.png
     - assets/statistics3.png
     - assets/
+    - assets/statistic_screen/time_penalty_button.png
+    - assets/statistic_screen/red_card_button.png
+    - assets/statistic_screen/yellow_card_button.png
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

@@ -4,9 +4,10 @@ import '../data/player.dart';
 import '../data/team.dart';
 import '../data/database_repository.dart';
 import 'package:get/get.dart';
-import '../controllers/persistentController.dart';
-import '../controllers/tempController.dart';
+import '../controllers/persistent_controller.dart';
+import '../controllers/temp_controller.dart';
 import '../data/club.dart';
+import '../data/game.dart';
 
 Future<bool> initializeLocalData() async {
   PersistentController persistentController = Get.find<PersistentController>();
@@ -28,18 +29,33 @@ Future<bool> initializeLocalData() async {
     }
     QuerySnapshot playersSnapshot = await repository.getAllPlayers();
     // make sure initialization doesn't break if there are no players
-    if (playersSnapshot.docs.isEmpty){
+    if (playersSnapshot.docs.isEmpty) {
       print("no players found");
+    } else {
+      List<Player> players = [];
+      playersSnapshot.docs.forEach((QueryDocumentSnapshot playerSnapshot) {
+        players.add(Player.fromDocumentSnapshot(playerSnapshot));
+      });
+      persistentController.setAllPlayers(players);
+    }
+    QuerySnapshot gamesSnapshot = await repository.getAllGames();
+    // make sure initialization doesn't break if there are no games
+    if (gamesSnapshot.docs.isEmpty) {
+      print("no games found");
+    } else {
+      List<Game> gamesList = [];
+      for (QueryDocumentSnapshot game in gamesSnapshot.docs) {
+        gamesList.add(Game.fromDocumentSnapshot(game));
+      }
+      persistentController.setAllGames(gamesList);
     }
     // go through every team document
     for (DocumentSnapshot teamDocumentSnapshot in teamsSnapshot.docs) {
-      Map<String, dynamic> docData =
-          teamDocumentSnapshot.data() as Map<String, dynamic>;
+      Map<String, dynamic> docData = teamDocumentSnapshot.data() as Map<String, dynamic>;
       List<Player> playerList = [];
       List<Player> onFieldList = [];
       // add all players in each team to the players list
-      List<DocumentReference> playerReferences =
-          docData["players"].cast<DocumentReference>();
+      List<DocumentReference> playerReferences = docData["players"].cast<DocumentReference>();
       for (DocumentReference playerReference in playerReferences) {
         playersSnapshot.docs.forEach((playerSnapshot) {
           if (playerSnapshot.id == playerReference.id.toString()) {
@@ -48,8 +64,7 @@ Future<bool> initializeLocalData() async {
         });
       }
       // add each onFieldPlayer to the onFieldPlayers list
-      List<DocumentReference> onFieldPlayers =
-          docData["onFieldPlayers"].cast<DocumentReference>();
+      List<DocumentReference> onFieldPlayers = docData["onFieldPlayers"].cast<DocumentReference>();
       for (DocumentReference playerReference in onFieldPlayers) {
         playersSnapshot.docs.forEach((playerSnapshot) {
           if (playerSnapshot.id == playerReference.id.toString()) {
@@ -59,11 +74,7 @@ Future<bool> initializeLocalData() async {
       }
       logger.d("adding team: " + docData["name"]);
       teamsList.add(Team(
-          id: teamDocumentSnapshot.reference.id,
-          type: docData["type"],
-          name: docData["name"],
-          players: playerList,
-          onFieldPlayers: onFieldList));
+          id: teamDocumentSnapshot.reference.id, type: docData["type"], name: docData["name"], players: playerList, onFieldPlayers: onFieldList));
     }
     persistentController.updateAvailableTeams(teamsList);
     persistentController.isInitialized = true;
@@ -71,14 +82,15 @@ Future<bool> initializeLocalData() async {
     // set the default selected team to be the first one available
     TempController tempController = Get.find<TempController>();
     tempController.setSelectedTeam(persistentController.getAvailableTeams()[0]);
+    // TODO whats the difference between the two?
     tempController.setPlayingTeam(persistentController.getAvailableTeams()[0]);
 
     // run a test whether a previous game exists already
-    bool gameWithinLast20Mins =
-        await repository.isThereAGameWithinLastMinutes(20);
+    bool gameWithinLast20Mins = await repository.isThereAGameWithinLastMinutes(20);
     if (gameWithinLast20Mins) {
       tempController.setOldGameStateExists(true);
     }
+    persistentController.generateStatistics();
   }
   return true;
 }

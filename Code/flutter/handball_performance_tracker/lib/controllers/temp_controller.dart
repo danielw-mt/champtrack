@@ -2,7 +2,7 @@ import 'package:get/get.dart';
 import 'package:handball_performance_tracker/data/database_repository.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../data/game.dart';
-import 'persistentController.dart';
+import 'persistent_controller.dart';
 import '../data/game_action.dart';
 import '../data/player.dart';
 import '../data/team.dart';

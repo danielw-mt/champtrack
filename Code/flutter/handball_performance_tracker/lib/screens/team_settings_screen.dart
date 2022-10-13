@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:handball_performance_tracker/widgets/nav_drawer.dart';
-import '../controllers/tempController.dart';
+import '../controllers/temp_controller.dart';
 import '../widgets/team_settings_screen/players_list.dart';
 import '../widgets/team_settings_screen/team_settings_bar.dart';
 import '../widgets/team_settings_screen/team_details_form.dart';

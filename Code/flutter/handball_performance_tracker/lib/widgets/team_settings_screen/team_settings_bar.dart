@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:handball_performance_tracker/constants/colors.dart';
 import '../../constants/stringsGeneral.dart';
-import '../../controllers/tempController.dart';
+import '../../controllers/temp_controller.dart';
 
 // Bottom Nav Bar for team settings screen
 class TeamSettingsBar extends StatelessWidget {

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:handball_performance_tracker/constants/team_constants.dart';
 import '../../constants/colors.dart';
-import '../../controllers/tempController.dart';
+import '../../controllers/temp_controller.dart';
 import 'package:get/get.dart';
 import '../../data/player.dart';
 

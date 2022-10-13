@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:handball_performance_tracker/constants/colors.dart';
 import 'package:handball_performance_tracker/constants/stringsGameScreen.dart';
-import 'package:handball_performance_tracker/controllers/tempController.dart';
+import 'package:handball_performance_tracker/controllers/temp_controller.dart';
 import 'package:get/get.dart';
-import 'package:handball_performance_tracker/screens/mainScreen.dart';
+import 'package:handball_performance_tracker/screens/main_screen.dart';
 
 class SideSwitch extends StatelessWidget {
   const SideSwitch({Key? key}) : super(key: key);

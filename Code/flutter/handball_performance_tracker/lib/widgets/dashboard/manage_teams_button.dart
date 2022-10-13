@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:handball_performance_tracker/constants/fieldSizeParameter.dart';
-import 'package:handball_performance_tracker/screens/startGameScreen.dart';
-import 'package:handball_performance_tracker/screens/teamSelectionScreen.dart';
+import 'package:handball_performance_tracker/screens/start_game_screen.dart';
+import 'package:handball_performance_tracker/screens/team_selection_screen.dart';
 import 'package:get/get.dart';
 import 'package:handball_performance_tracker/constants/stringsDashboard.dart';
 

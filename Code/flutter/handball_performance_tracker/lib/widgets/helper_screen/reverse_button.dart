@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../controllers/persistentController.dart';
+import '../../controllers/persistent_controller.dart';
 import 'package:get/get.dart';
 
 class ReverseButton extends StatelessWidget {
