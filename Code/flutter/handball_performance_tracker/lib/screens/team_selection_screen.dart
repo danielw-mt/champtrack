@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:handball_performance_tracker/constants/colors.dart';
 import 'package:handball_performance_tracker/constants/stringsGeneral.dart';
 import 'package:handball_performance_tracker/constants/stringsTeamManagement.dart';
-import 'package:handball_performance_tracker/controllers/persistentController.dart';
+import 'package:handball_performance_tracker/controllers/persistent_controller.dart';
 import 'package:handball_performance_tracker/widgets/nav_drawer.dart';
 import '../controllers/temp_controller.dart';
 import '../widgets/team_selection_screen/team_dropdown.dart';
