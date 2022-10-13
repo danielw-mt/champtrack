@@ -25,4 +25,7 @@ class StringsTeamManagement{
   static const String lConfirmDeleteTeam = "Soll das Team wirklich gelöscht werden?";
   static const String lYes = "Ja";
   static const String lNo = "Nein";
+
+  static const String lAddTeam = "Team hinzufügen";
+  static const String lEditTeam = "Team bearbeiten";
 }

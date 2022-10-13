@@ -46,7 +46,12 @@ class TempController extends GetxController {
     PersistentController persistentController =
         Get.find<PersistentController>();
     persistentController.deleteTeam(_selectedTeam.value);
-    _selectedTeam.value = persistentController.getAvailableTeams()[0];
+    // set selected team to default team if no teams are available
+    if (persistentController.getAvailableTeams().length > 0) {
+      _selectedTeam.value = persistentController.getAvailableTeams()[0];
+    } else {
+      _selectedTeam.value = Team(id: "-1", name: "Default team");
+    }
     update([
       "team-type-selection-bar",
       "players-list",
