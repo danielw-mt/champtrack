@@ -152,9 +152,9 @@ class _ActionsCardState extends State<ActionsCard> {
                 flex: 4,
                 child: widget.actionCounts != {}
                     ? SingleChildScrollView(
-                      scrollDirection: Axis.vertical,
-                      child: DataTable(
-                          columns: const <DataColumn>[
+                        scrollDirection: Axis.vertical,
+                        child: DataTable(
+                            columns: const <DataColumn>[
                               DataColumn(
                                 label: Text("Action"),
                               ),
@@ -162,14 +162,14 @@ class _ActionsCardState extends State<ActionsCard> {
                                 label: Text("Count"),
                               ),
                             ],
-                          rows: List<DataRow>.generate(
-                              widget.actionCounts.length,
-                              (index) => DataRow(cells: [
-                                    // convert action tag to the correct string specified in the strings using realActionType
-                                    DataCell(Text(realActionType(widget.actionCounts.keys.elementAt(index)))),
-                                    DataCell(Text(widget.actionCounts.values.elementAt(index).toString()))
-                                  ]))),
-                    )
+                            rows: List<DataRow>.generate(
+                                widget.actionCounts.length,
+                                (index) => DataRow(cells: [
+                                      // convert action tag to the correct string specified in the strings using realActionType
+                                      DataCell(Text(realActionType(widget.actionCounts.keys.elementAt(index)))),
+                                      DataCell(Text(widget.actionCounts.values.elementAt(index).toString()))
+                                    ]))),
+                      )
                     : Text("No actions recorded for the selected player and game"))
           ],
         ),
@@ -205,11 +205,13 @@ class _PerformanceCardState extends State<PerformanceCard> {
   @override
   Widget build(BuildContext context) {
     if (widget.actionSeries.length == 0) {
-      return Text("No data available");
+      return Center(child: Text("No data available"));
     }
-    // add the ef-score option to the dropdown elements
+    // add the ef-score option to the action series dropdown elements
     _dropDownElements = [];
-    _dropDownElements.add("Ef-Score");
+    if (widget.efScoreSeries.length > 0) {
+      _dropDownElements.add("Ef-Score");
+    }
     widget.actionSeries.keys.toList().forEach((String actionType) {
       // convert action tag to the correct string specified in the strings using realActionType
       _dropDownElements.add(actionType);
@@ -259,7 +261,7 @@ class _PerformanceCardState extends State<PerformanceCard> {
       items: _dropDownElements.map((String dropdownElement) {
         return DropdownMenuItem(
           value: dropdownElement,
-          // if the element is Ef-score don't do anything. 
+          // if the element is Ef-score don't do anything.
           //If it is one of the action type series then convert the tag to the correct string using realActionType
           child: dropdownElement == "Ef-score" ? Text(dropdownElement) : Text(realActionType(dropdownElement)),
         );

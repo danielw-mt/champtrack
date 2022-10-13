@@ -73,7 +73,6 @@ class _TeamStatisticsState extends State<TeamStatistics> {
     List<double> efScoreSeries = [];
     List<int> timeStamps = [];
     try {
-      logger.d(_statistics[_selectedGame.id]["team_stats"]);
       Map<String, dynamic> teamStats = _statistics[_selectedGame.id]["team_stats"][_selectedTeam.id];
       // try to get action counts for the player
       actionCounts = teamStats["action_counts"];
@@ -143,7 +142,7 @@ class _TeamStatisticsState extends State<TeamStatistics> {
                       Flexible(
                         child: PerformanceCard(
                             actionSeries: actionSeries,
-                            efScoreSeries: efScoreSeries,
+                            efScoreSeries: [],
                             allActionTimeStamps: timeStamps,
                             startTime: startTime,
                             stopTime: stopTime),
