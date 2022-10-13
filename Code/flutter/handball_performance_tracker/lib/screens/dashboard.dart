@@ -105,7 +105,18 @@ class Dashboard extends StatelessWidget {
               ],
             );
           } else {
-            return CustomAlertWidget("Initializing local data");
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text("Loading...",
+                    style: TextStyle(fontSize: 20, color: Colors.blue)),
+                Image.asset("assets/goalee_gif.gif"),
+                CircularProgressIndicator(
+                  strokeWidth: 4,
+                )
+              ],
+            );
+            //return CustomAlertWidget("Initializing local data");
           }
         });
   }
