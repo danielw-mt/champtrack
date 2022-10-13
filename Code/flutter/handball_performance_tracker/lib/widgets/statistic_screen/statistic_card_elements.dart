@@ -151,22 +151,25 @@ class _ActionsCardState extends State<ActionsCard> {
             Flexible(
                 flex: 4,
                 child: widget.actionCounts != {}
-                    ? DataTable(
-                        columns: const <DataColumn>[
-                            DataColumn(
-                              label: Text("Action"),
-                            ),
-                            DataColumn(
-                              label: Text("Count"),
-                            ),
-                          ],
-                        rows: List<DataRow>.generate(
-                            widget.actionCounts.length,
-                            (index) => DataRow(cells: [
-                                  // convert action tag to the correct string specified in the strings using realActionType
-                                  DataCell(Text(realActionType(widget.actionCounts.keys.elementAt(index)))),
-                                  DataCell(Text(widget.actionCounts.values.elementAt(index).toString()))
-                                ])))
+                    ? SingleChildScrollView(
+                      scrollDirection: Axis.vertical,
+                      child: DataTable(
+                          columns: const <DataColumn>[
+                              DataColumn(
+                                label: Text("Action"),
+                              ),
+                              DataColumn(
+                                label: Text("Count"),
+                              ),
+                            ],
+                          rows: List<DataRow>.generate(
+                              widget.actionCounts.length,
+                              (index) => DataRow(cells: [
+                                    // convert action tag to the correct string specified in the strings using realActionType
+                                    DataCell(Text(realActionType(widget.actionCounts.keys.elementAt(index)))),
+                                    DataCell(Text(widget.actionCounts.values.elementAt(index).toString()))
+                                  ]))),
+                    )
                     : Text("No actions recorded for the selected player and game"))
           ],
         ),
