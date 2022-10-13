@@ -75,6 +75,7 @@ class NavDrawer extends StatelessWidget {
                       onPressed: () {
                         FirebaseAuth.instance.signOut();
                         Get.to(Home());
+                        Get.deleteAll();
                       },
                       icon: Icon(
                         Icons.logout,
