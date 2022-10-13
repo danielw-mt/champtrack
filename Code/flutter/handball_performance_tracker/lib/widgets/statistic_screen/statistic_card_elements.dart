@@ -196,7 +196,6 @@ class PerformanceCard extends StatefulWidget {
 }
 
 class _PerformanceCardState extends State<PerformanceCard> {
-  int _currentGraph = 0;
   String _selectedDropdownElement = "";
   List<String> _dropDownElements = [];
 
