@@ -1,3 +1,5 @@
+import 'package:handball_performance_tracker/constants/game_actions.dart';
+
 import '../data/game_action.dart';
 import 'package:logger/logger.dart';
 import '../data/ef_score.dart';
@@ -52,7 +54,6 @@ class StatisticsEngine {
 
   /// create the map that contains all statistics for an individual player from all the actions in the game
   Map<String, dynamic> _generatePlayerStatistics(actions, List<Player> players) {
-
     // map with statistics for all player by id of the player
     Map<String, dynamic> player_stats = {};
 
@@ -268,19 +269,29 @@ class StatisticsEngine {
           teamStats["action_coordinates"][actionType] = coordinates;
         }
       });
-      // add all actions and all action timestamps to a Splaytreemap.
-      // This map will guarantee that the keys (timestamps) and the corresponding values (actions) stay sorted
-      SplayTreeMap<int, String> allActions = SplayTreeMap<int, String>();
-      for (int i = 0; i < playerStatistic["all_action_timestamps"].length; i++) {
-        allActions[playerStatistic["all_action_timestamps"][i]] = playerStatistic["all_actions"][i];
-      }
-      teamStats["all_actions"].addAll(allActions.values);
-      teamStats["all_action_timestamps"].addAll(allActions.keys);
+      List<String> allActions = playerStatistic["all_actions"];
+      List<int> allActionTimestamps = playerStatistic["all_action_timestamps"];
+      allActions.forEach((String actionType) {
+        teamStats["all_actions"].add(actionType);
+      });
+      allActionTimestamps.forEach((int timestamp) {
+        teamStats["all_action_timestamps"].add(timestamp);
+      });
+
       // TODO calculate the ef-score series for the team by building the average through all players through time
       // go through every player and update the ef-score by adding to the global ef score average at the time when a new action is added
       // ef score depends on the player position which is why we need to do this
     });
-    // update overall statistics
+    // sort all_actions and all_action_timestamps chronologically. Keys are timestamp and values are actions
+
+    Map<int, String> allActionsUnsorted = Map<int, String>();
+    teamStats["all_action_timestamps"].forEach((int timestamp) {
+      allActionsUnsorted[timestamp] = teamStats["all_actions"][teamStats["all_action_timestamps"].indexOf(timestamp)];
+    });
+    Map<int, String> sortedByTimeStampMap = new SplayTreeMap<int, String>.from(allActionsUnsorted, (k1, k2) => k1.compareTo(k2));
+
+    teamStats["all_actions"] = sortedByTimeStampMap.values.toList();
+    teamStats["all_action_timestamps"] = sortedByTimeStampMap.keys.toList();
     return teamStats;
   }
 
