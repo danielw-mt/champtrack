@@ -16,6 +16,7 @@ var logger = Logger(
       ),
 );
 
+/// Switch the field from defense to offense
 void defensiveFieldSwitch() {
   final TempController tempController = Get.find<TempController>();
   // if our action is left (page 0) and we are defensing (on page 0) jump back to attack (page 1) after the action
@@ -40,6 +41,7 @@ void defensiveFieldSwitch() {
   }
 }
 
+/// Switch the field from offense to defense
 void offensiveFieldSwitch() {
   final TempController tempController = Get.find<TempController>();
   // if our action is left (page 0) and we are attacking (on page 0) jump back to defense (page 1) after the action

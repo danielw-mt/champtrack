@@ -13,6 +13,20 @@ import '../../../constants/game_actions.dart';
 import '../playermenu.dart';
 import 'dart:math';
 import '../../../constants/positions.dart';
+import '../../../utils/field_control.dart';
+import 'package:logger/logger.dart';
+
+
+var logger = Logger(
+  printer: PrettyPrinter(
+      methodCount: 2, // number of method calls to be displayed
+      errorMethodCount: 8, // number of method calls if stacktrace is provided
+      lineLength: 120, // width of the output
+      colors: true, // Colorful log messages
+      printEmojis: true, // Print an emoji for each log message
+      printTime: false // Should each log print contain a timestamp
+      ),
+);
 
 /// @return
 /// builds a single dialog button that logs its text (=action) to firestore
@@ -54,16 +68,7 @@ class CustomDialogButton extends StatelessWidget {
 
       // switch field side after hold of goalkeeper
       if (actionTag == paradeTag || actionTag == emptyGoalTag || actionTag == goalOpponentTag) {
-        while (FieldSwitch.pageController.positions.length > 1) {
-          FieldSwitch.pageController.detach(FieldSwitch.pageController.positions.first);
-        }
-        if (tempController.getAttackIsLeft() == true) {
-          logger.d("Switching to left field after goalkeeper action");
-          FieldSwitch.pageController.jumpToPage(0);
-        } else {
-          logger.d("Switching to right field after goalkeeper action");
-          FieldSwitch.pageController.jumpToPage(1);
-        }
+        defensiveFieldSwitch();
       }
       GameAction action = GameAction(
           teamId: tempController.getSelectedTeam().id!,
@@ -79,7 +84,7 @@ class CustomDialogButton extends StatelessWidget {
       // updated in firebase with their player_id using the action_id
 
       // if an action inside goalkeeper menu that does not correspond to the opponent was hit try to assign this action directly to the goalkeeper
-      if (actionContext == actionContextGoalkeeper && actionTag != goalOpponentTag && actionTag != emptyGoalTag) {
+      if (actionTag == paradeTag) {
         List<Player> goalKeepers = [];
         tempController.getOnFieldPlayers().forEach((Player player) {
           if (player.positions.contains(goalkeeperPos)) {

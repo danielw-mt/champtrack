@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:handball_performance_tracker/constants/game_actions.dart';
+import 'package:handball_performance_tracker/utils/field_control.dart';
 import 'package:handball_performance_tracker/utils/icons.dart';
 import 'package:handball_performance_tracker/utils/player_helper.dart';
 import 'package:handball_performance_tracker/widgets/main_screen/ef_score_bar.dart';
@@ -226,32 +227,9 @@ GetBuilder<TempController> buildDialogButton(BuildContext context, Player player
 
   void _setFieldBasedOnLastAction(GameAction lastAction) {
     if (lastAction.tag == goalTag || lastAction.tag == missTag || lastAction.tag == trfTag) {
-      while (FieldSwitch.pageController.positions.length > 1) {
-        FieldSwitch.pageController.detach(FieldSwitch.pageController.positions.first);
-      }
-      // if our action is left (page 0) and we are attacking (on page 0) jump back to defense (page 1) after the action
-      if (tempController.getFieldIsLeft() == true && tempController.getAttackIsLeft() == true) {
-        logger.d("Switching to right field after action");
-        FieldSwitch.pageController.jumpToPage(1);
-        // if out action is right (page 1) and we are attacking (on page 1) jump back to defense (page 0) after the action
-      } else if (tempController.getFieldIsLeft() == false && tempController.getAttackIsLeft() == false) {
-        logger.d("Switching to left field after action");
-        FieldSwitch.pageController.jumpToPage(0);
-      }
+      offensiveFieldSwitch();
     } else if (lastAction.tag == blockAndStealTag) {
-      while (FieldSwitch.pageController.positions.length > 1) {
-        FieldSwitch.pageController.detach(FieldSwitch.pageController.positions.first);
-      }
-      // if our action is left (page 0) and we are defensing (on page 0) jump back to attack (page 1) after the action
-      if (tempController.getFieldIsLeft() == true && tempController.getAttackIsLeft() == false) {
-        logger.d("Switching to right field after action");
-        FieldSwitch.pageController.jumpToPage(1);
-
-        // if out action is right (page 1) and we are defensing (on page 1) jump back to attack (page 0) after the action
-      } else if (tempController.getFieldIsLeft() == false && tempController.getAttackIsLeft() == true) {
-        logger.d("Switching to left field after action");
-        FieldSwitch.pageController.jumpToPage(0);
-      }
+      defensiveFieldSwitch();
     }
   }
 
