@@ -15,26 +15,26 @@ const String goalTag = "goal";
 const String goalPosTag = "goal_pos";
 const String goalSubNineTag = "goal<9m";
 const String goalExtNineTag = "goal>9m";
-const String goalChrunchtimeTag = "goalLastFive";
+const String goalChrunchtimeTag = "goal_crunchtime";
 const String assistTag = "assist";
 const String oneVOneTag = "1v1";
 const String blockTag = "block";
 const String blockAndStealTag = "block_steal";
 const String forceTwoMinTag = "2min";
 const String missTag = "miss";
-const String missPosTag = "err_pos";
-const String missSubNineTag = "err<9m";
-const String missExtNineTag = "err>9m";
-const String missCrunchtimeTag = "errLastFive";
+const String missPosTag = "miss_pos";
+const String missSubNineTag = "miss<9m";
+const String missExtNineTag = "miss>9m";
+const String missCrunchtimeTag = "miss_crunchtime";
 const String trfTag = "trf";
 const String foulSevenMeterTag = "foul";
-const String timePenaltyTag = "timePen";
+const String timePenaltyTag = "time_pen";
 const String redCardTag = "red";
 const String paradeTag = "parade";
 const String yellowCardTag = "yellow";
-const String badPassTag = "badPass";
-const String goalOthersTag = "goalOthers";
-const String emptyGoalTag = "emptyGoal";
+const String badPassTag = "bad_pass";
+const String goalOpponentTag = "goal_opponent";
+const String emptyGoalTag = "empty_goal";
 
 const String positiveActionTag = "pos";
 const String negativeActionTag = "neg";
@@ -73,12 +73,12 @@ Map<String, Map<String, String>> actionMapping = {
     StringsGameScreen.lGoalGoalkeeper: goalTag,
     StringsGameScreen.lBadPass: badPassTag,
     StringsGameScreen.lParade: paradeTag,
-    StringsGameScreen.lGoalOtherSide: goalOthersTag,
+    StringsGameScreen.lGoalOpponent: goalOpponentTag,
   },
   actionContextSevenMeter_meter: {
     StringsGameScreen.lGoal: goal7mTag,
     StringsGameScreen.lErrThrow: missed7mTag,
-    StringsGameScreen.lGoalOtherSide: goalOthersTag,
+    StringsGameScreen.lGoalOpponent: goalOpponentTag,
     StringsGeneral.lCaught: parade7mTag
   },
   actionContextAllActions: {
@@ -95,7 +95,7 @@ Map<String, Map<String, String>> actionMapping = {
     StringsGameScreen.lBlockAndSteal: blockAndStealTag,
     StringsGameScreen.lParade: paradeTag,
     StringsGameScreen.lBadPass: badPassTag,
-    StringsGameScreen.lGoalOtherSide: goalOthersTag,
+    StringsGameScreen.lGoalOpponent: goalOpponentTag,
     StringsGameScreen.lEmptyGoal: emptyGoalTag,
     StringsGameScreen.lGoalGoalkeeper: goalTag,
     StringsGeneral.lCaught: parade7mTag,

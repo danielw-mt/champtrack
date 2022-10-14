@@ -52,18 +52,15 @@ class CustomDialogButton extends StatelessWidget {
       String currentGameId = persistentController.getCurrentGame().id!;
 
       // switch field side after hold of goalkeeper
-      logger.d("switching field side if applicable");
-      if (actionMapping[actionContextAllActions]![buttonText]! == paradeTag ||
-          actionMapping[actionContextAllActions]![buttonText]! == emptyGoalTag ||
-          actionMapping[actionContextAllActions]![buttonText]! == goalOthersTag) {
+      if (actionTag == paradeTag || actionTag == emptyGoalTag || actionTag == goalOpponentTag) {
         while (FieldSwitch.pageController.positions.length > 1) {
           FieldSwitch.pageController.detach(FieldSwitch.pageController.positions.first);
         }
         if (tempController.getAttackIsLeft() == true) {
-          logger.d("Switching to left field after hold");
+          logger.d("Switching to left field after goalkeeper action");
           FieldSwitch.pageController.jumpToPage(0);
         } else {
-          logger.d("Switching to right field after hold");
+          logger.d("Switching to right field after goalkeeper action");
           FieldSwitch.pageController.jumpToPage(1);
         }
       }
@@ -76,16 +73,12 @@ class CustomDialogButton extends StatelessWidget {
           timestamp: unixTime,
           relativeTime: secondsSinceGameStart);
       logger.d("GameAction object created: ${action.tag}");
-      logger.d(action.tag);
-
-      // add action to firebase
-
       // store most recent action id in game state for the player menu
       // when a player was selected in that menu the action document can be
       // updated in firebase with their player_id using the action_id
-      logger.d("Adding gameaction to firebase");
+
       // Save action directly if goalkeeper action
-      if (actionTag == actionContextGoalkeeper) {
+      if (actionContext == actionContextGoalkeeper) {
         String? goalKeeperId = "goalkeeper";
         // get id of goalkeeper by going through players on field and searching for position
         for (int k in getOnFieldIndex()) {
@@ -102,16 +95,15 @@ class CustomDialogButton extends StatelessWidget {
         logger.d("last action saved in database: ${persistentController.getLastAction().toMap()}");
         if (action.tag == goalTag) {
           tempController.incOwnScore();
-        } else if (action.tag == goalOthersTag || action.tag == emptyGoalTag) {
+        } else if (action.tag == goalOpponentTag || action.tag == emptyGoalTag) {
           tempController.incOpponentScore();
         }
       } else {
         persistentController.addAction(action);
       }
       Navigator.pop(context);
-      // close action menu if goalkeeper action
-      if (actionTag != actionContextGoalkeeper) {
-        print("stepping in here: $actionTag");
+      // don't show player menu if a goalkeeper action or opponent action was logged
+      if (actionContext != actionContextGoalkeeper && actionTag != goalOpponentTag) {
         callPlayerMenu(context);
       }
     }

@@ -17,7 +17,7 @@ void removeFeedItem(GameAction action, TempController tempController) {
   // decrease own score by one if a goal action was deleted
   if (action.tag == goalTag) {
     tempController.decOwnScore();
-  } else if (action.tag == goalOthersTag || action.tag == emptyGoalTag) {
+  } else if (action.tag == goalOpponentTag || action.tag == emptyGoalTag) {
     tempController.decOpponentScore();
   }
   // update player's ef.score

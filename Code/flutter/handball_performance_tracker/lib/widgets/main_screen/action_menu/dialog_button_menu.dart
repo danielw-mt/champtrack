@@ -156,7 +156,7 @@ class ArrangedDialogButtons extends StatelessWidget {
           child: Column(
             children: [
               Flexible(child: dialogButtons[StringsGameScreen.lParade]!),
-              Flexible(child: dialogButtons[StringsGameScreen.lGoalOtherSide]!),
+              Flexible(child: dialogButtons[StringsGameScreen.lGoalOpponent]!),
             ],
           ),
         ),
@@ -274,11 +274,11 @@ class ArrangedDialogButtons extends StatelessWidget {
           buttonText: StringsGameScreen.lParade,
           buttonColor: Color.fromRGBO(99, 107, 171, 1),
         ),
-        StringsGameScreen.lGoalOtherSide: CustomDialogButton(
+        StringsGameScreen.lGoalOpponent: CustomDialogButton(
           buildContext: context,
-          actionTag: goalKeeperActionMapping[StringsGameScreen.lGoalOtherSide]!,
+          actionTag: goalKeeperActionMapping[StringsGameScreen.lGoalOpponent]!,
           actionContext: actionContextGoalkeeper,
-          buttonText: StringsGameScreen.lGoalOtherSide,
+          buttonText: StringsGameScreen.lGoalOpponent,
           buttonColor: Color.fromRGBO(203, 206, 227, 1),
         ),
       };
