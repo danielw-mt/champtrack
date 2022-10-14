@@ -68,9 +68,7 @@ class PersistentController extends GetxController {
   /// get a team object from cachedTeamsList from reference string
   /// i.e teams/ypunI6UsJmTr2LxKh1aw
   Team getSpecificTeam(String teamReference) {
-    return _cachedTeamsList
-        .where((Team team) => teamReference.contains(team.id.toString()))
-        .first;
+    return _cachedTeamsList.where((Team team) => teamReference.contains(team.id.toString())).first;
   }
 
   /// Setter for cachedTeamsList
@@ -94,17 +92,17 @@ class PersistentController extends GetxController {
     return _actions.isEmpty;
   }
 
-  /// add action to actions list and firestore
-  void addAction(GameAction action) {
+  /// add action to persistent controller action list
+  void addActionToCache(GameAction action) {
     _actions.add(action);
   }
 
-  /// return last action that was added
+  /// Return last action that was added to persistentcontroller actions list
   GameAction getLastAction() {
     if (_actions.length > 0) {
       return _actions.last;
     }
-    return GameAction();
+    throw Exception("No actions available in persistent controller");
   }
 
   List<GameAction> getAllActions() {
@@ -112,7 +110,7 @@ class PersistentController extends GetxController {
   }
 
   /// updates playerid of the last action
-  Future<void> setLastActionPlayer(Player player) async {
+  void setLastActionPlayer(Player player) {
     _actions.last.playerId = player.id!;
   }
 

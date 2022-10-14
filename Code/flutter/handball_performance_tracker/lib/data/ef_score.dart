@@ -86,9 +86,9 @@ class EfScore {
       return true;
     }
     // player has circle position and action was performed in 9m circle
-    if (positions.contains(circle) && _isInNineMeters(sector[1])) {
+    if (positions.contains(circlePos) && _isInNineMeters(sector[1])) {
       // action was performed in backcourt area
-      if ((sector[0] == backcourtLeft) || (sector[0] == backcourtMiddle) || (sector[0] == backcourtRight)) {
+      if ((sector[0] == backcourtLeftPos) || (sector[0] == backcourtMiddlePos) || (sector[0] == backcourtRightPos)) {
         return true;
       }
     }
@@ -96,7 +96,7 @@ class EfScore {
   }
 
   /// @return true if the action happened within the 9-m-circle
-  bool _isInNineMeters(String distance) => distance != outsideNine;
+  bool _isInNineMeters(String distance) => distance != extNineThrowPos;
 }
 
 class LiveEfScore extends EfScore {

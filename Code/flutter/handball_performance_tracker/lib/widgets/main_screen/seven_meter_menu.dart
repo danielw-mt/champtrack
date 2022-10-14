@@ -151,7 +151,7 @@ DialogButton buildDialogButton(BuildContext context, String actionType, String b
     Player activePlayer;
     if (actionType == goalTag || actionType == missed7mTag) {
       // own player did 7m
-      activePlayer = tempController.getLastClickedPlayer();
+      activePlayer = tempController.getPreviousClickedPlayer();
       tempController.setLastClickedPlayer(Player());
     } else {
       // opponent player did 7m
@@ -167,8 +167,8 @@ DialogButton buildDialogButton(BuildContext context, String actionType, String b
       activePlayer = goalKeeperId;
     }
     // add action to firebase
-    persistentController.addAction(action);
-    await persistentController.setLastActionPlayer(activePlayer);
+    persistentController.addActionToCache(action);
+    persistentController.setLastActionPlayer(activePlayer);
 
     tempController.updatePlayerEfScore(activePlayer.id!, persistentController.getLastAction());
     // add action to feed

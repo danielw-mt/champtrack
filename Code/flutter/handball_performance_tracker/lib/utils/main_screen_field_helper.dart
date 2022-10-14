@@ -84,12 +84,12 @@ class SectorCalc {
     bool inSixMeter = inSixMeterEllipse(x, y);
     if (inNineMeter) {
       if (inSixMeter) {
-        return inSix;
+        return inSixThrowPos;
       } else {
-        return betweenSixAndNine;
+        return interSixAndNineThrowPos;
       }
     } else {
-      return outsideNine;
+      return extNineThrowPos;
     }
   }
 

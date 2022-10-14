@@ -30,8 +30,7 @@ runGameStateSync() {
     // update currentGame in case the score changed
     currentGame = persistentController.getCurrentGame();
     // get most recent gameData from Firebase as usable object in dart
-    Game gameDocument =
-        await databaseRepository.getGame(currentGame.id.toString());
+    Game gameDocument = await databaseRepository.getGame(currentGame.id.toString());
     Map<String, dynamic> gameData = gameDocument.toMap();
     // sync selected team id, score, stopwatchtime,
     databaseRepository.syncGameMetaData({
@@ -45,10 +44,7 @@ runGameStateSync() {
 
     // if there are any actions in the gameState without an ID
     //(not added to FB yet), add those actions and assign them the id (happens in repository)
-    persistentController
-        .getAllActions()
-        .where((GameAction action) => action.id == null)
-        .forEach((GameAction action_in_loop) {
+    persistentController.getAllActions().where((GameAction action) => action.id == null).forEach((GameAction action_in_loop) {
       persistentController.addActionToFirebase(action_in_loop);
     });
 
@@ -100,16 +96,12 @@ Future<void> recreateGameStateFromFirebase() async {
   mostRecentGame.onFieldPlayers.forEach((String playerId) async {
     DocumentSnapshot playerSnapshot = await repository.getPlayer(playerId);
     if (playerSnapshot.exists) {
-      onFieldPlayersFromLastGame
-          .add(Player.fromDocumentSnapshot(playerSnapshot));
+      onFieldPlayersFromLastGame.add(Player.fromDocumentSnapshot(playerSnapshot));
     }
   });
   // recreate team from already stored teams in persistentController
   //(those teams were created in initialize local data)
-  Team selectedTeam = persistentController
-      .getAvailableTeams()
-      .where((Team team) => team.id == mostRecentGame.teamId)
-      .first;
+  Team selectedTeam = persistentController.getAvailableTeams().where((Team team) => team.id == mostRecentGame.teamId).first;
   selectedTeam.onFieldPlayers = onFieldPlayersFromLastGame;
   tempController.setSelectedTeam(selectedTeam);
   tempController.setOnFieldPlayers(onFieldPlayersFromLastGame);
@@ -118,10 +110,9 @@ Future<void> recreateGameStateFromFirebase() async {
   tempController.setOpponentScore(mostRecentGame.scoreOpponent!.toInt());
 
   // add all old actions, update feed, update ef-score
-  List<GameAction> actionsFromLastGame =
-      await repository.getGameActionsFromGame(mostRecentGame.id.toString());
+  List<GameAction> actionsFromLastGame = await repository.getGameActionsFromGame(mostRecentGame.id.toString());
   actionsFromLastGame.forEach((GameAction action) {
-    persistentController.addAction(action);
+    persistentController.addActionToCache(action);
     tempController.addFeedAction(action);
     tempController.updatePlayerEfScore(action.playerId, action);
   });
