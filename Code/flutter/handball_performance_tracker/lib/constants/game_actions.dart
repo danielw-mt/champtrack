@@ -17,7 +17,7 @@ const String goalSubNineTag = "goal<9m";
 const String goalExtNineTag = "goal>9m";
 const String goalChrunchtimeTag = "goal_crunchtime";
 const String assistTag = "assist";
-const String oneVOneTag = "1v1";
+const String oneVOneSevenTag = "1v1&7";
 const String blockTag = "block";
 const String blockAndStealTag = "block_steal";
 const String forceTwoMinTag = "2min";
@@ -49,7 +49,7 @@ Map<String, Map<String, String>> actionMapping = {
     StringsGameScreen.lYellowCard: yellowCardTag,
     StringsGameScreen.lTimePenalty: timePenaltyTag,
     StringsGameScreen.lGoal: goalTag,
-    StringsGameScreen.lOneVsOneAnd7m: oneVOneTag,
+    StringsGameScreen.lOneVsOneAnd7m: oneVOneSevenTag,
     StringsGameScreen.lTwoMin: forceTwoMinTag,
     StringsGameScreen.lErrThrow: missTag,
     StringsGameScreen.lTrf: trfTag,
@@ -86,7 +86,7 @@ Map<String, Map<String, String>> actionMapping = {
     StringsGameScreen.lYellowCard: yellowCardTag,
     StringsGameScreen.lTimePenalty: timePenaltyTag,
     StringsGameScreen.lGoal: goalTag,
-    StringsGameScreen.lOneVsOneAnd7m: oneVOneTag,
+    StringsGameScreen.lOneVsOneAnd7m: oneVOneSevenTag,
     StringsGameScreen.lTwoMin: forceTwoMinTag,
     StringsGameScreen.lErrThrow: missTag,
     StringsGameScreen.lTrf: trfTag,
@@ -110,7 +110,7 @@ const Map<String, Map<String, int>> efScoreParameters = {
     goalExtNineTag: 5,
     goalChrunchtimeTag: 9,
     assistTag: 6,
-    oneVOneTag: 6,
+    oneVOneSevenTag: 6,
     blockTag: 2,
     blockAndStealTag: 7,
     forceTwoMinTag: 8

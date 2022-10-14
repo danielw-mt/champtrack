@@ -17,6 +17,8 @@ class StringsGameScreen {
   static const String lGoalkeeperPopUpHeader = "Torwart Aktionen";
   static const String lSelectActionDialogHeader = "Wählen Sie eine Aktion";
   static const String lAttentionTimeIsPaused = "Achtung! Zeit ist pausiert.";
+  static const String lChooseGoalkeeper = "Mehrere Spieler mit TW Rolle festgelegt. Bitte wählen";
+  static const String lChoose7mReceiver = "7m Erzieler";
 
   // Pop ups
   static const String lNoAssist = "Kein Assist";
@@ -29,12 +31,12 @@ class StringsGameScreen {
   static const String lYellowCard = "Gelbe Karte";
   static const String lTimePenalty = "Zeitstrafe";
   static const String lGoal = "Tor";
-  static const String lOneVsOneAnd7m = "1v1 & 7m";
+  static const String lOneVsOneAnd7m = "1v1 mit 7m Folge";
   static const String lTwoMin = "2min ziehen";
   static const String lErrThrow = "Fehlwurf";
   static const String lErrThrowGoalkeeper = "Fehlwurf Torwart";
   static const String lTrf = "Tech. Fehler";
-  static const String lFoul7m = "Foul => 7m";
+  static const String lFoul7m = "Foul mit 7m Folge";
   static const String lBlockNoBall = "Block ohne Ballgewinn";
   static const String lBlockAndSteal = "Block & Steal";
   static const String lParade = "Parade";

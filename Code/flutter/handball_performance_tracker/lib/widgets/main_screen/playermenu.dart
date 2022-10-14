@@ -346,7 +346,7 @@ GetBuilder<TempController> buildDialogButton(BuildContext context, Player player
     }
 
     // if we get a 7m in our favor call the seven meter menu for us
-    if (lastAction.tag == oneVOneTag) {
+    if (lastAction.tag == oneVOneSevenTag) {
       logger.d("1v1 detected => 7m menu");
       Navigator.pop(context);
       callSevenMeterPlayerMenu(context);

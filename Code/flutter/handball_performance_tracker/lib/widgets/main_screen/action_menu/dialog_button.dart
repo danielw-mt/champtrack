@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:handball_performance_tracker/constants/stringsGameScreen.dart';
 import 'package:handball_performance_tracker/data/player.dart';
 import 'package:handball_performance_tracker/utils/feed_logic.dart';
 import 'package:handball_performance_tracker/utils/player_helper.dart';
@@ -95,11 +96,18 @@ class CustomDialogButton extends StatelessWidget {
           Navigator.pop(context);
           // if there is more than one player with a goalkeeper position on field right now
         } else {
-          logger.e("More than one goalkeeper on field. Waiting for player selection");
+          tempController.setPlayerMenuText(StringsGameScreen.lChooseGoalkeeper);
+          logger.d("More than one goalkeeper on field. Waiting for player selection");
+          persistentController.addActionToCache(action);
+          Navigator.pop(context);
+          callPlayerMenu(context);
         }
       }
       if (action.tag == goalTag) {
         tempController.incOwnScore();
+      }
+      if (action.tag == oneVOneSevenTag) {
+        tempController.setPlayerMenuText(StringsGameScreen.lChoose7mReceiver);
       }
       if (action.tag == goalOpponentTag || action.tag == emptyGoalTag) {
         tempController.incOpponentScore();

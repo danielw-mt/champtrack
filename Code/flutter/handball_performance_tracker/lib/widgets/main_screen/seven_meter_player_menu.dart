@@ -25,7 +25,7 @@ var logger = Logger(
 );
 
 void callSevenMeterPlayerMenu(context) {
-  logger.d("Calling player menu");
+  logger.d("Calling seven meter player menu");
 
   showDialog(
       context: context,
