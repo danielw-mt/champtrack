@@ -4,7 +4,7 @@ import 'package:handball_performance_tracker/controllers/temp_controller.dart';
 import 'package:handball_performance_tracker/controllers/temp_controller.dart';
 import 'package:get/get.dart';
 import 'package:handball_performance_tracker/constants/stringsDashboard.dart';
-import '../../screens/main_screen.dart';
+import '../../screens/game_screen.dart';
 import '../../utils/sync_game_state.dart';
 
 class OldGameCard extends StatelessWidget {
@@ -16,10 +16,9 @@ class OldGameCard extends StatelessWidget {
           onTap: () async {
             // restore old game state
             await recreateGameStateFromFirebase();
-            PersistentController persistentController =
-                Get.find<PersistentController>();
+            PersistentController persistentController = Get.find<PersistentController>();
             // move to main Screen
-            Get.to(() => MainScreen());
+            Get.to(() => GameScreen());
             tempController.update(["action-feed", "ef-score-bar"]);
           },
           child: Card(child: Text(StringsDashboard.lRecreateOldGame)),

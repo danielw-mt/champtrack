@@ -2,21 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:handball_performance_tracker/constants/colors.dart';
 import 'package:handball_performance_tracker/controllers/temp_controller.dart';
 import 'package:handball_performance_tracker/widgets/main_screen/ef_score_bar.dart';
-import 'package:handball_performance_tracker/widgets/main_screen/ef_score_bar.dart'
-    as efscorebar;
+import 'package:handball_performance_tracker/widgets/main_screen/ef_score_bar.dart' as efscorebar;
 import 'package:handball_performance_tracker/widgets/main_screen/field.dart';
 import 'package:handball_performance_tracker/widgets/main_screen/score_keeping.dart';
 import 'package:handball_performance_tracker/widgets/main_screen/stop_game.dart';
 import 'package:handball_performance_tracker/widgets/main_screen/side_switch.dart';
 import './../widgets/nav_drawer.dart';
-import 'package:handball_performance_tracker/constants/fieldSizeParameter.dart'
-    as fieldSizeParameter;
+import 'package:handball_performance_tracker/constants/fieldSizeParameter.dart' as fieldSizeParameter;
 import 'package:flutter/services.dart';
 import '../widgets/main_screen/stopwatchbar.dart';
 import '../widgets/main_screen/action_feed.dart';
 import 'package:get/get.dart';
 
-class MainScreen extends StatelessWidget {
+class GameScreen extends StatelessWidget {
   // screen where the game takes place
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -72,10 +70,8 @@ class MainScreen extends StatelessWidget {
                   ActionFeed(),
                   // Player Bar
                   Container(
-                      width: efscorebar.scorebarWidth +
-                          efscorebar.paddingWidth * 4,
-                      height: fieldSizeParameter.fieldHeight +
-                          fieldSizeParameter.toolbarHeight / 4,
+                      width: efscorebar.scorebarWidth + efscorebar.paddingWidth * 4,
+                      height: fieldSizeParameter.fieldHeight + fieldSizeParameter.toolbarHeight / 4,
                       alignment: Alignment.topCenter,
                       child: EfScoreBar()),
                   // Field
@@ -84,16 +80,13 @@ class MainScreen extends StatelessWidget {
                     child: Column(
                       children: [
                         Container(
-                          width: fieldSizeParameter.fieldWidth +
-                              fieldSizeParameter.toolbarHeight / 4,
-                          height: fieldSizeParameter.fieldHeight +
-                              fieldSizeParameter.toolbarHeight / 4,
+                          width: fieldSizeParameter.fieldWidth + fieldSizeParameter.toolbarHeight / 4,
+                          height: fieldSizeParameter.fieldHeight + fieldSizeParameter.toolbarHeight / 4,
                           alignment: Alignment.topCenter,
                           child: Container(
                             decoration: BoxDecoration(
                                 // set border around field
-                                border: Border.all(
-                                    width: fieldSizeParameter.lineSize)),
+                                border: Border.all(width: fieldSizeParameter.lineSize)),
                             child: SizedBox(
                               // FieldSwitch to swipe between right and left field side. SizedBox around it so there is no rendering error.
                               width: fieldSizeParameter.fieldWidth,
@@ -101,12 +94,9 @@ class MainScreen extends StatelessWidget {
                               // Use a LayoutBuilder to get the real size of SizedBox.
                               // As it is inside Flexible Widget, the size can vary depending on screen size.
                               child: new LayoutBuilder(
-                                builder: (BuildContext context,
-                                    BoxConstraints constraints) {
+                                builder: (BuildContext context, BoxConstraints constraints) {
                                   // set Field size depending on Widget size
-                                  fieldSizeParameter.setFieldSize(
-                                      constraints.maxWidth,
-                                      constraints.maxHeight);
+                                  fieldSizeParameter.setFieldSize(constraints.maxWidth, constraints.maxHeight);
                                   return FieldSwitch();
                                 },
                               ),

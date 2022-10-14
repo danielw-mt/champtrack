@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:handball_performance_tracker/data/player.dart';
 import 'package:handball_performance_tracker/utils/feed_logic.dart';
 import 'package:handball_performance_tracker/utils/player_helper.dart';
-import 'package:handball_performance_tracker/widgets/helper_screen/alert_message_widget.dart';
+import 'package:handball_performance_tracker/widgets/debug_screen/alert_message_widget.dart';
 import 'package:handball_performance_tracker/widgets/main_screen/ef_score_bar.dart';
 import 'package:handball_performance_tracker/widgets/main_screen/field.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';

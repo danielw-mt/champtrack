@@ -5,12 +5,12 @@ import 'package:handball_performance_tracker/screens/start_game_screen.dart';
 import 'package:handball_performance_tracker/utils/game_control.dart';
 import 'package:handball_performance_tracker/constants/stringsGeneral.dart';
 import 'package:handball_performance_tracker/constants/stringsGameSettings.dart';
-import 'package:handball_performance_tracker/widgets/helper_screen/alert_message_widget.dart';
+import 'package:handball_performance_tracker/widgets/debug_screen/alert_message_widget.dart';
 import 'package:handball_performance_tracker/widgets/main_screen/ef_score_bar.dart';
 import 'package:handball_performance_tracker/widgets/team_settings_screen/players_list.dart';
 import '../constants/colors.dart';
 import '../widgets/nav_drawer.dart';
-import 'main_screen.dart';
+import 'game_screen.dart';
 
 /// Screen that is displayed after startGameScreen and allows to select, add, and remove players before starting the game
 class PlayerSelectionScreen extends StatefulWidget {
@@ -78,17 +78,11 @@ class _PlayerSelectionScreenState extends State<PlayerSelectionScreen> {
                 width: 0.15 * width,
                 height: 0.08 * height,
                 child: ElevatedButton(
-                    style: ButtonStyle(
-                        backgroundColor:
-                            MaterialStateProperty.all<Color>(buttonGreyColor)),
+                    style: ButtonStyle(backgroundColor: MaterialStateProperty.all<Color>(buttonGreyColor)),
                     onPressed: () {
                       Get.to(() => StartGameScreen());
                     },
-                    child: Text(StringsGeneral.lBack,
-                        style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black))),
+                    child: Text(StringsGeneral.lBack, style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black))),
               ),
             ),
             Flexible(
@@ -96,9 +90,7 @@ class _PlayerSelectionScreenState extends State<PlayerSelectionScreen> {
                 width: 0.15 * width,
                 height: 0.08 * height,
                 child: ElevatedButton(
-                  style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all<Color>(
-                          buttonLightBlueColor)),
+                  style: ButtonStyle(backgroundColor: MaterialStateProperty.all<Color>(buttonLightBlueColor)),
                   onPressed: () async {
                     // validate whether 7 players were selected on this page
                     TempController tempController = Get.find<TempController>();
@@ -110,27 +102,20 @@ class _PlayerSelectionScreenState extends State<PlayerSelectionScreen> {
                             return AlertDialog(
                                 scrollable: true,
                                 shape: RoundedRectangleBorder(
-                                  borderRadius:
-                                      BorderRadius.circular(menuRadius),
+                                  borderRadius: BorderRadius.circular(menuRadius),
                                 ),
                                 content: CustomAlertMessageWidget(
-                                    StringsGameSettings.lStartGameAlertHeader +
-                                        "!\n" +
-                                        StringsGameSettings.lStartGameAlert));
+                                    StringsGameSettings.lStartGameAlertHeader + "!\n" + StringsGameSettings.lStartGameAlert));
                           });
                     } else {
                       tempController.updateOnFieldPlayers();
                       tempController.setPlayerBarPlayersOrder();
                       startGame(context, preconfigured: true);
-                      Get.to(() => MainScreen());
+                      Get.to(() => GameScreen());
                       return;
                     }
                   },
-                  child: Text(StringsGeneral.lStartGameButton,
-                      style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black)),
+                  child: Text(StringsGeneral.lStartGameButton, style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black)),
                 ),
               ),
             )

@@ -5,7 +5,7 @@ import 'package:handball_performance_tracker/constants/stringsTeamManagement.dar
 import 'package:handball_performance_tracker/data/game.dart';
 import 'package:handball_performance_tracker/screens/player_selection_screen.dart';
 import 'package:handball_performance_tracker/widgets/start_game_screen/season_dropdown.dart';
-import 'package:handball_performance_tracker/widgets/team_selection_screen/team_dropdown.dart';
+import 'package:handball_performance_tracker/widgets/game_setup_screen/team_dropdown.dart';
 import '../../constants/stringsDashboard.dart';
 import '../../constants/stringsGameSettings.dart';
 import '../../controllers/persistent_controller.dart';

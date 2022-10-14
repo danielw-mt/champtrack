@@ -3,7 +3,7 @@ import 'package:handball_performance_tracker/constants/colors.dart';
 import 'package:handball_performance_tracker/constants/stringsGameScreen.dart';
 import 'package:handball_performance_tracker/controllers/temp_controller.dart';
 import 'package:get/get.dart';
-import 'package:handball_performance_tracker/screens/main_screen.dart';
+import 'package:handball_performance_tracker/screens/game_screen.dart';
 
 class SideSwitch extends StatelessWidget {
   const SideSwitch({Key? key}) : super(key: key);
@@ -20,13 +20,10 @@ class SideSwitch extends StatelessWidget {
         onPressed: () {
           tempController.setAttackIsLeft(!tempController.getAttackIsLeft());
           // Reload Mainscreen so field colors are adapted
-          Get.to(MainScreen(), preventDuplicates: false);
+          Get.to(GameScreen(), preventDuplicates: false);
         },
         child: Row(
-          children: [
-            Icon(Icons.autorenew_rounded),
-            Text(StringsGameScreen.lSwitch)
-          ],
+          children: [Icon(Icons.autorenew_rounded), Text(StringsGameScreen.lSwitch)],
         ));
   }
 }

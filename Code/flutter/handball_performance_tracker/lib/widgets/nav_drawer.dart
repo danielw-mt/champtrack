@@ -12,9 +12,9 @@ import 'package:handball_performance_tracker/screens/statistics_screen.dart';
 import 'package:handball_performance_tracker/screens/team_settings_screen.dart';
 import 'package:handball_performance_tracker/widgets/main_screen/ef_score_bar.dart';
 import 'package:handball_performance_tracker/constants/stringsAuthentication.dart';
-import '../screens/main_screen.dart';
+import '../screens/game_screen.dart';
 import '../screens/debug_screen.dart';
-import '../screens/team_selection_screen.dart';
+import '../screens/teams_management_screen.dart';
 import 'package:get/get.dart';
 import '../constants/stringsGeneral.dart';
 
@@ -38,10 +38,7 @@ class NavDrawer extends StatelessWidget {
                       context: context,
                       color: popupDarkBlueColor,
                       tiles: buildMenuList(
-                          context,
-                          tempController.getGameIsRunning(),
-                          tempController.getGameIsPaused(),
-                          tempController.getMenuIsEllapsed()),
+                          context, tempController.getGameIsRunning(), tempController.getGameIsPaused(), tempController.getMenuIsEllapsed()),
                     ).toList(),
                   );
                 }),
@@ -59,10 +56,7 @@ class NavDrawer extends StatelessWidget {
                         color: Colors.white,
                       ),
                       children: <TextSpan>[
-                        TextSpan(
-                            text: FirebaseAuth.instance.currentUser?.email
-                                .toString(),
-                            style: TextStyle(fontWeight: FontWeight.bold))
+                        TextSpan(text: FirebaseAuth.instance.currentUser?.email.toString(), style: TextStyle(fontWeight: FontWeight.bold))
                       ],
                     ),
                   ),
@@ -98,8 +92,7 @@ class NavDrawer extends StatelessWidget {
 }
 
 // Build List of Menu entries to show. If gameIsRunning, add the button which takes you back to the game.
-List<Widget> buildMenuList(BuildContext context, bool gameIsRunning,
-    bool gameIsPaused, bool menuIsEllapsed) {
+List<Widget> buildMenuList(BuildContext context, bool gameIsRunning, bool gameIsPaused, bool menuIsEllapsed) {
   List<Widget> menuList = <Widget>[
     MenuHeader(),
     // Dashboard
@@ -107,19 +100,13 @@ List<Widget> buildMenuList(BuildContext context, bool gameIsRunning,
     // Mannschaften
     CollabsibleListEntry(
       text: StringsTeamManagement.lTeams,
-      screen: TeamSelectionScreen(),
+      screen: TeamsManagementScreen(),
       children: buildTeamChildren(context),
     ),
     // Statistics
-    CollabsibleListEntry(
-        text: StringsGeneral.lStatistics,
-        screen: StatisticsScreen(),
-        children: [Text("")]),
+    CollabsibleListEntry(text: StringsGeneral.lStatistics, screen: StatisticsScreen(), children: [Text("")]),
     // Glossary
-    CollabsibleListEntry(
-        text: StringsGeneral.lGlossary,
-        screen: GlossaryScreen(),
-        children: [Text("")]),
+    CollabsibleListEntry(text: StringsGeneral.lGlossary, screen: GlossaryScreen(), children: [Text("")]),
   ];
   if ((gameIsRunning || gameIsPaused) && !menuIsEllapsed) {
     menuList.add(GameIsRunningButton());
@@ -145,8 +132,7 @@ class SimpleListEntry extends StatelessWidget {
   // Called if teamId is given, calls team selection screen for that team.
   void showSelectedTeam(teamId) {
     final TempController tempController = Get.find<TempController>();
-    final PersistentController persController =
-        Get.find<PersistentController>();
+    final PersistentController persController = Get.find<PersistentController>();
     tempController.setSelectedTeam(persController.getSpecificTeam(teamId));
     Get.to(screen);
   }
@@ -176,12 +162,7 @@ class CollabsibleListEntry extends StatelessWidget {
   final String text;
   final Widget screen;
   final List<Widget> children;
-  const CollabsibleListEntry(
-      {Key? key,
-      required this.text,
-      required this.screen,
-      required this.children})
-      : super(key: key);
+  const CollabsibleListEntry({Key? key, required this.text, required this.screen, required this.children}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -311,7 +292,7 @@ class GameIsRunningButton extends StatelessWidget {
         onPressed: () {
           tempController.setSelectedTeam(tempController.getPlayingTeam());
           Navigator.pop(context);
-          Get.to(MainScreen());
+          Get.to(GameScreen());
         },
       ),
     );
@@ -344,10 +325,8 @@ class MenuButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return // Container for menu button on top left corner
         Container(
-      decoration: BoxDecoration(
-          border: Border.all(color: Colors.white),
-          borderRadius: const BorderRadius.all(Radius.circular(8)),
-          color: Colors.white),
+      decoration:
+          BoxDecoration(border: Border.all(color: Colors.white), borderRadius: const BorderRadius.all(Radius.circular(8)), color: Colors.white),
       child: IconButton(
         icon: const Icon(Icons.menu),
         color: buttonDarkBlueColor,
