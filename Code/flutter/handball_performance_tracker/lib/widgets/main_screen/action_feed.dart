@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:handball_performance_tracker/constants/colors.dart';
+import 'package:handball_performance_tracker/constants/stringsGameScreen.dart';
 import 'package:handball_performance_tracker/constants/stringsGeneral.dart';
 import 'package:handball_performance_tracker/widgets/main_screen/ef_score_bar.dart';
 import 'package:handball_performance_tracker/constants/fieldSizeParameter.dart' as fieldSizeParameter;
@@ -39,8 +40,13 @@ class ActionFeed extends StatelessWidget {
                     itemBuilder: (context, index) {
                       GameAction feedAction = feedActions.reversed.toList()[index];
                       String actionType = feedAction.tag;
+                      Player relevantPlayer = Player();
                       // get the player object whose id matches the playerId in the action Object
-                      Player relevantPlayer = tempController.getPlayerFromSelectedTeam(feedAction.playerId);
+                      if (feedAction.playerId != "opponent") {
+                        relevantPlayer = tempController.getPlayerFromSelectedTeam(feedAction.playerId);
+                      } else {
+                        relevantPlayer = Player(lastName: StringsGameScreen.lOpponent, id: "opponent");
+                      }
                       return Column(
                         children: [
                           Row(
@@ -67,7 +73,7 @@ class ActionFeed extends StatelessWidget {
                                 child: Container(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Text(
-                                    relevantPlayer.lastName,
+                                    relevantPlayer == Player() ? StringsGameScreen.lUnknown : relevantPlayer.lastName,
                                     overflow: TextOverflow.ellipsis,
                                     style: TextStyle(
                                       fontSize: 15,

@@ -43,4 +43,6 @@ class StringsGameScreen {
   static const String lGoalGoalkeeper = "Tor Torwart";
   static const String lEmptyGoal = "Tor Gegner \n Empty Goal";
   static const String lAssist = "Assist";
+  static const String lOpponent = "Gegner";
+  static const String lUnknown = "Unbekannt";
 }

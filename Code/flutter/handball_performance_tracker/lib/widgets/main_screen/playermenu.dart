@@ -196,9 +196,9 @@ List<GetBuilder<TempController>> buildDialogButtonOnFieldList(BuildContext conte
 
 /// builds a single dialog button that logs its text (=player name) to firestore
 /// and updates the game state
-GetBuilder<TempController> buildDialogButton(BuildContext context, Player associatedPlayer, [substitute_menu, isNotOnField]) {
-  String buttonText = associatedPlayer.lastName;
-  String buttonNumber = (associatedPlayer.number).toString();
+GetBuilder<TempController> buildDialogButton(BuildContext context, Player playerFromButton, [substitute_menu, isNotOnField]) {
+  String buttonText = playerFromButton.lastName;
+  String buttonNumber = (playerFromButton.number).toString();
   PersistentController persistentController = Get.find<PersistentController>();
   TempController tempController = Get.find<TempController>();
 
@@ -212,11 +212,11 @@ GetBuilder<TempController> buildDialogButton(BuildContext context, Player associ
     // check if action was a goal
     // if it was a goal allow the player to be pressed twice or select and assist player
     // if the player is clicked again it is a solo action
-    if (tempController.getLastClickedPlayer().id == associatedPlayer.id) {
+    if (tempController.getPreviousClickedPlayer().id == playerFromButton.id) {
       logger.d("Action was not an assist");
       return false;
     }
-    if (tempController.getLastClickedPlayer().id != associatedPlayer.id) {
+    if (tempController.getPreviousClickedPlayer().id != playerFromButton.id) {
       logger.d("Action was an assist");
       return true;
     }
@@ -258,21 +258,24 @@ GetBuilder<TempController> buildDialogButton(BuildContext context, Player associ
   void handlePlayerSelection() async {
     logger.d("Logging the player selection");
     GameAction lastAction = persistentController.getLastAction();
-    Player lastClickedPlayer = tempController.getLastClickedPlayer();
+    logger.d("Last action was: " + lastAction.toString());
+    Player previousClickedPlayer = tempController.getPreviousClickedPlayer();
+    logger.d("Previous clicked player was: " + previousClickedPlayer.toString());
     // if goal was pressed but no player was selected yet
     //(lastClickedPlayer is default Player Object) do nothing
-    if (lastAction.tag == "goal" && lastClickedPlayer.id! == "") {
+    if (lastAction.tag == goalTag && previousClickedPlayer.id! == "") {
       tempController.setPlayerMenuText("Assist");
       // update last Clicked player value with the Player from selected team
       // who was clicked
-      tempController.setLastClickedPlayer(tempController.getPlayerFromSelectedTeam(associatedPlayer.id!));
+      tempController.setLastClickedPlayer(tempController.getPlayerFromSelectedTeam(playerFromButton.id!));
       return;
     }
     // if goal was pressed and a player was already clicked once
-    if (lastAction.tag == "goal") {
+    if (lastAction.tag == goalTag) {
+      logger.d("goal selected");
       // if it was a solo goal the action type has to be updated to "Tor Solo"
-      await persistentController.setLastActionPlayer(lastClickedPlayer);
-      tempController.updatePlayerEfScore(lastClickedPlayer.id!, persistentController.getLastAction());
+      persistentController.setLastActionPlayer(previousClickedPlayer);
+      tempController.updatePlayerEfScore(previousClickedPlayer.id!, persistentController.getLastAction());
       addFeedItem(persistentController.getLastAction());
       tempController.incOwnScore();
       // add goal to feed
@@ -280,18 +283,18 @@ GetBuilder<TempController> buildDialogButton(BuildContext context, Player associ
 
       if (!_wasAssist()) {
         logger.d("Logging solo goal");
-        // update data for person that shot the goal
+        // don't need to do anything because ID was already set above
       } else {
         logger.d("Logging goal with assist");
         // person that scored assist
         // deep clone a new action from the most recent action
         GameAction assistAction = GameAction.clone(lastAction);
         print("assist action: $assistAction");
-        assistAction.tag = "assist";
-        persistentController.addAction(assistAction);
-        Player assistPlayer = associatedPlayer;
+        assistAction.tag = assistTag;
+        persistentController.addActionToCache(assistAction);
+        Player assistPlayer = playerFromButton;
         assistAction.playerId = assistPlayer.id!;
-        await persistentController.setLastActionPlayer(assistPlayer);
+        persistentController.setLastActionPlayer(assistPlayer);
         tempController.updatePlayerEfScore(assistPlayer.id!, persistentController.getLastAction());
 
         // add assist first to the feed and then the goal
@@ -300,54 +303,64 @@ GetBuilder<TempController> buildDialogButton(BuildContext context, Player associ
       }
     } else {
       // if the action was not a goal just update the player id in firebase and gamestate
-      await persistentController.setLastActionPlayer(associatedPlayer);
-      tempController.setLastClickedPlayer(associatedPlayer);
-      tempController.updatePlayerEfScore(associatedPlayer.id!, persistentController.getLastAction());
+      persistentController.setLastActionPlayer(playerFromButton);
+      tempController.setLastClickedPlayer(playerFromButton);
+      tempController.updatePlayerEfScore(playerFromButton.id!, persistentController.getLastAction());
       // add action to feed
+      lastAction.playerId = playerFromButton.id!;
       addFeedItem(persistentController.getLastAction());
+      persistentController.addActionToCache(lastAction);
     }
+
+    ///
     // start: time penalty logic
-    if (tempController.isPlayerPenalized(associatedPlayer)) {
-      tempController.removePenalizedPlayer(associatedPlayer);
+    // if you click on a penalized player the time penalty is removed
+    ///
+    if (tempController.isPlayerPenalized(playerFromButton)) {
+      tempController.removePenalizedPlayer(playerFromButton);
     }
     if (lastAction.tag == timePenaltyTag) {
-      Player player = tempController.getLastClickedPlayer();
+      Player player = tempController.getPreviousClickedPlayer();
       tempController.addPenalizedPlayer(player);
       logger.d("Penality for player: " + player.id.toString());
     }
+
+    ///
     // end: time penalty logic
+    ///
+
     // Check if associated player or lastClickedPlayer are notOnFieldPlayer. If yes, player menu appears to change the player.
-    if (!tempController.getOnFieldPlayers().contains(associatedPlayer)) {
-      tempController.addPlayerToChange(associatedPlayer);
+    // We can click on not on field players if we swipe on the player menu and all the player not on field will be shown.
+    if (!tempController.getOnFieldPlayers().contains(playerFromButton)) {
+      tempController.addPlayerToChange(playerFromButton);
     }
-    if (!tempController.getOnFieldPlayers().contains(lastClickedPlayer) && !(lastClickedPlayer.id! == "")) {
-      tempController.addPlayerToChange(lastClickedPlayer);
+    if (!tempController.getOnFieldPlayers().contains(previousClickedPlayer) && !(previousClickedPlayer.id! == "")) {
+      tempController.addPlayerToChange(previousClickedPlayer);
     }
     _setFieldBasedOnLastAction(lastAction);
-    if (lastAction.tag == "1v1") {
-      logger.d("1v1 detected");
+    // If there are still player to change, open the player menu again but as a substitue player menu (true flag)
+    if (!tempController.getPlayersToChange().isEmpty) {
+      Navigator.pop(context);
+      callPlayerMenu(context, true);
+      return;
+    }
+
+    // if we get a 7m in our favor call the seven meter menu for us
+    if (lastAction.tag == oneVOneTag) {
+      logger.d("1v1 detected => 7m menu");
       Navigator.pop(context);
       callSevenMeterPlayerMenu(context);
       return;
     }
-    // if we perform a 7m foul go straight to 7m screen
+    // if we perform a 7m foul call the seven meter menu for the other team
     else if (lastAction.tag == foulSevenMeterTag) {
       logger.d("7m foul. Going to 7m screen");
       Navigator.pop(context);
       callSevenMeterMenu(context, false);
       return;
     }
-    print("last action saved in database: ");
-    // if the action was a 7 meter action we pop the screen above and go to 7m menu
-    // for all other actions the player menu
-
+    // reset last clicked player and player menu hint text
     tempController.setLastClickedPlayer(Player());
-    // If there were player clicked which are not on field, open substitute player menu
-    if (!tempController.getPlayersToChange().isEmpty) {
-      Navigator.pop(context);
-      callPlayerMenu(context, true);
-      return;
-    }
     tempController.setPlayerMenuText("");
     Navigator.pop(context);
   }
@@ -361,20 +374,14 @@ GetBuilder<TempController> buildDialogButton(BuildContext context, Player associ
 
     // Update player bar players
     int l = tempController.getPlayersFromSelectedTeam().indexOf(playerToChange);
-    int k = tempController.getPlayersFromSelectedTeam().indexOf(associatedPlayer);
+    int k = tempController.getPlayersFromSelectedTeam().indexOf(playerFromButton);
     int indexToChange = tempController.getPlayerBarPlayers().indexOf(k);
     tempController.changePlayerBarPlayers(indexToChange, l);
     // Change the player which was pressed in player menu in tempController.getOnFieldPlayers()
     // to the player which was pressed in popup dialog.
     tempController.setOnFieldPlayer(
-        tempController.getOnFieldPlayers().indexOf(associatedPlayer), playerToChange, Get.find<PersistentController>().getCurrentGame());
+        tempController.getOnFieldPlayers().indexOf(playerFromButton), playerToChange, Get.find<PersistentController>().getCurrentGame());
 
-    // If there are still player to change, open menu again
-    if (!tempController.getPlayersToChange().isEmpty) {
-      Navigator.pop(context);
-      callPlayerMenu(context, true);
-      return;
-    }
     tempController.setPlayerMenuText("");
     Navigator.pop(context);
   }
@@ -385,16 +392,16 @@ GetBuilder<TempController> buildDialogButton(BuildContext context, Player associ
       id: "player-menu-button",
       builder: (tempController) {
         Color buttonColor = Color(0);
-        if (tempController.getLastClickedPlayer() == associatedPlayer) {
+        if (tempController.getPreviousClickedPlayer() == playerFromButton) {
           buttonColor = Colors.purple;
-        } else if (tempController.isPlayerPenalized(associatedPlayer)) {
+        } else if (tempController.isPlayerPenalized(playerFromButton)) {
           buttonColor = Colors.grey;
         } else {
           buttonColor = Color.fromARGB(255, 180, 211, 236);
         }
         // Dialog button that shows "No Assist" instead of the player name and shirt
         // at the place where the first player was clicked
-        if (tempController.getLastClickedPlayer().lastName == buttonText) {
+        if (tempController.getPreviousClickedPlayer().lastName == buttonText) {
           return DialogButton(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,

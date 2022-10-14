@@ -11,6 +11,7 @@ import '../../../data/game_action.dart';
 import '../../../constants/game_actions.dart';
 import '../playermenu.dart';
 import 'dart:math';
+import '../../../constants/positions.dart';
 
 /// @return
 /// builds a single dialog button that logs its text (=action) to firestore
@@ -46,7 +47,6 @@ class CustomDialogButton extends StatelessWidget {
       logger.d("logging an action");
       DateTime dateTime = DateTime.now();
       int unixTime = dateTime.toUtc().millisecondsSinceEpoch;
-      print(persistentController.getCurrentGame().id);
       int secondsSinceGameStart = persistentController.getCurrentGame().stopWatchTimer.secondTime.value;
       // get most recent game id from DB
       String currentGameId = persistentController.getCurrentGame().id!;
@@ -77,34 +77,45 @@ class CustomDialogButton extends StatelessWidget {
       // when a player was selected in that menu the action document can be
       // updated in firebase with their player_id using the action_id
 
-      // Save action directly if goalkeeper action
-      if (actionContext == actionContextGoalkeeper) {
-        String? goalKeeperId = "goalkeeper";
-        // get id of goalkeeper by going through players on field and searching for position
-        for (int k in getOnFieldIndex()) {
-          Player player = tempController.getPlayersFromSelectedTeam()[k];
-          if (player.positions.contains("TW")) {
-            goalKeeperId = player.id;
-            break;
+      // if an action inside goalkeeper menu that does not correspond to the opponent was hit try to assign this action directly to the goalkeeper
+      if (actionContext == actionContextGoalkeeper && actionTag != goalOpponentTag && actionTag != emptyGoalTag) {
+        List<Player> goalKeepers = [];
+        tempController.getOnFieldPlayers().forEach((Player player) {
+          if (player.positions.contains(goalkeeperPos)) {
+            goalKeepers.add(player);
           }
+        });
+        // if there is only one player with a goalkeeper position on field right now assign the action to him
+        if (goalKeepers.length == 1) {
+          // we know the player id so we assign it here. For all other actions it is assigned in the player menu
+          action.playerId = goalKeepers[0].id!;
+          persistentController.addActionToCache(action);
+          persistentController.addActionToFirebase(action);
+          addFeedItem(action);
+          Navigator.pop(context);
+          // if there is more than one player with a goalkeeper position on field right now
+        } else {
+          logger.e("More than one goalkeeper on field. Waiting for player selection");
         }
-
-        action.playerId = goalKeeperId.toString();
-        persistentController.addAction(action);
-        addFeedItem(action);
-        logger.d("last action saved in database: ${persistentController.getLastAction().toMap()}");
-        if (action.tag == goalTag) {
-          tempController.incOwnScore();
-        } else if (action.tag == goalOpponentTag || action.tag == emptyGoalTag) {
-          tempController.incOpponentScore();
-        }
-      } else {
-        persistentController.addAction(action);
       }
-      Navigator.pop(context);
+      if (action.tag == goalTag) {
+        tempController.incOwnScore();
+      }
+      if (action.tag == goalOpponentTag || action.tag == emptyGoalTag) {
+        tempController.incOpponentScore();
+        // we can add a gameaction here to DB because the player does not need to be selected in the player menu later
+        action.playerId = "opponent";
+        persistentController.addActionToCache(action);
+        persistentController.addActionToFirebase(action);
+        addFeedItem(action);
+        Navigator.pop(context);
+      }
       // don't show player menu if a goalkeeper action or opponent action was logged
+      // for all other actions show player menu
       if (actionContext != actionContextGoalkeeper && actionTag != goalOpponentTag) {
+        Navigator.pop(context);
         callPlayerMenu(context);
+        persistentController.addActionToCache(action);
       }
     }
 
