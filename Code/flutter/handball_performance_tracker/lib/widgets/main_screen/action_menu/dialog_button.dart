@@ -84,7 +84,7 @@ class CustomDialogButton extends StatelessWidget {
       // updated in firebase with their player_id using the action_id
 
       // if an action inside goalkeeper menu that does not correspond to the opponent was hit try to assign this action directly to the goalkeeper
-      if (actionTag == paradeTag) {
+      if (actionContext == actionContextGoalkeeper && actionTag != goalOpponentTag && actionTag != emptyGoalTag) {
         List<Player> goalKeepers = [];
         tempController.getOnFieldPlayers().forEach((Player player) {
           if (player.positions.contains(goalkeeperPos)) {

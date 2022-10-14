@@ -12,6 +12,7 @@ const String actionContextAllActions = "allActions";
 // action tags
 // TODO check if all these tags are actually used (e.g. <9 and >9) and so on
 const String goalTag = "goal";
+const String goalGoalKeeperTag = "goal_goalkeeper";
 const String goalPosTag = "goal_pos";
 const String goalSubNineTag = "goal<9m";
 const String goalExtNineTag = "goal>9m";
@@ -71,7 +72,7 @@ Map<String, Map<String, String>> actionMapping = {
     StringsGameScreen.lTimePenalty: timePenaltyTag,
     StringsGameScreen.lEmptyGoal: emptyGoalTag,
     StringsGameScreen.lErrThrowGoalkeeper: missTag,
-    StringsGameScreen.lGoalGoalkeeper: goalTag,
+    StringsGameScreen.lGoalGoalkeeper: goalGoalKeeperTag,
     StringsGameScreen.lBadPass: badPassTag,
     StringsGameScreen.lParade: paradeTag,
     StringsGameScreen.lGoalOpponent: goalOpponentTag,
