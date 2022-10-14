@@ -32,8 +32,8 @@ var logger = Logger(
 
 /// A menu of differently arranged buttons depending on whether we are in action, defense or goal keeper mode
 class DialogButtonMenu extends StatelessWidget {
-  final String actionState;
-  DialogButtonMenu({super.key, required this.actionState});
+  final String actionContext;
+  DialogButtonMenu({super.key, required this.actionContext});
 
   @override
   Widget build(BuildContext context) {
@@ -44,18 +44,18 @@ class DialogButtonMenu extends StatelessWidget {
   // by arranging either the attack menu or defense menu first or the goal keeper menu
   List<Widget> buildPageViewChildren() {
     print("building page view children");
-    if (actionState == actionStateGoalkeeper) {
-      return [ArrangedDialogButtons(actionState: actionState)];
-    } else if (actionState == actionStateAttack) {
+    if (actionContext == actionContextGoalkeeper) {
+      return [ArrangedDialogButtons(actionContext: actionContext)];
+    } else if (actionContext == actionContextAttack) {
       print("action state attack");
       return [
-        ArrangedDialogButtons(actionState: actionStateAttack),
-        ArrangedDialogButtons(actionState: actionStateDefense),
+        ArrangedDialogButtons(actionContext: actionContextAttack),
+        ArrangedDialogButtons(actionContext: actionContextDefense),
       ];
-    } else if (actionState == actionStateDefense) {
+    } else if (actionContext == actionContextDefense) {
       return [
-        ArrangedDialogButtons(actionState: actionStateDefense),
-        ArrangedDialogButtons(actionState: actionStateAttack),
+        ArrangedDialogButtons(actionContext: actionContextDefense),
+        ArrangedDialogButtons(actionContext: actionContextAttack),
       ];
     } else {
       print("no page view children");
@@ -65,8 +65,8 @@ class DialogButtonMenu extends StatelessWidget {
 }
 
 class ArrangedDialogButtons extends StatelessWidget {
-  final String actionState;
-  const ArrangedDialogButtons({super.key, required this.actionState});
+  final String actionContext;
+  const ArrangedDialogButtons({super.key, required this.actionContext});
 
   @override
   Widget build(BuildContext context) {
@@ -80,11 +80,11 @@ class ArrangedDialogButtons extends StatelessWidget {
             // header text of menu
             child: Text(
               (() {
-                if (actionState == actionStateAttack) {
+                if (actionContext == actionContextAttack) {
                   return StringsGameScreen.lOffensePopUpHeader;
-                } else if (actionState == actionStateGoalkeeper) {
+                } else if (actionContext == actionContextGoalkeeper) {
                   return StringsGameScreen.lGoalkeeperPopUpHeader;
-                } else if (actionState == actionStateDefense) {
+                } else if (actionContext == actionContextDefense) {
                   return StringsGameScreen.lDefensePopUpHeader;
                 } else {
                   return "Error";
@@ -131,7 +131,7 @@ class ArrangedDialogButtons extends StatelessWidget {
     // String header;
     Row buttonRow;
     Map<String, CustomDialogButton> dialogButtons = buildDialogButtons(context);
-    if (actionState == actionStateGoalkeeper) {
+    if (actionContext == actionContextGoalkeeper) {
       buttonRow = Row(children: [
         Column(children: [
           Flexible(
@@ -161,7 +161,7 @@ class ArrangedDialogButtons extends StatelessWidget {
           ),
         ),
       ]);
-    } else if (actionState == actionStateAttack) {
+    } else if (actionContext == actionContextAttack) {
       logger.d("arranging dialog buttons for attack");
       buttonRow = Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
         Column(children: [
@@ -207,182 +207,208 @@ class ArrangedDialogButtons extends StatelessWidget {
     return buttonRow;
   }
 
+  // TODO clean up actionTag calls
   Map<String, CustomDialogButton> buildDialogButtons(BuildContext context) {
     print("building dialog buttons");
-    if (actionState == actionStateGoalkeeper) {
-      Map<String, String> goalKeeperActionMapping = actionMapping[actionStateGoalkeeper]!;
+    if (actionContext == actionContextGoalkeeper) {
+      Map<String, String> goalKeeperActionMapping = actionMapping[actionContextGoalkeeper]!;
       return {
         StringsGameScreen.lRedCard: CustomDialogButton(
-            context: context,
+            buildContext: context,
             actionTag: goalKeeperActionMapping[StringsGameScreen.lRedCard]!,
+            actionContext: actionContextGoalkeeper,
             buttonText: StringsGameScreen.lRedCard,
             buttonColor: Colors.red,
             sizeFactor: 0,
             icon: Icon(Icons.style)),
         StringsGameScreen.lYellowCard: CustomDialogButton(
-            context: context,
+            buildContext: context,
             actionTag: goalKeeperActionMapping[StringsGameScreen.lYellowCard]!,
+            actionContext: actionContextGoalkeeper,
             buttonText: StringsGameScreen.lYellowCard,
             buttonColor: Colors.yellow,
             sizeFactor: 0,
             icon: Icon(Icons.style)),
         StringsGameScreen.lTimePenalty: CustomDialogButton(
-            context: context,
+            buildContext: context,
             actionTag: goalKeeperActionMapping[StringsGameScreen.lTimePenalty]!,
+            actionContext: actionContextGoalkeeper,
             buttonText: StringsGameScreen.lTimePenalty,
             buttonColor: Color.fromRGBO(199, 208, 244, 1),
             sizeFactor: 0,
             icon: Icon(Icons.timer)),
         StringsGameScreen.lEmptyGoal: CustomDialogButton(
-          context: context,
+          buildContext: context,
           actionTag: goalKeeperActionMapping[StringsGameScreen.lEmptyGoal]!,
+          actionContext: actionContextGoalkeeper,
           buttonText: StringsGameScreen.lEmptyGoal,
           buttonColor: Color.fromRGBO(199, 208, 244, 1),
           sizeFactor: 2,
         ),
         StringsGameScreen.lErrThrowGoalkeeper: CustomDialogButton(
-          context: context,
+          buildContext: context,
           actionTag: goalKeeperActionMapping[StringsGameScreen.lErrThrowGoalkeeper]!,
+          actionContext: actionContextGoalkeeper,
           buttonText: StringsGameScreen.lErrThrowGoalkeeper,
           buttonColor: Color.fromRGBO(199, 208, 244, 1),
           sizeFactor: 2,
         ),
         StringsGameScreen.lGoalGoalkeeper: CustomDialogButton(
-          context: context,
+          buildContext: context,
           actionTag: goalKeeperActionMapping[StringsGameScreen.lGoalGoalkeeper]!,
+          actionContext: actionContextGoalkeeper,
           buttonText: StringsGameScreen.lGoalGoalkeeper,
           buttonColor: Color.fromRGBO(99, 107, 171, 1),
         ),
         StringsGameScreen.lBadPass: CustomDialogButton(
-          context: context,
+          buildContext: context,
           actionTag: goalKeeperActionMapping[StringsGameScreen.lBadPass]!,
+          actionContext: actionContextGoalkeeper,
           buttonText: StringsGameScreen.lBadPass,
           buttonColor: Color.fromRGBO(203, 206, 227, 1),
         ),
         StringsGameScreen.lParade: CustomDialogButton(
-          context: context,
+          buildContext: context,
           actionTag: goalKeeperActionMapping[StringsGameScreen.lParade]!,
+          actionContext: actionContextGoalkeeper,
           buttonText: StringsGameScreen.lParade,
           buttonColor: Color.fromRGBO(99, 107, 171, 1),
         ),
         StringsGameScreen.lGoalOtherSide: CustomDialogButton(
-          context: context,
+          buildContext: context,
           actionTag: goalKeeperActionMapping[StringsGameScreen.lGoalOtherSide]!,
+          actionContext: actionContextGoalkeeper,
           buttonText: StringsGameScreen.lGoalOtherSide,
           buttonColor: Color.fromRGBO(203, 206, 227, 1),
         ),
       };
     }
-    if (actionState == actionStateAttack) {
-      Map<String, String> attackActionMapping = actionMapping[actionStateAttack]!;
+    if (actionContext == actionContextAttack) {
+      Map<String, String> attackActionMapping = actionMapping[actionContextAttack]!;
       logger.d("attackActionMapping: $attackActionMapping");
       return {
         StringsGameScreen.lRedCard: CustomDialogButton(
-            context: context,
+            buildContext: context,
             actionTag: attackActionMapping[StringsGameScreen.lRedCard]!,
+            actionContext: actionContextAttack,
             buttonText: StringsGameScreen.lRedCard,
             buttonColor: Colors.red,
             sizeFactor: 0,
             icon: Icon(Icons.style)),
         StringsGameScreen.lYellowCard: CustomDialogButton(
-            context: context,
+            buildContext: context,
             actionTag: attackActionMapping[StringsGameScreen.lYellowCard]!,
+            actionContext: actionContextAttack,
             buttonText: StringsGameScreen.lYellowCard,
             buttonColor: Colors.yellow,
             sizeFactor: 0,
             icon: Icon(Icons.style)),
         StringsGameScreen.lTimePenalty: CustomDialogButton(
-          context: context,
+          buildContext: context,
           actionTag: attackActionMapping[StringsGameScreen.lTimePenalty]!,
+          actionContext: actionContextAttack,
           buttonText: StringsGameScreen.lTimePenalty,
           buttonColor: Color.fromRGBO(199, 208, 244, 1),
           sizeFactor: 1,
         ),
         StringsGameScreen.lGoal: CustomDialogButton(
-          context: context,
+          buildContext: context,
           actionTag: attackActionMapping[StringsGameScreen.lGoal]!,
+          actionContext: actionContextAttack,
           buttonText: StringsGameScreen.lGoal,
           buttonColor: Color.fromRGBO(99, 107, 171, 1),
         ),
         StringsGameScreen.lOneVsOneAnd7m: CustomDialogButton(
-          context: context,
+          buildContext: context,
           actionTag: attackActionMapping[StringsGameScreen.lOneVsOneAnd7m]!,
+          actionContext: actionContextAttack,
           buttonText: StringsGameScreen.lOneVsOneAnd7m,
           buttonColor: Color.fromRGBO(99, 107, 171, 1),
         ),
         StringsGameScreen.lTwoMin: CustomDialogButton(
-          context: context,
+          buildContext: context,
           actionTag: attackActionMapping[StringsGameScreen.lTwoMin]!,
+          actionContext: actionContextAttack,
           buttonText: StringsGameScreen.lTwoMin,
           buttonColor: Color.fromRGBO(199, 208, 244, 1),
           sizeFactor: 1,
         ),
         StringsGameScreen.lErrThrow: CustomDialogButton(
-          context: context,
+          buildContext: context,
           actionTag: attackActionMapping[StringsGameScreen.lErrThrow]!,
+          actionContext: actionContextAttack,
           buttonText: StringsGameScreen.lErrThrow,
           buttonColor: Color.fromRGBO(203, 206, 227, 1),
         ),
         StringsGameScreen.lTrf: CustomDialogButton(
-          context: context,
+          buildContext: context,
           actionTag: attackActionMapping[StringsGameScreen.lTrf]!,
+          actionContext: actionContextAttack,
           buttonText: StringsGameScreen.lTrf,
           buttonColor: Color.fromRGBO(203, 206, 227, 1),
         ),
       };
     }
-    if (actionState == actionStateDefense) {
+    if (actionContext == actionContextDefense) {
       // tags action tags for the different buttons
-      Map<String, String> defenseActionMapping = actionMapping[actionStateDefense]!;
+      Map<String, String> defenseActionMapping = actionMapping[actionContextDefense]!;
       return {
         StringsGameScreen.lRedCard: CustomDialogButton(
-            context: context,
+            buildContext: context,
             actionTag: defenseActionMapping[StringsGameScreen.lRedCard]!,
+            actionContext: actionContextDefense,
             buttonText: StringsGameScreen.lRedCard,
             buttonColor: Colors.red,
             sizeFactor: 0,
             icon: Icon(Icons.style)),
         StringsGameScreen.lYellowCard: CustomDialogButton(
-            context: context,
+            buildContext: context,
             actionTag: defenseActionMapping[StringsGameScreen.lYellowCard]!,
+            actionContext: actionContextDefense,
             buttonText: StringsGameScreen.lYellowCard,
             buttonColor: Colors.yellow,
             sizeFactor: 0,
             icon: Icon(Icons.style)),
         StringsGameScreen.lFoul7m: CustomDialogButton(
-          context: context,
+          buildContext: context,
           actionTag: defenseActionMapping[StringsGameScreen.lFoul7m]!,
+          actionContext: actionContextDefense,
           buttonText: StringsGameScreen.lFoul7m,
           buttonColor: Color.fromRGBO(203, 206, 227, 1),
         ),
         StringsGameScreen.lTimePenalty: CustomDialogButton(
-            context: context,
+            buildContext: context,
             actionTag: defenseActionMapping[StringsGameScreen.lTimePenalty]!,
+            actionContext: actionContextDefense,
             buttonText: StringsGameScreen.lTimePenalty,
             buttonColor: Color.fromRGBO(199, 208, 244, 1),
             sizeFactor: 1,
             icon: Icon(Icons.timer)),
         StringsGameScreen.lBlockNoBall: CustomDialogButton(
-          context: context,
+          buildContext: context,
           actionTag: defenseActionMapping[StringsGameScreen.lBlockNoBall]!,
+          actionContext: actionContextDefense,
           buttonText: StringsGameScreen.lBlockNoBall,
           buttonColor: Color.fromRGBO(99, 107, 171, 1),
         ),
         StringsGameScreen.lBlockAndSteal: CustomDialogButton(
-          context: context,
+          buildContext: context,
           actionTag: defenseActionMapping[StringsGameScreen.lBlockAndSteal]!,
+          actionContext: actionContextDefense,
           buttonText: StringsGameScreen.lBlockAndSteal,
           buttonColor: Color.fromRGBO(99, 107, 171, 1),
         ),
         StringsGameScreen.lTrf: CustomDialogButton(
-          context: context,
+          buildContext: context,
           actionTag: defenseActionMapping[StringsGameScreen.lTrf]!,
+          actionContext: actionContextDefense,
           buttonText: StringsGameScreen.lTrf,
           buttonColor: Color.fromRGBO(203, 206, 227, 1),
         ),
         StringsGameScreen.lTwoMin: CustomDialogButton(
-          context: context,
+          buildContext: context,
           actionTag: defenseActionMapping[StringsGameScreen.lTwoMin]!,
+          actionContext: actionContextDefense,
           buttonText: StringsGameScreen.lTwoMin,
           buttonColor: Color.fromRGBO(199, 208, 244, 1),
           sizeFactor: 1,

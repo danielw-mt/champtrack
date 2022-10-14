@@ -43,13 +43,9 @@ void callSevenMeterMenu(BuildContext context, bool belongsToHomeTeam) {
             content: Container(
                 width: MediaQuery.of(context).size.width * 0.4,
                 height: MediaQuery.of(context).size.height * 0.4,
-                child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Expanded(
-                          child: buildDialogButtonMenu(
-                              bcontext, belongsToHomeTeam)),
-                    ] // Column of "Spieler", horizontal line and Button-Row
+                child: Column(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
+                  Expanded(child: buildDialogButtonMenu(bcontext, belongsToHomeTeam)),
+                ] // Column of "Spieler", horizontal line and Button-Row
                     )));
       });
 }
@@ -83,33 +79,17 @@ Widget buildDialogButtonMenu(BuildContext context, bool belongsToHomeTeam) {
   List<DialogButton> dialogButtons = [];
   if (belongsToHomeTeam) {
     dialogButtons = [
-      buildDialogButton(
-          context,
-          actionMapping[actionStateSevenMeter_meter]!.values.toList()[0],
-          actionMapping[actionStateSevenMeter_meter]!.keys.toList()[0],
-          Colors.lightBlue,
-          Icons.style),
-      buildDialogButton(
-          context,
-          actionMapping[actionStateSevenMeter_meter]!.values.toList()[1],
-          actionMapping[actionStateSevenMeter_meter]!.keys.toList()[1],
-          Colors.deepPurple,
-          Icons.style),
+      buildDialogButton(context, actionMapping[actionContextSevenMeter_meter]!.values.toList()[0],
+          actionMapping[actionContextSevenMeter_meter]!.keys.toList()[0], Colors.lightBlue, Icons.style),
+      buildDialogButton(context, actionMapping[actionContextSevenMeter_meter]!.values.toList()[1],
+          actionMapping[actionContextSevenMeter_meter]!.keys.toList()[1], Colors.deepPurple, Icons.style),
     ];
   } else {
     dialogButtons = [
-      buildDialogButton(
-          context,
-          actionMapping[actionStateSevenMeter_meter]!.values.toList()[2],
-          actionMapping[actionStateSevenMeter_meter]!.keys.toList()[2],
-          Colors.red,
-          Icons.style),
-      buildDialogButton(
-          context,
-          actionMapping[actionStateSevenMeter_meter]!.values.toList()[3],
-          actionMapping[actionStateSevenMeter_meter]!.keys.toList()[3],
-          Colors.yellow,
-          Icons.style)
+      buildDialogButton(context, actionMapping[actionContextSevenMeter_meter]!.values.toList()[2],
+          actionMapping[actionContextSevenMeter_meter]!.keys.toList()[2], Colors.red, Icons.style),
+      buildDialogButton(context, actionMapping[actionContextSevenMeter_meter]!.values.toList()[3],
+          actionMapping[actionContextSevenMeter_meter]!.keys.toList()[3], Colors.yellow, Icons.style)
     ];
   }
   return Column(children: [
@@ -146,18 +126,14 @@ Widget buildDialogButtonMenu(BuildContext context, bool belongsToHomeTeam) {
 /// @return
 /// builds a single dialog button that logs its text (=action) to firestore
 //  and updates the game state. Its color and icon can be specified as parameters
-DialogButton buildDialogButton(
-    BuildContext context, String actionType, String buttonText, Color color,
-    [icon]) {
-  final PersistentController persistentController =
-      Get.find<PersistentController>();
+DialogButton buildDialogButton(BuildContext context, String actionType, String buttonText, Color color, [icon]) {
+  final PersistentController persistentController = Get.find<PersistentController>();
   final TempController tempController = Get.find<TempController>();
   void logAction() async {
     logger.d("logging an action");
     DateTime dateTime = DateTime.now();
     int unixTime = dateTime.toUtc().millisecondsSinceEpoch;
-    int secondsSinceGameStart =
-        persistentController.getCurrentGame().stopWatchTimer.secondTime.value;
+    int secondsSinceGameStart = persistentController.getCurrentGame().stopWatchTimer.secondTime.value;
 
     // get most recent game id from DB
     String currentGameId = persistentController.getCurrentGame().id!;
@@ -165,16 +141,15 @@ DialogButton buildDialogButton(
     GameAction action = GameAction(
         teamId: tempController.getSelectedTeam().id!,
         gameId: currentGameId,
-        tag: determineAttack() ? 'attack' : 'defense',
-        actionType: actionType,
-        throwLocation:
-            List.from(tempController.getLastLocation().cast<String>()),
+        context: determineAttack() ? 'attack' : 'defense',
+        tag: actionType,
+        throwLocation: List.from(tempController.getLastLocation().cast<String>()),
         timestamp: unixTime,
         relativeTime: secondsSinceGameStart);
     logger.d("GameAction object created: ");
     logger.d(action);
     Player activePlayer;
-    if (actionType == goal || actionType == missed7m) {
+    if (actionType == goalTag || actionType == missed7mTag) {
       // own player did 7m
       activePlayer = tempController.getLastClickedPlayer();
       tempController.setLastClickedPlayer(Player());
@@ -195,31 +170,26 @@ DialogButton buildDialogButton(
     persistentController.addAction(action);
     await persistentController.setLastActionPlayer(activePlayer);
 
-    tempController.updatePlayerEfScore(
-        activePlayer.id!, persistentController.getLastAction());
+    tempController.updatePlayerEfScore(activePlayer.id!, persistentController.getLastAction());
     // add action to feed
     addFeedItem(action);
 
     // goal
-    if (actionType ==
-        actionMapping[actionStateSevenMeter_meter]!.values.toList()[0]) {
+    if (actionType == actionMapping[actionContextSevenMeter_meter]!.values.toList()[0]) {
       tempController.incOwnScore();
       offensiveFieldSwitch();
     }
     // missed 7m
-    if (actionType ==
-        actionMapping[actionStateSevenMeter_meter]!.values.toList()[1]) {
+    if (actionType == actionMapping[actionContextSevenMeter_meter]!.values.toList()[1]) {
       offensiveFieldSwitch();
     }
     // opponent goal
-    if (actionType ==
-        actionMapping[actionStateSevenMeter_meter]!.values.toList()[2]) {
+    if (actionType == actionMapping[actionContextSevenMeter_meter]!.values.toList()[2]) {
       tempController.incOpponentScore();
       defensiveFieldSwitch();
     }
     // opponent missed
-    if (actionType ==
-        actionMapping[actionStateSevenMeter_meter]!.values.toList()[3]) {
+    if (actionType == actionMapping[actionContextSevenMeter_meter]!.values.toList()[3]) {
       defensiveFieldSwitch();
     }
 

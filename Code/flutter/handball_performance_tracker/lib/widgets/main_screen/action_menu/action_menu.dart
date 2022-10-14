@@ -1,22 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:handball_performance_tracker/data/player.dart';
-import 'package:handball_performance_tracker/utils/feed_logic.dart';
-import 'package:handball_performance_tracker/utils/player_helper.dart';
 import 'package:handball_performance_tracker/widgets/helper_screen/alert_message_widget.dart';
 import 'package:handball_performance_tracker/widgets/main_screen/ef_score_bar.dart';
-import 'package:handball_performance_tracker/widgets/main_screen/field.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 import '../../../constants/stringsGameScreen.dart';
 import '../../../controllers/persistentController.dart';
 import '../../../controllers/tempController.dart';
 import 'package:get/get.dart';
-import 'package:rflutter_alert/rflutter_alert.dart';
-import '../../../data/game_action.dart';
 import '../../../constants/game_actions.dart';
-import '../playermenu.dart';
-import 'dart:math';
 import 'package:logger/logger.dart';
-import 'dialog_button.dart' as DialogButton;
 import 'dialog_button_menu.dart';
 
 var logger = Logger(
@@ -37,11 +28,10 @@ void callActionMenu(BuildContext context) {
   String actionState = determineActionState();
 
   // do nothing if goal of others was clicked
-  if (actionState == actionStateOtherGoalkeeper) {
+  if (actionState == actionContextOtherGoalkeeper) {
     return;
   }
-  StopWatchTimer stopWatchTimer =
-      persController.getCurrentGame().stopWatchTimer;
+  StopWatchTimer stopWatchTimer = persController.getCurrentGame().stopWatchTimer;
   // if game is not running give a warning
   if (stopWatchTimer.rawTime.value == 0) {
     showDialog(
@@ -52,8 +42,7 @@ void callActionMenu(BuildContext context) {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(menuRadius),
               ),
-              content: CustomAlertMessageWidget(
-                  StringsGameScreen.lGameStartErrorMessage));
+              content: CustomAlertMessageWidget(StringsGameScreen.lGameStartErrorMessage));
         });
     return;
   }
@@ -71,17 +60,15 @@ void callActionMenu(BuildContext context) {
             content: Container(
                 width: MediaQuery.of(context).size.width * 0.72,
                 height: MediaQuery.of(context).size.height * 0.7,
-                child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Expanded(
-                        child: Scrollbar(
-                            thumbVisibility: true,
-                            child: DialogButtonMenu(
-                              actionState: actionState,
-                            )),
-                      )
-                    ] // Column of "Spieler", horizontal line and Button-Row
+                child: Column(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
+                  Expanded(
+                    child: Scrollbar(
+                        thumbVisibility: true,
+                        child: DialogButtonMenu(
+                          actionContext: actionState,
+                        )),
+                  )
+                ] // Column of "Spieler", horizontal line and Button-Row
                     )));
       });
 }
@@ -92,29 +79,29 @@ String determineActionState() {
   final TempController tempController = Get.find<TempController>();
   // decide whether attack or defense actions should be displayed depending
   //on what side the team goals is and whether they are attacking or defending
-  String actionType = actionStateDefense;
+  String actionContext = actionContextDefense;
   bool attackIsLeft = tempController.getAttackIsLeft();
   bool fieldIsLeft = tempController.getFieldIsLeft();
   // when our goal is to the right (= attackIsLeft) and the field is left
   //display attack options
-  if (tempController.getLastLocation()[0] == goal) {
-    actionType = actionStateGoalkeeper;
+  if (tempController.getLastLocation()[0] == goalTag) {
+    actionContext = actionContextGoalkeeper;
     if (attackIsLeft && fieldIsLeft) {
-      actionType = actionStateOtherGoalkeeper;
+      actionContext = actionContextOtherGoalkeeper;
       // when our goal is to the left (=attack is right) and the field is to the
       //right display attack options
     } else if (attackIsLeft == false && fieldIsLeft == false) {
-      actionType = actionStateOtherGoalkeeper;
+      actionContext = actionContextOtherGoalkeeper;
     }
   } else {
     if (attackIsLeft && fieldIsLeft) {
-      actionType = actionStateAttack;
+      actionContext = actionContextAttack;
       // when our goal is to the left (=attack is right) and the field is to the
       //right display attack options
     } else if (attackIsLeft == false && fieldIsLeft == false) {
-      actionType = actionStateAttack;
+      actionContext = actionContextAttack;
     }
   }
-  logger.d("Actions should be displayed: $actionType");
-  return actionType;
+  logger.d("Actions should be displayed: $actionContext");
+  return actionContext;
 }

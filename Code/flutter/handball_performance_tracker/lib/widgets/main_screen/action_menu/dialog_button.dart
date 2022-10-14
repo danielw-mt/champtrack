@@ -18,17 +18,19 @@ import 'dart:math';
 // @params - sizeFactor: 0 for small buttons, 1 for middle big buttons, 2 for long buttons, anything else for big buttons
 //         - otherText: Text to display if it should not equal the text in actionMapping
 class CustomDialogButton extends StatelessWidget {
-  final BuildContext context;
+  final BuildContext buildContext;
   final String buttonText;
   final Color buttonColor;
   int? sizeFactor;
   Icon? icon;
   String? otherText;
   final String actionTag;
+  final String actionContext;
   CustomDialogButton(
       {super.key,
-      required this.context,
-      this.actionTag = "red",
+      required this.buildContext,
+      required this.actionTag,
+      required this.actionContext,
       this.buttonText = "",
       this.buttonColor = Colors.blue,
       this.sizeFactor,
@@ -40,7 +42,7 @@ class CustomDialogButton extends StatelessWidget {
     print("building button $buttonText");
     TempController tempController = Get.find<TempController>();
     PersistentController persistentController = Get.find<PersistentController>();
-    void handleAction(String actionType) async {
+    void handleAction(String actionTag) async {
       logger.d("logging an action");
       DateTime dateTime = DateTime.now();
       int unixTime = dateTime.toUtc().millisecondsSinceEpoch;
@@ -51,9 +53,9 @@ class CustomDialogButton extends StatelessWidget {
 
       // switch field side after hold of goalkeeper
       logger.d("switching field side if applicable");
-      if (actionMapping[actionStateAllActions]![buttonText]! == parade ||
-          actionMapping[actionStateAllActions]![buttonText]! == emptyGoal ||
-          actionMapping[actionStateAllActions]![buttonText]! == goalOthers) {
+      if (actionMapping[actionContextAllActions]![buttonText]! == paradeTag ||
+          actionMapping[actionContextAllActions]![buttonText]! == emptyGoalTag ||
+          actionMapping[actionContextAllActions]![buttonText]! == goalOthersTag) {
         while (FieldSwitch.pageController.positions.length > 1) {
           FieldSwitch.pageController.detach(FieldSwitch.pageController.positions.first);
         }
@@ -68,13 +70,13 @@ class CustomDialogButton extends StatelessWidget {
       GameAction action = GameAction(
           teamId: tempController.getSelectedTeam().id!,
           gameId: currentGameId,
-          tag: actionType,
-          actionType: actionMapping[actionStateAllActions]![buttonText]!,
+          context: actionContext,
+          tag: actionTag,
           throwLocation: List.from(tempController.getLastLocation().cast<String>()),
           timestamp: unixTime,
           relativeTime: secondsSinceGameStart);
-      logger.d("GameAction object created: ${action.actionType}");
-      logger.d(action.actionType);
+      logger.d("GameAction object created: ${action.tag}");
+      logger.d(action.tag);
 
       // add action to firebase
 
@@ -83,7 +85,7 @@ class CustomDialogButton extends StatelessWidget {
       // updated in firebase with their player_id using the action_id
       logger.d("Adding gameaction to firebase");
       // Save action directly if goalkeeper action
-      if (actionType == actionStateGoalkeeper) {
+      if (actionTag == actionContextGoalkeeper) {
         String? goalKeeperId = "goalkeeper";
         // get id of goalkeeper by going through players on field and searching for position
         for (int k in getOnFieldIndex()) {
@@ -98,9 +100,9 @@ class CustomDialogButton extends StatelessWidget {
         persistentController.addAction(action);
         addFeedItem(action);
         logger.d("last action saved in database: ${persistentController.getLastAction().toMap()}");
-        if (action.actionType == goal) {
+        if (action.tag == goalTag) {
           tempController.incOwnScore();
-        } else if (action.actionType == goalOthers || action.actionType == emptyGoal) {
+        } else if (action.tag == goalOthersTag || action.tag == emptyGoalTag) {
           tempController.incOpponentScore();
         }
       } else {
@@ -108,8 +110,8 @@ class CustomDialogButton extends StatelessWidget {
       }
       Navigator.pop(context);
       // close action menu if goalkeeper action
-      if (actionType != actionStateGoalkeeper) {
-        print("stepping in here: $actionType");
+      if (actionTag != actionContextGoalkeeper) {
+        print("stepping in here: $actionTag");
         callPlayerMenu(context);
       }
     }
@@ -130,7 +132,7 @@ class CustomDialogButton extends StatelessWidget {
       // Long buttons like in goalkeeper menu
       buttonWidth = width * 0.25;
       buttonHeight = width * 0.17;
-    // if no size factor provided
+      // if no size factor provided
     } else {
       // Big buttons like goal
       buttonWidth = width * 0.17;

@@ -5,8 +5,8 @@ class GameAction {
   final String teamId;
   final String gameId;
   String playerId;
+  String context;
   String tag;
-  String actionType;
   List<String> throwLocation;
   int timestamp;
   int relativeTime;
@@ -16,8 +16,8 @@ class GameAction {
       this.teamId = "",
       this.gameId = "",
       this.playerId = "",
+      this.context = "",
       this.tag = "",
-      this.actionType = "",
       this.throwLocation = const [],
       this.timestamp = 0,
       this.relativeTime = 0});
@@ -28,8 +28,8 @@ class GameAction {
       'teamId': teamId,
       'gameId': gameId,
       'playerId': playerId,
+      'context': context,
       'tag': tag,
-      'actionType': actionType,
       'throwLocation': throwLocation,
       'timestamp': timestamp,
       'relativeTime': relativeTime
@@ -49,8 +49,8 @@ class GameAction {
         teamId: map['teamId'],
         gameId: map['gameId'],
         playerId: map['playerId'],
-        tag: map['type'],
-        actionType: map['actionType'],
+        context: map['context'],
+        tag: map['tag'],
         throwLocation: map['throwLocation'].cast<String>(),
         timestamp: map['timestamp'],
         relativeTime: map['relativeTime']);
@@ -59,12 +59,12 @@ class GameAction {
   // @return a new GameAction instance with the exact same properties as @param action
   GameAction.clone(GameAction action)
       : this(
-            actionType: action.actionType,
+            tag: action.tag,
             teamId: action.teamId,
             gameId: action.gameId,
             playerId: action.playerId,
             relativeTime: action.relativeTime,
             throwLocation: action.throwLocation,
             timestamp: action.timestamp,
-            tag: action.tag);
+            context: action.context);
 }
