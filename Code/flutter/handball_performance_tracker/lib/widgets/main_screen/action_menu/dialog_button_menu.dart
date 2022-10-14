@@ -168,7 +168,7 @@ class ArrangedDialogButtons extends StatelessWidget {
         ),
       ]);
     } else if (actionState == actionStateAttack) {
-      Map<String, CustomDialogButton> dialogButtons = {};
+      logger.d("arranging dialog buttons for attack");
       buttonRow =
           Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
         Column(children: [
@@ -303,60 +303,62 @@ class ArrangedDialogButtons extends StatelessWidget {
       Map<String, String> attackActionMapping =
           actionMapping[actionStateAttack]!;
       logger.d("attackActionMapping: $attackActionMapping");
-      // return {
-      //   StringsGameScreen.lRedCard: CustomDialogButton(
-      //       context: context,
-      //       actionTag: attackActionMapping[StringsGameScreen.lRedCard]!,
-      //       buttonText: StringsGameScreen.lRedCard,
-      //       buttonColor: Colors.red,
-      //       sizeFactor: 0,
-      //       icon: Icon(Icons.remove_circle_outline)),
-      //   StringsGameScreen.lYellowCard: CustomDialogButton(
-      //       context: context,
-      //       actionTag: attackActionMapping[StringsGameScreen.lYellowCard]!,
-      //       buttonText: StringsGameScreen.lYellowCard,
-      //       buttonColor: Colors.yellow,
-      //       sizeFactor: 0,
-      //       icon: Icon(Icons.remove_circle_outline)),
-      //   StringsGameScreen.lTimePenalty: CustomDialogButton(
-      //       context: context,
-      //       actionTag: attackActionMapping[StringsGameScreen.lTimePenalty]!,
-      //       buttonText: StringsGameScreen.lTimePenalty,
-      //       buttonColor: Color.fromRGBO(199, 208, 244, 1),
-      //       sizeFactor: 1,
-      //       icon: Icon(Icons.remove_circle_outline)),
-      //   StringsGameScreen.lGoal: CustomDialogButton(
-      //       context: context,
-      //       actionTag: attackActionMapping[StringsGameScreen.lGoal]!,
-      //       buttonText: StringsGameScreen.lGoal,
-      //       buttonColor: Color.fromRGBO(99, 107, 171, 1),
-      //       icon: Icon(Icons.remove_circle_outline)),
-      //   StringsGameScreen.lOneVsOneAnd7m: CustomDialogButton(
-      //       context: context,
-      //       actionTag: attackActionMapping[StringsGameScreen.lOneVsOneAnd7m]!,
-      //       buttonText: StringsGameScreen.lOneVsOneAnd7m,
-      //       buttonColor: Color.fromRGBO(99, 107, 171, 1),
-      //       icon: Icon(Icons.remove_circle_outline)),
-      //   StringsGameScreen.lTwoMin: CustomDialogButton(
-      //       context: context,
-      //       actionTag: attackActionMapping[StringsGameScreen.lTwoMin]!,
-      //       buttonText: StringsGameScreen.lTwoMin,
-      //       buttonColor: Color.fromRGBO(199, 208, 244, 1),
-      //       sizeFactor: 1,
-      //       icon: Icon(Icons.remove_circle_outline)),
-      //   StringsGameScreen.lErrThrow: CustomDialogButton(
-      //       context: context,
-      //       actionTag: attackActionMapping[StringsGameScreen.lErrThrow]!,
-      //       buttonText: StringsGameScreen.lErrThrow,
-      //       buttonColor: Color.fromRGBO(203, 206, 227, 1),
-      //       icon: Icon(Icons.remove_circle_outline)),
-      //   StringsGameScreen.lTrf: CustomDialogButton(
-      //       context: context,
-      //       actionTag: attackActionMapping[StringsGameScreen.lTrf]!,
-      //       buttonText: StringsGameScreen.lTrf,
-      //       buttonColor: Color.fromRGBO(203, 206, 227, 1),
-      //       icon: Icon(Icons.remove_circle_outline)),
-      // };
+      return {
+        StringsGameScreen.lRedCard: CustomDialogButton(
+            context: context,
+            actionTag: attackActionMapping[StringsGameScreen.lRedCard]!,
+            buttonText: StringsGameScreen.lRedCard,
+            buttonColor: Colors.red,
+            sizeFactor: 0,
+            icon: Icon(Icons.remove_circle_outline)),
+        StringsGameScreen.lYellowCard: CustomDialogButton(
+            context: context,
+            actionTag: attackActionMapping[StringsGameScreen.lYellowCard]!,
+            buttonText: StringsGameScreen.lYellowCard,
+            buttonColor: Colors.yellow,
+            sizeFactor: 0,
+            icon: Icon(Icons.remove_circle_outline)),
+        StringsGameScreen.lTimePenalty: CustomDialogButton(
+            context: context,
+            actionTag: attackActionMapping[StringsGameScreen.lTimePenalty]!,
+            buttonText: StringsGameScreen.lTimePenalty,
+            buttonColor: Color.fromRGBO(199, 208, 244, 1),
+            sizeFactor: 1,
+            icon: Icon(Icons.remove_circle_outline)),
+        StringsGameScreen.lGoal: CustomDialogButton(
+            context: context,
+            actionTag: attackActionMapping[StringsGameScreen.lGoal]!,
+            buttonText: StringsGameScreen.lGoal,
+            buttonColor: Color.fromRGBO(99, 107, 171, 1),
+            sizeFactor: 1,
+            icon: Icon(Icons.remove_circle_outline)),
+        StringsGameScreen.lOneVsOneAnd7m: CustomDialogButton(
+            context: context,
+            actionTag: attackActionMapping[StringsGameScreen.lOneVsOneAnd7m]!,
+            buttonText: StringsGameScreen.lOneVsOneAnd7m,
+            buttonColor: Color.fromRGBO(99, 107, 171, 1),
+            sizeFactor: 1,
+            icon: Icon(Icons.remove_circle_outline)),
+        StringsGameScreen.lTwoMin: CustomDialogButton(
+            context: context,
+            actionTag: attackActionMapping[StringsGameScreen.lTwoMin]!,
+            buttonText: StringsGameScreen.lTwoMin,
+            buttonColor: Color.fromRGBO(199, 208, 244, 1),
+            sizeFactor: 1,
+            icon: Icon(Icons.remove_circle_outline)),
+        StringsGameScreen.lErrThrow: CustomDialogButton(
+            context: context,
+            actionTag: attackActionMapping[StringsGameScreen.lErrThrow]!,
+            buttonText: StringsGameScreen.lErrThrow,
+            buttonColor: Color.fromRGBO(203, 206, 227, 1),
+            icon: Icon(Icons.remove_circle_outline)),
+        StringsGameScreen.lTrf: CustomDialogButton(
+            context: context,
+            actionTag: attackActionMapping[StringsGameScreen.lTrf]!,
+            buttonText: StringsGameScreen.lTrf,
+            buttonColor: Color.fromRGBO(203, 206, 227, 1),
+            icon: Icon(Icons.remove_circle_outline)),
+      };
     }
     if (actionState == actionStateDefense) {
       // tags action tags for the different buttons
