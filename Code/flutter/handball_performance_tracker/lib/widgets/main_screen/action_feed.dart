@@ -39,7 +39,7 @@ class ActionFeed extends StatelessWidget {
                     itemCount: feedActions.length,
                     itemBuilder: (context, index) {
                       GameAction feedAction = feedActions.reversed.toList()[index];
-                      String actionType = feedAction.tag;
+                      String actionTag = feedAction.tag;
                       Player relevantPlayer = Player();
                       // get the player object whose id matches the playerId in the action Object
                       if (feedAction.playerId != "opponent") {
@@ -60,7 +60,7 @@ class ActionFeed extends StatelessWidget {
                                 child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                                   Flexible(
                                     child: Text(
-                                      actionType,
+                                      actionTag,
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
                                         fontSize: 12,

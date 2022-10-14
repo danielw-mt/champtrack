@@ -4,7 +4,7 @@ import 'package:handball_performance_tracker/constants/stringsGeneral.dart';
 // action context
 const String actionContextAttack = "attack";
 const String actionContextDefense = "defense";
-const String actionContextSevenMeter_meter = "seven_meter";
+const String actionContextSevenMeter = "seven_meter";
 const String actionContextGoalkeeper = "goalkeeper";
 const String actionContextOtherGoalkeeper = "otherGoalkeeper";
 const String actionContextAllActions = "allActions";
@@ -39,9 +39,10 @@ const String emptyGoalTag = "empty_goal";
 const String positiveActionTag = "pos";
 const String negativeActionTag = "neg";
 
-const String goal7mTag = "goal7m";
-const String missed7mTag = "missed7m";
-const String parade7mTag = "parade7m";
+const String goal7mTag = "goal_7m";
+const String missed7mTag = "missed_7m";
+const String parade7mTag = "parade_7m";
+const String goalOpponent7mTag = "goal_opponent_7m";
 
 Map<String, Map<String, String>> actionMapping = {
   actionContextAttack: {
@@ -75,7 +76,7 @@ Map<String, Map<String, String>> actionMapping = {
     StringsGameScreen.lParade: paradeTag,
     StringsGameScreen.lGoalOpponent: goalOpponentTag,
   },
-  actionContextSevenMeter_meter: {
+  actionContextSevenMeter: {
     StringsGameScreen.lGoal: goal7mTag,
     StringsGameScreen.lErrThrow: missed7mTag,
     StringsGameScreen.lGoalOpponent: goalOpponentTag,

@@ -290,7 +290,7 @@ class TempController extends GetxController {
   Player getPreviousClickedPlayer() => _lastClickedPlayer.value;
 
   /// setter for lastClickedPlayer
-  void setLastClickedPlayer(Player lastClickedPlayer) {
+  void setPreviousClickedPlayer(Player lastClickedPlayer) {
     _lastClickedPlayer.value = lastClickedPlayer;
     update(["player-menu-button"]);
   }

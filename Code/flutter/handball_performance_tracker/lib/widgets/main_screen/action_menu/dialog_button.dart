@@ -114,6 +114,9 @@ class CustomDialogButton extends StatelessWidget {
       if (action.tag == oneVOneSevenTag) {
         tempController.setPlayerMenuText(StringsGameScreen.lChoose7mReceiver);
       }
+      if (action.tag == foulSevenMeterTag) {
+        tempController.setPlayerMenuText(StringsGameScreen.lChoose7mCause);
+      }
       if (action.tag == goalOpponentTag || action.tag == emptyGoalTag) {
         tempController.incOpponentScore();
         // we can add a gameaction here to DB because the player does not need to be selected in the player menu later

@@ -118,7 +118,7 @@ void callPlayerMenu(context, [substitute_menu]) {
       // if just pressed anywhere in screen)
       .then((_) {
     tempController.setPlayerMenuText("");
-    tempController.setLastClickedPlayer(Player());
+    tempController.setPreviousClickedPlayer(Player());
     (!playerChanged && substitute_menu != null)
         ? tempController.getLastPlayerToChange()
         : null; // delete player to change from list if player menu was closed
@@ -245,7 +245,7 @@ GetBuilder<TempController> buildDialogButton(BuildContext context, Player player
       tempController.setPlayerMenuText("Assist");
       // update last Clicked player value with the Player from selected team
       // who was clicked
-      tempController.setLastClickedPlayer(tempController.getPlayerFromSelectedTeam(playerFromButton.id!));
+      tempController.setPreviousClickedPlayer(tempController.getPlayerFromSelectedTeam(playerFromButton.id!));
       return;
     }
     // if goal was pressed and a player was already clicked once
@@ -277,12 +277,12 @@ GetBuilder<TempController> buildDialogButton(BuildContext context, Player player
 
         // add assist first to the feed and then the goal
         addFeedItem(assistAction);
-        tempController.setLastClickedPlayer(Player());
+        tempController.setPreviousClickedPlayer(Player());
       }
     } else {
       // if the action was not a goal just update the player id in firebase and gamestate
       persistentController.setLastActionPlayer(playerFromButton);
-      tempController.setLastClickedPlayer(playerFromButton);
+      tempController.setPreviousClickedPlayer(playerFromButton);
       tempController.updatePlayerEfScore(playerFromButton.id!, persistentController.getLastAction());
       // add action to feed
       lastAction.playerId = playerFromButton.id!;
@@ -338,7 +338,7 @@ GetBuilder<TempController> buildDialogButton(BuildContext context, Player player
       return;
     }
     // reset last clicked player and player menu hint text
-    tempController.setLastClickedPlayer(Player());
+    tempController.setPreviousClickedPlayer(Player());
     tempController.setPlayerMenuText("");
     Navigator.pop(context);
   }

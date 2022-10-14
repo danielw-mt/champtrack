@@ -15,6 +15,7 @@ import '../../controllers/persistentController.dart';
 import 'dart:math';
 import 'package:logger/logger.dart';
 import '../../utils/field_control.dart';
+import '../../constants/positions.dart';
 
 var logger = Logger(
   printer: PrettyPrinter(
@@ -79,17 +80,13 @@ Widget buildDialogButtonMenu(BuildContext context, bool belongsToHomeTeam) {
   List<DialogButton> dialogButtons = [];
   if (belongsToHomeTeam) {
     dialogButtons = [
-      buildDialogButton(context, actionMapping[actionContextSevenMeter_meter]!.values.toList()[0],
-          actionMapping[actionContextSevenMeter_meter]!.keys.toList()[0], Colors.lightBlue, Icons.style),
-      buildDialogButton(context, actionMapping[actionContextSevenMeter_meter]!.values.toList()[1],
-          actionMapping[actionContextSevenMeter_meter]!.keys.toList()[1], Colors.deepPurple, Icons.style),
+      buildDialogButton(context, goal7mTag, StringsGameScreen.lGoal, Colors.lightBlue, Icons.style),
+      buildDialogButton(context, missed7mTag, StringsGameScreen.lErrThrow, Colors.deepPurple, Icons.style),
     ];
   } else {
     dialogButtons = [
-      buildDialogButton(context, actionMapping[actionContextSevenMeter_meter]!.values.toList()[2],
-          actionMapping[actionContextSevenMeter_meter]!.keys.toList()[2], Colors.red, Icons.style),
-      buildDialogButton(context, actionMapping[actionContextSevenMeter_meter]!.values.toList()[3],
-          actionMapping[actionContextSevenMeter_meter]!.keys.toList()[3], Colors.yellow, Icons.style)
+      buildDialogButton(context, goalOpponent7mTag, StringsGameScreen.lGoalOpponent, Colors.red, Icons.style),
+      buildDialogButton(context, parade7mTag, StringsGeneral.lCaught, Colors.yellow, Icons.style)
     ];
   }
   return Column(children: [
@@ -126,7 +123,7 @@ Widget buildDialogButtonMenu(BuildContext context, bool belongsToHomeTeam) {
 /// @return
 /// builds a single dialog button that logs its text (=action) to firestore
 //  and updates the game state. Its color and icon can be specified as parameters
-DialogButton buildDialogButton(BuildContext context, String actionType, String buttonText, Color color, [icon]) {
+DialogButton buildDialogButton(BuildContext context, String actionTag, String buttonText, Color color, [icon]) {
   final PersistentController persistentController = Get.find<PersistentController>();
   final TempController tempController = Get.find<TempController>();
   void logAction() async {
@@ -141,65 +138,78 @@ DialogButton buildDialogButton(BuildContext context, String actionType, String b
     GameAction action = GameAction(
         teamId: tempController.getSelectedTeam().id!,
         gameId: currentGameId,
-        context: determineAttack() ? 'attack' : 'defense',
-        tag: actionType,
+        context: actionContextSevenMeter,
+        tag: actionTag,
         throwLocation: List.from(tempController.getLastLocation().cast<String>()),
         timestamp: unixTime,
         relativeTime: secondsSinceGameStart);
-    logger.d("GameAction object created: ");
-    logger.d(action);
-    Player activePlayer;
-    if (actionType == goalTag || actionType == missed7mTag) {
-      // own player did 7m
-      activePlayer = tempController.getPreviousClickedPlayer();
-      tempController.setLastClickedPlayer(Player());
-    } else {
-      // opponent player did 7m
-      // get id of goalkeeper by going through players on field and searching for position
-      Player goalKeeperId = tempController.getPlayersFromSelectedTeam()[0];
-      for (int k in getOnFieldIndex()) {
-        Player player = tempController.getPlayersFromSelectedTeam()[k];
-        if (player.positions.contains("TW")) {
-          goalKeeperId = player;
-          break;
+    // we executed a 7m
+    if (actionTag == goal7mTag || actionTag == missed7mTag) {
+      logger.d("our team executed a 7m");
+      Player sevenMeterExecutor = tempController.getPreviousClickedPlayer();
+      action.playerId = sevenMeterExecutor.id!;
+      persistentController.addActionToCache(action);
+      persistentController.addActionToFirebase(action);
+      tempController.updatePlayerEfScore(action.playerId, action);
+      addFeedItem(action);
+      tempController.setPreviousClickedPlayer(Player());
+      Navigator.pop(context);
+      // opponents scored or missed their 7m
+    } else if (actionTag == goalOpponent7mTag || actionTag == parade7mTag) {
+      logger.d("opponent executed a 7m");
+      List<Player> goalKeepers = [];
+      tempController.getOnFieldPlayers().forEach((Player player) {
+        if (player.positions.contains(goalkeeperPos)) {
+          goalKeepers.add(player);
         }
+      });
+      // if there is only one player with a goalkeeper position on field right now assign the action to him
+      if (goalKeepers.length == 1) {
+        logger.d("single goalkeeper on field");
+        // we know the player id so we assign it here. For all other actions it is assigned in the player menu
+        action.playerId = goalKeepers[0].id!;
+        persistentController.addActionToCache(action);
+        persistentController.addActionToFirebase(action);
+        addFeedItem(action);
+        Navigator.pop(context);
+        tempController.updatePlayerEfScore(action.playerId, action);
+        // if there is more than one player with a goalkeeper position on field right now
+      } else {
+        tempController.setPlayerMenuText(StringsGameScreen.lChooseGoalkeeper);
+        logger.d("More than one goalkeeper on field. Waiting for player selection");
+        persistentController.addActionToCache(action);
+        Navigator.pop(context);
+        callPlayerMenu(context);
       }
-      activePlayer = goalKeeperId;
     }
-    // add action to firebase
-    persistentController.addActionToCache(action);
-    persistentController.setLastActionPlayer(activePlayer);
-
-    tempController.updatePlayerEfScore(activePlayer.id!, persistentController.getLastAction());
-    // add action to feed
-    addFeedItem(action);
 
     // goal
-    if (actionType == actionMapping[actionContextSevenMeter_meter]!.values.toList()[0]) {
+    if (actionTag == goal7mTag) {
       tempController.incOwnScore();
       offensiveFieldSwitch();
     }
     // missed 7m
-    if (actionType == actionMapping[actionContextSevenMeter_meter]!.values.toList()[1]) {
+    if (actionTag == missed7mTag) {
       offensiveFieldSwitch();
     }
     // opponent goal
-    if (actionType == actionMapping[actionContextSevenMeter_meter]!.values.toList()[2]) {
+    if (actionTag == goalOpponent7mTag) {
       tempController.incOpponentScore();
       defensiveFieldSwitch();
     }
     // opponent missed
-    if (actionType == actionMapping[actionContextSevenMeter_meter]!.values.toList()[3]) {
+    if (actionTag == parade7mTag) {
       defensiveFieldSwitch();
     }
 
     // If there were player clicked which are not on field, open substitute player menu
-    if (!tempController.getPlayersToChange().isEmpty) {
-      Navigator.pop(context);
-      callPlayerMenu(context, true);
-      return;
-    }
-    Navigator.pop(context);
+
+    // see # 400 swapping out player on bench should not be possible
+    // if (!tempController.getPlayersToChange().isEmpty) {
+    //   Navigator.pop(context);
+    //   callPlayerMenu(context, true);
+    //   return;
+    // }
   }
 
   final double width = MediaQuery.of(context).size.width;
