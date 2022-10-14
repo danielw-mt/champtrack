@@ -21,9 +21,9 @@ class CustomDialogButton extends StatelessWidget {
   final BuildContext context;
   final String buttonText;
   final Color buttonColor;
-  final int sizeFactor;
-  final Icon icon;
-  final String otherText;
+  int? sizeFactor;
+  Icon? icon;
+  String? otherText;
   final String actionTag;
   CustomDialogButton(
       {super.key,
@@ -31,23 +31,21 @@ class CustomDialogButton extends StatelessWidget {
       this.actionTag = "red",
       this.buttonText = "",
       this.buttonColor = Colors.blue,
-      this.sizeFactor = 0,
-      this.icon = const Icon(Icons.add),
-      this.otherText = ""});
+      this.sizeFactor,
+      this.icon,
+      this.otherText});
 
   @override
   Widget build(BuildContext context) {
     print("building button $buttonText");
     TempController tempController = Get.find<TempController>();
-    PersistentController persistentController =
-        Get.find<PersistentController>();
+    PersistentController persistentController = Get.find<PersistentController>();
     void handleAction(String actionType) async {
       logger.d("logging an action");
       DateTime dateTime = DateTime.now();
       int unixTime = dateTime.toUtc().millisecondsSinceEpoch;
       print(persistentController.getCurrentGame().id);
-      int secondsSinceGameStart =
-          persistentController.getCurrentGame().stopWatchTimer.secondTime.value;
+      int secondsSinceGameStart = persistentController.getCurrentGame().stopWatchTimer.secondTime.value;
       // get most recent game id from DB
       String currentGameId = persistentController.getCurrentGame().id!;
 
@@ -57,8 +55,7 @@ class CustomDialogButton extends StatelessWidget {
           actionMapping[actionStateAllActions]![buttonText]! == emptyGoal ||
           actionMapping[actionStateAllActions]![buttonText]! == goalOthers) {
         while (FieldSwitch.pageController.positions.length > 1) {
-          FieldSwitch.pageController
-              .detach(FieldSwitch.pageController.positions.first);
+          FieldSwitch.pageController.detach(FieldSwitch.pageController.positions.first);
         }
         if (tempController.getAttackIsLeft() == true) {
           logger.d("Switching to left field after hold");
@@ -73,8 +70,7 @@ class CustomDialogButton extends StatelessWidget {
           gameId: currentGameId,
           tag: actionType,
           actionType: actionMapping[actionStateAllActions]![buttonText]!,
-          throwLocation:
-              List.from(tempController.getLastLocation().cast<String>()),
+          throwLocation: List.from(tempController.getLastLocation().cast<String>()),
           timestamp: unixTime,
           relativeTime: secondsSinceGameStart);
       logger.d("GameAction object created: ${action.actionType}");
@@ -101,12 +97,10 @@ class CustomDialogButton extends StatelessWidget {
         action.playerId = goalKeeperId.toString();
         persistentController.addAction(action);
         addFeedItem(action);
-        logger.d(
-            "last action saved in database: ${persistentController.getLastAction().toMap()}");
+        logger.d("last action saved in database: ${persistentController.getLastAction().toMap()}");
         if (action.actionType == goal) {
           tempController.incOwnScore();
-        } else if (action.actionType == goalOthers ||
-            action.actionType == emptyGoal) {
+        } else if (action.actionType == goalOthers || action.actionType == emptyGoal) {
           tempController.incOpponentScore();
         }
       } else {
@@ -136,6 +130,7 @@ class CustomDialogButton extends StatelessWidget {
       // Long buttons like in goalkeeper menu
       buttonWidth = width * 0.25;
       buttonHeight = width * 0.17;
+    // if no size factor provided
     } else {
       // Big buttons like goal
       buttonWidth = width * 0.17;

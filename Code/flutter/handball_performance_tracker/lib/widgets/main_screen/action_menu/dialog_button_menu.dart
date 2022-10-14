@@ -30,7 +30,6 @@ var logger = Logger(
       ),
 );
 
-
 /// A menu of differently arranged buttons depending on whether we are in action, defense or goal keeper mode
 class DialogButtonMenu extends StatelessWidget {
   final String actionState;
@@ -38,8 +37,7 @@ class DialogButtonMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PageView(
-        controller: new PageController(), children: buildPageViewChildren());
+    return PageView(controller: new PageController(), children: buildPageViewChildren());
   }
 
   // a method for building the children of the pageview in the right order
@@ -61,9 +59,7 @@ class DialogButtonMenu extends StatelessWidget {
       ];
     } else {
       print("no page view children");
-      return [
-        Text("Could not build menu that is matching the phase of the game")
-      ];
+      return [Text("Could not build menu that is matching the phase of the game")];
     }
   }
 }
@@ -134,8 +130,7 @@ class ArrangedDialogButtons extends StatelessWidget {
     print("arranging dialog buttons");
     // String header;
     Row buttonRow;
-    Map<String, CustomDialogButton> dialogButtons =
-          buildDialogButtons(context);
+    Map<String, CustomDialogButton> dialogButtons = buildDialogButtons(context);
     if (actionState == actionStateGoalkeeper) {
       buttonRow = Row(children: [
         Column(children: [
@@ -149,8 +144,7 @@ class ArrangedDialogButtons extends StatelessWidget {
             ),
           ),
           Flexible(child: dialogButtons[StringsGameScreen.lEmptyGoal]!),
-          Flexible(
-              child: dialogButtons[StringsGameScreen.lErrThrowGoalkeeper]!),
+          Flexible(child: dialogButtons[StringsGameScreen.lErrThrowGoalkeeper]!),
         ]),
         Flexible(
           child: Column(children: [
@@ -169,8 +163,7 @@ class ArrangedDialogButtons extends StatelessWidget {
       ]);
     } else if (actionState == actionStateAttack) {
       logger.d("arranging dialog buttons for attack");
-      buttonRow =
-          Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+      buttonRow = Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
         Column(children: [
           Row(children: [dialogButtons[StringsGameScreen.lYellowCard]!, dialogButtons[StringsGameScreen.lRedCard]!]),
           Flexible(child: dialogButtons[StringsGameScreen.lTwoMin]!),
@@ -178,24 +171,17 @@ class ArrangedDialogButtons extends StatelessWidget {
         ]),
         Flexible(
           child: Column(
-            children: [
-              Flexible(child: dialogButtons[StringsGameScreen.lErrThrow]!),
-              Flexible(child: dialogButtons[StringsGameScreen.lTrf]!)
-            ],
+            children: [Flexible(child: dialogButtons[StringsGameScreen.lErrThrow]!), Flexible(child: dialogButtons[StringsGameScreen.lTrf]!)],
           ),
         ),
         Flexible(
           child: Column(
-            children: [
-              Flexible(child: dialogButtons[StringsGameScreen.lGoal]!),
-              Flexible(child: dialogButtons[StringsGameScreen.lOneVsOneAnd7m]!)
-            ],
+            children: [Flexible(child: dialogButtons[StringsGameScreen.lGoal]!), Flexible(child: dialogButtons[StringsGameScreen.lOneVsOneAnd7m]!)],
           ),
         ),
       ]);
     } else {
-      buttonRow =
-          Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+      buttonRow = Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
         Column(
           children: [
             Row(children: [dialogButtons[StringsGameScreen.lYellowCard]!, dialogButtons[StringsGameScreen.lRedCard]!]),
@@ -205,10 +191,7 @@ class ArrangedDialogButtons extends StatelessWidget {
         ),
         Flexible(
           child: Column(
-            children: [
-              Flexible(child: dialogButtons[StringsGameScreen.lFoul7m]!),
-              Flexible(child: dialogButtons[StringsGameScreen.lTrf]!)
-            ],
+            children: [Flexible(child: dialogButtons[StringsGameScreen.lFoul7m]!), Flexible(child: dialogButtons[StringsGameScreen.lTrf]!)],
           ),
         ),
         Flexible(
@@ -224,12 +207,10 @@ class ArrangedDialogButtons extends StatelessWidget {
     return buttonRow;
   }
 
-  // TODO adapt icons
   Map<String, CustomDialogButton> buildDialogButtons(BuildContext context) {
     print("building dialog buttons");
     if (actionState == actionStateGoalkeeper) {
-      Map<String, String> goalKeeperActionMapping =
-          actionMapping[actionStateGoalkeeper]!;
+      Map<String, String> goalKeeperActionMapping = actionMapping[actionStateGoalkeeper]!;
       return {
         StringsGameScreen.lRedCard: CustomDialogButton(
             context: context,
@@ -237,71 +218,63 @@ class ArrangedDialogButtons extends StatelessWidget {
             buttonText: StringsGameScreen.lRedCard,
             buttonColor: Colors.red,
             sizeFactor: 0,
-            icon: Icon(Icons.remove_circle_outline)),
+            icon: Icon(Icons.style)),
         StringsGameScreen.lYellowCard: CustomDialogButton(
             context: context,
             actionTag: goalKeeperActionMapping[StringsGameScreen.lYellowCard]!,
             buttonText: StringsGameScreen.lYellowCard,
             buttonColor: Colors.yellow,
             sizeFactor: 0,
-            icon: Icon(Icons.remove_circle_outline)),
+            icon: Icon(Icons.style)),
         StringsGameScreen.lTimePenalty: CustomDialogButton(
             context: context,
             actionTag: goalKeeperActionMapping[StringsGameScreen.lTimePenalty]!,
             buttonText: StringsGameScreen.lTimePenalty,
             buttonColor: Color.fromRGBO(199, 208, 244, 1),
             sizeFactor: 0,
-            icon: Icon(Icons.remove_circle_outline)),
+            icon: Icon(Icons.timer)),
         StringsGameScreen.lEmptyGoal: CustomDialogButton(
-            context: context,
-            actionTag: goalKeeperActionMapping[StringsGameScreen.lEmptyGoal]!,
-            buttonText: StringsGameScreen.lEmptyGoal,
-            buttonColor: Color.fromRGBO(199, 208, 244, 1),
-            sizeFactor: 2,
-            icon: Icon(Icons.remove_circle_outline)),
+          context: context,
+          actionTag: goalKeeperActionMapping[StringsGameScreen.lEmptyGoal]!,
+          buttonText: StringsGameScreen.lEmptyGoal,
+          buttonColor: Color.fromRGBO(199, 208, 244, 1),
+          sizeFactor: 2,
+        ),
         StringsGameScreen.lErrThrowGoalkeeper: CustomDialogButton(
-            context: context,
-            actionTag:
-                goalKeeperActionMapping[StringsGameScreen.lErrThrowGoalkeeper]!,
-            buttonText: StringsGameScreen.lErrThrowGoalkeeper,
-            buttonColor: Color.fromRGBO(199, 208, 244, 1),
-            sizeFactor: 2,
-            icon: Icon(Icons.remove_circle_outline)),
+          context: context,
+          actionTag: goalKeeperActionMapping[StringsGameScreen.lErrThrowGoalkeeper]!,
+          buttonText: StringsGameScreen.lErrThrowGoalkeeper,
+          buttonColor: Color.fromRGBO(199, 208, 244, 1),
+          sizeFactor: 2,
+        ),
         StringsGameScreen.lGoalGoalkeeper: CustomDialogButton(
-            context: context,
-            actionTag:
-                goalKeeperActionMapping[StringsGameScreen.lGoalGoalkeeper]!,
-            buttonText: StringsGameScreen.lGoalGoalkeeper,
-            buttonColor: Color.fromRGBO(99, 107, 171, 1),
-            sizeFactor: 1,
-            icon: Icon(Icons.remove_circle_outline)),
+          context: context,
+          actionTag: goalKeeperActionMapping[StringsGameScreen.lGoalGoalkeeper]!,
+          buttonText: StringsGameScreen.lGoalGoalkeeper,
+          buttonColor: Color.fromRGBO(99, 107, 171, 1),
+        ),
         StringsGameScreen.lBadPass: CustomDialogButton(
-            context: context,
-            actionTag: goalKeeperActionMapping[StringsGameScreen.lBadPass]!,
-            buttonText: StringsGameScreen.lBadPass,
-            buttonColor: Color.fromRGBO(203, 206, 227, 1),
-            sizeFactor: 1,
-            icon: Icon(Icons.remove_circle_outline)),
+          context: context,
+          actionTag: goalKeeperActionMapping[StringsGameScreen.lBadPass]!,
+          buttonText: StringsGameScreen.lBadPass,
+          buttonColor: Color.fromRGBO(203, 206, 227, 1),
+        ),
         StringsGameScreen.lParade: CustomDialogButton(
-            context: context,
-            actionTag: goalKeeperActionMapping[StringsGameScreen.lParade]!,
-            buttonText: StringsGameScreen.lParade,
-            buttonColor: Color.fromRGBO(99, 107, 171, 1),
-            sizeFactor: 1,
-            icon: Icon(Icons.remove_circle_outline)),
+          context: context,
+          actionTag: goalKeeperActionMapping[StringsGameScreen.lParade]!,
+          buttonText: StringsGameScreen.lParade,
+          buttonColor: Color.fromRGBO(99, 107, 171, 1),
+        ),
         StringsGameScreen.lGoalOtherSide: CustomDialogButton(
-            context: context,
-            actionTag:
-                goalKeeperActionMapping[StringsGameScreen.lGoalOtherSide]!,
-            buttonText: StringsGameScreen.lGoalOtherSide,
-            buttonColor: Color.fromRGBO(203, 206, 227, 1),
-            sizeFactor: 1,
-            icon: Icon(Icons.remove_circle_outline)),
+          context: context,
+          actionTag: goalKeeperActionMapping[StringsGameScreen.lGoalOtherSide]!,
+          buttonText: StringsGameScreen.lGoalOtherSide,
+          buttonColor: Color.fromRGBO(203, 206, 227, 1),
+        ),
       };
     }
     if (actionState == actionStateAttack) {
-      Map<String, String> attackActionMapping =
-          actionMapping[actionStateAttack]!;
+      Map<String, String> attackActionMapping = actionMapping[actionStateAttack]!;
       logger.d("attackActionMapping: $attackActionMapping");
       return {
         StringsGameScreen.lRedCard: CustomDialogButton(
@@ -310,60 +283,57 @@ class ArrangedDialogButtons extends StatelessWidget {
             buttonText: StringsGameScreen.lRedCard,
             buttonColor: Colors.red,
             sizeFactor: 0,
-            icon: Icon(Icons.remove_circle_outline)),
+            icon: Icon(Icons.style)),
         StringsGameScreen.lYellowCard: CustomDialogButton(
             context: context,
             actionTag: attackActionMapping[StringsGameScreen.lYellowCard]!,
             buttonText: StringsGameScreen.lYellowCard,
             buttonColor: Colors.yellow,
             sizeFactor: 0,
-            icon: Icon(Icons.remove_circle_outline)),
+            icon: Icon(Icons.style)),
         StringsGameScreen.lTimePenalty: CustomDialogButton(
-            context: context,
-            actionTag: attackActionMapping[StringsGameScreen.lTimePenalty]!,
-            buttonText: StringsGameScreen.lTimePenalty,
-            buttonColor: Color.fromRGBO(199, 208, 244, 1),
-            sizeFactor: 1,
-            icon: Icon(Icons.remove_circle_outline)),
+          context: context,
+          actionTag: attackActionMapping[StringsGameScreen.lTimePenalty]!,
+          buttonText: StringsGameScreen.lTimePenalty,
+          buttonColor: Color.fromRGBO(199, 208, 244, 1),
+          sizeFactor: 1,
+        ),
         StringsGameScreen.lGoal: CustomDialogButton(
-            context: context,
-            actionTag: attackActionMapping[StringsGameScreen.lGoal]!,
-            buttonText: StringsGameScreen.lGoal,
-            buttonColor: Color.fromRGBO(99, 107, 171, 1),
-            sizeFactor: 1,
-            icon: Icon(Icons.remove_circle_outline)),
+          context: context,
+          actionTag: attackActionMapping[StringsGameScreen.lGoal]!,
+          buttonText: StringsGameScreen.lGoal,
+          buttonColor: Color.fromRGBO(99, 107, 171, 1),
+        ),
         StringsGameScreen.lOneVsOneAnd7m: CustomDialogButton(
-            context: context,
-            actionTag: attackActionMapping[StringsGameScreen.lOneVsOneAnd7m]!,
-            buttonText: StringsGameScreen.lOneVsOneAnd7m,
-            buttonColor: Color.fromRGBO(99, 107, 171, 1),
-            sizeFactor: 1,
-            icon: Icon(Icons.remove_circle_outline)),
+          context: context,
+          actionTag: attackActionMapping[StringsGameScreen.lOneVsOneAnd7m]!,
+          buttonText: StringsGameScreen.lOneVsOneAnd7m,
+          buttonColor: Color.fromRGBO(99, 107, 171, 1),
+        ),
         StringsGameScreen.lTwoMin: CustomDialogButton(
-            context: context,
-            actionTag: attackActionMapping[StringsGameScreen.lTwoMin]!,
-            buttonText: StringsGameScreen.lTwoMin,
-            buttonColor: Color.fromRGBO(199, 208, 244, 1),
-            sizeFactor: 1,
-            icon: Icon(Icons.remove_circle_outline)),
+          context: context,
+          actionTag: attackActionMapping[StringsGameScreen.lTwoMin]!,
+          buttonText: StringsGameScreen.lTwoMin,
+          buttonColor: Color.fromRGBO(199, 208, 244, 1),
+          sizeFactor: 1,
+        ),
         StringsGameScreen.lErrThrow: CustomDialogButton(
-            context: context,
-            actionTag: attackActionMapping[StringsGameScreen.lErrThrow]!,
-            buttonText: StringsGameScreen.lErrThrow,
-            buttonColor: Color.fromRGBO(203, 206, 227, 1),
-            icon: Icon(Icons.remove_circle_outline)),
+          context: context,
+          actionTag: attackActionMapping[StringsGameScreen.lErrThrow]!,
+          buttonText: StringsGameScreen.lErrThrow,
+          buttonColor: Color.fromRGBO(203, 206, 227, 1),
+        ),
         StringsGameScreen.lTrf: CustomDialogButton(
-            context: context,
-            actionTag: attackActionMapping[StringsGameScreen.lTrf]!,
-            buttonText: StringsGameScreen.lTrf,
-            buttonColor: Color.fromRGBO(203, 206, 227, 1),
-            icon: Icon(Icons.remove_circle_outline)),
+          context: context,
+          actionTag: attackActionMapping[StringsGameScreen.lTrf]!,
+          buttonText: StringsGameScreen.lTrf,
+          buttonColor: Color.fromRGBO(203, 206, 227, 1),
+        ),
       };
     }
     if (actionState == actionStateDefense) {
       // tags action tags for the different buttons
-      Map<String, String> defenseActionMapping =
-          actionMapping[actionStateDefense]!;
+      Map<String, String> defenseActionMapping = actionMapping[actionStateDefense]!;
       return {
         StringsGameScreen.lRedCard: CustomDialogButton(
             context: context,
@@ -371,52 +341,52 @@ class ArrangedDialogButtons extends StatelessWidget {
             buttonText: StringsGameScreen.lRedCard,
             buttonColor: Colors.red,
             sizeFactor: 0,
-            icon: Icon(Icons.remove_circle_outline)),
+            icon: Icon(Icons.style)),
         StringsGameScreen.lYellowCard: CustomDialogButton(
             context: context,
             actionTag: defenseActionMapping[StringsGameScreen.lYellowCard]!,
             buttonText: StringsGameScreen.lYellowCard,
             buttonColor: Colors.yellow,
             sizeFactor: 0,
-            icon: Icon(Icons.remove_circle_outline)),
+            icon: Icon(Icons.style)),
         StringsGameScreen.lFoul7m: CustomDialogButton(
-            context: context,
-            actionTag: defenseActionMapping[StringsGameScreen.lFoul7m]!,
-            buttonText: StringsGameScreen.lFoul7m,
-            buttonColor: Color.fromRGBO(203, 206, 227, 1),
-            icon: Icon(Icons.remove_circle_outline)),
+          context: context,
+          actionTag: defenseActionMapping[StringsGameScreen.lFoul7m]!,
+          buttonText: StringsGameScreen.lFoul7m,
+          buttonColor: Color.fromRGBO(203, 206, 227, 1),
+        ),
         StringsGameScreen.lTimePenalty: CustomDialogButton(
             context: context,
             actionTag: defenseActionMapping[StringsGameScreen.lTimePenalty]!,
             buttonText: StringsGameScreen.lTimePenalty,
             buttonColor: Color.fromRGBO(199, 208, 244, 1),
             sizeFactor: 1,
-            icon: Icon(Icons.remove_circle_outline)),
+            icon: Icon(Icons.timer)),
         StringsGameScreen.lBlockNoBall: CustomDialogButton(
-            context: context,
-            actionTag: defenseActionMapping[StringsGameScreen.lBlockNoBall]!,
-            buttonText: StringsGameScreen.lBlockNoBall,
-            buttonColor: Color.fromRGBO(99, 107, 171, 1),
-            icon: Icon(Icons.remove_circle_outline)),
+          context: context,
+          actionTag: defenseActionMapping[StringsGameScreen.lBlockNoBall]!,
+          buttonText: StringsGameScreen.lBlockNoBall,
+          buttonColor: Color.fromRGBO(99, 107, 171, 1),
+        ),
         StringsGameScreen.lBlockAndSteal: CustomDialogButton(
-            context: context,
-            actionTag: defenseActionMapping[StringsGameScreen.lBlockAndSteal]!,
-            buttonText: StringsGameScreen.lBlockAndSteal,
-            buttonColor: Color.fromRGBO(99, 107, 171, 1),
-            icon: Icon(Icons.remove_circle_outline)),
+          context: context,
+          actionTag: defenseActionMapping[StringsGameScreen.lBlockAndSteal]!,
+          buttonText: StringsGameScreen.lBlockAndSteal,
+          buttonColor: Color.fromRGBO(99, 107, 171, 1),
+        ),
         StringsGameScreen.lTrf: CustomDialogButton(
-            context: context,
-            actionTag: defenseActionMapping[StringsGameScreen.lTrf]!,
-            buttonText: StringsGameScreen.lTrf,
-            buttonColor:  Color.fromRGBO(203, 206, 227, 1),
-            icon: Icon(Icons.remove_circle_outline)),
+          context: context,
+          actionTag: defenseActionMapping[StringsGameScreen.lTrf]!,
+          buttonText: StringsGameScreen.lTrf,
+          buttonColor: Color.fromRGBO(203, 206, 227, 1),
+        ),
         StringsGameScreen.lTwoMin: CustomDialogButton(
-            context: context,
-            actionTag: defenseActionMapping[StringsGameScreen.lTwoMin]!,
-            buttonText: StringsGameScreen.lTwoMin,
-            buttonColor: Color.fromRGBO(199, 208, 244, 1),
-            sizeFactor: 1,
-            icon: Icon(Icons.remove_circle_outline)),
+          context: context,
+          actionTag: defenseActionMapping[StringsGameScreen.lTwoMin]!,
+          buttonText: StringsGameScreen.lTwoMin,
+          buttonColor: Color.fromRGBO(199, 208, 244, 1),
+          sizeFactor: 1,
+        ),
       };
     }
     return {};
