@@ -48,16 +48,11 @@ class _PlayerSelectionScreenState extends State<PlayerSelectionScreen> {
               children: [
                 // Container for menu button on top left corner
                 MenuButton(_scaffoldKey),
-                buildStartScreenContent(),
+                Center(child: SizedBox(height: MediaQuery.of(context).size.height * 0.6, child: PlayersList())),
                 SizedBox(height: 20),
                 buildBackNextButtons()
               ],
             )));
-  }
-
-  /// Depending on what page of the screen you are render different main content
-  Widget buildStartScreenContent() {
-    return PlayersList();
   }
 
   /// Buttons that allow to go to the next and last page in the flow
