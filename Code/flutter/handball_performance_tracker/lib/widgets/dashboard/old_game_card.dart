@@ -16,8 +16,6 @@ class OldGameCard extends StatelessWidget {
           onTap: () async {
             // restore old game state
             await recreateGameStateFromFirebase();
-            PersistentController persistentController =
-                Get.find<PersistentController>();
             // move to main Screen
             Get.to(() => MainScreen());
             tempController.update(["action-feed", "ef-score-bar"]);
