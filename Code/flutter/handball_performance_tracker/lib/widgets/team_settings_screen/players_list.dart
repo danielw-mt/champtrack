@@ -32,7 +32,7 @@ class PlayersList extends StatelessWidget{
                   label: Text(StringsGeneral.lNumber),
                 ),
                 DataColumn(label: Text(StringsGeneral.lPosition)),
-                DataColumn(label: Text(StringsGeneral.lPlayerStartingOnField)),
+                DataColumn(label: Text(StringsGeneral.lPlayerStartingOnField, softWrap: true,)),
                 DataColumn(label: Text(StringsGeneral.lEdit))
               ],
               rows: List<DataRow>.generate(
@@ -42,7 +42,7 @@ class PlayersList extends StatelessWidget{
                       .positions
                       .reduce((value, element) => value + ", " + element);
                   String playerId = playersList[index].id.toString();
-
+          
                   return DataRow(
                     color: MaterialStateProperty.resolveWith<Color?>(
                         (Set<MaterialState> states) {
@@ -63,7 +63,7 @@ class PlayersList extends StatelessWidget{
                       DataCell(Text(
                           "${playersList[index].firstName} ${playersList[index].lastName}")),
                       DataCell(Text(playersList[index].number.toString())),
-                      DataCell(Text(positionsString)),
+                      DataCell(Text(positionsString, softWrap: true,)),
                       DataCell(OnFieldCheckbox(
                         player: playersList[index],
                       )),

@@ -35,62 +35,70 @@ class TeamSettingsScreen extends StatelessWidget {
                 }
               },
               bottomNavigationBar: TeamSettingsBar(),
-              body: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Container for menu button on top left corner
-                    MenuButton(_scaffoldKey),
-                    if (gameController.getSelectedTeamSetting() == 0)
-                      Expanded(
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Flexible(flex: 5, child: PlayersList()),
-                            Flexible(
-                              flex: 2,
-                              child: Column(
-                                children: [
-                                  Flexible(flex: 5, child: Container()),
-                                  Flexible(
-                                    flex: 2,
-                                    child: FloatingActionButton(
-                                      onPressed: () {
-                                        Alert(
-                                          context: context,
-                                          buttons: [],
-                                          content: SizedBox(
-                                            width: MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                0.7,
-                                            height: MediaQuery.of(context)
-                                                    .size
-                                                    .height *
-                                                0.7,
-                                            child: Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.spaceEvenly,
-                                              children: [PlayerForm()],
-                                            ),
-                                          ),
-                                        ).show();
-                                      },
-                                      backgroundColor: buttonDarkBlueColor,
-                                      focusColor: buttonDarkBlueColor,
-                                      child: Icon(Icons.add),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    if (gameController.getSelectedTeamSetting() == 1)
-                      Text("TODO Games"),
-                    if (gameController.getSelectedTeamSetting() == 2)
-                      TeamDetailsForm()
-                  ])),
+              body: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisAlignment: MainAxisAlignment.start, children: [
+                // Container for menu button on top left corner
+                MenuButton(_scaffoldKey),
+                if (gameController.getSelectedTeamSetting() == 0) ...[
+                  Center(child: SizedBox(height: MediaQuery.of(context).size.height * 0.6, child: PlayersList())),
+                  Container(
+                    height: MediaQuery.of(context).size.height * 0.1,
+                    width: 20,
+                  ),
+                  Center(
+                      child: SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.1,
+                          width: MediaQuery.of(context).size.width * 0.3,
+                          child: ElevatedButton(onPressed: () {}, child: Text("Neuen Spieler hinzufügen")))),
+                ],
+
+                // Expanded(
+                //   child: Row(
+                //     crossAxisAlignment: CrossAxisAlignment.start,
+                //     children: [
+                //       Flexible(flex: 5, child: PlayersList()),
+                //       Flexible(
+                //         flex: 2,
+                //         child: Column(
+                //           children: [
+                //             Flexible(flex: 5, child: Container()),
+                //             Flexible(
+                //               flex: 2,
+                //               child: FloatingActionButton(
+                //                 onPressed: () {
+                //                   Alert(
+                //                     context: context,
+                //                     buttons: [],
+                //                     content: SizedBox(
+                //                       width: MediaQuery.of(context)
+                //                               .size
+                //                               .width *
+                //                           0.7,
+                //                       height: MediaQuery.of(context)
+                //                               .size
+                //                               .height *
+                //                           0.7,
+                //                       child: Column(
+                //                         mainAxisAlignment:
+                //                             MainAxisAlignment.spaceEvenly,
+                //                         children: [PlayerForm()],
+                //                       ),
+                //                     ),
+                //                   ).show();
+                //                 },
+                //                 backgroundColor: buttonDarkBlueColor,
+                //                 focusColor: buttonDarkBlueColor,
+                //                 child: Icon(Icons.add),
+                //               ),
+                //             ),
+                //           ],
+                //         ),
+                //       ),
+                //     ],
+                //   ),
+                // ),
+                if (gameController.getSelectedTeamSetting() == 1) Text("TODO Games"),
+                if (gameController.getSelectedTeamSetting() == 2) TeamDetailsForm()
+              ])),
         );
       },
     ));
