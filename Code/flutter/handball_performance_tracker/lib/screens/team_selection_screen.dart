@@ -43,39 +43,42 @@ class TeamSelectionScreen extends StatelessWidget {
                   children: [
                     MenuButton(_scaffoldKey),
                     // TODO implement team cards here instead of dropdown
-                    Flexible(child: TeamDropdown()),
+                    Center(child: TeamDropdown()),
 
                     Container(
                       height: 20,
                     ),
                     // don't display edit button if there are no teams
-                    Row(
-                      children: [
-                        persistentController.getAvailableTeams().length == 0
-                            ? Container()
-                            : Flexible(
-                                child: ElevatedButton(
-                                    onPressed: () {
-                                      Get.to(() => TeamSettingsScreen());
-                                    },
-                                    child:
-                                        Text(StringsTeamManagement.lEditTeam)),
-                              ),
-                        Container(
-                          width: 20,
-                        ),
-                        Flexible(
-                          child: ElevatedButton(
-                            onPressed: (() => showDialog(
-                                context: context,
-                                builder: (context) => AlertDialog(
-                                      title: Text(StringsGeneral.lAddTeam),
-                                      content: NewTeamForm(),
-                                    ))),
-                            child: Text(StringsTeamManagement.lAddTeam),
+                    Center(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          persistentController.getAvailableTeams().length == 0
+                              ? Container()
+                              : Flexible(
+                                  child: ElevatedButton(
+                                      onPressed: () {
+                                        Get.to(() => TeamSettingsScreen());
+                                      },
+                                      child:
+                                          Text(StringsTeamManagement.lEditTeam)),
+                                ),
+                          Container(
+                            width: 20,
                           ),
-                        )
-                      ],
+                          Flexible(
+                            child: ElevatedButton(
+                              onPressed: (() => showDialog(
+                                  context: context,
+                                  builder: (context) => AlertDialog(
+                                        title: Text(StringsGeneral.lAddTeam),
+                                        content: NewTeamForm(),
+                                      ))),
+                              child: Text(StringsTeamManagement.lAddTeam),
+                            ),
+                          )
+                        ],
+                      ),
                     ),
                   ])),
         );
