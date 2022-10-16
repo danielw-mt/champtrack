@@ -14,7 +14,7 @@ import '../constants/stringsGameSettings.dart';
 import '../screens/main_screen.dart';
 import '../constants/positions.dart';
 
-void startGame(BuildContext context, {bool preconfigured: false}) async {
+void startGame(BuildContext context, {bool preconfigured: false, bool warningIgnored: false}) async {
   TempController tempController = Get.find<TempController>();
   PersistentController persistentController = Get.find<PersistentController>();
   // check if enough players have been selected
@@ -34,60 +34,61 @@ void startGame(BuildContext context, {bool preconfigured: false}) async {
         });
     return;
   }
-  // check if we have all the positions
-  List<String> playerPositions = [];
-  tempController.getOnFieldPlayers().forEach((Player player) {
-    playerPositions.addAll(player.positions);
-  });
-  List<String> missingPositions = [];
-  requiredPositions.forEach((String position) {
-    if (!playerPositions.contains(position)) {
-      missingPositions.add(position);
-      print("missing position: " + position);
-    }
-  });
-  if (missingPositions.length > 0) {
-    String missingPositionsString = "";
-    missingPositions.forEach((String position) {
-      missingPositionsString += position + ", ";
+  if (warningIgnored == false) {
+    // check if we have all the positions
+    List<String> playerPositions = [];
+    tempController.getOnFieldPlayers().forEach((Player player) {
+      playerPositions.addAll(player.positions);
     });
-    showDialog(
-        context: context,
-        builder: (BuildContext bcontext) {
-          return AlertDialog(
-              scrollable: true,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(menuRadius),
-              ),
-              content: Column(
-                children: [
-                  Text(StringsGameSettings.lMissingPositionsAlert + "\n" + missingPositionsString),
-                  Row(
-                    children: [
-                      ElevatedButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                          return;
-                        },
-                        child: Text(StringsGameSettings.lCancelButton),
-                      ),
-                      Container(
-                        width: 20,
-                      ),
-                      ElevatedButton(
+    List<String> missingPositions = [];
+    requiredPositions.forEach((String position) {
+      if (!playerPositions.contains(position)) {
+        missingPositions.add(position);
+        print("missing position: " + position);
+      }
+    });
+    if (missingPositions.length > 0) {
+      String missingPositionsString = "";
+      missingPositions.forEach((String position) {
+        missingPositionsString += position + ", ";
+      });
+      showDialog(
+          context: context,
+          builder: (BuildContext bcontext) {
+            return AlertDialog(
+                scrollable: true,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(menuRadius),
+                ),
+                content: Column(
+                  children: [
+                    Text(StringsGameSettings.lMissingPositionsAlert + "\n" + missingPositionsString),
+                    Row(
+                      children: [
+                        ElevatedButton(
                           onPressed: () {
                             Navigator.pop(context);
-                            startGame(context, preconfigured: true);
+                            return;
                           },
-                          child: Text(StringsGameSettings.lStartGameButton))
-                    ],
-                  ),
-                ],
-              ));
-        });
-    return;
+                          child: Text(StringsGameSettings.lCancelButton),
+                        ),
+                        Container(
+                          width: 20,
+                        ),
+                        ElevatedButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                              startGame(context, preconfigured: true, warningIgnored: true);
+                            },
+                            child: Text(StringsGameSettings.lStartGameButton))
+                      ],
+                    ),
+                  ],
+                ));
+          });
+      return;
+    }
   }
-
   if (preconfigured) {
     // game has already been saved to firebase, only update relevant information
     Game preconfiguredGame = persistentController.getCurrentGame();
