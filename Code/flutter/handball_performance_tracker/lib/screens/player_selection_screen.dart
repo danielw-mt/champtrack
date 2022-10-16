@@ -11,6 +11,8 @@ import 'package:handball_performance_tracker/widgets/team_settings_screen/player
 import '../constants/colors.dart';
 import '../widgets/nav_drawer.dart';
 import 'main_screen.dart';
+import '../data/player.dart';
+import '../constants/positions.dart';
 
 /// Screen that is displayed after startGameScreen and allows to select, add, and remove players before starting the game
 class PlayerSelectionScreen extends StatefulWidget {
@@ -67,7 +69,6 @@ class _PlayerSelectionScreenState extends State<PlayerSelectionScreen> {
     return Container(
       alignment: Alignment.bottomCenter,
       child: Padding(
-        // TODO create a lock in button
         padding: const EdgeInsets.only(left: 20, right: 20, bottom: 20),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -78,17 +79,11 @@ class _PlayerSelectionScreenState extends State<PlayerSelectionScreen> {
                 width: 0.15 * width,
                 height: 0.08 * height,
                 child: ElevatedButton(
-                    style: ButtonStyle(
-                        backgroundColor:
-                            MaterialStateProperty.all<Color>(buttonGreyColor)),
+                    style: ButtonStyle(backgroundColor: MaterialStateProperty.all<Color>(buttonGreyColor)),
                     onPressed: () {
                       Get.to(() => StartGameScreen());
                     },
-                    child: Text(StringsGeneral.lBack,
-                        style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black))),
+                    child: Text(StringsGeneral.lBack, style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black))),
               ),
             ),
             Flexible(
@@ -96,41 +91,33 @@ class _PlayerSelectionScreenState extends State<PlayerSelectionScreen> {
                 width: 0.15 * width,
                 height: 0.08 * height,
                 child: ElevatedButton(
-                  style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all<Color>(
-                          buttonLightBlueColor)),
+                  style: ButtonStyle(backgroundColor: MaterialStateProperty.all<Color>(buttonLightBlueColor)),
                   onPressed: () async {
+                    startGame(context, preconfigured: true);
                     // validate whether 7 players were selected on this page
-                    TempController tempController = Get.find<TempController>();
+
                     // display alert if less than 7 have been selected
-                    if (tempController.getOnFieldPlayers().length != 7) {
-                      showDialog(
-                          context: context,
-                          builder: (BuildContext bcontext) {
-                            return AlertDialog(
-                                scrollable: true,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius:
-                                      BorderRadius.circular(menuRadius),
-                                ),
-                                content: CustomAlertMessageWidget(
-                                    StringsGameSettings.lStartGameAlertHeader +
-                                        "!\n" +
-                                        StringsGameSettings.lStartGameAlert));
-                          });
-                    } else {
-                      tempController.updateOnFieldPlayers();
-                      tempController.setPlayerBarPlayersOrder();
-                      startGame(context, preconfigured: true);
-                      Get.to(() => MainScreen());
-                      return;
-                    }
+                    // if (tempController.getOnFieldPlayers().length != 7) {
+                    //   showDialog(
+                    //       context: context,
+                    //       builder: (BuildContext bcontext) {
+                    //         return AlertDialog(
+                    //             scrollable: true,
+                    //             shape: RoundedRectangleBorder(
+                    //               borderRadius: BorderRadius.circular(menuRadius),
+                    //             ),
+                    //             content: CustomAlertMessageWidget(
+                    //                 StringsGameSettings.lStartGameAlertHeader + "!\n" + StringsGameSettings.lStartGameAlert));
+                    //       });
+                    // }
+                    // if any roles are missing show dialog
+
+                    // } else {
+                    //   startGame(context, preconfigured: true);
+                    //   return;
+                    // }
                   },
-                  child: Text(StringsGeneral.lStartGameButton,
-                      style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black)),
+                  child: Text(StringsGeneral.lStartGameButton, style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black)),
                 ),
               ),
             )

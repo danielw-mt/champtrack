@@ -15,6 +15,7 @@ class StringsGameSettings{
   static const String lStartGameAlertHeader = "Warnung";
   static const String lStartGameAlert =
       "Sie können das Spiel nur mit 7 Spielern starten.";
+  static const String lMissingPositionsAlert = "Achtung folgende Positionen fehlen im Team. Fortfahren?";
   
   // start_game_form.dart
   static const String lGameDataSaved = "Spieldaten erfolgreich gespeichert!";

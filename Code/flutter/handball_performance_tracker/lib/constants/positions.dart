@@ -14,7 +14,9 @@ const String rightOutside = "RA"; // rechts aussen
 const String backcourtLeft = "RL"; // rueckraum links
 const String backcourtMiddle = "RM"; // rueckraum mitte
 const String backcourtRight = "RR"; // rueckraum rechts
-const String circle = "K"; // kreiss
+const String circle = "KR"; // kreiss
+const String goalKeeper = "TW"; // torwart
+const List<String> requiredPositions = [leftOutside, rightOutside, backcourtLeft, backcourtMiddle, backcourtRight, circle, goalKeeper];
 const List<String> sectors = [leftOutside, rightOutside, backcourtLeft, backcourtMiddle, backcourtRight, circle]; 
 ///
 // mapping of calculated sector numbers based on fieldIsLeft

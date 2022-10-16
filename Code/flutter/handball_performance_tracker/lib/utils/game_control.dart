@@ -11,6 +11,8 @@ import '../data/game.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 import 'sync_game_state.dart';
 import '../constants/stringsGameSettings.dart';
+import '../screens/main_screen.dart';
+import '../constants/positions.dart';
 
 void startGame(BuildContext context, {bool preconfigured: false}) async {
   TempController tempController = Get.find<TempController>();
@@ -18,6 +20,7 @@ void startGame(BuildContext context, {bool preconfigured: false}) async {
   // check if enough players have been selected
   var numPlayersOnField = tempController.getOnFieldPlayers().length;
   if (numPlayersOnField != PLAYER_NUM) {
+    print("not enough players selected");
     // create alert if someone tries to start the game without enough players
     showDialog(
         context: context,
@@ -27,10 +30,60 @@ void startGame(BuildContext context, {bool preconfigured: false}) async {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(menuRadius),
               ),
-              content: CustomAlertMessageWidget(
-                  StringsGameSettings.lStartGameAlertHeader +
-                      "!\n" +
-                      StringsGameSettings.lStartGameAlert));
+              content: CustomAlertMessageWidget(StringsGameSettings.lStartGameAlertHeader + "!\n" + StringsGameSettings.lStartGameAlert));
+        });
+    return;
+  }
+  // check if we have all the positions
+  List<String> playerPositions = [];
+  tempController.getOnFieldPlayers().forEach((Player player) {
+    playerPositions.addAll(player.positions);
+  });
+  List<String> missingPositions = [];
+  requiredPositions.forEach((String position) {
+    if (!playerPositions.contains(position)) {
+      missingPositions.add(position);
+      print("missing position: " + position);
+    }
+  });
+  if (missingPositions.length > 0) {
+    String missingPositionsString = "";
+    missingPositions.forEach((String position) {
+      missingPositionsString += position + ", ";
+    });
+    showDialog(
+        context: context,
+        builder: (BuildContext bcontext) {
+          return AlertDialog(
+              scrollable: true,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(menuRadius),
+              ),
+              content: Column(
+                children: [
+                  Text(StringsGameSettings.lMissingPositionsAlert + "\n" + missingPositionsString),
+                  Row(
+                    children: [
+                      ElevatedButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                          return;
+                        },
+                        child: Text(StringsGameSettings.lCancelButton),
+                      ),
+                      Container(
+                        width: 20,
+                      ),
+                      ElevatedButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                            startGame(context, preconfigured: true);
+                          },
+                          child: Text(StringsGameSettings.lStartGameButton))
+                    ],
+                  ),
+                ],
+              ));
         });
     return;
   }
@@ -50,10 +103,7 @@ void startGame(BuildContext context, {bool preconfigured: false}) async {
     print("starting new game");
     DateTime dateTime = DateTime.now();
     int unixTimeStamp = dateTime.toUtc().millisecondsSinceEpoch;
-    Game newGame = Game(
-        date: dateTime,
-        startTime: unixTimeStamp,
-        onFieldPlayers: tempController.getOnFieldPlayersById());
+    Game newGame = Game(date: dateTime, startTime: unixTimeStamp, onFieldPlayers: tempController.getOnFieldPlayersById());
     await persistentController.setCurrentGame(newGame, isNewGame: true);
     print("start game, id: ${persistentController.getCurrentGame().id}");
 
@@ -62,6 +112,9 @@ void startGame(BuildContext context, {bool preconfigured: false}) async {
     tempController.setOpponentScore(0);
     tempController.setOwnScore(0);
   }
+  tempController.updateOnFieldPlayers();
+  tempController.setPlayerBarPlayersOrder();
+  Get.to(() => MainScreen());
   runGameStateSync();
   print("start game, id: ${persistentController.getCurrentGame().id}");
 }
@@ -72,11 +125,7 @@ void unpauseGame() {
   tempController.setActionMenutText("");
   tempController.setGameIsRunning(true);
   tempController.setGameIsPaused(false);
-  persistentController
-      .getCurrentGame()
-      .stopWatchTimer
-      .onExecute
-      .add(StopWatchExecute.start);
+  persistentController.getCurrentGame().stopWatchTimer.onExecute.add(StopWatchExecute.start);
   runGameStateSync();
 }
 
@@ -86,11 +135,7 @@ void pauseGame() {
   tempController.setActionMenutText(StringsGameScreen.lAttentionTimeIsPaused);
   tempController.setGameIsRunning(false);
   tempController.setGameIsPaused(true);
-  persistentController
-      .getCurrentGame()
-      .stopWatchTimer
-      .onExecute
-      .add(StopWatchExecute.stop);
+  persistentController.getCurrentGame().stopWatchTimer.onExecute.add(StopWatchExecute.stop);
 }
 
 void stopGame() async {
@@ -108,11 +153,7 @@ void stopGame() async {
   persistentController.setCurrentGame(currentGame);
 
   // stop the game timer
-  persistentController
-      .getCurrentGame()
-      .stopWatchTimer
-      .onExecute
-      .add(StopWatchExecute.stop);
+  persistentController.getCurrentGame().stopWatchTimer.onExecute.add(StopWatchExecute.stop);
 
   tempController.setGameIsRunning(false);
   tempController.setGameIsPaused(false);
