@@ -33,7 +33,7 @@ class StatisticsEngine {
       List<Map<String, dynamic>> actions = gameDocument["actions"];
       // generate statistics for each player
       Map<String, dynamic> playerStats = _generatePlayerStatistics(actions, players);
-      Map<String, dynamic> teamStats = _updateTeamStatistics(playerStats);
+      Map<String, dynamic> teamStats = _generateTeamStatistics(playerStats);
       String teamID = gameDocument["teamId"];
       // generate stop time
       DateTime stopWatchTimeAsDateTime =
@@ -48,12 +48,12 @@ class StatisticsEngine {
       };
       //
     });
-
     _statistics_ready = true;
   }
 
   /// create the map that contains all statistics for an individual player from all the actions in the game
   Map<String, dynamic> _generatePlayerStatistics(actions, List<Player> players) {
+    logger.d("generating player statistics");
     // map with statistics for all player by id of the player
     Map<String, dynamic> player_stats = {};
 
@@ -222,7 +222,8 @@ class StatisticsEngine {
 
   /// TODO change this to work on a single game document and not all game documents
   /// updates _statistics element with team statistics data using game data
-  Map<String, dynamic> _updateTeamStatistics(Map<String, dynamic> playerStats) {
+  Map<String, dynamic> _generateTeamStatistics(Map<String, dynamic> playerStats) {
+    logger.d("generating team statistics");
     // team stats for the current team (only one team per game is implicit assumption)
     Map<String, dynamic> teamStats = {
       "seven_meter_quota": <double>[0, 0],

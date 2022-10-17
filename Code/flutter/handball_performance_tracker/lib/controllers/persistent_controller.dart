@@ -180,6 +180,10 @@ class PersistentController extends GetxController {
     _currentGame.value.stopWatchTimer.setPresetTime(mSec: time);
   }
 
+  void addGame(Game game){
+    _allGames.add(game);
+  }
+
   void setAllGames(List<Game> games) {
     _allGames.value = games;
   }
