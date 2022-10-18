@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:handball_performance_tracker/constants/fieldSizeParameter.dart';
 import 'package:handball_performance_tracker/screens/start_game_screen.dart';
 import 'package:handball_performance_tracker/screens/team_selection_screen.dart';
 import 'package:get/get.dart';
@@ -11,35 +12,35 @@ class StatisticsButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: Container(
-        margin: EdgeInsets.all(20),
-        decoration: BoxDecoration(
+    return Container(
+      margin: EdgeInsets.all(20),
+      width: MediaQuery.of(context).size.width * 0.85,
+      height: MediaQuery.of(context).size.height * 0.3,
+      decoration: BoxDecoration(
+          color: Colors.white,
+          // set border so corners can be made round
+          border: Border.all(
             color: Colors.white,
-            // set border so corners can be made round
-            border: Border.all(
-              color: Colors.white,
-            ),
-            borderRadius: BorderRadius.all(Radius.circular(15))),
-        child: TextButton(
-            onPressed: () {
-              Get.to(() => StatisticsScreen());
-            },
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(
-                  Icons.bar_chart,
-                  color: Colors.black,
-                  size: 50,
-                ),
-                Text(
-                  StringsGeneral.lStatistics,
-                  style: TextStyle(color: Colors.black, fontSize: 30),
-                )
-              ],
-            )),
-      ),
+          ),
+          borderRadius: BorderRadius.all(Radius.circular(15))),
+      child: TextButton(
+          onPressed: () {
+            Get.to(() => StatisticsScreen());
+          },
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                Icons.bar_chart,
+                color: Colors.black,
+                size: 50,
+              ),
+              Text(
+                StringsGeneral.lStatistics,
+                style: TextStyle(color: Colors.black, fontSize: 30),
+              )
+            ],
+          )),
     );
   }
 }
@@ -53,6 +54,8 @@ class SquareDashboardButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.all(20),
+      width: MediaQuery.of(context).size.width * 0.4,
+      height: MediaQuery.of(context).size.height * 0.4,
       decoration: BoxDecoration(
           color: Colors.white,
           // set border so corners can be made round
