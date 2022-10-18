@@ -55,7 +55,7 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: buttonDarkBlueColor,
-          title: Text("Statistics"),
+          title: Text("Statistiken"),
         ),
         backgroundColor: Colors.white,
         key: _scaffoldKey,
