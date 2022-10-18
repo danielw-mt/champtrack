@@ -31,6 +31,7 @@ class TempController extends GetxController {
   void setSelectedTeam(Team team) {
     PersistentController persistentController = Get.find<PersistentController>();
     persistentController.updateTeam(team);
+    repository.updateTeam(team);
     _selectedTeam.value = team;
     update([
       "team-type-selection-bar",

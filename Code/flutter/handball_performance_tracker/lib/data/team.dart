@@ -12,10 +12,19 @@ class Team {
 
   // @return Map<String,dynamic> as representation of Club object that can be saved to firestore
   Map<String, dynamic> toMap() {
+    List<DocumentReference> playerRefs = [];
+    players.forEach((Player player) {
+      playerRefs.add(FirebaseFirestore.instance.collection("players").doc(player.id));
+    });
+    List<DocumentReference> onFieldPlayerRefs = [];
+    onFieldPlayers.forEach((Player player) {
+      onFieldPlayerRefs.add(FirebaseFirestore.instance.collection("players").doc(player.id));
+    });
+
     return {
       'name': name,
-      'players': players,
-      'onFieldPlayers': onFieldPlayers,
+      'players': playerRefs,
+      'onFieldPlayers': onFieldPlayerRefs,
       'type': type,
     };
   }
