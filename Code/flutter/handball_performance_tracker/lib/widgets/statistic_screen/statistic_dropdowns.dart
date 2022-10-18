@@ -59,8 +59,9 @@ class _PlayerSelectorState extends State<PlayerSelector> {
       _selectedPlayer = widget.players[0];
     }
     return DropdownButton<Player>(
+      isExpanded: true,
       value: _selectedPlayer,
-      icon: const Icon(Icons.arrow_downward),
+      icon: Icon(Icons.arrow_drop_down),
       elevation: 16,
       style: const TextStyle(color: Colors.deepPurple),
       underline: Container(
@@ -117,8 +118,9 @@ class _GameSelectorState extends State<GameSelector> {
       _selectedGame = widget.games[0];
     }
     return DropdownButton<Game>(
+      isExpanded: true,
       value: _selectedGame,
-      icon: const Icon(Icons.arrow_downward),
+      icon: Icon(Icons.arrow_drop_down),
       elevation: 16,
       style: const TextStyle(color: Colors.deepPurple),
       underline: Container(
@@ -181,8 +183,9 @@ class _TeamSelectorState extends State<TeamSelector> {
       _selectedTeam = widget.teams[0];
     }
     return DropdownButton<Team>(
+      isExpanded: true,
       value: _selectedTeam,
-      icon: const Icon(Icons.arrow_downward),
+      icon: Icon(Icons.arrow_drop_down),
       elevation: 16,
       style: const TextStyle(color: Colors.deepPurple),
       underline: Container(

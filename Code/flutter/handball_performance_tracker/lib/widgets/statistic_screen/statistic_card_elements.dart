@@ -298,9 +298,9 @@ class _QuotaCardState extends State<QuotaCard> {
     return Column(
       mainAxisSize: MainAxisSize.max,
       children: <Widget>[
-        SizedBox(
+        Expanded(
           // you may want to use an aspect ratio here for tablet support
-          height: 200.0,
+          //height: 20.0,
           child: PageView.builder(
             onPageChanged: (pageIndex) => setState(() {
               _selectedCarousalIndex = pageIndex;
