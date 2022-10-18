@@ -105,10 +105,10 @@ List<Widget> buildMenuList(BuildContext context, bool gameIsRunning,
     // Dashboard
     SimpleListEntry(text: StringsGeneral.lDashboard, screen: Dashboard()),
     // Teams
-    CollabsibleListEntry(
+    SimpleListEntry(
       text: StringsTeamManagement.lTeams,
       screen: TeamSelectionScreen(),
-      children: buildTeamChildren(context),
+      //children: buildTeamChildren(context),
     ),
     // Statistics
     SimpleListEntry(
@@ -260,7 +260,7 @@ class MenuHeader extends StatelessWidget {
                   })),
         ),
         // Arrow Icon
-        Container(margin: EdgeInsets.only(left: 20), child: Text(""))
+        //Container(margin: EdgeInsets.only(left: 20), child: Text(""))
       ],
     );
   }
