@@ -12,11 +12,7 @@ class LineChartWidget extends StatelessWidget {
   final int stopTime;
 
   /// generate a line chart from @param timeStamps and @param values
-  LineChartWidget(
-      {required this.startTime,
-      required this.timeStamps,
-      required this.values,
-      required this.stopTime});
+  LineChartWidget({required this.startTime, required this.timeStamps, required this.values, required this.stopTime});
 
   final List<Color> gradientColors = [
     const Color(0xff23b6e6),
@@ -28,8 +24,7 @@ class LineChartWidget extends StatelessWidget {
     int end_minutes = 60;
     // if the stop watch time in minutes is larger than 60 then extend the chart to that value
     // for example if the game lasted 70 minutes extend the chart to that value
-    int stop_time_in_minutes =
-        DateTime.fromMillisecondsSinceEpoch(stopTime).minute;
+    int stop_time_in_minutes = DateTime.fromMillisecondsSinceEpoch(stopTime).minute;
     if (stop_time_in_minutes > 60) {
       end_minutes = stop_time_in_minutes;
     }
@@ -52,10 +47,8 @@ class LineChartWidget extends StatelessWidget {
         show: true,
         leftTitles: AxisTitles(
           // if there are no values provided (i.e. ef-score data) then only display Action Count
-          axisNameWidget:
-              values.isEmpty ? Text("Action Count") : Text("Values"),
-          sideTitles:
-              SideTitles(interval: 1, showTitles: true, reservedSize: 40),
+          axisNameWidget: values.isEmpty ? Text("Action Count") : Text("Values"),
+          sideTitles: SideTitles(interval: 1, showTitles: true, reservedSize: 40),
         ),
         topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
         rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
@@ -87,16 +80,11 @@ class LineChartWidget extends StatelessWidget {
                       // each spot is the difference in minutes from the startTime
                       (index) {
                     int difference_in_minutes =
-                        DateTime.fromMillisecondsSinceEpoch(timeStamps[index])
-                            .difference(
-                                DateTime.fromMillisecondsSinceEpoch(startTime))
-                            .inMinutes;
+                        DateTime.fromMillisecondsSinceEpoch(timeStamps[index]).difference(DateTime.fromMillisecondsSinceEpoch(startTime)).inMinutes;
                     if (values.isEmpty) {
-                      return FlSpot(difference_in_minutes.toDouble(),
-                          (index + 1).toDouble());
+                      return FlSpot(difference_in_minutes.toDouble(), (index + 1).toDouble());
                     } else {
-                      return FlSpot(difference_in_minutes.toDouble(),
-                          values[index].toDouble());
+                      return FlSpot(difference_in_minutes.toDouble(), values[index].toDouble());
                     }
                   }),
                   isCurved: false)
@@ -122,7 +110,7 @@ class PieChartActionsWidget extends StatelessWidget {
       });
       // convert action tag keys to the correct string specified in the strings
       actionCountsAsDouble = actionCountsAsDouble.map((key, value) {
-        return MapEntry(realActionType(key), value);
+        return MapEntry(realActionTag(key), value);
       });
       return pie.PieChart(dataMap: actionCountsAsDouble);
     }

@@ -54,6 +54,7 @@ class StatisticsEngine {
 
   /// create the map that contains all statistics for an individual player from all the actions in the game
   Map<String, dynamic> _generatePlayerStatistics(actions, List<Player> players) {
+    logger.d("generate player statistics");
     // map with statistics for all player by id of the player
     Map<String, dynamic> player_stats = {};
 
@@ -61,11 +62,12 @@ class StatisticsEngine {
     ///
     /// called for every action
     Map<String, int> updateActionCounts(Map<String, dynamic> action, Map<String, int> action_counts) {
-      String actionType = action["actionType"];
-      if (!action_counts.containsKey(actionType)) {
-        action_counts[actionType] = 1;
+      logger.d("update action counts");
+      String actionTag = action["tag"];
+      if (!action_counts.containsKey(actionTag)) {
+        action_counts[actionTag] = 1;
       } else {
-        action_counts[actionType] = action_counts[actionType]! + 1;
+        action_counts[actionTag] = action_counts[actionTag]! + 1;
       }
       return action_counts;
     }
@@ -74,11 +76,12 @@ class StatisticsEngine {
     ///
     /// Called for every action.
     Map<String, List<int>> updateActionSeries(Map<String, dynamic> action, Map<String, List<int>> action_series) {
-      String actionType = action["actionType"];
-      if (!action_series.containsKey(actionType)) {
-        action_series[actionType] = [action["timestamp"]];
+      logger.d("action series");
+      String actionTag = action["tag"];
+      if (!action_series.containsKey(actionTag)) {
+        action_series[actionTag] = [action["timestamp"]];
       } else {
-        action_series[actionType]?.add(action["timestamp"]);
+        action_series[actionTag]?.add(action["timestamp"]);
       }
       return action_series;
     }
@@ -87,13 +90,14 @@ class StatisticsEngine {
     ///
     /// Called for every action
     Map<String, dynamic> updateActionCoordinates(Map<String, dynamic> action, Map<String, dynamic> action_coordinates) {
+      logger.d("update action coordinates");
       // if there is no throw location object inside the action
       if (action["throwLocation"] == null) return action_coordinates;
-      String actionType = action["actionType"];
-      if (!action_coordinates.containsKey(actionType)) {
-        action_coordinates[actionType] = [action["throwLocation"]];
+      String actionTag = action["tag"];
+      if (!action_coordinates.containsKey(actionTag)) {
+        action_coordinates[actionTag] = [action["throwLocation"]];
       } else {
-        action_coordinates[actionType].add(action["throwLocation"]);
+        action_coordinates[actionTag].add(action["throwLocation"]);
       }
       return action_coordinates;
     }
@@ -107,7 +111,7 @@ class StatisticsEngine {
     /// quotas[2][0]: total goals
     /// quotas[2][1]: total shots
     List<List<double>> updateQuotas(Map<String, dynamic> action, List<List<double>> quotas) {
-      switch (action["actionType"]) {
+      switch (action["tag"]) {
         // TODO use constants here instead of strings
         case "missed7m":
           {
@@ -189,7 +193,7 @@ class StatisticsEngine {
         player_statistic["action_counts"] = updateActionCounts(action, player_statistic["action_counts"]);
         player_statistic["action_series"] = updateActionSeries(action, player_statistic["action_series"]);
         player_statistic["action_coordinates"] = updateActionCoordinates(action, player_statistic["action_coordinates"]);
-        player_statistic["all_actions"].add(action["actionType"]);
+        player_statistic["all_actions"].add(action["tag"]);
         player_statistic["all_action_timestamps"].add(action["timestamp"]);
         List quotas =
             updateQuotas(action, [player_statistic["seven_meter_quota"], player_statistic["position_quota"], player_statistic["throw_quota"]]);
@@ -223,6 +227,7 @@ class StatisticsEngine {
   /// TODO change this to work on a single game document and not all game documents
   /// updates _statistics element with team statistics data using game data
   Map<String, dynamic> _updateTeamStatistics(Map<String, dynamic> playerStats) {
+    logger.d("updating team statistics");
     // team stats for the current team (only one team per game is implicit assumption)
     Map<String, dynamic> teamStats = {
       "seven_meter_quota": <double>[0, 0],
@@ -245,34 +250,34 @@ class StatisticsEngine {
       teamStats["throw_quota"][0] += playerStatistic["throw_quota"][0];
       teamStats["throw_quota"][1] += playerStatistic["throw_quota"][1];
       // update action counts by summing up all action counts of every player
-      playerStatistic["action_counts"].forEach((String actionType, int count) {
-        if (teamStats["action_counts"].containsKey(actionType)) {
-          teamStats["action_counts"][actionType] += count;
+      playerStatistic["action_counts"].forEach((String actionTag, int count) {
+        if (teamStats["action_counts"].containsKey(actionTag)) {
+          teamStats["action_counts"][actionTag] += count;
         } else {
-          teamStats["action_counts"][actionType] = count;
+          teamStats["action_counts"][actionTag] = count;
         }
       });
       // add each player's action series timestamp to the team's action series timestamp and sort them afterwards
-      playerStatistic["action_series"].forEach((String actionType, List<int> timestamps) {
-        if (teamStats["action_series"].containsKey(actionType)) {
-          teamStats["action_series"][actionType].addAll(timestamps);
+      playerStatistic["action_series"].forEach((String actionTag, List<int> timestamps) {
+        if (teamStats["action_series"].containsKey(actionTag)) {
+          teamStats["action_series"][actionTag].addAll(timestamps);
         } else {
-          teamStats["action_series"][actionType] = timestamps;
+          teamStats["action_series"][actionTag] = timestamps;
         }
-        teamStats["action_series"][actionType].sort();
+        teamStats["action_series"][actionTag].sort();
       });
       // add each player's action coordinates to the team's action coordinates do not sort these
-      playerStatistic["action_coordinates"].forEach((String actionType, dynamic coordinates) {
-        if (teamStats["action_coordinates"].containsKey(actionType)) {
-          teamStats["action_coordinates"][actionType].addAll(coordinates);
+      playerStatistic["action_coordinates"].forEach((String actionTag, dynamic coordinates) {
+        if (teamStats["action_coordinates"].containsKey(actionTag)) {
+          teamStats["action_coordinates"][actionTag].addAll(coordinates);
         } else {
-          teamStats["action_coordinates"][actionType] = coordinates;
+          teamStats["action_coordinates"][actionTag] = coordinates;
         }
       });
       List<String> allActions = playerStatistic["all_actions"];
       List<int> allActionTimestamps = playerStatistic["all_action_timestamps"];
-      allActions.forEach((String actionType) {
-        teamStats["all_actions"].add(actionType);
+      allActions.forEach((String actionTag) {
+        teamStats["all_actions"].add(actionTag);
       });
       allActionTimestamps.forEach((int timestamp) {
         teamStats["all_action_timestamps"].add(timestamp);
