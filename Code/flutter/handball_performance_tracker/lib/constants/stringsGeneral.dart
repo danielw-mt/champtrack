@@ -121,7 +121,7 @@ class StringsGeneral {
   static const String lLeftWinger = "LA";
   static const String lCenterForward = "KR";
   static const String lRightWinger = "RA";
-  static const String lPlayerStartingOnField = "Spieler in Startaufstellung";
+  static const String lPlayerStartingOnField = "Startaufstellung";
   static const String lPlayerEditMode = "Spielerdetails bearbeiten";
   static const String lPlayerCreateMode = "Neuen Spieler anlegen";
   static const String lTextFieldEmpty = "Bitte Text eingeben";

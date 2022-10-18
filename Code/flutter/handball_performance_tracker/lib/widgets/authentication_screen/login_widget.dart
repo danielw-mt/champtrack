@@ -32,10 +32,7 @@ class _LoginWidgetState extends State<LoginWidget> {
           padding: const EdgeInsets.all(10),
           child: Text(
             StringsAuth.lAppTitle,
-            style: TextStyle(
-                color: buttonDarkBlueColor,
-                fontSize: 30,
-                fontWeight: FontWeight.bold),
+            style: TextStyle(color: buttonDarkBlueColor, fontSize: height / 100 * 3, fontWeight: FontWeight.bold),
           )),
       SizedBox(
         height: height * 0.05,
@@ -49,18 +46,16 @@ class _LoginWidgetState extends State<LoginWidget> {
           )),
     ];
     var eMailField = Container(
+      height: height * 0.1,
       padding: const EdgeInsets.all(10),
       child: TextField(
         controller: emailController,
         textInputAction: TextInputAction.next,
         style: TextStyle(color: Colors.grey.shade800),
         decoration: InputDecoration(
-            focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: buttonGreyColor)),
-            enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: buttonGreyColor)),
-            disabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: buttonGreyColor)),
+            focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: buttonGreyColor)),
+            enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: buttonGreyColor)),
+            disabledBorder: OutlineInputBorder(borderSide: BorderSide(color: buttonGreyColor)),
             labelStyle: TextStyle(color: Colors.grey.shade800),
             labelText: StringsAuth.lEmail,
             floatingLabelBehavior: FloatingLabelBehavior.never,
@@ -69,18 +64,16 @@ class _LoginWidgetState extends State<LoginWidget> {
       ),
     );
     var passwordField = Container(
+      height: height * 0.1,
       padding: const EdgeInsets.all(10),
       child: TextField(
         obscureText: true,
         controller: passwordController,
         textInputAction: TextInputAction.done,
         decoration: InputDecoration(
-            focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: buttonGreyColor)),
-            enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: buttonGreyColor)),
-            disabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: buttonGreyColor)),
+            focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: buttonGreyColor)),
+            enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: buttonGreyColor)),
+            disabledBorder: OutlineInputBorder(borderSide: BorderSide(color: buttonGreyColor)),
             labelStyle: TextStyle(color: Colors.grey.shade800),
             labelText: StringsAuth.lPassword,
             floatingLabelBehavior: FloatingLabelBehavior.never,
@@ -89,18 +82,16 @@ class _LoginWidgetState extends State<LoginWidget> {
       ),
     );
     var clubField = Container(
+      height: height * 0.1,
       padding: const EdgeInsets.all(10),
       child: TextField(
         obscureText: false,
         controller: clubNameController,
         textInputAction: TextInputAction.done,
         decoration: InputDecoration(
-            focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: buttonGreyColor)),
-            enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: buttonGreyColor)),
-            disabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: buttonGreyColor)),
+            focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: buttonGreyColor)),
+            enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: buttonGreyColor)),
+            disabledBorder: OutlineInputBorder(borderSide: BorderSide(color: buttonGreyColor)),
             labelStyle: TextStyle(color: Colors.grey.shade800),
             labelText: StringsAuth.lClubName,
             floatingLabelBehavior: FloatingLabelBehavior.never,
@@ -118,7 +109,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                 alignment: Alignment.center,
                 child: new Image.asset(
                   "assets/champtrack_logo.png",
-                  height: 250,
+                  height: height * 0.2,
                   fit: BoxFit.cover,
                 ),
               ),
@@ -134,25 +125,18 @@ class _LoginWidgetState extends State<LoginWidget> {
                       loginHeader[2],
                       eMailField,
                       Container(
-                          width: 0.5 * width,
                           height: 70,
                           padding: const EdgeInsets.fromLTRB(10, 20, 10, 0),
                           child: ElevatedButton(
-                              style: ButtonStyle(
-                                  backgroundColor:
-                                      MaterialStateProperty.all<Color>(
-                                          buttonLightBlueColor)),
-                              child: const Text(StringsAuth.lResetPassword,
-                                  style: TextStyle(
-                                      fontSize: 20, color: Colors.black)),
+                              style: ButtonStyle(backgroundColor: MaterialStateProperty.all<Color>(buttonLightBlueColor)),
+                              child: Text(StringsAuth.lResetPassword, style: TextStyle(fontSize: height / 100 * 2, color: Colors.black)),
                               onPressed: sendPasswordResetEmail)),
                       Row(
                         children: <Widget>[
                           TextButton(
                             child: Text(
                               StringsAuth.lBackToSignInButton,
-                              style: TextStyle(
-                                  fontSize: 20, color: buttonDarkBlueColor),
+                              style: TextStyle(fontSize: height / 100 * 2, color: buttonDarkBlueColor),
                             ),
                             onPressed: onClickedReset, // deactivate reset mode
                           )
@@ -175,7 +159,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                 alignment: Alignment.center,
                 child: new Image.asset(
                   "assets/champtrack_logo.png",
-                  height: 250,
+                  height: height * 0.2,
                   fit: BoxFit.cover,
                 ),
               ),
@@ -196,13 +180,8 @@ class _LoginWidgetState extends State<LoginWidget> {
                           height: 70,
                           padding: const EdgeInsets.fromLTRB(10, 20, 10, 0),
                           child: ElevatedButton(
-                              style: ButtonStyle(
-                                  backgroundColor:
-                                      MaterialStateProperty.all<Color>(
-                                          buttonLightBlueColor)),
-                              child: const Text(StringsAuth.lSignInButton,
-                                  style: TextStyle(
-                                      fontSize: 20, color: Colors.black)),
+                              style: ButtonStyle(backgroundColor: MaterialStateProperty.all<Color>(buttonLightBlueColor)),
+                              child: Text(StringsAuth.lSignInButton, style: TextStyle(fontSize: height / 100 * 2, color: Colors.black)),
                               onPressed: signIn)),
                       TextButton(
                         onPressed: onClickedReset,
@@ -217,11 +196,9 @@ class _LoginWidgetState extends State<LoginWidget> {
                           TextButton(
                               child: Text(
                                 StringsAuth.lSignUpButton,
-                                style: TextStyle(
-                                    fontSize: 20, color: buttonDarkBlueColor),
+                                style: TextStyle(fontSize: height / 100 * 2, color: buttonDarkBlueColor),
                               ),
-                              onPressed:
-                                  onClickedSignUp // switch to sign up mode
+                              onPressed: onClickedSignUp // switch to sign up mode
                               )
                         ],
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -240,8 +217,8 @@ class _LoginWidgetState extends State<LoginWidget> {
           Container(
             alignment: Alignment.center,
             child: new Image.asset(
+              height: height * 0.2,
               "assets/champtrack_logo.png",
-              height: 250,
               fit: BoxFit.cover,
             ),
           ),
@@ -249,50 +226,39 @@ class _LoginWidgetState extends State<LoginWidget> {
             alignment: Alignment.center,
             child: SizedBox(
               width: 0.5 * width,
-              child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    loginHeader[0],
-                    loginHeader[1],
-                    Container(
-                        alignment: Alignment.center,
-                        padding: const EdgeInsets.all(10),
+              child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
+                loginHeader[0],
+                loginHeader[1],
+                Container(
+                    alignment: Alignment.center,
+                    padding: const EdgeInsets.all(10),
+                    child: Text(
+                      StringsAuth.lSignUpButton,
+                      style: TextStyle(color: buttonDarkBlueColor, fontSize: height / 100 * 3),
+                    )),
+                clubField,
+                eMailField,
+                passwordField,
+                Container(
+                    height: height * 0.1,
+                    padding: const EdgeInsets.fromLTRB(10, 20, 10, 0),
+                    child: ElevatedButton(
+                        style: ButtonStyle(backgroundColor: MaterialStateProperty.all<Color>(buttonLightBlueColor)),
+                        child: Text(StringsAuth.lSignUpButton, style: TextStyle(fontSize: height / 100 * 2, color: Colors.black)),
+                        onPressed: signUp)),
+                Row(
+                  children: <Widget>[
+                    TextButton(
                         child: Text(
-                          StringsAuth.lSignUpButton,
-                          style: TextStyle(
-                              color: buttonDarkBlueColor, fontSize: 30),
-                        )),
-                    clubField,
-                    eMailField,
-                    passwordField,
-                    Container(
-                        width: 0.5 * width,
-                        height: 70,
-                        padding: const EdgeInsets.fromLTRB(10, 20, 10, 0),
-                        child: ElevatedButton(
-                            style: ButtonStyle(
-                                backgroundColor:
-                                    MaterialStateProperty.all<Color>(
-                                        buttonLightBlueColor)),
-                            child: const Text(StringsAuth.lSignUpButton,
-                                style: TextStyle(
-                                    fontSize: 20, color: Colors.black)),
-                            onPressed: signUp)),
-                    Row(
-                      children: <Widget>[
-                        TextButton(
-                            child: Text(
-                              StringsAuth.lBackToSignInButton,
-                              style: TextStyle(
-                                  fontSize: 20, color: buttonDarkBlueColor),
-                            ),
-                            onPressed:
-                                onClickedSignUp // switch back to sign in mode
-                            )
-                      ],
-                      mainAxisAlignment: MainAxisAlignment.center,
-                    ),
-                  ]),
+                          StringsAuth.lBackToSignInButton,
+                          style: TextStyle(fontSize: height / 100 * 2, color: buttonDarkBlueColor),
+                        ),
+                        onPressed: onClickedSignUp // switch back to sign in mode
+                        )
+                  ],
+                  mainAxisAlignment: MainAxisAlignment.center,
+                ),
+              ]),
             ),
           )
         ]),
@@ -302,16 +268,11 @@ class _LoginWidgetState extends State<LoginWidget> {
 
   Future signIn() async {
     // show an indication that user is signing in
-    Alert loadingAlert = Alert(
-        context: context,
-        buttons: [],
-        content: CustomAlertWidget(StringsAuth.lLoggingIn));
+    Alert loadingAlert = Alert(context: context, buttons: [], content: CustomAlertWidget(StringsAuth.lLoggingIn));
 
     loadingAlert.show();
     try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
-          email: emailController.text.trim(),
-          password: passwordController.text.trim());
+      await FirebaseAuth.instance.signInWithEmailAndPassword(email: emailController.text.trim(), password: passwordController.text.trim());
       // pop the indicator after account has been created
       loadingAlert.dismiss();
     } on FirebaseAuthException catch (e) {
@@ -319,8 +280,7 @@ class _LoginWidgetState extends State<LoginWidget> {
       Alert(
               context: context,
               buttons: [],
-              content: Text(e.message.toString(),
-                  style: TextStyle(color: Colors.grey.shade800)),
+              content: Text(e.message.toString(), style: TextStyle(color: Colors.grey.shade800)),
               style: AlertStyle(backgroundColor: buttonLightBlueColor))
           .show();
       // pop alert once it sign in is completed
@@ -331,17 +291,11 @@ class _LoginWidgetState extends State<LoginWidget> {
   Future signUp() async {
     DatabaseRepository repository = persistentController.repository;
     // show an indication that user is signing up
-    Alert loadingAlert = Alert(
-        context: context,
-        buttons: [],
-        content: CustomAlertWidget(StringsAuth.lSigningUp));
+    Alert loadingAlert = Alert(context: context, buttons: [], content: CustomAlertWidget(StringsAuth.lSigningUp));
 
     loadingAlert.show();
     try {
-      await FirebaseAuth.instance
-          .createUserWithEmailAndPassword(
-              email: emailController.text.trim(),
-              password: passwordController.text.trim());
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(email: emailController.text.trim(), password: passwordController.text.trim());
       repository.createClub(clubNameController.text.trim());
       loadingAlert.dismiss();
       // pop the indicator after account has been created
@@ -350,8 +304,7 @@ class _LoginWidgetState extends State<LoginWidget> {
       Alert(
               context: context,
               buttons: [],
-              content: Text(e.message.toString(),
-                  style: TextStyle(color: Colors.grey.shade800)),
+              content: Text(e.message.toString(), style: TextStyle(color: Colors.grey.shade800)),
               style: AlertStyle(backgroundColor: buttonLightBlueColor))
           .show();
     }
@@ -374,22 +327,17 @@ class _LoginWidgetState extends State<LoginWidget> {
 
   void sendPasswordResetEmail() async {
     // show an indication that user is signing up
-    Alert loadingAlert = Alert(
-        context: context,
-        buttons: [],
-        content: CustomAlertWidget(StringsAuth.lLoggingIn));
+    Alert loadingAlert = Alert(context: context, buttons: [], content: CustomAlertWidget(StringsAuth.lLoggingIn));
     loadingAlert.show();
     try {
-      await FirebaseAuth.instance
-          .sendPasswordResetEmail(email: emailController.text.trim());
+      await FirebaseAuth.instance.sendPasswordResetEmail(email: emailController.text.trim());
       loadingAlert.dismiss();
     } on FirebaseAuthException catch (e) {
       loadingAlert.dismiss();
       Alert(
               context: context,
               buttons: [],
-              content: Text(e.message.toString(),
-                  style: TextStyle(color: Colors.grey.shade800)),
+              content: Text(e.message.toString(), style: TextStyle(color: Colors.grey.shade800)),
               style: AlertStyle(backgroundColor: buttonLightBlueColor))
           .show();
     }
