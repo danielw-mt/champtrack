@@ -95,17 +95,35 @@ class TempController extends GetxController {
     // update player in selected team
     _selectedTeam.value.players.where((Player playerElement) => playerElement.id == player.id).toList().first = player;
     repository.updatePlayer(player);
-    // try to add the player to all the teams that are assigned in the player.teams property
-    addPlayer(player);
-    // get all the teams the player is not in
+
     // TODO remove circular persistentController dependency if possible. Not critical for now
     PersistentController persistentController = Get.find<PersistentController>();
     List<Team> allTeams = persistentController.getAvailableTeams();
+    // try to add the player to all the teams that are assigned in the player.teams property
+    addPlayer(player);
+    // get all the teams the player should be in
+    List<Team> teamsWithPlayer = allTeams.where((Team team) => player.teams.contains('teams/' + team.id!)).toList();
+    // update the player in all the teams where the should be in
+    teamsWithPlayer.forEach((Team team) {
+      if (team.players.contains(player)){
+        // use this trick here to first remove the player with for example the old name and the re-add the player with the new name
+        team.players.remove(player);
+        team.players.add(player);
+      }
+    });
+    // also update player in selected team if they should be within the selected team
+    if (teamsWithPlayer.contains(_selectedTeam)) {
+      // same trick for selected team
+      _selectedTeam.value.players.remove(player);
+      _selectedTeam.value.players.add(player);
+    }
+
+    // get all the teams the player should not be in
     List<Team> teamsWithoutPlayer = allTeams.where((Team team) => !player.teams.contains('teams/' + team.id!)).toList();
     teamsWithoutPlayer.forEach((element) {
       logger.d(element.name);
     });
-    // try to remove the player from all these teams
+    // try to remove the player from all these teams they shouldn't be in
     teamsWithoutPlayer.forEach((Team team) {
       team.players.forEach((Player teamPlayer) {
         logger.d(teamPlayer.lastName);
@@ -117,8 +135,7 @@ class TempController extends GetxController {
         persistentController.updateTeam(team);
       }
     });
-
-    // also update selected team
+    // also remove player from selected team if they shouldn't be in the selected team
     if (teamsWithoutPlayer.contains(_selectedTeam.value)) {
       _selectedTeam.value.players.remove(player);
     }
