@@ -37,39 +37,58 @@ class TeamSettingsScreen extends StatelessWidget {
                 }
               },
               bottomNavigationBar: TeamSettingsBar(),
-              body: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisAlignment: MainAxisAlignment.start, children: [
-                // Container for menu button on top left corner
-                MenuButton(_scaffoldKey),
-                if (gameController.getSelectedTeamSetting() == 0) ...[
-                  Center(child: SizedBox(height: MediaQuery.of(context).size.height * 0.6, child: PlayersList())),
-                  Container(
-                    height: MediaQuery.of(context).size.height * 0.1,
-                    width: 20,
-                  ),
-                  Center(
-                      child: SizedBox(
-                          height: MediaQuery.of(context).size.height * 0.1,
-                          width: MediaQuery.of(context).size.width * 0.3,
-                          child: ElevatedButton(
-                              onPressed: () {
-                                Alert(
-                                  context: context,
-                                  buttons: [],
-                                  content: SizedBox(
-                                    width: MediaQuery.of(context).size.width * 0.7,
-                                    height: MediaQuery.of(context).size.height * 0.7,
-                                    child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                      children: [PlayerForm()],
-                                    ),
-                                  ),
-                                ).show();
-                              },
-                              child: Text(StringsTeamManagement.lAddPlayer)))),
-                ],
-                if (gameController.getSelectedTeamSetting() == 1) Text("TODO Games"),
-                if (gameController.getSelectedTeamSetting() == 2) TeamDetailsForm()
-              ])),
+              body: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    // Container for menu button on top left corner
+                    MenuButton(_scaffoldKey),
+                    if (gameController.getSelectedTeamSetting() == 0) ...[
+                      Expanded( child: Center(
+                          child: SizedBox(
+                              height: MediaQuery.of(context).size.height * 0.6,
+                              child: PlayersList()))),
+                      Container(
+                        height: MediaQuery.of(context).size.height * 0.1,
+                        width: 20,
+                      ),
+                      Flexible(
+                          child: Center(
+                              child:
+                                  //SizedBox(
+                                  //    height: MediaQuery.of(context).size.height * 0.1,
+                                  //    width: MediaQuery.of(context).size.width * 0.3,
+                                  // child:
+                                  ElevatedButton(
+                                      onPressed: () {
+                                        Alert(
+                                          context: context,
+                                          buttons: [],
+                                          content: SizedBox(
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.7,
+                                            height: MediaQuery.of(context)
+                                                    .size
+                                                    .height *
+                                                0.7,
+                                            child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.spaceEvenly,
+                                              children: [PlayerForm()],
+                                            ),
+                                          ),
+                                        ).show();
+                                      },
+                                      child: Text(
+                                          StringsTeamManagement.lAddPlayer)))),
+                    ],
+                    if (gameController.getSelectedTeamSetting() == 1)
+                      Text("TODO Games"),
+                    if (gameController.getSelectedTeamSetting() == 2)
+                      TeamDetailsForm()
+                  ])),
         );
       },
     ));
