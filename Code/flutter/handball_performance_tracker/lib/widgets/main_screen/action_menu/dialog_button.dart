@@ -108,7 +108,6 @@ class CustomDialogButton extends StatelessWidget {
         }
       }
       if (action.tag == goalTag) {
-        tempController.incOwnScore();
       }
       if (action.tag == oneVOneSevenTag) {
         tempController.setPlayerMenuText(StringsGameScreen.lChoose7mReceiver);
