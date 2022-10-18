@@ -86,10 +86,11 @@ Future<bool> initializeLocalData() async {
     tempController.setPlayingTeam(persistentController.getAvailableTeams()[0]);
 
     // run a test whether a previous game exists already
-    bool gameWithinLast20Mins = await repository.isThereAGameWithinLastMinutes(20);
-    if (gameWithinLast20Mins) {
-      tempController.setOldGameStateExists(true);
-    }
+    // TODO don't reload previous game for now 18.10.22
+    // bool gameWithinLast20Mins = await repository.isThereAGameWithinLastMinutes(20);
+    // if (gameWithinLast20Mins) {
+    //   tempController.setOldGameStateExists(true);
+    // }
     persistentController.generateStatistics();
   }
   return true;
