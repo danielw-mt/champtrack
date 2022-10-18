@@ -363,14 +363,6 @@ class PlayerFormState extends State<PlayerForm> {
                                 tempController.addPlayer(player);
                                 logger.d("new player mode");
                               }
-
-                              // TODO remove this if the code above works
-                              // if (editModeEnabled) {
-                              //   tempController.setPlayer(player);
-                              //   // Add new player mode
-                              // } else {
-                              //   tempController.addPlayer(player);
-                              // }
                             }
                           },
                           child: const Text(
