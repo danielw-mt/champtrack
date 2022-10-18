@@ -9,7 +9,11 @@ class ComparisonStatistics extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
+    // show image statistics3_overlay.jpg from assests folder
+    return Center(child: Image(image: AssetImage('assets/statistics3_overlay.jpg')));
+
+    
+    /*return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
         // Payer List in this Team
@@ -62,6 +66,6 @@ class ComparisonStatistics extends StatelessWidget {
               ],
             )),
       ],
-    );
+    );*/
   }
 }
