@@ -29,6 +29,9 @@ class TeamSelectionScreen extends StatelessWidget {
           initialIndex: gameController.getSelectedTeamSetting(),
           length: 3,
           child: Scaffold(
+            appBar: AppBar(
+                backgroundColor: buttonDarkBlueColor,
+                title: Text("Teams")),
               key: _scaffoldKey,
               drawer: NavDrawer(),
               // if drawer is closed notify, so if game is running the back to game button appears on next opening
@@ -41,7 +44,7 @@ class TeamSelectionScreen extends StatelessWidget {
               body: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    MenuButton(_scaffoldKey),
+                    //MenuButton(_scaffoldKey),
                     // TODO implement team cards here instead of dropdown
                     Center(child: TeamDropdown()),
 

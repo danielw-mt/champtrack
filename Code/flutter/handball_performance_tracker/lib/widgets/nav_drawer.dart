@@ -111,10 +111,10 @@ List<Widget> buildMenuList(BuildContext context, bool gameIsRunning,
       children: buildTeamChildren(context),
     ),
     // Statistics
-    CollabsibleListEntry(
+    SimpleListEntry(
         text: StringsGeneral.lStatistics,
-        screen: StatisticsScreen(),
-        children: [Text("")]),
+        screen: StatisticsScreen()),
+        //children: [Text("")]),
     // Glossary
     SimpleListEntry(
         text: StringsGeneral.lGlossary,
