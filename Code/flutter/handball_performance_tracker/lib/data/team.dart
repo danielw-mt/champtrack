@@ -4,17 +4,11 @@ import 'player.dart';
 class Team {
   String? id;
   String name;
-  List<Player> players;
-  List<Player> onFieldPlayers;
+  List<Player> players = [];
+  List<Player> onFieldPlayers = [];
   String type;
 
-  Team({
-    this.id,
-    this.name = "Default Team",
-    this.players = const [],
-    this.onFieldPlayers = const [],
-    this.type = "",
-  });
+  Team({this.id, this.name = "Default Team", this.type = "", required this.players, required onFieldPlayers});
 
   // @return Map<String,dynamic> as representation of Club object that can be saved to firestore
   Map<String, dynamic> toMap() {
@@ -48,9 +42,6 @@ class Team {
         playerList.add(Player.fromDocumentSnapshot(playerSnapshot));
       }
     });
-    return Team(
-        name: map["name"],
-        players: playerList,
-        onFieldPlayers: onFieldList);
+    return Team(name: map["name"], players: playerList, onFieldPlayers: onFieldList);
   }
 }

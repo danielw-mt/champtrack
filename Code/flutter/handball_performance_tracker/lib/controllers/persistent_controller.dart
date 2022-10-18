@@ -48,17 +48,16 @@ class PersistentController extends GetxController {
 
   void addTeam(String name, String type) async {
     TempController tempController = Get.find<TempController>();
-    Team newTeam = Team(name: name, type: type);
+    Team newTeam = Team(name: name, type: type, players: [], onFieldPlayers: []);
     DocumentReference docRef = await repository.addTeam(newTeam);
     newTeam.id = docRef.id;
     _cachedTeamsList.add(newTeam);
-    if (_cachedTeamsList.length == 1) {
-      tempController.setSelectedTeam(newTeam);
-    }
+    tempController.setSelectedTeam(newTeam);
     // update all ui elements referencing teams
     tempController.updateItem("team-list");
     tempController.updateItem("team-selection-screen");
     tempController.updateItem("team-dropdown");
+    tempController.update(["players-list"]);
   }
 
   void deleteTeam(Team team) async {

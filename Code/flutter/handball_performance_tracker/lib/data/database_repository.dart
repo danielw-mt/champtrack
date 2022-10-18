@@ -179,7 +179,7 @@ class DatabaseRepository {
   }
 
   /// add player to a team in firebase with teamReference string i.e. teams/ypunI6UsJmTr2LxKh1aw
-  void addPlayerToTeam(Player player, Team relevantTeam) async {
+  Future<void> addPlayerToTeam(Player player, Team relevantTeam) async {
     print("trying to add player ${player.id} to team ${relevantTeam.id}");
     DocumentReference<Map<String, dynamic>> selectedTeam =
         _loggedInClubReference.collection("teams").doc(relevantTeam.id);
@@ -189,11 +189,11 @@ class DatabaseRepository {
     List<DocumentReference> playerReferences =
         snapshotData["players"].cast<DocumentReference>();
     //get a reference of the player object from the players collection
-    DocumentReference<Map<String, dynamic>> relevantPlayer =
+    DocumentReference relevantPlayerReference =
         _loggedInClubReference.collection("players").doc(player.id);
-
+    logger.d("relevantplayer reference: "+relevantPlayerReference.toString());
     // add player to reference list
-    playerReferences.add(relevantPlayer);
+    playerReferences.add(relevantPlayerReference);
     // update the list of references in the respective team
     await selectedTeam.update({'players': playerReferences});
   }
