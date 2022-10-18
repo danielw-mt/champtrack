@@ -101,7 +101,7 @@ class CustomDialogButton extends StatelessWidget {
           // if there is more than one player with a goalkeeper position on field right now
         } else {
           tempController.setPlayerMenuText(StringsGameScreen.lChooseGoalkeeper);
-          logger.d("More than one goalkeeper on field. Waiting for player selection");
+          logger.d("Goalkeeper ambigious. Waiting for player selection");
           persistentController.addActionToCache(action);
           Navigator.pop(context);
           callPlayerMenu(context);

@@ -17,7 +17,7 @@ class StringsGameScreen {
   static const String lGoalkeeperPopUpHeader = "Torwart Aktionen";
   static const String lSelectActionDialogHeader = "Wählen Sie eine Aktion";
   static const String lAttentionTimeIsPaused = "Achtung! Zeit ist pausiert.";
-  static const String lChooseGoalkeeper = "Mehrere Spieler mit TW Rolle festgelegt. Bitte wählen";
+  static const String lChooseGoalkeeper = "Kein einzelner Spieler mit TW Rolle. Bitte TW wählen";
   static const String lChoose7mReceiver = "7m Erzieler";
   static const String lChoose7mCause = "7m Verursacher";
 
