@@ -25,7 +25,7 @@ var logger = Logger(
 );
 
 void callSevenMeterPlayerMenu(context) {
-  logger.d("Calling player menu");
+  logger.d("Calling seven meter player menu");
 
   showDialog(
       context: context,
@@ -95,8 +95,7 @@ void callSevenMeterPlayerMenu(context) {
 List<Widget> buildPageViewChildren(BuildContext context) {
   final TempController tempController = Get.find<TempController>();
   List<DialogButton> onFieldButtons = buildDialogButtonList(context);
-  List<DialogButton> notOnFieldButtons =
-      buildDialogButtonNotOnFieldList(context);
+  List<DialogButton> notOnFieldButtons = buildDialogButtonNotOnFieldList(context);
 
   // Build content for on field player page
   List<Widget> onFieldDisplay = [];
@@ -108,8 +107,7 @@ List<Widget> buildPageViewChildren(BuildContext context) {
   }
   // If number of player uneven, add the last which is not inside a row.
   if (tempController.getOnFieldPlayers().length % 2 != 0) {
-    onFieldDisplay
-        .add(onFieldButtons[tempController.getOnFieldPlayers().length - 1]);
+    onFieldDisplay.add(onFieldButtons[tempController.getOnFieldPlayers().length - 1]);
   }
 
   // Build content for not on field player page
@@ -124,8 +122,7 @@ List<Widget> buildPageViewChildren(BuildContext context) {
   }
   // If number of player uneven, add the last which is not inside a row.
   if (notOnFieldButtons.length % 2 != 0) {
-    notOnFieldDisplay
-        .add(Flexible(child: notOnFieldButtons[notOnFieldButtons.length - 1]));
+    notOnFieldDisplay.add(Flexible(child: notOnFieldButtons[notOnFieldButtons.length - 1]));
   }
   return [
     Row(children: onFieldDisplay),
@@ -138,13 +135,8 @@ List<DialogButton> buildDialogButtonNotOnFieldList(BuildContext context) {
   final TempController tempController = Get.find<TempController>();
   List<DialogButton> dialogButtons = [];
   for (int i = 0; i < tempController.getSelectedTeam().players.length; i++) {
-    if (tempController
-            .getSelectedTeam()
-            .onFieldPlayers
-            .contains(tempController.getSelectedTeam().players[i]) ==
-        false) {
-      DialogButton dialogButton = buildDialogButton(
-          context, tempController.getSelectedTeam().players[i], true);
+    if (tempController.getSelectedTeam().onFieldPlayers.contains(tempController.getSelectedTeam().players[i]) == false) {
+      DialogButton dialogButton = buildDialogButton(context, tempController.getSelectedTeam().players[i], true);
       dialogButtons.add(dialogButton);
     }
   }
@@ -164,8 +156,7 @@ List<DialogButton> buildDialogButtonList(BuildContext context) {
 
 /// builds a single dialog button that logs its text (=player name) to firestore
 /// and updates the game state
-DialogButton buildDialogButton(BuildContext context, Player associatedPlayer,
-    [isNotOnField]) {
+DialogButton buildDialogButton(BuildContext context, Player associatedPlayer, [isNotOnField]) {
   PersistentController persistentController = Get.find<PersistentController>();
   TempController tempController = Get.find<TempController>();
 
@@ -207,8 +198,7 @@ DialogButton buildDialogButton(BuildContext context, Player associatedPlayer,
                 Center(
                   child: Icon(
                     MyFlutterApp.t_shirt,
-                    size: (isNotOnField == null ||
-                            getNotOnFieldIndex().length <= 7)
+                    size: (isNotOnField == null || getNotOnFieldIndex().length <= 7)
                         ? (width * 0.11)
                         : (width * 0.11 / getNotOnFieldIndex().length * 7),
                   ),
@@ -236,8 +226,7 @@ DialogButton buildDialogButton(BuildContext context, Player associatedPlayer,
   void logPlayerSelection() async {
     logger.d("Logging the player selection");
 
-    tempController.setLastClickedPlayer(
-        tempController.getPlayerFromSelectedTeam(associatedPlayer.id!));
+    tempController.setPreviousClickedPlayer(tempController.getPlayerFromSelectedTeam(associatedPlayer.id!));
     // Check if associated player or lastClickedPlayer are notOnFieldPlayer. If yes, player menu appears to change the player.
     if (!tempController.getOnFieldPlayers().contains(associatedPlayer)) {
       tempController.addPlayerToChange(associatedPlayer);
@@ -255,9 +244,7 @@ DialogButton buildDialogButton(BuildContext context, Player associatedPlayer,
       // set height and width of buttons so the shirt and name are fitting inside
       height: width * 0.14,
       width: width * 0.14,
-      color: lastClickedPlayerId == associatedPlayer.id
-          ? Colors.purple
-          : Color.fromARGB(255, 180, 211, 236),
+      color: lastClickedPlayerId == associatedPlayer.id ? Colors.purple : Color.fromARGB(255, 180, 211, 236),
       onPressed: () {
         logPlayerSelection();
         Navigator.pop(context);

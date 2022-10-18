@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:handball_performance_tracker/constants/game_actions.dart';
-import 'package:handball_performance_tracker/constants/fieldSizeParameter.dart'
-    as fieldSizeParameter;
+import 'package:handball_performance_tracker/constants/fieldSizeParameter.dart' as fieldSizeParameter;
 import 'dart:math' as math;
 import 'dart:ui' as ui;
 import '../constants/positions.dart';
@@ -32,7 +31,7 @@ class SectorCalc {
     num x = position.dx;
     num y = position.dy;
     if (determineGoal(x, y)) {
-      return [goal];
+      return [goalTag];
     }
     String sector = determineSector(x, y);
     String perimeters = determinePerimeter(x, y);
@@ -46,12 +45,8 @@ class SectorCalc {
   inSixMeterEllipse(num x, num y) {
     num yCentered = y - fieldSizeParameter.fieldHeight / 2;
     num xCentered = x - xOffset;
-    return (xCentered * xCentered) /
-                (fieldSizeParameter.sixMeterRadiusX *
-                    fieldSizeParameter.sixMeterRadiusX) +
-            (yCentered * yCentered) /
-                (fieldSizeParameter.sixMeterRadiusY *
-                    fieldSizeParameter.sixMeterRadiusY) <=
+    return (xCentered * xCentered) / (fieldSizeParameter.sixMeterRadiusX * fieldSizeParameter.sixMeterRadiusX) +
+            (yCentered * yCentered) / (fieldSizeParameter.sixMeterRadiusY * fieldSizeParameter.sixMeterRadiusY) <=
         1;
   }
 
@@ -62,12 +57,8 @@ class SectorCalc {
   inNineMeterEllipse(num x, num y) {
     num yCentered = y - fieldSizeParameter.fieldHeight / 2;
     num xCentered = x - xOffset;
-    return (xCentered * xCentered) /
-                (fieldSizeParameter.nineMeterRadiusX *
-                    fieldSizeParameter.nineMeterRadiusX) +
-            (yCentered * yCentered) /
-                (fieldSizeParameter.nineMeterRadiusY *
-                    fieldSizeParameter.nineMeterRadiusY) <=
+    return (xCentered * xCentered) / (fieldSizeParameter.nineMeterRadiusX * fieldSizeParameter.nineMeterRadiusX) +
+            (yCentered * yCentered) / (fieldSizeParameter.nineMeterRadiusY * fieldSizeParameter.nineMeterRadiusY) <=
         1;
   }
 
@@ -76,17 +67,12 @@ class SectorCalc {
   * @return  true if (x,y) is inside and otherwise false.
   */
   bool determineGoal(num x, num y) {
-    bool inGoal = y >
-            fieldSizeParameter.fieldHeight / 2 -
-                fieldSizeParameter.goalHeight / 2 &&
-        y <
-            fieldSizeParameter.fieldHeight / 2 +
-                fieldSizeParameter.goalHeight / 2;
+    bool inGoal = y > fieldSizeParameter.fieldHeight / 2 - fieldSizeParameter.goalHeight / 2 &&
+        y < fieldSizeParameter.fieldHeight / 2 + fieldSizeParameter.goalHeight / 2;
     if (leftSide) {
       inGoal = inGoal && x < fieldSizeParameter.goalWidth;
     } else {
-      inGoal = inGoal &&
-          x > fieldSizeParameter.fieldWidth - fieldSizeParameter.goalWidth;
+      inGoal = inGoal && x > fieldSizeParameter.fieldWidth - fieldSizeParameter.goalWidth;
     }
     return inGoal;
   }
@@ -98,12 +84,12 @@ class SectorCalc {
     bool inSixMeter = inSixMeterEllipse(x, y);
     if (inNineMeter) {
       if (inSixMeter) {
-        return inSix;
+        return inSixThrowPos;
       } else {
-        return betweenSixAndNine;
+        return interSixAndNineThrowPos;
       }
     } else {
-      return outsideNine;
+      return extNineThrowPos;
     }
   }
 
@@ -135,8 +121,7 @@ class SectorCalc {
         yIntercept = yIntercepts[i] - gradient * xOffset;
       }
       // check if (x,y) is below this line and still above the line below
-      bool inSector = (gradient * x + yIntercept <= y) &&
-          (lowerGradient * x + lowerIntercept > y);
+      bool inSector = (gradient * x + yIntercept <= y) && (lowerGradient * x + lowerIntercept > y);
       lowerGradient = gradient;
       lowerIntercept = yIntercept;
       if (inSector == true) {
@@ -163,8 +148,7 @@ class FieldPainter extends CustomPainter {
   Color nineMeterColor;
   Color sixMeterColor;
   Color fieldBackgroundColor;
-  FieldPainter(this.leftSide, this.nineMeterColor, this.sixMeterColor,
-      this.fieldBackgroundColor);
+  FieldPainter(this.leftSide, this.nineMeterColor, this.sixMeterColor, this.fieldBackgroundColor);
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -187,8 +171,7 @@ class FieldPainter extends CustomPainter {
     // draw background
     canvas.drawRect(
         Rect.fromCenter(
-            center: Offset(fieldSizeParameter.fieldWidth / 2,
-                fieldSizeParameter.fieldHeight / 2),
+            center: Offset(fieldSizeParameter.fieldWidth / 2, fieldSizeParameter.fieldHeight / 2),
             width: fieldSizeParameter.fieldWidth,
             height: fieldSizeParameter.fieldHeight),
         Paint()..color = fieldBackgroundColor);
@@ -221,20 +204,13 @@ class FieldPainter extends CustomPainter {
     double x2;
     // difference between y1 and y2 determines the length of the 7m line.
     double yDifferenceFactor = 0.035;
-    double y1 = fieldSizeParameter.fieldHeight / 2 -
-        fieldSizeParameter.fieldHeight * yDifferenceFactor;
-    double y2 = fieldSizeParameter.fieldHeight / 2 +
-        fieldSizeParameter.fieldHeight * yDifferenceFactor;
+    double y1 = fieldSizeParameter.fieldHeight / 2 - fieldSizeParameter.fieldHeight * yDifferenceFactor;
+    double y2 = fieldSizeParameter.fieldHeight / 2 + fieldSizeParameter.fieldHeight * yDifferenceFactor;
     if (leftSide) {
-      x1 = (fieldSizeParameter.sixMeterRadiusX * 2 +
-              fieldSizeParameter.nineMeterRadiusX) /
-          3;
+      x1 = (fieldSizeParameter.sixMeterRadiusX * 2 + fieldSizeParameter.nineMeterRadiusX) / 3;
       x2 = x1;
     } else {
-      x1 = fieldSizeParameter.fieldWidth -
-          (fieldSizeParameter.sixMeterRadiusX * 2 +
-                  fieldSizeParameter.nineMeterRadiusX) /
-              3;
+      x1 = fieldSizeParameter.fieldWidth - (fieldSizeParameter.sixMeterRadiusX * 2 + fieldSizeParameter.nineMeterRadiusX) / 3;
       x2 = x1;
     }
     canvas.drawLine(

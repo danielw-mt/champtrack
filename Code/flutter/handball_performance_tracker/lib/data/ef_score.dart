@@ -21,19 +21,17 @@ class EfScore {
 
   EfScore()
       : score = 0,
-        actionStats = {
-          for (var v in efScoreParameters.values.expand((e) => e.keys)) v: 0
-        },
+        actionStats = {for (var v in efScoreParameters.values.expand((e) => e.keys)) v: 0},
         numOfActions = 0;
 
   /// calculates the ef-score using the weights specified in game_actions.dart, updates property `score`
   void calculate() {
     double positiveScore = 0;
     double negativeScore = 0;
-    efScoreParameters[positiveAction]!.forEach((key, value) {
+    efScoreParameters[positiveActionTag]!.forEach((key, value) {
       positiveScore += value * actionStats[key]!;
     });
-    efScoreParameters[negativeAction]!.forEach((key, value) {
+    efScoreParameters[negativeActionTag]!.forEach((key, value) {
       negativeScore += value * actionStats[key]!;
     });
     if (numOfActions > 0) {
@@ -46,35 +44,35 @@ class EfScore {
   /// determine the correct string identifier from `efScoreParameters` for @param action
   /// distinguished between different throw positions and the player's specified @param position for goals and error throws
   String? _getActionType(GameAction action, List<String> positions) {
-    String? actionType = action.actionType;
-    if (actionType == goal) {
+    String? actionType = action.tag;
+    if (actionType == goalTag) {
       // don't consider position and distance if goal happened after minute 55
       if (action.relativeTime > lastFiveMinThreshold) {
-        actionType = goalLastFive;
+        actionType = goalChrunchtimeTag;
       } else if (_isPosition(positions, action.throwLocation)) {
-        actionType = goalPos;
+        actionType = goalPosTag;
       } else if (_isInNineMeters(action.throwLocation[1])) {
-        actionType = goalUnderNine;
+        actionType = goalSubNineTag;
       } else {
-        actionType = goalOutsideNine;
+        actionType = goalExtNineTag;
       }
-    } else if (actionType == errThrow) {
+    } else if (actionType == missTag) {
       if (action.relativeTime > lastFiveMinThreshold) {
         // don't consider position and distance if err happened after minute 55
-        actionType = errThrowLastFive;
+        actionType = missCrunchtimeTag;
       } else if (_isPosition(positions, action.throwLocation)) {
-        actionType = errThrowPos;
+        actionType = missPosTag;
       } else if (_isInNineMeters(action.throwLocation[1])) {
-        actionType = errThrowUnderNine;
+        actionType = missSubNineTag;
       } else {
-        actionType = errThrowOutsideNine;
+        actionType = missExtNineTag;
       }
-    } else if (actionType == goal7m){ 
+    } else if (actionType == goal7mTag) {
       // 7m goal is weighted identically to goal under nine
-      actionType = goalUnderNine;
-    } else if (actionType == missed7m){
+      actionType = goalSubNineTag;
+    } else if (actionType == missed7mTag) {
       // 7m error throw is weighted identically to errow throw under nine
-      actionType = goalUnderNine;
+      actionType = goalSubNineTag;
     } else if (!actionStats.containsKey(actionType)) {
       actionType = null;
     }
@@ -88,11 +86,9 @@ class EfScore {
       return true;
     }
     // player has circle position and action was performed in 9m circle
-    if (positions.contains(circle) && _isInNineMeters(sector[1])) {
+    if (positions.contains(circlePos) && _isInNineMeters(sector[1])) {
       // action was performed in backcourt area
-      if ((sector[0] == backcourtLeft) ||
-          (sector[0] == backcourtMiddle) ||
-          (sector[0] == backcourtRight)) {
+      if ((sector[0] == backcourtLeftPos) || (sector[0] == backcourtMiddlePos) || (sector[0] == backcourtRightPos)) {
         return true;
       }
     }
@@ -100,7 +96,7 @@ class EfScore {
   }
 
   /// @return true if the action happened within the 9-m-circle
-  bool _isInNineMeters(String distance) => distance != outsideNine;
+  bool _isInNineMeters(String distance) => distance != extNineThrowPos;
 }
 
 class LiveEfScore extends EfScore {
@@ -122,7 +118,7 @@ class LiveEfScore extends EfScore {
     if (actionType != null) {
       if (actionStats[actionType]! >= 1) {
         actionStats[actionType] = actionStats[actionType]! - 1;
-        numOfActions--; 
+        numOfActions--;
         logger.d("Action deleted: $actionType, old ef-score: $score");
         calculate();
         logger.d("New ef-score: $score");

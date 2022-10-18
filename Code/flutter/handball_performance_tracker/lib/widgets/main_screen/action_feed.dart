@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:handball_performance_tracker/constants/colors.dart';
+import 'package:handball_performance_tracker/constants/stringsGameScreen.dart';
 import 'package:handball_performance_tracker/constants/stringsGeneral.dart';
 import 'package:handball_performance_tracker/widgets/main_screen/ef_score_bar.dart';
 import 'package:handball_performance_tracker/constants/fieldSizeParameter.dart'
     as fieldSizeParameter;
+import '../../controllers/temp_controller.dart';
+import 'package:handball_performance_tracker/constants/fieldSizeParameter.dart' as fieldSizeParameter;
 import '../../controllers/temp_controller.dart';
 import 'package:get/get.dart';
 import '../../data/game_action.dart';
@@ -13,7 +16,6 @@ import '../../utils/feed_logic.dart';
 /// A widget that displays the newest actions. It can be tweaked in lib/const/settings_config
 /// GameActions are periodically removed and can also be removed by clicking on them
 class ActionFeed extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     return GetBuilder<TempController>(
@@ -25,9 +27,7 @@ class ActionFeed extends StatelessWidget {
           padding: EdgeInsets.only(bottom: 5),
           decoration: BoxDecoration(
               color: Colors.white,
-              borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(menuRadius),
-                  bottomRight: Radius.circular(menuRadius))),
+              borderRadius: BorderRadius.only(bottomLeft: Radius.circular(menuRadius), bottomRight: Radius.circular(menuRadius))),
           alignment: Alignment.centerLeft,
           width: MediaQuery.of(context).size.width * 0.23,
           height: fieldSizeParameter.fieldHeight * 0.95,
@@ -41,12 +41,15 @@ class ActionFeed extends StatelessWidget {
                     shrinkWrap: true,
                     itemCount: feedActions.length,
                     itemBuilder: (context, index) {
-                      GameAction feedAction =
-                          feedActions.reversed.toList()[index];
-                      String actionType = feedAction.actionType;
+                      GameAction feedAction = feedActions.reversed.toList()[index];
+                      String actionTag = feedAction.tag;
+                      Player relevantPlayer = Player();
                       // get the player object whose id matches the playerId in the action Object
-                      Player relevantPlayer = tempController
-                          .getPlayerFromSelectedTeam(feedAction.playerId);
+                      if (feedAction.playerId != "opponent") {
+                        relevantPlayer = tempController.getPlayerFromSelectedTeam(feedAction.playerId);
+                      } else {
+                        relevantPlayer = Player(lastName: StringsGameScreen.lOpponent, id: "opponent");
+                      }
                       return Column(
                         children: [
                           Row(
@@ -56,30 +59,24 @@ class ActionFeed extends StatelessWidget {
                                 margin: EdgeInsets.only(left: 5),
                                 width: buttonHeight * 0.8,
                                 height: buttonHeight * 0.8,
-                                decoration: BoxDecoration(
-                                    color: buttonGreyColor,
-                                    borderRadius: BorderRadius.all(
-                                        Radius.circular(menuRadius))),
-                                child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.center,
-                                    children: [
-                                      Flexible(
-                                        child: Text(
-                                          actionType,
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                            fontSize: 12,
-                                          ),
-                                        ),
+                                decoration: BoxDecoration(color: buttonGreyColor, borderRadius: BorderRadius.all(Radius.circular(menuRadius))),
+                                child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                                  Flexible(
+                                    child: Text(
+                                      actionTag,
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontSize: 12,
                                       ),
-                                    ]),
+                                    ),
+                                  ),
+                                ]),
                               ),
                               Expanded(
                                 child: Container(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Text(
-                                    relevantPlayer.lastName,
+                                    relevantPlayer == Player() ? StringsGameScreen.lUnknown : relevantPlayer.lastName,
                                     overflow: TextOverflow.ellipsis,
                                     style: TextStyle(
                                       fontSize: 15,
@@ -91,8 +88,7 @@ class ActionFeed extends StatelessWidget {
                                 cursor: SystemMouseCursors.click,
                                 child: GestureDetector(
                                   onTap: () async {
-                                    removeFeedItem(
-                                        feedAction, tempController);
+                                    removeFeedItem(feedAction, tempController);
                                   },
                                   child: Icon(
                                     Icons.delete,
@@ -129,13 +125,10 @@ class FeedHeader extends StatelessWidget {
             color: buttonDarkBlueColor,
           ),
           // make round edges
-          borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(menuRadius),
-              topRight: Radius.circular(menuRadius))),
+          borderRadius: BorderRadius.only(topLeft: Radius.circular(menuRadius), topRight: Radius.circular(menuRadius))),
       padding: EdgeInsets.all(10),
       margin: EdgeInsets.only(bottom: 5),
-      child: Text(StringsGeneral.lFeedHeader,
-          style: TextStyle(color: Colors.white)),
+      child: Text(StringsGeneral.lFeedHeader, style: TextStyle(color: Colors.white)),
     );
   }
 }

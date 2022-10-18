@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:handball_performance_tracker/constants/game_actions.dart';
+import 'package:handball_performance_tracker/utils/field_control.dart';
 import 'package:handball_performance_tracker/utils/icons.dart';
 import 'package:handball_performance_tracker/utils/player_helper.dart';
 import 'package:handball_performance_tracker/widgets/main_screen/ef_score_bar.dart';
@@ -72,9 +73,7 @@ void callPlayerMenu(context, [substitute_menu]) {
                             id: "player-menu-text",
                             builder: (tempController) {
                               return Text(
-                                substitute_menu == null
-                                    ? tempController.getPlayerMenuText()
-                                    : StringsGameScreen.lSubstitute,
+                                substitute_menu == null ? tempController.getPlayerMenuText() : StringsGameScreen.lSubstitute,
                                 textAlign: TextAlign.right,
                                 style: const TextStyle(
                                   color: Colors.purple,
@@ -95,11 +94,8 @@ void callPlayerMenu(context, [substitute_menu]) {
                   Text(
                     substitute_menu == null
                         ? ""
-                        : StringsGameScreen.lSubstitute1 +
-                            tempController.getPlayersToChange()[0].lastName +
-                            StringsGameScreen.lSubstitute2,
-                    style: const TextStyle(
-                        fontSize: 20, fontWeight: FontWeight.bold),
+                        : StringsGameScreen.lSubstitute1 + tempController.getPlayersToChange()[0].lastName + StringsGameScreen.lSubstitute2,
+                    style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
 
                   // Button-Row: one Row with four Columns of one or two buttons
@@ -110,8 +106,7 @@ void callPlayerMenu(context, [substitute_menu]) {
                       height: MediaQuery.of(context).size.height * 0.6,
                       child: PageView(
                         controller: new PageController(),
-                        children:
-                            buildPageViewChildren(bcontext, substitute_menu),
+                        children: buildPageViewChildren(bcontext, substitute_menu),
                       ),
                     ),
                   )
@@ -123,7 +118,7 @@ void callPlayerMenu(context, [substitute_menu]) {
       // if just pressed anywhere in screen)
       .then((_) {
     tempController.setPlayerMenuText("");
-    tempController.setLastClickedPlayer(Player());
+    tempController.setPreviousClickedPlayer(Player());
     (!playerChanged && substitute_menu != null)
         ? tempController.getLastPlayerToChange()
         : null; // delete player to change from list if player menu was closed
@@ -135,10 +130,8 @@ void callPlayerMenu(context, [substitute_menu]) {
 // a method for building the children of the pageview with players on field on the first page and all others on the next.
 List<Widget> buildPageViewChildren(BuildContext context, [substitute_menu]) {
   final TempController tempController = Get.find<TempController>();
-  List<GetBuilder<TempController>> onFieldButtons =
-      buildDialogButtonOnFieldList(context, substitute_menu);
-  List<GetBuilder<TempController>> notOnFieldButtons =
-      buildDialogButtonNotOnFieldList(context);
+  List<GetBuilder<TempController>> onFieldButtons = buildDialogButtonOnFieldList(context, substitute_menu);
+  List<GetBuilder<TempController>> notOnFieldButtons = buildDialogButtonNotOnFieldList(context);
 
   // Build content for on field player page
   List<Widget> onFieldDisplay = [];
@@ -150,8 +143,7 @@ List<Widget> buildPageViewChildren(BuildContext context, [substitute_menu]) {
   }
   // If number of player uneven, add the last which is not inside a row.
   if (tempController.getOnFieldPlayers().length % 2 != 0) {
-    onFieldDisplay
-        .add(onFieldButtons[tempController.getOnFieldPlayers().length - 1]);
+    onFieldDisplay.add(onFieldButtons[tempController.getOnFieldPlayers().length - 1]);
   }
 
   // Build content for not on field player page
@@ -166,8 +158,7 @@ List<Widget> buildPageViewChildren(BuildContext context, [substitute_menu]) {
   }
   // If number of player uneven, add the last which is not inside a row.
   if (notOnFieldButtons.length % 2 != 0) {
-    notOnFieldDisplay
-        .add(Flexible(child: notOnFieldButtons[notOnFieldButtons.length - 1]));
+    notOnFieldDisplay.add(Flexible(child: notOnFieldButtons[notOnFieldButtons.length - 1]));
   }
   List<Widget> buttonRow = (substitute_menu == null)
       ? [
@@ -181,18 +172,12 @@ List<Widget> buildPageViewChildren(BuildContext context, [substitute_menu]) {
 }
 
 /// builds a list of Dialog buttons with players which are not on field
-List<GetBuilder<TempController>> buildDialogButtonNotOnFieldList(
-    BuildContext context) {
+List<GetBuilder<TempController>> buildDialogButtonNotOnFieldList(BuildContext context) {
   final TempController tempController = Get.find<TempController>();
   List<GetBuilder<TempController>> dialogButtons = [];
   for (int i = 0; i < tempController.getSelectedTeam().players.length; i++) {
-    if (tempController
-            .getSelectedTeam()
-            .onFieldPlayers
-            .contains(tempController.getSelectedTeam().players[i]) ==
-        false) {
-      GetBuilder<TempController> dialogButton = buildDialogButton(
-          context, tempController.getSelectedTeam().players[i], null, true);
+    if (tempController.getSelectedTeam().onFieldPlayers.contains(tempController.getSelectedTeam().players[i]) == false) {
+      GetBuilder<TempController> dialogButton = buildDialogButton(context, tempController.getSelectedTeam().players[i], null, true);
       dialogButtons.add(dialogButton);
     }
   }
@@ -200,14 +185,11 @@ List<GetBuilder<TempController>> buildDialogButtonNotOnFieldList(
 }
 
 /// builds a list of Dialog buttons with players which are on field
-List<GetBuilder<TempController>> buildDialogButtonOnFieldList(
-    BuildContext context,
-    [substitute_menu]) {
+List<GetBuilder<TempController>> buildDialogButtonOnFieldList(BuildContext context, [substitute_menu]) {
   final TempController tempController = Get.find<TempController>();
   List<GetBuilder<TempController>> dialogButtons = [];
   for (Player player in tempController.getOnFieldPlayers()) {
-    GetBuilder<TempController> dialogButton =
-        buildDialogButton(context, player, substitute_menu);
+    GetBuilder<TempController> dialogButton = buildDialogButton(context, player, substitute_menu);
     dialogButtons.add(dialogButton);
   }
   return dialogButtons;
@@ -215,11 +197,9 @@ List<GetBuilder<TempController>> buildDialogButtonOnFieldList(
 
 /// builds a single dialog button that logs its text (=player name) to firestore
 /// and updates the game state
-GetBuilder<TempController> buildDialogButton(
-    BuildContext context, Player associatedPlayer,
-    [substitute_menu, isNotOnField]) {
-  String buttonText = associatedPlayer.lastName;
-  String buttonNumber = (associatedPlayer.number).toString();
+GetBuilder<TempController> buildDialogButton(BuildContext context, Player playerFromButton, [substitute_menu, isNotOnField]) {
+  String buttonText = playerFromButton.lastName;
+  String buttonNumber = (playerFromButton.number).toString();
   PersistentController persistentController = Get.find<PersistentController>();
   TempController tempController = Get.find<TempController>();
 
@@ -233,11 +213,11 @@ GetBuilder<TempController> buildDialogButton(
     // check if action was a goal
     // if it was a goal allow the player to be pressed twice or select and assist player
     // if the player is clicked again it is a solo action
-    if (tempController.getLastClickedPlayer().id == associatedPlayer.id) {
+    if (tempController.getPreviousClickedPlayer().id == playerFromButton.id) {
       logger.d("Action was not an assist");
       return false;
     }
-    if (tempController.getLastClickedPlayer().id != associatedPlayer.id) {
+    if (tempController.getPreviousClickedPlayer().id != playerFromButton.id) {
       logger.d("Action was an assist");
       return true;
     }
@@ -246,64 +226,34 @@ GetBuilder<TempController> buildDialogButton(
   }
 
   void _setFieldBasedOnLastAction(GameAction lastAction) {
-    if (lastAction.actionType == goal ||
-        lastAction.actionType == errThrow ||
-        lastAction.actionType == trf) {
-      while (FieldSwitch.pageController.positions.length > 1) {
-        FieldSwitch.pageController
-            .detach(FieldSwitch.pageController.positions.first);
-      }
-      // if our action is left (page 0) and we are attacking (on page 0) jump back to defense (page 1) after the action
-      if (tempController.getFieldIsLeft() == true &&
-          tempController.getAttackIsLeft() == true) {
-        logger.d("Switching to right field after action");
-        FieldSwitch.pageController.jumpToPage(1);
-        // if out action is right (page 1) and we are attacking (on page 1) jump back to defense (page 0) after the action
-      } else if (tempController.getFieldIsLeft() == false &&
-          tempController.getAttackIsLeft() == false) {
-        logger.d("Switching to left field after action");
-        FieldSwitch.pageController.jumpToPage(0);
-      }
-    } else if (lastAction.actionType == blockAndSteal) {
-      while (FieldSwitch.pageController.positions.length > 1) {
-        FieldSwitch.pageController
-            .detach(FieldSwitch.pageController.positions.first);
-      }
-      // if our action is left (page 0) and we are defensing (on page 0) jump back to attack (page 1) after the action
-      if (tempController.getFieldIsLeft() == true &&
-          tempController.getAttackIsLeft() == false) {
-        logger.d("Switching to right field after action");
-        FieldSwitch.pageController.jumpToPage(1);
-
-        // if out action is right (page 1) and we are defensing (on page 1) jump back to attack (page 0) after the action
-      } else if (tempController.getFieldIsLeft() == false &&
-          tempController.getAttackIsLeft() == true) {
-        logger.d("Switching to left field after action");
-        FieldSwitch.pageController.jumpToPage(0);
-      }
+    if (lastAction.tag == goalTag || lastAction.tag == missTag || lastAction.tag == trfTag) {
+      offensiveFieldSwitch();
+    } else if (lastAction.tag == blockAndStealTag) {
+      defensiveFieldSwitch();
     }
   }
 
   void handlePlayerSelection() async {
     logger.d("Logging the player selection");
     GameAction lastAction = persistentController.getLastAction();
-    Player lastClickedPlayer = tempController.getLastClickedPlayer();
+    logger.d("Last action was: " + lastAction.toString());
+    Player previousClickedPlayer = tempController.getPreviousClickedPlayer();
+    logger.d("Previous clicked player was: " + previousClickedPlayer.toString());
     // if goal was pressed but no player was selected yet
     //(lastClickedPlayer is default Player Object) do nothing
-    if (lastAction.actionType == "goal" && lastClickedPlayer.id! == "") {
+    if (lastAction.tag == goalTag && previousClickedPlayer.id! == "") {
       tempController.setPlayerMenuText("Assist");
       // update last Clicked player value with the Player from selected team
       // who was clicked
-      tempController.setLastClickedPlayer(
-          tempController.getPlayerFromSelectedTeam(associatedPlayer.id!));
+      tempController.setPreviousClickedPlayer(tempController.getPlayerFromSelectedTeam(playerFromButton.id!));
       return;
     }
     // if goal was pressed and a player was already clicked once
-    if (lastAction.actionType == "goal") {
+    if (lastAction.tag == goalTag) {
+      logger.d("goal selected");
       // if it was a solo goal the action type has to be updated to "Tor Solo"
-      await persistentController.setLastActionPlayer(lastClickedPlayer);
-      tempController.updatePlayerEfScore(
-          lastClickedPlayer.id!, persistentController.getLastAction());
+      persistentController.setLastActionPlayer(previousClickedPlayer);
+      tempController.updatePlayerEfScore(previousClickedPlayer.id!, persistentController.getLastAction());
       addFeedItem(persistentController.getLastAction());
       tempController.incOwnScore();
       // add goal to feed
@@ -311,77 +261,84 @@ GetBuilder<TempController> buildDialogButton(
 
       if (!_wasAssist()) {
         logger.d("Logging solo goal");
-        // update data for person that shot the goal
+        // don't need to do anything because ID was already set above
       } else {
         logger.d("Logging goal with assist");
         // person that scored assist
         // deep clone a new action from the most recent action
         GameAction assistAction = GameAction.clone(lastAction);
         print("assist action: $assistAction");
-        assistAction.actionType = "assist";
-        persistentController.addAction(assistAction);
-        Player assistPlayer = associatedPlayer;
+        assistAction.tag = assistTag;
+        persistentController.addActionToCache(assistAction);
+        Player assistPlayer = playerFromButton;
         assistAction.playerId = assistPlayer.id!;
-        await persistentController.setLastActionPlayer(assistPlayer);
-        tempController.updatePlayerEfScore(
-            assistPlayer.id!, persistentController.getLastAction());
+        persistentController.setLastActionPlayer(assistPlayer);
+        tempController.updatePlayerEfScore(assistPlayer.id!, persistentController.getLastAction());
 
         // add assist first to the feed and then the goal
         addFeedItem(assistAction);
-        tempController.setLastClickedPlayer(Player());
+        tempController.setPreviousClickedPlayer(Player());
       }
     } else {
       // if the action was not a goal just update the player id in firebase and gamestate
-      await persistentController.setLastActionPlayer(associatedPlayer);
-      tempController.setLastClickedPlayer(associatedPlayer);
-      tempController.updatePlayerEfScore(
-          associatedPlayer.id!, persistentController.getLastAction());
+      persistentController.setLastActionPlayer(playerFromButton);
+      tempController.setPreviousClickedPlayer(playerFromButton);
+      tempController.updatePlayerEfScore(playerFromButton.id!, persistentController.getLastAction());
       // add action to feed
+      lastAction.playerId = playerFromButton.id!;
       addFeedItem(persistentController.getLastAction());
+      persistentController.addActionToCache(lastAction);
     }
+
+    ///
     // start: time penalty logic
-    if (tempController.isPlayerPenalized(associatedPlayer)) {
-      tempController.removePenalizedPlayer(associatedPlayer);
+    // if you click on a penalized player the time penalty is removed
+    ///
+    if (tempController.isPlayerPenalized(playerFromButton)) {
+      tempController.removePenalizedPlayer(playerFromButton);
     }
-    if (lastAction.actionType == timePenalty) {
-      Player player = tempController.getLastClickedPlayer();
+    if (lastAction.tag == timePenaltyTag) {
+      Player player = tempController.getPreviousClickedPlayer();
       tempController.addPenalizedPlayer(player);
       logger.d("Penality for player: " + player.id.toString());
     }
+
+    ///
     // end: time penalty logic
+    ///
+
     // Check if associated player or lastClickedPlayer are notOnFieldPlayer. If yes, player menu appears to change the player.
-    if (!tempController.getOnFieldPlayers().contains(associatedPlayer)) {
-      tempController.addPlayerToChange(associatedPlayer);
+    // We can click on not on field players if we swipe on the player menu and all the player not on field will be shown.
+    if (!tempController.getOnFieldPlayers().contains(playerFromButton)) {
+      tempController.addPlayerToChange(playerFromButton);
     }
-    if (!tempController.getOnFieldPlayers().contains(lastClickedPlayer) &&
-        !(lastClickedPlayer.id! == "")) {
-      tempController.addPlayerToChange(lastClickedPlayer);
+    if (!tempController.getOnFieldPlayers().contains(previousClickedPlayer) && !(previousClickedPlayer.id! == "")) {
+      tempController.addPlayerToChange(previousClickedPlayer);
     }
     _setFieldBasedOnLastAction(lastAction);
-    if (lastAction.actionType == "1v1") {
-      logger.d("1v1 detected");
-      Navigator.pop(context);
-      callSevenMeterPlayerMenu(context);
-      return;
-    }
-    // if we perform a 7m foul go straight to 7m screen
-    else if (lastAction.actionType == foulWithSeven) {
-      logger.d("7m foul. Going to 7m screen");
-      Navigator.pop(context);
-      callSevenMeterMenu(context, false);
-      return;
-    }
-    print("last action saved in database: ");
-    // if the action was a 7 meter action we pop the screen above and go to 7m menu
-    // for all other actions the player menu
-
-    tempController.setLastClickedPlayer(Player());
-    // If there were player clicked which are not on field, open substitute player menu
+    // If there are still player to change, open the player menu again but as a substitue player menu (true flag)
     if (!tempController.getPlayersToChange().isEmpty) {
       Navigator.pop(context);
       callPlayerMenu(context, true);
       return;
     }
+
+    // if we get a 7m in our favor call the seven meter menu for us
+    if (lastAction.tag == oneVOneSevenTag) {
+      logger.d("1v1 detected => 7m menu");
+      Navigator.pop(context);
+      callSevenMeterPlayerMenu(context);
+      return;
+    }
+    // if we perform a 7m foul call the seven meter menu for the other team
+    else if (lastAction.tag == foulSevenMeterTag) {
+      logger.d("7m foul. Going to 7m screen");
+      Navigator.pop(context);
+      callSevenMeterMenu(context, false);
+      return;
+    }
+    // reset last clicked player and player menu hint text
+    tempController.setPreviousClickedPlayer(Player());
     tempController.setPlayerMenuText("");
     Navigator.pop(context);
   }
@@ -395,23 +352,14 @@ GetBuilder<TempController> buildDialogButton(
 
     // Update player bar players
     int l = tempController.getPlayersFromSelectedTeam().indexOf(playerToChange);
-    int k =
-        tempController.getPlayersFromSelectedTeam().indexOf(associatedPlayer);
+    int k = tempController.getPlayersFromSelectedTeam().indexOf(playerFromButton);
     int indexToChange = tempController.getPlayerBarPlayers().indexOf(k);
     tempController.changePlayerBarPlayers(indexToChange, l);
     // Change the player which was pressed in player menu in tempController.getOnFieldPlayers()
     // to the player which was pressed in popup dialog.
     tempController.setOnFieldPlayer(
-        tempController.getOnFieldPlayers().indexOf(associatedPlayer),
-        playerToChange,
-        Get.find<PersistentController>().getCurrentGame());
+        tempController.getOnFieldPlayers().indexOf(playerFromButton), playerToChange, Get.find<PersistentController>().getCurrentGame());
 
-    // If there are still player to change, open menu again
-    if (!tempController.getPlayersToChange().isEmpty) {
-      Navigator.pop(context);
-      callPlayerMenu(context, true);
-      return;
-    }
     tempController.setPlayerMenuText("");
     Navigator.pop(context);
   }
@@ -422,16 +370,16 @@ GetBuilder<TempController> buildDialogButton(
       id: "player-menu-button",
       builder: (tempController) {
         Color buttonColor = Color(0);
-        if (tempController.getLastClickedPlayer() == associatedPlayer) {
+        if (tempController.getPreviousClickedPlayer() == playerFromButton) {
           buttonColor = Colors.purple;
-        } else if (tempController.isPlayerPenalized(associatedPlayer)) {
+        } else if (tempController.isPlayerPenalized(playerFromButton)) {
           buttonColor = Colors.grey;
         } else {
           buttonColor = Color.fromARGB(255, 180, 211, 236);
         }
         // Dialog button that shows "No Assist" instead of the player name and shirt
         // at the place where the first player was clicked
-        if (tempController.getLastClickedPlayer().lastName == buttonText) {
+        if (tempController.getPreviousClickedPlayer().lastName == buttonText) {
           return DialogButton(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -484,13 +432,9 @@ GetBuilder<TempController> buildDialogButton(
                         child: Icon(
                           MyFlutterApp.t_shirt,
                           // make shirt smaller if there are more than 7 player displayed
-                          size: (isNotOnField == null ||
-                                  getNotOnFieldIndex().length <= 7)
+                          size: (isNotOnField == null || getNotOnFieldIndex().length <= 7)
                               ? (width * 0.11)
-                              : (width *
-                                  0.11 /
-                                  getNotOnFieldIndex().length *
-                                  7),
+                              : (width * 0.11 / getNotOnFieldIndex().length * 7),
                         ),
                       ),
                     ],
@@ -516,9 +460,7 @@ GetBuilder<TempController> buildDialogButton(
               width: width * 0.14,
               color: buttonColor,
               onPressed: () {
-                (substitute_menu == null)
-                    ? handlePlayerSelection()
-                    : substitutePlayer();
+                (substitute_menu == null) ? handlePlayerSelection() : substitutePlayer();
               });
         }
       });

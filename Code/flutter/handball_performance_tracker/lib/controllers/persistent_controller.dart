@@ -123,17 +123,17 @@ class PersistentController extends GetxController {
     _statisticsEngine.value.generateStatistics(gamesData, getAllPlayers());
   }
 
-  /// add action to actions list and firestore
-  void addAction(GameAction action) {
+  /// add action to persistent controller action list
+  void addActionToCache(GameAction action) {
     _actions.add(action);
   }
 
-  /// return last action that was added
+  /// Return last action that was added to persistentcontroller actions list
   GameAction getLastAction() {
     if (_actions.length > 0) {
       return _actions.last;
     }
-    return GameAction();
+    throw Exception("No actions available in persistent controller");
   }
 
   List<GameAction> getAllActions() {
@@ -141,7 +141,7 @@ class PersistentController extends GetxController {
   }
 
   /// updates playerid of the last action
-  Future<void> setLastActionPlayer(Player player) async {
+  void setLastActionPlayer(Player player) {
     _actions.last.playerId = player.id!;
   }
 

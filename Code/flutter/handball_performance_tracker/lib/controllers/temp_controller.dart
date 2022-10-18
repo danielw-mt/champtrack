@@ -29,8 +29,7 @@ class TempController extends GetxController {
 
   /// setter for selectedTeam
   void setSelectedTeam(Team team) {
-    PersistentController persistentController =
-        Get.find<PersistentController>();
+    PersistentController persistentController = Get.find<PersistentController>();
     persistentController.updateTeam(team);
     _selectedTeam.value = team;
     update([
@@ -42,9 +41,10 @@ class TempController extends GetxController {
     ]);
   }
 
+  /// remove selected team from list of teams in persistent controller
+  /// and set selected team to one that is available
   void deleteSelectedTeam() {
-    PersistentController persistentController =
-        Get.find<PersistentController>();
+    PersistentController persistentController = Get.find<PersistentController>();
     persistentController.deleteTeam(_selectedTeam.value);
     // set selected team to default team if no teams are available
     if (persistentController.getAvailableTeams().length > 0) {
@@ -75,28 +75,17 @@ class TempController extends GetxController {
 
   /// return the first player in selectedTeam with the given playerId
   Player getPlayerFromSelectedTeam(String playerId) {
-    return _selectedTeam.value.players
-        .where((Player player) => player.id == playerId)
-        .first;
+    return _selectedTeam.value.players.where((Player player) => player.id == playerId).first;
   }
 
-  void updatePlayerEfScore(String playerId, GameAction action,
-      {removeAction = false}) {
-    if (_selectedTeam.value.players
-        .where((Player player) => player.id == playerId)
-        .isEmpty) {
+  void updatePlayerEfScore(String playerId, GameAction action, {removeAction = false}) {
+    if (_selectedTeam.value.players.where((Player player) => player.id == playerId).isEmpty) {
       return;
     }
     if (removeAction) {
-      _selectedTeam.value.players
-          .where((Player player) => player.id == playerId)
-          .first
-          .removeAction(action);
+      _selectedTeam.value.players.where((Player player) => player.id == playerId).first.removeAction(action);
     } else {
-      _selectedTeam.value.players
-          .where((Player player) => player.id == playerId)
-          .first
-          .addAction(action);
+      _selectedTeam.value.players.where((Player player) => player.id == playerId).first.addAction(action);
     }
     update(["ef-score-bar"]);
   }
@@ -107,10 +96,7 @@ class TempController extends GetxController {
   }
 
   void setPlayer(Player player) {
-    _selectedTeam.value.players
-        .where((Player playerElement) => playerElement.id == player.id)
-        .toList()
-        .first = player;
+    _selectedTeam.value.players.where((Player playerElement) => playerElement.id == player.id).toList().first = player;
     repository.updatePlayer(player);
     update(["players-list"]);
   }
@@ -129,8 +115,7 @@ class TempController extends GetxController {
   /// collection.
   void addPlayerToSelectedTeam(Player player) async {
     print("add player to selected team");
-    PersistentController persistentController =
-        Get.find<PersistentController>();
+    PersistentController persistentController = Get.find<PersistentController>();
     DocumentReference docRef = await repository.addPlayer(player);
     player.id = docRef.id;
     // if the player is not already in the selected team add the selected team
@@ -155,35 +140,30 @@ class TempController extends GetxController {
     update(["players-list"]);
   }
 
-  List<String> getOnFieldPlayersById() =>
-      _selectedTeam.value.onFieldPlayers.map((player) => player.id!).toList();
+  List<String> getOnFieldPlayersById() => _selectedTeam.value.onFieldPlayers.map((player) => player.id!).toList();
 
   /// set the onFieldPlayer from selectedTeam stored at the given index
   void setOnFieldPlayer(int index, Player player, Game game) {
     _selectedTeam.value.onFieldPlayers[index] = player;
     addGameToPlayer(player, game); // if a player is substituted during a game
-    update(
-        ["action-feed", "on-field-checkbox", "ef-score-bar", "players-list"]);
+    update(["action-feed", "on-field-checkbox", "ef-score-bar", "players-list"]);
   }
 
   /// add additional onFieldPlayer to selectedTeam
   void addOnFieldPlayer(Player player) {
     // TODO implement check if there are not already 7 onFieldPlayers
     _selectedTeam.value.onFieldPlayers.add(player);
-    update(
-        ["action-feed", "on-field-checkbox", "ef-score-bar", "players-list"]);
+    update(["action-feed", "on-field-checkbox", "ef-score-bar", "players-list"]);
   }
 
   void updateOnFieldPlayers() {
-    repository.updateOnFieldPlayers(
-        _selectedTeam.value.onFieldPlayers, _selectedTeam.value);
+    repository.updateOnFieldPlayers(_selectedTeam.value.onFieldPlayers, _selectedTeam.value);
   }
 
   /// remove the given Player from onFieldPlayers of selectedTeam
   void removeOnFieldPlayer(Player player) {
     _selectedTeam.value.onFieldPlayers.remove(player);
-    update(
-        ["action-feed", "on-field-checkbox", "ef-score-bar", "players-list"]);
+    update(["action-feed", "on-field-checkbox", "ef-score-bar", "players-list"]);
   }
 
   /// if player gets active in a game, add the game's id to its games list
@@ -236,8 +216,7 @@ class TempController extends GetxController {
   /// setter for selectedTeamSetting
   void setSelectedTeamSetting(int tabNumber) {
     _selectedTeamSetting.value = tabNumber;
-    update(
-        ["team-selection-screen", "team-setting-screen", "team-settings-bar"]);
+    update(["team-selection-screen", "team-setting-screen", "team-settings-bar"]);
   }
 
   ////
@@ -314,10 +293,10 @@ class TempController extends GetxController {
   Rx<Player> _lastClickedPlayer = Player().obs;
 
   /// getter for lastClickedPlayer
-  Player getLastClickedPlayer() => _lastClickedPlayer.value;
+  Player getPreviousClickedPlayer() => _lastClickedPlayer.value;
 
   /// setter for lastClickedPlayer
-  void setLastClickedPlayer(Player lastClickedPlayer) {
+  void setPreviousClickedPlayer(Player lastClickedPlayer) {
     _lastClickedPlayer.value = lastClickedPlayer;
     update(["player-menu-button"]);
   }
@@ -543,10 +522,8 @@ class TempController extends GetxController {
     if (isPlayerPenalized(player)) {
       return;
     }
-    PersistentController persistentController =
-        Get.find<PersistentController>();
-    penalizedPlayers[player.id] =
-        persistentController.getCurrentGame().stopWatchTimer.rawTime.value;
+    PersistentController persistentController = Get.find<PersistentController>();
+    penalizedPlayers[player.id] = persistentController.getCurrentGame().stopWatchTimer.rawTime.value;
     print(penalizedPlayers);
     update(["player-bar-button"]);
     // check whether the penalty for the player ran out every 5 seconds of the stopwatch
@@ -555,8 +532,7 @@ class TempController extends GetxController {
         t.cancel();
         return;
       }
-      int stopWatchTime =
-          persistentController.getCurrentGame().stopWatchTimer.rawTime.value;
+      int stopWatchTime = persistentController.getCurrentGame().stopWatchTimer.rawTime.value;
       int penaltyStartStopWatchTime = penalizedPlayers[player.id];
       if (stopWatchTime - penaltyStartStopWatchTime >= 120000) {
         removePenalizedPlayer(player);
@@ -572,6 +548,5 @@ class TempController extends GetxController {
     }
   }
 
-  bool isPlayerPenalized(Player player) =>
-      penalizedPlayers.containsKey(player.id);
+  bool isPlayerPenalized(Player player) => penalizedPlayers.containsKey(player.id);
 }

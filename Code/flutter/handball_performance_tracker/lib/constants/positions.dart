@@ -1,26 +1,29 @@
-
 ///
 // throw positions
 ///
-const String inSix = "<6"; 
-const String betweenSixAndNine = "6to9";
-const String outsideNine = ">9"; 
-const List<String> throwPositions = [inSix, betweenSixAndNine, outsideNine];
+const String inSixThrowPos = "<6";
+const String interSixAndNineThrowPos = "6to9";
+const String extNineThrowPos = ">9";
+const List<String> throwPositions = [inSixThrowPos, interSixAndNineThrowPos, extNineThrowPos];
+
 ///
 // player positions
 ///
-const String leftOutside = "LA"; // links aussen
-const String rightOutside = "RA"; // rechts aussen
-const String backcourtLeft = "RL"; // rueckraum links
-const String backcourtMiddle = "RM"; // rueckraum mitte
-const String backcourtRight = "RR"; // rueckraum rechts
-const String circle = "K"; // kreiss
-const List<String> sectors = [leftOutside, rightOutside, backcourtLeft, backcourtMiddle, backcourtRight, circle]; 
+const String leftOutsidePos = "LA"; // links aussen
+const String rightOutsidePos = "RA"; // rechts aussen
+const String backcourtLeftPos = "RL"; // rueckraum links
+const String backcourtMiddlePos = "RM"; // rueckraum mitte
+const String backcourtRightPos = "RR"; // rueckraum rechts
+const String circlePos = "K"; // kreiss
+const String goalkeeperPos = "TW"; // torwart
+const List<String> sectors = [leftOutsidePos, rightOutsidePos, backcourtLeftPos, backcourtMiddlePos, backcourtRightPos, circlePos];
+
 ///
 // mapping of calculated sector numbers based on fieldIsLeft
 ///
-const List<String> sectorsFieldIsLeft = [leftOutside, backcourtLeft, backcourtMiddle, backcourtRight, rightOutside];
-const List<String> sectorsFieldIsRight = [rightOutside, backcourtRight, backcourtMiddle, backcourtLeft, leftOutside];
+const List<String> sectorsFieldIsLeft = [leftOutsidePos, backcourtLeftPos, backcourtMiddlePos, backcourtRightPos, rightOutsidePos];
+const List<String> sectorsFieldIsRight = [rightOutsidePos, backcourtRightPos, backcourtMiddlePos, backcourtLeftPos, leftOutsidePos];
+
 ///
 // special player position
 ///
