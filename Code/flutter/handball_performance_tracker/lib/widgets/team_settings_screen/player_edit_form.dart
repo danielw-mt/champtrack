@@ -330,9 +330,54 @@ class PlayerFormState extends State<PlayerForm> {
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
+                    
+                    Flexible(
+                      // Cancel-Button
+                      child:
+                          //SizedBox(
+                          //width: 0.15 * width,
+                          //height: 0.08 * height,
+                          //child:
+                          ElevatedButton(
+                        style: ButtonStyle(
+                            backgroundColor: MaterialStateProperty.all<Color>(
+                                buttonGreyColor)),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: const Text(
+                          StringsGeneral.lBack,
+                          style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black),
+                        ),
+                      ),
+                    ),
+                    Flexible(
+                      child:
+                          //SizedBox(
+                          //width: 0.15 * width,
+                          //height: 0.08 * height,
+                          //child:
+                          ElevatedButton(
+                              style: ButtonStyle(
+                                  backgroundColor:
+                                      MaterialStateProperty.all<Color>(
+                                          buttonGreyColor)),
+                              onPressed: () {
+                                tempController.deletePlayer(player);
+                                Navigator.pop(context);
+                              },
+                              child: Text(StringsGeneral.lDeletePlayer,
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black))),
+                    ),
                     Flexible(
                       child:
                           //SizedBox(
@@ -377,51 +422,6 @@ class PlayerFormState extends State<PlayerForm> {
                         ),
                       ),
                     ),
-                    Flexible(
-                      child: 
-                      //SizedBox(
-                        //width: 0.15 * width,
-                        //height: 0.08 * height,
-                        //child: 
-                        ElevatedButton(
-                            style: ButtonStyle(
-                                backgroundColor:
-                                    MaterialStateProperty.all<Color>(
-                                        buttonGreyColor)),
-                            onPressed: () {
-                              tempController.deletePlayer(player);
-                              Navigator.pop(context);
-                            },
-                            child: Text(StringsGeneral.lDeletePlayer,
-                                style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black))),
-                      
-                    ),
-                    Flexible(
-                        // Cancel-Button
-                        child: 
-                        //SizedBox(
-                      //width: 0.15 * width,
-                      //height: 0.08 * height,
-                      //child:
-                       ElevatedButton(
-                        style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.all<Color>(
-                                buttonGreyColor)),
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                        child: const Text(
-                          StringsGeneral.lBack,
-                          style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black),
-                        ),
-                      ),
-                    )
                   ],
                 ),
               ),
