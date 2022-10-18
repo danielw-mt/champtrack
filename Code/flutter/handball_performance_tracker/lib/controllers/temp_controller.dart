@@ -22,7 +22,7 @@ class TempController extends GetxController {
   }
 
   /// Temporary variable for storing the currently selected Team
-  Rx<Team> _selectedTeam = Team(id: "-1", name: "Default team").obs;
+  Rx<Team> _selectedTeam = Team(players: [], onFieldPlayers: []).obs;
 
   /// getter for selectedTeam
   Team getSelectedTeam() => _selectedTeam.value;
@@ -31,6 +31,7 @@ class TempController extends GetxController {
   void setSelectedTeam(Team team) {
     PersistentController persistentController = Get.find<PersistentController>();
     persistentController.updateTeam(team);
+    repository.updateTeam(team);
     _selectedTeam.value = team;
     update([
       "team-type-selection-bar",
@@ -43,26 +44,21 @@ class TempController extends GetxController {
 
   /// remove selected team from list of teams in persistent controller
   /// and set selected team to one that is available
-  void deleteSelectedTeam() {
+  void deleteSelectedTeam() async {
     PersistentController persistentController = Get.find<PersistentController>();
-    persistentController.deleteTeam(_selectedTeam.value);
+    await persistentController.deleteTeam(_selectedTeam.value);
     // set selected team to default team if no teams are available
     if (persistentController.getAvailableTeams().length > 0) {
       _selectedTeam.value = persistentController.getAvailableTeams()[0];
     } else {
-      _selectedTeam.value = Team(id: "-1", name: "Default team");
+      _selectedTeam.value = Team(players: [], onFieldPlayers: []);
     }
-    update([
-      "team-type-selection-bar",
-      "players-list",
-      "team-details-form-state",
-      "team-dropdown"
-    ]);
+    update(["team-type-selection-bar", "players-list", "team-details-form-state", "team-dropdown"]);
   }
 
   /// Temporary variable for storing the currently playing Team
   /// TODO why is this needed? can't we just use selectedTeam?
-  Rx<Team> _playingTeam = Team(id: "-1", name: "Default team").obs;
+  Rx<Team> _playingTeam = Team(players: [], onFieldPlayers: []).obs;
 
   /// getter for playingTeam
   Team getPlayingTeam() => _playingTeam.value;
@@ -95,40 +91,105 @@ class TempController extends GetxController {
     return _selectedTeam.value.players;
   }
 
+  /// update/edit player with provided @param player
   void setPlayer(Player player) {
+    // update player in selected team
     _selectedTeam.value.players.where((Player playerElement) => playerElement.id == player.id).toList().first = player;
     repository.updatePlayer(player);
+
+    // TODO remove circular persistentController dependency if possible. Not critical for now
+    PersistentController persistentController = Get.find<PersistentController>();
+    List<Team> allTeams = persistentController.getAvailableTeams();
+    // try to add the player to all the teams that are assigned in the player.teams property
+    addPlayer(player);
+    // get all the teams the player should be in
+    List<Team> teamsWithPlayer = allTeams.where((Team team) => player.teams.contains('teams/' + team.id!)).toList();
+    // update the player in all the teams where the should be in
+    teamsWithPlayer.forEach((Team team) {
+      if (team.players.contains(player)){
+        // use this trick here to first remove the player with for example the old name and the re-add the player with the new name
+        team.players.remove(player);
+        team.players.add(player);
+      }
+    });
+    // also update player in selected team if they should be within the selected team
+    if (teamsWithPlayer.contains(_selectedTeam)) {
+      // same trick for selected team
+      _selectedTeam.value.players.remove(player);
+      _selectedTeam.value.players.add(player);
+    }
+
+    // get all the teams the player should not be in
+    List<Team> teamsWithoutPlayer = allTeams.where((Team team) => !player.teams.contains('teams/' + team.id!)).toList();
+    teamsWithoutPlayer.forEach((element) {
+      logger.d(element.name);
+    });
+    // try to remove the player from all these teams they shouldn't be in
+    teamsWithoutPlayer.forEach((Team team) {
+      team.players.forEach((Player teamPlayer) {
+        logger.d(teamPlayer.lastName);
+      });
+      if (team.players.contains(player)) {
+        logger.d("removing player from team " + team.name);
+        team.players.remove(player);
+        repository.updateTeam(team);
+        persistentController.updateTeam(team);
+      }
+    });
+    // also remove player from selected team if they shouldn't be in the selected team
+    if (teamsWithoutPlayer.contains(_selectedTeam.value)) {
+      _selectedTeam.value.players.remove(player);
+    }
     update(["players-list"]);
   }
 
   /// deleting player from game state and firebase
   void deletePlayer(Player player) async {
-    _selectedTeam.value.players.remove(player);
+    if (_selectedTeam.value.players.contains(player)) {
+      _selectedTeam.value.players.remove(player);
+    }
     if (_selectedTeam.value.onFieldPlayers.contains(player)) {
       _selectedTeam.value.onFieldPlayers.remove(player);
     }
+    PersistentController persistentController = Get.find<PersistentController>();
+    persistentController.removePlayerFromTeams(player);
     repository.deletePlayer(player);
     update(["players-list"]);
   }
 
-  /// adds player to the players collection and the selected teams in the teams
-  /// collection.
-  void addPlayerToSelectedTeam(Player player) async {
-    print("add player to selected team");
+  /// Adds player to the teams that they are assigned to (player.teams property)
+  /// Also adds player to players collection
+  /// TODO do not addPlayer to a team if they are already part of that team
+  void addPlayer(Player player) async {
+    // TODO not critical but try to avoid circular dependency
     PersistentController persistentController = Get.find<PersistentController>();
-    DocumentReference docRef = await repository.addPlayer(player);
-    player.id = docRef.id;
     // if the player is not already in the selected team add the selected team
-    if (!player.teams.contains('teams/' + _selectedTeam.value.id.toString())) {
-      print("player not already in selected team");
-      player.teams.add(_selectedTeam.value.id.toString());
+
+    // TODO not sure if we need this part
+    // if (!player.teams.contains('teams/' + _selectedTeam.value.id.toString())) {
+    //   print("player not already in selected team");
+    //   player.teams.add(_selectedTeam.value.id.toString());
+    // }
+    // add player to players if they haven't been added before. Basically player has an id when they were previously added to firebase collection
+    if (player.id == null) {
+      DocumentReference docRef = await repository.addPlayer(player);
+      player.id = docRef.id;
     }
     // add player to each team inside references
-    player.teams.forEach((String teamReference) {
+    player.teams.forEach((String teamReference) async {
+      logger.d("adding player $teamReference team in firebase");
       Team relevantTeam = persistentController.getSpecificTeam(teamReference);
-      repository.addPlayerToTeam(player, relevantTeam);
+      // only add player to team if they are not already part of that team
+      if (!relevantTeam.players.contains(player)) {
+        relevantTeam.players.add(player);
+        await repository.addPlayerToTeam(player, relevantTeam);
+      }
     });
-    _selectedTeam.value.players.add(player);
+    // if player should be added to selected team, add them
+    if (player.teams.contains(_selectedTeam)) {
+      logger.d("add player to selected team");
+      _selectedTeam.value.players.add(player);
+    }
     update(["players-list"]);
   }
 

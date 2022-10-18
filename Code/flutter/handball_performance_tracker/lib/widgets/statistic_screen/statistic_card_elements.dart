@@ -166,7 +166,7 @@ class _ActionsCardState extends State<ActionsCard> {
                                 widget.actionCounts.length,
                                 (index) => DataRow(cells: [
                                       // convert action tag to the correct string specified in the strings using realActionType
-                                      DataCell(Text(realActionType(widget.actionCounts.keys.elementAt(index)))),
+                                      DataCell(Text(realActionTag(widget.actionCounts.keys.elementAt(index)))),
                                       DataCell(Text(widget.actionCounts.values.elementAt(index).toString()))
                                     ]))),
                       )
@@ -212,16 +212,16 @@ class _PerformanceCardState extends State<PerformanceCard> {
     if (widget.efScoreSeries.length > 0) {
       _dropDownElements.add("Ef-Score");
     }
-    widget.actionSeries.keys.toList().forEach((String actionType) {
+    widget.actionSeries.keys.toList().forEach((String actionTag) {
       // convert action tag to the correct string specified in the strings using realActionType
-      _dropDownElements.add(actionType);
+      _dropDownElements.add(actionTag);
     });
 
     return Card(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Flexible(flex: 1, child: buildActionTypeDropdown()),
+          Flexible(flex: 1, child: buildActionTagDropdown()),
           Flexible(
               flex: 4,
               // when we selected ef-score in the dropdown use the timestamps from all the actions and not the series timestamps
@@ -244,7 +244,7 @@ class _PerformanceCardState extends State<PerformanceCard> {
     );
   }
 
-  DropdownButton buildActionTypeDropdown() {
+  DropdownButton buildActionTagDropdown() {
     if (_selectedDropdownElement == "") {
       _selectedDropdownElement = _dropDownElements[0];
     }
@@ -263,7 +263,7 @@ class _PerformanceCardState extends State<PerformanceCard> {
           value: dropdownElement,
           // if the element is Ef-score don't do anything.
           //If it is one of the action type series then convert the tag to the correct string using realActionType
-          child: dropdownElement == "Ef-score" ? Text(dropdownElement) : Text(realActionType(dropdownElement)),
+          child: dropdownElement == "Ef-score" ? Text(dropdownElement) : Text(realActionTag(dropdownElement)),
         );
       }).toList(),
       // After selecting the desired option,it will

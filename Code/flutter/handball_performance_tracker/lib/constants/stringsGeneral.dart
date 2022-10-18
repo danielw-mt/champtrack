@@ -134,4 +134,5 @@ class StringsGeneral {
   // team selection screen
   static const String lAddTeam = "Team hinzufügen";
   static const String lTeamTypes = "Teamtypen";
+  static const String lNoTeamsWarning = "Keine Teams vorhanden. Bitte zuerst anlegen";
 }

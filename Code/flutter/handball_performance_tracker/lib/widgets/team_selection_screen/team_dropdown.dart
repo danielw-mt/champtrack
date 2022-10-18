@@ -14,7 +14,7 @@ class TeamDropdown extends StatelessWidget {
         Get.find<PersistentController>();
     // don't show the dropdown if there are no available teams
     if (persistentController.getAvailableTeams().length == 0) {
-      return Container();
+      return Center(child: Text(StringsGeneral.lNoTeamsWarning, style: TextStyle(fontSize: 20, color: Colors.blue),));
     }
     return // build the dropdown button
         GetBuilder<TempController>(

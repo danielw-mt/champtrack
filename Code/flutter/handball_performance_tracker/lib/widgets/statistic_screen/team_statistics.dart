@@ -25,7 +25,7 @@ class _TeamStatisticsState extends State<TeamStatistics> {
   List<Game> _games = [];
   List<Team> _teams = [];
   Map<String, dynamic> _statistics = {};
-  Team _selectedTeam = Team();
+  Team _selectedTeam = Team(players: [], onFieldPlayers: []);
   Game _selectedGame = Game(date: DateTime.fromMicrosecondsSinceEpoch(0));
 
   void onGameSelected(Game game) {
