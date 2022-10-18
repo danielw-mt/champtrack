@@ -76,7 +76,7 @@ class _PlayerStatisticsState extends State<PlayerStatistics> {
   void onGameSelected(Game game) {
     setState(() {
       _selectedGame = game;
-      _updatePlayersOfGame();
+      // _updatePlayersOfGame();
     });
   }
 
@@ -84,7 +84,7 @@ class _PlayerStatisticsState extends State<PlayerStatistics> {
     setState(() {
       _selectedTeam = team;
       _games = _persistentController.getAllGames(teamId: _selectedTeam.id);
-      _updatePlayersOfGame();
+      // _updatePlayersOfGame();
       logger.d("players: $_players");
       if (_players.length > 0) {
         _selectedPlayer = _players[0];
