@@ -116,10 +116,10 @@ List<Widget> buildMenuList(BuildContext context, bool gameIsRunning,
         screen: StatisticsScreen(),
         children: [Text("")]),
     // Glossary
-    CollabsibleListEntry(
+    SimpleListEntry(
         text: StringsGeneral.lGlossary,
-        screen: GlossaryScreen(),
-        children: [Text("")]),
+        screen: GlossaryScreen())
+        //children: [Text("")]),
   ];
   if ((gameIsRunning || gameIsPaused) && !menuIsEllapsed) {
     menuList.add(GameIsRunningButton());
