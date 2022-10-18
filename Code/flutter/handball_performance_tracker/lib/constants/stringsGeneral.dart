@@ -104,6 +104,11 @@ class StringsGeneral {
   static const String lName = "Name";
   static const String lNumber = "Nummer";
   static const String lPosition = "Position";
+  static const String lGameNotAvailable = "Keine Spiele verfügbar";
+  static const String lDeleteGame = "Spiel löschen";
+  static const String lGameDeleteWarning = "Soll das Spiel wirklich gelöscht werden?";
+  static const String lCancel = "Abbrechen";
+  static const String lConfirm = "Bestätigen";
 
   static const String lFirstName = "Vorname";
   static const String lLastName = "Nachname";

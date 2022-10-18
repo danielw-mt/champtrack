@@ -258,6 +258,11 @@ class DatabaseRepository {
         .update(game.toMap());
   }
 
+  /// Delete a game from the "games" collection
+  Future<void> deleteGame(Game game) async {
+    await _loggedInClubReference.collection("games").doc(game.id).delete();
+  }
+
   // query all teams in db
   Stream<QuerySnapshot> getAllTeamsStream() {
     return _loggedInClubReference.collection("teams").snapshots();
