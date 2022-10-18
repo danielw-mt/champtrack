@@ -13,6 +13,7 @@ import 'package:rflutter_alert/rflutter_alert.dart';
 
 // A screen where all relevant Infos of a team can be edited (players, game history and team details like name)
 // screen that allows players to be selected including what players are on the field or on the bench (non selected)
+
 class TeamSettingsScreen extends StatelessWidget {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   // TODO Get.find instead of Get.put?
@@ -28,6 +29,9 @@ class TeamSettingsScreen extends StatelessWidget {
           initialIndex: gameController.getSelectedTeamSetting(),
           length: 3,
           child: Scaffold(
+              appBar: AppBar(
+                backgroundColor: buttonDarkBlueColor,
+                title: Text("Teams")),
               key: _scaffoldKey,
               drawer: NavDrawer(),
               // if drawer is closed notify, so if game is running the back to game button appears on next opening
@@ -38,21 +42,21 @@ class TeamSettingsScreen extends StatelessWidget {
               },
               bottomNavigationBar: TeamSettingsBar(),
               body: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     // Container for menu button on top left corner
-                    MenuButton(_scaffoldKey),
+                    //MenuButton(_scaffoldKey),
                     if (gameController.getSelectedTeamSetting() == 0) ...[
-                      Expanded( child: Center(
-                          child: SizedBox(
-                              height: MediaQuery.of(context).size.height * 0.6,
-                              child: PlayersList()))),
-                      Container(
-                        height: MediaQuery.of(context).size.height * 0.1,
-                        width: 20,
-                      ),
-                      Flexible(
+                      Expanded(
+                          //child: SizedBox(
+                          //height: MediaQuery.of(context).size.height * 0.6,
+                          child: PlayersList()),
+                      //Container(
+                      //  height: MediaQuery.of(context).size.height * 0.1,
+                      //  width: 20,
+                      //),
+                      Expanded(
                           child: Center(
                               child:
                                   //SizedBox(

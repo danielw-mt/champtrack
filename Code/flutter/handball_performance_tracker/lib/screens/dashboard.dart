@@ -30,6 +30,26 @@ class Dashboard extends StatelessWidget {
                     backgroundColor: backgroundColor,
                     key: _scaffoldKey,
                     drawer: NavDrawer(),
+                    appBar: AppBar(
+                      backgroundColor: buttonDarkBlueColor,
+                        title: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          padding: EdgeInsets.only(right: 10),
+                          child: new Image.asset(
+                            "assets/launcher_icon.png",
+                            height: MediaQuery.of(context).size.height * 0.1,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                        Text(
+                          persistentController.getLoggedInClub().name,
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 20),
+                        ),
+                      ],
+                    )),
                     // if drawer is closed notify, so if game is running the back to game button appears on next opening
                     onDrawerChanged: (isOpened) {
                       if (!isOpened) {
@@ -40,37 +60,18 @@ class Dashboard extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           // Upper white bar with menu button etc
-                          Container(
+                          /*Container(
                             color: Colors.white,
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 // Container for menu button on top left corner
-                                MenuButton(_scaffoldKey),
-                                Row(
-                                  children: [
-                                    Container(
-                                      padding: EdgeInsets.only(right: 10),
-                                      child: new Image.asset(
-                                        "assets/launcher_icon.png",
-                                        height: MediaQuery.of(context).size.height * 0.1,
-                                        fit: BoxFit.cover,
-                                      ),
-                                    ),
-                                    Text(
-                                      persistentController
-                                          .getLoggedInClub()
-                                          .name,
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 20),
-                                    ),
-                                  ],
-                                ),
+                                //MenuButton(_scaffoldKey),
+                                
                                 Text(""), // To be substituted by saison button
                               ],
                             ),
-                          ),
+                          ),*/
 
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
