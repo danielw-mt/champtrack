@@ -8,15 +8,24 @@ import '../../data/team.dart';
 import '../../constants/stringsGeneral.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
-class GameList extends StatelessWidget {
+// Widget is only statful so we can trigger a rebuild when we delete a game
+class GameList extends StatefulWidget {
   const GameList({super.key});
 
   @override
+  State<GameList> createState() => _GameListState();
+}
+
+class _GameListState extends State<GameList> {
+  TempController _tempController = Get.find<TempController>();
+  PersistentController _persistentController = Get.find<PersistentController>();
+  
+  @override
   Widget build(BuildContext context) {
-    TempController tempController = Get.find<TempController>();
-    PersistentController persistentController = Get.find<PersistentController>();
-    Team selectedTeam = tempController.getSelectedTeam();
-    List<Game> gamesList = persistentController.getAllGames(teamId: selectedTeam.id);
+    print("rebuild view");
+    Team selectedTeam = _tempController.getSelectedTeam();
+    List<Game> gamesList = _persistentController.getAllGames(teamId: selectedTeam.id);
+    print("gamesList: "+gamesList.length.toString());
     return SingleChildScrollView(
       child: DataTable(
         columns: const <DataColumn>[
@@ -54,31 +63,28 @@ class GameList extends StatelessWidget {
                     Alert(
                       context: context,
                       buttons: [],
-                      content: SizedBox(
-                        width: MediaQuery.of(context).size.width * 0.7,
-                        height: MediaQuery.of(context).size.height * 0.8,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Text(StringsGeneral.lGameDeleteWarning),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                ElevatedButton(
-                                    onPressed: () {
-                                      Navigator.pop(context);
-                                    },
-                                    child: Text(StringsGeneral.lCancel)),
-                                ElevatedButton(
-                                    onPressed: () {
-                                      persistentController.deleteGame(gamesList[index]);
-                                      Navigator.pop(context);
-                                    },
-                                    child: Text(StringsGeneral.lConfirm)),
-                              ],
-                            )
-                          ],
-                        ),
+                      content: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Text(StringsGeneral.lGameDeleteWarning),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              ElevatedButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: Text(StringsGeneral.lCancel)),
+                              ElevatedButton(
+                                  onPressed: () {
+                                    _persistentController.deleteGame(gamesList[index]);
+                                    setState(() {});
+                                    Navigator.pop(context);
+                                  },
+                                  child: Text(StringsGeneral.lConfirm)),
+                            ],
+                          )
+                        ],
                       ),
                     ).show();
                   },

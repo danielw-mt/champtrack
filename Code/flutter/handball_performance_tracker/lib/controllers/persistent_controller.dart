@@ -194,10 +194,6 @@ class PersistentController extends GetxController {
     _allGames.value = games;
   }
 
-  void addGame(Game game) {
-    _allGames.add(game);
-  }
-
   List<Game> getAllGames({String? teamId}) {
     // if there is a teamId provided only get the games corresponding to that team
     if (teamId != null) {
@@ -207,8 +203,8 @@ class PersistentController extends GetxController {
     return _allGames;
   }
 
-  void deleteGame(Game game){
-    repository.deleteGame(game);
+  void deleteGame(Game game) async {
+    await repository.deleteGame(game);
     _allGames.remove(game);
   }
 
