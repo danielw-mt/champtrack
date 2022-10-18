@@ -86,7 +86,7 @@ class PlayerFormState extends State<PlayerForm> {
   //   if (loggedInClub.id != null){
   //     this.player.clubId = loggedInClub.id!;
   //   }
-    
+
   // }
 
   @override
@@ -115,23 +115,6 @@ class PlayerFormState extends State<PlayerForm> {
                 style: TextStyle(fontWeight: FontWeight.bold))
             : Text(StringsGeneral.lPlayerCreateMode,
                 style: TextStyle(fontWeight: FontWeight.bold)),
-        SizedBox(
-          width: 0.15 * width,
-          height: 0.08 * height,
-          child: ElevatedButton(
-              style: ButtonStyle(
-                  backgroundColor:
-                      MaterialStateProperty.all<Color>(buttonGreyColor)),
-              onPressed: () {
-                tempController.deletePlayer(player);
-                Navigator.pop(context);
-              },
-              child: Text(StringsGeneral.lDeletePlayer,
-                  style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black))),
-        ),
       ]),
       Form(
         key: _formKey,
@@ -225,6 +208,7 @@ class PlayerFormState extends State<PlayerForm> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 FormField(
+                  // Team selection
                   builder: (state) => Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -275,6 +259,7 @@ class PlayerFormState extends State<PlayerForm> {
                   },
                 ),
                 FormField(
+                  // Position check boxes
                   builder: (state) => Column(
                     children: [
                       Text(StringsGeneral.lPosition),
@@ -349,53 +334,79 @@ class PlayerFormState extends State<PlayerForm> {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     Flexible(
-                      child: SizedBox(
-                        width: 0.15 * width,
-                        height: 0.08 * height,
-                        child: ElevatedButton(
-                          style: ButtonStyle(
-                              backgroundColor: MaterialStateProperty.all<Color>(
-                                  buttonLightBlueColor)),
-                          onPressed: () {
-                            // Validate returns true if the form is valid, or false otherwise.
-                            if (_formKey.currentState!.validate()) {
-                              player.firstName = firstNameController.text;
-                              player.lastName = lastNameController.text;
-                              player.nickName = nickNameController.text;
-                              player.number =
-                                  int.parse(shirtNumberController.text);
-                              // pop alert
-                              Navigator.pop(context);
-                              // display snackbar while data is stored in db
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                    content:
-                                        Text(StringsGeneral.lProcessingData)),
-                              );
-                              // Edit mode
-                              if (editModeEnabled) {
-                                tempController.setPlayer(player);
-                              } else {
-                                tempController.addPlayerToSelectedTeam(player);
-                              }
+                      child:
+                          //SizedBox(
+                          //width: 0.15 * width,
+                          // height: 0.08 * height,
+                          //child:
+                          ElevatedButton(
+                        style: ButtonStyle(
+                            backgroundColor: MaterialStateProperty.all<Color>(
+                                buttonLightBlueColor)),
+                        onPressed: () {
+                          // Validate returns true if the form is valid, or false otherwise.
+                          if (_formKey.currentState!.validate()) {
+                            player.firstName = firstNameController.text;
+                            player.lastName = lastNameController.text;
+                            player.nickName = nickNameController.text;
+                            player.number =
+                                int.parse(shirtNumberController.text);
+                            // pop alert
+                            Navigator.pop(context);
+                            // display snackbar while data is stored in db
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                  content:
+                                      Text(StringsGeneral.lProcessingData)),
+                            );
+                            // Edit mode
+                            if (editModeEnabled) {
+                              tempController.setPlayer(player);
+                            } else {
+                              tempController.addPlayerToSelectedTeam(player);
                             }
-                          },
-                          child: const Text(
-                            StringsGeneral.lSubmitButton,
-                            style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black),
-                          ),
+                          }
+                        },
+                        child: const Text(
+                          // Safe button
+                          StringsGeneral.lSubmitButton,
+                          style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black),
                         ),
                       ),
                     ),
                     Flexible(
+                      child: 
+                      //SizedBox(
+                        //width: 0.15 * width,
+                        //height: 0.08 * height,
+                        //child: 
+                        ElevatedButton(
+                            style: ButtonStyle(
+                                backgroundColor:
+                                    MaterialStateProperty.all<Color>(
+                                        buttonGreyColor)),
+                            onPressed: () {
+                              tempController.deletePlayer(player);
+                              Navigator.pop(context);
+                            },
+                            child: Text(StringsGeneral.lDeletePlayer,
+                                style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black))),
+                      
+                    ),
+                    Flexible(
                         // Cancel-Button
-                        child: SizedBox(
-                      width: 0.15 * width,
-                      height: 0.08 * height,
-                      child: ElevatedButton(
+                        child: 
+                        //SizedBox(
+                      //width: 0.15 * width,
+                      //height: 0.08 * height,
+                      //child:
+                       ElevatedButton(
                         style: ButtonStyle(
                             backgroundColor: MaterialStateProperty.all<Color>(
                                 buttonGreyColor)),
@@ -410,7 +421,7 @@ class PlayerFormState extends State<PlayerForm> {
                               color: Colors.black),
                         ),
                       ),
-                    ))
+                    )
                   ],
                 ),
               ),
