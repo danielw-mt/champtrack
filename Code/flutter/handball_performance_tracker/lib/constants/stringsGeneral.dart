@@ -98,7 +98,7 @@ class StringsGeneral {
   static const String lSamePlayer = "Gleicher Player";
   // Dashboard
   static const String lDashboard = "Dashboard";
-  static const String lManageTeams = "Mannschaften verwalten";
+  static const String lManageTeams = "Teams verwalten";
   static const String lTrackNewGame = "Neues Spiel tracken";
   // team settings screen
   static const String lName = "Name";
@@ -113,7 +113,7 @@ class StringsGeneral {
   static const String lDeletePlayer = "Löschen";
   static const String lNickName = "Spitzname";
   static const String lShirtNumber = "Trikotnummer";
-  static const String lTeams = "Mannschaften*";
+  static const String lTeams = "Teams";
   static const String lGoalkeeper = "TW";
   static const String lLeftBack = "RL";
   static const String lCenterBack = "RM";

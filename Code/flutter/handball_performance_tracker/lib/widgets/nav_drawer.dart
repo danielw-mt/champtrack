@@ -104,7 +104,7 @@ List<Widget> buildMenuList(BuildContext context, bool gameIsRunning,
     MenuHeader(),
     // Dashboard
     SimpleListEntry(text: StringsGeneral.lDashboard, screen: Dashboard()),
-    // Mannschaften
+    // Teams
     CollabsibleListEntry(
       text: StringsTeamManagement.lTeams,
       screen: TeamSelectionScreen(),

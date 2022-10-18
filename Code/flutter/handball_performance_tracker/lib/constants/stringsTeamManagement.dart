@@ -11,7 +11,7 @@ class StringsTeamManagement{
   static const String lDeletePlayer = "Löschen";
 
   static const String lShirtNumber = "Trikotnummer";
-  static const String lTeams = "Mannschaften";
+  static const String lTeams = "Teams";
   static const String lGoalkeeper = "TW";
   static const String lLeftBack = "RL";
   static const String lCenterBack = "RM";
