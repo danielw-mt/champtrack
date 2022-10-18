@@ -38,6 +38,7 @@ class _TeamStatisticsState extends State<TeamStatistics> {
     setState(() {
       _selectedTeam = team;
       _games = _persistentController.getAllGames(teamId: _selectedTeam.id);
+      _selectedGame = _games[0];
     });
   }
 

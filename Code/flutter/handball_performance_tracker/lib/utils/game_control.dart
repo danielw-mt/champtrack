@@ -120,6 +120,8 @@ void stopGame() async {
   //reset all data
   tempController.resetGameData(persistentController.getCurrentGame());
   persistentController.resetCurrentGame();
+  persistentController.addGame(currentGame);
+  persistentController.generateStatistics();
 }
 
 void _addGameToPlayers(Game game) {
