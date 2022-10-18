@@ -30,19 +30,19 @@ class StringsGameScreen {
   // game_actions.dart & action_feed.dart
   static const String lRedCard = "Rote Karte";
   static const String lYellowCard = "Gelbe Karte";
-  static const String lTimePenalty = "Zeitstrafe";
+  static const String lTimePenalty = "Zeitstrafe verursacht";
   static const String lGoal = "Tor";
   static const String lOneVsOneAnd7m = "1v1 mit 7m Folge";
   static const String lTwoMin = "2min ziehen";
   static const String lErrThrow = "Fehlwurf";
   static const String lErrThrowGoalkeeper = "Fehlwurf Torwart";
-  static const String lTrf = "Tech. Fehler";
+  static const String lTrf = "TRF";
   static const String lFoul7m = "Foul mit 7m Folge";
   static const String lBlockNoBall = "Block ohne Ballgewinn";
   static const String lBlockAndSteal = "Block & Steal";
   static const String lParade = "Parade";
   static const String lBadPass = "Fehlpass";
-  static const String lGoalOpponent = "Tor Gegner";
+  static const String lGoalOpponent = "Gegentor";
   static const String lGoalGoalkeeper = "Tor Torwart";
   static const String lEmptyGoal = "Tor Gegner \n Empty Goal";
   static const String lAssist = "Assist";

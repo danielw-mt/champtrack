@@ -231,7 +231,7 @@ class MenuHeader extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         // Icon
-        Container(
+        /*Container(
             decoration: BoxDecoration(
                 color: buttonGreyColor,
                 // set border so corners can be made round
@@ -244,7 +244,7 @@ class MenuHeader extends StatelessWidget {
             padding: EdgeInsets.all(10),
             child: Text(
               "HC",
-            )),
+            )),*/
 
         // Use FittedBox to dynamically resize text
         Expanded(
