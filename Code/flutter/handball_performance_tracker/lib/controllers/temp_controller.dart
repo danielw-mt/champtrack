@@ -43,9 +43,9 @@ class TempController extends GetxController {
 
   /// remove selected team from list of teams in persistent controller
   /// and set selected team to one that is available
-  void deleteSelectedTeam() {
+  void deleteSelectedTeam() async {
     PersistentController persistentController = Get.find<PersistentController>();
-    persistentController.deleteTeam(_selectedTeam.value);
+    await persistentController.deleteTeam(_selectedTeam.value);
     // set selected team to default team if no teams are available
     if (persistentController.getAvailableTeams().length > 0) {
       _selectedTeam.value = persistentController.getAvailableTeams()[0];

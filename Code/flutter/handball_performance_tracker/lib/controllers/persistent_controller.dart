@@ -66,7 +66,7 @@ class PersistentController extends GetxController {
     tempController.update(["players-list"]);
   }
 
-  void deleteTeam(Team team) async {
+  Future<void> deleteTeam(Team team) async {
     logger.d("deleting team: " + team.name);
     await repository.deleteTeam(team);
     _cachedTeamsList.remove(team);
