@@ -35,14 +35,14 @@ class Dashboard extends StatelessWidget {
                         title: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Container(
+                        /*Container(
                           padding: EdgeInsets.only(right: 10),
                           child: new Image.asset(
                             "assets/launcher_icon.png",
                             height: MediaQuery.of(context).size.height * 0.1,
                             fit: BoxFit.cover,
                           ),
-                        ),
+                        ),*/
                         Text(
                           persistentController.getLoggedInClub().name,
                           style: TextStyle(
@@ -57,7 +57,7 @@ class Dashboard extends StatelessWidget {
                       }
                     },
                     body: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           // Upper white bar with menu button etc
                           /*Container(
