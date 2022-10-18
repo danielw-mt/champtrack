@@ -353,13 +353,24 @@ class PlayerFormState extends State<PlayerForm> {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(content: Text(StringsGeneral.lProcessingData)),
                               );
-                              // Edit mode
-                              if (editModeEnabled) {
+                              // If the player already exists they have an ID and we just need to update them
+                              if (player.id != null) {
+                                // update player
                                 tempController.setPlayer(player);
-                                // Add new player mode
+                                logger.d("edit mode");
                               } else {
+                                // add player
                                 tempController.addPlayer(player);
+                                logger.d("new player mode");
                               }
+
+                              // TODO remove this if the code above works
+                              // if (editModeEnabled) {
+                              //   tempController.setPlayer(player);
+                              //   // Add new player mode
+                              // } else {
+                              //   tempController.addPlayer(player);
+                              // }
                             }
                           },
                           child: const Text(

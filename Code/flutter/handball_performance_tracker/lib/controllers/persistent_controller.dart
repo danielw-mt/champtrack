@@ -46,6 +46,12 @@ class PersistentController extends GetxController {
     return _cachedTeamsList;
   }
 
+  void removePlayerFromTeams(Player player) {
+    player.teams.forEach((String teamId) { 
+      _cachedTeamsList.where((Team team) => teamId.contains(team.id!)).first.players.remove(player);
+    });
+  }
+
   void addTeam(String name, String type) async {
     TempController tempController = Get.find<TempController>();
     Team newTeam = Team(name: name, type: type, players: [], onFieldPlayers: []);

@@ -90,43 +90,88 @@ class TempController extends GetxController {
     return _selectedTeam.value.players;
   }
 
-  // TODO update that player should only be part of teams that they belong to
+  /// update/edit player with provided @param player
   void setPlayer(Player player) {
+    // update player in selected team
     _selectedTeam.value.players.where((Player playerElement) => playerElement.id == player.id).toList().first = player;
     repository.updatePlayer(player);
+    // try to add the player to all the teams that are assigned in the player.teams property
+    addPlayer(player);
+    // get all the teams the player is not in
+    // TODO remove circular persistentController dependency if possible. Not critical for now
+    PersistentController persistentController = Get.find<PersistentController>();
+    List<Team> allTeams = persistentController.getAvailableTeams();
+    List<Team> teamsWithoutPlayer = allTeams.where((Team team) => !player.teams.contains('teams/' + team.id!)).toList();
+    teamsWithoutPlayer.forEach((element) {
+      logger.d(element.name);
+    });
+    // try to remove the player from all these teams
+    teamsWithoutPlayer.forEach((Team team) {
+      team.players.forEach((Player teamPlayer) {
+        logger.d(teamPlayer.lastName);
+      });
+      if (team.players.contains(player)) {
+        logger.d("removing player from team " + team.name);
+        team.players.remove(player);
+        repository.updateTeam(team);
+        persistentController.updateTeam(team);
+      }
+    });
+
+    // also update selected team
+    if (teamsWithoutPlayer.contains(_selectedTeam.value)) {
+      _selectedTeam.value.players.remove(player);
+    }
     update(["players-list"]);
   }
 
   /// deleting player from game state and firebase
   void deletePlayer(Player player) async {
-    _selectedTeam.value.players.remove(player);
+    if (_selectedTeam.value.players.contains(player)) {
+      _selectedTeam.value.players.remove(player);
+    }
     if (_selectedTeam.value.onFieldPlayers.contains(player)) {
       _selectedTeam.value.onFieldPlayers.remove(player);
     }
+    PersistentController persistentController = Get.find<PersistentController>();
+    persistentController.removePlayerFromTeams(player);
     repository.deletePlayer(player);
     update(["players-list"]);
   }
 
   /// Adds player to the teams that they are assigned to (player.teams property)
   /// Also adds player to players collection
+  /// TODO do not addPlayer to a team if they are already part of that team
   void addPlayer(Player player) async {
-    print("add player to selected team");
     // TODO not critical but try to avoid circular dependency
     PersistentController persistentController = Get.find<PersistentController>();
     // if the player is not already in the selected team add the selected team
-    if (!player.teams.contains('teams/' + _selectedTeam.value.id.toString())) {
-      print("player not already in selected team");
-      player.teams.add(_selectedTeam.value.id.toString());
+
+    // TODO not sure if we need this part
+    // if (!player.teams.contains('teams/' + _selectedTeam.value.id.toString())) {
+    //   print("player not already in selected team");
+    //   player.teams.add(_selectedTeam.value.id.toString());
+    // }
+    // add player to players if they haven't been added before. Basically player has an id when they were previously added to firebase collection
+    if (player.id == null) {
+      DocumentReference docRef = await repository.addPlayer(player);
+      player.id = docRef.id;
     }
-    DocumentReference docRef = await repository.addPlayer(player);
-    player.id = docRef.id;
     // add player to each team inside references
     player.teams.forEach((String teamReference) async {
-      print("adding player $teamReference team in firebase");
+      logger.d("adding player $teamReference team in firebase");
       Team relevantTeam = persistentController.getSpecificTeam(teamReference);
-      await repository.addPlayerToTeam(player, relevantTeam);
+      // only add player to team if they are not already part of that team
+      if (!relevantTeam.players.contains(player)) {
+        relevantTeam.players.add(player);
+        await repository.addPlayerToTeam(player, relevantTeam);
+      }
     });
-    _selectedTeam.value.players.add(player);
+    // if player should be added to selected team, add them
+    if (player.teams.contains(_selectedTeam)) {
+      logger.d("add player to selected team");
+      _selectedTeam.value.players.add(player);
+    }
     update(["players-list"]);
   }
 
