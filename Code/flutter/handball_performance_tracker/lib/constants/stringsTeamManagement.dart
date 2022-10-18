@@ -19,7 +19,7 @@ class StringsTeamManagement{
   static const String lLeftWinger = "LA";
   static const String lCenterForward = "KR";
   static const String lRightWinger = "RA";
-  static const String lPlayerStartingOnField = "Spieler in Startaufstellung";
+  static const String lPlayerStartingOnField = "Player in Startaufstellung";
 
   static const String lDeleteTeam = "Team löschen";
   static const String lConfirmDeleteTeam = "Soll das Team wirklich gelöscht werden?";
@@ -28,5 +28,5 @@ class StringsTeamManagement{
 
   static const String lAddTeam = "Team hinzufügen";
   static const String lEditTeam = "Team bearbeiten";
-  static const String lAddPlayer = "Spieler hinzufügen";
+  static const String lAddPlayer = "Player hinzufügen";
 }

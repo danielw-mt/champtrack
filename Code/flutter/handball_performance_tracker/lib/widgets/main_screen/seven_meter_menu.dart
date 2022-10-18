@@ -46,7 +46,7 @@ void callSevenMeterMenu(BuildContext context, bool belongsToHomeTeam) {
                 height: MediaQuery.of(context).size.height * 0.4,
                 child: Column(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
                   Expanded(child: buildDialogButtonMenu(bcontext, belongsToHomeTeam)),
-                ] // Column of "Spieler", horizontal line and Button-Row
+                ] // Column of "Player", horizontal line and Button-Row
                     )));
       });
 }
