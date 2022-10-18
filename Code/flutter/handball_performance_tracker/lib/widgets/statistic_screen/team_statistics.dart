@@ -10,6 +10,7 @@ import '../../controllers/temp_controller.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 import 'statistic_dropdowns.dart';
+import '../../constants/game_actions.dart';
 
 class TeamStatistics extends StatefulWidget {
   const TeamStatistics({Key? key}) : super(key: key);
@@ -165,9 +166,9 @@ class _TeamStatisticsState extends State<TeamStatistics> {
                   // only pass the penalty values if they can be found in the actionCounts map
                   // if there is no value for that penalty pass 0
                   child: PenaltyInfoCard(
-                    redCards: actionCounts[redCard] == null ? 0 : actionCounts[redCard]!,
-                    yellowCards: actionCounts[yellowCard] == null ? 0 : actionCounts[yellowCard]!,
-                    timePenalties: actionCounts[timePenalty] == null ? 0 : actionCounts[timePenalty]!,
+                    redCards: actionCounts[redCardTag] == null ? 0 : actionCounts[redCardTag]!,
+                    yellowCards: actionCounts[yellowCardTag] == null ? 0 : actionCounts[yellowCardTag]!,
+                    timePenalties: actionCounts[timePenaltyTag] == null ? 0 : actionCounts[timePenaltyTag]!,
                   ),
                 ),
                 Expanded(

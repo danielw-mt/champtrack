@@ -205,12 +205,12 @@ class StatisticsEngine {
       // TODO maybe incorporate timestamps later when the ef-score has a time component
       LiveEfScore playerEfScore = LiveEfScore();
       List<String> allActions = playerStatistic["all_actions"];
-      allActions.forEach((String actionType) {
+      allActions.forEach((String actionTag) {
         // for some of our action tags the ef-score does not know what to do. So just keep the ef-score the same for those
         try {
-          playerEfScore.addAction(GameAction(actionType: actionType), players.where((player) => player.id == playerId).first.positions);
+          playerEfScore.addAction(GameAction(tag: actionTag), players.where((player) => player.id == playerId).first.positions);
         } catch (e) {
-          logger.d("ef-score does not know what to do with action $actionType" + "\n" + e.toString());
+          logger.d("ef-score does not know what to do with action $actionTag" + "\n" + e.toString());
         }
         playerStatistic["ef_score_series"].add(playerEfScore.score);
       });

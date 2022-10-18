@@ -10,7 +10,7 @@ import '../../controllers/temp_controller.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 import 'statistic_dropdowns.dart';
-
+import '../../constants/game_actions.dart';
 
 var logger = Logger(
   printer: PrettyPrinter(
@@ -43,27 +43,26 @@ class _PlayerStatisticsState extends State<PlayerStatistics> {
   @override
   void initState() {
     _players = _tempController.getPlayersFromSelectedTeam();
-    
     _teams = _persistentController.getAvailableTeams();
     // if's are for index safety
-    if (_players.length > 0){
-       _selectedPlayer = _players[0];
-    // if there are no players don't display any games
+    if (_players.length > 0) {
+      _selectedPlayer = _players[0];
+      // if there are no players don't display any games
     } else {
       _games = [];
     }
-    if (_games.length > 0){
+    if (_games.length > 0) {
       _selectedGame = _games[0];
     }
-    if (_teams.length > 0){
+    if (_teams.length > 0) {
       _selectedTeam = _tempController.getSelectedTeam();
       _games = _persistentController.getAllGames(teamId: _selectedTeam.id);
-    // if there are no teams ofc there are no players and no games
+      // if there are no teams ofc there are no players and no games
     } else {
       _players = [];
       _games = [];
     }
-    
+
     _statistics = _persistentController.getStatistics();
     super.initState();
   }
@@ -77,6 +76,7 @@ class _PlayerStatisticsState extends State<PlayerStatistics> {
   void onGameSelected(Game game) {
     setState(() {
       _selectedGame = game;
+      _updatePlayersOfGame();
     });
   }
 
@@ -84,15 +84,39 @@ class _PlayerStatisticsState extends State<PlayerStatistics> {
     setState(() {
       _selectedTeam = team;
       _games = _persistentController.getAllGames(teamId: _selectedTeam.id);
-      _players = _persistentController.getAllPlayers(teamId: _selectedTeam.id);
+      _updatePlayersOfGame();
       logger.d("players: $_players");
-      if (_players.length > 0){
-      _selectedPlayer = _players[0];
+      if (_players.length > 0) {
+        _selectedPlayer = _players[0];
       }
-      if (_games.length > 0){
+      if (_games.length > 0) {
         _selectedGame = _games[0];
       }
     });
+  }
+
+  // TODO implement this function
+  /// get all players from selected team that player in the selected game
+  _updatePlayersOfGame() {
+    // if no game has been selected yet i.e. there is no game available for the previous team
+    if (_selectedGame.id == null){
+      _selectedGame = _games[0];
+    }
+    List<Player> allPlayersInTeam = _persistentController.getAllPlayers(teamId: _selectedTeam.id);
+    Map<String, dynamic> gameStats = _statistics[_selectedGame.id];
+    logger.d("gameStats: $gameStats");
+    Map<String, dynamic> playerStats = gameStats["player_stats"];
+    List<String> playerIDsOfGame = playerStats.keys.toList();
+    logger.d("all player ids");
+    allPlayersInTeam.forEach((player) {
+      logger.d(player.id);
+    });
+    logger.d("all player id s in game");
+    playerIDsOfGame.forEach((playerID) {
+      logger.d(playerID);
+    });
+    List<Player> playersInGame = allPlayersInTeam.where((Player player) => playerIDsOfGame.contains(player.id)).toList();
+    _players = playersInGame;
   }
 
   @override
@@ -205,9 +229,9 @@ class _PlayerStatisticsState extends State<PlayerStatistics> {
                   // only pass the penalty values if they can be found in the actionCounts map
                   // if there is no value for that penalty pass 0
                   child: PenaltyInfoCard(
-                    redCards: actionCounts[redCard] == null ? 0 : actionCounts[redCard]!,
-                    yellowCards: actionCounts[yellowCard] == null ? 0 : actionCounts[yellowCard]!,
-                    timePenalties: actionCounts[timePenalty] == null ? 0 : actionCounts[timePenalty]!,
+                    redCards: actionCounts[redCardTag] == null ? 0 : actionCounts[redCardTag]!,
+                    yellowCards: actionCounts[yellowCardTag] == null ? 0 : actionCounts[yellowCardTag]!,
+                    timePenalties: actionCounts[timePenaltyTag] == null ? 0 : actionCounts[timePenaltyTag]!,
                   ),
                 ),
                 Expanded(

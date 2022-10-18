@@ -4,8 +4,8 @@ import 'package:handball_performance_tracker/data/player.dart';
 import 'package:handball_performance_tracker/utils/feed_logic.dart';
 import 'package:handball_performance_tracker/utils/player_helper.dart';
 import 'package:handball_performance_tracker/widgets/main_screen/field.dart';
-import '../../../controllers/persistentController.dart';
-import '../../../controllers/tempController.dart';
+import '../../../controllers/persistent_controller.dart';
+import '../../../controllers/temp_controller.dart';
 import 'package:get/get.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import '../../../data/game_action.dart';
@@ -15,7 +15,6 @@ import 'dart:math';
 import '../../../constants/positions.dart';
 import '../../../utils/field_control.dart';
 import 'package:logger/logger.dart';
-
 
 var logger = Logger(
   printer: PrettyPrinter(
