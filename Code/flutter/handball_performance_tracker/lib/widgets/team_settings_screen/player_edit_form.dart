@@ -164,7 +164,8 @@ class PlayerFormState extends State<PlayerForm> {
               children: [
                 SizedBox(
                   width: width * 0.25,
-                  child: TextFormField(
+                  child: Container(),
+                  /*TextFormField(
                     controller: nickNameController,
                     style: TextStyle(fontSize: 18),
                     decoration: getDecoration(StringsGeneral.lNickName),
@@ -175,7 +176,7 @@ class PlayerFormState extends State<PlayerForm> {
                       // }
                       return null;
                     },
-                  ),
+                  ),*/
                 ),
                 SizedBox(
                   width: width * 0.25,
