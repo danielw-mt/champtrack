@@ -10,7 +10,7 @@ class ComparisonStatistics extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // show image statistics3_overlay.jpg from assests folder
-    return Center(child: Image(image: AssetImage('assets/statistics3_overlay.jpg')));
+    return Center(child: Image(image: AssetImage('images/statistics3_overlay.jpg')));
 
     
     /*return Row(

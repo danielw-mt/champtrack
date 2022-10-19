@@ -34,7 +34,7 @@ class Dashboard extends StatelessWidget {
                             /*Container(
                           padding: EdgeInsets.only(right: 10),
                           child: new Image.asset(
-                            "assets/launcher_icon.png",
+                            "images/launcher_icon.png",
                             height: MediaQuery.of(context).size.height * 0.1,
                             fit: BoxFit.cover,
                           ),
@@ -117,7 +117,7 @@ class Dashboard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text("Loading...", style: TextStyle(fontSize: 20, color: Colors.blue)),
-                Image.asset("assets/goalee_gif.gif"),
+                Image.asset("images/goalee_gif.gif"),
                 CircularProgressIndicator(
                   strokeWidth: 4,
                 )

@@ -244,7 +244,7 @@ class _PlayerStatisticsState extends State<PlayerStatistics> {
                 ),
                 Expanded(
                   flex: 4,
-                  child: Card(child: Image(image: AssetImage('statistics2_heatmap.png'))),
+                  child: Card(child: Image(image: AssetImage('images/statistics2_heatmap.jpg'))),
                 )
               ],
             )),
