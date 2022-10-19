@@ -23,7 +23,7 @@ class _GameListState extends State<GameList> {
   @override
   void initState() {
     Team selectedTeam = _tempController.getSelectedTeam();
-    _gamesList =  _persistentController.getAllGames(teamId: selectedTeam.id);
+    _gamesList = _persistentController.getAllGames(teamId: selectedTeam.id);
     super.initState();
   }
 
@@ -46,10 +46,14 @@ class _GameListState extends State<GameList> {
           _gamesList.length,
           (int index) {
             return DataRow(
-              color: MaterialStateProperty.resolveWith<Color?>((Set<MaterialState> states) {
+              color: MaterialStateProperty.resolveWith<Color?>(
+                  (Set<MaterialState> states) {
                 // All rows will have the same selected color.
                 if (states.contains(MaterialState.selected)) {
-                  return Theme.of(context).colorScheme.primary.withOpacity(0.08);
+                  return Theme.of(context)
+                      .colorScheme
+                      .primary
+                      .withOpacity(0.08);
                 }
                 // Even rows will have a grey color.
                 if (index.isEven) {
@@ -59,10 +63,11 @@ class _GameListState extends State<GameList> {
               }),
               cells: <DataCell>[
                 DataCell(Text(_gamesList[index].opponent!)),
-                DataCell(Text(_gamesList[index].date.toString().substring(0, 10))),
+                DataCell(
+                    Text(_gamesList[index].date.toString().substring(0, 10))),
                 DataCell(Text(_gamesList[index].location!)),
                 DataCell(GestureDetector(
-                  child: Icon(Icons.delete),
+                  child: Center(child: Icon(Icons.delete)),
                   onTap: () {
                     Alert(
                       context: context,
@@ -81,7 +86,8 @@ class _GameListState extends State<GameList> {
                                   child: Text(StringsGeneral.lCancel)),
                               ElevatedButton(
                                   onPressed: () {
-                                    _persistentController.deleteGame(_gamesList[index]);
+                                    _persistentController
+                                        .deleteGame(_gamesList[index]);
                                     setState(() {
                                       _gamesList.removeAt(index);
                                     });

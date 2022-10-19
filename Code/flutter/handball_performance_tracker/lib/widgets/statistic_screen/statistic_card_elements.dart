@@ -26,7 +26,7 @@ class PenaltyInfoCard extends StatelessWidget {
                 Flexible(
                   flex: 1,
                   child: IconButton(
-                      icon: Image.asset('statistic_screen/yellow_card_button.png'),
+                      icon: Image.asset('assets/statistic_screen/yellow_card_button.png'),
                       onPressed: () {
                         // do nothing
                       }),
@@ -45,7 +45,7 @@ class PenaltyInfoCard extends StatelessWidget {
                 Flexible(
                   flex: 1,
                   child: IconButton(
-                    icon: Image.asset('statistic_screen/red_card_button.png'),
+                    icon: Image.asset('assets/statistic_screen/red_card_button.jpg'),
                     onPressed: () {
                       // do nothing
                     },
@@ -65,7 +65,7 @@ class PenaltyInfoCard extends StatelessWidget {
                 Flexible(
                   flex: 1,
                   child: IconButton(
-                    icon: Image.asset('statistic_screen/time_penalty_button.png'),
+                    icon: Image.asset('assets/statistic_screen/time_penalty_button.png'),
                     onPressed: () {
                       // do nothing
                     },

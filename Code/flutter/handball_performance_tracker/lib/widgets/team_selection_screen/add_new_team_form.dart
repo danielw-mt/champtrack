@@ -64,83 +64,66 @@ class NewTeamFormState extends State<NewTeamForm> {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     return Column(children: [
-      Text(StringsGeneral.lAddTeam),
+      //Text(StringsGeneral.lAddTeam),
       Form(
         key: _formKey,
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                SizedBox(
-                  width: width * 0.25,
-                  child: TextFormField(
-                    style: TextStyle(fontSize: 18),
-                    decoration: getDecoration(StringsGeneral.lTeam),
-                    controller: teamNameController,
-                    // The validator receives the text that the user has entered.
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return StringsGeneral.lTextFieldEmpty;
-                      }
-                      return null;
-                    },
-                  ),
-                ),
-              ],
+            SizedBox(
+              width: width * 0.25,
+              child: TextFormField(
+                style: TextStyle(fontSize: 18),
+                decoration: getDecoration(StringsGeneral.lTeam),
+                controller: teamNameController,
+                // The validator receives the text that the user has entered.
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return StringsGeneral.lTextFieldEmpty;
+                  }
+                  return null;
+                },
+              ),
             ),
-            Container(
-              height: 20,
+            FormField(
+              builder: (state) => Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(StringsGeneral.lTeamTypes),
+                  SizedBox(
+                      width: width * 0.25,
+                      height: 100,
+                      child: ListView.builder(
+                          itemCount: teamTypes.length,
+                          itemBuilder: (context, index) {
+                            String relevantTeamType = teamTypes[index];
+                            return Row(
+                              children: [
+                                Checkbox(
+                                    fillColor: MaterialStateProperty.all<Color>(
+                                        buttonDarkBlueColor),
+                                    value: isTeamTypeSelected(relevantTeamType),
+                                    onChanged: (value) {
+                                      setState(() {
+                                        if (value == true) {
+                                          selectedTeamType = index;
+                                        }
+                                      });
+                                    }),
+                                Text(relevantTeamType)
+                              ],
+                            );
+                          })),
+                  Text(
+                    state.errorText ?? '',
+                    style: TextStyle(
+                      color: Theme.of(context).errorColor,
+                    ),
+                  )
+                ],
+              ),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                FormField(
-                  builder: (state) => Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(StringsGeneral.lTeamTypes),
-                      SizedBox(
-                          width: width * 0.25,
-                          height: 100,
-                          child: ListView.builder(
-                              itemCount: teamTypes.length,
-                              itemBuilder: (context, index) {
-                                String relevantTeamType = teamTypes[index];
-                                return Row(
-                                  children: [
-                                    Text(relevantTeamType),
-                                    Checkbox(
-                                        fillColor:
-                                            MaterialStateProperty.all<Color>(
-                                                buttonDarkBlueColor),
-                                        value: isTeamTypeSelected(
-                                            relevantTeamType),
-                                        onChanged: (value) {
-                                          setState(() {
-                                            if (value == true) {
-                                              selectedTeamType = index;
-                                            }
-                                          });
-                                        })
-                                  ],
-                                );
-                              })),
-                      Text(
-                        state.errorText ?? '',
-                        style: TextStyle(
-                          color: Theme.of(context).errorColor,
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-              ],
-            ),
-            Container(
-              height: 20,
-            ),
+
             // Submit button
             Container(
               alignment: Alignment.bottomCenter,
@@ -151,45 +134,6 @@ class NewTeamFormState extends State<NewTeamForm> {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     Flexible(
-                      child: SizedBox(
-                        width: 0.15 * width,
-                        height: 0.08 * height,
-                        child: ElevatedButton(
-                          style: ButtonStyle(
-                              backgroundColor: MaterialStateProperty.all<Color>(
-                                  buttonLightBlueColor)),
-                          onPressed: () {
-                            // Validate returns true if the form is valid, or false otherwise.
-                            if (_formKey.currentState!.validate()) {
-                              persistentController.addTeam(
-                                  teamNameController.text,
-                                  TEAM_TYPE_MAPPING[selectedTeamType]);
-                              Navigator.pop(context);
-                              if (persistentController
-                                      .getAvailableTeams()
-                                      .length ==
-                                  1) {
-                                tempController.setSelectedTeam(
-                                    persistentController
-                                        .getAvailableTeams()[0]);
-                              }
-                            }
-                          },
-                          child: const Text(
-                            StringsGeneral.lSubmitButton,
-                            style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black),
-                          ),
-                        ),
-                      ),
-                    ),
-                    Flexible(
-                        // Cancel-Button
-                        child: SizedBox(
-                      width: 0.15 * width,
-                      height: 0.08 * height,
                       child: ElevatedButton(
                         style: ButtonStyle(
                             backgroundColor: MaterialStateProperty.all<Color>(
@@ -205,7 +149,37 @@ class NewTeamFormState extends State<NewTeamForm> {
                               color: Colors.black),
                         ),
                       ),
-                    ))
+                    ),
+                    Flexible(
+                      child: ElevatedButton(
+                        style: ButtonStyle(
+                            backgroundColor: MaterialStateProperty.all<Color>(
+                                buttonLightBlueColor)),
+                        onPressed: () {
+                          // Validate returns true if the form is valid, or false otherwise.
+                          if (_formKey.currentState!.validate()) {
+                            persistentController.addTeam(
+                                teamNameController.text,
+                                TEAM_TYPE_MAPPING[selectedTeamType]);
+                            Navigator.pop(context);
+                            if (persistentController
+                                    .getAvailableTeams()
+                                    .length ==
+                                1) {
+                              tempController.setSelectedTeam(
+                                  persistentController.getAvailableTeams()[0]);
+                            }
+                          }
+                        },
+                        child: const Text(
+                          StringsGeneral.lSubmitButton,
+                          style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black),
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ),
