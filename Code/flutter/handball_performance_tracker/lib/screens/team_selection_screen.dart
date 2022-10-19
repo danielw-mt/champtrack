@@ -17,8 +17,7 @@ class TeamSelectionScreen extends StatelessWidget {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   // TODO Get.find instead of Get.put?
   final TempController tempController = Get.put(TempController());
-  final PersistentController persistentController =
-      Get.find<PersistentController>();
+  final PersistentController persistentController = Get.find<PersistentController>();
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -29,9 +28,7 @@ class TeamSelectionScreen extends StatelessWidget {
           initialIndex: gameController.getSelectedTeamSetting(),
           length: 3,
           child: Scaffold(
-            appBar: AppBar(
-                backgroundColor: buttonDarkBlueColor,
-                title: Text("Teams")),
+              appBar: AppBar(backgroundColor: buttonDarkBlueColor, title: Text("Teams")),
               key: _scaffoldKey,
               drawer: NavDrawer(),
               // if drawer is closed notify, so if game is running the back to game button appears on next opening
@@ -41,49 +38,46 @@ class TeamSelectionScreen extends StatelessWidget {
                 }
               },
               bottomNavigationBar: TeamTypeSelectionBar(),
-              body: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    //MenuButton(_scaffoldKey),
-                    // TODO implement team cards here instead of dropdown
-                    Center(child: TeamDropdown()),
+              body: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                //MenuButton(_scaffoldKey),
+                // TODO implement team cards here instead of dropdown
+                Center(child: TeamDropdown()),
 
-                    Container(
-                      height: 20,
-                    ),
-                    // don't display edit button if there are no teams
-                    Center(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          persistentController.getAvailableTeams().length == 0
-                              ? Container()
-                              : Flexible(
-                                  child: ElevatedButton(
-                                      onPressed: () {
-                                        Get.to(() => TeamSettingsScreen());
-                                      },
-                                      child:
-                                          Text(StringsTeamManagement.lEditTeam)),
-                                ),
-                          Container(
-                            width: 20,
-                          ),
-                          Flexible(
-                            child: ElevatedButton(
-                              onPressed: (() => showDialog(
-                                  context: context,
-                                  builder: (context) => AlertDialog(
-                                        title: Text(StringsGeneral.lAddTeam),
-                                        content: NewTeamForm(),
-                                      ))),
-                              child: Text(StringsTeamManagement.lAddTeam),
+                Container(
+                  height: 20,
+                ),
+                // don't display edit button if there are no teams
+                Center(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      persistentController.getAvailableTeams().length == 0
+                          ? Container()
+                          : Flexible(
+                              child: ElevatedButton(
+                                  onPressed: () {
+                                    Get.to(() => TeamSettingsScreen());
+                                  },
+                                  child: Text(StringsTeamManagement.lManageTeam)),
                             ),
-                          )
-                        ],
+                      Container(
+                        width: 20,
                       ),
-                    ),
-                  ])),
+                      Flexible(
+                        child: ElevatedButton(
+                          onPressed: (() => showDialog(
+                              context: context,
+                              builder: (context) => AlertDialog(
+                                    title: Text(StringsGeneral.lAddTeam),
+                                    content: NewTeamForm(),
+                                  ))),
+                          child: Text(StringsTeamManagement.lAddTeam),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ])),
         );
       },
     ));
