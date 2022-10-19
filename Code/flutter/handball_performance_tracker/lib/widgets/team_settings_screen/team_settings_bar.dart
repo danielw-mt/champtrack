@@ -34,7 +34,7 @@ class TeamSettingsBar extends StatelessWidget {
               ),
               Tab(
                 text: StringsGeneral.lTeamDetails,
-                icon: Icon(Icons.book),
+                icon: Icon(Icons.settings),
               ),
             ],
           ),

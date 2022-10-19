@@ -66,7 +66,7 @@ class StringsGeneral {
 
   // team_settings_bar.dart
   static const String lGames = "Spiele";
-  static const String lTeamDetails = "Team Details";
+  static const String lTeamDetails = "Team Einstellungen";
 
   // start game screen
   static const String lBack = "Zurück";
