@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:handball_performance_tracker/constants/game_actions.dart';
+import 'package:handball_performance_tracker/constants/stringsGeneral.dart';
 import 'package:handball_performance_tracker/controllers/persistent_controller.dart';
 import 'package:handball_performance_tracker/controllers/temp_controller.dart';
 import 'statistic_card_elements.dart';
@@ -113,7 +114,7 @@ class _GameSelectorState extends State<GameSelector> {
       logger.d("Game selector cannot be displayer because there are no games");
     }
     if (widget.games.length == 0){
-      return Text("No games found");
+      return Text(StringsGeneral.lNoTeamStats);
     }
     if (!widget.games.contains(_selectedGame)){
       _selectedGame = widget.games[0];

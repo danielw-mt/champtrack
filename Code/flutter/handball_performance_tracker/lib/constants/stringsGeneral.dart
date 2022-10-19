@@ -140,4 +140,7 @@ class StringsGeneral {
   static const String lAddTeam = "Team hinzufügen";
   static const String lTeamTypes = "Teamtypen";
   static const String lNoTeamsWarning = "Keine Teams vorhanden. Bitte zuerst anlegen";
+
+  // statistic screen
+  static const String lNoTeamStats = "Keine Spiel-Statistiken verfügbar";
 }

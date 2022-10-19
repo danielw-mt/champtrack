@@ -6,6 +6,7 @@ import '../../constants/stringsGeneral.dart';
 import '../../controllers/temp_controller.dart';
 import '../../constants/colors.dart';
 import '../../data/team.dart';
+import '../../constants/team_constants.dart';
 
 // Create a Form widget.
 class TeamDetailsForm extends StatefulWidget {
@@ -128,7 +129,7 @@ class TeamDetailsFormState extends State<TeamDetailsForm> {
                           );
                           Team newTeam = tempController.getSelectedTeam();
                           newTeam.name = teamNameController.text;
-                          newTeam.type = teamTypes[selectedTeamType];
+                          newTeam.type = TEAM_TYPE_MAPPING[selectedTeamType];
                           tempController.setSelectedTeam(newTeam);
                         }
                       },

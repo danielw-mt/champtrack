@@ -30,23 +30,31 @@ class StatisticsEngine {
   generateStatistics(List<Map<String, dynamic>> gameDocuments, List<Player> players) {
     logger.d("generate game statistics");
     gameDocuments.forEach((Map<String, dynamic> gameDocument) {
-      List<Map<String, dynamic>> actions = gameDocument["actions"];
-      // generate statistics for each player
-      Map<String, dynamic> playerStats = _generatePlayerStatistics(actions, players);
-      Map<String, dynamic> teamStats = _generateTeamStatistics(playerStats);
-      String teamID = gameDocument["teamId"];
-      // generate stop time
-      DateTime stopWatchTimeAsDateTime =
-          DateTime.fromMillisecondsSinceEpoch((DateTime.fromMillisecondsSinceEpoch(0).millisecond + gameDocument["stopWatchTime"]).toInt());
-      // timestamp like 1664014756081
-      int stopTimeAsIsoTimeStamp = stopWatchTimeAsDateTime.millisecondsSinceEpoch;
-      _statistics[gameDocument["id"]] = {
-        "start_time": gameDocument["startTime"],
-        "stop_time": stopTimeAsIsoTimeStamp,
-        "player_stats": playerStats,
-        "team_stats": {teamID: teamStats}
-      };
-      //
+      // quality check that game document contains all the fields it needs and also actions
+      // otherwise don't deal with this game
+      if (gameDocument["teamId"] != null &&
+          gameDocument["startTime"] != null &&
+          gameDocument["stopTime"] != null &&
+          gameDocument["actions"] != null &&
+          gameDocument["id"] != null) {
+        List<Map<String, dynamic>> actions = gameDocument["actions"];
+        // generate statistics for each player
+        Map<String, dynamic> playerStats = _generatePlayerStatistics(actions, players);
+        Map<String, dynamic> teamStats = _generateTeamStatistics(playerStats);
+        String teamID = gameDocument["teamId"];
+        // generate stop time
+        DateTime stopWatchTimeAsDateTime =
+            DateTime.fromMillisecondsSinceEpoch((DateTime.fromMillisecondsSinceEpoch(0).millisecond + gameDocument["stopWatchTime"]).toInt());
+        // timestamp like 1664014756081
+        int stopTimeAsIsoTimeStamp = stopWatchTimeAsDateTime.millisecondsSinceEpoch;
+        _statistics[gameDocument["id"]] = {
+          "start_time": gameDocument["startTime"],
+          "stop_time": stopTimeAsIsoTimeStamp,
+          "player_stats": playerStats,
+          "team_stats": {teamID: teamStats}
+        };
+        //
+      } 
     });
     _statistics_ready = true;
   }
@@ -223,7 +231,6 @@ class StatisticsEngine {
     return player_stats;
   }
 
-  /// TODO change this to work on a single game document and not all game documents
   /// updates _statistics element with team statistics data using game data
   Map<String, dynamic> _generateTeamStatistics(Map<String, dynamic> playerStats) {
     logger.d("generating team statistics");
@@ -241,50 +248,61 @@ class StatisticsEngine {
     };
     // update team stats from previous player stats
     playerStats.forEach((String playerID, dynamic playerStatistic) {
-      // update quotas by summing up numerators and denominators of every player
-      teamStats["seven_meter_quota"][0] += playerStatistic["seven_meter_quota"][0];
-      teamStats["seven_meter_quota"][1] += playerStatistic["seven_meter_quota"][1];
-      teamStats["position_quota"][0] += playerStatistic["position_quota"][0];
-      teamStats["position_quota"][1] += playerStatistic["position_quota"][1];
-      teamStats["throw_quota"][0] += playerStatistic["throw_quota"][0];
-      teamStats["throw_quota"][1] += playerStatistic["throw_quota"][1];
-      // update action counts by summing up all action counts of every player
-      playerStatistic["action_counts"].forEach((String actionTag, int count) {
-        if (teamStats["action_counts"].containsKey(actionTag)) {
-          teamStats["action_counts"][actionTag] += count;
-        } else {
-          teamStats["action_counts"][actionTag] = count;
-        }
-      });
-      // add each player's action series timestamp to the team's action series timestamp and sort them afterwards
-      playerStatistic["action_series"].forEach((String actionTag, List<int> timestamps) {
-        if (teamStats["action_series"].containsKey(actionTag)) {
-          teamStats["action_series"][actionTag].addAll(timestamps);
-        } else {
-          teamStats["action_series"][actionTag] = timestamps;
-        }
-        teamStats["action_series"][actionTag].sort();
-      });
-      // add each player's action coordinates to the team's action coordinates do not sort these
-      playerStatistic["action_coordinates"].forEach((String actionTag, dynamic coordinates) {
-        if (teamStats["action_coordinates"].containsKey(actionTag)) {
-          teamStats["action_coordinates"][actionTag].addAll(coordinates);
-        } else {
-          teamStats["action_coordinates"][actionTag] = coordinates;
-        }
-      });
-      List<String> allActions = playerStatistic["all_actions"];
-      List<int> allActionTimestamps = playerStatistic["all_action_timestamps"];
-      allActions.forEach((String actionTag) {
-        teamStats["all_actions"].add(actionTag);
-      });
-      allActionTimestamps.forEach((int timestamp) {
-        teamStats["all_action_timestamps"].add(timestamp);
-      });
+      // make sure that we have initialized values in the player statistic otherwise don't generate team statistic
+      if (playerStatistic["seven_meter_quota"] != <double>[0, 0] &&
+          playerStatistic["position_quota"] != <double>[0, 0] &&
+          playerStatistic["throw_quota"] != <double>[0, 0] &&
+          playerStatistic["action_counts"] != Map<String, int>() &&
+          playerStatistic["action_series"] != Map<String, List<int>>() &&
+          playerStatistic["action_coordinates"] != Map<String, dynamic>() &&
+          playerStatistic["all_actions"] != <String>[] &&
+          playerStatistic["all_action_timestamps"] != <int>[] &&
+          playerStatistic["ef_score_series"] != <double>[]) {
+        // update quotas by summing up numerators and denominators of every player
+        teamStats["seven_meter_quota"][0] += playerStatistic["seven_meter_quota"][0];
+        teamStats["seven_meter_quota"][1] += playerStatistic["seven_meter_quota"][1];
+        teamStats["position_quota"][0] += playerStatistic["position_quota"][0];
+        teamStats["position_quota"][1] += playerStatistic["position_quota"][1];
+        teamStats["throw_quota"][0] += playerStatistic["throw_quota"][0];
+        teamStats["throw_quota"][1] += playerStatistic["throw_quota"][1];
+        // update action counts by summing up all action counts of every player
+        playerStatistic["action_counts"].forEach((String actionTag, int count) {
+          if (teamStats["action_counts"].containsKey(actionTag)) {
+            teamStats["action_counts"][actionTag] += count;
+          } else {
+            teamStats["action_counts"][actionTag] = count;
+          }
+        });
+        // add each player's action series timestamp to the team's action series timestamp and sort them afterwards
+        playerStatistic["action_series"].forEach((String actionTag, List<int> timestamps) {
+          if (teamStats["action_series"].containsKey(actionTag)) {
+            teamStats["action_series"][actionTag].addAll(timestamps);
+          } else {
+            teamStats["action_series"][actionTag] = timestamps;
+          }
+          teamStats["action_series"][actionTag].sort();
+        });
+        // add each player's action coordinates to the team's action coordinates do not sort these
+        playerStatistic["action_coordinates"].forEach((String actionTag, dynamic coordinates) {
+          if (teamStats["action_coordinates"].containsKey(actionTag)) {
+            teamStats["action_coordinates"][actionTag].addAll(coordinates);
+          } else {
+            teamStats["action_coordinates"][actionTag] = coordinates;
+          }
+        });
+        List<String> allActions = playerStatistic["all_actions"];
+        List<int> allActionTimestamps = playerStatistic["all_action_timestamps"];
+        allActions.forEach((String actionTag) {
+          teamStats["all_actions"].add(actionTag);
+        });
+        allActionTimestamps.forEach((int timestamp) {
+          teamStats["all_action_timestamps"].add(timestamp);
+        });
 
-      // TODO calculate the ef-score series for the team by building the average through all players through time
-      // go through every player and update the ef-score by adding to the global ef score average at the time when a new action is added
-      // ef score depends on the player position which is why we need to do this
+        // TODO calculate the ef-score series for the team by building the average through all players through time
+        // go through every player and update the ef-score by adding to the global ef score average at the time when a new action is added
+        // ef score depends on the player position which is why we need to do this
+      }
     });
     // sort all_actions and all_action_timestamps chronologically. Keys are timestamp and values are actions
 

@@ -48,7 +48,10 @@ class _TeamStatisticsState extends State<TeamStatistics> {
     // index access safety
     if (_teams.length > 0){
       _selectedTeam = _tempController.getSelectedTeam();
-      _games = _persistentController.getAllGames(teamId: _selectedTeam.id);
+      // get allGame that are cached in persistentController
+      List<Game> allGames = _persistentController.getAllGames(teamId: _selectedTeam.id);
+      // only actually show games that are in the statistics map
+      _games = allGames.where((game) => _statistics.containsKey(game.id)).toList();
     // if there are no teams ofc there are no players and no games
     } else {
       _games = [];
