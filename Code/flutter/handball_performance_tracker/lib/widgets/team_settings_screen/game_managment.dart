@@ -19,13 +19,17 @@ class GameList extends StatefulWidget {
 class _GameListState extends State<GameList> {
   TempController _tempController = Get.find<TempController>();
   PersistentController _persistentController = Get.find<PersistentController>();
-  List<Game> gamesList = [];
+  List<Game> _gamesList = [];
+  @override
+  void initState() {
+    Team selectedTeam = _tempController.getSelectedTeam();
+    _gamesList =  _persistentController.getAllGames(teamId: selectedTeam.id);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    print("rebuild view");
-    Team selectedTeam = _tempController.getSelectedTeam();
-    gamesList = _persistentController.getAllGames(teamId: selectedTeam.id);
-    print("gamesList: " + gamesList.length.toString());
+    print(_gamesList.toString());
     return SingleChildScrollView(
       child: DataTable(
         columns: <DataColumn>[
@@ -39,7 +43,7 @@ class _GameListState extends State<GameList> {
           DataColumn(label: Text(StringsGeneral.lDeleteGame))
         ],
         rows: List<DataRow>.generate(
-          gamesList.length,
+          _gamesList.length,
           (int index) {
             return DataRow(
               color: MaterialStateProperty.resolveWith<Color?>((Set<MaterialState> states) {
@@ -54,9 +58,9 @@ class _GameListState extends State<GameList> {
                 return null; // Use default value for other states and odd rows.
               }),
               cells: <DataCell>[
-                DataCell(Text(gamesList[index].opponent!)),
-                DataCell(Text(gamesList[index].date.toString().substring(0, 10))),
-                DataCell(Text(gamesList[index].location!)),
+                DataCell(Text(_gamesList[index].opponent!)),
+                DataCell(Text(_gamesList[index].date.toString().substring(0, 10))),
+                DataCell(Text(_gamesList[index].location!)),
                 DataCell(GestureDetector(
                   child: Icon(Icons.delete),
                   onTap: () {
@@ -66,7 +70,7 @@ class _GameListState extends State<GameList> {
                       content: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          Text(StringsGeneral.lGameDeleteWarning + "\n" + "Bitte nach dem Löschen eines Spiels kurz die Spielübersicht neu laden"),
+                          Text(StringsGeneral.lGameDeleteWarning),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
@@ -77,9 +81,9 @@ class _GameListState extends State<GameList> {
                                   child: Text(StringsGeneral.lCancel)),
                               ElevatedButton(
                                   onPressed: () {
-                                    _persistentController.deleteGame(gamesList[index]);
+                                    _persistentController.deleteGame(_gamesList[index]);
                                     setState(() {
-                                      gamesList.removeAt(index);
+                                      _gamesList.removeAt(index);
                                     });
                                     Navigator.pop(context);
                                   },
