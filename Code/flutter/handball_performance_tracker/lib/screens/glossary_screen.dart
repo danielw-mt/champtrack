@@ -39,6 +39,7 @@ class GlossaryScreen extends StatelessWidget {
 
                     Expanded(
                       child: SingleChildScrollView(
+                        controller: ScrollController(),
                         scrollDirection: Axis.vertical,
                         child: DataTable(
                           columns: [

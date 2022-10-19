@@ -23,6 +23,7 @@ class PlayersList extends StatelessWidget{
           List<Player> playersList =
               tempController.getPlayersFromSelectedTeam();
           return SingleChildScrollView(
+            controller: ScrollController(),
             child: DataTable(
               columns: const <DataColumn>[
                 DataColumn(

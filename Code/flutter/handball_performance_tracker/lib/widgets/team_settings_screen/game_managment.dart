@@ -29,8 +29,8 @@ class _GameListState extends State<GameList> {
 
   @override
   Widget build(BuildContext context) {
-    print(_gamesList.toString());
     return SingleChildScrollView(
+      controller: ScrollController(),
       child: DataTable(
         columns: <DataColumn>[
           DataColumn(

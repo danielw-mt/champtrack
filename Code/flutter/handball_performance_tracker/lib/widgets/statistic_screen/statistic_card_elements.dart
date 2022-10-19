@@ -152,6 +152,7 @@ class _ActionsCardState extends State<ActionsCard> {
                 flex: 4,
                 child: widget.actionCounts != {}
                     ? SingleChildScrollView(
+                      controller: ScrollController(),
                         scrollDirection: Axis.vertical,
                         child: DataTable(
                             columns: const <DataColumn>[
