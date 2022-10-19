@@ -8,6 +8,7 @@ import '../widgets/team_settings_screen/players_list.dart';
 import '../widgets/team_settings_screen/team_settings_bar.dart';
 import '../widgets/team_settings_screen/team_details_form.dart';
 import '../widgets/team_settings_screen/player_edit_form.dart';
+import '../widgets/team_settings_screen/game_managment.dart';
 import '../../constants/colors.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
@@ -88,8 +89,7 @@ class TeamSettingsScreen extends StatelessWidget {
                                       child: Text(
                                           StringsTeamManagement.lAddPlayer)))),
                     ],
-                    if (gameController.getSelectedTeamSetting() == 1)
-                      Text("TODO Games"),
+                    if (gameController.getSelectedTeamSetting() == 1) Center(child: GameList()),
                     if (gameController.getSelectedTeamSetting() == 2)
                       TeamDetailsForm()
                   ])),

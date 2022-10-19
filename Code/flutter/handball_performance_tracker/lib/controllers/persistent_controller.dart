@@ -46,6 +46,7 @@ class PersistentController extends GetxController {
     return _cachedTeamsList;
   }
 
+  // TODO not sure if this is necessary anymore
   void removePlayerFromTeams(Player player) {
     player.teams.forEach((String teamId) { 
       _cachedTeamsList.where((Team team) => teamId.contains(team.id!)).first.players.remove(player);
@@ -185,6 +186,10 @@ class PersistentController extends GetxController {
     _currentGame.value.stopWatchTimer.setPresetTime(mSec: time);
   }
 
+  void addGame(Game game){
+    _allGames.add(game);
+  }
+
   void setAllGames(List<Game> games) {
     _allGames.value = games;
   }
@@ -196,6 +201,13 @@ class PersistentController extends GetxController {
       return correspondingGames;
     }
     return _allGames;
+  }
+
+  void deleteGame(Game game) async {
+    await repository.deleteGame(game);
+    logger.d("games before: " + _allGames.length.toString());
+    _allGames.remove(game);
+    logger.d("games after: " + _allGames.length.toString());
   }
 
   /// reset the current Game object to a game without id and clean up the actions list

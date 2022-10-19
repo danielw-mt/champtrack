@@ -13,6 +13,7 @@ import '../../controllers/temp_controller.dart';
 import '../../constants/stringsGeneral.dart';
 import '../../screens/dashboard.dart';
 import '../nav_drawer.dart';
+import '../../data/team.dart';
 
 // Create a Form widget.
 class StartGameForm extends StatefulWidget {
@@ -90,6 +91,8 @@ class StartGameFormState extends State<StartGameForm> {
       dateController.text = "${selectedDate.toLocal()}".split(' ')[0];
     }
   }
+
+  TempController _tempController = Get.find<TempController>();
 
   @override
   Widget build(BuildContext context) {
@@ -334,8 +337,8 @@ class StartGameFormState extends State<StartGameForm> {
                           child: SizedBox(
                             width: 0.15 * width,
                             height: 0.08 * height,
-                            child: teamId == ""
-                                ? Container()
+                            child: _tempController.getSelectedTeam() == Team(players: [], onFieldPlayers: [])
+                                ? Container() 
                                 : ElevatedButton(
                                     style: ButtonStyle(
                                         backgroundColor:
