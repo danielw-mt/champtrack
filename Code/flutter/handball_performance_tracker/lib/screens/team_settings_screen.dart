@@ -31,8 +31,7 @@ class TeamSettingsScreen extends StatelessWidget {
           length: 3,
           child: Scaffold(
               appBar: AppBar(
-                backgroundColor: buttonDarkBlueColor,
-                title: Text("Teams")),
+                  backgroundColor: buttonDarkBlueColor, title: Text("Teams")),
               key: _scaffoldKey,
               drawer: NavDrawer(),
               // if drawer is closed notify, so if game is running the back to game button appears on next opening
@@ -42,57 +41,39 @@ class TeamSettingsScreen extends StatelessWidget {
                 }
               },
               bottomNavigationBar: TeamSettingsBar(),
-              body: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    // Container for menu button on top left corner
-                    //MenuButton(_scaffoldKey),
-                    if (gameController.getSelectedTeamSetting() == 0) ...[
-                      Expanded(
-                          //child: SizedBox(
-                          //height: MediaQuery.of(context).size.height * 0.6,
-                          child: PlayersList()),
-                      //Container(
-                      //  height: MediaQuery.of(context).size.height * 0.1,
-                      //  width: 20,
-                      //),
-                      Expanded(
-                          child: Center(
-                              child:
-                                  //SizedBox(
-                                  //    height: MediaQuery.of(context).size.height * 0.1,
-                                  //    width: MediaQuery.of(context).size.width * 0.3,
-                                  // child:
-                                  ElevatedButton(
-                                      onPressed: () {
-                                        Alert(
-                                          context: context,
-                                          buttons: [],
-                                          content: SizedBox(
-                                            width: MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                0.7,
-                                            height: MediaQuery.of(context)
-                                                    .size
-                                                    .height *
-                                                0.7,
-                                            child: Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.spaceEvenly,
-                                              children: [PlayerForm()],
-                                            ),
-                                          ),
-                                        ).show();
-                                      },
-                                      child: Text(
-                                          StringsTeamManagement.lAddPlayer)))),
-                    ],
-                    if (gameController.getSelectedTeamSetting() == 1) Center(child: GameList()),
-                    if (gameController.getSelectedTeamSetting() == 2)
-                      TeamDetailsForm()
-                  ])),
+              body:
+                  Column(mainAxisAlignment: MainAxisAlignment.start, children: [
+                if (gameController.getSelectedTeamSetting() == 0) ...[
+                  Expanded(
+                      child: Column(children: [
+                    Expanded(child: PlayersList()),
+                    Flexible(
+                        child: ElevatedButton(
+                            onPressed: () {
+                              Alert(
+                                context: context,
+                                buttons: [],
+                                content: SizedBox(
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.7,
+                                  height:
+                                      MediaQuery.of(context).size.height * 0.7,
+                                  child: Column(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    children: [PlayerForm()],
+                                  ),
+                                ),
+                              ).show();
+                            },
+                            child: Text(StringsTeamManagement.lAddPlayer))),
+                  ]))
+                ],
+                if (gameController.getSelectedTeamSetting() == 1)
+                  Expanded(child: Center(child: GameList())),
+                if (gameController.getSelectedTeamSetting() == 2)
+                  Center(child: TeamDetailsForm())
+              ])),
         );
       },
     ));

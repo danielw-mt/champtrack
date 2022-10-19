@@ -42,13 +42,6 @@ class MainScreen extends StatelessWidget {
       backgroundColor: backgroundColor,
       body: Stack(
         children: [
-          Positioned(
-            child: Row(
-              children: [StopGameButton(), SideSwitch()],
-            ),
-            bottom: 3,
-            left: 3,
-          ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -69,7 +62,18 @@ class MainScreen extends StatelessWidget {
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  ActionFeed(),
+                  Column(
+                    children: [
+                      ActionFeed(),
+                      Row(
+                        children: [
+                          StopGameButton(),
+                          SideSwitch(),
+                        ],
+                      ), 
+                      //FloatingActionButton(onPressed: () => null,)
+                    ],
+                  ),
                   // Player Bar
                   Container(
                       width: efscorebar.scorebarWidth +

@@ -82,7 +82,6 @@ class TeamDetailsFormState extends State<TeamDetailsForm> {
                               String relevantTeamType = teamTypes[index];
                               return Row(
                                 children: [
-                                  Text(relevantTeamType),
                                   Checkbox(
                                       fillColor:
                                           MaterialStateProperty.all<Color>(
@@ -95,7 +94,8 @@ class TeamDetailsFormState extends State<TeamDetailsForm> {
                                             selectedTeamType = index;
                                           }
                                         });
-                                      })
+                                      }),
+                                  Text(relevantTeamType)
                                 ],
                               );
                             })),
@@ -161,6 +161,32 @@ class TeamDetailsFormState extends State<TeamDetailsForm> {
                             });
                       },
                       child: const Text(StringsTeamManagement.lDeleteTeam),
+                    ),
+                  ),
+                  Container(
+                    height: 20,
+                    width: 20,
+                  ),
+                  // submit button
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 16.0),
+                    child: ElevatedButton(
+                      onPressed: () {
+                        // Validate returns true if the form is valid, or false otherwise.
+                        if (_formKey.currentState!.validate()) {
+                          // If the form is valid, display a snackbar. In the real world,
+                          // you'd often call a server or save the information in a database.
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                                content: Text(StringsGeneral.lProcessingData)),
+                          );
+                          Team newTeam = tempController.getSelectedTeam();
+                          newTeam.name = teamNameController.text;
+                          newTeam.type = teamTypes[selectedTeamType];
+                          tempController.setSelectedTeam(newTeam);
+                        }
+                      },
+                      child: const Text(StringsGeneral.lSubmitButton),
                     ),
                   ),
                 ],

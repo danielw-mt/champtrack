@@ -93,9 +93,12 @@ class PlayerFormState extends State<PlayerForm> {
   Widget build(BuildContext context) {
     InputDecoration getDecoration(String labelText) {
       return InputDecoration(
-          focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: buttonDarkBlueColor)),
-          enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: buttonDarkBlueColor)),
-          disabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: buttonDarkBlueColor)),
+          focusedBorder: UnderlineInputBorder(
+              borderSide: BorderSide(color: buttonDarkBlueColor)),
+          enabledBorder: UnderlineInputBorder(
+              borderSide: BorderSide(color: buttonDarkBlueColor)),
+          disabledBorder: UnderlineInputBorder(
+              borderSide: BorderSide(color: buttonDarkBlueColor)),
           labelText: labelText,
           labelStyle: TextStyle(color: buttonDarkBlueColor),
           filled: true,
@@ -223,19 +226,24 @@ class PlayerFormState extends State<PlayerForm> {
                                   Team relevantTeam = availableTeams[index];
                                   return Row(
                                     children: [
-                                      Text(relevantTeam.name),
                                       Checkbox(
-                                          fillColor: MaterialStateProperty.all<Color>(buttonDarkBlueColor),
-                                          value: isPlayerPartOfTeam(relevantTeam.id.toString()),
+                                          fillColor:
+                                              MaterialStateProperty.all<Color>(
+                                                  buttonDarkBlueColor),
+                                          value: isPlayerPartOfTeam(
+                                              relevantTeam.id.toString()),
                                           onChanged: (value) {
                                             setState(() {
                                               if (value == true) {
-                                                player.teams.add("teams/" + relevantTeam.id.toString());
+                                                player.teams.add("teams/" +
+                                                    relevantTeam.id.toString());
                                               } else {
-                                                player.teams.remove("teams/" + relevantTeam.id.toString());
+                                                player.teams.remove("teams/" +
+                                                    relevantTeam.id.toString());
                                               }
                                             });
-                                          })
+                                          }),
+                                      Text(relevantTeam.name)
                                     ],
                                   );
                                 }),
@@ -282,19 +290,24 @@ class PlayerFormState extends State<PlayerForm> {
                               ];
                               return Row(
                                 children: [
-                                  Text(positionNames[item]),
                                   Checkbox(
-                                      fillColor: MaterialStateProperty.all<Color>(buttonDarkBlueColor),
-                                      value: player.positions.contains(positionNames[item]),
+                                      fillColor:
+                                          MaterialStateProperty.all<Color>(
+                                              buttonDarkBlueColor),
+                                      value: player.positions
+                                          .contains(positionNames[item]),
                                       onChanged: (value) {
                                         setState(() {
                                           if (value == true) {
-                                            player.positions.add(positionNames[item]);
+                                            player.positions
+                                                .add(positionNames[item]);
                                           } else {
-                                            player.positions.remove(positionNames[item]);
+                                            player.positions
+                                                .remove(positionNames[item]);
                                           }
                                         });
-                                      })
+                                      }),
+                                  Text(positionNames[item])
                                 ],
                               );
                             },
@@ -330,15 +343,9 @@ class PlayerFormState extends State<PlayerForm> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    
                     Flexible(
                       // Cancel-Button
-                      child:
-                          //SizedBox(
-                          //width: 0.15 * width,
-                          //height: 0.08 * height,
-                          //child:
-                          ElevatedButton(
+                      child: ElevatedButton(
                         style: ButtonStyle(
                             backgroundColor: MaterialStateProperty.all<Color>(
                                 buttonGreyColor)),
@@ -355,81 +362,62 @@ class PlayerFormState extends State<PlayerForm> {
                       ),
                     ),
                     Flexible(
-                      child:
-                          //SizedBox(
-                          //width: 0.15 * width,
-                          //height: 0.08 * height,
-                          //child:
-                          ElevatedButton(
-                              style: ButtonStyle(
-                                  backgroundColor:
-                                      MaterialStateProperty.all<Color>(
-                                          buttonGreyColor)),
-                              onPressed: () {
-                                tempController.deletePlayer(player);
-                                Navigator.pop(context);
-                              },
-                              child: Text(StringsGeneral.lDeletePlayer,
-                                  style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black))),
+                      child: ElevatedButton(
+                          style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all<Color>(
+                                  buttonGreyColor)),
+                          onPressed: () {
+                            tempController.deletePlayer(player);
+                            Navigator.pop(context);
+                          },
+                          child: Text(StringsGeneral.lDeletePlayer,
+                              style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black))),
                     ),
                     Flexible(
-                      child: //SizedBox(
-                        //width: 0.15 * width,
-                        //height: 0.08 * height,
-                        //child: 
-                        ElevatedButton(
-                          style: ButtonStyle(backgroundColor: MaterialStateProperty.all<Color>(buttonLightBlueColor)),
-                          onPressed: () {
-                            // Validate returns true if the form is valid, or false otherwise.
-                            if (_formKey.currentState!.validate()) {
-                              player.firstName = firstNameController.text;
-                              player.lastName = lastNameController.text;
-                              player.nickName = nickNameController.text;
-                              player.number = int.parse(shirtNumberController.text);
-                              // pop alert
-                              Navigator.pop(context);
-                              // display snackbar while data is stored in db
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(content: Text(StringsGeneral.lProcessingData)),
-                              );
-                              // If the player already exists they have an ID and we just need to update them
-                              if (player.id != "") {
-                                // update player
-                                logger.d("edit mode");
-                                tempController.setPlayer(player);
-                              } else {
-                                // add player
-                                logger.d("new player mode");
-                                tempController.addPlayer(player);
-                                
-                              }
-                            }
-                          },
-                          child: const Text(
-                            StringsGeneral.lSubmitButton,
-                            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black),
-                          ),
-                        ),
-                    ),
-                    /*Flexible(
-                        // Cancel-Button
-                        child: SizedBox(
-                      width: 0.15 * width,
-                      height: 0.08 * height,
                       child: ElevatedButton(
-                        style: ButtonStyle(backgroundColor: MaterialStateProperty.all<Color>(buttonGreyColor)),
+                        style: ButtonStyle(
+                            backgroundColor: MaterialStateProperty.all<Color>(
+                                buttonLightBlueColor)),
                         onPressed: () {
-                          Navigator.of(context).pop();
+                          // Validate returns true if the form is valid, or false otherwise.
+                          if (_formKey.currentState!.validate()) {
+                            player.firstName = firstNameController.text;
+                            player.lastName = lastNameController.text;
+                            player.nickName = nickNameController.text;
+                            player.number =
+                                int.parse(shirtNumberController.text);
+                            // pop alert
+                            Navigator.pop(context);
+                            // display snackbar while data is stored in db
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                  content:
+                                      Text(StringsGeneral.lProcessingData)),
+                            );
+                            // If the player already exists they have an ID and we just need to update them
+                            if (player.id != "") {
+                              // update player
+                              logger.d("edit mode");
+                              tempController.setPlayer(player);
+                            } else {
+                              // add player
+                              logger.d("new player mode");
+                              tempController.addPlayer(player);
+                            }
+                          }
                         },
                         child: const Text(
-                          StringsGeneral.lBack,
-                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black),
+                          StringsGeneral.lSubmitButton,
+                          style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black),
                         ),
                       ),
-                    ))*/
+                    ),
                   ],
                 ),
               ),
