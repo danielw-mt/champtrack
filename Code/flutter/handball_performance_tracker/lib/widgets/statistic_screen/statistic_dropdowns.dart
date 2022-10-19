@@ -139,7 +139,8 @@ class _GameSelectorState extends State<GameSelector> {
       items: widget.games.map<DropdownMenuItem<Game>>((Game game) {
         return DropdownMenuItem<Game>(
           value: game,
-          child: Text(game.date.toString()),
+          // if there is opponent available show opponent. Otherwise show date only
+          child: game.opponent != "" ? Text(game.opponent! + " - "+game.date.toString().substring(0, 10)): Text(game.date.toString().substring(0, 10)),
         );
       }).toList(),
     );
