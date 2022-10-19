@@ -32,21 +32,31 @@ class StatisticsEngine {
     gameDocuments.forEach((Map<String, dynamic> gameDocument) {
       // quality check that game document contains all the fields it needs and also actions
       // otherwise don't deal with this game
-      if (gameDocument["teamId"] != null &&
-          gameDocument["startTime"] != null &&
-          gameDocument["stopTime"] != null &&
-          gameDocument["actions"] != null &&
-          gameDocument["id"] != null) {
+      if (gameDocument["teamId"] != null && gameDocument["startTime"] != null && gameDocument.containsKey("actions") && gameDocument["id"] != null) {
         List<Map<String, dynamic>> actions = gameDocument["actions"];
         // generate statistics for each player
         Map<String, dynamic> playerStats = _generatePlayerStatistics(actions, players);
         Map<String, dynamic> teamStats = _generateTeamStatistics(playerStats);
         String teamID = gameDocument["teamId"];
-        // generate stop time
+
+        // timestamp like 1664014756081
+        int stopTimeAsIsoTimeStamp;
         DateTime stopWatchTimeAsDateTime =
             DateTime.fromMillisecondsSinceEpoch((DateTime.fromMillisecondsSinceEpoch(0).millisecond + gameDocument["stopWatchTime"]).toInt());
-        // timestamp like 1664014756081
-        int stopTimeAsIsoTimeStamp = stopWatchTimeAsDateTime.millisecondsSinceEpoch;
+        stopTimeAsIsoTimeStamp = stopWatchTimeAsDateTime.millisecondsSinceEpoch;
+        // if the game was stopped correctly we will have a stopTime field
+        // if (gameDocument["stopTime"] != null) {
+        //   // generate stop time
+        //   DateTime stopWatchTimeAsDateTime =
+        //       DateTime.fromMillisecondsSinceEpoch((DateTime.fromMillisecondsSinceEpoch(0).millisecond + gameDocument["stopWatchTime"]).toInt());
+        //   stopTimeAsIsoTimeStamp = stopWatchTimeAsDateTime.millisecondsSinceEpoch;
+        //   // if the game crashed or was not stopped correctly we will not have a stoptime and have to infere this
+        //   // do so by just adding 60 minutes to the start time
+        //   // TODO maybe change this method in the future to use timestamps
+        // } else {
+        //   //stopTimeAsIsoTimeStamp = DateTime.fromMillisecondsSinceEpoch(gameDocument["startTime"]).add(Duration(minutes: 60)).millisecondsSinceEpoch;
+        // }
+
         _statistics[gameDocument["id"]] = {
           "start_time": gameDocument["startTime"],
           "stop_time": stopTimeAsIsoTimeStamp,
@@ -54,7 +64,7 @@ class StatisticsEngine {
           "team_stats": {teamID: teamStats}
         };
         //
-      } 
+      }
     });
     _statistics_ready = true;
   }
@@ -177,6 +187,7 @@ class StatisticsEngine {
 
     /// go over all actions and update the player statistics map using the sub-methods above within generatePlayerStatistics()
     actions.forEach((Map<String, dynamic> action) {
+      logger.d(action.toString());
       String playerId = action["playerId"];
       // only if a playerId is set the action can be associated. Sometimes the action is not associated with a player
       if (playerId != "") {
