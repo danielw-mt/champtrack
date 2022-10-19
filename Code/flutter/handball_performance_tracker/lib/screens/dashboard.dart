@@ -94,8 +94,6 @@ class Dashboard extends StatelessWidget {
             print(snapshot.error);
             return SafeArea(
               child: Scaffold(
-                key: _scaffoldKey,
-                drawer: NavDrawer(),
                 appBar: AppBar(),
                 body: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
