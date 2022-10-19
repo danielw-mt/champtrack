@@ -31,7 +31,6 @@ class PlayerStatistics extends StatefulWidget {
 }
 
 class _PlayerStatisticsState extends State<PlayerStatistics> {
-  TempController _tempController = Get.put(TempController());
   PersistentController _persistentController = Get.put(PersistentController());
   List<Player> _players = [];
   List<Game> _games = [];
@@ -40,40 +39,39 @@ class _PlayerStatisticsState extends State<PlayerStatistics> {
   Team _selectedTeam = Team(players: [], onFieldPlayers: []);
   Player _selectedPlayer = Player();
   Game _selectedGame = Game(date: DateTime.fromMicrosecondsSinceEpoch(0));
+
   @override
   void initState() {
     _teams = _persistentController.getAvailableTeams();
-    // if's are for index safety
-    if (_teams.length > 0) {
-      _selectedTeam = _tempController.getSelectedTeam();
+    _statistics = _persistentController.getStatistics();
+    if (_teams.length != 0) {
+      _selectedTeam = _teams[0];
       _games = getGamesInStatistics();
-      if (_games.length == 0) {
-        _players = [];
-      }
-      _players = _persistentController.getAllPlayers(teamId: _selectedTeam.id);
       // if there are no teams ofc there are no players and no games
     } else {
-      _players = [];
       _games = [];
     }
-    if (_games.length > 0) {
+    if (_games.length != 0) {
       _selectedGame = _games[0];
+      _players = _persistentController.getAllPlayers(teamId: _selectedTeam.id);
+      // if there are no games don't show the player menu
+    } else {
+      _players = [];
     }
-    if (_players.length > 0) {
+    if (_players.length != 0) {
       _selectedPlayer = _players[0];
-      // if there are no players don't display any games
+      // if there are no players also don't display any games
     } else {
       _games = [];
     }
-
-    _statistics = _persistentController.getStatistics();
     super.initState();
   }
 
   /// provide the games that are cached in persistentcontroller that match the selected team and that also match games in the statistics map
   List<Game> getGamesInStatistics() {
     List<Game> allGames = _persistentController.getAllGames(teamId: _selectedTeam.id);
-    return allGames.where((game) => _statistics.containsKey(game.id)).toList();
+    List<Game> matchingGames = allGames.where((Game game) => _statistics.containsKey(game.id)).toList();
+    return matchingGames;
   }
 
   void onPlayerSelected(Player player) {
@@ -85,7 +83,6 @@ class _PlayerStatisticsState extends State<PlayerStatistics> {
   void onGameSelected(Game game) {
     setState(() {
       _selectedGame = game;
-      // _updatePlayersOfGame();
     });
   }
 
@@ -94,16 +91,15 @@ class _PlayerStatisticsState extends State<PlayerStatistics> {
       _selectedTeam = team;
       _games = getGamesInStatistics();
       // if there are no games do not display the player dropdown
-      if (_games.length == 0) {
+      if (_games.length > 0){
+        _players = _persistentController.getAllPlayers(teamId: _selectedTeam.id);
+        logger.d(_players);
+        _selectedGame = _games[0];
+      } else {
         _players = [];
       }
-      _players = _persistentController.getAllPlayers(teamId: _selectedTeam.id);
-      logger.d("players: $_players");
       if (_players.length > 0) {
         _selectedPlayer = _players[0];
-      }
-      if (_games.length > 0) {
-        _selectedGame = _games[0];
       }
     });
   }
