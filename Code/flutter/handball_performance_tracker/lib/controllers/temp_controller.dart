@@ -195,6 +195,8 @@ class TempController extends GetxController {
     }
     update(["players-list"]);
   }
+  
+  // TODO way too many methods to deal with onFieldPlayer here
 
   /// get the players from selectedTeam that are currently marked as onFieldPlayers
   List<Player> getOnFieldPlayers() => _selectedTeam.value.onFieldPlayers;
@@ -215,9 +217,10 @@ class TempController extends GetxController {
 
   /// add additional onFieldPlayer to selectedTeam
   void addOnFieldPlayer(Player player) {
-    // TODO implement check if there are not already 7 onFieldPlayers
-    _selectedTeam.value.onFieldPlayers.add(player);
-    update(["action-feed", "on-field-checkbox", "ef-score-bar", "players-list"]);
+    if (_selectedTeam.value.onFieldPlayers.length < 7) {
+      _selectedTeam.value.onFieldPlayers.add(player);
+      update(["action-feed", "on-field-checkbox", "ef-score-bar", "players-list"]);
+    }
   }
 
   void updateOnFieldPlayers() {

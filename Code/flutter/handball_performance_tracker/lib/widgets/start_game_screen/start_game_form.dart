@@ -337,7 +337,7 @@ class StartGameFormState extends State<StartGameForm> {
                           child: SizedBox(
                             width: 0.15 * width,
                             height: 0.08 * height,
-                            child: _tempController.getSelectedTeam() == Team(players: [], onFieldPlayers: [])
+                            child: _tempController.getSelectedTeam().name == ""
                                 ? Container() 
                                 : ElevatedButton(
                                     style: ButtonStyle(

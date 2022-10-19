@@ -8,7 +8,7 @@ class Team {
   List<Player> onFieldPlayers = [];
   String type;
 
-  Team({this.id, this.name = "Default Team", this.type = "", required this.players, required onFieldPlayers});
+  Team({this.id, this.name = "", this.type = "", required this.players, required onFieldPlayers});
 
   // @return Map<String,dynamic> as representation of Club object that can be saved to firestore
   Map<String, dynamic> toMap() {
