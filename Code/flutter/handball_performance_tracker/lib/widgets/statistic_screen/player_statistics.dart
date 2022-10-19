@@ -42,7 +42,6 @@ class _PlayerStatisticsState extends State<PlayerStatistics> {
   Game _selectedGame = Game(date: DateTime.fromMicrosecondsSinceEpoch(0));
   @override
   void initState() {
-    _players = _tempController.getPlayersFromSelectedTeam();
     _teams = _persistentController.getAvailableTeams();
     // if's are for index safety
     if (_players.length > 0) {
@@ -56,7 +55,9 @@ class _PlayerStatisticsState extends State<PlayerStatistics> {
     }
     if (_teams.length > 0) {
       _selectedTeam = _tempController.getSelectedTeam();
-      _games = _persistentController.getAllGames(teamId: _selectedTeam.id);
+      List<Game> allGames = _persistentController.getAllGames(teamId: _selectedTeam.id);
+      _games = allGames.where((game) => _statistics.containsKey(game.id)).toList();
+      _players = _persistentController.getAllPlayers(teamId: _selectedTeam.id);
       // if there are no teams ofc there are no players and no games
     } else {
       _players = [];
@@ -84,7 +85,7 @@ class _PlayerStatisticsState extends State<PlayerStatistics> {
     setState(() {
       _selectedTeam = team;
       _games = _persistentController.getAllGames(teamId: _selectedTeam.id);
-      // _updatePlayersOfGame();
+      _players = _persistentController.getAllPlayers(teamId: _selectedTeam.id);
       logger.d("players: $_players");
       if (_players.length > 0) {
         _selectedPlayer = _players[0];
@@ -97,30 +98,30 @@ class _PlayerStatisticsState extends State<PlayerStatistics> {
 
   // TODO implement this function
   /// get all players from selected team that player in the selected game
-  _updatePlayersOfGame() {
-    // if no game has been selected yet i.e. there is no game available for the previous team
-    if (_selectedGame.id == null) {
-      _selectedGame = _games[0];
-    }
-    List<Player> allPlayersInTeam =
-        _persistentController.getAllPlayers(teamId: _selectedTeam.id);
-    Map<String, dynamic> gameStats = _statistics[_selectedGame.id];
-    logger.d("gameStats: $gameStats");
-    Map<String, dynamic> playerStats = gameStats["player_stats"];
-    List<String> playerIDsOfGame = playerStats.keys.toList();
-    logger.d("all player ids");
-    allPlayersInTeam.forEach((player) {
-      logger.d(player.id);
-    });
-    logger.d("all player id s in game");
-    playerIDsOfGame.forEach((playerID) {
-      logger.d(playerID);
-    });
-    List<Player> playersInGame = allPlayersInTeam
-        .where((Player player) => playerIDsOfGame.contains(player.id))
-        .toList();
-    _players = playersInGame;
-  }
+  // _updatePlayersOfGame() {
+  //   // if no game has been selected yet i.e. there is no game available for the previous team
+  //   if (_selectedGame.id == null) {
+  //     _selectedGame = _games[0];
+  //   }
+  //   List<Player> allPlayersInTeam =
+  //       _persistentController.getAllPlayers(teamId: _selectedTeam.id);
+  //   Map<String, dynamic> gameStats = _statistics[_selectedGame.id];
+  //   logger.d("gameStats: $gameStats");
+  //   Map<String, dynamic> playerStats = gameStats["player_stats"];
+  //   List<String> playerIDsOfGame = playerStats.keys.toList();
+  //   logger.d("all player ids");
+  //   allPlayersInTeam.forEach((player) {
+  //     logger.d(player.id);
+  //   });
+  //   logger.d("all player id s in game");
+  //   playerIDsOfGame.forEach((playerID) {
+  //     logger.d(playerID);
+  //   });
+  //   List<Player> playersInGame = allPlayersInTeam
+  //       .where((Player player) => playerIDsOfGame.contains(player.id))
+  //       .toList();
+  //   _players = playersInGame;
+  // }
 
   @override
   Widget build(BuildContext context) {

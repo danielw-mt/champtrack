@@ -119,6 +119,7 @@ class TempController extends GetxController {
       _selectedTeam.value.players.add(player);
     }
 
+
     // get all the teams the player should not be in
     List<Team> teamsWithoutPlayer = allTeams.where((Team team) => !player.teams.contains('teams/' + team.id!)).toList();
     teamsWithoutPlayer.forEach((element) {
@@ -154,6 +155,8 @@ class TempController extends GetxController {
     PersistentController persistentController = Get.find<PersistentController>();
     persistentController.removePlayerFromTeams(player);
     repository.deletePlayer(player);
+    // TODO remove player from teams in teams collection
+
     update(["players-list"]);
   }
 
