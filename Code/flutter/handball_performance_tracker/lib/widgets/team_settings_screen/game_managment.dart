@@ -19,16 +19,16 @@ class GameList extends StatefulWidget {
 class _GameListState extends State<GameList> {
   TempController _tempController = Get.find<TempController>();
   PersistentController _persistentController = Get.find<PersistentController>();
-  
+  List<Game> gamesList = [];
   @override
   Widget build(BuildContext context) {
     print("rebuild view");
     Team selectedTeam = _tempController.getSelectedTeam();
-    List<Game> gamesList = _persistentController.getAllGames(teamId: selectedTeam.id);
-    print("gamesList: "+gamesList.length.toString());
+    gamesList = _persistentController.getAllGames(teamId: selectedTeam.id);
+    print("gamesList: " + gamesList.length.toString());
     return SingleChildScrollView(
       child: DataTable(
-        columns: const <DataColumn>[
+        columns: <DataColumn>[
           DataColumn(
             label: Text(StringsGeneral.lOpponent),
           ),
@@ -66,7 +66,7 @@ class _GameListState extends State<GameList> {
                       content: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          Text(StringsGeneral.lGameDeleteWarning),
+                          Text(StringsGeneral.lGameDeleteWarning + "\n" + "Bitte nach dem Löschen eines Spiels kurz die Spielübersicht neu laden"),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
@@ -78,7 +78,9 @@ class _GameListState extends State<GameList> {
                               ElevatedButton(
                                   onPressed: () {
                                     _persistentController.deleteGame(gamesList[index]);
-                                    setState(() {});
+                                    setState(() {
+                                      gamesList.removeAt(index);
+                                    });
                                     Navigator.pop(context);
                                   },
                                   child: Text(StringsGeneral.lConfirm)),

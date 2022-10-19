@@ -205,7 +205,9 @@ class PersistentController extends GetxController {
 
   void deleteGame(Game game) async {
     await repository.deleteGame(game);
+    logger.d("games before: " + _allGames.length.toString());
     _allGames.remove(game);
+    logger.d("games after: " + _allGames.length.toString());
   }
 
   /// reset the current Game object to a game without id and clean up the actions list
