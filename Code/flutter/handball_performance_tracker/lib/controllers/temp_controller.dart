@@ -171,7 +171,7 @@ class TempController extends GetxController {
     //   player.teams.add(_selectedTeam.value.id.toString());
     // }
     // add player to players if they haven't been added before. Basically player has an id when they were previously added to firebase collection
-    if (player.id == null) {
+    if (player.id == "") {
       DocumentReference docRef = await repository.addPlayer(player);
       player.id = docRef.id;
     }
