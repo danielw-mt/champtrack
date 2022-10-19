@@ -15,6 +15,7 @@ class StopWatch extends StatelessWidget {
         persistentController.getCurrentGame().stopWatchTimer;
 
     return Scrollbar(
+      controller: ScrollController(),
         child: SingleChildScrollView(
             child: Padding(
                 padding: const EdgeInsets.symmetric(

@@ -215,6 +215,7 @@ class PlayerFormState extends State<PlayerForm> {
                           width: width * 0.25,
                           height: height * 0.2,
                           child: Scrollbar(
+                            controller: ScrollController(),
                             thumbVisibility: true,
                             child: ListView.builder(
                                 itemCount: availableTeams.length,
@@ -263,6 +264,7 @@ class PlayerFormState extends State<PlayerForm> {
                         width: width * 0.25,
                         height: height * 0.2,
                         child: Scrollbar(
+                          controller: ScrollController(),
                           thumbVisibility: true,
                           child: ListView.builder(
                             itemCount: 8,
@@ -394,14 +396,15 @@ class PlayerFormState extends State<PlayerForm> {
                                 const SnackBar(content: Text(StringsGeneral.lProcessingData)),
                               );
                               // If the player already exists they have an ID and we just need to update them
-                              if (player.id != null) {
+                              if (player.id != "") {
                                 // update player
-                                tempController.setPlayer(player);
                                 logger.d("edit mode");
+                                tempController.setPlayer(player);
                               } else {
                                 // add player
-                                tempController.addPlayer(player);
                                 logger.d("new player mode");
+                                tempController.addPlayer(player);
+                                
                               }
                             }
                           },

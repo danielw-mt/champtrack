@@ -63,6 +63,7 @@ void callActionMenu(BuildContext context) {
                 child: Column(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
                   Expanded(
                     child: Scrollbar(
+                      controller: ScrollController(),
                         thumbVisibility: true,
                         child: DialogButtonMenu(
                           actionContext: actionState,

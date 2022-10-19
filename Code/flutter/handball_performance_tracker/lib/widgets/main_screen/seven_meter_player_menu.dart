@@ -75,6 +75,7 @@ void callSevenMeterPlayerMenu(context) {
               ),
               // Button-Row: one Row with four Columns of one or two buttons
               Scrollbar(
+                controller: ScrollController(),
                 thumbVisibility: true,
                 child: SizedBox(
                   width: MediaQuery.of(context).size.width * 0.65,
