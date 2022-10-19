@@ -20,13 +20,34 @@ class TeamStatistics extends StatefulWidget {
 }
 
 class _TeamStatisticsState extends State<TeamStatistics> {
-  TempController _tempController = Get.put(TempController());
   PersistentController _persistentController = Get.put(PersistentController());
   List<Game> _games = [];
   List<Team> _teams = [];
   Map<String, dynamic> _statistics = {};
   Team _selectedTeam = Team(players: [], onFieldPlayers: []);
   Game _selectedGame = Game(date: DateTime.fromMicrosecondsSinceEpoch(0));
+
+  @override
+  void initState() {
+    _teams = _persistentController.getAvailableTeams();
+    _statistics = _persistentController.getStatistics();
+    // index access safety
+    if (_teams.length > 0) {
+      _selectedTeam = _teams[0];
+      // get allGame that are cached in persistentController
+      List<Game> allGames = _persistentController.getAllGames(teamId: _selectedTeam.id);
+      // only actually show games that are in the statistics map
+      _games = allGames.where((game) => _statistics.containsKey(game.id)).toList();
+    // if there are no teams ofc there are no players and no games
+    } else {
+      _games = [];
+    }
+    if (_games.length > 0) {
+      _selectedGame = _games[0];
+    }
+    super.initState();
+  }
+
 
   void onGameSelected(Game game) {
     setState(() {
@@ -42,27 +63,6 @@ class _TeamStatisticsState extends State<TeamStatistics> {
       _games = allGames.where((game) => _statistics.containsKey(game.id)).toList();
       _selectedGame = _games[0];
     });
-  }
-
-  @override
-  void initState() {
-    _teams = _persistentController.getAvailableTeams();
-    // index access safety
-    if (_teams.length > 0) {
-      _selectedTeam = _tempController.getSelectedTeam();
-      // get allGame that are cached in persistentController
-      List<Game> allGames = _persistentController.getAllGames(teamId: _selectedTeam.id);
-      // only actually show games that are in the statistics map
-      _games = allGames.where((game) => _statistics.containsKey(game.id)).toList();
-      // if there are no teams ofc there are no players and no games
-    } else {
-      _games = [];
-    }
-    if (_games.length > 0) {
-      _selectedGame = _games[0];
-    }
-    _statistics = _persistentController.getStatistics();
-    super.initState();
   }
 
   @override
