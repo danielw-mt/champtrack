@@ -44,28 +44,36 @@ class _PlayerStatisticsState extends State<PlayerStatistics> {
   void initState() {
     _teams = _persistentController.getAvailableTeams();
     // if's are for index safety
-    if (_players.length > 0) {
-      _selectedPlayer = _players[0];
-      // if there are no players don't display any games
-    } else {
-      _games = [];
-    }
-    if (_games.length > 0) {
-      _selectedGame = _games[0];
-    }
     if (_teams.length > 0) {
       _selectedTeam = _tempController.getSelectedTeam();
-      List<Game> allGames = _persistentController.getAllGames(teamId: _selectedTeam.id);
-      _games = allGames.where((game) => _statistics.containsKey(game.id)).toList();
+      _games = getGamesInStatistics();
+      if (_games.length == 0) {
+        _players = [];
+      }
       _players = _persistentController.getAllPlayers(teamId: _selectedTeam.id);
       // if there are no teams ofc there are no players and no games
     } else {
       _players = [];
       _games = [];
     }
+    if (_games.length > 0) {
+      _selectedGame = _games[0];
+    }
+    if (_players.length > 0) {
+      _selectedPlayer = _players[0];
+      // if there are no players don't display any games
+    } else {
+      _games = [];
+    }
 
     _statistics = _persistentController.getStatistics();
     super.initState();
+  }
+
+  /// provide the games that are cached in persistentcontroller that match the selected team and that also match games in the statistics map
+  List<Game> getGamesInStatistics() {
+    List<Game> allGames = _persistentController.getAllGames(teamId: _selectedTeam.id);
+    return allGames.where((game) => _statistics.containsKey(game.id)).toList();
   }
 
   void onPlayerSelected(Player player) {
@@ -84,7 +92,11 @@ class _PlayerStatisticsState extends State<PlayerStatistics> {
   void onTeamSelected(Team team) {
     setState(() {
       _selectedTeam = team;
-      _games = _persistentController.getAllGames(teamId: _selectedTeam.id);
+      _games = getGamesInStatistics();
+      // if there are no games do not display the player dropdown
+      if (_games.length == 0) {
+        _players = [];
+      }
       _players = _persistentController.getAllPlayers(teamId: _selectedTeam.id);
       logger.d("players: $_players");
       if (_players.length > 0) {
@@ -137,8 +149,7 @@ class _PlayerStatisticsState extends State<PlayerStatistics> {
     List<double> efScoreSeries = [];
     List<int> timeStamps = [];
     try {
-      Map<String, dynamic> playerStats =
-          _statistics[_selectedGame.id]["player_stats"][_selectedPlayer.id];
+      Map<String, dynamic> playerStats = _statistics[_selectedGame.id]["player_stats"][_selectedPlayer.id];
       // try to get action counts for the player
       actionCounts = playerStats["action_counts"];
       // try to get action_series for player
@@ -153,10 +164,8 @@ class _PlayerStatisticsState extends State<PlayerStatistics> {
       stopTime = _statistics[_selectedGame.id]["stop_time"];
 
       // try to get quotas for player
-      quotas[0][0] =
-          double.parse(playerStats["seven_meter_quota"][0].toString());
-      quotas[0][1] =
-          double.parse(playerStats["seven_meter_quota"][1].toString());
+      quotas[0][0] = double.parse(playerStats["seven_meter_quota"][0].toString());
+      quotas[0][1] = double.parse(playerStats["seven_meter_quota"][1].toString());
       quotas[1][0] = double.parse(playerStats["position_quota"][0].toString());
       quotas[1][1] = double.parse(playerStats["position_quota"][1].toString());
       quotas[2][0] = double.parse(playerStats["throw_quota"][0].toString());
@@ -186,15 +195,9 @@ class _PlayerStatisticsState extends State<PlayerStatistics> {
                               child: Column(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
-                              TeamSelector(
-                                  teams: _teams,
-                                  onTeamSelected: onTeamSelected),
-                              GameSelector(
-                                  games: _games,
-                                  onGameSelected: onGameSelected),
-                              PlayerSelector(
-                                  players: _players,
-                                  onPlayerSelected: onPlayerSelected)
+                              TeamSelector(teams: _teams, onTeamSelected: onTeamSelected),
+                              GameSelector(games: _games, onGameSelected: onGameSelected),
+                              PlayerSelector(players: _players, onPlayerSelected: onPlayerSelected)
                             ],
                           ))),
                       Flexible(
@@ -238,15 +241,9 @@ class _PlayerStatisticsState extends State<PlayerStatistics> {
                   // only pass the penalty values if they can be found in the actionCounts map
                   // if there is no value for that penalty pass 0
                   child: PenaltyInfoCard(
-                    redCards: actionCounts[redCardTag] == null
-                        ? 0
-                        : actionCounts[redCardTag]!,
-                    yellowCards: actionCounts[yellowCardTag] == null
-                        ? 0
-                        : actionCounts[yellowCardTag]!,
-                    timePenalties: actionCounts[timePenaltyTag] == null
-                        ? 0
-                        : actionCounts[timePenaltyTag]!,
+                    redCards: actionCounts[redCardTag] == null ? 0 : actionCounts[redCardTag]!,
+                    yellowCards: actionCounts[yellowCardTag] == null ? 0 : actionCounts[yellowCardTag]!,
+                    timePenalties: actionCounts[timePenaltyTag] == null ? 0 : actionCounts[timePenaltyTag]!,
                   ),
                 ),
                 Expanded(

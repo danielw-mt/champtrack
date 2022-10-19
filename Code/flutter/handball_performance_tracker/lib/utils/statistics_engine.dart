@@ -32,7 +32,11 @@ class StatisticsEngine {
     gameDocuments.forEach((Map<String, dynamic> gameDocument) {
       // quality check that game document contains all the fields it needs and also actions
       // otherwise don't deal with this game
-      if (gameDocument["teamId"] != null && gameDocument["startTime"] != null && gameDocument.containsKey("actions") && gameDocument["id"] != null) {
+      if (gameDocument["teamId"] != null &&
+          gameDocument["startTime"] != null &&
+          gameDocument["stopTime"] != null &&
+          gameDocument.containsKey("actions") &&
+          gameDocument["id"] != null) {
         List<Map<String, dynamic>> actions = gameDocument["actions"];
         // generate statistics for each player
         Map<String, dynamic> playerStats = _generatePlayerStatistics(actions, players);
