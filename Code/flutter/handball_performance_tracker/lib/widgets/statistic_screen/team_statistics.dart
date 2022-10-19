@@ -37,7 +37,9 @@ class _TeamStatisticsState extends State<TeamStatistics> {
   void onTeamSelected(Team team) {
     setState(() {
       _selectedTeam = team;
-      _games = _persistentController.getAllGames(teamId: _selectedTeam.id);
+      List<Game> allGames = _persistentController.getAllGames(teamId: _selectedTeam.id);
+      // only actually show games that are in the statistics map
+      _games = allGames.where((game) => _statistics.containsKey(game.id)).toList();
       _selectedGame = _games[0];
     });
   }
@@ -46,23 +48,22 @@ class _TeamStatisticsState extends State<TeamStatistics> {
   void initState() {
     _teams = _persistentController.getAvailableTeams();
     // index access safety
-    if (_teams.length > 0){
+    if (_teams.length > 0) {
       _selectedTeam = _tempController.getSelectedTeam();
       // get allGame that are cached in persistentController
       List<Game> allGames = _persistentController.getAllGames(teamId: _selectedTeam.id);
       // only actually show games that are in the statistics map
       _games = allGames.where((game) => _statistics.containsKey(game.id)).toList();
-    // if there are no teams ofc there are no players and no games
+      // if there are no teams ofc there are no players and no games
     } else {
       _games = [];
     }
-    if (_games.length > 0){
+    if (_games.length > 0) {
       _selectedGame = _games[0];
     }
     _statistics = _persistentController.getStatistics();
     super.initState();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -146,11 +147,7 @@ class _TeamStatisticsState extends State<TeamStatistics> {
                     children: [
                       Flexible(
                         child: PerformanceCard(
-                            actionSeries: actionSeries,
-                            efScoreSeries: [],
-                            allActionTimeStamps: timeStamps,
-                            startTime: startTime,
-                            stopTime: stopTime),
+                            actionSeries: actionSeries, efScoreSeries: [], allActionTimeStamps: timeStamps, startTime: startTime, stopTime: stopTime),
                       ),
                       Expanded(
                         // TODO change ActionCards to stateless widget
@@ -177,8 +174,7 @@ class _TeamStatisticsState extends State<TeamStatistics> {
                 ),
                 Expanded(
                   flex: 4,
-                  child:  Card(child: Image(image: AssetImage('statistics2_heatmap.png'))),
-                  
+                  child: Card(child: Image(image: AssetImage('statistics2_heatmap.png'))),
                 )
               ],
             )),
