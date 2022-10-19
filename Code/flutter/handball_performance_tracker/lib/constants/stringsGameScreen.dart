@@ -28,8 +28,8 @@ class StringsGameScreen {
   static const String lSubstitute = "Wechsel";
 
   // game_actions.dart & action_feed.dart
-  static const String lRedCard = "Rote Karte";
-  static const String lYellowCard = "Gelbe Karte";
+  static const String lRedCard = "Rot";
+  static const String lYellowCard = "Gelb";
   static const String lTimePenalty = "Zeitstrafe verursacht";
   static const String lGoal = "Tor";
   static const String lOneVsOneAnd7m = "1v1 mit 7m Folge";

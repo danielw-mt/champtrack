@@ -233,8 +233,7 @@ class StartGameFormState extends State<StartGameForm> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Flexible(
-                              child:
-                                  Row(
+                              child: Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceEvenly,
                                 children: [
@@ -287,8 +286,9 @@ class StartGameFormState extends State<StartGameForm> {
                                                 });
                                               }),
                                         ),
-                                        Text(StringsGameSettings
-                                            .lHomeSideIsRight)
+                                        Flexible(
+                                            child: Text(StringsGameSettings
+                                                .lHomeSideIsRight))
                                       ],
                                     ),
                                   ),
@@ -337,8 +337,9 @@ class StartGameFormState extends State<StartGameForm> {
                           child: SizedBox(
                             width: 0.15 * width,
                             height: 0.08 * height,
-                            child: _tempController.getSelectedTeam() == Team(players: [], onFieldPlayers: [])
-                                ? Container() 
+                            child: _tempController.getSelectedTeam() ==
+                                    Team(players: [], onFieldPlayers: [])
+                                ? Container()
                                 : ElevatedButton(
                                     style: ButtonStyle(
                                         backgroundColor:

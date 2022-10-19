@@ -37,7 +37,7 @@ class GlossaryScreen extends StatelessWidget {
                     // Container for menu button on top left corner
                     //MenuButton(_scaffoldKey),
 
-                    Expanded(
+                    Flexible(
                       child: SingleChildScrollView(
                         scrollDirection: Axis.vertical,
                         child: DataTable(
@@ -57,7 +57,8 @@ class GlossaryScreen extends StatelessWidget {
                             DataRow(cells: [
                               DataCell(Text('Tor')),
                               DataCell(
-                                  Text('Player erziehlt regelkonform ein Tor')),
+                                  Text(
+                                    'Player erziehlt regelkonform ein Tor',softWrap: true)),
                             ]),
                             DataRow(cells: [
                               DataCell(Text('Assist')),
@@ -116,7 +117,7 @@ class GlossaryScreen extends StatelessWidget {
                             ]),
                             DataRow(cells: [
                               DataCell(Text('Technischer Fehler')),
-                              DataCell(Text(
+                              DataCell(Text(softWrap: true,
                                   'Ein Player begeht einen der folgenden Fehler: Stürmerfoul, Tippfehler, Schrittfehler, Fehlpass, Fangfehler, \nFalsch ausgeführter Freiwurf/7m/Einwurf, Übertritt, Laufen durch den Kreis, Ball übergeben, Anlaufen aus dem Aus')),
                             ]),
                           ],
