@@ -1,8 +1,5 @@
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:handball_performance_tracker/constants/colors.dart';
-import 'package:handball_performance_tracker/widgets/authentication_screen/alert_widget.dart';
-import 'package:handball_performance_tracker/widgets/main_screen/ef_score_bar.dart';
 import 'package:handball_performance_tracker/widgets/nav_drawer.dart';
 import 'package:get/get.dart';
 import '../controllers/persistent_controller.dart';
@@ -11,11 +8,10 @@ import '../utils/initialize_local_data.dart';
 import '../widgets/dashboard/start_new_game_button.dart';
 import '../widgets/dashboard/manage_teams_button.dart';
 import '../widgets/dashboard/statistics_button.dart';
-import '../widgets/dashboard/old_game_card.dart';
+import '../constants/stringsGeneral.dart';
 
 class Dashboard extends StatelessWidget {
-  final PersistentController persistentController =
-      Get.put(PersistentController());
+  final PersistentController persistentController = Get.put(PersistentController());
   final TempController tempController = Get.put(TempController());
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -31,11 +27,11 @@ class Dashboard extends StatelessWidget {
                     key: _scaffoldKey,
                     drawer: NavDrawer(),
                     appBar: AppBar(
-                      backgroundColor: buttonDarkBlueColor,
+                        backgroundColor: buttonDarkBlueColor,
                         title: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        /*Container(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            /*Container(
                           padding: EdgeInsets.only(right: 10),
                           child: new Image.asset(
                             "assets/launcher_icon.png",
@@ -43,24 +39,21 @@ class Dashboard extends StatelessWidget {
                             fit: BoxFit.cover,
                           ),
                         ),*/
-                        Text(
-                          persistentController.getLoggedInClub().name,
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 20),
-                        ),
-                      ],
-                    )),
+                            Text(
+                              persistentController.getLoggedInClub().name,
+                              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                            ),
+                          ],
+                        )),
                     // if drawer is closed notify, so if game is running the back to game button appears on next opening
                     onDrawerChanged: (isOpened) {
                       if (!isOpened) {
                         tempController.setMenuIsEllapsed(false);
                       }
                     },
-                    body: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          // Upper white bar with menu button etc
-                          /*Container(
+                    body: Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+                      // Upper white bar with menu button etc
+                      /*Container(
                             color: Colors.white,
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -73,45 +66,59 @@ class Dashboard extends StatelessWidget {
                             ),
                           ),*/
 
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              // Buttons
-                              Container(
-                                child: Column(
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          // Buttons
+                          Container(
+                            child: Column(
+                              children: [
+                                StatisticsButton(),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
-                                    StatisticsButton(),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        ManageTeamsButton(),
-                                        StartNewGameButton(),
-                                        // Take game restore out for now (18.10.22)
-                                        //OldGameCard()
-                                      ],
-                                    ),
+                                    ManageTeamsButton(),
+                                    StartNewGameButton(),
+                                    // Take game restore out for now (18.10.22)
+                                    //OldGameCard()
                                   ],
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
-                        ])));
+                        ],
+                      ),
+                    ])));
           }
           if (snapshot.hasError) {
             print(snapshot.error);
-            return Column(
-              children: [
-                Icon(Icons.error),
-                Text("Couldn't get any data from Firebase")
-              ],
+            return SafeArea(
+              child: Scaffold(
+                key: _scaffoldKey,
+                drawer: NavDrawer(),
+                appBar: AppBar(),
+                body: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Center(
+                        child: Icon(
+                      Icons.wifi_off,
+                    )),
+                    Center(
+                        child: Text(
+                      StringsGeneral.lNoConnection,
+                      style: TextStyle(fontSize: 30),
+                    )),
+                  ],
+                ),
+              ),
             );
           } else {
             return Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text("Loading...",
-                    style: TextStyle(fontSize: 20, color: Colors.blue)),
+                Text("Loading...", style: TextStyle(fontSize: 20, color: Colors.blue)),
                 Image.asset("assets/goalee_gif.gif"),
                 CircularProgressIndicator(
                   strokeWidth: 4,

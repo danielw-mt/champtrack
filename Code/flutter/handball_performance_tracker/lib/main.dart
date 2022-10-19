@@ -119,17 +119,18 @@ Future<dynamic> _startupCheck() async {
   }
   // if connected force synchronization
   var connectivityResult = await (Connectivity().checkConnectivity());
-  // if (connectivityResult == ConnectivityResult.mobile ||
-  //     connectivityResult == ConnectivityResult.wifi) {
-  //   // I am connected to a mobile network.
-  //   FirebaseFirestore db = FirebaseFirestore.instance;
-  //   db.enableNetwork();
-  //   print(StringsGeneral.lConnected);
-  // } else {
-  //   // TODO define behaviour for not connected i.e. wait 5 secs and try again
-  //   print(StringsGeneral.lNot + ' ' + StringsGeneral.lConnected);
+  if (connectivityResult == ConnectivityResult.mobile ||
+      connectivityResult == ConnectivityResult.wifi) {
+    // I am connected to a mobile network.
+    FirebaseFirestore db = FirebaseFirestore.instance;
+    db.enableNetwork();
+    print(StringsGeneral.lConnected);
+  } else {
+    // TODO define behaviour for not connected i.e. wait 5 secs and try again
+    print(StringsGeneral.lNot + ' ' + StringsGeneral.lConnected);
+    return "";
 
-  // }
+  }
   FirebaseFirestore db = FirebaseFirestore.instance;
   db.settings = const Settings(
     persistenceEnabled: true,

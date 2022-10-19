@@ -24,7 +24,7 @@ class StringsGeneral {
   static const String lGoal = "Tor";
   static const String lOneVsOneAnd7m = "1v1 & 7m";
   static const String lTwoMin = "2min ziehen";
-  static const String lMiss = "miss"; 
+  static const String lMiss = "miss";
   static const String lTrf = "TRF";
   static const String lFoul7m = "Foul => 7m";
   static const String lBlockNoBall = "Block ohne Ballgewinn";
@@ -78,16 +78,12 @@ class StringsGeneral {
   static const String lLocation = "Halle";
   static const String lHomeGame = "Heimspiel";
   static const String lOutwardsGame = "Auswärtsspiel";
-  static const String lStartGameFormPrompt =
-      "Bitte ergänze alle fehlenden Felder";
+  static const String lStartGameFormPrompt = "Bitte ergänze alle fehlenden Felder";
   static const String lStartGameTitle = "Neues Spiel tracken";
   static const String lStartGameTeamPrompt = "Bitte wähle ein Team aus";
-  static const String lStartGamePlayerSelectionPrompt =
-      "Bitte wähle alle Player für den Spieltag aus";
-  static const String lStartGamePlayerPositioningPrompt =
-      "Bitte wähle die Startaufstellung aus den nominierten Playern aus";
-  static const String lHotReloadError =
-      "Es scheint ein Problem zu geben. Bitte gehen Sie zurück zum Dashboard";
+  static const String lStartGamePlayerSelectionPrompt = "Bitte wähle alle Player für den Spieltag aus";
+  static const String lStartGamePlayerPositioningPrompt = "Bitte wähle die Startaufstellung aus den nominierten Playern aus";
+  static const String lHotReloadError = "Es scheint ein Problem zu geben. Bitte gehen Sie zurück zum Dashboard";
   static const String lStartGameButton = "Spiel starten";
   static const String lSubmitButton = "Speichern";
 
@@ -100,6 +96,8 @@ class StringsGeneral {
   static const String lDashboard = "Dashboard";
   static const String lManageTeams = "Teams verwalten";
   static const String lTrackNewGame = "Neues Spiel tracken";
+  static const String lNoConnection = "Es konnten keine Daten von unseren Servern geladen werden. Bitte Internet Verbindung überprüfen";
+
   // team settings screen
   static const String lName = "Name";
   static const String lNumber = "Nummer";
@@ -135,7 +133,7 @@ class StringsGeneral {
   static const String lNumberTooLong = "Bitte kürzere Nummer eingeben";
   static const String lPositionMissing = "Bitte Position auswählen";
   static const String lTeamMissing = "Bitte Team auswählen";
-  
+
   // team selection screen
   static const String lAddTeam = "Team hinzufügen";
   static const String lTeamTypes = "Teamtypen";
