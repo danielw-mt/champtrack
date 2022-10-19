@@ -58,7 +58,7 @@ class StopWatchBar extends StatelessWidget {
                   )),
             ),
             // reset button
-            Container(
+            /*Container(
               decoration: BoxDecoration(
                   color: buttonGreyColor,
                   borderRadius: BorderRadius.all(Radius.circular(menuRadius))),
@@ -78,7 +78,7 @@ class StopWatchBar extends StatelessWidget {
                     Icons.history,
                     color: Colors.black,
                   )),
-            ),
+            ),*/
           ],
         );
       },

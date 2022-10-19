@@ -5,6 +5,8 @@ import 'package:handball_performance_tracker/constants/game_actions.dart';
 import 'package:handball_performance_tracker/controllers/temp_controller.dart';
 import 'package:handball_performance_tracker/widgets/nav_drawer.dart';
 
+import '../constants/colors.dart';
+
 // a screen that holds widgets that can be useful for debugging and game control
 class GlossaryScreen extends StatelessWidget {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -15,6 +17,9 @@ class GlossaryScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
+            appBar: AppBar(
+                backgroundColor: buttonDarkBlueColor,
+                title: Text("Glossar")),
             key: _scaffoldKey,
             drawer: NavDrawer(),
             // if drawer is closed notify, so if game is running the back to game button appears on next opening
@@ -30,7 +35,7 @@ class GlossaryScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // Container for menu button on top left corner
-                    MenuButton(_scaffoldKey),
+                    //MenuButton(_scaffoldKey),
 
                     Expanded(
                       child: SingleChildScrollView(

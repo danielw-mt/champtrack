@@ -80,7 +80,11 @@ class StartGameFormState extends State<StartGameForm> {
         firstDate: DateTime(2015, 8),
         lastDate: DateTime(2101),
         builder: (context, child) {
-          return Theme(data: ThemeData.light().copyWith(colorScheme: ColorScheme.fromSeed(seedColor: buttonDarkBlueColor)), child: child!);
+          return Theme(
+              data: ThemeData.light().copyWith(
+                  colorScheme:
+                      ColorScheme.fromSeed(seedColor: buttonDarkBlueColor)),
+              child: child!);
         });
     if (picked != null && picked != selectedDate) {
       selectedDate = picked;
@@ -95,9 +99,12 @@ class StartGameFormState extends State<StartGameForm> {
     // configure decoration for all input fields
     InputDecoration getDecoration(String labelText) {
       return InputDecoration(
-          focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: buttonDarkBlueColor)),
-          enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: buttonDarkBlueColor)),
-          disabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: buttonDarkBlueColor)),
+          focusedBorder: UnderlineInputBorder(
+              borderSide: BorderSide(color: buttonDarkBlueColor)),
+          enabledBorder: UnderlineInputBorder(
+              borderSide: BorderSide(color: buttonDarkBlueColor)),
+          disabledBorder: UnderlineInputBorder(
+              borderSide: BorderSide(color: buttonDarkBlueColor)),
           labelText: labelText,
           labelStyle: TextStyle(color: buttonDarkBlueColor),
           filled: true,
@@ -110,7 +117,14 @@ class StartGameFormState extends State<StartGameForm> {
       builder: (TempController tempController) {
         double width = MediaQuery.of(context).size.width;
         double height = MediaQuery.of(context).size.height;
-        return Column(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+        return Scaffold(
+          appBar: AppBar(
+            title: Text(StringsGeneral.lTrackNewGame),
+            backgroundColor: buttonDarkBlueColor,
+          ),
+          body:
+
+              /*Column(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
           Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
@@ -122,14 +136,14 @@ class StartGameFormState extends State<StartGameForm> {
                     MenuButton(scaffoldKey),
                     Icon(Icons.sports_handball, color: buttonDarkBlueColor),
                     Expanded(child: Text(StringsGeneral.lTrackNewGame, style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold))),
-                    SizedBox(width: 0.2 * width, child: SeasonDropdown()),
+                    //SizedBox(width: 0.2 * width, child: SeasonDropdown()),
                   ],
                 ),
               ),
               Divider(),
             ],
-          ),
-          Form(
+          ),*/
+              Form(
             key: _formKey,
             child: Column(
               children: [
@@ -163,7 +177,8 @@ class StartGameFormState extends State<StartGameForm> {
                                   child: TextFormField(
                                     controller: opponentController,
                                     style: TextStyle(fontSize: 18),
-                                    decoration: getDecoration(StringsGeneral.lOpponent),
+                                    decoration:
+                                        getDecoration(StringsGeneral.lOpponent),
                                     onChanged: (String? input) {
                                       if (input != null) opponent = input;
                                     },
@@ -176,7 +191,8 @@ class StartGameFormState extends State<StartGameForm> {
                                   height: height * 0.15,
                                   child: TextFormField(
                                     controller: locationController,
-                                    decoration: getDecoration(StringsGeneral.lLocation),
+                                    decoration:
+                                        getDecoration(StringsGeneral.lLocation),
                                     onChanged: (String? input) {
                                       if (input != null) location = input;
                                     },
@@ -196,7 +212,8 @@ class StartGameFormState extends State<StartGameForm> {
                                   height: height * 0.15,
                                   child: TextFormField(
                                     controller: dateController,
-                                    decoration: getDecoration(StringsGameSettings.lSelectDate),
+                                    decoration: getDecoration(
+                                        StringsGameSettings.lSelectDate),
                                     onTap: () => selectDate(context),
                                   )),
                             ),
@@ -213,60 +230,69 @@ class StartGameFormState extends State<StartGameForm> {
                       ),
                       Flexible(
                         child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Flexible(
-                              child: SizedBox(
-                                width: 0.3 * width,
-                                height: height * 0.15,
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                  children: [
-                                    Flexible(
-                                      child: Checkbox(
-                                          fillColor: MaterialStateProperty.all<Color>(buttonDarkBlueColor),
+                              child:
+                                  Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  Flexible(
+                                      child: Row(
+                                    children: [
+                                      Checkbox(
+                                          fillColor:
+                                              MaterialStateProperty.all<Color>(
+                                                  buttonDarkBlueColor),
                                           value: isAtHome,
                                           onChanged: (bool? value) {
                                             setState(() {
                                               isAtHome = value!;
                                             });
                                           }),
-                                    ),
-                                    Flexible(child: Text(StringsGeneral.lHomeGame)),
-                                    Flexible(
-                                      child: Checkbox(
-                                          fillColor: MaterialStateProperty.all<Color>(buttonDarkBlueColor),
+                                      Text(StringsGeneral.lHomeGame),
+                                    ],
+                                  )),
+                                  Flexible(
+                                      child: Row(
+                                    children: [
+                                      Checkbox(
+                                          fillColor:
+                                              MaterialStateProperty.all<Color>(
+                                                  buttonDarkBlueColor),
                                           value: !isAtHome,
                                           onChanged: (bool? value) {
                                             setState(() {
                                               isAtHome = !value!;
                                             });
                                           }),
+                                      Text(StringsGeneral.lOutwardsGame),
+                                    ],
+                                  )),
+                                  Flexible(
+                                    child: Row(
+                                      children: [
+                                        Flexible(
+                                          child: Checkbox(
+                                              fillColor: MaterialStateProperty
+                                                  .all<Color>(
+                                                      buttonDarkBlueColor),
+                                              value: tempController
+                                                  .getAttackIsLeft(),
+                                              onChanged: (bool? value) {
+                                                setState(() {
+                                                  tempController
+                                                      .setAttackIsLeft(value!);
+                                                });
+                                              }),
+                                        ),
+                                        Text(StringsGameSettings
+                                            .lHomeSideIsRight)
+                                      ],
                                     ),
-                                    Flexible(child: Text(StringsGeneral.lOutwardsGame))
-                                  ],
-                                ),
-                              ),
-                            ),
-                            Flexible(
-                              child: SizedBox(
-                                width: 0.3 * width,
-                                height: height * 0.15,
-                                child: Row(
-                                  children: [
-                                    Flexible(
-                                      child: Checkbox(
-                                          fillColor: MaterialStateProperty.all<Color>(buttonDarkBlueColor),
-                                          value: tempController.getAttackIsLeft(),
-                                          onChanged: (bool? value) {
-                                            setState(() {
-                                              tempController.setAttackIsLeft(value!);
-                                            });
-                                          }),
-                                    ),
-                                    Flexible(child: Text(StringsGameSettings.lHomeSideIsRight))
-                                  ],
-                                ),
+                                  ),
+                                ],
                               ),
                             ),
                           ],
@@ -282,7 +308,8 @@ class StartGameFormState extends State<StartGameForm> {
                   alignment: Alignment.bottomCenter,
                   child: Padding(
                     // TODO create a lock in button
-                    padding: const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 20.0),
+                    padding: const EdgeInsets.only(
+                        left: 20.0, right: 20.0, bottom: 20.0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.end,
@@ -292,12 +319,18 @@ class StartGameFormState extends State<StartGameForm> {
                             width: 0.15 * width,
                             height: 0.08 * height,
                             child: ElevatedButton(
-                                style: ButtonStyle(backgroundColor: MaterialStateProperty.all<Color>(buttonGreyColor)),
+                                style: ButtonStyle(
+                                    backgroundColor:
+                                        MaterialStateProperty.all<Color>(
+                                            buttonGreyColor)),
                                 onPressed: () {
                                   Get.to(() => Dashboard());
                                 },
                                 child: Text(StringsDashboard.lDashboard,
-                                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black))),
+                                    style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black))),
                           ),
                         ),
                         Flexible(
@@ -307,12 +340,20 @@ class StartGameFormState extends State<StartGameForm> {
                             child: _tempController.getSelectedTeam() == Team(players: [], onFieldPlayers: [])
                                 ? Container() 
                                 : ElevatedButton(
-                                    style: ButtonStyle(backgroundColor: MaterialStateProperty.all<Color>(buttonLightBlueColor)),
+                                    style: ButtonStyle(
+                                        backgroundColor:
+                                            MaterialStateProperty.all<Color>(
+                                                buttonLightBlueColor)),
                                     onPressed: () async {
-                                      PersistentController persistentController = Get.find<PersistentController>();
+                                      PersistentController
+                                          persistentController =
+                                          Get.find<PersistentController>();
                                       // check if there was already a game created and information is only updated
-                                      Game currentGame = persistentController.getCurrentGame();
-                                      bool gameExists = (currentGame.id == null) ? false : true;
+                                      Game currentGame =
+                                          persistentController.getCurrentGame();
+                                      bool gameExists = (currentGame.id == null)
+                                          ? false
+                                          : true;
                                       if (gameExists) {
                                         print("game exists");
                                         // update information based on user input
@@ -322,23 +363,33 @@ class StartGameFormState extends State<StartGameForm> {
                                         currentGame.opponent = opponent;
                                         currentGame.season = season;
                                         currentGame.isAtHome = isAtHome;
-                                        persistentController.setCurrentGame(currentGame);
+                                        persistentController
+                                            .setCurrentGame(currentGame);
                                       } else {
                                         print("game does not exist");
                                         // store entered data to a new game object that will be used when the game is started at the end of the flow
                                         Game preconfiguredGame = Game(
                                             date: selectedDate,
-                                            teamId: tempController.getSelectedTeam().id!,
+                                            teamId: tempController
+                                                .getSelectedTeam()
+                                                .id!,
                                             location: location,
                                             opponent: opponent,
-                                            season: tempController.getSelectedSeason(),
+                                            season: tempController
+                                                .getSelectedSeason(),
                                             isAtHome: isAtHome);
-                                        await persistentController.setCurrentGame(preconfiguredGame, isNewGame: true);
+                                        await persistentController
+                                            .setCurrentGame(preconfiguredGame,
+                                                isNewGame: true);
                                       }
                                       Get.to(() => PlayerSelectionScreen());
                                     },
-                                    child: const Text(StringsTeamManagement.lSubmitButton,
-                                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black)),
+                                    child: const Text(
+                                        StringsTeamManagement.lSubmitButton,
+                                        style: TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.black)),
                                   ),
                           ),
                         )
@@ -349,7 +400,7 @@ class StartGameFormState extends State<StartGameForm> {
               ],
             ),
           ),
-        ]);
+        );
       },
     );
   }

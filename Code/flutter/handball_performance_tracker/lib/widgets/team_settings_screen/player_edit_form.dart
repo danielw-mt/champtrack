@@ -108,19 +108,10 @@ class PlayerFormState extends State<PlayerForm> {
     return Column(children: [
       Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
         editModeEnabled
-            ? Text(StringsGeneral.lPlayerEditMode, style: TextStyle(fontWeight: FontWeight.bold))
-            : Text(StringsGeneral.lPlayerCreateMode, style: TextStyle(fontWeight: FontWeight.bold)),
-        SizedBox(
-          width: 0.15 * width,
-          height: 0.08 * height,
-          child: ElevatedButton(
-              style: ButtonStyle(backgroundColor: MaterialStateProperty.all<Color>(buttonGreyColor)),
-              onPressed: () {
-                tempController.deletePlayer(player);
-                Navigator.pop(context);
-              },
-              child: Text(StringsGeneral.lDeletePlayer, style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black))),
-        ),
+            ? Text(StringsGeneral.lPlayerEditMode,
+                style: TextStyle(fontWeight: FontWeight.bold))
+            : Text(StringsGeneral.lPlayerCreateMode,
+                style: TextStyle(fontWeight: FontWeight.bold)),
       ]),
       Form(
         key: _formKey,
@@ -170,7 +161,8 @@ class PlayerFormState extends State<PlayerForm> {
               children: [
                 SizedBox(
                   width: width * 0.25,
-                  child: TextFormField(
+                  child: Container(),
+                  /*TextFormField(
                     controller: nickNameController,
                     style: TextStyle(fontSize: 18),
                     decoration: getDecoration(StringsGeneral.lNickName),
@@ -181,7 +173,7 @@ class PlayerFormState extends State<PlayerForm> {
                       // }
                       return null;
                     },
-                  ),
+                  ),*/
                 ),
                 SizedBox(
                   width: width * 0.25,
@@ -214,6 +206,7 @@ class PlayerFormState extends State<PlayerForm> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 FormField(
+                  // Team selection
                   builder: (state) => Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -262,6 +255,7 @@ class PlayerFormState extends State<PlayerForm> {
                   },
                 ),
                 FormField(
+                  // Position check boxes
                   builder: (state) => Column(
                     children: [
                       Text(StringsGeneral.lPosition),
@@ -331,14 +325,60 @@ class PlayerFormState extends State<PlayerForm> {
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
+                    
                     Flexible(
-                      child: SizedBox(
-                        width: 0.15 * width,
-                        height: 0.08 * height,
-                        child: ElevatedButton(
+                      // Cancel-Button
+                      child:
+                          //SizedBox(
+                          //width: 0.15 * width,
+                          //height: 0.08 * height,
+                          //child:
+                          ElevatedButton(
+                        style: ButtonStyle(
+                            backgroundColor: MaterialStateProperty.all<Color>(
+                                buttonGreyColor)),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: const Text(
+                          StringsGeneral.lBack,
+                          style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black),
+                        ),
+                      ),
+                    ),
+                    Flexible(
+                      child:
+                          //SizedBox(
+                          //width: 0.15 * width,
+                          //height: 0.08 * height,
+                          //child:
+                          ElevatedButton(
+                              style: ButtonStyle(
+                                  backgroundColor:
+                                      MaterialStateProperty.all<Color>(
+                                          buttonGreyColor)),
+                              onPressed: () {
+                                tempController.deletePlayer(player);
+                                Navigator.pop(context);
+                              },
+                              child: Text(StringsGeneral.lDeletePlayer,
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black))),
+                    ),
+                    Flexible(
+                      child: //SizedBox(
+                        //width: 0.15 * width,
+                        //height: 0.08 * height,
+                        //child: 
+                        ElevatedButton(
                           style: ButtonStyle(backgroundColor: MaterialStateProperty.all<Color>(buttonLightBlueColor)),
                           onPressed: () {
                             // Validate returns true if the form is valid, or false otherwise.
@@ -370,9 +410,8 @@ class PlayerFormState extends State<PlayerForm> {
                             style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black),
                           ),
                         ),
-                      ),
                     ),
-                    Flexible(
+                    /*Flexible(
                         // Cancel-Button
                         child: SizedBox(
                       width: 0.15 * width,
@@ -387,7 +426,7 @@ class PlayerFormState extends State<PlayerForm> {
                           style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black),
                         ),
                       ),
-                    ))
+                    ))*/
                   ],
                 ),
               ),

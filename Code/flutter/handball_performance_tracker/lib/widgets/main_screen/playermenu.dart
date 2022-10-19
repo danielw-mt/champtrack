@@ -48,10 +48,10 @@ void callPlayerMenu(context, [substitute_menu]) {
               ),
               // alert contains a list of DialogButton objects
               content:
-                  // Column of "Spieler", horizontal line and Button-Row
+                  // Column of "Player", horizontal line and Button-Row
                   Column(
                 children: [
-                  // upper row: "Spieler" Text on left and "Assist" will pop up on right after a goal.
+                  // upper row: "Player" Text on left and "Assist" will pop up on right after a goal.
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [

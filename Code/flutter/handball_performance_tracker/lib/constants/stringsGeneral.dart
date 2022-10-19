@@ -83,9 +83,9 @@ class StringsGeneral {
   static const String lStartGameTitle = "Neues Spiel tracken";
   static const String lStartGameTeamPrompt = "Bitte wähle ein Team aus";
   static const String lStartGamePlayerSelectionPrompt =
-      "Bitte wähle alle Spieler für den Spieltag aus";
+      "Bitte wähle alle Player für den Spieltag aus";
   static const String lStartGamePlayerPositioningPrompt =
-      "Bitte wähle die Startaufstellung aus den nominierten Spielern aus";
+      "Bitte wähle die Startaufstellung aus den nominierten Playern aus";
   static const String lHotReloadError =
       "Es scheint ein Problem zu geben. Bitte gehen Sie zurück zum Dashboard";
   static const String lStartGameButton = "Spiel starten";
@@ -95,10 +95,10 @@ class StringsGeneral {
   static const String lCaught = "Gehalten";
   static const String lSevenMeter = "7m";
   static const String lChooseSevenMeterPlayer = "7m Ausführung";
-  static const String lSamePlayer = "Gleicher Spieler";
+  static const String lSamePlayer = "Gleicher Player";
   // Dashboard
   static const String lDashboard = "Dashboard";
-  static const String lManageTeams = "Mannschaften verwalten";
+  static const String lManageTeams = "Teams verwalten";
   static const String lTrackNewGame = "Neues Spiel tracken";
   // team settings screen
   static const String lName = "Name";
@@ -118,7 +118,7 @@ class StringsGeneral {
   static const String lDeletePlayer = "Löschen";
   static const String lNickName = "Spitzname";
   static const String lShirtNumber = "Trikotnummer";
-  static const String lTeams = "Mannschaften*";
+  static const String lTeams = "Teams";
   static const String lGoalkeeper = "TW";
   static const String lLeftBack = "RL";
   static const String lCenterBack = "RM";
@@ -127,8 +127,8 @@ class StringsGeneral {
   static const String lCenterForward = "KR";
   static const String lRightWinger = "RA";
   static const String lPlayerStartingOnField = "Startaufstellung";
-  static const String lPlayerEditMode = "Spielerdetails bearbeiten";
-  static const String lPlayerCreateMode = "Neuen Spieler anlegen";
+  static const String lPlayerEditMode = "Playerdetails bearbeiten";
+  static const String lPlayerCreateMode = "Neuen Player anlegen";
   static const String lTextFieldEmpty = "Bitte Text eingeben";
   static const String lOptional = "optional";
   static const String lNumberFieldNotValid = "Bitte gültige Nummer eingeben";

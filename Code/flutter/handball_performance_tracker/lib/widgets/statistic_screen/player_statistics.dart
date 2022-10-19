@@ -99,10 +99,11 @@ class _PlayerStatisticsState extends State<PlayerStatistics> {
   /// get all players from selected team that player in the selected game
   _updatePlayersOfGame() {
     // if no game has been selected yet i.e. there is no game available for the previous team
-    if (_selectedGame.id == null){
+    if (_selectedGame.id == null) {
       _selectedGame = _games[0];
     }
-    List<Player> allPlayersInTeam = _persistentController.getAllPlayers(teamId: _selectedTeam.id);
+    List<Player> allPlayersInTeam =
+        _persistentController.getAllPlayers(teamId: _selectedTeam.id);
     Map<String, dynamic> gameStats = _statistics[_selectedGame.id];
     logger.d("gameStats: $gameStats");
     Map<String, dynamic> playerStats = gameStats["player_stats"];
@@ -115,7 +116,9 @@ class _PlayerStatisticsState extends State<PlayerStatistics> {
     playerIDsOfGame.forEach((playerID) {
       logger.d(playerID);
     });
-    List<Player> playersInGame = allPlayersInTeam.where((Player player) => playerIDsOfGame.contains(player.id)).toList();
+    List<Player> playersInGame = allPlayersInTeam
+        .where((Player player) => playerIDsOfGame.contains(player.id))
+        .toList();
     _players = playersInGame;
   }
 
@@ -133,7 +136,8 @@ class _PlayerStatisticsState extends State<PlayerStatistics> {
     List<double> efScoreSeries = [];
     List<int> timeStamps = [];
     try {
-      Map<String, dynamic> playerStats = _statistics[_selectedGame.id]["player_stats"][_selectedPlayer.id];
+      Map<String, dynamic> playerStats =
+          _statistics[_selectedGame.id]["player_stats"][_selectedPlayer.id];
       // try to get action counts for the player
       actionCounts = playerStats["action_counts"];
       // try to get action_series for player
@@ -148,8 +152,10 @@ class _PlayerStatisticsState extends State<PlayerStatistics> {
       stopTime = _statistics[_selectedGame.id]["stop_time"];
 
       // try to get quotas for player
-      quotas[0][0] = double.parse(playerStats["seven_meter_quota"][0].toString());
-      quotas[0][1] = double.parse(playerStats["seven_meter_quota"][1].toString());
+      quotas[0][0] =
+          double.parse(playerStats["seven_meter_quota"][0].toString());
+      quotas[0][1] =
+          double.parse(playerStats["seven_meter_quota"][1].toString());
       quotas[1][0] = double.parse(playerStats["position_quota"][0].toString());
       quotas[1][1] = double.parse(playerStats["position_quota"][1].toString());
       quotas[2][0] = double.parse(playerStats["throw_quota"][0].toString());
@@ -175,19 +181,21 @@ class _PlayerStatisticsState extends State<PlayerStatistics> {
                     children: [
                       Flexible(
                           flex: 1,
-                          child: Column(
+                          child: Card(
+                              child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
-                              PlayerSelector(players: _players, onPlayerSelected: onPlayerSelected),
-                              Container(
-                                height: 20,
-                              ),
-                              GameSelector(games: _games, onGameSelected: onGameSelected),
-                              Container(
-                                height: 20,
-                              ),
-                              TeamSelector(teams: _teams, onTeamSelected: onTeamSelected)
+                              TeamSelector(
+                                  teams: _teams,
+                                  onTeamSelected: onTeamSelected),
+                              GameSelector(
+                                  games: _games,
+                                  onGameSelected: onGameSelected),
+                              PlayerSelector(
+                                  players: _players,
+                                  onPlayerSelected: onPlayerSelected)
                             ],
-                          )),
+                          ))),
                       Flexible(
                         flex: 2,
                         child: QuotaCard(
@@ -229,15 +237,20 @@ class _PlayerStatisticsState extends State<PlayerStatistics> {
                   // only pass the penalty values if they can be found in the actionCounts map
                   // if there is no value for that penalty pass 0
                   child: PenaltyInfoCard(
-                    redCards: actionCounts[redCardTag] == null ? 0 : actionCounts[redCardTag]!,
-                    yellowCards: actionCounts[yellowCardTag] == null ? 0 : actionCounts[yellowCardTag]!,
-                    timePenalties: actionCounts[timePenaltyTag] == null ? 0 : actionCounts[timePenaltyTag]!,
+                    redCards: actionCounts[redCardTag] == null
+                        ? 0
+                        : actionCounts[redCardTag]!,
+                    yellowCards: actionCounts[yellowCardTag] == null
+                        ? 0
+                        : actionCounts[yellowCardTag]!,
+                    timePenalties: actionCounts[timePenaltyTag] == null
+                        ? 0
+                        : actionCounts[timePenaltyTag]!,
                   ),
                 ),
                 Expanded(
                   flex: 4,
-                  child:  Image(image: AssetImage('statistics2_heatmap.png')),
-                  
+                  child: Card(child: Image(image: AssetImage('statistics2_heatmap.png'))),
                 )
               ],
             )),

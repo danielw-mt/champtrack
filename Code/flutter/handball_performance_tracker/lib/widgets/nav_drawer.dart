@@ -104,22 +104,22 @@ List<Widget> buildMenuList(BuildContext context, bool gameIsRunning,
     MenuHeader(),
     // Dashboard
     SimpleListEntry(text: StringsGeneral.lDashboard, screen: Dashboard()),
-    // Mannschaften
-    CollabsibleListEntry(
+    // Teams
+    SimpleListEntry(
       text: StringsTeamManagement.lTeams,
       screen: TeamSelectionScreen(),
-      children: buildTeamChildren(context),
+      //children: buildTeamChildren(context),
     ),
     // Statistics
-    CollabsibleListEntry(
+    SimpleListEntry(
         text: StringsGeneral.lStatistics,
-        screen: StatisticsScreen(),
-        children: [Text("")]),
+        screen: StatisticsScreen()),
+        //children: [Text("")]),
     // Glossary
-    CollabsibleListEntry(
+    SimpleListEntry(
         text: StringsGeneral.lGlossary,
-        screen: GlossaryScreen(),
-        children: [Text("")]),
+        screen: GlossaryScreen())
+        //children: [Text("")]),
   ];
   if ((gameIsRunning || gameIsPaused) && !menuIsEllapsed) {
     menuList.add(GameIsRunningButton());
@@ -260,7 +260,7 @@ class MenuHeader extends StatelessWidget {
                   })),
         ),
         // Arrow Icon
-        Container(margin: EdgeInsets.only(left: 20), child: Text(""))
+        //Container(margin: EdgeInsets.only(left: 20), child: Text(""))
       ],
     );
   }

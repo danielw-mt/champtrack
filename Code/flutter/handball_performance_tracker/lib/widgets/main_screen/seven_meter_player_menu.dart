@@ -37,7 +37,7 @@ void callSevenMeterPlayerMenu(context) {
           ),
           // alert contains a list of DialogButton objects
           content:
-              // Column of "Spieler", horizontal line and Button-Row
+              // Column of "Player", horizontal line and Button-Row
               Column(
             children: [
               Row(

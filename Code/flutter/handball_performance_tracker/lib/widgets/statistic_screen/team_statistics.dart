@@ -117,14 +117,14 @@ class _TeamStatisticsState extends State<TeamStatistics> {
                     children: [
                       Flexible(
                           flex: 1,
-                          child: Column(
-                            children: [
-                              GameSelector(games: _games, onGameSelected: onGameSelected),
-                              Container(
-                                height: 20,
-                              ),
-                              TeamSelector(teams: _teams, onTeamSelected: onTeamSelected)
-                            ],
+                          child: Card(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                TeamSelector(teams: _teams, onTeamSelected: onTeamSelected),
+                                GameSelector(games: _games, onGameSelected: onGameSelected)
+                              ],
+                            ),
                           )),
                       Flexible(
                         flex: 2,
@@ -174,7 +174,7 @@ class _TeamStatisticsState extends State<TeamStatistics> {
                 ),
                 Expanded(
                   flex: 4,
-                  child:  Image(image: AssetImage('statistics2_heatmap.png')),
+                  child:  Card(child: Image(image: AssetImage('statistics2_heatmap.png'))),
                   
                 )
               ],

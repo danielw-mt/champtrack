@@ -1,6 +1,6 @@
 class StringsGameSettings{
       //settingsScreen.dart
-  static const String lHomeSideIsRight = "Tor auf der rechten Spielfeldhälfte";
+  static const String lHomeSideIsRight = "Eigenes Tor auf rechter Spielfeldhälfte";
   static const String lPageTwo = "Page Two"; // TODO correct name
 
   // game_start_stop_buttons.dart
@@ -14,7 +14,7 @@ class StringsGameSettings{
     //gameControl.dart
   static const String lStartGameAlertHeader = "Warnung";
   static const String lStartGameAlert =
-      "Sie können das Spiel nur mit 7 Spielern starten.";
+      "Sie können das Spiel nur mit 7 Playern starten.";
   
   // start_game_form.dart
   static const String lGameDataSaved = "Spieldaten erfolgreich gespeichert!";

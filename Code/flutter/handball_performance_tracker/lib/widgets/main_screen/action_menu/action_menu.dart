@@ -68,7 +68,7 @@ void callActionMenu(BuildContext context) {
                           actionContext: actionState,
                         )),
                   )
-                ] // Column of "Spieler", horizontal line and Button-Row
+                ] // Column of "Player", horizontal line and Button-Row
                     )));
       });
 }

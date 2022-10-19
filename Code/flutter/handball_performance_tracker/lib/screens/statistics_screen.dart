@@ -1,4 +1,5 @@
 import 'dart:convert';
+import '../constants/colors.dart';
 import '../widgets/statistic_screen/player_statistics.dart';
 import '../widgets/statistic_screen/team_statistics.dart';
 import '../widgets/statistic_screen/comp_statistics.dart';
@@ -10,7 +11,7 @@ import 'package:handball_performance_tracker/widgets/nav_drawer.dart';
 import 'package:handball_performance_tracker/widgets/statistic_screen/charts.dart';
 
 // TODO move these to the constant strings
-const String page1 = "Mannschaft";
+const String page1 = "Team";
 const String page2 = "Player";
 const String page3 = "Vergleich";
 
@@ -53,7 +54,8 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          title: Text("Statistics"),
+          backgroundColor: buttonDarkBlueColor,
+          title: Text("Statistiken"),
         ),
         backgroundColor: Colors.white,
         key: _scaffoldKey,
