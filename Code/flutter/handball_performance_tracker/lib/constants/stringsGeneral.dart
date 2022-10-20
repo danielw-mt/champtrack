@@ -146,13 +146,13 @@ class StringsGeneral {
   static const String lValues = "Werte";
   static const String l7mQuota = "7m Quote";
   static const String lNo7mQuota = "Keine 7m Würfe erfasst";
-  static const String l7mThrowsRecord = "insg. 7m Würfe";
+  static const String l7mThrowsRecord = "7m Würfe";
   static const String lPositionQuota = "Positionsquote";
   static const String lNoPositionQuota = "Keine Positionswürfe erfasst";
-  static const String lPositonThrowsRecord = "insg. Würfe v. Position";
+  static const String lPositonThrowsRecord = "Würfe von Position";
   static const String lThrowQuota = "Wurfquote";
   static const String lNoThrowQuota = "Keine Torwürfe erfasst";
-  static const String lThrowsRecord = "insg. Würfe auf Tor";
+  static const String lThrowsRecord = "Würfe auf Tor";
   static const String lTableView = "Tabellenansicht";
   static const String lPieChartView = "Kreisdiagramm";
   static const String lAction = "Aktion";

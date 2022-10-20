@@ -328,7 +328,7 @@ class _QuotaCardState extends State<QuotaCard> {
           flex: 1,
           child: widget.quotas[0][1] != 0
               ? Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     const Flexible(
                       flex: 1,
@@ -354,7 +354,7 @@ class _QuotaCardState extends State<QuotaCard> {
         //   flex: 1,
         //   child: widget.quotas[1][1] != 0
         //       ? Column(
-        //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        //           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         //           children: [
         //             const Flexible(
         //               flex: 1,
@@ -379,7 +379,7 @@ class _QuotaCardState extends State<QuotaCard> {
           flex: 1,
           child: widget.quotas[2][1] != 0
               ? Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     const Flexible(
                       flex: 1,
