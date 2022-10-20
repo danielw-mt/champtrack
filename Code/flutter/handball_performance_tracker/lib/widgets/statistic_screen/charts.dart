@@ -146,22 +146,29 @@ class QuotaPieChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    
-    return pie.PieChart(
-      chartType: ringForm ? pie.ChartType.ring : pie.ChartType.disc,
-      legendOptions: pie.LegendOptions(
-        showLegendsInRow: ringForm ? false : true,
-        legendPosition: pie.LegendPosition.right,
-        showLegends: ringForm ? false : true,
-      ),
-      chartValuesOptions: pie.ChartValuesOptions(
-        showChartValueBackground: true,
-        showChartValues: true,
-        showChartValuesInPercentage: ringForm ? true : false,
-        showChartValuesOutside: ringForm ? true : false,
-        decimalPlaces: 1,
-      ),
-      dataMap: ringForm ? dataMap : dataMap,
-    );
+    if (dataMap.isEmpty) {
+      return Text("No data provided");
+    } else {
+      // if numerator and denominator are the same just display numerator because it is 100%
+      if (dataMap.values.toList()[0] == dataMap.values.toList()[1]) {
+        dataMap.remove(dataMap.keys.toList()[1]);
+      }
+      return pie.PieChart(
+        chartType: ringForm ? pie.ChartType.ring : pie.ChartType.disc,
+        legendOptions: pie.LegendOptions(
+          showLegendsInRow: ringForm ? false : true,
+          legendPosition: pie.LegendPosition.right,
+          showLegends: ringForm ? false : true,
+        ),
+        chartValuesOptions: pie.ChartValuesOptions(
+          showChartValueBackground: true,
+          showChartValues: true,
+          showChartValuesInPercentage: ringForm ? true : false,
+          showChartValuesOutside: ringForm ? true : false,
+          decimalPlaces: 1,
+        ),
+        dataMap: ringForm ? dataMap : dataMap,
+      );
+    }
   }
 }

@@ -319,6 +319,9 @@ class _QuotaCardState extends State<QuotaCard> {
   }
 
   Widget _buildCarouselItemQuotes(BuildContext context, int carouselIndex, int itemIndex, bool ring_form) {
+    print("7m quota: "+widget.quotas[0].toString());
+    print("position quota: "+widget.quotas[1].toString());
+    print("throw quota: "+widget.quotas[2].toString());
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -347,31 +350,32 @@ class _QuotaCardState extends State<QuotaCard> {
                 )
               : Text(StringsGeneral.lNo7mQuota),
         ),
-        Flexible(
-          flex: 1,
-          child: widget.quotas[1][1] != 0
-              ? Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Flexible(
-                      flex: 1,
-                      child: Text(StringsGeneral.lPositionQuota),
-                    ),
-                    Flexible(
-                      flex: 2,
-                      child: QuotaPieChart(
-                        ringForm: true,
-                        dataMap: {"Goals": widget.quotas[1][0], "Position throws": widget.quotas[1][1]},
-                      ),
-                    ),
-                    Flexible(
-                      flex: 2,
-                      child: Text(widget.quotas[1][1].toString() + " "+StringsGeneral.lPositonThrowsRecord),
-                    )
-                  ],
-                )
-              : Text(StringsGeneral.lNoPositionQuota),
-        ),
+        // TODO implement position quota calculation in statistics engine
+        // Flexible(
+        //   flex: 1,
+        //   child: widget.quotas[1][1] != 0
+        //       ? Column(
+        //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        //           children: [
+        //             const Flexible(
+        //               flex: 1,
+        //               child: Text(StringsGeneral.lPositionQuota),
+        //             ),
+        //             Flexible(
+        //               flex: 2,
+        //               child: QuotaPieChart(
+        //                 ringForm: true,
+        //                 dataMap: {"Goals": widget.quotas[1][0], "Position throws": widget.quotas[1][1]},
+        //               ),
+        //             ),
+        //             Flexible(
+        //               flex: 2,
+        //               child: Text(widget.quotas[1][1].toString() + " "+StringsGeneral.lPositonThrowsRecord),
+        //             )
+        //           ],
+        //         )
+        //       : Text(StringsGeneral.lNoPositionQuota),
+        // ),
         Flexible(
           flex: 1,
           child: widget.quotas[2][1] != 0

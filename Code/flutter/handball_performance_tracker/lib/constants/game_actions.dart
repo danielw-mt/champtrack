@@ -81,7 +81,9 @@ Map<String, Map<String, String>> actionMapping = {
     StringsGameScreen.lGoal: goal7mTag,
     StringsGameScreen.lErrThrow: missed7mTag,
     StringsGameScreen.lGoalOpponent: goalOpponentTag,
-    StringsGeneral.lCaught: parade7mTag
+    StringsGeneral.lCaught: parade7mTag,
+    StringsGameScreen.lOneVsOneAnd7m: oneVOneSevenTag,
+
   },
   actionContextAllActions: {
     StringsGameScreen.lRedCard: redCardTag,
@@ -102,6 +104,8 @@ Map<String, Map<String, String>> actionMapping = {
     StringsGameScreen.lGoalGoalkeeper: goalTag,
     StringsGeneral.lCaught: parade7mTag,
     StringsGameScreen.lErrThrowGoalkeeper: missTag,
+    StringsGameScreen.lGoalSevenMeter:goal7mTag,
+    StringsGameScreen.lMissSevenMeter:missed7mTag,
   }
 };
 

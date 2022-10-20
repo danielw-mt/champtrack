@@ -134,6 +134,7 @@ class StatisticsEngine {
     /// quotas[2][1]: total shots
     List<List<double>> updateQuotas(Map<String, dynamic> action, List<List<double>> quotas) {
       switch (action["tag"]) {
+        // TODO calculate position quota by infering whether action position matches player position
         case missed7mTag:
           {
             // incrase 7m shots
