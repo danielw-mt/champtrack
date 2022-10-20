@@ -422,46 +422,48 @@ GetBuilder<TempController> buildDialogButton(BuildContext context, Player player
           return DialogButton(
               child:
                   // Column with 2 entries: 1. a Stack with Shirt & buttonNumber and 2. buttonText
-                  Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      // ButtonNumber
-                      Text(
-                        buttonNumber,
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: (width * 0.03),
-                          fontWeight: FontWeight.bold,
+                  Flexible(
+                    child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                    Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        // ButtonNumber
+                        Text(
+                          buttonNumber,
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: (width * 0.03),
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
-                      // Shirt
-                      Center(
-                        child: Icon(
-                          MyFlutterApp.t_shirt,
-                          // make shirt smaller if there are more than 7 player displayed
-                          size: (isNotOnField == null || getNotOnFieldIndex().length <= 7)
-                              ? (width * 0.11)
-                              : (width * 0.11 / getNotOnFieldIndex().length * 7),
+                        // Shirt
+                        Center(
+                          child: Icon(
+                            MyFlutterApp.t_shirt,
+                            // make shirt smaller if there are more than 7 player displayed
+                            size: (isNotOnField == null || getNotOnFieldIndex().length <= 7)
+                                ? (width * 0.11)
+                                : (width * 0.11 / getNotOnFieldIndex().length * 7),
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                  // ButtonName
-                  Text(
-                    buttonText,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: (width * 0.02),
-                      fontWeight: FontWeight.bold,
+                      ],
                     ),
+                    // ButtonName
+                    Text(
+                      buttonText,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: (width * 0.02),
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                                  ],
+                                ),
                   ),
-                ],
-              ),
               // have some space between the buttons
               margin: EdgeInsets.all(min(height, width) * 0.013),
               // have round edges with same degree as Alert dialog
