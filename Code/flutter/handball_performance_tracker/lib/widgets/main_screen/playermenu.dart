@@ -138,8 +138,10 @@ List<Widget> buildPageViewChildren(BuildContext context, [substitute_menu]) {
   // Build content for on field player page
   List<Widget> onFieldDisplay = [];
   for (int i = 0; i < tempController.getOnFieldPlayers().length - 1; i++) {
-    onFieldDisplay.add(Column(
-      children: [onFieldButtons[i], onFieldButtons[i + 1]],
+    onFieldDisplay.add(Flexible(
+      child: Column(
+        children: [onFieldButtons[i], onFieldButtons[i + 1]],
+      ),
     ));
     i++;
   }
@@ -162,13 +164,20 @@ List<Widget> buildPageViewChildren(BuildContext context, [substitute_menu]) {
   if (notOnFieldButtons.length % 2 != 0) {
     notOnFieldDisplay.add(Flexible(child: notOnFieldButtons[notOnFieldButtons.length - 1]));
   }
+
   List<Widget> buttonRow = (substitute_menu == null)
       ? [
-          Row(children: onFieldDisplay),
-          Row(children: notOnFieldDisplay),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: onFieldDisplay),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: notOnFieldDisplay),
         ]
       : [
-          Row(children: onFieldDisplay),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: onFieldDisplay),
         ];
   return buttonRow;
 }
