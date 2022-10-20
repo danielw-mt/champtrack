@@ -39,7 +39,7 @@ class StringsGameScreen {
   static const String lTrf = "TRF";
   static const String lFoul7m = "Foul mit 7m Folge";
   static const String lBlockNoBall = "Block ohne Ballgewinn";
-  static const String lBlockAndSteal = "Block & Steal";
+  static const String lBlockAndSteal = "Block & Steal / Stürmerfoul";
   static const String lParade = "Parade";
   static const String lBadPass = "Fehlpass";
   static const String lGoalOpponent = "Gegentor";
