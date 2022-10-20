@@ -507,8 +507,8 @@ GetBuilder<TempController> buildDialogButton(
               // have round edges with same degree as Alert dialog
               radius: const BorderRadius.all(Radius.circular(15)),
               // set height and width of buttons so the shirt and name are fitting inside
-              height: width * 0.14,
-              width: width * 0.14,
+              height: MediaQuery.of(context).size.width * 0.14,
+              width: MediaQuery.of(context).size.width * 0.14,
               color: buttonColor,
               onPressed: () {
                 (substitute_menu == null)
