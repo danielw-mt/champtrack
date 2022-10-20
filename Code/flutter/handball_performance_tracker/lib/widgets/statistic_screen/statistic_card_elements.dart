@@ -115,13 +115,9 @@ class _ActionsCardState extends State<ActionsCard> {
                             currentTab = 1;
                           });
                         },
-                        child: Text("Table View")),
+                        child: Text(StringsGeneral.lTableView)),
                   ],
                 )),
-            Flexible(
-              flex: 1,
-              child: Text("% Actions"),
-            ),
             Flexible(
               flex: 4,
               child: PieChartActionsWidget(widget.actionCounts),
@@ -146,7 +142,7 @@ class _ActionsCardState extends State<ActionsCard> {
                             currentTab = 0;
                           });
                         },
-                        child: Text("Pie Chart View")),
+                        child: Text(StringsGeneral.lPieChartView)),
                   ],
                 )),
             Flexible(
@@ -158,10 +154,10 @@ class _ActionsCardState extends State<ActionsCard> {
                         child: DataTable(
                             columns: const <DataColumn>[
                               DataColumn(
-                                label: Text("Action"),
+                                label: Text(StringsGeneral.lAction),
                               ),
                               DataColumn(
-                                label: Text("Count"),
+                                label: Text(StringsGeneral.lCount),
                               ),
                             ],
                             rows: List<DataRow>.generate(
@@ -172,7 +168,7 @@ class _ActionsCardState extends State<ActionsCard> {
                                       DataCell(Text(widget.actionCounts.values.elementAt(index).toString()))
                                     ]))),
                       )
-                    : Text("No actions recorded for the selected player and game"))
+                    : Text(StringsGeneral.lNoActionsRecorded))
           ],
         ),
       );
@@ -207,7 +203,7 @@ class _PerformanceCardState extends State<PerformanceCard> {
   @override
   Widget build(BuildContext context) {
     if (widget.actionSeries.length == 0) {
-      return Center(child: Text("No data available"));
+      return Center(child: Text(StringsGeneral.lNoDataAvailable));
     }
     // add the ef-score option to the action series dropdown elements
     _dropDownElements = [];

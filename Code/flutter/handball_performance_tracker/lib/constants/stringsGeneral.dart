@@ -153,4 +153,10 @@ class StringsGeneral {
   static const String lThrowQuota = "Wurfquote";
   static const String lNoThrowQuota = "Keine Torwürfe erfasst";
   static const String lThrowsRecord = "insg. Würfe auf Tor";
+  static const String lTableView = "Tabellenansicht";
+  static const String lPieChartView = "Kreisdiagramm";
+  static const String lAction = "Aktion";
+  static const String lCount = "Anzahl";
+  static const String lNoActionsRecorded = "Keine Aktionen für Auswahl erfasst";
+  static const String lNoDataAvailable = "Keine Daten verfügbar";
 }
