@@ -39,9 +39,10 @@ class _TeamStatisticsState extends State<TeamStatistics> {
       // only actually show games that are in the statistics map
       _games = allGames.where((game) => _statistics.containsKey(game.id)).toList();
     // if there are no teams ofc there are no players and no games
-    } else {
-      _games = [];
-    }
+    } 
+    // else {
+    //   _games = [];
+    // }
     if (_games.length > 0) {
       _selectedGame = _games[0];
     }

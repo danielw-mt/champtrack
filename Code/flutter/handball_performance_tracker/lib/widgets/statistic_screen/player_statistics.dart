@@ -50,20 +50,23 @@ class _PlayerStatisticsState extends State<PlayerStatistics> {
       // if there are no teams ofc there are no players and no games
     } else {
       _games = [];
+      _players = [];
     }
     if (_games.length != 0) {
       _selectedGame = _games[0];
       _players = _persistentController.getAllPlayers(teamId: _selectedTeam.id);
       // if there are no games don't show the player menu
-    } else {
-      _players = [];
-    }
+    } 
+    // else {
+    //   _players = [];
+    // }
     if (_players.length != 0) {
       _selectedPlayer = _players[0];
       // if there are no players also don't display any games
-    } else {
-      _games = [];
-    }
+    } 
+    // else {
+    //   _games = [];
+    // }
     super.initState();
   }
 
@@ -91,13 +94,14 @@ class _PlayerStatisticsState extends State<PlayerStatistics> {
       _selectedTeam = team;
       _games = getGamesInStatistics();
       // if there are no games do not display the player dropdown
-      if (_games.length > 0){
+      if (_games.length != 0) {
+        _selectedGame = _games[0];
         _players = _persistentController.getAllPlayers(teamId: _selectedTeam.id);
         logger.d(_players);
-        _selectedGame = _games[0];
-      } else {
-        _players = [];
-      }
+      } 
+      // else {
+      //   _players = [];
+      // }
       if (_players.length > 0) {
         _selectedPlayer = _players[0];
       }

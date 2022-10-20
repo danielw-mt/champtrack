@@ -275,15 +275,17 @@ class StatisticsEngine {
     // update team stats from previous player stats
     playerStats.forEach((String playerID, dynamic playerStatistic) {
       // make sure that we have initialized values in the player statistic otherwise don't generate team statistic
-      if (playerStatistic["seven_meter_quota"] != <double>[0, 0] &&
-          playerStatistic["position_quota"] != <double>[0, 0] &&
-          playerStatistic["throw_quota"] != <double>[0, 0] &&
-          playerStatistic["action_counts"] != Map<String, int>() &&
-          playerStatistic["action_series"] != Map<String, List<int>>() &&
-          playerStatistic["action_coordinates"] != Map<String, dynamic>() &&
-          playerStatistic["all_actions"] != <String>[] &&
-          playerStatistic["all_action_timestamps"] != <int>[] &&
-          playerStatistic["ef_score_series"] != <double>[]) {
+      
+      // TODO implement a quality check here whether player statistics were implemented correctly
+      // if (playerStatistic["seven_meter_quota"] != <double>[0, 0] &&
+      //     playerStatistic["position_quota"] != <double>[0, 0] &&
+      //     playerStatistic["throw_quota"] != <double>[0, 0] &&
+      //     playerStatistic["action_counts"] != Map<String, int>() &&
+      //     playerStatistic["action_series"] != Map<String, List<int>>() &&
+      //     playerStatistic["action_coordinates"] != Map<String, dynamic>() &&
+      //     playerStatistic["all_actions"] != <String>[] &&
+      //     playerStatistic["all_action_timestamps"] != <int>[] &&
+      //     playerStatistic["ef_score_series"] != <double>[]) {}
         // update quotas by summing up numerators and denominators of every player
         teamStats["seven_meter_quota"][0] += playerStatistic["seven_meter_quota"][0];
         teamStats["seven_meter_quota"][1] += playerStatistic["seven_meter_quota"][1];
@@ -328,7 +330,6 @@ class StatisticsEngine {
         // TODO calculate the ef-score series for the team by building the average through all players through time
         // go through every player and update the ef-score by adding to the global ef score average at the time when a new action is added
         // ef score depends on the player position which is why we need to do this
-      }
     });
     // sort all_actions and all_action_timestamps chronologically. Keys are timestamp and values are actions
 
