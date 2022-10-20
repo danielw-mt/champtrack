@@ -325,7 +325,7 @@ class _QuotaCardState extends State<QuotaCard> {
     print("position quota: " + widget.quotas[1].toString());
     print("throw quota: " + widget.quotas[2].toString());
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         Flexible(
           flex: 1,
