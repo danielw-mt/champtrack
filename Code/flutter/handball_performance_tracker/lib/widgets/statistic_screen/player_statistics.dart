@@ -47,6 +47,7 @@ class _PlayerStatisticsState extends State<PlayerStatistics> {
     if (_teams.length != 0) {
       _selectedTeam = _teams[0];
       _games = getGamesInStatistics();
+      _players = _persistentController.getAllPlayers(teamId: _selectedTeam.id);
       // if there are no teams ofc there are no players and no games
     } else {
       _games = [];
@@ -54,7 +55,6 @@ class _PlayerStatisticsState extends State<PlayerStatistics> {
     }
     if (_games.length != 0) {
       _selectedGame = _games[0];
-      _players = _persistentController.getAllPlayers(teamId: _selectedTeam.id);
       // if there are no games don't show the player menu
     } 
     // else {
@@ -137,6 +137,14 @@ class _PlayerStatisticsState extends State<PlayerStatistics> {
 
   @override
   Widget build(BuildContext context) {
+    if (_selectedTeam == Team(players: [], onFieldPlayers: []) && _teams.isNotEmpty) {
+      _selectedTeam = _teams[0];
+      _games = getGamesInStatistics();
+      _players = _persistentController.getAllPlayers(teamId: _selectedTeam.id);
+    }
+
+
+
     Map<String, int> actionCounts = {};
     Map<String, List<int>> actionSeries = {};
     int startTime = 0;

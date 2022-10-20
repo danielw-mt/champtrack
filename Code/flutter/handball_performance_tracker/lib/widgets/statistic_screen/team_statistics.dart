@@ -38,17 +38,15 @@ class _TeamStatisticsState extends State<TeamStatistics> {
       List<Game> allGames = _persistentController.getAllGames(teamId: _selectedTeam.id);
       // only actually show games that are in the statistics map
       _games = allGames.where((game) => _statistics.containsKey(game.id)).toList();
-    // if there are no teams ofc there are no players and no games
-    } 
-    // else {
-    //   _games = [];
-    // }
+      // if there are no teams ofc there are no players and no games
+    } else {
+      _games = [];
+    }
     if (_games.length > 0) {
       _selectedGame = _games[0];
     }
     super.initState();
   }
-
 
   void onGameSelected(Game game) {
     setState(() {

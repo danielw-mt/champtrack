@@ -50,4 +50,6 @@ class StringsGameScreen {
   static const String lUnknown = "Unbekannt";
   static const String lGoalSevenMeter = "Tor 7m";
   static const String lMissSevenMeter = "Fehlwurf 7m";
+
+  // feed tag
 }

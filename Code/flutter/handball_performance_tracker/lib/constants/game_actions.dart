@@ -106,6 +106,7 @@ Map<String, Map<String, String>> actionMapping = {
     StringsGameScreen.lErrThrowGoalkeeper: missTag,
     StringsGameScreen.lGoalSevenMeter:goal7mTag,
     StringsGameScreen.lMissSevenMeter:missed7mTag,
+    StringsGameScreen.lAssist: assistTag,
   }
 };
 
