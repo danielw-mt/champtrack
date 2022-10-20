@@ -324,6 +324,11 @@ class _QuotaCardState extends State<QuotaCard> {
     print("7m quota: " + widget.quotas[0].toString());
     print("position quota: " + widget.quotas[1].toString());
     print("throw quota: " + widget.quotas[2].toString());
+    // convert quotas to correct datamaps for the piecharts
+    // 7 meter misses are just the total seven meter atempts - the seven meter goals
+    Map<String, double> sevenMeterDataMap = {"7m goals": widget.quotas[0][0], "7 meter misses": widget.quotas[0][1] - widget.quotas[0][0]};
+    Map<String, double> positionDataMap = {"Position goals": widget.quotas[1][0], "Position throws": widget.quotas[1][1] - widget.quotas[1][0]};
+    Map<String, double> throwDataMap = {"Throw goals": widget.quotas[2][0], "Throw misses": widget.quotas[2][1] - widget.quotas[2][0]};
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
@@ -341,7 +346,7 @@ class _QuotaCardState extends State<QuotaCard> {
                       flex: 2,
                       child: QuotaPieChart(
                         ringForm: true,
-                        dataMap: {"7m goals": widget.quotas[0][0], "7 meters": widget.quotas[0][1]},
+                        dataMap: sevenMeterDataMap,
                       ),
                     ),
                     Flexible(
@@ -367,7 +372,7 @@ class _QuotaCardState extends State<QuotaCard> {
         //               flex: 2,
         //               child: QuotaPieChart(
         //                 ringForm: true,
-        //                 dataMap: {"Goals": widget.quotas[1][0], "Position throws": widget.quotas[1][1]},
+        //                 dataMap: positionDataMap,
         //               ),
         //             ),
         //             Flexible(
@@ -390,7 +395,7 @@ class _QuotaCardState extends State<QuotaCard> {
                     ),
                     Flexible(
                       flex: 2,
-                      child: QuotaPieChart(ringForm: true, dataMap: {"Total goals": widget.quotas[2][0], "Total throws": widget.quotas[2][1]}),
+                      child: QuotaPieChart(ringForm: true, dataMap: throwDataMap),
                     ),
                     Flexible(
                       flex: 2,
