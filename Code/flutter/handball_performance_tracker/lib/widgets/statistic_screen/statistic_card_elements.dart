@@ -203,7 +203,15 @@ class _PerformanceCardState extends State<PerformanceCard> {
       // convert action tag to the correct string specified in the strings using realActionType
       _dropDownElements.add(actionTag);
     });
-    _selectedDropdownElement = _dropDownElements[0];
+    // if we did not select an element yet, select the first one
+    if (_selectedDropdownElement == ""){
+      _selectedDropdownElement = _dropDownElements[0];
+    }
+    // if a dropdown element is selected that is not available. (i.e. remnant from loading another game statistic previously)
+    if (!_dropDownElements.contains(_selectedDropdownElement)){
+      _selectedDropdownElement = _dropDownElements[0];
+    }
+      
     return Card(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -232,10 +240,6 @@ class _PerformanceCardState extends State<PerformanceCard> {
   }
 
   DropdownButton buildActionTagDropdown() {
-    if (_selectedDropdownElement == "") {
-      _selectedDropdownElement = _dropDownElements[0];
-    }
-    print("dropdown menu items: $_dropDownElements");
     return DropdownButton<String>(
       isExpanded: true,
       // Initial Value
@@ -246,16 +250,15 @@ class _PerformanceCardState extends State<PerformanceCard> {
 
       // Array list of items
       items: _dropDownElements.map((String dropdownElement) {
-        print("dropdown element: " + dropdownElement);
-        // if (widget.actionSeries[dropdownElement] == null && dropdownElement != "Ef-Score") {
-        //   print("cannot display dropdown element" +
-        //       dropdownElement +
-        //       " which has no data");
-        //   return DropdownMenuItem(
-        //     child: Text("Cannot display statistic"),
-        //     value: dropdownElement,
-        //   );
-        // }
+        if (widget.actionSeries[dropdownElement] == null && dropdownElement != "Ef-Score") {
+          print("cannot display dropdown element" +
+              dropdownElement +
+              " which has no data");
+          return DropdownMenuItem(
+            child: Text("Cannot display statistic"),
+            value: dropdownElement,
+          );
+        }
         return DropdownMenuItem(
           value: dropdownElement,
           // if the element is Ef-score don't do anything.
