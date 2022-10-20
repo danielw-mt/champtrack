@@ -23,14 +23,11 @@ class PenaltyInfoCard extends StatelessWidget {
           Flexible(
             flex: 1,
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Flexible(
                   flex: 1,
-                  child: IconButton(
-                      icon: Image(image: AssetImage('images/statistic_screen/yellow_card_button.jpg')),
-                      onPressed: () {
-                        // do nothing
-                      }),
+                  child: Image(image: AssetImage('images/statistic_screen/yellow_card_button.jpg')),
                 ),
                 Flexible(
                   flex: 1,
@@ -42,15 +39,11 @@ class PenaltyInfoCard extends StatelessWidget {
           Flexible(
             flex: 1,
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Flexible(
                   flex: 1,
-                  child: IconButton(
-                    icon: Image(image: AssetImage('images/statistic_screen/red_card_button.jpg')),
-                    onPressed: () {
-                      // do nothing
-                    },
-                  ),
+                  child: Image(image: AssetImage('images/statistic_screen/red_card_button.jpg')),
                 ),
                 Flexible(
                   flex: 1,
@@ -62,15 +55,11 @@ class PenaltyInfoCard extends StatelessWidget {
           Flexible(
             flex: 1,
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Flexible(
                   flex: 1,
-                  child: IconButton(
-                    icon: Image(image: AssetImage('images/statistic_screen/time_penalty_button.jpg')),
-                    onPressed: () {
-                      // do nothing
-                    },
-                  ),
+                  child: Image(image: AssetImage('images/statistic_screen/time_penalty_button.jpg')),
                 ),
                 Flexible(
                   flex: 1,
@@ -257,7 +246,7 @@ class _PerformanceCardState extends State<PerformanceCard> {
 
       // Array list of items
       items: _dropDownElements.map((String dropdownElement) {
-        print("dropdown element: "+dropdownElement);
+        print("dropdown element: " + dropdownElement);
         // if (widget.actionSeries[dropdownElement] == null && dropdownElement != "Ef-Score") {
         //   print("cannot display dropdown element" +
         //       dropdownElement +
