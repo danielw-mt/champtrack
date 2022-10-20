@@ -8,15 +8,16 @@ import 'package:stop_watch_timer/stop_watch_timer.dart';
 class StopWatch extends StatelessWidget {
   // stop watch widget that allows to the time to be started, stopped, resetted and in-/decremented by 1 sec
   PersistentController persistentController = Get.find<PersistentController>();
-
+  ScrollController scrollController = ScrollController();
   @override
   Widget build(BuildContext context) {
     StopWatchTimer stopWatchTimer =
         persistentController.getCurrentGame().stopWatchTimer;
 
     return Scrollbar(
-      controller: ScrollController(),
+      controller: scrollController,
         child: SingleChildScrollView(
+          controller: scrollController,
             child: Padding(
                 padding: const EdgeInsets.symmetric(
                   vertical: 32,

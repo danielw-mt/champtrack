@@ -36,6 +36,7 @@ var logger = Logger(
 bool playerChanged = false;
 
 void callPlayerMenu(context, [substitute_menu]) {
+  PageController pageController = PageController();
   logger.d("Calling player menu");
   final TempController tempController = Get.find<TempController>();
   showDialog(
@@ -100,13 +101,13 @@ void callPlayerMenu(context, [substitute_menu]) {
 
                   // Button-Row: one Row with four Columns of one or two buttons
                   Scrollbar(
-                    controller: ScrollController(),
+                    controller: pageController,
                     thumbVisibility: true,
                     child: SizedBox(
                       width: MediaQuery.of(context).size.width * 0.65,
                       height: MediaQuery.of(context).size.height * 0.6,
                       child: PageView(
-                        controller: new PageController(),
+                        controller: pageController,
                         children: buildPageViewChildren(bcontext, substitute_menu),
                       ),
                     ),

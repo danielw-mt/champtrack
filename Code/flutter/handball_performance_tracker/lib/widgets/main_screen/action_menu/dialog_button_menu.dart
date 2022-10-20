@@ -34,11 +34,12 @@ var logger = Logger(
 class DialogButtonMenu extends StatelessWidget {
   final String actionContext;
   DialogButtonMenu({super.key, required this.actionContext});
+  PageController pageController = PageController();
 
   @override
   Widget build(BuildContext context) {
-    return PageView(
-        controller: new PageController(), children: buildPageViewChildren());
+    return Scrollbar(
+        thumbVisibility: true, controller: pageController, child: PageView(controller: pageController, children: buildPageViewChildren()));
   }
 
   // a method for building the children of the pageview in the right order
@@ -60,9 +61,7 @@ class DialogButtonMenu extends StatelessWidget {
       ];
     } else {
       print("no page view children");
-      return [
-        Text("Could not build menu that is matching the phase of the game")
-      ];
+      return [Text("Could not build menu that is matching the phase of the game")];
     }
   }
 }
@@ -135,12 +134,8 @@ class ArrangedDialogButtons extends StatelessWidget {
     Row buttonRow;
     Map<String, CustomDialogButton> dialogButtons = buildDialogButtons(context);
     if (actionContext == actionContextGoalkeeper) {
-      buttonRow = Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-        Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
+      buttonRow = Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+        Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
           Flexible(
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -152,13 +147,10 @@ class ArrangedDialogButtons extends StatelessWidget {
           ),
           Flexible(child: dialogButtons[StringsGameScreen.lTimePenalty]!),
           Flexible(child: dialogButtons[StringsGameScreen.lEmptyGoal]!),
-          Flexible(
-              child: dialogButtons[StringsGameScreen.lErrThrowGoalkeeper]!),
+          Flexible(child: dialogButtons[StringsGameScreen.lErrThrowGoalkeeper]!),
         ]),
         Flexible(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
+          child: Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
             Flexible(child: dialogButtons[StringsGameScreen.lGoalGoalkeeper]!),
             Flexible(child: dialogButtons[StringsGameScreen.lBadPass]!),
           ]),
@@ -175,45 +167,33 @@ class ArrangedDialogButtons extends StatelessWidget {
       ]);
     } else if (actionContext == actionContextAttack) {
       logger.d("arranging dialog buttons for attack");
-      buttonRow =
-          Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+      buttonRow = Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
         Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-          Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-            dialogButtons[StringsGameScreen.lYellowCard]!,
-            dialogButtons[StringsGameScreen.lRedCard]!
-          ]),
+          Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [dialogButtons[StringsGameScreen.lYellowCard]!, dialogButtons[StringsGameScreen.lRedCard]!]),
           Flexible(child: dialogButtons[StringsGameScreen.lTwoMin]!),
           Flexible(child: dialogButtons[StringsGameScreen.lTimePenalty]!),
         ]),
         Flexible(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Flexible(child: dialogButtons[StringsGameScreen.lErrThrow]!),
-              Flexible(child: dialogButtons[StringsGameScreen.lTrf]!)
-            ],
+            children: [Flexible(child: dialogButtons[StringsGameScreen.lErrThrow]!), Flexible(child: dialogButtons[StringsGameScreen.lTrf]!)],
           ),
         ),
         Flexible(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Flexible(child: dialogButtons[StringsGameScreen.lGoal]!),
-              Flexible(child: dialogButtons[StringsGameScreen.lOneVsOneAnd7m]!)
-            ],
+            children: [Flexible(child: dialogButtons[StringsGameScreen.lGoal]!), Flexible(child: dialogButtons[StringsGameScreen.lOneVsOneAnd7m]!)],
           ),
         ),
       ]);
     } else {
-      buttonRow =
-          Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+      buttonRow = Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
         Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            Row(children: [
-              dialogButtons[StringsGameScreen.lYellowCard]!,
-              dialogButtons[StringsGameScreen.lRedCard]!
-            ]),
+            Row(children: [dialogButtons[StringsGameScreen.lYellowCard]!, dialogButtons[StringsGameScreen.lRedCard]!]),
             Flexible(child: dialogButtons[StringsGameScreen.lTwoMin]!),
             Flexible(child: dialogButtons[StringsGameScreen.lTimePenalty]!)
           ],
@@ -221,10 +201,7 @@ class ArrangedDialogButtons extends StatelessWidget {
         Flexible(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Flexible(child: dialogButtons[StringsGameScreen.lFoul7m]!),
-              Flexible(child: dialogButtons[StringsGameScreen.lTrf]!)
-            ],
+            children: [Flexible(child: dialogButtons[StringsGameScreen.lFoul7m]!), Flexible(child: dialogButtons[StringsGameScreen.lTrf]!)],
           ),
         ),
         Flexible(
@@ -245,8 +222,7 @@ class ArrangedDialogButtons extends StatelessWidget {
   Map<String, CustomDialogButton> buildDialogButtons(BuildContext context) {
     print("building dialog buttons");
     if (actionContext == actionContextGoalkeeper) {
-      Map<String, String> goalKeeperActionMapping =
-          actionMapping[actionContextGoalkeeper]!;
+      Map<String, String> goalKeeperActionMapping = actionMapping[actionContextGoalkeeper]!;
       return {
         StringsGameScreen.lRedCard: CustomDialogButton(
             buildContext: context,
@@ -282,8 +258,7 @@ class ArrangedDialogButtons extends StatelessWidget {
         ),
         StringsGameScreen.lErrThrowGoalkeeper: CustomDialogButton(
           buildContext: context,
-          actionTag:
-              goalKeeperActionMapping[StringsGameScreen.lErrThrowGoalkeeper]!,
+          actionTag: goalKeeperActionMapping[StringsGameScreen.lErrThrowGoalkeeper]!,
           actionContext: actionContextGoalkeeper,
           buttonText: StringsGameScreen.lErrThrowGoalkeeper,
           buttonColor: Color.fromRGBO(199, 208, 244, 1),
@@ -291,8 +266,7 @@ class ArrangedDialogButtons extends StatelessWidget {
         ),
         StringsGameScreen.lGoalGoalkeeper: CustomDialogButton(
           buildContext: context,
-          actionTag:
-              goalKeeperActionMapping[StringsGameScreen.lGoalGoalkeeper]!,
+          actionTag: goalKeeperActionMapping[StringsGameScreen.lGoalGoalkeeper]!,
           actionContext: actionContextGoalkeeper,
           buttonText: StringsGameScreen.lGoalGoalkeeper,
           buttonColor: Color.fromRGBO(99, 107, 171, 1),
@@ -321,8 +295,7 @@ class ArrangedDialogButtons extends StatelessWidget {
       };
     }
     if (actionContext == actionContextAttack) {
-      Map<String, String> attackActionMapping =
-          actionMapping[actionContextAttack]!;
+      Map<String, String> attackActionMapping = actionMapping[actionContextAttack]!;
       logger.d("attackActionMapping: $attackActionMapping");
       return {
         StringsGameScreen.lRedCard: CustomDialogButton(
@@ -389,8 +362,7 @@ class ArrangedDialogButtons extends StatelessWidget {
     }
     if (actionContext == actionContextDefense) {
       // tags action tags for the different buttons
-      Map<String, String> defenseActionMapping =
-          actionMapping[actionContextDefense]!;
+      Map<String, String> defenseActionMapping = actionMapping[actionContextDefense]!;
       return {
         StringsGameScreen.lRedCard: CustomDialogButton(
             buildContext: context,

@@ -62,12 +62,9 @@ void callActionMenu(BuildContext context) {
                 height: MediaQuery.of(context).size.height * 0.7,
                 child: Column(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
                   Expanded(
-                    child: Scrollbar(
-                      controller: ScrollController(),
-                        thumbVisibility: true,
-                        child: DialogButtonMenu(
-                          actionContext: actionState,
-                        )),
+                    child: DialogButtonMenu(
+                      actionContext: actionState,
+                    ),
                   )
                 ] // Column of "Player", horizontal line and Button-Row
                     )));

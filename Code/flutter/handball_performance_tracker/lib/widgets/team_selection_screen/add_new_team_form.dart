@@ -30,11 +30,7 @@ class NewTeamFormState extends State<NewTeamForm> {
   // not a GlobalKey<MyCustomFormState>.
   final _formKey = GlobalKey<FormState>();
   TextEditingController teamNameController = TextEditingController();
-  List<String> teamTypes = [
-    StringsGeneral.lMenTeams,
-    StringsGeneral.lWomenTeams,
-    StringsGeneral.lYouthTeams
-  ];
+  List<String> teamTypes = [StringsGeneral.lMenTeams, StringsGeneral.lWomenTeams, StringsGeneral.lYouthTeams];
   int selectedTeamType = 0;
 
   bool isTeamTypeSelected(String teamType) {
@@ -48,12 +44,9 @@ class NewTeamFormState extends State<NewTeamForm> {
   Widget build(BuildContext context) {
     InputDecoration getDecoration(String labelText) {
       return InputDecoration(
-          focusedBorder: UnderlineInputBorder(
-              borderSide: BorderSide(color: buttonDarkBlueColor)),
-          enabledBorder: UnderlineInputBorder(
-              borderSide: BorderSide(color: buttonDarkBlueColor)),
-          disabledBorder: UnderlineInputBorder(
-              borderSide: BorderSide(color: buttonDarkBlueColor)),
+          focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: buttonDarkBlueColor)),
+          enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: buttonDarkBlueColor)),
+          disabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: buttonDarkBlueColor)),
           labelText: labelText,
           labelStyle: TextStyle(color: buttonDarkBlueColor),
           filled: true,
@@ -94,14 +87,14 @@ class NewTeamFormState extends State<NewTeamForm> {
                       width: width * 0.25,
                       height: 100,
                       child: ListView.builder(
+                          controller: ScrollController(),
                           itemCount: teamTypes.length,
                           itemBuilder: (context, index) {
                             String relevantTeamType = teamTypes[index];
                             return Row(
                               children: [
                                 Checkbox(
-                                    fillColor: MaterialStateProperty.all<Color>(
-                                        buttonDarkBlueColor),
+                                    fillColor: MaterialStateProperty.all<Color>(buttonDarkBlueColor),
                                     value: isTeamTypeSelected(relevantTeamType),
                                     onChanged: (value) {
                                       setState(() {
@@ -135,48 +128,32 @@ class NewTeamFormState extends State<NewTeamForm> {
                   children: [
                     Flexible(
                       child: ElevatedButton(
-                        style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.all<Color>(
-                                buttonGreyColor)),
+                        style: ButtonStyle(backgroundColor: MaterialStateProperty.all<Color>(buttonGreyColor)),
                         onPressed: () {
                           Navigator.of(context).pop();
                         },
                         child: const Text(
                           StringsGeneral.lBack,
-                          style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black),
+                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black),
                         ),
                       ),
                     ),
                     Flexible(
                       child: ElevatedButton(
-                        style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.all<Color>(
-                                buttonLightBlueColor)),
+                        style: ButtonStyle(backgroundColor: MaterialStateProperty.all<Color>(buttonLightBlueColor)),
                         onPressed: () {
                           // Validate returns true if the form is valid, or false otherwise.
                           if (_formKey.currentState!.validate()) {
-                            persistentController.addTeam(
-                                teamNameController.text,
-                                TEAM_TYPE_MAPPING[selectedTeamType]);
+                            persistentController.addTeam(teamNameController.text, TEAM_TYPE_MAPPING[selectedTeamType]);
                             Navigator.pop(context);
-                            if (persistentController
-                                    .getAvailableTeams()
-                                    .length ==
-                                1) {
-                              tempController.setSelectedTeam(
-                                  persistentController.getAvailableTeams()[0]);
+                            if (persistentController.getAvailableTeams().length == 1) {
+                              tempController.setSelectedTeam(persistentController.getAvailableTeams()[0]);
                             }
                           }
                         },
                         child: const Text(
                           StringsGeneral.lSubmitButton,
-                          style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black),
+                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black),
                         ),
                       ),
                     ),

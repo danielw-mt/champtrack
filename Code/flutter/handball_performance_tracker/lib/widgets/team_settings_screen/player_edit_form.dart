@@ -91,14 +91,13 @@ class PlayerFormState extends State<PlayerForm> {
 
   @override
   Widget build(BuildContext context) {
+    ScrollController teamScrollController = ScrollController();
+    ScrollController positionScrollController = ScrollController();
     InputDecoration getDecoration(String labelText) {
       return InputDecoration(
-          focusedBorder: UnderlineInputBorder(
-              borderSide: BorderSide(color: buttonDarkBlueColor)),
-          enabledBorder: UnderlineInputBorder(
-              borderSide: BorderSide(color: buttonDarkBlueColor)),
-          disabledBorder: UnderlineInputBorder(
-              borderSide: BorderSide(color: buttonDarkBlueColor)),
+          focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: buttonDarkBlueColor)),
+          enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: buttonDarkBlueColor)),
+          disabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: buttonDarkBlueColor)),
           labelText: labelText,
           labelStyle: TextStyle(color: buttonDarkBlueColor),
           filled: true,
@@ -111,10 +110,8 @@ class PlayerFormState extends State<PlayerForm> {
     return Column(children: [
       Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
         editModeEnabled
-            ? Text(StringsGeneral.lPlayerEditMode,
-                style: TextStyle(fontWeight: FontWeight.bold))
-            : Text(StringsGeneral.lPlayerCreateMode,
-                style: TextStyle(fontWeight: FontWeight.bold)),
+            ? Text(StringsGeneral.lPlayerEditMode, style: TextStyle(fontWeight: FontWeight.bold))
+            : Text(StringsGeneral.lPlayerCreateMode, style: TextStyle(fontWeight: FontWeight.bold)),
       ]),
       Form(
         key: _formKey,
@@ -218,28 +215,24 @@ class PlayerFormState extends State<PlayerForm> {
                           width: width * 0.25,
                           height: height * 0.2,
                           child: Scrollbar(
-                            controller: ScrollController(),
+                            controller: teamScrollController,
                             thumbVisibility: true,
                             child: ListView.builder(
+                                controller: teamScrollController,
                                 itemCount: availableTeams.length,
                                 itemBuilder: (context, index) {
                                   Team relevantTeam = availableTeams[index];
                                   return Row(
                                     children: [
                                       Checkbox(
-                                          fillColor:
-                                              MaterialStateProperty.all<Color>(
-                                                  buttonDarkBlueColor),
-                                          value: isPlayerPartOfTeam(
-                                              relevantTeam.id.toString()),
+                                          fillColor: MaterialStateProperty.all<Color>(buttonDarkBlueColor),
+                                          value: isPlayerPartOfTeam(relevantTeam.id.toString()),
                                           onChanged: (value) {
                                             setState(() {
                                               if (value == true) {
-                                                player.teams.add("teams/" +
-                                                    relevantTeam.id.toString());
+                                                player.teams.add("teams/" + relevantTeam.id.toString());
                                               } else {
-                                                player.teams.remove("teams/" +
-                                                    relevantTeam.id.toString());
+                                                player.teams.remove("teams/" + relevantTeam.id.toString());
                                               }
                                             });
                                           }),
@@ -272,9 +265,10 @@ class PlayerFormState extends State<PlayerForm> {
                         width: width * 0.25,
                         height: height * 0.2,
                         child: Scrollbar(
-                          controller: ScrollController(),
+                          controller: positionScrollController,
                           thumbVisibility: true,
                           child: ListView.builder(
+                            controller: positionScrollController,
                             itemCount: 8,
                             shrinkWrap: true,
                             itemBuilder: (context, item) {
@@ -291,19 +285,14 @@ class PlayerFormState extends State<PlayerForm> {
                               return Row(
                                 children: [
                                   Checkbox(
-                                      fillColor:
-                                          MaterialStateProperty.all<Color>(
-                                              buttonDarkBlueColor),
-                                      value: player.positions
-                                          .contains(positionNames[item]),
+                                      fillColor: MaterialStateProperty.all<Color>(buttonDarkBlueColor),
+                                      value: player.positions.contains(positionNames[item]),
                                       onChanged: (value) {
                                         setState(() {
                                           if (value == true) {
-                                            player.positions
-                                                .add(positionNames[item]);
+                                            player.positions.add(positionNames[item]);
                                           } else {
-                                            player.positions
-                                                .remove(positionNames[item]);
+                                            player.positions.remove(positionNames[item]);
                                           }
                                         });
                                       }),
@@ -346,56 +335,41 @@ class PlayerFormState extends State<PlayerForm> {
                     Flexible(
                       // Cancel-Button
                       child: ElevatedButton(
-                        style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.all<Color>(
-                                buttonGreyColor)),
+                        style: ButtonStyle(backgroundColor: MaterialStateProperty.all<Color>(buttonGreyColor)),
                         onPressed: () {
                           Navigator.of(context).pop();
                         },
                         child: const Text(
                           StringsGeneral.lBack,
-                          style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black),
+                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black),
                         ),
                       ),
                     ),
                     Flexible(
                       child: ElevatedButton(
-                          style: ButtonStyle(
-                              backgroundColor: MaterialStateProperty.all<Color>(
-                                  buttonGreyColor)),
+                          style: ButtonStyle(backgroundColor: MaterialStateProperty.all<Color>(buttonGreyColor)),
                           onPressed: () {
                             tempController.deletePlayer(player);
                             Navigator.pop(context);
                           },
-                          child: Text(StringsGeneral.lDeletePlayer,
-                              style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black))),
+                          child:
+                              Text(StringsGeneral.lDeletePlayer, style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black))),
                     ),
                     Flexible(
                       child: ElevatedButton(
-                        style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.all<Color>(
-                                buttonLightBlueColor)),
+                        style: ButtonStyle(backgroundColor: MaterialStateProperty.all<Color>(buttonLightBlueColor)),
                         onPressed: () {
                           // Validate returns true if the form is valid, or false otherwise.
                           if (_formKey.currentState!.validate()) {
                             player.firstName = firstNameController.text;
                             player.lastName = lastNameController.text;
                             player.nickName = nickNameController.text;
-                            player.number =
-                                int.parse(shirtNumberController.text);
+                            player.number = int.parse(shirtNumberController.text);
                             // pop alert
                             Navigator.pop(context);
                             // display snackbar while data is stored in db
                             ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                  content:
-                                      Text(StringsGeneral.lProcessingData)),
+                              const SnackBar(content: Text(StringsGeneral.lProcessingData)),
                             );
                             // If the player already exists they have an ID and we just need to update them
                             if (player.id != "") {
@@ -411,10 +385,7 @@ class PlayerFormState extends State<PlayerForm> {
                         },
                         child: const Text(
                           StringsGeneral.lSubmitButton,
-                          style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black),
+                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black),
                         ),
                       ),
                     ),

@@ -26,7 +26,7 @@ var logger = Logger(
 
 void callSevenMeterPlayerMenu(context) {
   logger.d("Calling seven meter player menu");
-
+  PageController pageController = PageController();
   showDialog(
       context: context,
       builder: (BuildContext bcontext) {
@@ -75,13 +75,13 @@ void callSevenMeterPlayerMenu(context) {
               ),
               // Button-Row: one Row with four Columns of one or two buttons
               Scrollbar(
-                controller: ScrollController(),
+                controller: pageController,
                 thumbVisibility: true,
                 child: SizedBox(
                   width: MediaQuery.of(context).size.width * 0.65,
                   height: MediaQuery.of(context).size.height * 0.6,
                   child: PageView(
-                    controller: new PageController(),
+                    controller: pageController,
                     children: buildPageViewChildren(bcontext),
                   ),
                 ),

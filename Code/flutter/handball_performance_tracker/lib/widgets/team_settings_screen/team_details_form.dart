@@ -25,11 +25,7 @@ class TeamDetailsFormState extends State<TeamDetailsForm> {
   // and allows validation of the form.
 
   final _formKey = GlobalKey<FormState>();
-  List<String> teamTypes = [
-    StringsGeneral.lMenTeams,
-    StringsGeneral.lWomenTeams,
-    StringsGeneral.lYouthTeams
-  ];
+  List<String> teamTypes = [StringsGeneral.lMenTeams, StringsGeneral.lWomenTeams, StringsGeneral.lYouthTeams];
   int selectedTeamType = 0;
   TextEditingController teamNameController = TextEditingController();
 
@@ -77,17 +73,15 @@ class TeamDetailsFormState extends State<TeamDetailsForm> {
                         width: width * 0.25,
                         height: 200,
                         child: ListView.builder(
+                            controller: ScrollController(),
                             itemCount: teamTypes.length,
                             itemBuilder: (context, index) {
                               String relevantTeamType = teamTypes[index];
                               return Row(
                                 children: [
                                   Checkbox(
-                                      fillColor:
-                                          MaterialStateProperty.all<Color>(
-                                              buttonDarkBlueColor),
-                                      value:
-                                          isTeamTypeSelected(relevantTeamType),
+                                      fillColor: MaterialStateProperty.all<Color>(buttonDarkBlueColor),
+                                      value: isTeamTypeSelected(relevantTeamType),
                                       onChanged: (value) {
                                         setState(() {
                                           if (value == true) {
@@ -124,8 +118,7 @@ class TeamDetailsFormState extends State<TeamDetailsForm> {
                           // If the form is valid, display a snackbar. In the real world,
                           // you'd often call a server or save the information in a database.
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                                content: Text(StringsGeneral.lProcessingData)),
+                            const SnackBar(content: Text(StringsGeneral.lProcessingData)),
                           );
                           Team newTeam = tempController.getSelectedTeam();
                           newTeam.name = teamNameController.text;
@@ -147,8 +140,7 @@ class TeamDetailsFormState extends State<TeamDetailsForm> {
                       onPressed: () {
                         Get.defaultDialog(
                             title: StringsTeamManagement.lDeleteTeam,
-                            middleText:
-                                StringsTeamManagement.lConfirmDeleteTeam,
+                            middleText: StringsTeamManagement.lConfirmDeleteTeam,
                             textConfirm: StringsTeamManagement.lYes,
                             textCancel: StringsTeamManagement.lNo,
                             onConfirm: () {
@@ -177,8 +169,7 @@ class TeamDetailsFormState extends State<TeamDetailsForm> {
                           // If the form is valid, display a snackbar. In the real world,
                           // you'd often call a server or save the information in a database.
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                                content: Text(StringsGeneral.lProcessingData)),
+                            const SnackBar(content: Text(StringsGeneral.lProcessingData)),
                           );
                           Team newTeam = tempController.getSelectedTeam();
                           newTeam.name = teamNameController.text;

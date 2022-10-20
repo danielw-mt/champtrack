@@ -3,8 +3,7 @@ import 'package:handball_performance_tracker/constants/colors.dart';
 import 'package:handball_performance_tracker/constants/stringsGameScreen.dart';
 import 'package:handball_performance_tracker/constants/stringsGeneral.dart';
 import 'package:handball_performance_tracker/widgets/main_screen/ef_score_bar.dart';
-import 'package:handball_performance_tracker/constants/fieldSizeParameter.dart'
-    as fieldSizeParameter;
+import 'package:handball_performance_tracker/constants/fieldSizeParameter.dart' as fieldSizeParameter;
 import '../../controllers/temp_controller.dart';
 import 'package:handball_performance_tracker/constants/fieldSizeParameter.dart' as fieldSizeParameter;
 import '../../controllers/temp_controller.dart';
@@ -36,6 +35,7 @@ class ActionFeed extends StatelessWidget {
               FeedHeader(),
               Expanded(
                 child: ListView.builder(
+                    controller: ScrollController(),
                     physics: ClampingScrollPhysics(),
                     reverse: true,
                     shrinkWrap: true,

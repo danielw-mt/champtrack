@@ -204,14 +204,14 @@ class _PerformanceCardState extends State<PerformanceCard> {
       _dropDownElements.add(actionTag);
     });
     // if we did not select an element yet, select the first one
-    if (_selectedDropdownElement == ""){
+    if (_selectedDropdownElement == "") {
       _selectedDropdownElement = _dropDownElements[0];
     }
     // if a dropdown element is selected that is not available. (i.e. remnant from loading another game statistic previously)
-    if (!_dropDownElements.contains(_selectedDropdownElement)){
+    if (!_dropDownElements.contains(_selectedDropdownElement)) {
       _selectedDropdownElement = _dropDownElements[0];
     }
-      
+
     return Card(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -251,9 +251,7 @@ class _PerformanceCardState extends State<PerformanceCard> {
       // Array list of items
       items: _dropDownElements.map((String dropdownElement) {
         if (widget.actionSeries[dropdownElement] == null && dropdownElement != "Ef-Score") {
-          print("cannot display dropdown element" +
-              dropdownElement +
-              " which has no data");
+          print("cannot display dropdown element" + dropdownElement + " which has no data");
           return DropdownMenuItem(
             child: Text("Cannot display statistic"),
             value: dropdownElement,
@@ -460,6 +458,7 @@ class _PlayerListState extends State<PlayerList> {
   Widget build(BuildContext context) {
     return Card(
         child: ListView.builder(
+      controller: ScrollController(),
       itemBuilder: (BuildContext, index) {
         return Card(
           child: ListTile(
