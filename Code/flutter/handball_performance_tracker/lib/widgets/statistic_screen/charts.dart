@@ -4,6 +4,7 @@ import 'package:pie_chart/pie_chart.dart' as pie;
 import 'dart:math';
 import 'dart:core';
 import '../../utils/action_mapping.dart';
+import '../../constants/stringsGeneral.dart';
 
 class LineChartWidget extends StatelessWidget {
   final List<int> timeStamps;
@@ -47,13 +48,13 @@ class LineChartWidget extends StatelessWidget {
         show: true,
         leftTitles: AxisTitles(
           // if there are no values provided (i.e. ef-score data) then only display Action Count
-          axisNameWidget: values.isEmpty ? Text("Action Count") : Text("Values"),
+          axisNameWidget: values.isEmpty ? Text(StringsGeneral.lActionCount) : Text(StringsGeneral.lValues),
           sideTitles: SideTitles(interval: 1, showTitles: true, reservedSize: 40),
         ),
         topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
         rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
         bottomTitles: AxisTitles(
-            axisNameWidget: Text("Minutes since start"),
+            axisNameWidget: Text(StringsGeneral.lMinutesSinceStart),
             sideTitles: SideTitles(
               showTitles: true,
               getTitlesWidget: (double value, TitleMeta meta) {
@@ -145,6 +146,7 @@ class QuotaPieChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    
     return pie.PieChart(
       chartType: ringForm ? pie.ChartType.ring : pie.ChartType.disc,
       legendOptions: pie.LegendOptions(

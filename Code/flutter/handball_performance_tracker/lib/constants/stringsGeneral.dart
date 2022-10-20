@@ -141,4 +141,16 @@ class StringsGeneral {
 
   // statistic screen
   static const String lNoTeamStats = "Keine Spiel-Statistiken verfügbar";
+  static const String lMinutesSinceStart = "Spielminuten";
+  static const String lActionCount = "Anzahl Aktionen";
+  static const String lValues = "Werte";
+  static const String l7mQuota = "7m Quote";
+  static const String lNo7mQuota = "Keine 7m Würfe erfasst";
+  static const String l7mThrowsRecord = "insg. 7m Würfe";
+  static const String lPositionQuota = "Positionsquote";
+  static const String lNoPositionQuota = "Keine Positionswürfe erfasst";
+  static const String lPositonThrowsRecord = "insg. Würfe v. Position";
+  static const String lThrowQuota = "Wurfquote";
+  static const String lNoThrowQuota = "Keine Torwürfe erfasst";
+  static const String lThrowsRecord = "insg. Würfe auf Tor";
 }

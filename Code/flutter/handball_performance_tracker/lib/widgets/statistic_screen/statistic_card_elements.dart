@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:handball_performance_tracker/constants/stringsGeneral.dart';
 import 'package:handball_performance_tracker/controllers/persistent_controller.dart';
 import 'package:handball_performance_tracker/widgets/statistic_screen/bar_chart_example.dart';
 import 'charts.dart';
@@ -333,7 +334,7 @@ class _QuotaCardState extends State<QuotaCard> {
                   children: [
                     const Flexible(
                       flex: 1,
-                      child: Text("7m Quota"),
+                      child: Text(StringsGeneral.l7mQuota),
                     ),
                     Flexible(
                       flex: 2,
@@ -344,11 +345,11 @@ class _QuotaCardState extends State<QuotaCard> {
                     ),
                     Flexible(
                       flex: 2,
-                      child: Text(widget.quotas[0][1].toString() + "total 7m throws"),
+                      child: Text(widget.quotas[0][1].toString() + " "+StringsGeneral.l7mThrowsRecord),
                     )
                   ],
                 )
-              : Text("No 7m throws recorded"),
+              : Text(StringsGeneral.lNo7mQuota),
         ),
         Flexible(
           flex: 1,
@@ -358,7 +359,7 @@ class _QuotaCardState extends State<QuotaCard> {
                   children: [
                     const Flexible(
                       flex: 1,
-                      child: Text("Postition Quota"),
+                      child: Text(StringsGeneral.lPositionQuota),
                     ),
                     Flexible(
                       flex: 2,
@@ -369,11 +370,11 @@ class _QuotaCardState extends State<QuotaCard> {
                     ),
                     Flexible(
                       flex: 2,
-                      child: Text(widget.quotas[1][1].toString() + "total position throws"),
+                      child: Text(widget.quotas[1][1].toString() + " "+StringsGeneral.lPositonThrowsRecord),
                     )
                   ],
                 )
-              : Text("No throws from position recorded"),
+              : Text(StringsGeneral.lNoPositionQuota),
         ),
         Flexible(
           flex: 1,
@@ -383,7 +384,7 @@ class _QuotaCardState extends State<QuotaCard> {
                   children: [
                     const Flexible(
                       flex: 1,
-                      child: Text("Throw Quota"),
+                      child: Text(StringsGeneral.lThrowQuota),
                     ),
                     Flexible(
                       flex: 2,
@@ -391,11 +392,11 @@ class _QuotaCardState extends State<QuotaCard> {
                     ),
                     Flexible(
                       flex: 2,
-                      child: Text(widget.quotas[2][1].toString() + " total throws onto goal"),
+                      child: Text(widget.quotas[2][1].toString() + " "+StringsGeneral.lThrowsRecord),
                     )
                   ],
                 )
-              : Text("No goal attempts recorded"),
+              : Text(StringsGeneral.lNoThrowQuota),
         ),
       ],
     );

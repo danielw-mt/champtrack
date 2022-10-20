@@ -6,6 +6,7 @@ import '../data/ef_score.dart';
 import '../data/player.dart';
 import "dart:collection";
 import '../utils/action_mapping.dart';
+import '../constants/game_actions.dart';
 
 class StatisticsEngine {
   var logger = Logger(
@@ -133,14 +134,13 @@ class StatisticsEngine {
     /// quotas[2][1]: total shots
     List<List<double>> updateQuotas(Map<String, dynamic> action, List<List<double>> quotas) {
       switch (action["tag"]) {
-        // TODO use constants here instead of strings
-        case "missed7m":
+        case missed7mTag:
           {
             // incrase 7m shots
             quotas[0][1] = quotas[0][1] + 1;
             return quotas;
           }
-        case "goal7m":
+        case goal7mTag:
           {
             // incrase 7m shots
             quotas[0][1] = quotas[0][1] + 1;
@@ -148,7 +148,7 @@ class StatisticsEngine {
             quotas[0][0] = quotas[0][0] + 1;
             return quotas;
           }
-        case "goal":
+        case goalTag:
           {
             // increase total shots
             quotas[2][1] = quotas[2][1] + 1;
@@ -156,7 +156,7 @@ class StatisticsEngine {
             quotas[2][0] = quotas[2][0] + 1;
             return quotas;
           }
-        case "goalPos":
+        case goalPosTag:
           {
             // increase total shots
             quotas[2][1] = quotas[2][1] + 1;
@@ -166,13 +166,23 @@ class StatisticsEngine {
             quotas[1][1] = quotas[1][1] + 1;
             return quotas;
           }
-        case "err":
+        case goalGoalKeeperTag:
+          {
+            // increase total shots
+            quotas[2][1] = quotas[2][1] + 1;
+            // increase total goals
+            quotas[2][0] = quotas[2][0] + 1;
+            // increase position shots
+            quotas[1][1] = quotas[1][1] + 1;
+            return quotas;
+          }
+        case missTag:
           {
             // increase total shots
             quotas[2][1] = quotas[2][1] + 1;
             return quotas;
           }
-        case "err_pos":
+        case missPosTag:
           {
             // increase total shots
             quotas[2][1] = quotas[2][1] + 1;
