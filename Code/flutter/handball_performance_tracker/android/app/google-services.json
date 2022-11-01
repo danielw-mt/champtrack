@@ -7,6 +7,42 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:974814103289:android:70f636ee4485d2c506c428",
+        "android_client_info": {
+          "package_name": "com.example.flutter_firebase_login"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "974814103289-54hhai36gn5a8gr3hma5k8p2gerk55bd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDgjjjDLuQoL5CTGvlAVizQiqFfqdsXMow"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "974814103289-54hhai36gn5a8gr3hma5k8p2gerk55bd.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "974814103289-260dj6a7nbb8b7dguabpbgunpv1sosrl.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "mad.tf.fau.de.handballPerformanceTracker"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:974814103289:android:7044af92503d46c606c428",
         "android_client_info": {
           "package_name": "mad.tf.fau.de.handball_performance_tracker"
@@ -31,10 +67,10 @@
               "client_type": 3
             },
             {
-              "client_id": "974814103289-ons4kch686ru43alc0ss1rp2t0sq9f3f.apps.googleusercontent.com",
+              "client_id": "974814103289-260dj6a7nbb8b7dguabpbgunpv1sosrl.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.mycompany.champtrackv2"
+                "bundle_id": "mad.tf.fau.de.handballPerformanceTracker"
               }
             }
           ]

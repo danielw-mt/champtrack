@@ -1,13 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import '../data/database_repository.dart';
-import '../data/game.dart';
-import '../data/game_action.dart';
-import '../data/player.dart';
-import '../data/team.dart';
-import '../data/club.dart';
+import '../data/models/game_model.dart';
+import '../data/models/game_action_model.dart';
+import '../data/models/player_model.dart';
+import '../data/models/team_model.dart';
+import '../data/models/club_model.dart';
 import 'temp_controller.dart';
-import '../utils/statistics_engine.dart';
+import '../old-utils/statistics_engine.dart';
 
 /// stores more persistent state
 /// generally more complex variables and data structure that are

@@ -1,12 +1,12 @@
 import 'package:get/get.dart';
 import 'package:handball_performance_tracker/data/database_repository.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../data/game.dart';
+import '../data/models/game_model.dart';
 import 'persistent_controller.dart';
-import '../data/game_action.dart';
-import '../data/player.dart';
-import '../data/team.dart';
-import '../utils/player_helper.dart';
+import '../data/models/game_action_model.dart';
+import '../data/models/player_model.dart';
+import '../data/models/team_model.dart';
+import '../old-utils/player_helper.dart';
 import 'dart:async';
 
 /// Contains variables that are changed often throughout the app.

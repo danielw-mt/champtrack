@@ -1,6 +1,6 @@
-import 'package:handball_performance_tracker/constants/game_actions.dart';
-import 'package:handball_performance_tracker/constants/positions.dart';
-import 'package:handball_performance_tracker/data/game_action.dart';
+import 'package:handball_performance_tracker/old-constants/game_actions.dart';
+import 'package:handball_performance_tracker/old-constants/positions.dart';
+import 'package:handball_performance_tracker/data/models/game_action_model.dart';
 import 'package:logger/logger.dart';
 
 var logger = Logger(
