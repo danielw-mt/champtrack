@@ -4,7 +4,7 @@ import 'package:handball_performance_tracker/old-utils/player_helper.dart';
 import 'package:handball_performance_tracker/old-widgets/main_screen/ef_score_bar.dart';
 import 'package:handball_performance_tracker/old-widgets/main_screen/seven_meter_menu.dart';
 import 'package:handball_performance_tracker/controllers/persistent_controller.dart';
-import '../../old-constants/stringsGeneral.dart';
+import '../../core/constants/stringsGeneral.dart';
 import '../../controllers/temp_controller.dart';
 import 'package:get/get.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';

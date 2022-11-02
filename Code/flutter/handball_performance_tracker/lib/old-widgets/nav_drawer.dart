@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:handball_performance_tracker/old-constants/colors.dart';
-import 'package:handball_performance_tracker/old-constants/stringsTeamManagement.dart';
+import 'package:handball_performance_tracker/core/constants/colors.dart';
+import 'package:handball_performance_tracker/core/constants/stringsTeamManagement.dart';
 import 'package:handball_performance_tracker/controllers/persistent_controller.dart';
 import 'package:handball_performance_tracker/controllers/temp_controller.dart';
 import 'package:handball_performance_tracker/data/models/team_model.dart';
@@ -11,12 +11,12 @@ import 'package:handball_performance_tracker/old-screens/glossary_screen.dart';
 import 'package:handball_performance_tracker/old-screens/statistics_screen.dart';
 import 'package:handball_performance_tracker/old-screens/team_settings_screen.dart';
 import 'package:handball_performance_tracker/old-widgets/main_screen/ef_score_bar.dart';
-import 'package:handball_performance_tracker/old-constants/stringsAuthentication.dart';
+import 'package:handball_performance_tracker/core/constants/stringsAuthentication.dart';
 import '../old-screens/main_screen.dart';
 import '../old-screens/debug_screen.dart';
 import '../old-screens/team_selection_screen.dart';
 import 'package:get/get.dart';
-import '../old-constants/stringsGeneral.dart';
+import '../core/constants/stringsGeneral.dart';
 
 class NavDrawer extends StatelessWidget {
   // Navigation widget for Material app. Can be opend from the sidebar
@@ -101,7 +101,7 @@ class NavDrawer extends StatelessWidget {
 List<Widget> buildMenuList(BuildContext context, bool gameIsRunning,
     bool gameIsPaused, bool menuIsEllapsed) {
   List<Widget> menuList = <Widget>[
-    MenuHeader(),
+    // MenuHeader(),
     // Dashboard
     SimpleListEntry(text: StringsGeneral.lDashboard, screen: Dashboard()),
     // Teams
@@ -116,9 +116,9 @@ List<Widget> buildMenuList(BuildContext context, bool gameIsRunning,
         screen: StatisticsScreen()),
         //children: [Text("")]),
     // Glossary
-    SimpleListEntry(
-        text: StringsGeneral.lGlossary,
-        screen: GlossaryScreen())
+    // SimpleListEntry(
+        // text: StringsGeneral.lGlossary,
+        // screen: GlossaryScreen())
         //children: [Text("")]),
   ];
   if ((gameIsRunning || gameIsPaused) && !menuIsEllapsed) {
@@ -217,54 +217,7 @@ class CollabsibleListEntry extends StatelessWidget {
   }
 }
 
-// returns the first line of the menu which is
-// - the grey container
-// - name of the Club
-// - Arrows
-class MenuHeader extends StatelessWidget {
-  const MenuHeader({Key? key}) : super(key: key);
 
-  @override
-  Widget build(BuildContext context) {
-    // Header with Icon and Clubname
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        // Icon
-        /*Container(
-            decoration: BoxDecoration(
-                color: buttonGreyColor,
-                // set border so corners can be made round
-                border: Border.all(
-                  color: buttonGreyColor,
-                ),
-                // make round edges
-                borderRadius: BorderRadius.all(Radius.circular(menuRadius))),
-            margin: EdgeInsets.only(right: 20, left: 10, bottom: 15, top: 15),
-            padding: EdgeInsets.all(10),
-            child: Text(
-              "HC",
-            )),*/
-
-        // Use FittedBox to dynamically resize text
-        Expanded(
-          child: FittedBox(
-              fit: BoxFit.cover,
-              child: GetBuilder<PersistentController>(
-                  id: "menu-club-display",
-                  builder: (persController) {
-                    return Text(
-                      persController.getLoggedInClub().name,
-                      style: TextStyle(color: Colors.white),
-                    );
-                  })),
-        ),
-        // Arrow Icon
-        //Container(margin: EdgeInsets.only(left: 20), child: Text(""))
-      ],
-    );
-  }
-}
 
 // Button which takes you back to the game
 class GameIsRunningButton extends StatelessWidget {

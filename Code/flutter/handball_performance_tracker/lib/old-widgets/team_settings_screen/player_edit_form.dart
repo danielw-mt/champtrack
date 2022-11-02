@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:handball_performance_tracker/old-constants/positions.dart';
-import '../../old-constants/colors.dart';
-import '../../old-constants/stringsGeneral.dart';
+import 'package:handball_performance_tracker/core/constants/positions.dart';
+import '../../core/constants/colors.dart';
+import '../../core/constants/stringsGeneral.dart';
 import 'package:handball_performance_tracker/controllers/persistent_controller.dart';
 import 'package:handball_performance_tracker/data/models/team_model.dart';
 import '../../data/models/player_model.dart';

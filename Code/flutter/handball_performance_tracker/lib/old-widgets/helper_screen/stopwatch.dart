@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../old-constants/stringsGeneral.dart';
-import '../../old-constants/stringsGameScreen.dart';
+import '../../core/constants/stringsGeneral.dart';
+import '../../core/constants/stringsGameScreen.dart';
 import '../../controllers/persistent_controller.dart';
 import 'package:get/get.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';

@@ -1,4 +1,4 @@
-import 'package:handball_performance_tracker/old-constants/game_actions.dart';
+import 'package:handball_performance_tracker/core/constants/game_actions.dart';
 
 import '../data/models/game_action_model.dart';
 import 'package:logger/logger.dart';
@@ -6,7 +6,7 @@ import '../data/ef_score.dart';
 import '../data/models/player_model.dart';
 import "dart:collection";
 import '../old-utils/action_mapping.dart';
-import '../old-constants/game_actions.dart';
+import '../core/constants/game_actions.dart';
 
 class StatisticsEngine {
   var logger = Logger(

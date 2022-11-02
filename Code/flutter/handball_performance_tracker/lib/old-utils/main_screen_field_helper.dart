@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:handball_performance_tracker/old-constants/game_actions.dart';
-import 'package:handball_performance_tracker/old-constants/fieldSizeParameter.dart' as fieldSizeParameter;
+import 'package:handball_performance_tracker/core/constants/game_actions.dart';
+import 'package:handball_performance_tracker/core/constants/fieldSizeParameter.dart' as fieldSizeParameter;
 import 'dart:math' as math;
 import 'dart:ui' as ui;
-import '../old-constants/positions.dart';
+import '../core/constants/positions.dart';
 
 /* Class to calculate if a click was inside or outside a section.
 * 

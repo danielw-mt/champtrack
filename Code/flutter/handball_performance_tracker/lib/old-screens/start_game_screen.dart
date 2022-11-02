@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:handball_performance_tracker/controllers/temp_controller.dart';
 import 'package:handball_performance_tracker/old-widgets/start_game_screen/start_game_form.dart';
-import 'package:handball_performance_tracker/old-constants/stringsGeneral.dart';
+import 'package:handball_performance_tracker/core/constants/stringsGeneral.dart';
 import '../old-widgets/nav_drawer.dart';
 
 /// Screen that allows input of game properties

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:handball_performance_tracker/old-constants/game_actions.dart';
+import 'package:handball_performance_tracker/core/constants/game_actions.dart';
 import 'package:handball_performance_tracker/old-utils/field_control.dart';
 import 'package:handball_performance_tracker/old-utils/icons.dart';
 import 'package:handball_performance_tracker/old-utils/player_helper.dart';
 import 'package:handball_performance_tracker/old-widgets/main_screen/ef_score_bar.dart';
 import 'package:handball_performance_tracker/old-widgets/main_screen/seven_meter_menu.dart';
-import '../../old-constants/stringsGeneral.dart';
-import '../../old-constants/stringsGameScreen.dart';
+import '../../core/constants/stringsGeneral.dart';
+import '../../core/constants/stringsGameScreen.dart';
 import 'package:handball_performance_tracker/old-widgets/main_screen/seven_meter_player_menu.dart';
 import 'package:handball_performance_tracker/old-widgets/main_screen/field.dart';
 import 'package:handball_performance_tracker/controllers/persistent_controller.dart';

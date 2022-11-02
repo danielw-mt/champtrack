@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:handball_performance_tracker/old-constants/game_actions.dart';
-import 'package:handball_performance_tracker/old-constants/stringsGeneral.dart';
+import 'package:handball_performance_tracker/core/constants/game_actions.dart';
+import 'package:handball_performance_tracker/core/constants/stringsGeneral.dart';
 import 'package:handball_performance_tracker/controllers/persistent_controller.dart';
 import 'package:handball_performance_tracker/controllers/temp_controller.dart';
 import 'statistic_card_elements.dart';

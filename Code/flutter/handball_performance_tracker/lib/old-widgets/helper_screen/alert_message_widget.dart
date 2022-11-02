@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../old-constants/colors.dart';
+import '../../core/constants/colors.dart';
 
 class CustomAlertMessageWidget extends StatelessWidget {
   late final String alertMessage;

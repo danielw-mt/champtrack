@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:handball_performance_tracker/old-constants/colors.dart';
+import 'package:handball_performance_tracker/core/constants/colors.dart';
 import '../../controllers/persistent_controller.dart';
 import '../../controllers/temp_controller.dart';
 import '../../data/models/game_model.dart';
 import '../../data/models/team_model.dart';
-import '../../old-constants/stringsGeneral.dart';
+import '../../core/constants/stringsGeneral.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
 // Widget is only statful so we can trigger a rebuild when we delete a game

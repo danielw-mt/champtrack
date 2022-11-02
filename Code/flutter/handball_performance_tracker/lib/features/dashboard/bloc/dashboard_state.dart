@@ -3,19 +3,21 @@ part of 'dashboard_bloc.dart';
 enum DashboardStatus { initial, loading, success, failure }
 
 class DashboardState extends Equatable {
-  const DashboardState({
+  final DashboardStatus status;
+  final Club club;
+
+  const DashboardState._({
     this.status = DashboardStatus.initial,
     this.club = const Club(),
   });
 
-  final DashboardStatus status;
-  final Club club;
+  const DashboardState.initial() : this._();
 
   DashboardState copyWith({
     DashboardStatus? status,
     Club? club,
   }) {
-    return DashboardState(
+    return DashboardState._(
       status: status ?? this.status,
       club: club ?? this.club,
     );
@@ -23,7 +25,7 @@ class DashboardState extends Equatable {
 
   @override
   String toString() {
-    return '''ClubState { status: $status, club: ${club.toString()} }''';
+    return '''DashboardState { status: $status, club: ${club.toString()} }''';
   }
 
   @override

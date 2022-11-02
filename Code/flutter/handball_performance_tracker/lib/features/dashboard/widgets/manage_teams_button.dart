@@ -1,12 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:handball_performance_tracker/old-constants/fieldSizeParameter.dart';
-import 'package:handball_performance_tracker/old-screens/start_game_screen.dart';
-import 'package:handball_performance_tracker/old-screens/team_selection_screen.dart';
-import 'package:get/get.dart';
-import 'package:handball_performance_tracker/old-constants/stringsDashboard.dart';
+import 'package:handball_performance_tracker/core/constants/stringsDashboard.dart';
 
 class ManageTeamsButton extends StatelessWidget {
-  bool startButton = false;
+  final bool startButton = false;
   ManageTeamsButton({Key? key}) : super(key: key);
 
   @override
@@ -24,9 +20,9 @@ class ManageTeamsButton extends StatelessWidget {
           borderRadius: BorderRadius.all(Radius.circular(15))),
       child: TextButton(
           onPressed: () {
-            startButton
-                ? Get.to(() => StartGameScreen())
-                : Get.to(() => TeamSelectionScreen());
+            // startButton
+            //     ? Get.to(() => StartGameScreen())
+            //     : Get.to(() => TeamSelectionScreen());
           },
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,

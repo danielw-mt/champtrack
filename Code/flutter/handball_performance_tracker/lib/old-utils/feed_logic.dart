@@ -1,8 +1,8 @@
 import 'package:get/get.dart';
-import 'package:handball_performance_tracker/old-constants/game_actions.dart';
+import 'package:handball_performance_tracker/core/constants/game_actions.dart';
 import '../controllers/temp_controller.dart';
 import '../data/models/game_action_model.dart';
-import '../old-constants/settings_config.dart';
+import '../core/constants/settings_config.dart';
 
 /// adds item to the feedActions list
 void addFeedItem(GameAction feedAction) async {

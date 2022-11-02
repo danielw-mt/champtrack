@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:handball_performance_tracker/old-widgets/helper_screen/alert_message_widget.dart';
 import 'package:handball_performance_tracker/old-widgets/main_screen/ef_score_bar.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
-import '../../../old-constants/stringsGameScreen.dart';
+import '../../../core/constants/stringsGameScreen.dart';
 import '../../../controllers/persistent_controller.dart';
 import '../../../controllers/temp_controller.dart';
 import 'package:get/get.dart';
-import '../../../old-constants/game_actions.dart';
+import '../../../core/constants/game_actions.dart';
 import 'package:logger/logger.dart';
 import 'dialog_button_menu.dart';
 

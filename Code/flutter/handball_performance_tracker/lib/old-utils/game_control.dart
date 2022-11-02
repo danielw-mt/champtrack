@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:handball_performance_tracker/old-constants/stringsGameScreen.dart';
-import 'package:handball_performance_tracker/old-constants/team_constants.dart';
+import 'package:handball_performance_tracker/core/constants/stringsGameScreen.dart';
+import 'package:handball_performance_tracker/core/constants/team_constants.dart';
 import 'package:handball_performance_tracker/old-widgets/helper_screen/alert_message_widget.dart';
 import 'package:handball_performance_tracker/old-widgets/main_screen/ef_score_bar.dart';
 import '../controllers/persistent_controller.dart';
@@ -10,7 +10,7 @@ import '../data/models/player_model.dart';
 import '../data/models/game_model.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 import 'sync_game_state.dart';
-import '../old-constants/stringsGameSettings.dart';
+import '../core/constants/stringsGameSettings.dart';
 
 void startGame(BuildContext context, {bool preconfigured: false}) async {
   TempController tempController = Get.find<TempController>();

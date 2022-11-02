@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:handball_performance_tracker/old-constants/stringsGeneral.dart';
+import 'package:handball_performance_tracker/core/constants/stringsGeneral.dart';
 import 'package:get/get.dart';
 import 'package:handball_performance_tracker/data/models/player_model.dart';
 import 'package:handball_performance_tracker/old-utils/feed_logic.dart';
@@ -7,15 +7,15 @@ import 'package:handball_performance_tracker/old-utils/player_helper.dart';
 import 'package:handball_performance_tracker/old-widgets/main_screen/ef_score_bar.dart';
 import 'package:handball_performance_tracker/old-widgets/main_screen/playermenu.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
-import '../../old-constants/stringsGameScreen.dart';
+import '../../core/constants/stringsGameScreen.dart';
 import '../../data/models/game_action_model.dart';
-import '../../old-constants/game_actions.dart';
+import '../../core/constants/game_actions.dart';
 import '../../controllers/temp_controller.dart';
 import '../../controllers/persistent_controller.dart';
 import 'dart:math';
 import 'package:logger/logger.dart';
 import '../../old-utils/field_control.dart';
-import '../../old-constants/positions.dart';
+import '../../core/constants/positions.dart';
 
 var logger = Logger(
   printer: PrettyPrinter(

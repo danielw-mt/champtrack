@@ -3,7 +3,7 @@ import 'package:handball_performance_tracker/controllers/persistent_controller.d
 import 'package:handball_performance_tracker/controllers/temp_controller.dart';
 import 'package:handball_performance_tracker/controllers/temp_controller.dart';
 import 'package:get/get.dart';
-import 'package:handball_performance_tracker/old-constants/stringsDashboard.dart';
+import 'package:handball_performance_tracker/core/constants/stringsDashboard.dart';
 import '../../old-screens/main_screen.dart';
 import '../../old-utils/sync_game_state.dart';
 

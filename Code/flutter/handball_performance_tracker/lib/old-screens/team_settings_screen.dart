@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:handball_performance_tracker/old-constants/stringsGeneral.dart';
-import 'package:handball_performance_tracker/old-constants/stringsTeamManagement.dart';
+import 'package:handball_performance_tracker/core/constants/stringsGeneral.dart';
+import 'package:handball_performance_tracker/core/constants/stringsTeamManagement.dart';
 import 'package:handball_performance_tracker/old-widgets/nav_drawer.dart';
 import '../controllers/temp_controller.dart';
 import '../old-widgets/team_settings_screen/players_list.dart';
@@ -9,7 +9,7 @@ import '../old-widgets/team_settings_screen/team_settings_bar.dart';
 import '../old-widgets/team_settings_screen/team_details_form.dart';
 import '../old-widgets/team_settings_screen/player_edit_form.dart';
 import '../old-widgets/team_settings_screen/game_managment.dart';
-import '../old-constants/colors.dart';
+import '../core/constants/colors.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
 // A screen where all relevant Infos of a team can be edited (players, game history and team details like name)

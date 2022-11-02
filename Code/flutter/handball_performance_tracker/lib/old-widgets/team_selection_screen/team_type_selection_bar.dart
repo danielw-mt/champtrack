@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:handball_performance_tracker/old-constants/colors.dart';
+import 'package:handball_performance_tracker/core/constants/colors.dart';
 import '../../controllers/temp_controller.dart';
 import 'package:get/get.dart';
-import '../../old-constants/stringsGeneral.dart';
+import '../../core/constants/stringsGeneral.dart';
 import '../../old-utils/team_type_helpers.dart';
 
 class TeamTypeSelectionBar extends StatelessWidget {

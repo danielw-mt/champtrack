@@ -1,5 +1,5 @@
 import 'dart:convert';
-import '../old-constants/colors.dart';
+import '../core/constants/colors.dart';
 import '../old-widgets/statistic_screen/player_statistics.dart';
 import '../old-widgets/statistic_screen/team_statistics.dart';
 import '../old-widgets/statistic_screen/comp_statistics.dart';

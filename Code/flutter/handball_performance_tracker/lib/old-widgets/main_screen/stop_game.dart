@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:handball_performance_tracker/old-constants/colors.dart';
-import 'package:handball_performance_tracker/old-constants/stringsGameScreen.dart';
-import 'package:handball_performance_tracker/old-constants/stringsGameSettings.dart';
+import 'package:handball_performance_tracker/core/constants/colors.dart';
+import 'package:handball_performance_tracker/core/constants/stringsGameScreen.dart';
+import 'package:handball_performance_tracker/core/constants/stringsGameSettings.dart';
 import 'package:get/get.dart';
 import 'package:handball_performance_tracker/old-screens/dashboard.dart';
 import 'package:handball_performance_tracker/old-utils/game_control.dart';

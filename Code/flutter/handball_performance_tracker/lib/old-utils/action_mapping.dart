@@ -1,4 +1,4 @@
-import '../old-constants/game_actions.dart';
+import '../core/constants/game_actions.dart';
 
 /// converts the action tag to the correct string specified in the strings
 String realActionTag(String actionTag) {

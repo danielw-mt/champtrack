@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:handball_performance_tracker/old-constants/colors.dart';
-import '../../old-constants/colors.dart';
+import 'package:handball_performance_tracker/core/constants/colors.dart';
+import '../../core/constants/colors.dart';
 import '../../controllers/persistent_controller.dart';
 import '../../controllers/temp_controller.dart';
 import '../../data/models/player_model.dart';
 import '../../data/models/team_model.dart';
 import 'on_field_checkbox.dart';
-import '../../old-constants/stringsGeneral.dart';
+import '../../core/constants/stringsGeneral.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'player_edit_form.dart';
 

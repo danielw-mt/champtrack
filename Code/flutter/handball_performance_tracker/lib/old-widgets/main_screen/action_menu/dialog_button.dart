@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:handball_performance_tracker/old-constants/stringsGameScreen.dart';
+import 'package:handball_performance_tracker/core/constants/stringsGameScreen.dart';
 import 'package:handball_performance_tracker/data/models/player_model.dart';
 import 'package:handball_performance_tracker/old-utils/feed_logic.dart';
 import 'package:handball_performance_tracker/old-utils/player_helper.dart';
@@ -9,10 +9,10 @@ import '../../../controllers/temp_controller.dart';
 import 'package:get/get.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import '../../../data/models/game_action_model.dart';
-import '../../../old-constants/game_actions.dart';
+import '../../../core/constants/game_actions.dart';
 import '../playermenu.dart';
 import 'dart:math';
-import '../../../old-constants/positions.dart';
+import '../../../core/constants/positions.dart';
 import '../../../old-utils/field_control.dart';
 import 'package:logger/logger.dart';
 

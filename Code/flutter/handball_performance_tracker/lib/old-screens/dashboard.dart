@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:handball_performance_tracker/old-constants/colors.dart';
+import 'package:handball_performance_tracker/core/constants/colors.dart';
 import 'package:handball_performance_tracker/old-widgets/nav_drawer.dart';
 import 'package:get/get.dart';
 import '../controllers/persistent_controller.dart';
@@ -8,7 +8,7 @@ import '../old-utils/initialize_local_data.dart';
 import '../old-widgets/dashboard/start_new_game_button.dart';
 import '../old-widgets/dashboard/manage_teams_button.dart';
 import '../old-widgets/dashboard/statistics_button.dart';
-import '../old-constants/stringsGeneral.dart';
+import '../core/constants/stringsGeneral.dart';
 
 class Dashboard extends StatelessWidget {
   final PersistentController persistentController = Get.put(PersistentController());

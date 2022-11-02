@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:handball_performance_tracker/old-constants/colors.dart';
-import 'package:handball_performance_tracker/old-constants/stringsAuthentication.dart';
+import 'package:handball_performance_tracker/core/constants/colors.dart';
+import 'package:handball_performance_tracker/core/constants/stringsAuthentication.dart';
 import 'package:handball_performance_tracker/old-widgets/authentication_screen/alert_widget.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import '../../data/database_repository.dart';

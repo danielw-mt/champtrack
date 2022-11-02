@@ -1,6 +1,5 @@
-import 'package:handball_performance_tracker/authentication/authentication.dart';
-import 'package:handball_performance_tracker/dashboard/dashboard.dart';
-import 'sign_up.dart';
+import 'package:handball_performance_tracker/features/authentication/authentication.dart';
+import 'package:handball_performance_tracker/features/dashboard/dashboard.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../old-constants/colors.dart';
-import '../../old-constants/stringsGeneral.dart';
+import '../../core/constants/colors.dart';
+import '../../core/constants/stringsGeneral.dart';
 import '../../controllers/persistent_controller.dart';
 import '../../controllers/temp_controller.dart';
 import 'package:get/get.dart';

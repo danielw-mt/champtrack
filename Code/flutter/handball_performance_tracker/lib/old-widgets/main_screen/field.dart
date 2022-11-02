@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:handball_performance_tracker/old-constants/colors.dart';
+import 'package:handball_performance_tracker/core/constants/colors.dart';
 import 'package:handball_performance_tracker/old-utils/main_screen_field_helper.dart';
 import '../../controllers/temp_controller.dart';
 import 'package:get/get.dart';

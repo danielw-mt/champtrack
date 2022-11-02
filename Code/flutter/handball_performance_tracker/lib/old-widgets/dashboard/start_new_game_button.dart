@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:handball_performance_tracker/old-constants/fieldSizeParameter.dart';
+import 'package:handball_performance_tracker/core/constants/fieldSizeParameter.dart';
 import 'package:handball_performance_tracker/old-screens/dashboard.dart';
 import 'package:handball_performance_tracker/old-screens/start_game_screen.dart';
 import 'package:handball_performance_tracker/old-screens/team_selection_screen.dart';
 import 'package:get/get.dart';
-import 'package:handball_performance_tracker/old-constants/stringsDashboard.dart';
+import 'package:handball_performance_tracker/core/constants/stringsDashboard.dart';
 import 'package:handball_performance_tracker/controllers/temp_controller.dart';
 import 'package:handball_performance_tracker/old-widgets/helper_screen/alert_message_widget.dart';
-import 'package:handball_performance_tracker/old-constants/stringsGameSettings.dart';
+import 'package:handball_performance_tracker/core/constants/stringsGameSettings.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
 class StartNewGameButton extends StatelessWidget {

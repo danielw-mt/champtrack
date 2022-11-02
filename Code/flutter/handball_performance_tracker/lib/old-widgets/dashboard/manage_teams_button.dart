@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:handball_performance_tracker/old-constants/fieldSizeParameter.dart';
+import 'package:handball_performance_tracker/core/constants/fieldSizeParameter.dart';
 import 'package:handball_performance_tracker/old-screens/start_game_screen.dart';
 import 'package:handball_performance_tracker/old-screens/team_selection_screen.dart';
 import 'package:get/get.dart';
-import 'package:handball_performance_tracker/old-constants/stringsDashboard.dart';
+import 'package:handball_performance_tracker/core/constants/stringsDashboard.dart';
 
 class ManageTeamsButton extends StatelessWidget {
   bool startButton = false;

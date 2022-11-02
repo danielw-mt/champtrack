@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:handball_performance_tracker/old-constants/colors.dart';
-import '../../old-constants/stringsGeneral.dart';
+import 'package:handball_performance_tracker/core/constants/colors.dart';
+import '../../core/constants/stringsGeneral.dart';
 import '../../controllers/temp_controller.dart';
 
 // Bottom Nav Bar for team settings screen

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:handball_performance_tracker/dashboard/dashboard.dart';
+import 'package:handball_performance_tracker/features/dashboard/dashboard.dart';
 import 'package:handball_performance_tracker/data/repositories/repositories.dart';
-import 'package:handball_performance_tracker/authentication/authentication.dart';
+import 'package:handball_performance_tracker/features/authentication/authentication.dart';
+import 'package:handball_performance_tracker/features/sidebar/sidebar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class HandballApp extends StatelessWidget {
@@ -14,8 +15,11 @@ class HandballApp extends StatelessWidget {
         RepositoryProvider<AuthRepository>(create: (context) => AuthRepository()),
         RepositoryProvider<ClubRepository>(create: (context) => ClubFirebaseRepository()),
       ],
-      child: BlocProvider(
-        create: (context) => AuthBloc(authRepository: RepositoryProvider.of<AuthRepository>(context)),
+      child: MultiBlocProvider(
+        providers: [
+          BlocProvider<AuthBloc>(create: (context) => AuthBloc(authRepository: RepositoryProvider.of<AuthRepository>(context))),
+          BlocProvider<SidebarBloc>(create: (context) => SidebarBloc(clubRepository: RepositoryProvider.of<ClubRepository>(context))),
+        ],
         child: MaterialApp(
           home: StreamBuilder<User?>(
               stream: FirebaseAuth.instance.authStateChanges(),

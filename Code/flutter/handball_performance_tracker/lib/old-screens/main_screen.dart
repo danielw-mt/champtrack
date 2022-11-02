@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:handball_performance_tracker/old-constants/colors.dart';
+import 'package:handball_performance_tracker/core/constants/colors.dart';
 import 'package:handball_performance_tracker/controllers/temp_controller.dart';
 import 'package:handball_performance_tracker/old-widgets/main_screen/ef_score_bar.dart';
 import 'package:handball_performance_tracker/old-widgets/main_screen/ef_score_bar.dart'
@@ -9,7 +9,7 @@ import 'package:handball_performance_tracker/old-widgets/main_screen/score_keepi
 import 'package:handball_performance_tracker/old-widgets/main_screen/stop_game.dart';
 import 'package:handball_performance_tracker/old-widgets/main_screen/side_switch.dart';
 import '../old-widgets/nav_drawer.dart';
-import 'package:handball_performance_tracker/old-constants/fieldSizeParameter.dart'
+import 'package:handball_performance_tracker/core/constants/fieldSizeParameter.dart'
     as fieldSizeParameter;
 import 'package:flutter/services.dart';
 import '../old-widgets/main_screen/stopwatchbar.dart';

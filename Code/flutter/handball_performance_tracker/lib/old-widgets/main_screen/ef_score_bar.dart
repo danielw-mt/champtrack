@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:handball_performance_tracker/old-constants/colors.dart';
-import 'package:handball_performance_tracker/old-constants/positions.dart';
+import 'package:handball_performance_tracker/core/constants/colors.dart';
+import 'package:handball_performance_tracker/core/constants/positions.dart';
 import 'package:handball_performance_tracker/controllers/persistent_controller.dart';
 import 'package:handball_performance_tracker/data/models/player_model.dart';
-import 'package:handball_performance_tracker/old-constants/fieldSizeParameter.dart'
+import 'package:handball_performance_tracker/core/constants/fieldSizeParameter.dart'
     as fieldSizeParameter;
 import 'package:handball_performance_tracker/old-utils/player_helper.dart';
 import 'dart:math';
