@@ -1,16 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:handball_performance_tracker/core/constants/fieldSizeParameter.dart';
-import 'package:handball_performance_tracker/core/constants/game_actions.dart';
-import 'package:handball_performance_tracker/oldcontrollers/temp_controller.dart';
-import 'package:handball_performance_tracker/old-widgets/nav_drawer.dart';
 import 'package:handball_performance_tracker/core/constants/colors.dart';
+import 'package:handball_performance_tracker/features/sidebar/sidebar.dart';
 
 // a screen that holds widgets that can be useful for debugging and game control
 class GlossaryScreen extends StatelessWidget {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   // TODO Get.find instead of Get.put?
-  final TempController tempController = Get.put(TempController());
 
   @override
   Widget build(BuildContext context) {
@@ -18,13 +13,7 @@ class GlossaryScreen extends StatelessWidget {
         child: Scaffold(
             appBar: AppBar(backgroundColor: buttonDarkBlueColor, title: Text("Glossar")),
             key: _scaffoldKey,
-            drawer: NavDrawer(),
-            // if drawer is closed notify, so if game is running the back to game button appears on next opening
-            onDrawerChanged: (isOpened) {
-              if (!isOpened) {
-                tempController.setMenuIsEllapsed(false);
-              }
-            },
+            drawer: SidebarPage(),
             body: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [

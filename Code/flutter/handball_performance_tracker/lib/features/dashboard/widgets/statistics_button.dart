@@ -25,7 +25,7 @@ class StatisticsButton extends StatelessWidget {
           borderRadius: BorderRadius.all(Radius.circular(15))),
       child: TextButton(
           onPressed: () {
-            Get.to(() => StatisticsScreen());
+            // Get.to(() => StatisticsScreen());
           },
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -65,9 +65,9 @@ class SquareDashboardButton extends StatelessWidget {
           borderRadius: BorderRadius.all(Radius.circular(15))),
       child: TextButton(
           onPressed: () {
-            startButton
-                ? Get.to(() => StartGameScreen())
-                : Get.to(() => TeamSelectionScreen());
+            // startButton
+                // ? Get.to(() => StartGameScreen())
+                // : Get.to(() => TeamSelectionScreen());
           },
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
