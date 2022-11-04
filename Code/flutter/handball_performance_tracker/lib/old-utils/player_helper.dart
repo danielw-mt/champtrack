@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
 
-import '../controllers/temp_controller.dart';
+import '../oldcontrollers/temp_controller.dart';
 
 /// Function to get list of indices where the list playersOnField is true.
 /// Those are the indices of onFieldPlayer within the list of all players.

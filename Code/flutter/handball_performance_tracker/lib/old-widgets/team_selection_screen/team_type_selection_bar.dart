@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:handball_performance_tracker/core/constants/colors.dart';
-import '../../controllers/temp_controller.dart';
+import '../../oldcontrollers/temp_controller.dart';
 import 'package:get/get.dart';
 import '../../core/constants/stringsGeneral.dart';
 import '../../old-utils/team_type_helpers.dart';

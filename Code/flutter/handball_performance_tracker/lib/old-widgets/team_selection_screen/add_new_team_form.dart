@@ -3,12 +3,12 @@ import 'package:handball_performance_tracker/core/constants/positions.dart';
 import 'package:handball_performance_tracker/core/constants/team_constants.dart';
 import '../../core/constants/colors.dart';
 import '../../core/constants/stringsGeneral.dart';
-import 'package:handball_performance_tracker/controllers/persistent_controller.dart';
+import 'package:handball_performance_tracker/oldcontrollers/persistent_controller.dart';
 import 'package:handball_performance_tracker/data/models/team_model.dart';
 import '../../data/models/player_model.dart';
 import '../../data/models/club_model.dart';
 import '../../data/database_repository.dart';
-import '../../controllers/temp_controller.dart';
+import '../../oldcontrollers/temp_controller.dart';
 import 'package:get/get.dart';
 
 class NewTeamForm extends StatefulWidget {

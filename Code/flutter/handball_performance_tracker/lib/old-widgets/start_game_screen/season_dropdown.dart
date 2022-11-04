@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:handball_performance_tracker/core/constants/colors.dart';
-import '../../controllers/temp_controller.dart';
+import '../../oldcontrollers/temp_controller.dart';
 import 'package:get/get.dart';
 
 // dropdown that shows all available teams belonging to the selected team type

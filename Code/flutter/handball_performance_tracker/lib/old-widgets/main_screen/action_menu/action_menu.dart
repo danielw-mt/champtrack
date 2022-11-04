@@ -3,8 +3,8 @@ import 'package:handball_performance_tracker/old-widgets/helper_screen/alert_mes
 import 'package:handball_performance_tracker/old-widgets/main_screen/ef_score_bar.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 import '../../../core/constants/stringsGameScreen.dart';
-import '../../../controllers/persistent_controller.dart';
-import '../../../controllers/temp_controller.dart';
+import '../../../oldcontrollers/persistent_controller.dart';
+import '../../../oldcontrollers/temp_controller.dart';
 import 'package:get/get.dart';
 import '../../../core/constants/game_actions.dart';
 import 'package:logger/logger.dart';

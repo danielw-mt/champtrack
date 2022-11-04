@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import '../../core/constants/colors.dart';
 import '../../core/constants/stringsGeneral.dart';
-import '../../controllers/persistent_controller.dart';
-import '../../controllers/temp_controller.dart';
+import '../../oldcontrollers/persistent_controller.dart';
+import '../../oldcontrollers/temp_controller.dart';
 import 'package:get/get.dart';
 import '../../data/models/team_model.dart';
 

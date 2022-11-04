@@ -25,7 +25,7 @@ class Club {
 
   @override
   String toString() {
-    return 'Club { name: $name, roles: ${roles.toString()}, id: $id }';
+    return 'Club { name: $name, +\n id: $id, +\n roles: $roles }';
   }
 
   ClubEntity toEntity() {

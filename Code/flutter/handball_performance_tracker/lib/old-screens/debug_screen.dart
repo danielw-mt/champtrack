@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:handball_performance_tracker/controllers/temp_controller.dart';
+import 'package:handball_performance_tracker/oldcontrollers/temp_controller.dart';
 import 'package:handball_performance_tracker/old-widgets/nav_drawer.dart';
 
 // a screen that holds widgets that can be useful for debugging and game control

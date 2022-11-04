@@ -1,4 +1,4 @@
-import '../controllers/temp_controller.dart';
+import '../oldcontrollers/temp_controller.dart';
 import 'package:handball_performance_tracker/old-widgets/main_screen/field.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';

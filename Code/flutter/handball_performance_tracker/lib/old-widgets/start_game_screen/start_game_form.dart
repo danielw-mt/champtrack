@@ -8,8 +8,8 @@ import 'package:handball_performance_tracker/old-widgets/start_game_screen/seaso
 import 'package:handball_performance_tracker/old-widgets/team_selection_screen/team_dropdown.dart';
 import '../../core/constants/stringsDashboard.dart';
 import '../../core/constants/stringsGameSettings.dart';
-import '../../controllers/persistent_controller.dart';
-import '../../controllers/temp_controller.dart';
+import '../../oldcontrollers/persistent_controller.dart';
+import '../../oldcontrollers/temp_controller.dart';
 import '../../core/constants/stringsGeneral.dart';
 import '../../old-screens/dashboard.dart';
 import '../nav_drawer.dart';

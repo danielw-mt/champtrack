@@ -4,9 +4,9 @@ import 'package:handball_performance_tracker/core/constants/stringsGameScreen.da
 import 'package:handball_performance_tracker/core/constants/stringsGeneral.dart';
 import 'package:handball_performance_tracker/old-widgets/main_screen/ef_score_bar.dart';
 import 'package:handball_performance_tracker/core/constants/fieldSizeParameter.dart' as fieldSizeParameter;
-import '../../controllers/temp_controller.dart';
+import '../../oldcontrollers/temp_controller.dart';
 import 'package:handball_performance_tracker/core/constants/fieldSizeParameter.dart' as fieldSizeParameter;
-import '../../controllers/temp_controller.dart';
+import '../../oldcontrollers/temp_controller.dart';
 import 'package:get/get.dart';
 import '../../data/models/game_action_model.dart';
 import '../../data/models/player_model.dart';

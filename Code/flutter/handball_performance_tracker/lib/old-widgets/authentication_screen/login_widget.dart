@@ -5,7 +5,7 @@ import 'package:handball_performance_tracker/core/constants/stringsAuthenticatio
 import 'package:handball_performance_tracker/old-widgets/authentication_screen/alert_widget.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import '../../data/database_repository.dart';
-import '../../controllers/persistent_controller.dart';
+import '../../oldcontrollers/persistent_controller.dart';
 
 class LoginWidget extends StatefulWidget {
   const LoginWidget({Key? key}) : super(key: key);

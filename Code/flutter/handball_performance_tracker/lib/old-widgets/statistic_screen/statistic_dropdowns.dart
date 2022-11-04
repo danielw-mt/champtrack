@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:handball_performance_tracker/core/constants/game_actions.dart';
 import 'package:handball_performance_tracker/core/constants/stringsGeneral.dart';
-import 'package:handball_performance_tracker/controllers/persistent_controller.dart';
-import 'package:handball_performance_tracker/controllers/temp_controller.dart';
+import 'package:handball_performance_tracker/oldcontrollers/persistent_controller.dart';
+import 'package:handball_performance_tracker/oldcontrollers/temp_controller.dart';
 import 'statistic_card_elements.dart';
 import '../../data/models/player_model.dart';
 import '../../data/models/game_model.dart';
 import '../../data/models/team_model.dart';
-import '../../controllers/temp_controller.dart';
+import '../../oldcontrollers/temp_controller.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 
