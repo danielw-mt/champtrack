@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:handball_performance_tracker/constants/stringsGeneral.dart';
 import 'package:handball_performance_tracker/controllers/persistent_controller.dart';
-import 'package:handball_performance_tracker/widgets/statistic_screen/bar_chart_example.dart';
 import 'charts.dart';
 import 'package:get/get.dart';
-import '../../data/player.dart';
 import '../../utils/action_mapping.dart';
+import 'package:handball_performance_tracker/constants/fieldSizeParameter.dart'
+    as fieldSizeParameter;
+import 'package:handball_performance_tracker/widgets/main_screen/field.dart';
+import 'package:handball_performance_tracker/constants/colors.dart';
+import 'package:handball_performance_tracker/utils/main_screen_field_helper.dart';
 
 class PenaltyInfoCard extends StatelessWidget {
   final int redCards;
@@ -13,7 +16,12 @@ class PenaltyInfoCard extends StatelessWidget {
   final int timePenalties;
 
   // initialize card values by default with 0
-  const PenaltyInfoCard({Key? key, this.redCards = 0, this.yellowCards = 0, this.timePenalties = 0}) : super(key: key);
+  const PenaltyInfoCard(
+      {Key? key,
+      this.redCards = 0,
+      this.yellowCards = 0,
+      this.timePenalties = 0})
+      : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -27,7 +35,9 @@ class PenaltyInfoCard extends StatelessWidget {
               children: [
                 Flexible(
                   flex: 1,
-                  child: Image(image: AssetImage('images/statistic_screen/yellow_card_button.jpg')),
+                  child: Image(
+                      image: AssetImage(
+                          'images/statistic_screen/yellow_card_button.jpg')),
                 ),
                 Flexible(
                   flex: 1,
@@ -43,7 +53,9 @@ class PenaltyInfoCard extends StatelessWidget {
               children: [
                 Flexible(
                   flex: 1,
-                  child: Image(image: AssetImage('images/statistic_screen/red_card_button.jpg')),
+                  child: Image(
+                      image: AssetImage(
+                          'images/statistic_screen/red_card_button.jpg')),
                 ),
                 Flexible(
                   flex: 1,
@@ -59,7 +71,9 @@ class PenaltyInfoCard extends StatelessWidget {
               children: [
                 Flexible(
                   flex: 1,
-                  child: Image(image: AssetImage('images/statistic_screen/time_penalty_button.jpg')),
+                  child: Image(
+                      image: AssetImage(
+                          'images/statistic_screen/time_penalty_button.jpg')),
                 ),
                 Flexible(
                   flex: 1,
@@ -153,8 +167,12 @@ class _ActionsCardState extends State<ActionsCard> {
                                 widget.actionCounts.length,
                                 (index) => DataRow(cells: [
                                       // convert action tag to the correct string specified in the strings using realActionType
-                                      DataCell(Text(realActionTag(widget.actionCounts.keys.elementAt(index)))),
-                                      DataCell(Text(widget.actionCounts.values.elementAt(index).toString()))
+                                      DataCell(Text(realActionTag(widget
+                                          .actionCounts.keys
+                                          .elementAt(index)))),
+                                      DataCell(Text(widget.actionCounts.values
+                                          .elementAt(index)
+                                          .toString()))
                                     ]))),
                       )
                     : Text(StringsGeneral.lNoActionsRecorded))
@@ -163,6 +181,93 @@ class _ActionsCardState extends State<ActionsCard> {
       );
     }
     return Container();
+  }
+}
+
+class HeatMapCard extends StatefulWidget {
+  @override
+  _HeatMapCardState createState() => _HeatMapCardState();
+}
+
+class _HeatMapCardState extends State<HeatMapCard> {
+  //final TempController tempController = Get.find<TempController>();
+  PersistentController persistentController = Get.find<PersistentController>();
+  int currentTab = 0;
+
+  bool fieldIsLeft = true;
+
+  //tempController.setFieldIsLeft(this.fieldIsLeft);
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Flexible(
+            flex: 1,
+            child: Text("Wurfverteilung"),
+          ),
+          Expanded(
+            flex: 12,
+            child: CustomPaint(
+              // Give colors: 9m(middle-dark),6m(dark),background(light)
+              painter: FieldPainter(fieldIsLeft, defenseMiddleColor,
+                  defenseDarkColor, defenseLightColor),
+              child:
+                  Container(), // empty container necessary to force filling card size
+              foregroundPainter: TestPainter2(),
+              // GestureDetector to handle on click or swipe
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class TestPainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = Colors.blue
+      ..strokeWidth = 5
+      ..style = PaintingStyle.stroke;
+
+    // draw background
+    canvas.drawRect(
+        Rect.fromCenter(
+            center: Offset(120 / 2, 20 / 2), width: 120, height: 20),
+        Paint()..color = Colors.blue);
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) {
+    return false;
+    // TODO: implement shouldRepaint
+    throw UnimplementedError();
+  }
+}
+
+class TestPainter2 extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = Colors.blue
+      ..strokeWidth = 5
+      ..style = PaintingStyle.stroke;
+
+    // draw background
+    canvas.drawRect(
+        Rect.fromCenter(center: Offset(20 / 2, 20 / 2), width: 20, height: 20),
+        Paint()..color = Colors.red);
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) {
+    return false;
+    // TODO: implement shouldRepaint
+    throw UnimplementedError();
   }
 }
 
@@ -230,7 +335,8 @@ class _PerformanceCardState extends State<PerformanceCard> {
                     )
                   : LineChartWidget(
                       startTime: widget.startTime,
-                      timeStamps: widget.actionSeries[_selectedDropdownElement]!,
+                      timeStamps:
+                          widget.actionSeries[_selectedDropdownElement]!,
                       stopTime: widget.stopTime,
                       values: [],
                     )),
@@ -250,8 +356,11 @@ class _PerformanceCardState extends State<PerformanceCard> {
 
       // Array list of items
       items: _dropDownElements.map((String dropdownElement) {
-        if (widget.actionSeries[dropdownElement] == null && dropdownElement != "Ef-Score") {
-          print("cannot display dropdown element" + dropdownElement + " which has no data");
+        if (widget.actionSeries[dropdownElement] == null &&
+            dropdownElement != "Ef-Score") {
+          print("cannot display dropdown element" +
+              dropdownElement +
+              " which has no data");
           return DropdownMenuItem(
             child: Text("Cannot display statistic"),
             value: dropdownElement,
@@ -261,7 +370,9 @@ class _PerformanceCardState extends State<PerformanceCard> {
           value: dropdownElement,
           // if the element is Ef-score don't do anything.
           //If it is one of the action type series then convert the tag to the correct string using realActionType
-          child: dropdownElement == "Ef-score" ? Text(dropdownElement) : Text(realActionTag(dropdownElement)),
+          child: dropdownElement == "Ef-score"
+              ? Text(dropdownElement)
+              : Text(realActionTag(dropdownElement)),
         );
       }).toList(),
       // After selecting the desired option,it will
@@ -278,7 +389,8 @@ class _PerformanceCardState extends State<PerformanceCard> {
 class QuotaCard extends StatefulWidget {
   final List<List<double>> quotas;
   final ring_form;
-  const QuotaCard({Key? key, required this.ring_form, required this.quotas}) : super(key: key);
+  const QuotaCard({Key? key, required this.ring_form, required this.quotas})
+      : super(key: key);
 
   @override
   State<QuotaCard> createState() => _QuotaCardState();
@@ -289,10 +401,13 @@ class _QuotaCardState extends State<QuotaCard> {
 
   @override
   Widget build(BuildContext context) {
-    return Card(child: _buildCarousel(context, _selectedCarousalIndex ~/ 2, widget.ring_form));
+    return Card(
+        child: _buildCarousel(
+            context, _selectedCarousalIndex ~/ 2, widget.ring_form));
   }
 
-  Widget _buildCarousel(BuildContext context, int carouselIndex, bool ring_form) {
+  Widget _buildCarousel(
+      BuildContext context, int carouselIndex, bool ring_form) {
     return Column(
       mainAxisSize: MainAxisSize.max,
       children: <Widget>[
@@ -307,7 +422,8 @@ class _QuotaCardState extends State<QuotaCard> {
             controller: PageController(viewportFraction: 0.9),
             itemBuilder: (BuildContext context, int itemIndex) {
               if (itemIndex == 0) {
-                return _buildCarouselItemQuotes(context, carouselIndex, itemIndex, ring_form);
+                return _buildCarouselItemQuotes(
+                    context, carouselIndex, itemIndex, ring_form);
               } else {
                 return Container(); // TODO this is not ready yet //_buildCarouselItem(context, carouselIndex, itemIndex);
               }
@@ -318,15 +434,25 @@ class _QuotaCardState extends State<QuotaCard> {
     );
   }
 
-  Widget _buildCarouselItemQuotes(BuildContext context, int carouselIndex, int itemIndex, bool ring_form) {
+  Widget _buildCarouselItemQuotes(
+      BuildContext context, int carouselIndex, int itemIndex, bool ring_form) {
     print("7m quota: " + widget.quotas[0].toString());
     print("position quota: " + widget.quotas[1].toString());
     print("throw quota: " + widget.quotas[2].toString());
     // convert quotas to correct datamaps for the piecharts
     // 7 meter misses are just the total seven meter atempts - the seven meter goals
-    Map<String, double> sevenMeterDataMap = {"7m goals": widget.quotas[0][0], "7 meter misses": widget.quotas[0][1] - widget.quotas[0][0]};
-    Map<String, double> positionDataMap = {"Position goals": widget.quotas[1][0], "Position throws": widget.quotas[1][1] - widget.quotas[1][0]};
-    Map<String, double> throwDataMap = {"Throw goals": widget.quotas[2][0], "Throw misses": widget.quotas[2][1] - widget.quotas[2][0]};
+    Map<String, double> sevenMeterDataMap = {
+      "7m goals": widget.quotas[0][0],
+      "7 meter misses": widget.quotas[0][1] - widget.quotas[0][0]
+    };
+    Map<String, double> positionDataMap = {
+      "Position goals": widget.quotas[1][0],
+      "Position throws": widget.quotas[1][1] - widget.quotas[1][0]
+    };
+    Map<String, double> throwDataMap = {
+      "Throw goals": widget.quotas[2][0],
+      "Throw misses": widget.quotas[2][1] - widget.quotas[2][0]
+    };
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
@@ -349,7 +475,9 @@ class _QuotaCardState extends State<QuotaCard> {
                     ),
                     Flexible(
                       flex: 2,
-                      child: Text(widget.quotas[0][1].toString() + " " + StringsGeneral.l7mThrowsRecord),
+                      child: Text(widget.quotas[0][1].toString() +
+                          " " +
+                          StringsGeneral.l7mThrowsRecord),
                     )
                   ],
                 )
@@ -393,11 +521,14 @@ class _QuotaCardState extends State<QuotaCard> {
                     ),
                     Flexible(
                       flex: 2,
-                      child: QuotaPieChart(ringForm: true, dataMap: throwDataMap),
+                      child:
+                          QuotaPieChart(ringForm: true, dataMap: throwDataMap),
                     ),
                     Flexible(
                       flex: 2,
-                      child: Text(widget.quotas[2][1].toString() + " " + StringsGeneral.lThrowsRecord),
+                      child: Text(widget.quotas[2][1].toString() +
+                          " " +
+                          StringsGeneral.lThrowsRecord),
                     )
                   ],
                 )
@@ -407,7 +538,8 @@ class _QuotaCardState extends State<QuotaCard> {
     );
   }
 
-  Widget _buildCarouselItem(BuildContext context, int carouselIndex, int itemIndex) {
+  Widget _buildCarouselItem(
+      BuildContext context, int carouselIndex, int itemIndex) {
     return Column(
       children: [
         Flexible(
