@@ -52,7 +52,7 @@ class TeamFirebaseRepository extends TeamRepository {
     }
     DocumentSnapshot teamSnapshot = await clubSnapshot.docs[0].reference.collection("teams").doc(teamId).get();
     if (teamSnapshot.exists) {
-      team = Team.fromEntity(TeamEntity.fromSnapshot(teamSnapshot));
+      team = await Team.fromEntity(TeamEntity.fromSnapshot(teamSnapshot));
     }
     return team!;
   }
@@ -71,10 +71,10 @@ class TeamFirebaseRepository extends TeamRepository {
       throw Exception("No club found for user id. Cannot fetch players");
     }
     QuerySnapshot teamsSnapshot = await clubSnapshot.docs[0].reference.collection("teams").get();
-    teamsSnapshot.docs.forEach((DocumentSnapshot teamSnapshot) {
-      // check if the player reference are valid
-      
-      teams.add(Team.fromEntity(TeamEntity.fromSnapshot(teamSnapshot)));
+    await Future.forEach(teamsSnapshot.docs, (DocumentSnapshot teamSnapshot) async {
+      Team team = await Team.fromEntity(TeamEntity.fromSnapshot(teamSnapshot));
+      teams.add(team);
+      print("added team: "+team.name);
     });
     return teams;
   }

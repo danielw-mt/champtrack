@@ -73,10 +73,10 @@ class Team {
         onFieldPlayerRefs.add(playerRef);
       }
     });
-    DocumentReference? teamReference = null; 
-    if (path != ""){
-       teamReference = FirebaseFirestore.instance.doc(path);
-    } 
+    DocumentReference? teamReference = null;
+    if (path != "") {
+      teamReference = FirebaseFirestore.instance.doc(path);
+    }
     return TeamEntity(
       teamReference ?? null,
       name,
@@ -86,17 +86,18 @@ class Team {
     );
   }
 
-  static Team fromEntity(TeamEntity entity) {
+  static Future<Team> fromEntity(TeamEntity entity) async {
     List<Player> players = [];
-    entity.players.forEach((DocumentReference playerReference) async {
+    await Future.forEach(entity.players, (DocumentReference playerReference) async {
       DocumentSnapshot playerSnapshot = await playerReference.get();
       players.add(Player.fromEntity(PlayerEntity.fromSnapshot(playerSnapshot)));
     });
     List<Player> onFieldPlayers = [];
-    entity.onFieldPlayers.forEach((DocumentReference player) async {
-      DocumentSnapshot playerSnapshot = await player.get();
+    await Future.forEach(entity.onFieldPlayers, (DocumentReference playerReference) async {
+      DocumentSnapshot playerSnapshot = await playerReference.get();
       onFieldPlayers.add(Player.fromEntity(PlayerEntity.fromSnapshot(playerSnapshot)));
     });
+    print("Team, players: ${players.length}");
     Team team = Team(
       id: entity.documentReference!.id,
       path: entity.documentReference!.path,

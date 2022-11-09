@@ -31,7 +31,6 @@ class TeamManagementView extends StatelessWidget {
                     body: Column(
                       children: [
                         Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, crossAxisAlignment: CrossAxisAlignment.start, children: [
-                          // TODO implement team cards here instead of dropdown
                           Center(child: TeamDropdown()),
                           Center(
                               child: Flexible(
@@ -50,10 +49,14 @@ class TeamManagementView extends StatelessWidget {
                           ))
                         ]),
                         // players list or games list or team settings depending which tab is selected
+                        if (state.selectedTab == TeamManagementTab.playersTab) PlayersList(),
+                        // if (state.selectedTab == TeamManagementTab.gamesTab) GamesList(),
+                        // if (state.selectedTab == TeamManagementTab.teamSettingsTab) TeamSettings(),
                       ],
                     ));
               }
               if (state is TeamManagementError) {
+                print("team management error");
                 return Text("Error");
               }
               // By default add this state

@@ -11,9 +11,10 @@ class TeamManagementCubit extends Cubit<TeamManagementState> {
 
   Future<void> loadTeamsAndPlayers() async {
     try {
-      var allTeams = await TeamFirebaseRepository().fetchTeams();
-      var allPlayers = await PlayerFirebaseRepository().fetchPlayers();
-      emit(TeamManagementLoaded(allTeams: allTeams, allPlayers: allPlayers, selectedTeamIndex: 0));
+      List<Team> fetchedTeams = await TeamFirebaseRepository().fetchTeams();
+      // TODO fetch players or maybe not for team management
+      // List<Player> fetchedPlayers = await PlayerFirebaseRepository().fetchPlayers();
+      emit(TeamManagementLoaded(allTeams: fetchedTeams, allPlayers: [], selectedTeamIndex: 0));
     } catch (e) {
       developer.log('Failure loading teams or players ' + e.toString(), name: 'TeamManagementCubit', error: e);
       emit(TeamManagementError(errorMessage: "Error loading teams and players"));
@@ -21,11 +22,8 @@ class TeamManagementCubit extends Cubit<TeamManagementState> {
   }
 
   selectTeam(Team team) {
-    if (state is TeamManagementLoaded) {
-      TeamManagementLoaded state = this.state as TeamManagementLoaded;
-      int index = state.allTeams.indexWhere((Team team) => team.id == team.id);
-      emit(TeamManagementLoaded(allTeams: state.allTeams, allPlayers: state.allPlayers, selectedTeamIndex: index));
-    }
+    int index = state.allTeams.indexWhere((Team teamInList) => teamInList.id == team.id);
+    emit(TeamManagementLoaded(allTeams: state.allTeams, allPlayers: state.allPlayers, selectedTeamIndex: index));
   }
 
   Future<void> createTeam(Team team) async {
@@ -71,10 +69,6 @@ class TeamManagementCubit extends Cubit<TeamManagementState> {
   }
 
   changeTab(TeamManagementTab tab) {
-    if (state is TeamManagementLoaded) {
-      TeamManagementLoaded state = this.state as TeamManagementLoaded;
-      emit(
-          TeamManagementLoaded(allTeams: state.allTeams, allPlayers: state.allPlayers, selectedTeamIndex: state.selectedTeamIndex, selectedTab: tab));
-    }
+    emit(TeamManagementLoaded(allTeams: state.allTeams, allPlayers: state.allPlayers, selectedTeamIndex: state.selectedTeamIndex, selectedTab: tab));
   }
 }

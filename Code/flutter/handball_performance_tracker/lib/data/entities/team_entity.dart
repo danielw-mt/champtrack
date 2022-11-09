@@ -38,15 +38,12 @@ class TeamEntity extends Equatable {
   }
 
   static TeamEntity fromSnapshot(DocumentSnapshot snap) {
-    developer.log("fromSnapshot", name: "TeamEntity");
     Map<String, dynamic> data = snap.data() as Map<String, dynamic>;
-    // List onFieldPlayers = data['onFieldPlayers'];
     List<DocumentReference> onFieldPlayerReferences = [];
     data['onFieldPlayers'].forEach((onFieldPlayerReference) {
       onFieldPlayerReferences.add(onFieldPlayerReference);
     });
     List<DocumentReference> playerReferences = [];
-    // List<DocumentReference> playerReferences = [];
     data['players'].forEach((playerReference) {
       playerReferences.add(playerReference);
     });

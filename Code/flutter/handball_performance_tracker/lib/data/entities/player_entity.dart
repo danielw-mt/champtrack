@@ -45,31 +45,30 @@ class PlayerEntity extends Equatable {
   }
 
   static PlayerEntity fromSnapshot(DocumentSnapshot snap) {
-    developer.log('fromSnapshot ${snap.id}', name: 'PlayerEntity');
-    Map<String, dynamic> data = {};
-    try {
-      data = snap.data() as Map<String, dynamic>;
-    } catch (e) {
-      developer.log('fromSnapshot ${snap.id} error: $e', name: 'PlayerEntity');
+    if (snap.exists) {
+      // developer.log('fromSnapshot ${snap.id}', name: 'PlayerEntity');
+      Map<String, dynamic> data = snap.data() as Map<String, dynamic>;
+      // convert linkedmap to string string map
+      List<String> positions = [];
+      data['positions'].forEach((positionString) {
+        positions.add(positionString);
+      });
+      List<String> teams = [];
+      data['teams'].forEach((teamString) {
+        teams.add(teamString);
+      });
+      return PlayerEntity(
+        snap.reference,
+        data['firstName'],
+        data['lastName'],
+        data['nickName'],
+        data['number'],
+        positions,
+        teams,
+      );
     }
-    // convert linkedmap to string string map
-    List<String> positions = [];
-    data['positions'].forEach((positionString) {
-      positions.add(positionString);
-    });
-    List<String> teams = [];
-    data['teams'].forEach((teamString) {
-      teams.add(teamString);
-    });
-    return PlayerEntity(
-      snap.reference,
-      data['firstName'],
-      data['lastName'],
-      data['nickName'],
-      data['number'],
-      positions,
-      teams,
-    );
+    // if the player snapshot does not exist it most likely means that the player is invalid or was deleted
+    return PlayerEntity(snap.reference, "invalid / deleted", "invalid / deleted", "invalid / deleted", -1, [], []);
   }
 
   Map<String, Object?> toDocument() {

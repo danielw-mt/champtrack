@@ -70,7 +70,7 @@ class PlayerFirebaseRepository extends PlayerRepository {
       throw Exception("No club found for user id. Cannot fetch players");
     }
     QuerySnapshot playersSnapshot = await clubSnapshot.docs[0].reference.collection("players").get();
-    playersSnapshot.docs.forEach((DocumentSnapshot playerSnapshot) {
+    await Future.forEach(playersSnapshot.docs, (DocumentSnapshot playerSnapshot) async {
       players.add(Player.fromEntity(PlayerEntity.fromSnapshot(playerSnapshot)));
     });
     return players;
@@ -104,6 +104,4 @@ class PlayerFirebaseRepository extends PlayerRepository {
     }
     await clubSnapshot.docs[0].reference.collection("players").doc(player.id).update(player.toEntity().toDocument());
   }
-
-  
 }
