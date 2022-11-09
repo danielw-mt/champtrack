@@ -4,7 +4,7 @@ import 'package:handball_performance_tracker/data/models/game_action_model.dart'
 
 /// Representation of a club entry in firebase
 class GameEntity extends Equatable {
-  final id;
+  final DocumentReference documentReference;
   final List actions;
   final Timestamp date;
   final bool isAtHome;
@@ -20,12 +20,12 @@ class GameEntity extends Equatable {
   final int stopWatchTime;
   final String teamId;
 
-  GameEntity(this.id, this.actions, this.date, this.isAtHome, this.lastSync, this.location, this.onFieldPlayers, this.opponent, this.scoreHome,
+  GameEntity(this.documentReference, this.actions, this.date, this.isAtHome, this.lastSync, this.location, this.onFieldPlayers, this.opponent, this.scoreHome,
       this.scoreOpponent, this.season, this.startTime, this.stopTime, this.stopWatchTime, this.teamId);
 
   Map<String, Object> toJson() {
     return {
-      'id': id,
+      'documentReference': documentReference,
       'actions': actions,
       'date': date,
       'isAtHome': isAtHome,
@@ -45,13 +45,13 @@ class GameEntity extends Equatable {
 
   @override
   String toString() {
-    return 'ClubEntity { id: $id, actions: ${actions.toString()}, date: $date, isAtHome: $isAtHome, lastSync: $lastSync, location: $location, onFieldPlayers: ${onFieldPlayers.toString()}, opponent: $opponent, scoreHome: $scoreHome, scoreOpponent: $scoreOpponent, season: $season, startTime: $startTime, stopTime: $stopTime, stopWatchTime: $stopWatchTime, teamId: $teamId }';
+    return 'ClubEntity { actions: ${actions.toString()}, date: $date, isAtHome: $isAtHome, lastSync: $lastSync, location: $location, onFieldPlayers: ${onFieldPlayers.toString()}, opponent: $opponent, scoreHome: $scoreHome, scoreOpponent: $scoreOpponent, season: $season, startTime: $startTime, stopTime: $stopTime, stopWatchTime: $stopWatchTime, teamId: $teamId }';
   }
 
   static GameEntity fromJson(Map<String, Object> json) {
     // TODO probably parse actions
     return GameEntity(
-      json['id'] as String,
+      json['documentReference'] as DocumentReference,
       json['actions'] as List<DocumentSnapshot>,
       json['date'] as Timestamp,
       json['isAtHome'] as bool,
@@ -80,7 +80,7 @@ class GameEntity extends Equatable {
       onFieldPlayers.add(onFieldPlayerString);
     });
     return GameEntity(
-      snap.reference.id,
+      snap.reference,
       actions,
       data['date'],
       data['isAtHome'],
@@ -100,7 +100,6 @@ class GameEntity extends Equatable {
 
   Map<String, Object?> toDocument() {
     return {
-      'id': id,
       'actions': actions,
       'date': date,
       'isAtHome': isAtHome,

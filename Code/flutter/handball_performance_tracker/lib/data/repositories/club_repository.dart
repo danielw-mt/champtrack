@@ -1,19 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:handball_performance_tracker/data/models/models.dart';
 import 'package:handball_performance_tracker/data/entities/entities.dart';
-import 'package:logger/logger.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-var logger = Logger(
-  printer: PrettyPrinter(
-      methodCount: 2, // number of method calls to be displayed
-      errorMethodCount: 8, // number of method calls if stacktrace is provided
-      lineLength: 120, // width of the output
-      colors: true, // Colorful log messages
-      printEmojis: true, // Print an emoji for each log message
-      printTime: false // Should each log print contain a timestamp
-      ),
-);
 
 /// Defines methods that need to be implemented by data providers. Could also be something other than Firebase
 abstract class ClubRepository {

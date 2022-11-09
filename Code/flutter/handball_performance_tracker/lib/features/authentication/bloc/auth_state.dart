@@ -12,6 +12,10 @@ class Loading extends AuthState {
 
 // When the user is authenticated the state is changed to Authenticated.
 class Authenticated extends AuthState {
+  final Club club;
+
+  Authenticated({required this.club});
+
   @override
   List<Object?> get props => [];
 }

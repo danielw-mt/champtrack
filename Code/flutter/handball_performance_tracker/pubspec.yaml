@@ -37,21 +37,19 @@ dependencies:
   cloud_firestore: ^3.1.14
   connectivity_plus: ^2.3.0 
   stop_watch_timer: ^1.4.0
-  rflutter_alert: ^2.0.4 # try to remove this
-  rainbow_color: ^2.0.1 # try to remove this
+  rflutter_alert: ^2.0.4 # TODO try to remove this
+  rainbow_color: ^2.0.1 # TODO try to remove this
   firebase_auth: ^3.3.19
   fl_chart: ^0.55.1
   pie_chart: ^5.3.2
   firebase_performance: ^0.8.2+4
   firebase_analytics: ^9.3.3
   firebase_core: ^1.21.1
-  get_it: ^7.2.0 # remove this
-  logger: ^1.1.0 # try to remove this
   firebase_crashlytics: ^2.8.9
   bloc: ^8.0.0
   flutter_bloc: ^8.0.0
   equatable: ^2.0.0
-  email_validator: ^2.1.17 # try to remove this
+  email_validator: ^2.1.17 # TODO try to remove this
 
 dev_dependencies:
   flutter_test:

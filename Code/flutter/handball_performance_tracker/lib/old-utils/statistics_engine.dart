@@ -1,24 +1,15 @@
 import 'package:handball_performance_tracker/core/constants/game_actions.dart';
 
 import '../data/models/game_action_model.dart';
-import 'package:logger/logger.dart';
 import '../data/ef_score.dart';
 import '../data/models/player_model.dart';
 import "dart:collection";
 import '../old-utils/action_mapping.dart';
 import '../core/constants/game_actions.dart';
+import 'dart:developer' as developer;
 
 class StatisticsEngine {
-  var logger = Logger(
-    printer: PrettyPrinter(
-        methodCount: 2, // number of method calls to be displayed
-        errorMethodCount: 8, // number of method calls if stacktrace is provided
-        lineLength: 120, // width of the output
-        colors: true, // Colorful log messages
-        printEmojis: true, // Print an emoji for each log message
-        printTime: true // Should each log print contain a timestamp
-        ),
-  );
+
 
   Map<String, dynamic> _statistics = {};
   bool _statistics_ready = false;
@@ -29,7 +20,7 @@ class StatisticsEngine {
   ///
   /// @param players: a list of all players that correspond to the logged in club
   generateStatistics(List<Map<String, dynamic>> gameDocuments, List<Player> players) {
-    logger.d("generate game statistics");
+    developer.log("generate game statistics");
     gameDocuments.forEach((Map<String, dynamic> gameDocument) {
       // quality check that game document contains all the fields it needs and also actions
       // otherwise don't deal with this game
@@ -72,7 +63,7 @@ class StatisticsEngine {
 
   /// create the map that contains all statistics for an individual player from all the actions in the game
   Map<String, dynamic> _generatePlayerStatistics(actions, List<Player> players) {
-    logger.d("generating player statistics");
+    developer.log("generating player statistics");
     // map with statistics for all player by id of the player
     Map<String, dynamic> player_stats = {};
 
@@ -80,7 +71,7 @@ class StatisticsEngine {
     ///
     /// called for every action
     Map<String, int> updateActionCounts(Map<String, dynamic> action, Map<String, int> action_counts) {
-      logger.d("update action counts");
+      developer.log("update action counts");
       String actionTag = action["tag"];
       if (!action_counts.containsKey(actionTag)) {
         action_counts[actionTag] = 1;
@@ -94,7 +85,7 @@ class StatisticsEngine {
     ///
     /// Called for every action.
     Map<String, List<int>> updateActionSeries(Map<String, dynamic> action, Map<String, List<int>> action_series) {
-      logger.d("action series");
+      developer.log("action series");
       String actionTag = action["tag"];
       if (!action_series.containsKey(actionTag)) {
         action_series[actionTag] = [action["timestamp"]];
@@ -108,7 +99,7 @@ class StatisticsEngine {
     ///
     /// Called for every action
     Map<String, dynamic> updateActionCoordinates(Map<String, dynamic> action, Map<String, dynamic> action_coordinates) {
-      logger.d("update action coordinates");
+      developer.log("update action coordinates");
       // if there is no throw location object inside the action
       if (action["throwLocation"] == null) return action_coordinates;
       String actionTag = action["tag"];
@@ -198,7 +189,7 @@ class StatisticsEngine {
 
     /// go over all actions and update the player statistics map using the sub-methods above within generatePlayerStatistics()
     actions.forEach((Map<String, dynamic> action) {
-      logger.d(action.toString());
+      developer.log(action.toString());
       String playerId = action["playerId"];
       // only if a playerId is set the action can be associated. Sometimes the action is not associated with a player
       if (playerId != "") {
@@ -243,7 +234,7 @@ class StatisticsEngine {
         try {
           playerEfScore.addAction(GameAction(tag: actionTag), players.where((player) => player.id == playerId).first.positions);
         } catch (e) {
-          logger.d("ef-score does not know what to do with action $actionTag" + "\n" + e.toString());
+          developer.log("ef-score does not know what to do with action $actionTag" + "\n" + e.toString());
         }
         playerStatistic["ef_score_series"].add(playerEfScore.score);
       });
@@ -255,7 +246,7 @@ class StatisticsEngine {
 
   /// updates _statistics element with team statistics data using game data
   Map<String, dynamic> _generateTeamStatistics(Map<String, dynamic> playerStats) {
-    logger.d("generating team statistics");
+    developer.log("generating team statistics");
     // team stats for the current team (only one team per game is implicit assumption)
     Map<String, dynamic> teamStats = {
       "seven_meter_quota": <double>[0, 0],

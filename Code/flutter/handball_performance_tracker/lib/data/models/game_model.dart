@@ -5,6 +5,7 @@ import 'package:handball_performance_tracker/data/models/models.dart';
 
 class Game {
   String? id;
+  String path;
   String teamId;
   DateTime date;
   int? startTime;
@@ -22,6 +23,7 @@ class Game {
 
   Game(
       {this.id,
+      this.path = "",
       this.teamId = "",
       required this.date,
       this.startTime,
@@ -127,13 +129,15 @@ class Game {
     List actions = [];
     Timestamp timestamp = Timestamp.fromDate(this.date);
     int stopWatchTimeFromTimer = stopWatchTimer.rawTime.value;
-    return GameEntity(this.id, actions, timestamp, this.isAtHome!, this.lastSync!, this.location!, this.onFieldPlayers, this.opponent!,
+    DocumentReference teamReference = FirebaseFirestore.instance.doc(this.path);
+    return GameEntity(teamReference, actions, timestamp, this.isAtHome!, this.lastSync!, this.location!, this.onFieldPlayers, this.opponent!,
         this.scoreHome!, this.scoreOpponent!, this.season!, this.startTime!, this.stopTime!, stopWatchTimeFromTimer, this.teamId);
   }
 
   static Game fromEntity(GameEntity entity) {
     Game game = Game(
-      id: entity.id,
+      id: entity.documentReference.id,
+      path: entity.documentReference.path,
       teamId: entity.teamId,
       date: DateTime.fromMillisecondsSinceEpoch(entity.date.millisecondsSinceEpoch),
       startTime: entity.startTime,

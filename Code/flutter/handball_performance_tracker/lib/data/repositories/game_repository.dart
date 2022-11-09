@@ -5,21 +5,39 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 /// Defines methods that need to be implemented by data providers. Could also be something other than Firebase
 abstract class GameRepository {
-  // reading the game
+  // add game to storage
+  Future<Game> createGame(Game game);
+
+  // reading single game from storage
   Future<Game> fetchGame(String gameId);
-  // reading all games
+  // read all games from storage
   Future<List<Game>> fetchGames();
 
-  // if user wants to delete all game data
-  Future<void> deleteGame(Game game);
-
-  // if user wants to update game
+  // update game in storage
   Future<void> updateGame(Game game);
+
+  // delete game in storage
+  Future<void> deleteGame(Game game);
 }
 
 /// Implementation of GameRepository that uses Firebase as the data provider
 class GameFirebaseRepository extends GameRepository {
   final String currentUserUid = FirebaseAuth.instance.currentUser!.uid;
+
+  /// Add game to the games collection of the logged in club and return the game with the updated id
+  Future<Game> createGame(Game game) async {
+    QuerySnapshot clubSnapshot = await FirebaseFirestore.instance
+        .collection('clubs')
+        .where("roles.${FirebaseAuth.instance.currentUser!.uid}", isEqualTo: "admin")
+        .limit(1)
+        .get();
+    if (clubSnapshot.docs.length != 1) {
+      throw Exception("No club found for user id. Cannot fetch game");
+    }
+    DocumentReference gameRef = await clubSnapshot.docs[0].reference.collection("games").add(game.toEntity().toDocument());
+    return game.copyWith(id: gameRef.id);
+  }
+
 
   /// Fetch the specified game from the games collection corresponding to the logged in Club
   Future<Game> fetchGame(String gameId) async {

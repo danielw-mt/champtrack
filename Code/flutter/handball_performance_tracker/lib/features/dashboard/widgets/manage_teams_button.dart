@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:handball_performance_tracker/core/constants/stringsDashboard.dart';
+import 'package:handball_performance_tracker/features/team_management/team_management.dart';
 
 class ManageTeamsButton extends StatelessWidget {
-  final bool startButton = false;
   ManageTeamsButton({Key? key}) : super(key: key);
 
   @override
@@ -20,23 +20,19 @@ class ManageTeamsButton extends StatelessWidget {
           borderRadius: BorderRadius.all(Radius.circular(15))),
       child: TextButton(
           onPressed: () {
-            // startButton
-            //     ? Get.to(() => StartGameScreen())
-            //     : Get.to(() => TeamSelectionScreen());
+            Navigator.push(context, MaterialPageRoute(builder: (context) => TeamManagementPage()));
           },
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Icon(
-                startButton ? Icons.add : Icons.edit,
+                Icons.edit,
                 color: Colors.black,
                 size: 50,
               ),
               Text("   "),
               Text(
-                startButton
-                    ? StringsDashboard.lTrackNewGame
-                    : StringsDashboard.lManageTeams,
+                StringsDashboard.lManageTeams,
                 style: TextStyle(color: Colors.black, fontSize: 30),
               )
             ],

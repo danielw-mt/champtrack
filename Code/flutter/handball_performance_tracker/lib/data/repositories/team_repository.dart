@@ -2,24 +2,42 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:handball_performance_tracker/data/models/models.dart';
 import 'package:handball_performance_tracker/data/entities/entities.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'dart:developer' as developer;
 
 /// Defines methods that need to be implemented by data providers. Could also be something other than Firebase
 abstract class TeamRepository {
-  // reading the game
+  // add team to storage and get back team with update id
+  Future<Team> createTeam(Team team);
+
+  // reading single team from storage
   Future<Team> fetchTeam(String teamId);
-  // reading all games
+  // read all teams from storage
   Future<List<Team>> fetchTeams();
 
-  // if user wants to delete all team data
+  // delete team in storage
   Future<void> deleteTeam(Team team);
 
-  // if users wants to update team
+  // update team in storage
   Future<void> updateTeam(Team team);
 }
 
 /// Implementation of TeamRepository that uses Firebase as the data provider
 class TeamFirebaseRepository extends TeamRepository {
   final String currentUserUid = FirebaseAuth.instance.currentUser!.uid;
+
+  /// Add team to the teams collection of the logged in club and return the team with the updated id
+  Future<Team> createTeam(Team team) async {
+    QuerySnapshot clubSnapshot = await FirebaseFirestore.instance
+        .collection('clubs')
+        .where("roles.${FirebaseAuth.instance.currentUser!.uid}", isEqualTo: "admin")
+        .limit(1)
+        .get();
+    if (clubSnapshot.docs.length != 1) {
+      throw Exception("No club found for user id. Cannot fetch team");
+    }
+    DocumentReference teamRef = await clubSnapshot.docs[0].reference.collection("teams").add(team.toEntity().toDocument());
+    return team.copyWith(id: teamRef.id);
+  }
 
   /// Fetch the specified team from the teams collection corresponding to the logged in Club
   Future<Team> fetchTeam(String teamId) async {
@@ -41,6 +59,7 @@ class TeamFirebaseRepository extends TeamRepository {
 
   /// Fetch all teams from the team collection of the logged in club
   Future<List<Team>> fetchTeams() async {
+    developer.log("fetching teams", name: "TeamFirebaseRepository");
     List<Team> teams = [];
     QuerySnapshot clubSnapshot = await FirebaseFirestore.instance
         .collection('clubs')
@@ -53,6 +72,8 @@ class TeamFirebaseRepository extends TeamRepository {
     }
     QuerySnapshot teamsSnapshot = await clubSnapshot.docs[0].reference.collection("teams").get();
     teamsSnapshot.docs.forEach((DocumentSnapshot teamSnapshot) {
+      // check if the player reference are valid
+      
       teams.add(Team.fromEntity(TeamEntity.fromSnapshot(teamSnapshot)));
     });
     return teams;
@@ -78,10 +99,14 @@ class TeamFirebaseRepository extends TeamRepository {
       });
     });
     // remove team from the list of teams the player corresponds to inside the player collection
-    clubSnapshot.docs[0].reference.collection("players").where("teams", arrayContains: "teams/"+team.id.toString()).get().then((QuerySnapshot playersSnapshot) {
+    clubSnapshot.docs[0].reference
+        .collection("players")
+        .where("teams", arrayContains: "teams/" + team.id.toString())
+        .get()
+        .then((QuerySnapshot playersSnapshot) {
       playersSnapshot.docs.forEach((DocumentSnapshot playerSnapshot) {
         Player player = Player.fromEntity(PlayerEntity.fromSnapshot(playerSnapshot));
-        player.teams.remove("teams/"+team.id.toString());
+        player.teams.remove("teams/" + team.id.toString());
         playerSnapshot.reference.update(player.toEntity().toDocument());
       });
     });

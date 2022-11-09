@@ -1,9 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
+import 'dart:developer' as developer;
 
 /// Representation of a club entry in firebase
 class PlayerEntity extends Equatable {
-  final String id;
+  final DocumentReference documentReference;
   final String firstName;
   final String lastName;
   final String nickName;
@@ -12,11 +13,11 @@ class PlayerEntity extends Equatable {
   // TODO change this to document reference
   final List<String> teams;
 
-  PlayerEntity(this.id, this.firstName, this.lastName, this.nickName, this.number, this.positions, this.teams);
+  PlayerEntity(this.documentReference, this.firstName, this.lastName, this.nickName, this.number, this.positions, this.teams);
 
   Map<String, Object> toJson() {
     return {
-      'id': id,
+      "documentReference": documentReference,
       'firstName': firstName,
       'lastName': lastName,
       'nickName': nickName,
@@ -28,12 +29,12 @@ class PlayerEntity extends Equatable {
 
   @override
   String toString() {
-    return 'ClubEntity { firstName: $firstName, lastName: $lastName, nickName: $nickName, number: $number, positions: ${positions.toString()}, teams: ${teams.toString()}, id: $id }';
+    return 'ClubEntity { firstName: $firstName, lastName: $lastName, nickName: $nickName, number: $number, positions: ${positions.toString()}, teams: ${teams.toString()}}';
   }
 
   static PlayerEntity fromJson(Map<String, Object> json) {
     return PlayerEntity(
-      json['id'] as String,
+      json['documentReference'] as DocumentReference,
       json['firstName'] as String,
       json['lastName'] as String,
       json['nickName'] as String,
@@ -44,7 +45,13 @@ class PlayerEntity extends Equatable {
   }
 
   static PlayerEntity fromSnapshot(DocumentSnapshot snap) {
-    Map<String, dynamic> data = snap.data() as Map<String, dynamic>;
+    developer.log('fromSnapshot ${snap.id}', name: 'PlayerEntity');
+    Map<String, dynamic> data = {};
+    try {
+      data = snap.data() as Map<String, dynamic>;
+    } catch (e) {
+      developer.log('fromSnapshot ${snap.id} error: $e', name: 'PlayerEntity');
+    }
     // convert linkedmap to string string map
     List<String> positions = [];
     data['positions'].forEach((positionString) {
@@ -55,7 +62,7 @@ class PlayerEntity extends Equatable {
       teams.add(teamString);
     });
     return PlayerEntity(
-      snap.reference.id,
+      snap.reference,
       data['firstName'],
       data['lastName'],
       data['nickName'],

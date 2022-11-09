@@ -13,6 +13,7 @@ class SignUp extends StatefulWidget {
 
 class _SignUpState extends State<SignUp> {
   final _formKey = GlobalKey<FormState>();
+  final _clubNameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
@@ -27,7 +28,7 @@ class _SignUpState extends State<SignUp> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("SignUp"),
+        title: const Text("TODO SignUp"),
       ),
       body: BlocConsumer<AuthBloc, AuthState>(
         listener: (context, state) {
@@ -61,7 +62,7 @@ class _SignUpState extends State<SignUp> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       const Text(
-                        "Sign Up",
+                        "TODO Sign Up",
                         style: TextStyle(
                           fontSize: 38,
                           fontWeight: FontWeight.bold,
@@ -76,6 +77,19 @@ class _SignUpState extends State<SignUp> {
                           child: Column(
                             children: [
                               TextFormField(
+                                controller: _clubNameController,
+                                decoration: const InputDecoration(
+                                  labelText: "TODO Club Name",
+                                  border: OutlineInputBorder(),
+                                ),
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return "TODO Please enter your club name";
+                                  }
+                                  return null;
+                                },
+                              ),
+                              TextFormField(
                                 controller: _emailController,
                                 decoration: const InputDecoration(
                                   hintText: "Email",
@@ -86,7 +100,7 @@ class _SignUpState extends State<SignUp> {
                                 validator: (value) {
                                   return value != null &&
                                           !EmailValidator.validate(value)
-                                      ? 'Enter a valid email'
+                                      ? 'TODO Enter a valid email'
                                       : null;
                                 },
                               ),
@@ -103,7 +117,7 @@ class _SignUpState extends State<SignUp> {
                                     AutovalidateMode.onUserInteraction,
                                 validator: (value) {
                                   return value != null && value.length < 6
-                                      ? "Enter min. 6 characters"
+                                      ? "TODO Enter min. 6 characters"
                                       : null;
                                 },
                               ),
@@ -116,14 +130,14 @@ class _SignUpState extends State<SignUp> {
                                   onPressed: () {
                                     _createAccountWithEmailAndPassword(context);
                                   },
-                                  child: const Text('Sign Up'),
+                                  child: const Text('TODO Sign Up'),
                                 ),
                               )
                             ],
                           ),
                         ),
                       ),
-                      const Text("Already have an account?"),
+                      const Text("TODO Already have an account?"),
                       OutlinedButton(
                         onPressed: () {
                           Navigator.pushReplacement(
@@ -132,7 +146,7 @@ class _SignUpState extends State<SignUp> {
                                 builder: (context) => const SignIn()),
                           );
                         },
-                        child: const Text("Sign In"),
+                        child: const Text("TODO Sign In"),
                       ),
                       // const Text("Or"),
                       // IconButton(
@@ -161,6 +175,7 @@ class _SignUpState extends State<SignUp> {
     if (_formKey.currentState!.validate()) {
       BlocProvider.of<AuthBloc>(context).add(
         SignUpRequested(
+          _clubNameController.text,
           _emailController.text,
           _passwordController.text,
         ),

@@ -4,6 +4,7 @@ import '../ef_score.dart';
 
 class Player {
   String? id;
+  String path;
   String firstName;
   String lastName;
   String nickName;
@@ -14,6 +15,7 @@ class Player {
 
   Player({
     this.id = "",
+    this.path = "",
     this.firstName = "",
     this.lastName = "",
     this.nickName = "",
@@ -83,12 +85,14 @@ class Player {
   }
 
   PlayerEntity toEntity() {
-    return PlayerEntity(id!, firstName, lastName, nickName, number, positions, teams);
+    DocumentReference documentReference = FirebaseFirestore.instance.doc(path);
+    return PlayerEntity(documentReference,firstName, lastName, nickName, number, positions, teams);
   }
 
   static Player fromEntity(PlayerEntity entity) {
     return Player(
-      id: entity.id,
+      id: entity.documentReference.id,
+      path: entity.documentReference.path,
       firstName: entity.firstName,
       lastName: entity.lastName,
       nickName: entity.nickName,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:handball_performance_tracker/features/dashboard/dashboard.dart';
+import 'package:handball_performance_tracker/features/authentication/authentication.dart';
 import 'package:handball_performance_tracker/core/constants/colors.dart';
 import 'package:handball_performance_tracker/features/sidebar/sidebar.dart';
 
@@ -10,21 +11,10 @@ class DashboardView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-    final dashboardState = context.watch<DashboardBloc>().state;
+    final authState = context.watch<AuthBloc>().state;
     String clubName = "";
-    switch (dashboardState.status) {
-      case DashboardStatus.initial:
-        clubName = "Loading...";
-        break;
-      case DashboardStatus.loading:
-        clubName = "Loading...";
-        break;
-      case DashboardStatus.success:
-        clubName = dashboardState.club.name;
-        break;
-      case DashboardStatus.failure:
-        clubName = "Error";
-        break;
+    if (authState is Authenticated) {
+      clubName = authState.club.name;
     }
 
     return SafeArea(
@@ -51,14 +41,6 @@ class DashboardView extends StatelessWidget {
                     ),
                   ],
                 )),
-            // if drawer is closed notify, so if game is running the back to game button appears on next opening
-
-            // TODO implement drawer
-            // onDrawerChanged: (isOpened) {
-            //   if (!isOpened) {
-            //     tempController.setMenuIsEllapsed(false);
-            //   }
-            // },
             body: Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
               // Upper white bar with menu button etc
               /*Container(

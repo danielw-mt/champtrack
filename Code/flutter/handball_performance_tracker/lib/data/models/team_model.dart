@@ -1,24 +1,42 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:handball_performance_tracker/data/entities/entities.dart';
 import 'player_model.dart';
+import 'dart:developer' as developer;
 
 class Team {
   String? id;
+  String path;
   String name;
   List<Player> players = [];
   List<Player> onFieldPlayers = [];
   String type;
 
-  Team({this.id, this.name = "", this.type = "", required this.players, required onFieldPlayers});
+  Team({this.id, this.path = "", this.name = "", this.type = "", this.players = const [], this.onFieldPlayers = const []}) {
+    // fix the mess that dart requires const optional parameters
+    // https://stackoverflow.com/questions/69956033/flutter-how-to-handle-the-default-value-of-an-optional-parameter-must-be-const#comment129139196_69956165
+    if (this.players.isEmpty) {
+      this.players = [];
+    }
+    if (!this.players.isEmpty) {
+      this.players = players;
+    }
+    if (this.onFieldPlayers.isEmpty) {
+      this.onFieldPlayers = [];
+    }
+    if (!this.onFieldPlayers.isEmpty) {
+      this.onFieldPlayers = onFieldPlayers;
+    }
+  }
 
   Team copyWith({String? id, String? name, List<Player>? players, List<Player>? onFieldPlayers, String? type}) {
-    return Team(
+    Team team = Team(
       id: id ?? this.id,
       name: name ?? this.name,
-      players: players ?? this.players,
-      onFieldPlayers: onFieldPlayers ?? this.onFieldPlayers,
       type: type ?? this.type,
     );
+    team.players = players ?? this.players;
+    team.onFieldPlayers = onFieldPlayers ?? this.onFieldPlayers;
+    return team;
   }
 
   @override
@@ -41,18 +59,37 @@ class Team {
   }
 
   TeamEntity toEntity() {
-    // TODO how can we generate the document reference for a player. Maybe the usual club via auth and then player collection and ref
-    // return TeamEntity(
-    //   id, name,onFieldPlayers.map((player) => Firebase.instance.get).toList(),
-    //   type: type,
-    // );
-    throw UnimplementedError();
+    List<DocumentReference> playerRefs = [];
+    players.forEach((Player player) {
+      if (player.path != "") {
+        DocumentReference playerRef = FirebaseFirestore.instance.doc(player.path);
+        playerRefs.add(playerRef);
+      }
+    });
+    List<DocumentReference> onFieldPlayerRefs = [];
+    onFieldPlayers.forEach((Player player) {
+      if (player.path != "") {
+        DocumentReference playerRef = FirebaseFirestore.instance.doc(player.path);
+        onFieldPlayerRefs.add(playerRef);
+      }
+    });
+    DocumentReference? teamReference = null; 
+    if (path != ""){
+       teamReference = FirebaseFirestore.instance.doc(path);
+    } 
+    return TeamEntity(
+      teamReference ?? null,
+      name,
+      playerRefs,
+      onFieldPlayerRefs,
+      type,
+    );
   }
 
   static Team fromEntity(TeamEntity entity) {
     List<Player> players = [];
-    entity.players.forEach((DocumentReference player) async {
-      DocumentSnapshot playerSnapshot = await player.get();
+    entity.players.forEach((DocumentReference playerReference) async {
+      DocumentSnapshot playerSnapshot = await playerReference.get();
       players.add(Player.fromEntity(PlayerEntity.fromSnapshot(playerSnapshot)));
     });
     List<Player> onFieldPlayers = [];
@@ -60,13 +97,15 @@ class Team {
       DocumentSnapshot playerSnapshot = await player.get();
       onFieldPlayers.add(Player.fromEntity(PlayerEntity.fromSnapshot(playerSnapshot)));
     });
-    return Team(
-      id: entity.id,
+    Team team = Team(
+      id: entity.documentReference!.id,
+      path: entity.documentReference!.path,
       name: entity.name,
       players: players,
       onFieldPlayers: onFieldPlayers,
       type: entity.type,
     );
+    return team;
   }
 
   // @return Map<String,dynamic> as representation of Club object that can be saved to firestore

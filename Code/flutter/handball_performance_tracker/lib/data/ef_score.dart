@@ -1,18 +1,7 @@
 import 'package:handball_performance_tracker/core/constants/game_actions.dart';
 import 'package:handball_performance_tracker/core/constants/positions.dart';
 import 'package:handball_performance_tracker/data/models/game_action_model.dart';
-import 'package:logger/logger.dart';
-
-var logger = Logger(
-  printer: PrettyPrinter(
-      methodCount: 2, // number of method calls to be displayed
-      errorMethodCount: 8, // number of method calls if stacktrace is provided
-      lineLength: 120, // width of the output
-      colors: true, // Colorful log messages
-      printEmojis: true, // Print an emoji for each log message
-      printTime: false // Should each log print contain a timestamp
-      ),
-);
+import 'dart:developer' as developer;
 
 class EfScore {
   double score;
@@ -105,11 +94,12 @@ class LiveEfScore extends EfScore {
     if (actionType != null) {
       actionStats[actionType] = actionStats[actionType]! + 1;
       numOfActions++;
-      logger.d("Action added: $actionType, old ef-score: $score");
+      
+      developer.log("Action added: $actionType, old ef-score: $score");
       calculate();
-      logger.d("New ef-score: $score");
+      developer.log("New ef-score: $score");
     } else {
-      logger.i("Action type $actionType is unknown. Action ignored.");
+      developer.log("Action type $actionType is unknown. Action ignored.");
     }
   }
 
@@ -119,12 +109,12 @@ class LiveEfScore extends EfScore {
       if (actionStats[actionType]! >= 1) {
         actionStats[actionType] = actionStats[actionType]! - 1;
         numOfActions--;
-        logger.d("Action deleted: $actionType, old ef-score: $score");
+        developer.log("Action deleted: $actionType, old ef-score: $score");
         calculate();
-        logger.d("New ef-score: $score");
+        developer.log("New ef-score: $score");
       }
     } else {
-      logger.i("Action type $actionType is unknown. No delete performed.");
+      developer.log("Action type $actionType is unknown. No delete performed.");
     }
   }
 }
