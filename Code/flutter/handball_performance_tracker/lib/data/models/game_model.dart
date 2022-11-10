@@ -6,8 +6,8 @@ import 'package:handball_performance_tracker/data/models/models.dart';
 class Game {
   String? id;
   String path;
-  String teamId;
-  DateTime date;
+  String? teamId;
+  DateTime? date;
   int? startTime;
   int? stopTime;
   int? scoreHome;
@@ -18,8 +18,8 @@ class Game {
   String? season;
   String? lastSync;
   // TODO change this to document reference or actual players
-  List<String> onFieldPlayers;
-  StopWatchTimer stopWatchTimer;
+  List<String>? onFieldPlayers;
+  StopWatchTimer? stopWatchTimer;
 
   Game(
       {this.id,
@@ -127,19 +127,20 @@ class Game {
 
   GameEntity toEntity() {
     List actions = [];
-    Timestamp timestamp = Timestamp.fromDate(this.date);
-    int stopWatchTimeFromTimer = stopWatchTimer.rawTime.value;
+    Timestamp? timestamp = Timestamp?.fromDate(this.date!);
+    int stopWatchTimeFromTimer = stopWatchTimer!.rawTime.value;
     DocumentReference teamReference = FirebaseFirestore.instance.doc(this.path);
-    return GameEntity(teamReference, actions, timestamp, this.isAtHome!, this.lastSync!, this.location!, this.onFieldPlayers, this.opponent!,
+    return GameEntity(teamReference, timestamp, this.isAtHome!, this.lastSync!, this.location!, this.onFieldPlayers, this.opponent!,
         this.scoreHome!, this.scoreOpponent!, this.season!, this.startTime!, this.stopTime!, stopWatchTimeFromTimer, this.teamId);
   }
 
   static Game fromEntity(GameEntity entity) {
+    print("Game from entity");
     Game game = Game(
       id: entity.documentReference.id,
       path: entity.documentReference.path,
       teamId: entity.teamId,
-      date: DateTime.fromMillisecondsSinceEpoch(entity.date.millisecondsSinceEpoch),
+      date: DateTime.fromMillisecondsSinceEpoch(entity.date!.millisecondsSinceEpoch),
       startTime: entity.startTime,
       stopTime: entity.stopTime,
       scoreHome: entity.scoreHome,
@@ -151,8 +152,8 @@ class Game {
       lastSync: entity.lastSync,
       onFieldPlayers: entity.onFieldPlayers,
     );
-    game.stopWatchTimer.onExecute.add(StopWatchExecute.reset);
-    game.stopWatchTimer.setPresetTime(mSec: entity.stopWatchTime);
+    game.stopWatchTimer!.onExecute.add(StopWatchExecute.reset);
+    game.stopWatchTimer!.setPresetTime(mSec: entity.stopWatchTime!);
     return game;
   }
 

@@ -50,8 +50,8 @@ class TeamManagementView extends StatelessWidget {
                         ]),
                         // players list or games list or team settings depending which tab is selected
                         if (state.selectedTab == TeamManagementTab.playersTab) PlayersList(),
-                        // if (state.selectedTab == TeamManagementTab.gamesTab) GamesList(),
-                        // if (state.selectedTab == TeamManagementTab.teamSettingsTab) TeamSettings(),
+                        if (state.selectedTab == TeamManagementTab.gamesTab) GameList(),
+                        if (state.selectedTab == TeamManagementTab.settingsTab) TeamSettings(),
                       ],
                     ));
               }

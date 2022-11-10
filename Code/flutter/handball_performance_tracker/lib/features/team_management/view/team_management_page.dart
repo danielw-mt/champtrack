@@ -10,7 +10,7 @@ class TeamManagementPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => TeamManagementCubit()..loadTeamsAndPlayers(),
+      create: (_) => TeamManagementCubit()..loadTeamManagement(),
       child: TeamManagementView(),
     );
   }

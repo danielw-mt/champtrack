@@ -38,7 +38,6 @@ class GameFirebaseRepository extends GameRepository {
     return game.copyWith(id: gameRef.id);
   }
 
-
   /// Fetch the specified game from the games collection corresponding to the logged in Club
   Future<Game> fetchGame(String gameId) async {
     Game? game = null;
@@ -69,7 +68,7 @@ class GameFirebaseRepository extends GameRepository {
       throw Exception("No club found for user id. Cannot fetch games");
     }
     QuerySnapshot gamesSnapshot = await clubSnapshot.docs[0].reference.collection("games").get();
-    gamesSnapshot.docs.forEach((DocumentSnapshot gameSnapshot) {
+    await Future.forEach(gamesSnapshot.docs, (DocumentSnapshot gameSnapshot) {
       games.add(Game.fromEntity(GameEntity.fromSnapshot(gameSnapshot)));
     });
     return games;

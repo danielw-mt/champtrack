@@ -5,54 +5,52 @@ import 'package:handball_performance_tracker/data/models/game_action_model.dart'
 /// Representation of a club entry in firebase
 class GameEntity extends Equatable {
   final DocumentReference documentReference;
-  final List actions;
-  final Timestamp date;
-  final bool isAtHome;
-  final String lastSync;
-  final String location;
-  final List<String> onFieldPlayers;
-  final String opponent;
-  final int scoreHome;
-  final int scoreOpponent;
-  final String season;
-  final int startTime;
-  final int stopTime;
-  final int stopWatchTime;
-  final String teamId;
+  // final List actions;
+  final Timestamp? date;
+  final bool? isAtHome;
+  final String? lastSync;
+  final String? location;
+  final List<String>? onFieldPlayers;
+  final String? opponent;
+  final int? scoreHome;
+  final int? scoreOpponent;
+  final String? season;
+  final int? startTime;
+  final int? stopTime; // a game could be saved without a stop time (e.g. if the game is still in progress)
+  final int? stopWatchTime;
+  final String? teamId;
 
-  GameEntity(this.documentReference, this.actions, this.date, this.isAtHome, this.lastSync, this.location, this.onFieldPlayers, this.opponent, this.scoreHome,
+  GameEntity(this.documentReference,  this.date, this.isAtHome, this.lastSync, this.location, this.onFieldPlayers, this.opponent, this.scoreHome,
       this.scoreOpponent, this.season, this.startTime, this.stopTime, this.stopWatchTime, this.teamId);
 
   Map<String, Object> toJson() {
     return {
       'documentReference': documentReference,
-      'actions': actions,
-      'date': date,
-      'isAtHome': isAtHome,
-      'lastSync': lastSync,
-      'location': location,
-      'onFieldPlayers': onFieldPlayers,
-      'opponent': opponent,
-      'scoreHome': scoreHome,
-      'scoreOpponent': scoreOpponent,
-      'season': season,
-      'startTime': startTime,
-      'stopTime': stopTime,
-      'stopWatchTime': stopWatchTime,
-      'teamId': teamId,
+      'date': date ?? Null,
+      'isAtHome': isAtHome ?? Null,
+      'lastSync': lastSync ?? Null,
+      'location': location ?? Null,
+      'onFieldPlayers': onFieldPlayers ?? Null,
+      'opponent': opponent ?? Null,
+      'scoreHome': scoreHome ?? Null,
+      'scoreOpponent': scoreOpponent ?? Null,
+      'season': season ?? Null,
+      'startTime': startTime ?? Null,
+      'stopTime': stopTime ?? Null,
+      'stopWatchTime': stopWatchTime ?? Null,
+      'teamId': teamId ?? Null,
     };
   }
 
   @override
   String toString() {
-    return 'ClubEntity { actions: ${actions.toString()}, date: $date, isAtHome: $isAtHome, lastSync: $lastSync, location: $location, onFieldPlayers: ${onFieldPlayers.toString()}, opponent: $opponent, scoreHome: $scoreHome, scoreOpponent: $scoreOpponent, season: $season, startTime: $startTime, stopTime: $stopTime, stopWatchTime: $stopWatchTime, teamId: $teamId }';
+    return 'ClubEntity { date: $date, isAtHome: $isAtHome, lastSync: $lastSync, location: $location, onFieldPlayers: ${onFieldPlayers.toString()}, opponent: $opponent, scoreHome: $scoreHome, scoreOpponent: $scoreOpponent, season: $season, startTime: $startTime, stopTime: $stopTime, stopWatchTime: $stopWatchTime, teamId: $teamId }';
   }
 
   static GameEntity fromJson(Map<String, Object> json) {
     // TODO probably parse actions
     return GameEntity(
       json['documentReference'] as DocumentReference,
-      json['actions'] as List<DocumentSnapshot>,
       json['date'] as Timestamp,
       json['isAtHome'] as bool,
       json['lastSync'] as String,
@@ -70,18 +68,18 @@ class GameEntity extends Equatable {
   }
 
   static GameEntity fromSnapshot(DocumentSnapshot snap) {
+    print("Game entity from snapshot "+snap.id);
     Map<String, dynamic> data = snap.data() as Map<String, dynamic>;
-    List<DocumentSnapshot> actions = [];
-    data['actions'].forEach((action) {
-      // TODO implement this. Might be complicated
-    });
+    // List<DocumentSnapshot> actions = [];
+    // data['actions'].forEach((action) {
+    //   // TODO implement this. Might be complicated
+    // });
     List<String> onFieldPlayers = [];
     data['onFieldPlayers'].forEach((onFieldPlayerString) {
       onFieldPlayers.add(onFieldPlayerString);
     });
     return GameEntity(
       snap.reference,
-      actions,
       data['date'],
       data['isAtHome'],
       data['lastSync'],
@@ -100,7 +98,6 @@ class GameEntity extends Equatable {
 
   Map<String, Object?> toDocument() {
     return {
-      'actions': actions,
       'date': date,
       'isAtHome': isAtHome,
       'lastSync': lastSync,
