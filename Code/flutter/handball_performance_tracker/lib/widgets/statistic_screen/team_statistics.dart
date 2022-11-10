@@ -72,6 +72,7 @@ class _TeamStatisticsState extends State<TeamStatistics> {
   Widget build(BuildContext context) {
     Map<String, int> actionCounts = {};
     Map<String, List<int>> actionSeries = {};
+    Map<String, List<dynamic>> actionCoordinates = {};
     int startTime = 0;
     int stopTime = 0;
     List<List<double>> quotas = [
@@ -96,6 +97,9 @@ class _TeamStatisticsState extends State<TeamStatistics> {
       // try to get start time for game
       startTime = _statistics[_selectedGame.id]["start_time"];
       stopTime = _statistics[_selectedGame.id]["stop_time"];
+
+      actionCoordinates = teamStats["action_coordinates"];
+      print(actionCoordinates);
 
       // try to get quotas for player
       quotas[0][0] = double.parse(teamStats["seven_meter_quota"][0].toString());
@@ -192,7 +196,7 @@ class _TeamStatisticsState extends State<TeamStatistics> {
                 ),
                 Expanded(
                   flex: 4,
-                  child: HeatMapCard(),
+                  child: HeatMapCard(actionCoordinates),
 
                   // child: Card(child: Image(image: AssetImage('images/statistics2_heatmap.jpg'))),
                 )

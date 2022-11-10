@@ -184,20 +184,19 @@ class _ActionsCardState extends State<ActionsCard> {
   }
 }
 
-class HeatMapCard extends StatefulWidget {
-  @override
-  _HeatMapCardState createState() => _HeatMapCardState();
-}
+class HeatMapCard extends StatelessWidget {
+  final Map<String, List<dynamic>> actionCoordinates;
+  HeatMapCard(this.actionCoordinates);
 
-class _HeatMapCardState extends State<HeatMapCard> {
   //final TempController tempController = Get.find<TempController>();
-  PersistentController persistentController = Get.find<PersistentController>();
-  int currentTab = 0;
+  final PersistentController persistentController =
+      Get.find<PersistentController>();
 
-  bool fieldIsLeft = true;
+  final int currentTab = 0;
+
+  final bool fieldIsLeft = true;
 
   //tempController.setFieldIsLeft(this.fieldIsLeft);
-
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -210,15 +209,7 @@ class _HeatMapCardState extends State<HeatMapCard> {
           ),
           Expanded(
             flex: 12,
-            child: CustomPaint(
-              // Give colors: 9m(middle-dark),6m(dark),background(light)
-              painter: FieldPainter(fieldIsLeft, defenseMiddleColor,
-                  defenseDarkColor, defenseLightColor),
-              child:
-                  Container(), // empty container necessary to force filling card size
-              foregroundPainter: TestPainter2(),
-              // GestureDetector to handle on click or swipe
-            ),
+            child: CustomCardField(actionCoordinates),
           ),
         ],
       ),

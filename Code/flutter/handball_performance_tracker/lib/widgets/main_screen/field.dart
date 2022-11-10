@@ -22,19 +22,20 @@ class CustomField extends StatelessWidget {
         CustomPaint(
           // Give colors: 9m(middle-dark),6m(dark),background(light)
           painter: FieldPainter(
-              fieldIsLeft,
-              (fieldIsLeft && tempController.getAttackIsLeft() ||
-                      !fieldIsLeft && !tempController.getAttackIsLeft())
-                  ? attackMiddleColor
-                  : defenseMiddleColor,
-              (fieldIsLeft && tempController.getAttackIsLeft() ||
-                      !fieldIsLeft && !tempController.getAttackIsLeft())
-                  ? attackDarkColor
-                  : defenseDarkColor,
-              (fieldIsLeft && tempController.getAttackIsLeft() ||
-                      !fieldIsLeft && !tempController.getAttackIsLeft())
-                  ? attackLightColor
-                  : defenseLightColor),
+            fieldIsLeft,
+            (fieldIsLeft && tempController.getAttackIsLeft() ||
+                    !fieldIsLeft && !tempController.getAttackIsLeft())
+                ? attackMiddleColor
+                : defenseMiddleColor,
+            (fieldIsLeft && tempController.getAttackIsLeft() ||
+                    !fieldIsLeft && !tempController.getAttackIsLeft())
+                ? attackDarkColor
+                : defenseDarkColor,
+            (fieldIsLeft && tempController.getAttackIsLeft() ||
+                    !fieldIsLeft && !tempController.getAttackIsLeft())
+                ? attackLightColor
+                : defenseLightColor,
+          ),
           // GestureDetector to handle on click or swipe
           child: GestureDetector(
               // handle coordinates on click
@@ -42,7 +43,7 @@ class CustomField extends StatelessWidget {
             // Set last location in controller before calling action menu, because it is queried there.
             tempController.setLastLocation(SectorCalc(fieldIsLeft)
                 .calculatePosition(details.localPosition));
-            callActionMenu(context);         
+            callActionMenu(context);
           }),
         ),
         // Painter of dashed 9m
@@ -52,6 +53,64 @@ class CustomField extends StatelessWidget {
         CustomPaint(
             painter:
                 DashedPathPainter(leftSide: fieldIsLeft, isEllipse: false)),
+      ]),
+    );
+  }
+}
+
+class CustomCardField extends StatelessWidget {
+  final TempController tempController = Get.find<TempController>();
+  final Map<String, List<dynamic>> actionCoordinates;
+  CustomCardField(this.actionCoordinates);
+  final bool fieldIsLeft = true;
+  //final Map<String, List<dynamic>> actionCoordinates = thi;
+
+  // TODO logic for foregroundpainter doing the heatmap depending on where actions are
+
+  @override
+  Widget build(BuildContext context) {
+    tempController.setFieldIsLeft(this.fieldIsLeft);
+
+    String viewed_action = "block_steal";
+    List<dynamic> viewed_coordinates = actionCoordinates[viewed_action]!;
+    int nb_actions = viewed_coordinates.length;
+    Map viewed_coordinates_map = Map();
+
+    // TODO super unclean, but works for now
+    viewed_coordinates.forEach((element) {
+      if (!viewed_coordinates_map.containsKey(element.join())) {
+        viewed_coordinates_map[element.join()] = 1;
+      } else {
+        viewed_coordinates_map[element.join()] += 1;
+      }
+    });
+
+    List<double> opacitySector = [0.5];
+
+    return GetBuilder<TempController>(
+      id: "custom-card-field",
+      builder: (TempController tempController) => Stack(children: [
+        // Painter of 7m, 6m and filled 9m
+        CustomPaint(
+          // Give colors: 9m(middle-dark),6m(dark),background(light)
+          painter: CardFieldPainter(fieldIsLeft, defenseMiddleColor,
+              defenseDarkColor, defenseLightColor, false),
+          child: Container(),
+          foregroundPainter: HeatmapOverlayPainter(
+              color: Colors.red,
+              fieldIsLeft: true,
+              isEllipse: false,
+              coordinates: viewed_coordinates_map),
+        ),
+
+        // TODO integrate paint lines into CardFieldPainter
+        // Painter of dashed 9m
+        // CustomPaint(
+        //     painter: DashedPathPainter(leftSide: fieldIsLeft, isEllipse: true)),
+        // // Painter of dashed goal
+        // CustomPaint(
+        //     painter:
+        //         DashedPathPainter(leftSide: fieldIsLeft, isEllipse: false)),
       ]),
     );
   }

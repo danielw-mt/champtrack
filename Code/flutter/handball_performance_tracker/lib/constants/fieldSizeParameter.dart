@@ -27,9 +27,10 @@ double lineSize = 3;
 double customHeightModifier = 0.99;
 // fieldHeigt takes all available screen height -> substract height of toolbar, size of border*2 and padding due to time, battery indicator etc
 double availableScreenHeight =
-(screenHeight - toolbarHeight - paddingBottom - paddingTop - lineSize * 2);
+    (screenHeight - toolbarHeight - paddingBottom - paddingTop - lineSize * 2);
 // take ratio of screenwidth and height into account, so the field is not stretched
-double fieldHeight = min(availableScreenHeight, screenWidth)*customHeightModifier;
+double fieldHeight =
+    min(availableScreenHeight, screenWidth) * customHeightModifier;
 double fieldWidth = fieldHeight;
 
 // Radii of the ellipses for six meter and 9 meter
@@ -68,3 +69,22 @@ void setFieldSize(double width, double heigh) {
     fieldHeight / 2,
   ];
 }
+
+// parameter for card heatmap field size
+double availableCardHeatmapHeight =
+    (screenHeight - toolbarHeight - paddingBottom - paddingTop - lineSize * 2) *
+        3.4 /
+        5; // 4/5 of available screen height goes into card widget
+
+double availableCardHeatmapWidth = screenWidth / 3.5;
+
+// Radii of the ellipses for six meter and 9 meter
+double nineMeterRadiusXCard = availableCardHeatmapWidth / 1.5;
+double nineMeterRadiusYCard = availableCardHeatmapHeight / 2;
+
+double sixMeterRadiusXCard = nineMeterRadiusXCard * 0.7;
+double sixMeterRadiusYCard = nineMeterRadiusYCard * 0.7;
+
+// goal width and height
+double goalWidthCard = sixMeterRadiusXCard * 0.24;
+double goalHeightCard = sixMeterRadiusYCard * 0.4;
