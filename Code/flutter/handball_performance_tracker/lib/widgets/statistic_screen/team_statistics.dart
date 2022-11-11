@@ -99,7 +99,7 @@ class _TeamStatisticsState extends State<TeamStatistics> {
       stopTime = _statistics[_selectedGame.id]["stop_time"];
 
       actionCoordinates = teamStats["action_coordinates"];
-      print(actionCoordinates);
+      //print(actionCoordinates);
 
       // try to get quotas for player
       quotas[0][0] = double.parse(teamStats["seven_meter_quota"][0].toString());
@@ -196,7 +196,7 @@ class _TeamStatisticsState extends State<TeamStatistics> {
                 ),
                 Expanded(
                   flex: 4,
-                  child: HeatMapCard(actionCoordinates),
+                  child: HeatMapCard(actionCoordinates: actionCoordinates),
 
                   // child: Card(child: Image(image: AssetImage('images/statistics2_heatmap.jpg'))),
                 )

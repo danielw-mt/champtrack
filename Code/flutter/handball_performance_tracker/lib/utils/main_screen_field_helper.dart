@@ -268,7 +268,7 @@ class HeatmapOverlayPainter extends CustomPainter {
   final bool fieldIsLeft;
   final Color color;
   final bool isEllipse;
-  final Map coordinates;
+  final List coordinates;
   HeatmapOverlayPainter(
       {required this.fieldIsLeft,
       required this.color,
@@ -282,19 +282,23 @@ class HeatmapOverlayPainter extends CustomPainter {
     canvas.drawCircle(center, radius, paint);
   }
 
-  void determineCirclePosition(Canvas canvas, Map coordinates) {
+  void determineCirclePosition(Canvas canvas, List coordinates) {
     Offset center =
         Offset(0, fieldSizeParameter.availableCardHeatmapHeight / 2);
 
-    coordinates.forEach((key, value) {
-      if (key == "RM>9") {
-        center = Offset(fieldSizeParameter.sixMeterRadiusXCard,
-            fieldSizeParameter.availableCardHeatmapWidth / 2);
-      } else if (key == "goal") {
-        center = Offset(fieldSizeParameter.sixMeterRadiusXCard, 0);
-      }
-    });
-    paintActionCircle(canvas, center, 10);
+    // coordinates.forEach((key, value) {
+    //   if (key == "RM>9") {
+    //     center = Offset(fieldSizeParameter.sixMeterRadiusXCard,
+    //         fieldSizeParameter.availableCardHeatmapWidth / 2);
+    //   } else if (key == "goal") {
+    //     center = Offset(fieldSizeParameter.sixMeterRadiusXCard, 0);
+    //   }
+    // });
+    for (var el in coordinates) {
+      print(el);
+      paintActionCircle(canvas, Offset(el[0], el[1]), 10);
+    }
+    
   }
 
   @override
@@ -320,7 +324,7 @@ class CardFieldPainter extends CustomPainter {
   Color fieldBackgroundColor;
   bool onHeatMapCard = true;
   CardFieldPainter(this.leftSide, this.nineMeterColor, this.sixMeterColor,
-      this.fieldBackgroundColor, this.onHeatMapCard);
+      this.fieldBackgroundColor);
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -418,9 +422,9 @@ class CardFieldPainter extends CustomPainter {
   // from the constructor) then we would return true if any
   // of them differed from the same fields on the oldDelegate.
   @override
-  bool shouldRepaint(FieldPainter oldDelegate) => false;
+  bool shouldRepaint(CardFieldPainter oldDelegate) => false;
   @override
-  bool shouldRebuildSemantics(FieldPainter oldDelegate) => false;
+  bool shouldRebuildSemantics(CardFieldPainter oldDelegate) => false;
 }
 
 // Code for the dased Oval line, taken from here:

@@ -7,8 +7,6 @@ import '../../utils/action_mapping.dart';
 import 'package:handball_performance_tracker/constants/fieldSizeParameter.dart'
     as fieldSizeParameter;
 import 'package:handball_performance_tracker/widgets/main_screen/field.dart';
-import 'package:handball_performance_tracker/constants/colors.dart';
-import 'package:handball_performance_tracker/utils/main_screen_field_helper.dart';
 
 class PenaltyInfoCard extends StatelessWidget {
   final int redCards;
@@ -184,81 +182,123 @@ class _ActionsCardState extends State<ActionsCard> {
   }
 }
 
-class HeatMapCard extends StatelessWidget {
+class HeatMapCard extends StatefulWidget {
   final Map<String, List<dynamic>> actionCoordinates;
-  HeatMapCard(this.actionCoordinates);
 
-  //final TempController tempController = Get.find<TempController>();
-  final PersistentController persistentController =
-      Get.find<PersistentController>();
+  const HeatMapCard({Key? key, required this.actionCoordinates})
+      : super(key: key);
+  @override
+  _HeatMapCardState createState() => _HeatMapCardState(actionCoordinates);
+}
 
-  final int currentTab = 0;
+class _HeatMapCardState extends State<HeatMapCard> {
+  final Map<String, List<dynamic>> actionCoordinates;
+  _HeatMapCardState(this.actionCoordinates);
 
-  final bool fieldIsLeft = true;
+  String _selectedDropdownElement = "";
+  List<String> _dropDownElements = [];
 
-  //tempController.setFieldIsLeft(this.fieldIsLeft);
+  @override
+  void initState() {
+    super.initState();
+
+    if (actionCoordinates.keys.length > 0) {
+      _dropDownElements = actionCoordinates.keys.toList();
+      //print(_dropDownElements);
+      _selectedDropdownElement = _dropDownElements[0];
+    }
+  }
+
+  //final bool fieldIsLeft = true;
+
+  final Map<String, List<dynamic>> actionCoordinatesFake = {
+    "parade": [
+      [3.0, 3.0]
+    ],
+    "goal_goalkeeper": [
+      [3.0, 3.0]
+    ],
+    "block_steal": [
+      [33.0, 33.0],
+      [31.0, 35.0],
+      [20.0, 30.0]
+    ],
+    "goal": [
+      [33.0, 63.0],
+      [43.0, 34.0],
+      [30.0, 80.0],
+      [140, 280]
+    ]
+  };
+
   @override
   Widget build(BuildContext context) {
+    if (widget.actionCoordinates.length == 0) {
+      return Center(child: Text(StringsGeneral.lNoDataAvailable));
+    }
+
+    // if a dropdown element is selected that is not available. (i.e. remnant from loading another game statistic previously)
+    if (!_dropDownElements.contains(_selectedDropdownElement)) {
+      _selectedDropdownElement = _dropDownElements[0];
+    }
+
     return Card(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Flexible(
-            flex: 1,
-            child: Text("Wurfverteilung"),
-          ),
+              flex: 1,
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text("Wurfverteilung"),
+                    buildActionTagDropdown()
+                  ])),
           Expanded(
             flex: 12,
-            child: CustomCardField(actionCoordinates),
+            child: CardFieldSwitch(
+                actionCoordinatesFake[_selectedDropdownElement]!),
           ),
         ],
       ),
     );
   }
-}
 
-class TestPainter extends CustomPainter {
-  @override
-  void paint(Canvas canvas, Size size) {
-    final paint = Paint()
-      ..color = Colors.blue
-      ..strokeWidth = 5
-      ..style = PaintingStyle.stroke;
+  DropdownButton buildActionTagDropdown() {
+    return DropdownButton<String>(
+      isExpanded: false,
+      // Initial Value
+      value: _selectedDropdownElement,
 
-    // draw background
-    canvas.drawRect(
-        Rect.fromCenter(
-            center: Offset(120 / 2, 20 / 2), width: 120, height: 20),
-        Paint()..color = Colors.blue);
-  }
+      // Down Arrow Icon
+      icon: const Icon(Icons.keyboard_arrow_down),
 
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) {
-    return false;
-    // TODO: implement shouldRepaint
-    throw UnimplementedError();
-  }
-}
-
-class TestPainter2 extends CustomPainter {
-  @override
-  void paint(Canvas canvas, Size size) {
-    final paint = Paint()
-      ..color = Colors.blue
-      ..strokeWidth = 5
-      ..style = PaintingStyle.stroke;
-
-    // draw background
-    canvas.drawRect(
-        Rect.fromCenter(center: Offset(20 / 2, 20 / 2), width: 20, height: 20),
-        Paint()..color = Colors.red);
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) {
-    return false;
-    // TODO: implement shouldRepaint
-    throw UnimplementedError();
+      // Array list of items
+      items: _dropDownElements.map((String dropdownElement) {
+        if (widget.actionCoordinates[dropdownElement] == null) {
+          print("cannot display dropdown element" +
+              dropdownElement +
+              " which has no data");
+          return DropdownMenuItem(
+            child: Text("Cannot display statistic"),
+            value: dropdownElement,
+          );
+        }
+        return DropdownMenuItem(
+          value: dropdownElement,
+          // if the element is Ef-score don't do anything.
+          //If it is one of the action type series then convert the tag to the correct string using realActionType
+          child: Text(realActionTag(dropdownElement)),
+        );
+      }).toList(),
+      // After selecting the desired option,it will
+      // change button value to selected value
+      onChanged: (String? newDropdownElement) {
+        setState(() {
+          _selectedDropdownElement = newDropdownElement!;
+        });
+      },
+    );
   }
 }
 

@@ -60,9 +60,10 @@ class CustomField extends StatelessWidget {
 
 class CustomCardField extends StatelessWidget {
   final TempController tempController = Get.find<TempController>();
-  final Map<String, List<dynamic>> actionCoordinates;
-  CustomCardField(this.actionCoordinates);
-  final bool fieldIsLeft = true;
+  final List<dynamic> actionCoordinates;
+  final bool fieldIsLeft;
+  CustomCardField(this.actionCoordinates, this.fieldIsLeft);
+  
   //final Map<String, List<dynamic>> actionCoordinates = thi;
 
   // TODO logic for foregroundpainter doing the heatmap depending on where actions are
@@ -71,19 +72,19 @@ class CustomCardField extends StatelessWidget {
   Widget build(BuildContext context) {
     tempController.setFieldIsLeft(this.fieldIsLeft);
 
-    String viewed_action = "block_steal";
-    List<dynamic> viewed_coordinates = actionCoordinates[viewed_action]!;
+    String viewed_action = "goal";
+    List<dynamic> viewed_coordinates = actionCoordinates;//[viewed_action]!;
     int nb_actions = viewed_coordinates.length;
-    Map viewed_coordinates_map = Map();
+    //Map viewed_coordinates_map = Map();
 
     // TODO super unclean, but works for now
-    viewed_coordinates.forEach((element) {
-      if (!viewed_coordinates_map.containsKey(element.join())) {
-        viewed_coordinates_map[element.join()] = 1;
-      } else {
-        viewed_coordinates_map[element.join()] += 1;
-      }
-    });
+    // viewed_coordinates.forEach((element) {
+    //   if (!viewed_coordinates_map.containsKey(element.join())) {
+    //     viewed_coordinates_map[element.join()] = 1;
+    //   } else {
+    //     viewed_coordinates_map[element.join()] += 1;
+    //   }
+    // });
 
     List<double> opacitySector = [0.5];
 
@@ -93,14 +94,24 @@ class CustomCardField extends StatelessWidget {
         // Painter of 7m, 6m and filled 9m
         CustomPaint(
           // Give colors: 9m(middle-dark),6m(dark),background(light)
-          painter: CardFieldPainter(fieldIsLeft, defenseMiddleColor,
-              defenseDarkColor, defenseLightColor, false),
+          painter: CardFieldPainter(fieldIsLeft, (fieldIsLeft && tempController.getAttackIsLeft() ||
+                    !fieldIsLeft && !tempController.getAttackIsLeft())
+                ? attackMiddleColor
+                : defenseMiddleColor,
+            (fieldIsLeft && tempController.getAttackIsLeft() ||
+                    !fieldIsLeft && !tempController.getAttackIsLeft())
+                ? attackDarkColor
+                : defenseDarkColor,
+            (fieldIsLeft && tempController.getAttackIsLeft() ||
+                    !fieldIsLeft && !tempController.getAttackIsLeft())
+                ? attackLightColor
+                : defenseLightColor),
           child: Container(),
           foregroundPainter: HeatmapOverlayPainter(
               color: Colors.red,
               fieldIsLeft: true,
               isEllipse: false,
-              coordinates: viewed_coordinates_map),
+              coordinates: viewed_coordinates),
         ),
 
         // TODO integrate paint lines into CardFieldPainter
@@ -134,6 +145,24 @@ class FieldSwitch extends StatelessWidget {
         CustomField(
           fieldIsLeft: false,
         ),
+      ],
+    );
+  }
+}
+
+class CardFieldSwitch extends StatelessWidget {
+  final List<dynamic> actionCoordinates;
+  CardFieldSwitch(this.actionCoordinates);
+
+  static final PageController pageController = PageController();
+
+  @override
+  Widget build(BuildContext context) {
+    return PageView(
+      controller: pageController,
+      children: <Widget>[
+        CustomCardField(actionCoordinates, true),
+        CustomCardField(actionCoordinates, false),
       ],
     );
   }
