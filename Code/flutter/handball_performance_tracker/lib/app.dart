@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:handball_performance_tracker/features/dashboard/dashboard.dart';
 import 'package:handball_performance_tracker/data/repositories/repositories.dart';
 import 'package:handball_performance_tracker/features/authentication/authentication.dart';
-import 'package:handball_performance_tracker/features/sidebar/sidebar.dart';
+import 'package:handball_performance_tracker/core/core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class HandballApp extends StatelessWidget {
@@ -18,7 +18,7 @@ class HandballApp extends StatelessWidget {
       child: MultiBlocProvider(
         providers: [
           BlocProvider<AuthBloc>(create: (context) => AuthBloc(authRepository: RepositoryProvider.of<AuthRepository>(context))),
-          BlocProvider<SidebarBloc>(create: (context) => SidebarBloc(clubRepository: RepositoryProvider.of<ClubRepository>(context))),
+          BlocProvider<GlobalBloc>(create: (context) => GlobalBloc()..add(LoadGlobalState())),
         ],
         child: MaterialApp(
           home: StreamBuilder<User?>(
@@ -26,7 +26,7 @@ class HandballApp extends StatelessWidget {
               builder: (context, snapshot) {
                 // If the snapshot has user data, then they're already signed in. So Navigating to the Dashboard.
                 if (snapshot.hasData) {
-                  return const DashboardPage();
+                  return const DashboardView();
                 }
                 // Otherwise, they're not signed in. Show the sign in page.
                 return SignIn();

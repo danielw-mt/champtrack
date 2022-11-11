@@ -1,83 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:handball_performance_tracker/features/dashboard/dashboard.dart';
-import 'package:handball_performance_tracker/features/authentication/authentication.dart';
-import 'package:handball_performance_tracker/core/constants/colors.dart';
-import 'package:handball_performance_tracker/features/sidebar/sidebar.dart';
+import 'package:handball_performance_tracker/core/core.dart';
 
 class DashboardView extends StatelessWidget {
   const DashboardView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-    final authState = context.watch<AuthBloc>().state;
-    String clubName = "";
-    if (authState is Authenticated) {
-      clubName = authState.club.name;
+    final globalState = context.watch<GlobalBloc>().state;
+    if (globalState.status == GlobalStatus.loading) {
+      return Column(children: [
+        Text("Loading...", style: TextStyle(fontSize: 20, color: Colors.blue)),
+        Image.asset("images/goalee_gif.gif"),
+        CircularProgressIndicator(
+          strokeWidth: 4,
+        )
+      ]);
     }
-
-    return SafeArea(
-        child: Scaffold(
-            backgroundColor: backgroundColor,
-            key: _scaffoldKey,
-            drawer: SidebarPage(),
-            appBar: AppBar(
-                backgroundColor: buttonDarkBlueColor,
-                title: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    /*Container(
-                          padding: EdgeInsets.only(right: 10),
-                          child: new Image.asset(
-                            "images/launcher_icon.png",
-                            height: MediaQuery.of(context).size.height * 0.1,
-                            fit: BoxFit.cover,
-                          ),
-                        ),*/
-                    Text(
-                      clubName,
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-                    ),
-                  ],
-                )),
-            body: Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-              // Upper white bar with menu button etc
-              /*Container(
-                            color: Colors.white,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                // Container for menu button on top left corner
-                                //MenuButton(_scaffoldKey),
-                                
-                                Text(""), // To be substituted by saison button
-                              ],
-                            ),
-                          ),*/
-
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  // Buttons
-                  Container(
-                    child: Column(
-                      children: [
-                        StatisticsButton(),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            ManageTeamsButton(),
-                            StartNewGameButton(),
-                            // Take game restore out for now (18.10.22)
-                            //OldGameCard()
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ])));
+    if (globalState.status == GlobalStatus.success) {
+      return const DashboardContent();
+    }
+    return const Center(
+      child: Text("TODO: Error"),
+    );
   }
 }

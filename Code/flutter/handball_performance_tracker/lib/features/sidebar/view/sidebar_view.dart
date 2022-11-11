@@ -34,15 +34,15 @@ class SidebarView extends StatelessWidget {
                   ),
 
                   // Dashboard
-                  SimpleListEntry(text: "TODO Dashboard", screen: DashboardPage()),
+                  SimpleListEntry(text: "TODO Dashboard", screen: DashboardView()),
                   // show game is running button only if game is running.
                   SimpleListEntry(
                     text: "TODO Teams",
                     screen: TeamManagementPage(),
                     //children: buildTeamChildren(context),
                   ),
-                  SimpleListEntry(text: "TODO Statistics", screen: DashboardPage()),
-                  if (gameRunning) SimpleListEntry(text: "TODO Game is running", screen: DashboardPage()) else Text(""),
+                  SimpleListEntry(text: "TODO Statistics", screen: DashboardView()),
+                  if (gameRunning) SimpleListEntry(text: "TODO Game is running", screen: DashboardView()) else Text(""),
                 ]).toList()),
             // Sign out button at the bottom
             Center(

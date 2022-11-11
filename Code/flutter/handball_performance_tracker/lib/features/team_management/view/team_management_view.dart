@@ -5,6 +5,7 @@ import 'package:handball_performance_tracker/core/constants/stringsGeneral.dart'
 import 'package:handball_performance_tracker/core/constants/stringsTeamManagement.dart';
 import 'package:handball_performance_tracker/features/sidebar/sidebar.dart';
 import 'package:handball_performance_tracker/features/team_management/team_management.dart';
+import 'package:handball_performance_tracker/core/core.dart';
 
 // A screen where all the available teams are listed for men, women and youth teams
 class TeamManagementView extends StatelessWidget {
@@ -13,20 +14,21 @@ class TeamManagementView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final globalState = context.watch<GlobalBloc>().state;
     return SafeArea(
         child: DefaultTabController(
             initialIndex: 0,
             length: 3,
             child: BlocBuilder<TeamManagementCubit, TeamManagementState>(builder: (context, state) {
-              if (state is TeamManagementLoading) {
+              if (globalState.status == GlobalStatus.loading) {
                 return Center(child: CircularProgressIndicator());
               }
-              if (state is TeamManagementLoaded) {
+              if (globalState.status == GlobalStatus.success) {
                 TeamManagementCubit teamManagementCubit = BlocProvider.of<TeamManagementCubit>(context);
                 return Scaffold(
                     appBar: AppBar(backgroundColor: buttonDarkBlueColor, title: Text("TODO Teams")),
                     key: _scaffoldKey,
-                    drawer: SidebarPage(),
+                    drawer: SidebarView(),
                     bottomNavigationBar: TeamManagementTabsBar(),
                     body: Column(
                       children: [
@@ -49,13 +51,13 @@ class TeamManagementView extends StatelessWidget {
                           ))
                         ]),
                         // players list or games list or team settings depending which tab is selected
-                        if (state.selectedTab == TeamManagementTab.playersTab) PlayersList(),
-                        if (state.selectedTab == TeamManagementTab.gamesTab) GameList(),
-                        if (state.selectedTab == TeamManagementTab.settingsTab) TeamSettings(),
+                        if (state.currentTab == TeamManagementTab.playersTab) PlayersList(),
+                        if (state.currentTab == TeamManagementTab.gamesTab) GameList(),
+                        if (state.currentTab == TeamManagementTab.settingsTab) TeamSettings(),
                       ],
                     ));
               }
-              if (state is TeamManagementError) {
+              if (globalState.status == GlobalStatus.failure) {
                 print("team management error");
                 return Text("Error");
               }

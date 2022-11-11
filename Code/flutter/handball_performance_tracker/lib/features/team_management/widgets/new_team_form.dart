@@ -6,6 +6,7 @@ import 'package:handball_performance_tracker/core/constants/stringsGeneral.dart'
 import 'package:handball_performance_tracker/core/constants/colors.dart';
 import 'package:handball_performance_tracker/data/models/team_model.dart';
 import 'package:handball_performance_tracker/features/team_management/team_management.dart';
+import 'package:handball_performance_tracker/core/core.dart';
 
 class NewTeamForm extends StatefulWidget {
   @override
@@ -138,14 +139,15 @@ class NewTeamFormState extends State<NewTeamForm> {
                         onPressed: () {
                           // Validate returns true if the form is valid, or false otherwise.
                           if (_formKey.currentState!.validate()) {
-                            context.read<TeamManagementCubit>().createTeam(Team(
-                                  name: teamNameController.text,
-                                  type: TEAM_TYPE_MAPPING[selectedTeamType],
-                                ));
+                            Team newTeam = Team(
+                              name: teamNameController.text,
+                              type: TEAM_TYPE_MAPPING[selectedTeamType],
+                            );
+                            context.read<GlobalBloc>().add(CreateTeam(team: newTeam));
                             Navigator.pop(context);
                             // if the added team is the first team to be added select this team right away
-                            if (context.read<TeamManagementCubit>().state.allTeams.length == 1) {
-                              context.read<TeamManagementCubit>().selectTeam(context.read<TeamManagementCubit>().state.allTeams[0]);
+                            if (context.read<GlobalBloc>().state.allTeams.length == 1) {
+                              context.read<TeamManagementCubit>().selectTeam(0);
                             }
                           }
                         },

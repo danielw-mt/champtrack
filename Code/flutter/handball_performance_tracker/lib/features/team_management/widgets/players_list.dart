@@ -5,12 +5,14 @@ import 'package:handball_performance_tracker/core/constants/colors.dart';
 import 'package:handball_performance_tracker/data/models/player_model.dart';
 import 'package:handball_performance_tracker/data/models/team_model.dart';
 import 'package:handball_performance_tracker/core/constants/stringsGeneral.dart';
+import 'package:handball_performance_tracker/core/core.dart';
 
 class PlayersList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final state = context.watch<TeamManagementCubit>().state;
-    List<Player> playersList = state.allTeams[state.selectedTeamIndex].players;
+    final globalState = context.watch<GlobalBloc>().state;
+    List<Player> playersList = globalState.allTeams[state.selectedTeamIndex].players;
     int numberOfPlayers = playersList.length;
     return SingleChildScrollView(
       controller: ScrollController(),

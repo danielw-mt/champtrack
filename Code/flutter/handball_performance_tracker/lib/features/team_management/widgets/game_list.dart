@@ -5,14 +5,15 @@ import 'package:handball_performance_tracker/core/constants/colors.dart';
 import 'package:handball_performance_tracker/data/models/game_model.dart';
 import 'package:handball_performance_tracker/data/models/team_model.dart';
 import 'package:handball_performance_tracker/core/constants/stringsGeneral.dart';
-import 'package:rflutter_alert/rflutter_alert.dart';
+import 'package:handball_performance_tracker/core/core.dart';
 
 class GameList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final TeamManagementState state = context.watch<TeamManagementCubit>().state;
-    final Team selectedTeam = state.allTeams[state.selectedTeamIndex];
-    final List<Game> gamesList = state.allGames.where((Game game) => game.teamId == selectedTeam.id).toList();
+    final globalState = context.watch<GlobalBloc>().state;
+    final Team selectedTeam = globalState.allTeams[state.selectedTeamIndex];
+    final List<Game> gamesList = globalState.allGames.where((Game game) => game.teamId == selectedTeam.id).toList();
     return SingleChildScrollView(
       controller: ScrollController(),
       child: DataTable(
@@ -48,32 +49,33 @@ class GameList extends StatelessWidget {
                 DataCell(GestureDetector(
                   child: Center(child: Icon(Icons.delete)),
                   onTap: () {
-                    Alert(
-                      context: context,
-                      buttons: [],
-                      content: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Text(StringsGeneral.lGameDeleteWarning),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              ElevatedButton(
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                  },
-                                  child: Text(StringsGeneral.lCancel)),
-                              ElevatedButton(
-                                  onPressed: () {
-                                    context.read<TeamManagementCubit>().deleteGame(gamesList[index]);
-                                    Navigator.pop(context);
-                                  },
-                                  child: Text(StringsGeneral.lConfirm)),
-                            ],
-                          )
-                        ],
-                      ),
-                    ).show();
+                    // TODO replace alert with flutter dialog
+                    // Alert(
+                    //   context: context,
+                    //   buttons: [],
+                    //   content: Column(
+                    //     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    //     children: [
+                    //       Text(StringsGeneral.lGameDeleteWarning),
+                    //       Row(
+                    //         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    //         children: [
+                    //           ElevatedButton(
+                    //               onPressed: () {
+                    //                 Navigator.pop(context);
+                    //               },
+                    //               child: Text(StringsGeneral.lCancel)),
+                    //           ElevatedButton(
+                    //               onPressed: () {
+                    //                 context.read<TeamManagementCubit>().deleteGame(gamesList[index]);
+                    //                 Navigator.pop(context);
+                    //               },
+                    //               child: Text(StringsGeneral.lConfirm)),
+                    //         ],
+                    //       )
+                    //     ],
+                    //   ),
+                    // ).show();
                   },
                 ))
               ],

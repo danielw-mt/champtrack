@@ -13,7 +13,7 @@ class GlossaryScreen extends StatelessWidget {
         child: Scaffold(
             appBar: AppBar(backgroundColor: buttonDarkBlueColor, title: Text("Glossar")),
             key: _scaffoldKey,
-            drawer: SidebarPage(),
+            drawer: SidebarView(),
             body: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [

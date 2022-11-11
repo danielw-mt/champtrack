@@ -6,6 +6,7 @@ import 'package:handball_performance_tracker/core/constants/stringsGeneral.dart'
 import 'package:handball_performance_tracker/core/constants/colors.dart';
 import 'package:handball_performance_tracker/data/models/team_model.dart';
 import 'package:handball_performance_tracker/core/constants/team_constants.dart';
+import 'package:handball_performance_tracker/core/core.dart';
 
 // Create a corresponding State class.
 // This class holds data related to the form.
@@ -28,6 +29,7 @@ class TeamSettings extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final TeamManagementState state = context.watch<TeamManagementCubit>().state;
+    final globalState = context.watch<GlobalBloc>().state;
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
 
@@ -99,10 +101,10 @@ class TeamSettings extends StatelessWidget {
                   onPressed: () {
                     // Validate returns true if the form is valid, or false otherwise.
                     if (_formKey.currentState!.validate()) {
-                      Team newTeam = state.allTeams[state.selectedTeamIndex];
+                      Team newTeam = globalState.allTeams[state.selectedTeamIndex];
                       newTeam.name = teamNameController.text;
                       newTeam.type = TEAM_TYPE_MAPPING[selectedTeamType];
-                      context.read<TeamManagementCubit>().updateTeam(newTeam);
+                      context.read<GlobalBloc>().add(UpdateTeam(team: newTeam));
                     }
                   },
                   child: const Text(StringsGeneral.lSubmitButton),
@@ -146,10 +148,10 @@ class TeamSettings extends StatelessWidget {
                   onPressed: () {
                     // Validate returns true if the form is valid, or false otherwise.
                     if (_formKey.currentState!.validate()) {
-                      Team newTeam = state.allTeams[state.selectedTeamIndex];
+                      Team newTeam = globalState.allTeams[state.selectedTeamIndex];
                       newTeam.name = teamNameController.text;
                       newTeam.type = TEAM_TYPE_MAPPING[selectedTeamType];
-                      context.read<TeamManagementCubit>().updateTeam(newTeam);
+                      context.read<GlobalBloc>().add(UpdateTeam(team: newTeam));
                     }
                   },
                   child: const Text(StringsGeneral.lSubmitButton),

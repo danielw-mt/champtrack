@@ -20,9 +20,7 @@ class TeamManagementTabsBar extends StatelessWidget {
             indicatorPadding: EdgeInsets.all(5.0),
             indicatorColor: buttonDarkBlueColor,
             onTap: (int tabNumber) {
-              if (state is TeamManagementLoaded) {
-                context.read<TeamManagementCubit>().changeTab(TeamManagementTab.values[tabNumber]);
-              }
+              context.read<TeamManagementCubit>().changeTab(TeamManagementTab.values[tabNumber]);
             },
             tabs: [
               Tab(
