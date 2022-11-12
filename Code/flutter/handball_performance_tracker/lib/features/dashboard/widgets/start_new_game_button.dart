@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:handball_performance_tracker/old-screens/start_game_screen.dart';
+import 'package:handball_performance_tracker/core/core.dart';
+import 'package:handball_performance_tracker/features/game_setup/game_setup.dart';
 import 'package:handball_performance_tracker/core/constants/stringsDashboard.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class StartNewGameButton extends StatelessWidget {
   final navigatorKey = GlobalKey<NavigatorState>();
@@ -20,21 +22,19 @@ class StartNewGameButton extends StatelessWidget {
           borderRadius: BorderRadius.all(Radius.circular(15))),
       child: TextButton(
           onPressed: () {
-            // if (tempController.getOldGameStateExists()) {
-            // TODO implement dialog
-            // Get.defaultDialog(
-            //     title: StringsDashboard.lWarning,
-            //     content: Column(
-            //       children: [
-            //         Text(StringsDashboard.lSkipGameRecreation),
-            //         ElevatedButton(
-            //             onPressed: () => Get.to(() => StartGameScreen()),
-            //             child: Text(StringsDashboard.lContinue)),
-            //       ],
-            //     ));
-            // } else {
-            //Get.to(() => StartGameScreen());
-            // }
+            // TODO implement check for old game existing
+            Navigator.push(
+              context,
+              MaterialPageRoute<GlobalBloc>(
+                builder: (context) {
+                  GlobalBloc globalBloc = BlocProvider.of<GlobalBloc>(context);
+                  return BlocProvider.value(
+                    value: globalBloc,
+                    child: GameSetupPage(),
+                  );
+                },
+              ),
+            );
           },
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,

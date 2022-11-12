@@ -25,7 +25,7 @@ class TeamManagementState extends Equatable {
 
   @override
   String toString() {
-    return ''' Globalstate {
+    return ''' TeamManagementState {
       currentTab: $currentTab,
       selectedTeamIndex: $selectedTeamIndex,
     }''';

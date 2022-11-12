@@ -58,7 +58,8 @@ class TeamFirebaseRepository extends TeamRepository {
   }
 
   /// Fetch all teams from the team collection of the logged in club
-  Future<List<Team>> fetchTeams() async {
+  /// @param allPlayers: optional list of previously built players used for populating the teams list
+  Future<List<Team>> fetchTeams({List<Player>? allPlayers}) async {
     developer.log("fetching teams", name: "TeamFirebaseRepository");
     List<Team> teams = [];
     QuerySnapshot clubSnapshot = await FirebaseFirestore.instance
@@ -72,9 +73,9 @@ class TeamFirebaseRepository extends TeamRepository {
     }
     QuerySnapshot teamsSnapshot = await clubSnapshot.docs[0].reference.collection("teams").get();
     await Future.forEach(teamsSnapshot.docs, (DocumentSnapshot teamSnapshot) async {
-      Team team = await Team.fromEntity(TeamEntity.fromSnapshot(teamSnapshot));
+      Team team = await Team.fromEntity(TeamEntity.fromSnapshot(teamSnapshot), allPlayers: allPlayers ?? []);
       teams.add(team);
-      print("added team: "+team.name);
+      print("added team: " + team.name);
     });
     return teams;
   }

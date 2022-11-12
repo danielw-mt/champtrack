@@ -86,17 +86,40 @@ class Team {
     );
   }
 
-  static Future<Team> fromEntity(TeamEntity entity) async {
+  static Future<Team> fromEntity(TeamEntity entity, {List<Player> allPlayers = const []}) async {
     List<Player> players = [];
-    await Future.forEach(entity.players, (DocumentReference playerReference) async {
-      DocumentSnapshot playerSnapshot = await playerReference.get();
-      players.add(Player.fromEntity(PlayerEntity.fromSnapshot(playerSnapshot)));
-    });
     List<Player> onFieldPlayers = [];
-    await Future.forEach(entity.onFieldPlayers, (DocumentReference playerReference) async {
-      DocumentSnapshot playerSnapshot = await playerReference.get();
-      onFieldPlayers.add(Player.fromEntity(PlayerEntity.fromSnapshot(playerSnapshot)));
-    });
+    // the players list is used to populate the team's players list. If is however insufficient because
+    bool allPlayersSufficient = true;
+    if (!allPlayers.isEmpty) {
+      entity.players.forEach((DocumentReference playerReference) {
+        // if there is no player in the players that can be used to populate the team's players list set playerInsufficient to true
+        List filteredPlayers = allPlayers.where((Player player) => player.path == playerReference.path).toList();
+        if (filteredPlayers.length == 0) {
+          allPlayersSufficient = true;
+        }
+      });
+    }
+    // if allPlayers cannot be used to populate players lists try to load each player individually
+    if (allPlayersSufficient == false) {
+      await Future.forEach(entity.players, (DocumentReference playerReference) async {
+        DocumentSnapshot playerSnapshot = await playerReference.get();
+        players.add(Player.fromEntity(PlayerEntity.fromSnapshot(playerSnapshot)));
+      });
+      await Future.forEach(entity.onFieldPlayers, (DocumentReference playerReference) async {
+        DocumentSnapshot playerSnapshot = await playerReference.get();
+        onFieldPlayers.add(Player.fromEntity(PlayerEntity.fromSnapshot(playerSnapshot)));
+      });
+    } else {
+      print("populating using players");
+      entity.players.forEach((DocumentReference playerReference) {
+        players.add(allPlayers.firstWhere((Player player) => player.path == playerReference.path));
+      });
+      entity.onFieldPlayers.forEach((DocumentReference playerReference) {
+        onFieldPlayers.add(allPlayers.firstWhere((Player player) => player.path == playerReference.path));
+      });
+    }
+
     print("Team, players: ${players.length}");
     Team team = Team(
       id: entity.documentReference!.id,
