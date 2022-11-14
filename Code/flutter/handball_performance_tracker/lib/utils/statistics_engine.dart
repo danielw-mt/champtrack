@@ -133,6 +133,18 @@ class StatisticsEngine {
       return action_coordinates;
     }
 
+    Map<String, List<String>> updateActionContext(
+        Map<String, dynamic> action, Map<String, List<String>> action_context) {
+      logger.d("update action context");
+      String actionTag = action["tag"];
+      if (!action_context.containsKey(actionTag)) {
+        action_context[actionTag] = [action["context"]];
+      } else {
+        action_context[actionTag]?.add(action["context"]);
+      }
+      return action_context;
+    }
+
     /// @param quotes is [(List<double> <<seven_meter_quota>>, List<double> <<position_quota>>, List<double> <<throw_quota>>]
     /// the quotas are stored as a list of the two components for each quota ratio i.e. quotas[0][1, 2] for 1/2 7m quota
     /// quotas[0][0]: 7m goals
@@ -225,6 +237,7 @@ class StatisticsEngine {
             "action_counts": Map<String, int>(),
             "action_series": Map<String, List<int>>(),
             "action_coordinates": Map<String, dynamic>(),
+            "action_context": Map<String, List<String>>(),
             "all_actions": <String>[],
             "all_action_timestamps": <int>[],
             "ef_score_series": <double>[]
@@ -239,6 +252,8 @@ class StatisticsEngine {
             updateActionSeries(action, player_statistic["action_series"]);
         player_statistic["action_coordinates"] = updateActionCoordinates(
             action, player_statistic["action_coordinates"]);
+        player_statistic["action_context"] =
+            updateActionContext(action, player_statistic["action_context"]);
         player_statistic["all_actions"].add(action["tag"]);
         player_statistic["all_action_timestamps"].add(action["timestamp"]);
         List quotas = updateQuotas(action, [
@@ -288,6 +303,7 @@ class StatisticsEngine {
       "action_counts": Map<String, int>(),
       "action_series": Map<String, List<int>>(),
       "action_coordinates": Map<String, List<dynamic>>(),
+      "action_context": Map<String, List<String>>(),
       "all_actions": <String>[],
       "all_action_timestamps": <int>[],
       "ef_score_series": <double>[]
@@ -332,6 +348,17 @@ class StatisticsEngine {
           teamStats["action_series"][actionTag] = timestamps;
         }
         teamStats["action_series"][actionTag].sort();
+      });
+
+      // add each player's action context to the team's action context
+      playerStatistic["action_context"]
+          .forEach((String actionTag, List<String> action_context) {
+        if (teamStats["action_context"].containsKey(actionTag)) {
+          teamStats["action_context"][actionTag].addAll(action_context);
+        } else {
+          teamStats["action_context"][actionTag] = action_context;
+        }
+        // teamStats["action_context"][actionTag].sort();
       });
 
       // add each player's action coordinates to the team's action coordinates do not sort these

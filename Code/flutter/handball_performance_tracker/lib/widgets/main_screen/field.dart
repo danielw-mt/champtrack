@@ -59,10 +59,11 @@ class CustomField extends StatelessWidget {
 }
 
 class CustomCardField extends StatelessWidget {
-  final TempController tempController = Get.find<TempController>();
+  //final TempController tempController = Get.find<TempController>();
   final List<dynamic> actionCoordinates;
   final bool fieldIsLeft;
-  CustomCardField(this.actionCoordinates, this.fieldIsLeft);
+  final List<String> actionContext;
+  CustomCardField(this.actionCoordinates, this.fieldIsLeft, this.actionContext);
   
   //final Map<String, List<dynamic>> actionCoordinates = thi;
 
@@ -70,23 +71,10 @@ class CustomCardField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    tempController.setFieldIsLeft(this.fieldIsLeft);
-
-    String viewed_action = "goal";
     List<dynamic> viewed_coordinates = actionCoordinates;//[viewed_action]!;
-    int nb_actions = viewed_coordinates.length;
-    //Map viewed_coordinates_map = Map();
+    //int nb_actions = viewed_coordinates.length;
 
-    // TODO super unclean, but works for now
-    // viewed_coordinates.forEach((element) {
-    //   if (!viewed_coordinates_map.containsKey(element.join())) {
-    //     viewed_coordinates_map[element.join()] = 1;
-    //   } else {
-    //     viewed_coordinates_map[element.join()] += 1;
-    //   }
-    // });
-
-    List<double> opacitySector = [0.5];
+    //List<double> opacitySector = [0.5];
 
     return GetBuilder<TempController>(
       id: "custom-card-field",
@@ -111,7 +99,8 @@ class CustomCardField extends StatelessWidget {
               color: Colors.red,
               fieldIsLeft: true,
               isEllipse: false,
-              coordinates: viewed_coordinates),
+              coordinates: viewed_coordinates,
+              actionContext: actionContext),
         ),
 
         // TODO integrate paint lines into CardFieldPainter
@@ -152,7 +141,8 @@ class FieldSwitch extends StatelessWidget {
 
 class CardFieldSwitch extends StatelessWidget {
   final List<dynamic> actionCoordinates;
-  CardFieldSwitch(this.actionCoordinates);
+  final List<String> actionContext;
+  CardFieldSwitch(this.actionCoordinates, List<String> this.actionContext);
 
   static final PageController pageController = PageController();
 
@@ -161,8 +151,8 @@ class CardFieldSwitch extends StatelessWidget {
     return PageView(
       controller: pageController,
       children: <Widget>[
-        CustomCardField(actionCoordinates, true),
-        CustomCardField(actionCoordinates, false),
+        CustomCardField(actionCoordinates, true, actionContext),
+        CustomCardField(actionCoordinates, false, actionContext),
       ],
     );
   }

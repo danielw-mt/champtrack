@@ -76,7 +76,7 @@ double availableCardHeatmapHeight =
         3.4 /
         5; // 4/5 of available screen height goes into card widget
 
-double availableCardHeatmapWidth = screenWidth / 3.5;
+double availableCardHeatmapWidth = screenWidth / 3.1;
 
 // Radii of the ellipses for six meter and 9 meter
 double nineMeterRadiusXCard = availableCardHeatmapWidth / 1.5;

@@ -269,11 +269,13 @@ class HeatmapOverlayPainter extends CustomPainter {
   final Color color;
   final bool isEllipse;
   final List coordinates;
+  final List actionContext;
   HeatmapOverlayPainter(
       {required this.fieldIsLeft,
       required this.color,
       required this.isEllipse,
-      required this.coordinates});
+      required this.coordinates,
+      required this.actionContext});
 
   void paintActionCircle(Canvas canvas, Offset center, double radius) {
     Paint paint = Paint()
@@ -282,18 +284,23 @@ class HeatmapOverlayPainter extends CustomPainter {
     canvas.drawCircle(center, radius, paint);
   }
 
-  void determineCirclePosition(Canvas canvas, List coordinates) {
+  void determineCirclePosition(Canvas canvas, List coordinates, List actionContext) {
     Offset center =
         Offset(0, fieldSizeParameter.availableCardHeatmapHeight / 2);
 
-    // coordinates.forEach((key, value) {
-    //   if (key == "RM>9") {
-    //     center = Offset(fieldSizeParameter.sixMeterRadiusXCard,
-    //         fieldSizeParameter.availableCardHeatmapWidth / 2);
-    //   } else if (key == "goal") {
-    //     center = Offset(fieldSizeParameter.sixMeterRadiusXCard, 0);
-    //   }
-    // });
+    for (var i = 0; i < coordinates.length; i++) {
+      
+      print(coordinates[i]);
+      print(actionContext[i]);
+      if (actionContext[i] == "attack") {
+        center = Offset(coordinates[i][0], coordinates[i][1]);
+      }else{
+        center = Offset(coordinates[i][0] + fieldSizeParameter.availableCardHeatmapWidth, 
+        coordinates[i][1]);
+      }
+      paintActionCircle(canvas, center, 10);
+    }
+    
     for (var el in coordinates) {
       print(el);
       paintActionCircle(canvas, Offset(el[0], el[1]), 10);
@@ -308,7 +315,7 @@ class HeatmapOverlayPainter extends CustomPainter {
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2.0;
 
-    determineCirclePosition(canvas, coordinates);
+    determineCirclePosition(canvas, coordinates, actionContext);
   }
 
   @override

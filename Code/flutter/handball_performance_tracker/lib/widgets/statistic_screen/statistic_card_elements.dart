@@ -184,16 +184,20 @@ class _ActionsCardState extends State<ActionsCard> {
 
 class HeatMapCard extends StatefulWidget {
   final Map<String, List<dynamic>> actionCoordinates;
+  final Map<String, List<String>> actionContext;
 
-  const HeatMapCard({Key? key, required this.actionCoordinates})
+  const HeatMapCard(
+      {Key? key, required this.actionCoordinates, required this.actionContext})
       : super(key: key);
   @override
-  _HeatMapCardState createState() => _HeatMapCardState(actionCoordinates);
+  _HeatMapCardState createState() =>
+      _HeatMapCardState(actionCoordinates, actionContext);
 }
 
 class _HeatMapCardState extends State<HeatMapCard> {
   final Map<String, List<dynamic>> actionCoordinates;
-  _HeatMapCardState(this.actionCoordinates);
+  final Map<String, List<String>> actionContext;
+  _HeatMapCardState(this.actionCoordinates, this.actionContext);
 
   String _selectedDropdownElement = "";
   List<String> _dropDownElements = [];
@@ -209,17 +213,16 @@ class _HeatMapCardState extends State<HeatMapCard> {
     }
   }
 
-  //final bool fieldIsLeft = true;
-
   final Map<String, List<dynamic>> actionCoordinatesFake = {
     "parade": [
       [3.0, 3.0]
     ],
     "goal_goalkeeper": [
-      [3.0, 3.0]
+      [3.0, 3.0],
+      [20.0, 180.0]
     ],
     "block_steal": [
-      [33.0, 33.0],
+      [200.0, 33.0],
       [31.0, 35.0],
       [20.0, 30.0]
     ],
@@ -228,6 +231,18 @@ class _HeatMapCardState extends State<HeatMapCard> {
       [43.0, 34.0],
       [30.0, 80.0],
       [140, 280]
+    ]
+  };
+
+  final Map<String, List<String>> actionContextFake = {
+    "parade": ["goalkeeper"],
+    "goal_goalkeeper": ["goalkeeper", "goalkeeper"],
+    "block_steal": ["attack", "defense", "defense"],
+    "goal": [
+      "attack",
+      "attack",
+      "attack",
+      "defense",
     ]
   };
 
@@ -257,7 +272,7 @@ class _HeatMapCardState extends State<HeatMapCard> {
           Expanded(
             flex: 12,
             child: CardFieldSwitch(
-                actionCoordinatesFake[_selectedDropdownElement]!),
+                actionCoordinatesFake[_selectedDropdownElement]!, actionContextFake[_selectedDropdownElement]!),
           ),
         ],
       ),
