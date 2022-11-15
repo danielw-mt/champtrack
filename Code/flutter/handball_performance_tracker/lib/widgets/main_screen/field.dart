@@ -59,22 +59,12 @@ class CustomField extends StatelessWidget {
 }
 
 class CustomCardField extends StatelessWidget {
-  //final TempController tempController = Get.find<TempController>();
-  final List<dynamic> actionCoordinates;
+  final List<dynamic> coordinatesWithContext;
   final bool fieldIsLeft;
-  final List<String> actionContext;
-  CustomCardField(this.actionCoordinates, this.fieldIsLeft, this.actionContext);
-  
-  //final Map<String, List<dynamic>> actionCoordinates = thi;
-
-  // TODO logic for foregroundpainter doing the heatmap depending on where actions are
+  CustomCardField(this.coordinatesWithContext, this.fieldIsLeft);
 
   @override
   Widget build(BuildContext context) {
-    List<dynamic> viewed_coordinates = actionCoordinates;//[viewed_action]!;
-    //int nb_actions = viewed_coordinates.length;
-
-    //List<double> opacitySector = [0.5];
 
     return GetBuilder<TempController>(
       id: "custom-card-field",
@@ -97,20 +87,17 @@ class CustomCardField extends StatelessWidget {
           child: Container(),
           foregroundPainter: HeatmapOverlayPainter(
               color: Colors.red,
-              fieldIsLeft: true,
-              isEllipse: false,
-              coordinates: viewed_coordinates,
-              actionContext: actionContext),
+              coordinatesWithContext: coordinatesWithContext),
         ),
 
         // TODO integrate paint lines into CardFieldPainter
         // Painter of dashed 9m
-        // CustomPaint(
-        //     painter: DashedPathPainter(leftSide: fieldIsLeft, isEllipse: true)),
-        // // Painter of dashed goal
-        // CustomPaint(
-        //     painter:
-        //         DashedPathPainter(leftSide: fieldIsLeft, isEllipse: false)),
+        CustomPaint(
+            painter: DashedPathPainterCard(leftSide: fieldIsLeft, isEllipse: true)),
+        // Painter of dashed goal
+        CustomPaint(
+            painter:
+                DashedPathPainterCard(leftSide: fieldIsLeft, isEllipse: false)),
       ]),
     );
   }
@@ -140,21 +127,18 @@ class FieldSwitch extends StatelessWidget {
 }
 
 class CardFieldSwitch extends StatelessWidget {
-  final List<dynamic> actionCoordinates;
-  final List<String> actionContext;
-  CardFieldSwitch(this.actionCoordinates, List<String> this.actionContext);
+  final List<dynamic> coordinatesWithContext;
+  CardFieldSwitch(this.coordinatesWithContext);
 
   static final PageController pageController = PageController();
-
-
 
   @override
   Widget build(BuildContext context) {
     return PageView(
       controller: pageController,
       children: <Widget>[
-        CustomCardField(actionCoordinates.where((i) => i["context"] == "attack").toList(), true, actionContext),
-        CustomCardField(actionCoordinates.where((i) => i["context"] != "attack").toList(), false, actionContext),
+        CustomCardField(coordinatesWithContext.where((i) => i["context"] == "attack").toList(), true),
+        CustomCardField(coordinatesWithContext.where((i) => i["context"] != "attack").toList(), false),
       ],
     );
   }

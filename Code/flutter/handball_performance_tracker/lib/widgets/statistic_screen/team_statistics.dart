@@ -74,6 +74,7 @@ class _TeamStatisticsState extends State<TeamStatistics> {
     Map<String, List<int>> actionSeries = {};
     Map<String, List<dynamic>> actionCoordinates = {};
     Map<String, List<String>> actionContext = {};
+    Map<String, dynamic> actionCoordinatesWithContext = {};
     int startTime = 0;
     int stopTime = 0;
     List<List<double>> quotas = [
@@ -106,16 +107,16 @@ class _TeamStatisticsState extends State<TeamStatistics> {
       print("context");
       print(actionContext);
       // combine the list actionCoordinates and action coordinates to an map where each key contains a dict including the action and its context
-      // Map<String, dynamic> actionCoordinatesWithContext = {};
-      // for (String action in actionCoordinates.keys) {
-      //   List<dynamic>? coordinates = actionCoordinates[action];
-      //   List<String>? context = actionContext[action];
-      //   List<dynamic> coordinatesWithContext = [];
-      //   for (int i = 0; i < coordinates!.length; i++) {
-      //     coordinatesWithContext.add([coordinates[i], context![i]]);
-      //   }
-      //   actionCoordinatesWithContext[action] = coordinatesWithContext;
-      // }
+      
+      for (String action in actionCoordinates.keys) {
+        List<dynamic>? coordinates = actionCoordinates[action];
+        List<String>? context = actionContext[action];
+        List<dynamic> coordinatesWithContext = [];
+        for (int i = 0; i < coordinates!.length; i++) {
+          coordinatesWithContext.add([coordinates[i], context![i]]);
+        }
+        actionCoordinatesWithContext[action] = coordinatesWithContext;
+      }
       // print("coordinates with context");
       // print(actionCoordinatesWithContext);
 
@@ -215,7 +216,7 @@ class _TeamStatisticsState extends State<TeamStatistics> {
                 ),
                 Expanded(
                   flex: 4,
-                  child: HeatMapCard(actionCoordinates: actionCoordinates, actionContext: actionContext),
+                  child: HeatMapCard(actionCoordinatesWithContext: actionCoordinatesWithContext),
 
                   // child: Card(child: Image(image: AssetImage('images/statistics2_heatmap.jpg'))),
                 )

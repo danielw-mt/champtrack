@@ -183,21 +183,19 @@ class _ActionsCardState extends State<ActionsCard> {
 }
 
 class HeatMapCard extends StatefulWidget {
-  final Map<String, List<dynamic>> actionCoordinates;
-  final Map<String, List<String>> actionContext;
+  final Map<String, dynamic> actionCoordinatesWithContext;
 
   const HeatMapCard(
-      {Key? key, required this.actionCoordinates, required this.actionContext})
+      {Key? key, required this.actionCoordinatesWithContext})
       : super(key: key);
   @override
   _HeatMapCardState createState() =>
-      _HeatMapCardState(actionCoordinates, actionContext);
+      _HeatMapCardState(actionCoordinatesWithContext);
 }
 
 class _HeatMapCardState extends State<HeatMapCard> {
-  final Map<String, List<dynamic>> actionCoordinates;
-  final Map<String, List<String>> actionContext;
-  _HeatMapCardState(this.actionCoordinates, this.actionContext);
+  final Map<String, dynamic> actionCoordinatesWithContext;
+  _HeatMapCardState(this.actionCoordinatesWithContext);
 
   String _selectedDropdownElement = "";
   List<String> _dropDownElements = [];
@@ -206,8 +204,8 @@ class _HeatMapCardState extends State<HeatMapCard> {
   void initState() {
     super.initState();
 
-    if (actionCoordinates.keys.length > 0) {
-      _dropDownElements = actionCoordinates.keys.toList();
+    if (actionCoordinatesWithContext.keys.length > 0) {
+      _dropDownElements = actionCoordinatesWithContext.keys.toList();
       //print(_dropDownElements);
       _selectedDropdownElement = _dropDownElements[0];
     }
@@ -217,7 +215,7 @@ class _HeatMapCardState extends State<HeatMapCard> {
     print("fake action coordinates");
     print(actionCoordinatesFake);
 
-    
+    // TODO remove here once the real data is available
     for (String action in actionCoordinatesFake.keys) {
       List<dynamic>? coordinates = actionCoordinatesFake[action];
       List<String>? context = actionContextFake[action];
@@ -264,11 +262,11 @@ class _HeatMapCardState extends State<HeatMapCard> {
     ]
   };
 
-  Map<String, dynamic> actionCoordinatesWithContext = {};
+  Map<String, dynamic> actionCoordinatesWithContextFake = {};
 
   @override
   Widget build(BuildContext context) {
-    if (widget.actionCoordinates.length == 0) {
+    if (widget.actionCoordinatesWithContext.length == 0) {
       return Center(child: Text(StringsGeneral.lNoDataAvailable));
     }
 
@@ -292,8 +290,7 @@ class _HeatMapCardState extends State<HeatMapCard> {
           Expanded(
             flex: 12,
             child: CardFieldSwitch(
-                actionCoordinatesWithContext[_selectedDropdownElement]!,
-                actionContextFake[_selectedDropdownElement]!),
+                actionCoordinatesWithContext[_selectedDropdownElement]!),
           ),
         ],
       ),
@@ -311,7 +308,7 @@ class _HeatMapCardState extends State<HeatMapCard> {
 
       // Array list of items
       items: _dropDownElements.map((String dropdownElement) {
-        if (widget.actionCoordinates[dropdownElement] == null) {
+        if (widget.actionCoordinatesWithContext[dropdownElement] == null) {
           print("cannot display dropdown element" +
               dropdownElement +
               " which has no data");

@@ -265,48 +265,16 @@ class FieldPainter extends CustomPainter {
 }
 
 class HeatmapOverlayPainter extends CustomPainter {
-  final bool fieldIsLeft;
   final Color color;
-  final bool isEllipse;
-  final List coordinates;
-  final List actionContext;
+  final List coordinatesWithContext;
   HeatmapOverlayPainter(
-      {required this.fieldIsLeft,
-      required this.color,
-      required this.isEllipse,
-      required this.coordinates,
-      required this.actionContext});
+      {required this.color, required this.coordinatesWithContext});
 
   void paintActionCircle(Canvas canvas, Offset center, double radius) {
     Paint paint = Paint()
       ..color = color
       ..style = PaintingStyle.fill;
     canvas.drawCircle(center, radius, paint);
-  }
-
-  void determineCirclePosition(Canvas canvas, List coordinates, List actionContext) {
-    Offset center =
-        Offset(0, fieldSizeParameter.availableCardHeatmapHeight / 2);
-
-
-    // for (var i = 0; i < coordinates.length; i++) {
-      
-    //   print(coordinates[i]);
-    //   print(actionContext[i]);
-    //   // if (actionContext[i] == "attack") {
-    //   //   center = Offset(coordinates[i][0], coordinates[i][1]);
-    //   // }else{
-    //   //   center = Offset(coordinates[i][0] + fieldSizeParameter.availableCardHeatmapWidth, 
-    //   //   coordinates[i][1]);
-    //   // }
-    //   paintActionCircle(canvas, center, 10);
-    // }
-    
-    for (var el in coordinates) {
-      print("Element to print: " + el.toString());
-      paintActionCircle(canvas, Offset(el["coordinates"][0], el["coordinates"][1]), 10);
-    }
-    
   }
 
   @override
@@ -316,7 +284,11 @@ class HeatmapOverlayPainter extends CustomPainter {
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2.0;
 
-    determineCirclePosition(canvas, coordinates, actionContext);
+    for (var el in coordinatesWithContext) {
+      //print("Element to print: " + el.toString());
+      paintActionCircle(
+          canvas, Offset(el["coordinates"][0], el["coordinates"][1]), 10);
+    }
   }
 
   @override
@@ -433,6 +405,103 @@ class CardFieldPainter extends CustomPainter {
   @override
   bool shouldRebuildSemantics(CardFieldPainter oldDelegate) => false;
 }
+
+class DashedPathPainterCard extends CustomPainter {
+  late Path originalPath;
+  bool isEllipse; // false for goal rectangle
+  final Color pathColor;
+  final double strokeWidth = fieldSizeParameter.lineSize;
+  final double dashGapLength;
+  final double dashLength;
+  late DashedPathProperties _dashedPathProperties;
+  bool leftSide = true;
+
+  DashedPathPainterCard({
+    required this.leftSide,
+    required this.isEllipse,
+    this.pathColor = Colors.black,
+    this.dashGapLength = 7,
+    this.dashLength = 7.3,
+  });
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    double xOffset;
+    double goalOffset;
+    double startAngle;
+    double sweepAngle;
+    // set Parameters for field side
+    if (leftSide) {
+      xOffset = 0;
+      startAngle = math.pi / 2;
+      sweepAngle = -math.pi;
+      goalOffset = xOffset + fieldSizeParameter.goalWidthCard / 2;
+    } else {
+      xOffset = fieldSizeParameter.availableCardHeatmapWidth;
+      startAngle = math.pi / 2;
+      sweepAngle = math.pi;
+      goalOffset = xOffset - fieldSizeParameter.goalWidthCard / 2;
+    }
+
+    if (isEllipse) {
+      // definde 9m oval
+      originalPath = Path()
+        ..addArc(
+          Rect.fromCenter(
+              center: Offset(xOffset, fieldSizeParameter.availableCardHeatmapHeight / 2),
+              width: fieldSizeParameter.nineMeterRadiusXCard * 2,
+              height: fieldSizeParameter.nineMeterRadiusYCard * 2),
+          startAngle,
+          sweepAngle,
+        );
+    } else {
+      originalPath = Path()
+        ..addRect(
+          Rect.fromCenter(
+              center: Offset(goalOffset, fieldSizeParameter.availableCardHeatmapHeight / 2),
+              width: fieldSizeParameter.goalWidthCard,
+              height: fieldSizeParameter.goalHeightCard),
+        );
+    }
+    _dashedPathProperties = DashedPathProperties(
+      path: Path(),
+      dashLength: dashLength,
+      dashGapLength: dashGapLength,
+    );
+    final dashedPath = _getDashedPath(originalPath, dashLength, dashGapLength);
+    canvas.drawPath(
+      dashedPath,
+      Paint()
+        ..style = PaintingStyle.stroke
+        ..color = pathColor
+        ..strokeWidth = strokeWidth,
+    );
+  }
+
+  @override
+  bool shouldRepaint(DashedPathPainterCard oldDelegate) => false;
+
+  Path _getDashedPath(
+    Path originalPath,
+    double dashLength,
+    double dashGapLength,
+  ) {
+    final metricsIterator = originalPath.computeMetrics().iterator;
+    while (metricsIterator.moveNext()) {
+      final metric = metricsIterator.current;
+      _dashedPathProperties.extractedPathLength = 0.0;
+      while (_dashedPathProperties.extractedPathLength < metric.length) {
+        if (_dashedPathProperties.addDashNext) {
+          _dashedPathProperties.addDash(metric, dashLength);
+        } else {
+          _dashedPathProperties.addDashGap(metric, dashGapLength);
+        }
+      }
+    }
+    return _dashedPathProperties.path;
+  }
+}
+
 
 // Code for the dased Oval line, taken from here:
 // https://stackoverflow.com/questions/54019785/how-to-add-line-dash-in-flutter (25.05.22)
