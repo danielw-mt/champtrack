@@ -288,22 +288,23 @@ class HeatmapOverlayPainter extends CustomPainter {
     Offset center =
         Offset(0, fieldSizeParameter.availableCardHeatmapHeight / 2);
 
-    for (var i = 0; i < coordinates.length; i++) {
+
+    // for (var i = 0; i < coordinates.length; i++) {
       
-      print(coordinates[i]);
-      print(actionContext[i]);
-      if (actionContext[i] == "attack") {
-        center = Offset(coordinates[i][0], coordinates[i][1]);
-      }else{
-        center = Offset(coordinates[i][0] + fieldSizeParameter.availableCardHeatmapWidth, 
-        coordinates[i][1]);
-      }
-      paintActionCircle(canvas, center, 10);
-    }
+    //   print(coordinates[i]);
+    //   print(actionContext[i]);
+    //   // if (actionContext[i] == "attack") {
+    //   //   center = Offset(coordinates[i][0], coordinates[i][1]);
+    //   // }else{
+    //   //   center = Offset(coordinates[i][0] + fieldSizeParameter.availableCardHeatmapWidth, 
+    //   //   coordinates[i][1]);
+    //   // }
+    //   paintActionCircle(canvas, center, 10);
+    // }
     
     for (var el in coordinates) {
-      print(el);
-      paintActionCircle(canvas, Offset(el[0], el[1]), 10);
+      print("Element to print: " + el.toString());
+      paintActionCircle(canvas, Offset(el["coordinates"][0], el["coordinates"][1]), 10);
     }
     
   }
@@ -329,7 +330,6 @@ class CardFieldPainter extends CustomPainter {
   Color nineMeterColor;
   Color sixMeterColor;
   Color fieldBackgroundColor;
-  bool onHeatMapCard = true;
   CardFieldPainter(this.leftSide, this.nineMeterColor, this.sixMeterColor,
       this.fieldBackgroundColor);
 

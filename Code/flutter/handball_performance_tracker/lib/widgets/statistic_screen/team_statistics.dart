@@ -100,10 +100,25 @@ class _TeamStatisticsState extends State<TeamStatistics> {
       stopTime = _statistics[_selectedGame.id]["stop_time"];
 
       actionCoordinates = teamStats["action_coordinates"];
+      print("action coordinates");
       print(actionCoordinates);
       actionContext = teamStats["action_context"];
       print("context");
       print(actionContext);
+      // combine the list actionCoordinates and action coordinates to an map where each key contains a dict including the action and its context
+      // Map<String, dynamic> actionCoordinatesWithContext = {};
+      // for (String action in actionCoordinates.keys) {
+      //   List<dynamic>? coordinates = actionCoordinates[action];
+      //   List<String>? context = actionContext[action];
+      //   List<dynamic> coordinatesWithContext = [];
+      //   for (int i = 0; i < coordinates!.length; i++) {
+      //     coordinatesWithContext.add([coordinates[i], context![i]]);
+      //   }
+      //   actionCoordinatesWithContext[action] = coordinatesWithContext;
+      // }
+      // print("coordinates with context");
+      // print(actionCoordinatesWithContext);
+
 
       // try to get quotas for player
       quotas[0][0] = double.parse(teamStats["seven_meter_quota"][0].toString());

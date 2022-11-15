@@ -146,13 +146,15 @@ class CardFieldSwitch extends StatelessWidget {
 
   static final PageController pageController = PageController();
 
+
+
   @override
   Widget build(BuildContext context) {
     return PageView(
       controller: pageController,
       children: <Widget>[
-        CustomCardField(actionCoordinates, true, actionContext),
-        CustomCardField(actionCoordinates, false, actionContext),
+        CustomCardField(actionCoordinates.where((i) => i["context"] == "attack").toList(), true, actionContext),
+        CustomCardField(actionCoordinates.where((i) => i["context"] != "attack").toList(), false, actionContext),
       ],
     );
   }

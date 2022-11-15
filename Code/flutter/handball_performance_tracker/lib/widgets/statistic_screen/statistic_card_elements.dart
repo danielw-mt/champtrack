@@ -211,6 +211,24 @@ class _HeatMapCardState extends State<HeatMapCard> {
       //print(_dropDownElements);
       _selectedDropdownElement = _dropDownElements[0];
     }
+
+    print("fake action context");
+    print(actionContextFake);
+    print("fake action coordinates");
+    print(actionCoordinatesFake);
+
+    
+    for (String action in actionCoordinatesFake.keys) {
+      List<dynamic>? coordinates = actionCoordinatesFake[action];
+      List<String>? context = actionContextFake[action];
+      List<dynamic> coordinatesWithContext = [];
+      for (int i = 0; i < coordinates!.length; i++) {
+        coordinatesWithContext.add({"coordinates": coordinates[i], "context": context![i]});
+      }
+      actionCoordinatesWithContext[action] = coordinatesWithContext;
+    }
+    print("coordinates with context");
+    print(actionCoordinatesWithContext);
   }
 
   final Map<String, List<dynamic>> actionCoordinatesFake = {
@@ -246,6 +264,8 @@ class _HeatMapCardState extends State<HeatMapCard> {
     ]
   };
 
+  Map<String, dynamic> actionCoordinatesWithContext = {};
+
   @override
   Widget build(BuildContext context) {
     if (widget.actionCoordinates.length == 0) {
@@ -272,7 +292,8 @@ class _HeatMapCardState extends State<HeatMapCard> {
           Expanded(
             flex: 12,
             child: CardFieldSwitch(
-                actionCoordinatesFake[_selectedDropdownElement]!, actionContextFake[_selectedDropdownElement]!),
+                actionCoordinatesWithContext[_selectedDropdownElement]!,
+                actionContextFake[_selectedDropdownElement]!),
           ),
         ],
       ),
