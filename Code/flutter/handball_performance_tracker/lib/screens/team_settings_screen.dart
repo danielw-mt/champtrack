@@ -27,9 +27,9 @@ class TeamSettingsScreen extends StatelessWidget {
       id: "team-setting-screen",
       builder: (gameController) {
         return DefaultTabController(
-          initialIndex: gameController.getSelectedTeamSetting(),
-          length: 3,
-          child: Scaffold(
+            initialIndex: gameController.getSelectedTeamSetting(),
+            length: 3,
+            child: Scaffold(
               appBar: AppBar(
                   backgroundColor: buttonDarkBlueColor, title: Text("Teams")),
               key: _scaffoldKey,
@@ -45,36 +45,36 @@ class TeamSettingsScreen extends StatelessWidget {
                   Column(mainAxisAlignment: MainAxisAlignment.start, children: [
                 if (gameController.getSelectedTeamSetting() == 0) ...[
                   Expanded(
-                      child: Column(children: [
-                    Expanded(child: PlayersList()),
-                    Flexible(
-                        child: ElevatedButton(
-                            onPressed: () {
-                              Alert(
-                                context: context,
-                                buttons: [],
-                                content: SizedBox(
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.7,
-                                  height:
-                                      MediaQuery.of(context).size.height * 0.7,
-                                  child: Column(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
-                                    children: [PlayerForm()],
-                                  ),
-                                ),
-                              ).show();
-                            },
-                            child: Text(StringsTeamManagement.lAddPlayer))),
-                  ]))
+                    child: PlayerGridList(tempController
+                        .getPlayersFromSelectedTeam()), // TODO: flex 2 is a workaround for the bug that the list is not scrollable
+                    //Expanded(child: PlayersList()),
+                  )
                 ],
                 if (gameController.getSelectedTeamSetting() == 1)
                   Expanded(child: Center(child: GameList())),
                 if (gameController.getSelectedTeamSetting() == 2)
                   Center(child: TeamDetailsForm())
-              ])),
-        );
+              ]),
+              // floatingActionButton: FloatingActionButton(
+              //   tooltip: StringsTeamManagement.lAddPlayer,
+              //   onPressed: () {
+              //     Alert(
+              //       context: context,
+              //       buttons: [],
+              //       content: SizedBox(
+              //         width: MediaQuery.of(context).size.width * 0.7,
+              //         height: MediaQuery.of(context).size.height * 0.7,
+              //         child: Column(
+              //           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              //           children: [PlayerForm()],
+              //         ),
+              //       ),
+              //     ).show();
+              //   },
+              //   //child: Text(StringsTeamManagement.lAddPlayer)),
+              //   child: Icon(Icons.add),
+              // )
+            ));
       },
     ));
   }

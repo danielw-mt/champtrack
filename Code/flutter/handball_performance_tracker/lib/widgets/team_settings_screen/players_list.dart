@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:handball_performance_tracker/constants/colors.dart';
+import 'package:handball_performance_tracker/widgets/statistic_screen/statistic_card_elements.dart';
 import '../../constants/colors.dart';
 import '../../controllers/persistent_controller.dart';
 import '../../controllers/temp_controller.dart';
@@ -11,8 +12,49 @@ import '../../constants/stringsGeneral.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'player_edit_form.dart';
 
+class PlayerGridList extends StatelessWidget {
+  final List<Player> playersFromSelectedTeam;
 
-class PlayersList extends StatelessWidget{
+  PlayerGridList(List<Player> this.playersFromSelectedTeam);
+  @override
+  Widget build(BuildContext context) {
+    return Flexible(
+        child: GridView.count(
+            // Create a grid with 3 columns. If you change the scrollDirection to
+            // horizontal, this produces 2 rows.
+            crossAxisCount: 4,
+            // Generate #players widgets that display their index in the List.
+            children: List.generate(playersFromSelectedTeam.length, (index) {
+              return PlayerCard(playersFromSelectedTeam[index], context);
+            })));
+  }
+
+  Widget PlayerCard(Player player, BuildContext context) {
+    return Flexible(
+      child: Card(
+        margin: EdgeInsets.all(5),
+        child: ListTile(
+            leading: CircleAvatar(child: Text(player.number.toString())),
+            title: Text(player.firstName + " " + player.lastName),
+            subtitle: Text(player.positions.toString()),
+            trailing: ElevatedButton(
+                onPressed: () {
+                  Alert(
+                    context: context,
+                    buttons: [],
+                    content: SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.7,
+                        height: MediaQuery.of(context).size.height * 0.8,
+                        child: PlayerForm(player.id.toString())),
+                  ).show();
+                },
+                child: Text("Edit"))),
+      ),
+    );
+  }
+}
+
+class PlayersList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetBuilder<TempController>(
@@ -33,7 +75,11 @@ class PlayersList extends StatelessWidget{
                   label: Text(StringsGeneral.lNumber),
                 ),
                 DataColumn(label: Text(StringsGeneral.lPosition)),
-                DataColumn(label: Text(StringsGeneral.lPlayerStartingOnField, softWrap: true,)),
+                DataColumn(
+                    label: Text(
+                  StringsGeneral.lPlayerStartingOnField,
+                  softWrap: true,
+                )),
                 DataColumn(label: Text(StringsGeneral.lEdit))
               ],
               rows: List<DataRow>.generate(
@@ -43,7 +89,7 @@ class PlayersList extends StatelessWidget{
                       .positions
                       .reduce((value, element) => value + ", " + element);
                   String playerId = playersList[index].id.toString();
-          
+
                   return DataRow(
                     color: MaterialStateProperty.resolveWith<Color?>(
                         (Set<MaterialState> states) {
@@ -64,7 +110,10 @@ class PlayersList extends StatelessWidget{
                       DataCell(Text(
                           "${playersList[index].firstName} ${playersList[index].lastName}")),
                       DataCell(Text(playersList[index].number.toString())),
-                      DataCell(Text(positionsString, softWrap: true,)),
+                      DataCell(Text(
+                        positionsString,
+                        softWrap: true,
+                      )),
                       DataCell(OnFieldCheckbox(
                         player: playersList[index],
                       )),
