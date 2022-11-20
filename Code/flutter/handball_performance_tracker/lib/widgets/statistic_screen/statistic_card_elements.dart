@@ -185,8 +185,7 @@ class _ActionsCardState extends State<ActionsCard> {
 class HeatMapCard extends StatefulWidget {
   final Map<String, dynamic> actionCoordinatesWithContext;
 
-  const HeatMapCard(
-      {Key? key, required this.actionCoordinatesWithContext})
+  const HeatMapCard({Key? key, required this.actionCoordinatesWithContext})
       : super(key: key);
   @override
   _HeatMapCardState createState() =>
@@ -204,12 +203,6 @@ class _HeatMapCardState extends State<HeatMapCard> {
   void initState() {
     super.initState();
 
-    if (actionCoordinatesWithContext.keys.length > 0) {
-      _dropDownElements = actionCoordinatesWithContext.keys.toList();
-      //print(_dropDownElements);
-      _selectedDropdownElement = _dropDownElements[0];
-    }
-
     print("fake action context");
     print(actionContextFake);
     print("fake action coordinates");
@@ -221,7 +214,8 @@ class _HeatMapCardState extends State<HeatMapCard> {
       List<String>? context = actionContextFake[action];
       List<dynamic> coordinatesWithContext = [];
       for (int i = 0; i < coordinates!.length; i++) {
-        coordinatesWithContext.add({"coordinates": coordinates[i], "context": context![i]});
+        coordinatesWithContext
+            .add({"coordinates": coordinates[i], "context": context![i]});
       }
       actionCoordinatesWithContext[action] = coordinatesWithContext;
     }
@@ -269,6 +263,18 @@ class _HeatMapCardState extends State<HeatMapCard> {
     if (widget.actionCoordinatesWithContext.length == 0) {
       return Center(child: Text(StringsGeneral.lNoDataAvailable));
     }
+    _dropDownElements = actionCoordinatesWithContext.keys.toList();
+
+    // if (actionCoordinatesWithContext.keys.length > 0) {
+    //   _dropDownElements = actionCoordinatesWithContext.keys.toList();
+    //   //print(_dropDownElements);
+    //   _selectedDropdownElement = _dropDownElements[0];
+    // }
+
+    // if we did not select an element yet, select the first one
+    if (_selectedDropdownElement == "") {
+      _selectedDropdownElement = _dropDownElements[0];
+    }
 
     // if a dropdown element is selected that is not available. (i.e. remnant from loading another game statistic previously)
     if (!_dropDownElements.contains(_selectedDropdownElement)) {
@@ -309,7 +315,7 @@ class _HeatMapCardState extends State<HeatMapCard> {
       // Array list of items
       items: _dropDownElements.map((String dropdownElement) {
         if (widget.actionCoordinatesWithContext[dropdownElement] == null) {
-          print("cannot display dropdown element" +
+          print("cannot display dropdown element " +
               dropdownElement +
               " which has no data");
           return DropdownMenuItem(
