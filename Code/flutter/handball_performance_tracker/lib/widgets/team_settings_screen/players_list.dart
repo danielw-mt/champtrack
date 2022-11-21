@@ -18,37 +18,44 @@ class PlayerGridList extends StatelessWidget {
   PlayerGridList(List<Player> this.playersFromSelectedTeam);
   @override
   Widget build(BuildContext context) {
-    return Flexible(
-        child: GridView.count(
-            // Create a grid with 3 columns. If you change the scrollDirection to
-            // horizontal, this produces 2 rows.
-            crossAxisCount: 4,
-            // Generate #players widgets that display their index in the List.
-            children: List.generate(playersFromSelectedTeam.length, (index) {
-              return PlayerCard(playersFromSelectedTeam[index], context);
-            })));
+    return GridView.count(
+        // Create a grid with 3 columns. If you change the scrollDirection to
+        // horizontal, this produces 2 rows.
+        crossAxisCount: 4,
+        childAspectRatio: 1.8,
+        // Generate #players widgets that display their index in the List.
+        children: List.generate(playersFromSelectedTeam.length, (index) {
+          return PlayerCard(playersFromSelectedTeam[index], context);
+        }));
   }
 
   Widget PlayerCard(Player player, BuildContext context) {
     return Flexible(
       child: Card(
         margin: EdgeInsets.all(5),
-        child: ListTile(
-            leading: CircleAvatar(child: Text(player.number.toString())),
-            title: Text(player.firstName + " " + player.lastName),
-            subtitle: Text(player.positions.toString()),
-            trailing: ElevatedButton(
-                onPressed: () {
-                  Alert(
-                    context: context,
-                    buttons: [],
-                    content: SizedBox(
-                        width: MediaQuery.of(context).size.width * 0.7,
-                        height: MediaQuery.of(context).size.height * 0.8,
-                        child: PlayerForm(player.id.toString())),
-                  ).show();
-                },
-                child: Text("Edit"))),
+        child: Center(
+          child: ListTile(
+              leading: CircleAvatar(child: Text(player.number.toString())),
+              title: Text(player.firstName + " " + player.lastName),
+              subtitle: Text(player.positions.toString()),
+              trailing: ElevatedButton(
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (context) {
+                        return Dialog(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(40)),
+                          child: SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.7,
+                              height: MediaQuery.of(context).size.height * 0.8,
+                              child: PlayerForm(player.id.toString())),
+                        );
+                      },
+                    );
+                  },
+                  child: Text("Edit"))),
+        ),
       ),
     );
   }
