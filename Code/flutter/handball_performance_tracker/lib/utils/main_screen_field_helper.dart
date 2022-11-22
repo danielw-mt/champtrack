@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:handball_performance_tracker/constants/game_actions.dart';
-import 'package:handball_performance_tracker/constants/fieldSizeParameter.dart' as fieldSizeParameter;
+import 'package:handball_performance_tracker/constants/fieldSizeParameter.dart'
+    as fieldSizeParameter;
 import 'dart:math' as math;
 import 'dart:ui' as ui;
 import '../constants/positions.dart';
@@ -45,8 +46,12 @@ class SectorCalc {
   inSixMeterEllipse(num x, num y) {
     num yCentered = y - fieldSizeParameter.fieldHeight / 2;
     num xCentered = x - xOffset;
-    return (xCentered * xCentered) / (fieldSizeParameter.sixMeterRadiusX * fieldSizeParameter.sixMeterRadiusX) +
-            (yCentered * yCentered) / (fieldSizeParameter.sixMeterRadiusY * fieldSizeParameter.sixMeterRadiusY) <=
+    return (xCentered * xCentered) /
+                (fieldSizeParameter.sixMeterRadiusX *
+                    fieldSizeParameter.sixMeterRadiusX) +
+            (yCentered * yCentered) /
+                (fieldSizeParameter.sixMeterRadiusY *
+                    fieldSizeParameter.sixMeterRadiusY) <=
         1;
   }
 
@@ -57,8 +62,12 @@ class SectorCalc {
   inNineMeterEllipse(num x, num y) {
     num yCentered = y - fieldSizeParameter.fieldHeight / 2;
     num xCentered = x - xOffset;
-    return (xCentered * xCentered) / (fieldSizeParameter.nineMeterRadiusX * fieldSizeParameter.nineMeterRadiusX) +
-            (yCentered * yCentered) / (fieldSizeParameter.nineMeterRadiusY * fieldSizeParameter.nineMeterRadiusY) <=
+    return (xCentered * xCentered) /
+                (fieldSizeParameter.nineMeterRadiusX *
+                    fieldSizeParameter.nineMeterRadiusX) +
+            (yCentered * yCentered) /
+                (fieldSizeParameter.nineMeterRadiusY *
+                    fieldSizeParameter.nineMeterRadiusY) <=
         1;
   }
 
@@ -67,12 +76,17 @@ class SectorCalc {
   * @return  true if (x,y) is inside and otherwise false.
   */
   bool determineGoal(num x, num y) {
-    bool inGoal = y > fieldSizeParameter.fieldHeight / 2 - fieldSizeParameter.goalHeight / 2 &&
-        y < fieldSizeParameter.fieldHeight / 2 + fieldSizeParameter.goalHeight / 2;
+    bool inGoal = y >
+            fieldSizeParameter.fieldHeight / 2 -
+                fieldSizeParameter.goalHeight / 2 &&
+        y <
+            fieldSizeParameter.fieldHeight / 2 +
+                fieldSizeParameter.goalHeight / 2;
     if (leftSide) {
       inGoal = inGoal && x < fieldSizeParameter.goalWidth;
     } else {
-      inGoal = inGoal && x > fieldSizeParameter.fieldWidth - fieldSizeParameter.goalWidth;
+      inGoal = inGoal &&
+          x > fieldSizeParameter.fieldWidth - fieldSizeParameter.goalWidth;
     }
     return inGoal;
   }
@@ -121,7 +135,8 @@ class SectorCalc {
         yIntercept = yIntercepts[i] - gradient * xOffset;
       }
       // check if (x,y) is below this line and still above the line below
-      bool inSector = (gradient * x + yIntercept <= y) && (lowerGradient * x + lowerIntercept > y);
+      bool inSector = (gradient * x + yIntercept <= y) &&
+          (lowerGradient * x + lowerIntercept > y);
       lowerGradient = gradient;
       lowerIntercept = yIntercept;
       if (inSector == true) {
@@ -148,7 +163,8 @@ class FieldPainter extends CustomPainter {
   Color nineMeterColor;
   Color sixMeterColor;
   Color fieldBackgroundColor;
-  FieldPainter(this.leftSide, this.nineMeterColor, this.sixMeterColor, this.fieldBackgroundColor);
+  FieldPainter(this.leftSide, this.nineMeterColor, this.sixMeterColor,
+      this.fieldBackgroundColor);
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -171,7 +187,8 @@ class FieldPainter extends CustomPainter {
     // draw background
     canvas.drawRect(
         Rect.fromCenter(
-            center: Offset(fieldSizeParameter.fieldWidth / 2, fieldSizeParameter.fieldHeight / 2),
+            center: Offset(fieldSizeParameter.fieldWidth / 2,
+                fieldSizeParameter.fieldHeight / 2),
             width: fieldSizeParameter.fieldWidth,
             height: fieldSizeParameter.fieldHeight),
         Paint()..color = fieldBackgroundColor);
@@ -204,13 +221,20 @@ class FieldPainter extends CustomPainter {
     double x2;
     // difference between y1 and y2 determines the length of the 7m line.
     double yDifferenceFactor = 0.035;
-    double y1 = fieldSizeParameter.fieldHeight / 2 - fieldSizeParameter.fieldHeight * yDifferenceFactor;
-    double y2 = fieldSizeParameter.fieldHeight / 2 + fieldSizeParameter.fieldHeight * yDifferenceFactor;
+    double y1 = fieldSizeParameter.fieldHeight / 2 -
+        fieldSizeParameter.fieldHeight * yDifferenceFactor;
+    double y2 = fieldSizeParameter.fieldHeight / 2 +
+        fieldSizeParameter.fieldHeight * yDifferenceFactor;
     if (leftSide) {
-      x1 = (fieldSizeParameter.sixMeterRadiusX * 2 + fieldSizeParameter.nineMeterRadiusX) / 3;
+      x1 = (fieldSizeParameter.sixMeterRadiusX * 2 +
+              fieldSizeParameter.nineMeterRadiusX) /
+          3;
       x2 = x1;
     } else {
-      x1 = fieldSizeParameter.fieldWidth - (fieldSizeParameter.sixMeterRadiusX * 2 + fieldSizeParameter.nineMeterRadiusX) / 3;
+      x1 = fieldSizeParameter.fieldWidth -
+          (fieldSizeParameter.sixMeterRadiusX * 2 +
+                  fieldSizeParameter.nineMeterRadiusX) /
+              3;
       x2 = x1;
     }
     canvas.drawLine(
@@ -239,6 +263,245 @@ class FieldPainter extends CustomPainter {
   @override
   bool shouldRebuildSemantics(FieldPainter oldDelegate) => false;
 }
+
+class HeatmapOverlayPainter extends CustomPainter {
+  final Color color;
+  final List coordinatesWithContext;
+  HeatmapOverlayPainter(
+      {required this.color, required this.coordinatesWithContext});
+
+  void paintActionCircle(Canvas canvas, Offset center, double radius) {
+    Paint paint = Paint()
+      ..color = color
+      ..style = PaintingStyle.fill;
+    canvas.drawCircle(center, radius, paint);
+  }
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = color
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 2.0;
+
+    for (var el in coordinatesWithContext) {
+      //print("Element to print: " + el.toString());
+      paintActionCircle(
+          canvas, Offset(el["coordinates"][0], el["coordinates"][1]), 10);
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) {
+    return true;
+  }
+}
+
+class CardFieldPainter extends CustomPainter {
+  bool leftSide = true;
+  Color nineMeterColor;
+  Color sixMeterColor;
+  Color fieldBackgroundColor;
+  CardFieldPainter(this.leftSide, this.nineMeterColor, this.sixMeterColor,
+      this.fieldBackgroundColor);
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    double xOffset;
+    double startAngle;
+    double sweepAngle;
+    double goalOffset;
+    // set Parameters for field side
+    if (leftSide) {
+      xOffset = 0;
+      startAngle = math.pi / 2;
+      sweepAngle = -math.pi;
+      goalOffset = xOffset + fieldSizeParameter.goalWidthCard / 2;
+    } else {
+      xOffset = fieldSizeParameter.availableCardHeatmapWidth;
+      startAngle = math.pi / 2;
+      sweepAngle = math.pi;
+      goalOffset = xOffset - fieldSizeParameter.goalWidthCard / 2;
+    }
+    // draw background
+    canvas.drawRect(
+        Rect.fromCenter(
+            center: Offset(fieldSizeParameter.availableCardHeatmapWidth / 2,
+                fieldSizeParameter.availableCardHeatmapHeight / 2),
+            width: fieldSizeParameter.availableCardHeatmapWidth,
+            height: fieldSizeParameter.availableCardHeatmapHeight),
+        Paint()..color = fieldBackgroundColor);
+
+    // draw bigger 9m oval
+    canvas.drawArc(
+        Rect.fromCenter(
+            center: Offset(
+                xOffset, fieldSizeParameter.availableCardHeatmapHeight / 2),
+            width: fieldSizeParameter.nineMeterRadiusXCard * 2,
+            height: fieldSizeParameter.nineMeterRadiusYCard * 2),
+        startAngle,
+        sweepAngle,
+        false,
+        Paint()..color = nineMeterColor);
+
+    // draw smaller 6m oval
+    canvas.drawArc(
+        Rect.fromCenter(
+            center: Offset(
+                xOffset, fieldSizeParameter.availableCardHeatmapHeight / 2),
+            width: fieldSizeParameter.sixMeterRadiusXCard * 2,
+            height: fieldSizeParameter.sixMeterRadiusYCard * 2),
+        startAngle,
+        sweepAngle,
+        false,
+        Paint()..color = sixMeterColor);
+
+    // draw 7m line
+    // To draw a line you need two points: (x1,y1) and (x2,y2)
+    double x1;
+    double x2;
+    // difference between y1 and y2 determines the length of the 7m line.
+    double yDifferenceFactor = 0.035;
+    double y1 = fieldSizeParameter.availableCardHeatmapHeight / 2 -
+        fieldSizeParameter.availableCardHeatmapHeight * yDifferenceFactor;
+    double y2 = fieldSizeParameter.availableCardHeatmapHeight / 2 +
+        fieldSizeParameter.availableCardHeatmapHeight * yDifferenceFactor;
+    if (leftSide) {
+      x1 = (fieldSizeParameter.sixMeterRadiusXCard * 2 +
+              fieldSizeParameter.nineMeterRadiusXCard) /
+          3;
+      x2 = x1;
+    } else {
+      x1 = fieldSizeParameter.availableCardHeatmapWidth -
+          (fieldSizeParameter.sixMeterRadiusXCard * 2 +
+                  fieldSizeParameter.nineMeterRadiusXCard) /
+              3;
+      x2 = x1;
+    }
+    canvas.drawLine(
+        Offset(x1, y1),
+        Offset(x2, y2),
+        Paint()
+          ..color = Colors.black
+          ..strokeWidth = fieldSizeParameter.lineSize);
+
+    // draw goal
+    canvas.drawRect(
+        Rect.fromCenter(
+            center: Offset(
+                goalOffset, fieldSizeParameter.availableCardHeatmapHeight / 2),
+            width: fieldSizeParameter.goalWidthCard,
+            height: fieldSizeParameter.goalHeightCard),
+        Paint()..color = nineMeterColor);
+  }
+
+  // Since this painter has no fields, it always paints
+  // the same thing and semantics information is the same.
+  // Therefore we return false here. If we had fields (set
+  // from the constructor) then we would return true if any
+  // of them differed from the same fields on the oldDelegate.
+  @override
+  bool shouldRepaint(CardFieldPainter oldDelegate) => false;
+  @override
+  bool shouldRebuildSemantics(CardFieldPainter oldDelegate) => false;
+}
+
+class DashedPathPainterCard extends CustomPainter {
+  late Path originalPath;
+  bool isEllipse; // false for goal rectangle
+  final Color pathColor;
+  final double strokeWidth = fieldSizeParameter.lineSize;
+  final double dashGapLength;
+  final double dashLength;
+  late DashedPathProperties _dashedPathProperties;
+  bool leftSide = true;
+
+  DashedPathPainterCard({
+    required this.leftSide,
+    required this.isEllipse,
+    this.pathColor = Colors.black,
+    this.dashGapLength = 7,
+    this.dashLength = 7.3,
+  });
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    double xOffset;
+    double goalOffset;
+    double startAngle;
+    double sweepAngle;
+    // set Parameters for field side
+    if (leftSide) {
+      xOffset = 0;
+      startAngle = math.pi / 2;
+      sweepAngle = -math.pi;
+      goalOffset = xOffset + fieldSizeParameter.goalWidthCard / 2;
+    } else {
+      xOffset = fieldSizeParameter.availableCardHeatmapWidth;
+      startAngle = math.pi / 2;
+      sweepAngle = math.pi;
+      goalOffset = xOffset - fieldSizeParameter.goalWidthCard / 2;
+    }
+
+    if (isEllipse) {
+      // definde 9m oval
+      originalPath = Path()
+        ..addArc(
+          Rect.fromCenter(
+              center: Offset(xOffset, fieldSizeParameter.availableCardHeatmapHeight / 2),
+              width: fieldSizeParameter.nineMeterRadiusXCard * 2,
+              height: fieldSizeParameter.nineMeterRadiusYCard * 2),
+          startAngle,
+          sweepAngle,
+        );
+    } else {
+      originalPath = Path()
+        ..addRect(
+          Rect.fromCenter(
+              center: Offset(goalOffset, fieldSizeParameter.availableCardHeatmapHeight / 2),
+              width: fieldSizeParameter.goalWidthCard,
+              height: fieldSizeParameter.goalHeightCard),
+        );
+    }
+    _dashedPathProperties = DashedPathProperties(
+      path: Path(),
+      dashLength: dashLength,
+      dashGapLength: dashGapLength,
+    );
+    final dashedPath = _getDashedPath(originalPath, dashLength, dashGapLength);
+    canvas.drawPath(
+      dashedPath,
+      Paint()
+        ..style = PaintingStyle.stroke
+        ..color = pathColor
+        ..strokeWidth = strokeWidth,
+    );
+  }
+
+  @override
+  bool shouldRepaint(DashedPathPainterCard oldDelegate) => false;
+
+  Path _getDashedPath(
+    Path originalPath,
+    double dashLength,
+    double dashGapLength,
+  ) {
+    final metricsIterator = originalPath.computeMetrics().iterator;
+    while (metricsIterator.moveNext()) {
+      final metric = metricsIterator.current;
+      _dashedPathProperties.extractedPathLength = 0.0;
+      while (_dashedPathProperties.extractedPathLength < metric.length) {
+        if (_dashedPathProperties.addDashNext) {
+          _dashedPathProperties.addDash(metric, dashLength);
+        } else {
+          _dashedPathProperties.addDashGap(metric, dashGapLength);
+        }
+      }
+    }
+    return _dashedPathProperties.path;
+  }
+}
+
 
 // Code for the dased Oval line, taken from here:
 // https://stackoverflow.com/questions/54019785/how-to-add-line-dash-in-flutter (25.05.22)

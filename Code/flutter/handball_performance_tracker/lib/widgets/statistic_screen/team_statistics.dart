@@ -35,9 +35,11 @@ class _TeamStatisticsState extends State<TeamStatistics> {
     if (_teams.length > 0) {
       _selectedTeam = _teams[0];
       // get allGame that are cached in persistentController
-      List<Game> allGames = _persistentController.getAllGames(teamId: _selectedTeam.id);
+      List<Game> allGames =
+          _persistentController.getAllGames(teamId: _selectedTeam.id);
       // only actually show games that are in the statistics map
-      _games = allGames.where((game) => _statistics.containsKey(game.id)).toList();
+      _games =
+          allGames.where((game) => _statistics.containsKey(game.id)).toList();
       // if there are no teams ofc there are no players and no games
     } else {
       _games = [];
@@ -57,9 +59,11 @@ class _TeamStatisticsState extends State<TeamStatistics> {
   void onTeamSelected(Team team) {
     setState(() {
       _selectedTeam = team;
-      List<Game> allGames = _persistentController.getAllGames(teamId: _selectedTeam.id);
+      List<Game> allGames =
+          _persistentController.getAllGames(teamId: _selectedTeam.id);
       // only actually show games that are in the statistics map
-      _games = allGames.where((game) => _statistics.containsKey(game.id)).toList();
+      _games =
+          allGames.where((game) => _statistics.containsKey(game.id)).toList();
       _selectedGame = _games[0];
     });
   }
@@ -68,6 +72,9 @@ class _TeamStatisticsState extends State<TeamStatistics> {
   Widget build(BuildContext context) {
     Map<String, int> actionCounts = {};
     Map<String, List<int>> actionSeries = {};
+    Map<String, List<dynamic>> actionCoordinates = {};
+    Map<String, List<String>> actionContext = {};
+    Map<String, dynamic> actionCoordinatesWithContext = {};
     int startTime = 0;
     int stopTime = 0;
     List<List<double>> quotas = [
@@ -78,7 +85,8 @@ class _TeamStatisticsState extends State<TeamStatistics> {
     List<double> efScoreSeries = [];
     List<int> timeStamps = [];
     try {
-      Map<String, dynamic> teamStats = _statistics[_selectedGame.id]["team_stats"][_selectedTeam.id];
+      Map<String, dynamic> teamStats =
+          _statistics[_selectedGame.id]["team_stats"][_selectedTeam.id];
       // try to get action counts for the player
       actionCounts = teamStats["action_counts"];
       // try to get action_series for player
@@ -91,6 +99,27 @@ class _TeamStatisticsState extends State<TeamStatistics> {
       // try to get start time for game
       startTime = _statistics[_selectedGame.id]["start_time"];
       stopTime = _statistics[_selectedGame.id]["stop_time"];
+
+      actionCoordinates = teamStats["action_coordinates"];
+      print("action coordinates");
+      print(actionCoordinates);
+      actionContext = teamStats["action_context"];
+      print("context");
+      print(actionContext);
+      // combine the list actionCoordinates and action coordinates to an map where each key contains a dict including the action and its context
+      
+      for (String action in actionCoordinates.keys) {
+        List<dynamic>? coordinates = actionCoordinates[action];
+        List<String>? context = actionContext[action];
+        List<dynamic> coordinatesWithContext = [];
+        for (int i = 0; i < coordinates!.length; i++) {
+          coordinatesWithContext.add([coordinates[i], context![i]]);
+        }
+        actionCoordinatesWithContext[action] = coordinatesWithContext;
+      }
+      // print("coordinates with context");
+      // print(actionCoordinatesWithContext);
+
 
       // try to get quotas for player
       quotas[0][0] = double.parse(teamStats["seven_meter_quota"][0].toString());
@@ -124,8 +153,12 @@ class _TeamStatisticsState extends State<TeamStatistics> {
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
-                                TeamSelector(teams: _teams, onTeamSelected: onTeamSelected),
-                                GameSelector(games: _games, onGameSelected: onGameSelected)
+                                TeamSelector(
+                                    teams: _teams,
+                                    onTeamSelected: onTeamSelected),
+                                GameSelector(
+                                    games: _games,
+                                    onGameSelected: onGameSelected)
                               ],
                             ),
                           )),
@@ -146,7 +179,11 @@ class _TeamStatisticsState extends State<TeamStatistics> {
                     children: [
                       Flexible(
                         child: PerformanceCard(
-                            actionSeries: actionSeries, efScoreSeries: [], allActionTimeStamps: timeStamps, startTime: startTime, stopTime: stopTime),
+                            actionSeries: actionSeries,
+                            efScoreSeries: [],
+                            allActionTimeStamps: timeStamps,
+                            startTime: startTime,
+                            stopTime: stopTime),
                       ),
                       Expanded(
                         // TODO change ActionCards to stateless widget
@@ -166,14 +203,22 @@ class _TeamStatisticsState extends State<TeamStatistics> {
                   // only pass the penalty values if they can be found in the actionCounts map
                   // if there is no value for that penalty pass 0
                   child: PenaltyInfoCard(
-                    redCards: actionCounts[redCardTag] == null ? 0 : actionCounts[redCardTag]!,
-                    yellowCards: actionCounts[yellowCardTag] == null ? 0 : actionCounts[yellowCardTag]!,
-                    timePenalties: actionCounts[timePenaltyTag] == null ? 0 : actionCounts[timePenaltyTag]!,
+                    redCards: actionCounts[redCardTag] == null
+                        ? 0
+                        : actionCounts[redCardTag]!,
+                    yellowCards: actionCounts[yellowCardTag] == null
+                        ? 0
+                        : actionCounts[yellowCardTag]!,
+                    timePenalties: actionCounts[timePenaltyTag] == null
+                        ? 0
+                        : actionCounts[timePenaltyTag]!,
                   ),
                 ),
                 Expanded(
                   flex: 4,
-                  child: Card(child: Image(image: AssetImage('images/statistics2_heatmap.jpg'))),
+                  child: HeatMapCard(actionCoordinatesWithContext: actionCoordinatesWithContext),
+
+                  // child: Card(child: Image(image: AssetImage('images/statistics2_heatmap.jpg'))),
                 )
               ],
             )),

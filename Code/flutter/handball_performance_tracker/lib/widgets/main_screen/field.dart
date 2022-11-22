@@ -22,19 +22,20 @@ class CustomField extends StatelessWidget {
         CustomPaint(
           // Give colors: 9m(middle-dark),6m(dark),background(light)
           painter: FieldPainter(
-              fieldIsLeft,
-              (fieldIsLeft && tempController.getAttackIsLeft() ||
-                      !fieldIsLeft && !tempController.getAttackIsLeft())
-                  ? attackMiddleColor
-                  : defenseMiddleColor,
-              (fieldIsLeft && tempController.getAttackIsLeft() ||
-                      !fieldIsLeft && !tempController.getAttackIsLeft())
-                  ? attackDarkColor
-                  : defenseDarkColor,
-              (fieldIsLeft && tempController.getAttackIsLeft() ||
-                      !fieldIsLeft && !tempController.getAttackIsLeft())
-                  ? attackLightColor
-                  : defenseLightColor),
+            fieldIsLeft,
+            (fieldIsLeft && tempController.getAttackIsLeft() ||
+                    !fieldIsLeft && !tempController.getAttackIsLeft())
+                ? attackMiddleColor
+                : defenseMiddleColor,
+            (fieldIsLeft && tempController.getAttackIsLeft() ||
+                    !fieldIsLeft && !tempController.getAttackIsLeft())
+                ? attackDarkColor
+                : defenseDarkColor,
+            (fieldIsLeft && tempController.getAttackIsLeft() ||
+                    !fieldIsLeft && !tempController.getAttackIsLeft())
+                ? attackLightColor
+                : defenseLightColor,
+          ),
           // GestureDetector to handle on click or swipe
           child: GestureDetector(
               // handle coordinates on click
@@ -42,7 +43,7 @@ class CustomField extends StatelessWidget {
             // Set last location in controller before calling action menu, because it is queried there.
             tempController.setLastLocation(SectorCalc(fieldIsLeft)
                 .calculatePosition(details.localPosition));
-            callActionMenu(context);         
+            callActionMenu(context);
           }),
         ),
         // Painter of dashed 9m
@@ -52,6 +53,51 @@ class CustomField extends StatelessWidget {
         CustomPaint(
             painter:
                 DashedPathPainter(leftSide: fieldIsLeft, isEllipse: false)),
+      ]),
+    );
+  }
+}
+
+class CustomCardField extends StatelessWidget {
+  final List<dynamic> coordinatesWithContext;
+  final bool fieldIsLeft;
+  CustomCardField(this.coordinatesWithContext, this.fieldIsLeft);
+
+  @override
+  Widget build(BuildContext context) {
+
+    return GetBuilder<TempController>(
+      id: "custom-card-field",
+      builder: (TempController tempController) => Stack(children: [
+        // Painter of 7m, 6m and filled 9m
+        CustomPaint(
+          // Give colors: 9m(middle-dark),6m(dark),background(light)
+          painter: CardFieldPainter(fieldIsLeft, (fieldIsLeft && tempController.getAttackIsLeft() ||
+                    !fieldIsLeft && !tempController.getAttackIsLeft())
+                ? attackMiddleColor
+                : defenseMiddleColor,
+            (fieldIsLeft && tempController.getAttackIsLeft() ||
+                    !fieldIsLeft && !tempController.getAttackIsLeft())
+                ? attackDarkColor
+                : defenseDarkColor,
+            (fieldIsLeft && tempController.getAttackIsLeft() ||
+                    !fieldIsLeft && !tempController.getAttackIsLeft())
+                ? attackLightColor
+                : defenseLightColor),
+          child: Container(),
+          foregroundPainter: HeatmapOverlayPainter(
+              color: Colors.red,
+              coordinatesWithContext: coordinatesWithContext),
+        ),
+
+        // TODO integrate paint lines into CardFieldPainter
+        // Painter of dashed 9m
+        CustomPaint(
+            painter: DashedPathPainterCard(leftSide: fieldIsLeft, isEllipse: true)),
+        // Painter of dashed goal
+        CustomPaint(
+            painter:
+                DashedPathPainterCard(leftSide: fieldIsLeft, isEllipse: false)),
       ]),
     );
   }
@@ -75,6 +121,24 @@ class FieldSwitch extends StatelessWidget {
         CustomField(
           fieldIsLeft: false,
         ),
+      ],
+    );
+  }
+}
+
+class CardFieldSwitch extends StatelessWidget {
+  final List<dynamic> coordinatesWithContext;
+  CardFieldSwitch(this.coordinatesWithContext);
+
+  static final PageController pageController = PageController();
+
+  @override
+  Widget build(BuildContext context) {
+    return PageView(
+      controller: pageController,
+      children: <Widget>[
+        CustomCardField(coordinatesWithContext.where((i) => i["context"] == "attack").toList(), true),
+        CustomCardField(coordinatesWithContext.where((i) => i["context"] != "attack").toList(), false),
       ],
     );
   }

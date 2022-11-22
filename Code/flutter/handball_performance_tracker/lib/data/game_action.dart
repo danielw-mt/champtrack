@@ -8,6 +8,7 @@ class GameAction {
   String context;
   String tag;
   List<String> throwLocation;
+  List<int> actionCoordinates;
   int timestamp;
   int relativeTime;
 
@@ -19,6 +20,7 @@ class GameAction {
       this.context = "",
       this.tag = "",
       this.throwLocation = const [],
+      this.actionCoordinates = const [],
       this.timestamp = 0,
       this.relativeTime = 0});
 
@@ -31,6 +33,7 @@ class GameAction {
       'context': context,
       'tag': tag,
       'throwLocation': throwLocation,
+      'actionCoordinates': actionCoordinates,
       'timestamp': timestamp,
       'relativeTime': relativeTime
     };
@@ -52,6 +55,7 @@ class GameAction {
         context: map['context'],
         tag: map['tag'],
         throwLocation: map['throwLocation'].cast<String>(),
+        actionCoordinates: map['actionCoordinates'].cast<int>(),
         timestamp: map['timestamp'],
         relativeTime: map['relativeTime']);
   }
@@ -65,6 +69,7 @@ class GameAction {
             playerId: action.playerId,
             relativeTime: action.relativeTime,
             throwLocation: action.throwLocation,
+            actionCoordinates: action.actionCoordinates,
             timestamp: action.timestamp,
             context: action.context);
 }
