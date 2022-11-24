@@ -150,6 +150,7 @@ class FieldPainter extends CustomPainter {
   Color fieldBackgroundColor;
   FieldPainter(this.leftSide, this.nineMeterColor, this.sixMeterColor, this.fieldBackgroundColor);
 
+
   @override
   void paint(Canvas canvas, Size size) {
     double xOffset;
@@ -229,13 +230,14 @@ class FieldPainter extends CustomPainter {
         Paint()..color = nineMeterColor);
   }
 
+  // If we have fields (set from the constructor) that are different than the old state 
+  // then repaint (thats why we return true) because the differ from the oldDelegate.
+  @override
+  bool shouldRepaint(FieldPainter oldDelegate) => true;
+
   // Since this painter has no fields, it always paints
   // the same thing and semantics information is the same.
-  // Therefore we return false here. If we had fields (set
-  // from the constructor) then we would return true if any
-  // of them differed from the same fields on the oldDelegate.
-  @override
-  bool shouldRepaint(FieldPainter oldDelegate) => false;
+  // Therefore we return false here.
   @override
   bool shouldRebuildSemantics(FieldPainter oldDelegate) => false;
 }

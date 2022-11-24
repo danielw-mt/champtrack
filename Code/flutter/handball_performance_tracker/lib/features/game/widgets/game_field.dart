@@ -13,7 +13,9 @@ class PaintedField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final gameBloc = context.watch<GameBloc>();
+    print("PaintedField build");
     bool displayAttackColor = fieldIsLeft && gameBloc.state.attackIsLeft || !fieldIsLeft && !gameBloc.state.attackIsLeft;
+    print("displayAttackColor: $displayAttackColor");
     return Stack(children: [
       // Painter of 7m, 6m and filled 9m
       CustomPaint(
@@ -27,7 +29,7 @@ class PaintedField extends StatelessWidget {
           // Set last location in controller before calling action menu, because it is queried there.
           // Old code:
           //tempController.setLastLocation(SectorCalc(fieldIsLeft).calculatePosition(details.localPosition));
-          gameBloc.add(RegisterClickOnField(position: details.localPosition));
+          //gameBloc.add(RegisterClickOnField(position: details.localPosition));
           // TODO call action menu from bloc
           //callActionMenu(context);
         }),

@@ -31,5 +31,9 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         emit(state.copyWith(attacking: false));
       }
     });
+
+    on<SwitchSides>((event, emit) async {
+      emit(state.copyWith(attackIsLeft: !state.attackIsLeft));
+    });
   }
 }

@@ -22,6 +22,7 @@ class HandballApp extends StatelessWidget {
           BlocProvider<GlobalBloc>(create: (context) => GlobalBloc()..add(LoadGlobalState())),
         ],
         child: MaterialApp(
+          debugShowCheckedModeBanner: false,
           scrollBehavior: AppScrollBehavior(),
           home: StreamBuilder<User?>(
               stream: FirebaseAuth.instance.authStateChanges(),

@@ -71,9 +71,16 @@ class GameState extends Equatable {
       opponentScore: opponentScore ?? this.opponentScore,
       stopWatchTimer: stopWatchTimer ?? this.stopWatchTimer,
       gameActions: gameActions ?? this.gameActions,
+      // these properties cannot be changed after game initialization so they can only be set in the constructor but not in the copyWith method
+      opponent: this.opponent,
+      location: this.location,
+      date: this.date,
+      selectedTeam: this.selectedTeam,
+      isHomeGame: this.isHomeGame,
     );
   }
 
   @override
-  List<Object> get props => [this.status, this.attackIsLeft, this.attacking, this.onFieldPlayers];
+  List<Object> get props =>
+      [this.status, this.attackIsLeft, this.attacking, this.onFieldPlayers, this.ownScore, this.opponentScore, this.stopWatchTimer, this.gameActions];
 }

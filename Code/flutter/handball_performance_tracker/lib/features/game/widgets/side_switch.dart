@@ -18,10 +18,6 @@ class SideSwitch extends StatelessWidget {
         ),
         onPressed: () {
           gameBloc.add(SwitchSides());
-          
-          // TODO this seems to be a hack to get the field to update. Make sure this gets updated automatically
-          // Reload Mainscreen so field colors are adapted
-          //Get.to(MainScreen(), preventDuplicates: false);
         },
         child: Row(
           children: [
