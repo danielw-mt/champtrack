@@ -53,7 +53,7 @@ class Game {
       String? lastSync,
       List<String>? onFieldPlayers,
       StopWatchTimer? stopWatchTimer}) {
-    Game game =  Game(
+    Game game = Game(
       id: id ?? this.id,
       teamId: teamId ?? this.teamId,
       date: date ?? this.date,
@@ -89,24 +89,7 @@ class Game {
       onFieldPlayers.hashCode;
 
   @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is Game &&
-          runtimeType == other.runtimeType &&
-          id == other.id &&
-          teamId == other.teamId &&
-          date == other.date &&
-          startTime == other.startTime &&
-          stopTime == other.stopTime &&
-          scoreHome == other.scoreHome &&
-          scoreOpponent == other.scoreOpponent &&
-          isAtHome == other.isAtHome &&
-          location == other.location &&
-          opponent == other.opponent &&
-          season == other.season &&
-          lastSync == other.lastSync &&
-          onFieldPlayers == other.onFieldPlayers;
-
+  bool operator ==(Object other) => identical(this, other) || other is Game && id == other.id;
   @override
   String toString() {
     return 'Club { id: $id, +\n ' +
@@ -130,8 +113,8 @@ class Game {
     Timestamp? timestamp = Timestamp?.fromDate(this.date!);
     int stopWatchTimeFromTimer = stopWatchTimer!.rawTime.value;
     DocumentReference teamReference = FirebaseFirestore.instance.doc(this.path);
-    return GameEntity(teamReference, timestamp, this.isAtHome!, this.lastSync!, this.location!, this.onFieldPlayers, this.opponent!,
-        this.scoreHome!, this.scoreOpponent!, this.season!, this.startTime!, this.stopTime!, stopWatchTimeFromTimer, this.teamId);
+    return GameEntity(teamReference, timestamp, this.isAtHome!, this.lastSync!, this.location!, this.onFieldPlayers, this.opponent!, this.scoreHome!,
+        this.scoreOpponent!, this.season!, this.startTime!, this.stopTime!, stopWatchTimeFromTimer, this.teamId);
   }
 
   static Game fromEntity(GameEntity entity) {

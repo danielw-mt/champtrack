@@ -5,6 +5,8 @@ abstract class AuthEvent extends Equatable {
   List<Object> get props => [];
 }
 
+class StartApp extends AuthEvent {}
+
 // When the user signing in with email and password this event is called and the [AuthRepository] is called to sign in the user
 class SignInRequested extends AuthEvent {
   final String email;

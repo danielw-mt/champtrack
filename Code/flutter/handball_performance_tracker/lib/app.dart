@@ -17,7 +17,7 @@ class HandballApp extends StatelessWidget {
       ],
       child: MultiBlocProvider(
         providers: [
-          BlocProvider<AuthBloc>(create: (context) => AuthBloc(authRepository: RepositoryProvider.of<AuthRepository>(context))),
+          BlocProvider<AuthBloc>(create: (context) => AuthBloc(authRepository: RepositoryProvider.of<AuthRepository>(context))..add(StartApp())),
           BlocProvider<GlobalBloc>(create: (context) => GlobalBloc()..add(LoadGlobalState())),
         ],
         child: MaterialApp(

@@ -10,7 +10,7 @@ class GameSetupState extends Equatable {
   final int selectedTeamIndex;
   final bool isHomeGame;
   final bool attackIsLeft;
-  List<Player>? onFieldPlayers;
+  List<Player> onFieldPlayers;
 
   GameSetupState({
     this.currentStep = GameSetupStep.gameSettings,
@@ -20,8 +20,13 @@ class GameSetupState extends Equatable {
     this.selectedTeamIndex = 0,
     this.isHomeGame = true,
     this.attackIsLeft = true,
-    this.onFieldPlayers,
-  });
+    this.onFieldPlayers = const [],
+  }){
+    // make sure that the list is growable
+    if (this.onFieldPlayers.isEmpty){
+      this.onFieldPlayers = [];
+    }
+  }
 
   GameSetupState copyWith({
     GameSetupStep? currentStep,
@@ -57,5 +62,5 @@ class GameSetupState extends Equatable {
   }
 
   @override
-  List<Object> get props => [currentStep, opponent, location, selectedTeamIndex, isHomeGame, attackIsLeft];
+  List<Object> get props => [currentStep, opponent, location, selectedTeamIndex, isHomeGame, attackIsLeft, onFieldPlayers];
 }

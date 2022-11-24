@@ -12,21 +12,25 @@ class DashboardContent extends StatelessWidget {
   Widget build(BuildContext context) {
     final authState = context.watch<AuthBloc>().state;
     String clubName = "";
+    if (authState is Loading) {
+      return const Center(
+        child: CircularProgressIndicator(),
+      );
+    }
     if (authState is Authenticated) {
       clubName = authState.club.name;
-    }
-    final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-    return SafeArea(
-        child: Scaffold(
-            backgroundColor: backgroundColor,
-            key: _scaffoldKey,
-            drawer: SidebarView(),
-            appBar: AppBar(
-                backgroundColor: buttonDarkBlueColor,
-                title: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    /*Container(
+      final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+      return SafeArea(
+          child: Scaffold(
+              backgroundColor: backgroundColor,
+              key: _scaffoldKey,
+              drawer: SidebarView(),
+              appBar: AppBar(
+                  backgroundColor: buttonDarkBlueColor,
+                  title: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      /*Container(
                           padding: EdgeInsets.only(right: 10),
                           child: new Image.asset(
                             "images/launcher_icon.png",
@@ -34,15 +38,15 @@ class DashboardContent extends StatelessWidget {
                             fit: BoxFit.cover,
                           ),
                         ),*/
-                    Text(
-                      clubName,
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-                    ),
-                  ],
-                )),
-            body: Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-              // Upper white bar with menu button etc
-              /*Container(
+                      Text(
+                        clubName,
+                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                      ),
+                    ],
+                  )),
+              body: Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+                // Upper white bar with menu button etc
+                /*Container(
                             color: Colors.white,
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -55,28 +59,34 @@ class DashboardContent extends StatelessWidget {
                             ),
                           ),*/
 
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  // Buttons
-                  Container(
-                    child: Column(
-                      children: [
-                        StatisticsButton(),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            ManageTeamsButton(),
-                            StartNewGameButton(),
-                            // Take game restore out for now (18.10.22)
-                            //OldGameCard()
-                          ],
-                        ),
-                      ],
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    // Buttons
+                    Container(
+                      child: Column(
+                        children: [
+                          StatisticsButton(),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              ManageTeamsButton(),
+                              StartNewGameButton(),
+                              // Take game restore out for now (18.10.22)
+                              //OldGameCard()
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                ],
-              ),
-            ])));
+                  ],
+                ),
+              ])));
+    } else {
+      print(authState);
+      return const Center(
+        child: Text("This should not happen"),
+      );
+    }
   }
 }

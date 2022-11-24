@@ -11,13 +11,26 @@ part 'auth_state.dart';
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final AuthRepository authRepository;
   AuthBloc({required this.authRepository}) : super(UnAuthenticated()) {
-    
+    on<StartApp>((event, emit) async {
+      try {
+        emit(UnAuthenticated());
+        final user = await authRepository.getUser();
+        if (user != null) {
+          Club club = await authRepository.fetchLoggedInClub();
+          emit(Authenticated(club: club));
+        } else {
+          emit(UnAuthenticated());
+        }
+      } catch (e) {
+        emit(AuthError(e.toString()));
+      }
+    });
+
     /// When User Presses the SignIn Button, we will send the SignInRequested Event to the AuthBloc to handle it and emit the Authenticated State if the user is authenticated
     on<SignInRequested>((event, emit) async {
       emit(Loading());
       try {
-        await authRepository.signIn(
-            email: event.email, password: event.password);
+        await authRepository.signIn(email: event.email, password: event.password);
         Club club = await authRepository.fetchLoggedInClub();
         emit(Authenticated(club: club));
       } catch (e) {
@@ -30,8 +43,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<SignUpRequested>((event, emit) async {
       emit(Loading());
       try {
-        await authRepository.signUp(clubName: event.clubName,
-            email: event.email, password: event.password);
+        await authRepository.signUp(clubName: event.clubName, email: event.email, password: event.password);
         Club club = await authRepository.fetchLoggedInClub();
         emit(Authenticated(club: club));
       } catch (e) {
@@ -61,7 +73,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   /// Returns a documentreference of the logged in club so that it can be used in later queries within that club
   DocumentReference getClubReference() {
-    if (this.state is Authenticated){
+    if (this.state is Authenticated) {
       return FirebaseFirestore.instance.collection("clubs").doc((this.state as Authenticated).club.id);
     } else {
       throw Exception("User is not authenticated");

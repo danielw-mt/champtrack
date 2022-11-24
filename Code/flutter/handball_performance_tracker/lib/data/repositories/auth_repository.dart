@@ -8,6 +8,10 @@ import 'package:handball_performance_tracker/data/entities/entities.dart';
 class AuthRepository {
   final _firebaseAuth = FirebaseAuth.instance;
 
+  Future<User?> getUser() async {
+    return _firebaseAuth.currentUser;
+  }
+
   /// send e-mail and password to [createUserWithEmailAndPassword] method from [FirebaseAuth]
   ///
   /// throw error codes for weak password and email already in use

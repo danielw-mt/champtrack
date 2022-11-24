@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:handball_performance_tracker/old-utils/game_control.dart';
+import 'package:handball_performance_tracker/core/constants/design_constants.dart';
 import 'package:handball_performance_tracker/core/constants/stringsGeneral.dart';
 import 'package:handball_performance_tracker/core/constants/stringsGameSettings.dart';
+import 'package:handball_performance_tracker/features/game/view/view.dart';
 import 'package:handball_performance_tracker/features/game_setup/game_setup.dart';
 import 'package:handball_performance_tracker/core/constants/colors.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:handball_performance_tracker/core/core.dart';
 
 /// Screen that is displayed after gamesettings and allows to select, add, and remove players before starting the game
 class PlayerSelection extends StatelessWidget {
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   int startGameFlowStep = 0;
 
   @override
@@ -47,25 +48,31 @@ class PlayerSelection extends StatelessWidget {
                   onPressed: () async {
                     // validate whether 7 players were selected in the playerslist
                     // display alert if less than 7 have been selected
-                    // if (tempController.getOnFieldPlayers().length != 7) {
-                    //   showDialog(
-                    //       context: context,
-                    //       builder: (BuildContext bcontext) {
-                    //         return AlertDialog(
-                    //             scrollable: true,
-                    //             shape: RoundedRectangleBorder(
-                    //               borderRadius: BorderRadius.circular(menuRadius),
-                    //             ),
-                    //             content: CustomAlertMessageWidget(
-                    //                 StringsGameSettings.lStartGameAlertHeader + "!\n" + StringsGameSettings.lStartGameAlert));
-                    //       });
-                    // } else {
-                    //   tempController.updateOnFieldPlayers();
-                    //   tempController.setPlayerBarPlayersOrder();
-                    //   startGame(context, preconfigured: true);
-                    //   Get.to(() => MainScreen());
-                    //   return;
-                    // }
+                    if (gameSetupState.onFieldPlayers.length != 7) {
+                      showDialog(
+                          context: context,
+                          builder: (BuildContext bcontext) {
+                            return AlertDialog(
+                                scrollable: true,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(MENU_RADIUS),
+                                ),
+                                content: CustomAlertMessageWidget(
+                                    StringsGameSettings.lStartGameAlertHeader + "!\n" + StringsGameSettings.lStartGameAlert));
+                          });
+                    } else {
+                      // TODO update onFieldPlayers in DB from BLOC
+                      // updates onFieldPlayers in the db
+                      //tempController.updateOnFieldPlayers();
+                      // TODO do we even need this?
+                      // tempController.setPlayerBarPlayersOrder();
+                      //startGame(context, preconfigured: true);
+                      //Get.to(() => MainScreen());
+                      
+                      // TODO use named routes
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => GamePage()));
+                      return;
+                    }
                   },
                   child: Text(StringsGeneral.lStartGameButton, style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black)),
                 ),
@@ -76,6 +83,4 @@ class PlayerSelection extends StatelessWidget {
       ],
     );
   }
-
-  
 }

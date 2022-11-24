@@ -59,18 +59,7 @@ class Player {
       efScore.hashCode;
 
   @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is Player &&
-          runtimeType == other.runtimeType &&
-          id == other.id &&
-          firstName == other.firstName &&
-          lastName == other.lastName &&
-          nickName == other.nickName &&
-          number == other.number &&
-          positions == other.positions &&
-          teams == other.teams &&
-          efScore == other.efScore;
+  bool operator ==(Object other) => identical(this, other) || other is Player && id == other.id;
 
   @override
   String toString() {
@@ -86,7 +75,7 @@ class Player {
 
   PlayerEntity toEntity() {
     DocumentReference documentReference = FirebaseFirestore.instance.doc(path);
-    return PlayerEntity(documentReference,firstName, lastName, nickName, number, positions, teams);
+    return PlayerEntity(documentReference, firstName, lastName, nickName, number, positions, teams);
   }
 
   static Player fromEntity(PlayerEntity entity) {

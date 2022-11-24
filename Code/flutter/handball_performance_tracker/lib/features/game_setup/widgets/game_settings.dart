@@ -208,7 +208,7 @@ class GameSettings extends StatelessWidget {
                         child: ElevatedButton(
                             style: ButtonStyle(backgroundColor: MaterialStateProperty.all<Color>(buttonGreyColor)),
                             onPressed: () {
-                              // TODO routing to Dashboard
+                              Navigator.pop(context);
                             },
                             child:
                                 Text(StringsDashboard.lDashboard, style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black))),

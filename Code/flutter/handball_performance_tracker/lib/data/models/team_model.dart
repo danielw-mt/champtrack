@@ -43,16 +43,7 @@ class Team {
   int get hashCode => id.hashCode ^ name.hashCode ^ players.hashCode ^ onFieldPlayers.hashCode ^ type.hashCode;
 
   @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is Team &&
-          runtimeType == other.runtimeType &&
-          id == other.id &&
-          name == other.name &&
-          players == other.players &&
-          onFieldPlayers == other.onFieldPlayers &&
-          type == other.type;
-
+  bool operator ==(Object other) => identical(this, other) || other is Team && id == other.id;
   @override
   String toString() {
     return 'Team { id: $id, \n' + 'name: $name, \n' + 'players: $players, \n' + 'onFieldPlayers: $onFieldPlayers, \n' + 'type: $type, \n' + '}';
@@ -96,7 +87,7 @@ class Team {
         // if there is no player in the players that can be used to populate the team's players list set playerInsufficient to true
         List filteredPlayers = allPlayers.where((Player player) => player.path == playerReference.path).toList();
         if (filteredPlayers.length == 0) {
-          allPlayersSufficient = true;
+          allPlayersSufficient = false;
         }
       });
     }
@@ -119,7 +110,6 @@ class Team {
         onFieldPlayers.add(allPlayers.firstWhere((Player player) => player.path == playerReference.path));
       });
     }
-
     print("Team, players: ${players.length}");
     Team team = Team(
       id: entity.documentReference!.id,

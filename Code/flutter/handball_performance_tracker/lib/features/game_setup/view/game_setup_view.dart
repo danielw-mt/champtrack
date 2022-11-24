@@ -23,8 +23,8 @@ class GameSetupView extends StatelessWidget {
     }
     if (state.currentStep == GameSetupStep.playerSelection) {
       return PlayerSelection();
+    } else {
+      return const Center(child: Text("This should not happen"));
     }
-    // this state should never be reached
-    return Text("This should not happen");
   }
 }

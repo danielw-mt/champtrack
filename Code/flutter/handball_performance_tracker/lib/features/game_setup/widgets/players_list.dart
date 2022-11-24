@@ -36,8 +36,6 @@ class PlayersList extends StatelessWidget {
           numberOfPlayers,
           (int index) {
             String positionsString = playersList[index].positions.reduce((value, element) => value + ", " + element);
-            String playerId = playersList[index].id.toString();
-
             return DataRow(
               color: MaterialStateProperty.resolveWith<Color?>((Set<MaterialState> states) {
                 // All rows will have the same selected color.
@@ -57,10 +55,26 @@ class PlayersList extends StatelessWidget {
                   positionsString,
                   softWrap: true,
                 )),
-                DataCell(Text("Onfieldcheckbox")
-                    // TODO implement onFieldCheckbox
-                    //OnFieldCheckbox(player: playersList[index],
-                    ),
+                DataCell(Checkbox(
+                    value: state.onFieldPlayers.contains(playersList[index]),
+                    onChanged: (bool? value) {
+                      List<Player> newOnFieldPlayers = List.from(state.onFieldPlayers);
+                      // if the value was changed from false to true
+                      if (value == true) {
+                        // if the player is not already in the list and there are not already 7 players on the field add the player to the list
+                        if (!newOnFieldPlayers.contains(playersList[index]) && newOnFieldPlayers.length < 7) {
+                          print("adding player to onFieldPlayers");
+                          newOnFieldPlayers.add(playersList[index]);
+                        }
+                        // if the value changed from true to false
+                      } else {
+                        if (newOnFieldPlayers.contains(playersList[index])) {
+                          print("removing player from onFieldPlayers");
+                          newOnFieldPlayers.remove(playersList[index]);
+                        }
+                      }
+                      context.read<GameSetupCubit>().setOnFieldPlayers(newOnFieldPlayers);
+                    })),
                 DataCell(GestureDetector(
                   child: Icon(Icons.edit),
                   onTap: () {

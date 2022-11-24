@@ -25,6 +25,7 @@ class GameSetupCubit extends Cubit<GameSetupState> {
       selectedTeamIndex: selectedTeamIndex,
       isHomeGame: isHomeGame,
       attackIsLeft: attackIsLeft,
+      onFieldPlayers: []
     ));
   }
 

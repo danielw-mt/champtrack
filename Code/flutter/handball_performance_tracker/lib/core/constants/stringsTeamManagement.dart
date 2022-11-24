@@ -29,4 +29,7 @@ class StringsTeamManagement {
   static const String lAddTeam = "Team hinzufügen";
   static const String lManageTeam = "Team verwalten";
   static const String lAddPlayer = "Player hinzufügen";
+  static const String lRemovePlayer = "Entfernen";
+  static const String lRemovePlayerConfirmation = "Soll der Player wirklich vom Team entfernt werden?";
+  static const String lConfirm = "Bestätigen";
 }
