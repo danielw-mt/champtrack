@@ -8,9 +8,25 @@ abstract class GameEvent extends Equatable {
 }
 
 class InitializeGame extends GameEvent {
-  final Game? game;
+  List<Player> onFieldPlayers = [];
+  Team selectedTeam = Team();
+  String opponent = "";
+  String location = "";
+  DateTime date = DateTime.now();
+  bool isHomeGame = true;
+  bool attackIsLeft = true;
 
-  InitializeGame({this.game});
+  InitializeGame({onFieldPlayers, selectedTeam, this.opponent = "", this.location = "", date, this.isHomeGame = true, this.attackIsLeft = true}) {
+    if (onFieldPlayers != null && onFieldPlayers.length > 0) {
+      this.onFieldPlayers = onFieldPlayers;
+    }
+    if (selectedTeam != null) {
+      this.selectedTeam = selectedTeam;
+    }
+    if (date != null) {
+      this.date = date;
+    }
+  }
 }
 
 class StartGame extends GameEvent {}

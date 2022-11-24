@@ -29,9 +29,16 @@ class GamePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Game game = Game(date: date, opponent: opponent, location: location, isAtHome: isHomeGame, attackIsLeft: attackIsLeft, onFieldPlayers: onFieldPlayers, selectedTeam: selectedTeam);
     return BlocProvider(
-      create: (_) => GameBloc().add(CreateGame(game: game)),
+      create: (_) => GameBloc()
+        ..add(InitializeGame(
+            onFieldPlayers: onFieldPlayers,
+            selectedTeam: selectedTeam,
+            opponent: opponent,
+            location: location,
+            date: date,
+            isHomeGame: isHomeGame,
+            attackIsLeft: attackIsLeft)),
       child: GameView(),
     );
   }

@@ -9,11 +9,19 @@ part 'game_state.dart';
 
 class GameBloc extends Bloc<GameEvent, GameState> {
   GameBloc() : super(GameState()) {
+    on<InitializeGame>((event, emit) async {
+      // TODO create game in repository
 
-    // TODO implement check that selectedTeam works properly otherwise game cannot be started
-
-    on<GameEvent>((event, emit) {
-      // TODO: implement event handler
+      // create the initial game state. Only overload the necessary fields that are not already defined as necessary in the constructor
+      emit(GameState(
+        opponent: event.opponent,
+        location: event.location,
+        date: event.date,
+        selectedTeam: event.selectedTeam,
+        isHomeGame: event.isHomeGame,
+        attackIsLeft: event.attackIsLeft,
+        onFieldPlayers: event.onFieldPlayers,
+      ));
     });
   }
 }

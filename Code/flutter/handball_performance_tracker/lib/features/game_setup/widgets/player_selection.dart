@@ -15,6 +15,7 @@ class PlayerSelection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final gameSetupState = context.watch<GameSetupCubit>().state;
+    final globalState = context.watch<GlobalBloc>().state;
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
     return Column(
@@ -68,9 +69,21 @@ class PlayerSelection extends StatelessWidget {
                       // tempController.setPlayerBarPlayersOrder();
                       //startGame(context, preconfigured: true);
                       //Get.to(() => MainScreen());
-                      
+
                       // TODO use named routes
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => GamePage()));
+
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => GamePage(
+                                    onFieldPlayers: gameSetupState.onFieldPlayers,
+                                    selectedTeam: globalState.allTeams[gameSetupState.selectedTeamIndex],
+                                    opponent: gameSetupState.opponent,
+                                    location: gameSetupState.location,
+                                    date: gameSetupState.date,
+                                    isHomeGame: gameSetupState.isHomeGame,
+                                    attackIsLeft: gameSetupState.attackIsLeft,
+                                  )));
                       return;
                     }
                   },
