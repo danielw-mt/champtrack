@@ -1,6 +1,6 @@
 // Radius of round edges
 double MENU_RADIUS = 8.0;
-double BUTTON_HEIGHT = 10.0;
+double BUTTON_HEIGHT = 50.0;
 double BUTTON_RADIUS = 8.0;
 // Width of padding between buttons
 double PADDING_WIDTH = 8.0;

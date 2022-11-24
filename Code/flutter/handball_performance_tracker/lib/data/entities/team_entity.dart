@@ -24,7 +24,7 @@ class TeamEntity extends Equatable {
 
   @override
   String toString() {
-    return 'ClubEntity { name: $name, onFieldPlayers: ${onFieldPlayers.toString()}, players: ${players.toString()}, type: $type}';
+    return 'TeamEntity { name: $name, onFieldPlayers: ${onFieldPlayers.toString()}, players: ${players.toString()}, type: $type}';
   }
 
   static TeamEntity fromJson(Map<String, Object> json) {
@@ -51,10 +51,10 @@ class TeamEntity extends Equatable {
     developer.log("players: "+playerReferences.toString(), name: "TeamEntity");
     return TeamEntity(
       snap.reference,
-      data['name'],
+      data['name'] ?? null,
       onFieldPlayerReferences,
       playerReferences,
-      data['type'],
+      data['type'] ?? null,
     );
   }
 

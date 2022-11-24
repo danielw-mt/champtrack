@@ -19,9 +19,10 @@ class GameEntity extends Equatable {
   final int? stopTime; // a game could be saved without a stop time (e.g. if the game is still in progress)
   final int? stopWatchTime;
   final String? teamId;
+  final bool? attackIsLeft;
 
-  GameEntity(this.documentReference,  this.date, this.isAtHome, this.lastSync, this.location, this.onFieldPlayers, this.opponent, this.scoreHome,
-      this.scoreOpponent, this.season, this.startTime, this.stopTime, this.stopWatchTime, this.teamId);
+  GameEntity(this.documentReference, this.date, this.isAtHome, this.lastSync, this.location, this.onFieldPlayers, this.opponent, this.scoreHome,
+      this.scoreOpponent, this.season, this.startTime, this.stopTime, this.stopWatchTime, this.teamId, this.attackIsLeft);
 
   Map<String, Object> toJson() {
     return {
@@ -39,12 +40,13 @@ class GameEntity extends Equatable {
       'stopTime': stopTime ?? Null,
       'stopWatchTime': stopWatchTime ?? Null,
       'teamId': teamId ?? Null,
+      'attackIsLeft': attackIsLeft ?? Null,
     };
   }
 
   @override
   String toString() {
-    return 'ClubEntity { date: $date, isAtHome: $isAtHome, lastSync: $lastSync, location: $location, onFieldPlayers: ${onFieldPlayers.toString()}, opponent: $opponent, scoreHome: $scoreHome, scoreOpponent: $scoreOpponent, season: $season, startTime: $startTime, stopTime: $stopTime, stopWatchTime: $stopWatchTime, teamId: $teamId }';
+    return 'GameEntity { date: $date, isAtHome: $isAtHome, lastSync: $lastSync, location: $location, onFieldPlayers: ${onFieldPlayers.toString()}, opponent: $opponent, scoreHome: $scoreHome, scoreOpponent: $scoreOpponent, season: $season, startTime: $startTime, stopTime: $stopTime, stopWatchTime: $stopWatchTime, teamId: $teamId, attackIsLeft: $attackIsLeft }';
   }
 
   static GameEntity fromJson(Map<String, Object> json) {
@@ -64,36 +66,44 @@ class GameEntity extends Equatable {
       json['stopTime'] as int,
       json['stopWatchTime'] as int,
       json['teamId'] as String,
+      json['attackIsLeft'] as bool,
     );
   }
 
   static GameEntity fromSnapshot(DocumentSnapshot snap) {
-    print("Game entity from snapshot "+snap.id);
-    Map<String, dynamic> data = snap.data() as Map<String, dynamic>;
-    // List<DocumentSnapshot> actions = [];
-    // data['actions'].forEach((action) {
-    //   // TODO implement this. Might be complicated
-    // });
-    List<String> onFieldPlayers = [];
-    data['onFieldPlayers'].forEach((onFieldPlayerString) {
-      onFieldPlayers.add(onFieldPlayerString);
-    });
-    return GameEntity(
-      snap.reference,
-      data['date'],
-      data['isAtHome'],
-      data['lastSync'],
-      data['location'],
-      onFieldPlayers,
-      data['opponent'],
-      data['scoreHome'],
-      data['scoreOpponent'],
-      data['season'],
-      data['startTime'],
-      data['stopTime'],
-      data['stopWatchTime'],
-      data['teamId'],
-    );
+    if (snap.exists) {
+      print("Game entity from snapshot " + snap.id);
+      Map<String, dynamic> data = snap.data() as Map<String, dynamic>;
+      // List<DocumentSnapshot> actions = [];
+      // data['actions'].forEach((action) {
+      //   // TODO implement this. Might be complicated
+      // });
+      List<String> onFieldPlayers = [];
+      if (data['onFieldPlayers'] != null) {
+        data['onFieldPlayers'].forEach((player) {
+          onFieldPlayers.add(player);
+        });
+      }
+      return GameEntity(
+        snap.reference,
+        data['date'] ?? null,
+        data['isAtHome'] ?? null,
+        data['lastSync'] ?? null,
+        data['location'] ?? null,
+        onFieldPlayers,
+        data['opponent'] ?? null,
+        data['scoreHome'] ?? null,
+        data['scoreOpponent'] ?? null,
+        data['season'] ?? null,
+        data['startTime'] ?? null,
+        data['stopTime'] ?? null,
+        data['stopWatchTime'] ?? null,
+        data['teamId'] ?? null,
+        data['attackIsLeft'] ?? null,
+      );
+    }
+    // this is in case that we are trying to access a game that does not exist anymore in the DB or could not be found
+    return GameEntity(snap.reference, null, false, "", "", [], "Deleted / Invalid", -1, -1, "Deleted / Invalid", -1, -1, -1, "", false);
   }
 
   Map<String, Object?> toDocument() {
@@ -111,6 +121,7 @@ class GameEntity extends Equatable {
       'stopTime': stopTime,
       'stopWatchTime': stopWatchTime,
       'teamId': teamId,
+      'attackIsLeft': attackIsLeft,
     };
   }
 

@@ -29,7 +29,7 @@ class PlayerEntity extends Equatable {
 
   @override
   String toString() {
-    return 'ClubEntity { firstName: $firstName, lastName: $lastName, nickName: $nickName, number: $number, positions: ${positions.toString()}, teams: ${teams.toString()}}';
+    return 'PlayerEntity { firstName: $firstName, lastName: $lastName, nickName: $nickName, number: $number, positions: ${positions.toString()}, teams: ${teams.toString()}}';
   }
 
   static PlayerEntity fromJson(Map<String, Object> json) {
@@ -50,19 +50,23 @@ class PlayerEntity extends Equatable {
       Map<String, dynamic> data = snap.data() as Map<String, dynamic>;
       // convert linkedmap to string string map
       List<String> positions = [];
-      data['positions'].forEach((positionString) {
-        positions.add(positionString);
-      });
+      if (data['positions'] != null) {
+        data['positions'].forEach((position) {
+          positions.add(position);
+        });
+      }
       List<String> teams = [];
-      data['teams'].forEach((teamString) {
-        teams.add(teamString);
-      });
+      if (data['teams'] != null) {
+        data['teams'].forEach((team) {
+          teams.add(team);
+        });
+      }
       return PlayerEntity(
         snap.reference,
-        data['firstName'],
-        data['lastName'],
-        data['nickName'],
-        data['number'],
+        data['firstName'] ?? null,
+        data['lastName'] ?? null,
+        data['nickName'] ?? null,
+        data['number'] ?? null,
         positions,
         teams,
       );

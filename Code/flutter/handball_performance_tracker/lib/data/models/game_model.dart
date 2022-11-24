@@ -20,6 +20,7 @@ class Game {
   // TODO change this to document reference or actual players
   List<String>? onFieldPlayers;
   StopWatchTimer? stopWatchTimer;
+  bool? attackIsLeft;
 
   Game(
       {this.id,
@@ -35,7 +36,8 @@ class Game {
       this.opponent = "",
       this.season = "",
       this.lastSync = "",
-      this.onFieldPlayers = const []})
+      this.onFieldPlayers = const [],
+      this.attackIsLeft = true})
       : stopWatchTimer = StopWatchTimer(mode: StopWatchMode.countUp);
 
   Game copyWith(
@@ -52,7 +54,8 @@ class Game {
       String? season,
       String? lastSync,
       List<String>? onFieldPlayers,
-      StopWatchTimer? stopWatchTimer}) {
+      StopWatchTimer? stopWatchTimer,
+      bool? attackIsLeft}) {
     Game game = Game(
       id: id ?? this.id,
       teamId: teamId ?? this.teamId,
@@ -67,6 +70,7 @@ class Game {
       season: season ?? this.season,
       lastSync: lastSync ?? this.lastSync,
       onFieldPlayers: onFieldPlayers ?? this.onFieldPlayers,
+      attackIsLeft: attackIsLeft ?? this.attackIsLeft,
     );
     game.stopWatchTimer = stopWatchTimer ?? this.stopWatchTimer;
     return game;
@@ -86,7 +90,8 @@ class Game {
       opponent.hashCode ^
       season.hashCode ^
       lastSync.hashCode ^
-      onFieldPlayers.hashCode;
+      onFieldPlayers.hashCode ^
+      stopWatchTimer.hashCode;
 
   @override
   bool operator ==(Object other) => identical(this, other) || other is Game && id == other.id;
@@ -105,6 +110,8 @@ class Game {
         'season: $season, +\n ' +
         'lastSync: $lastSync, +\n ' +
         'onFieldPlayers: $onFieldPlayers, +\n ' +
+        'stopWatchTimer: $stopWatchTimer, +\n ' +
+        'attackIsLeft: $attackIsLeft, +\n ' +
         '}';
   }
 
@@ -114,7 +121,7 @@ class Game {
     int stopWatchTimeFromTimer = stopWatchTimer!.rawTime.value;
     DocumentReference teamReference = FirebaseFirestore.instance.doc(this.path);
     return GameEntity(teamReference, timestamp, this.isAtHome!, this.lastSync!, this.location!, this.onFieldPlayers, this.opponent!, this.scoreHome!,
-        this.scoreOpponent!, this.season!, this.startTime!, this.stopTime!, stopWatchTimeFromTimer, this.teamId);
+        this.scoreOpponent!, this.season!, this.startTime!, this.stopTime!, stopWatchTimeFromTimer, this.teamId, this.attackIsLeft!);
   }
 
   static Game fromEntity(GameEntity entity) {

@@ -41,7 +41,7 @@ class ClubEntity extends Equatable {
     });
     return ClubEntity(
       snap.reference.id,
-      data['name'],
+      data['name'] ?? null,
       roles,
     );
   }
