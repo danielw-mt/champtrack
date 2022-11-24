@@ -5,6 +5,7 @@ import 'package:handball_performance_tracker/data/repositories/repositories.dart
 import 'package:handball_performance_tracker/features/authentication/authentication.dart';
 import 'package:handball_performance_tracker/core/core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'dart:ui';
 
 class HandballApp extends StatelessWidget {
   const HandballApp({Key? key}) : super(key: key);
@@ -21,6 +22,7 @@ class HandballApp extends StatelessWidget {
           BlocProvider<GlobalBloc>(create: (context) => GlobalBloc()..add(LoadGlobalState())),
         ],
         child: MaterialApp(
+          scrollBehavior: AppScrollBehavior(),
           home: StreamBuilder<User?>(
               stream: FirebaseAuth.instance.authStateChanges(),
               builder: (context, snapshot) {
@@ -35,4 +37,13 @@ class HandballApp extends StatelessWidget {
       ),
     );
   }
+}
+
+class AppScrollBehavior extends MaterialScrollBehavior {
+  @override
+  Set<PointerDeviceKind> get dragDevices => {
+        PointerDeviceKind.touch,
+        PointerDeviceKind.mouse,
+        PointerDeviceKind.trackpad,
+      };
 }

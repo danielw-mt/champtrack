@@ -1,6 +1,6 @@
 export 'action_feed.dart';
 export 'ef_score_panel/ef_score_panel.dart';
-export 'field.dart';
+export 'game_field.dart';
 export 'playermenu.dart';
 export 'score_keeping.dart';
 export 'side_switch.dart';

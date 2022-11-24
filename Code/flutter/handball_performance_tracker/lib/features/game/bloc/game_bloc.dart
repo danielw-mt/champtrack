@@ -23,5 +23,13 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         onFieldPlayers: event.onFieldPlayers,
       ));
     });
+
+    on<SwipeField>((event, emit) async {
+      if (state.attackIsLeft && event.isLeft || !state.attackIsLeft && !event.isLeft) {
+        emit(state.copyWith(attacking: true));
+      } else {
+        emit(state.copyWith(attacking: false));
+      }
+    });
   }
 }

@@ -7,22 +7,19 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 // Class that returns a FieldPainter with a GestureDetecture, i.e. the Painted halffield with the possibility to get coordinates on click.
 class PaintedField extends StatelessWidget {
-  bool fieldIsLeft = true;
-  PaintedField({required fieldIsLeft}) {
-    this.fieldIsLeft = fieldIsLeft;
-  }
+  bool fieldIsLeft;
+  PaintedField({required this.fieldIsLeft});
+
   @override
   Widget build(BuildContext context) {
     final gameBloc = context.watch<GameBloc>();
+    bool displayAttackColor = fieldIsLeft && gameBloc.state.attackIsLeft || !fieldIsLeft && !gameBloc.state.attackIsLeft;
     return Stack(children: [
       // Painter of 7m, 6m and filled 9m
       CustomPaint(
         // Give colors: 9m(middle-dark),6m(dark),background(light)
-        painter: FieldPainter(
-            fieldIsLeft,
-            (fieldIsLeft && gameBloc.state.attackIsLeft || !fieldIsLeft && !gameBloc.state.attackIsLeft) ? attackMiddleColor : defenseMiddleColor,
-            (fieldIsLeft && gameBloc.state.attackIsLeft || !fieldIsLeft && !gameBloc.state.attackIsLeft) ? attackDarkColor : defenseDarkColor,
-            (fieldIsLeft && gameBloc.state.attackIsLeft || !fieldIsLeft && !gameBloc.state.attackIsLeft) ? attackLightColor : defenseLightColor),
+        painter: FieldPainter(fieldIsLeft, displayAttackColor ? attackMiddleColor : defenseMiddleColor,
+            displayAttackColor ? attackDarkColor : defenseDarkColor, displayAttackColor ? attackLightColor : defenseLightColor),
         // GestureDetector to handle on click or swipe
         child: GestureDetector(
             // handle coordinates on click
@@ -48,12 +45,13 @@ class PaintedField extends StatelessWidget {
 * @return   Returns a Pageview with left field side and right field side as children.
 */
 class GameField extends StatelessWidget {
-  static final PageController pageController = PageController();
-
   @override
   Widget build(BuildContext context) {
+    final gameBloc = context.watch<GameBloc>();
     return PageView(
-      controller: pageController,
+      onPageChanged: (value) {
+        gameBloc.add(SwipeField(isLeft: value == 0));
+      },
       children: <Widget>[
         PaintedField(
           fieldIsLeft: true,
