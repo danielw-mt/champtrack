@@ -62,6 +62,13 @@ class SwipeField extends GameEvent {
   SwipeField({required this.isLeft});
 }
 
+/// Change the field programmatically
+class SwitchField extends GameEvent {
+  // TODO implement this. Basically set the field to the opposite of the current field
+
+  SwitchField();
+}
+
 /// Change the side our goal is on. I.e. half time
 class SwitchSides extends GameEvent {}
 
@@ -75,8 +82,9 @@ class SwitchPlayer extends GameEvent {
 /// Clicking onto the game field
 class RegisterClickOnField extends GameEvent {
   final Offset position;
+  final bool fieldIsLeft;
 
-  RegisterClickOnField({required this.position});
+  RegisterClickOnField({required this.position, required this.fieldIsLeft});
 }
 
 /// Click on an action in the action menu
@@ -107,4 +115,16 @@ class ChangeScore extends GameEvent {
   final bool isOwnScore;
 
   ChangeScore({required this.score, required this.isOwnScore});
+}
+
+class UpdatePlayerMenuHintText extends GameEvent {
+  final String hintText;
+
+  UpdatePlayerMenuHintText({required this.hintText});
+}
+
+class UpdateActionMenuHintText extends GameEvent {
+  final String hintText;
+
+  UpdateActionMenuHintText({required this.hintText});
 }

@@ -31,7 +31,7 @@ class DashboardView extends StatelessWidget {
     } else {
       print("dashboard view: this should not happen");
       return const Center(
-        child: Text("This should not happen"),
+        child: Text("This should not happen [Dashboard]"),
       );
     }
   }

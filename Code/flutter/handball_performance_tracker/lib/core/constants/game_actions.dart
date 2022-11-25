@@ -45,6 +45,9 @@ const String missed7mTag = "missed_7m";
 const String parade7mTag = "parade_7m";
 const String goalOpponent7mTag = "goal_opponent_7m";
 
+
+// TODO this actionmapping is super messy. We could use enum instead or something
+
 Map<String, Map<String, String>> actionMapping = {
   actionContextAttack: {
     StringsGameScreen.lRedCard: redCardTag,

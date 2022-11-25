@@ -29,7 +29,6 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  get: ^4.6.5
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -37,7 +36,6 @@ dependencies:
   cloud_firestore: ^3.1.14
   connectivity_plus: ^2.3.0 
   stop_watch_timer: ^1.4.0
-  rflutter_alert: ^2.0.4 # TODO try to remove this
   rainbow_color: ^2.0.1 # TODO try to remove this
   firebase_auth: ^3.3.19
   fl_chart: ^0.55.1

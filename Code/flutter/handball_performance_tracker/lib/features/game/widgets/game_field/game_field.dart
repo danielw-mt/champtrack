@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:handball_performance_tracker/core/constants/colors.dart';
-import 'package:handball_performance_tracker/old-utils/main_screen_field_helper.dart';
-import 'action_menu/action_menu.dart';
+import 'field_painters.dart';
+import '../action_menu/action_menu.dart';
 import 'package:handball_performance_tracker/features/game/game.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -13,9 +13,7 @@ class PaintedField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final gameBloc = context.watch<GameBloc>();
-    print("PaintedField build");
     bool displayAttackColor = fieldIsLeft && gameBloc.state.attackIsLeft || !fieldIsLeft && !gameBloc.state.attackIsLeft;
-    print("displayAttackColor: $displayAttackColor");
     return Stack(children: [
       // Painter of 7m, 6m and filled 9m
       CustomPaint(
@@ -26,12 +24,8 @@ class PaintedField extends StatelessWidget {
         child: GestureDetector(
             // handle coordinates on click
             onTapDown: (TapDownDetails details) {
-          // Set last location in controller before calling action menu, because it is queried there.
-          // Old code:
-          //tempController.setLastLocation(SectorCalc(fieldIsLeft).calculatePosition(details.localPosition));
-          //gameBloc.add(RegisterClickOnField(position: details.localPosition));
-          // TODO call action menu from bloc
-          //callActionMenu(context);
+          gameBloc.add(RegisterClickOnField(fieldIsLeft: fieldIsLeft, position: details.localPosition));
+          callActionMenu(context);
         }),
       ),
       // Painter of dashed 9m
@@ -47,10 +41,13 @@ class PaintedField extends StatelessWidget {
 * @return   Returns a Pageview with left field side and right field side as children.
 */
 class GameField extends StatelessWidget {
+  static final PageController pageController = PageController();
+
   @override
   Widget build(BuildContext context) {
     final gameBloc = context.watch<GameBloc>();
     return PageView(
+      controller: pageController,
       onPageChanged: (value) {
         gameBloc.add(SwipeField(isLeft: value == 0));
       },

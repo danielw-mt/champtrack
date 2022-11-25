@@ -2,8 +2,9 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/gestures.dart';
 import 'package:handball_performance_tracker/data/models/models.dart';
+import 'package:handball_performance_tracker/features/game/widgets/action_menu/action_menu.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
-
+import 'game_field_math.dart';
 part 'game_event.dart';
 part 'game_state.dart';
 
@@ -103,6 +104,12 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         stopWatchTimer.onExecute.add(StopWatchExecute.reset);
         stopWatchTimer.setPresetSecondTime(event.minutes * 60 + currentSecs);
       }
+    });
+
+    on<RegisterClickOnField>((event, emit) {
+      // set last clicked location
+      List<String> lastLocation = SectorCalc(event.fieldIsLeft).calculatePosition(event.position);
+      emit(state.copyWith(lastClickedLocation: lastLocation));
     });
   }
 }

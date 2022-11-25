@@ -10,25 +10,10 @@
 // import '../../../../old-widgets/main_screen/seven_meter_player_menu.dart';
 // import '../../../../old-widgets/main_screen/field.dart';
 // import 'package:handball_performance_tracker/oldcontrollers/persistent_controller.dart';
-// import '../../controllers/temp_controller.dart';
-// import 'package:get/get.dart';
-// import 'package:rflutter_alert/rflutter_alert.dart';
 // import 'dart:math';
 // import '../../old-utils/feed_logic.dart';
 // import '../../data/models/game_action_model.dart';
 // import '../../data/models/player_model.dart';
-// import 'package:logger/logger.dart';
-
-// var logger = Logger(
-//   printer: PrettyPrinter(
-//       methodCount: 2, // number of method calls to be displayed
-//       errorMethodCount: 8, // number of method calls if stacktrace is provided
-//       lineLength: 120, // width of the output
-//       colors: true, // Colorful log messages
-//       printEmojis: true, // Print an emoji for each log message
-//       printTime: false // Should each log print contain a timestamp
-//       ),
-// );
 
 // // Variable is true if the player menu is open. After a player was selected and Navigator.pop
 // // is called, it is set to false. This is used to know if the menu closes without choosing a player

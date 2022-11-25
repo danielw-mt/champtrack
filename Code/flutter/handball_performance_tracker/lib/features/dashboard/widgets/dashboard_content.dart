@@ -85,7 +85,7 @@ class DashboardContent extends StatelessWidget {
     } else {
       print(authState);
       return const Center(
-        child: Text("This should not happen"),
+        child: Text("This should not happen [Dashboard Content]"),
       );
     }
   }
