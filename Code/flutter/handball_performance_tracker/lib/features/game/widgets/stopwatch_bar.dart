@@ -6,15 +6,11 @@ import 'package:handball_performance_tracker/core/constants/stringsGeneral.dart'
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 import 'package:handball_performance_tracker/features/game/game.dart';
 
-// TODO there should really be only UI aspects in this file. All the logic should be moved to the bloc.
 class StopWatchBar extends StatelessWidget {
-  // stop watch widget that allows to the time to be started, stopped, resetted and in-/decremented by 1 sec
-
+  // stop watch widget that allows to the time to be started, stopped, resetted and in-/decremented by 1 second
   @override
   Widget build(BuildContext context) {
     final GameBloc gameBloc = context.watch<GameBloc>();
-
-    StopWatchTimer stopWatchTimer = gameBloc.state.stopWatchTimer;
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -27,8 +23,7 @@ class StopWatchBar extends StatelessWidget {
           alignment: Alignment.center,
           margin: const EdgeInsets.only(bottom: 10, top: 4),
           child: TextButton(
-            // TODO call bloc event here
-              onPressed: () => {}, //changeTime(context, 1000),
+              onPressed: () => {gameBloc.add(ChangeTime(offset: 1000))},
               child: Icon(
                 Icons.add,
                 color: Colors.black,
@@ -44,8 +39,7 @@ class StopWatchBar extends StatelessWidget {
           alignment: Alignment.center,
           margin: const EdgeInsets.only(bottom: 10, top: 4),
           child: TextButton(
-              // TODO call bloc event here
-              onPressed: () => {},//changeTime(context, -1000),
+              onPressed: () => {gameBloc.add(ChangeTime(offset: -1000))},
               child: const Icon(
                 Icons.remove,
                 color: Colors.black,
@@ -94,7 +88,7 @@ class TimePopoupButton extends StatelessWidget {
               final value = snap.data!;
               String displayTime = StopWatchTimer.getDisplayTime(value, hours: false, minute: true, second: true, milliSecond: false);
               return TextButton(
-                onPressed: () => callStopWatch(context),
+                onPressed: () => callStopWatchPopup(context),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
@@ -110,253 +104,173 @@ class TimePopoupButton extends StatelessWidget {
   }
 
   /// calls popup to adapt time manually
-  void callStopWatch(context) {
+  void callStopWatchPopup(BuildContext context) {
     double buttonHeight = MediaQuery.of(context).size.height * 0.08;
     final GameBloc gameBloc = context.read<GameBloc>();
     StopWatchTimer stopWatchTimer = gameBloc.state.stopWatchTimer;
     showDialog(
         context: context,
         builder: (BuildContext context) {
-          return AlertDialog(
-            scrollable: true,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(MENU_RADIUS),
-            ),
-            content:
-                // Column of "Edit score", horizontal line and score
-                Column(
-              children: [
-                // upper row: Text "Edit time"
-                const Align(
-                  alignment: Alignment.topLeft,
-                  child: Text(
-                    StringsGeneral.lEditTime,
-                    textAlign: TextAlign.left,
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 20,
+          // inject the BLOC into this alert again
+          return BlocProvider.value(
+            value: gameBloc,
+            child: AlertDialog(
+              scrollable: true,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(MENU_RADIUS),
+              ),
+              content:
+                  // Column of "Edit score", horizontal line and score
+                  Column(
+                children: [
+                  // upper row: Text "Edit time"
+                  const Align(
+                    alignment: Alignment.topLeft,
+                    child: Text(
+                      StringsGeneral.lEditTime,
+                      textAlign: TextAlign.left,
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 20,
+                      ),
                     ),
                   ),
-                ),
-                // horizontal line
-                const Divider(
-                  thickness: 2,
-                  color: Colors.black,
-                  height: 6,
-                ),
-                Text(""),
+                  // horizontal line
+                  const Divider(
+                    thickness: 2,
+                    color: Colors.black,
+                    height: 6,
+                  ),
+                  Text(""),
 
-                Row(
-                  children: [
-                    SetTimeButtons(),
-                    StartStopIcon(),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Row(children: [
-                          // Plus button for minutes
-                          SizedBox(
-                            height: buttonHeight,
-                            child: TextButton(
-                              style: TextButton.styleFrom(
-                                backgroundColor: buttonLightBlueColor,
+                  Row(
+                    children: [
+                      SetTimeButtons(),
+                      StartStopIcon(),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Row(children: [
+                            // Plus button for minutes
+                            SizedBox(
+                              height: buttonHeight,
+                              child: TextButton(
+                                style: TextButton.styleFrom(
+                                  backgroundColor: buttonLightBlueColor,
+                                ),
+                                onPressed: () => {gameBloc.add(ChangeTime(offset: 1000 * 60))},
+                                child: Icon(Icons.add, size: 17, color: Colors.black),
                               ),
-                              // TODO call bloc event here
-                              onPressed: () => changeTime(context, 1000 * 60),
-                              child: Icon(Icons.add, size: 17, color: Colors.black),
                             ),
-                          ),
-                          Text(
-                            "   ",
-                          ),
-                          // Plus button of seconds
-                          SizedBox(
-                            height: buttonHeight,
-                            child: TextButton(
-                              style: TextButton.styleFrom(
-                                backgroundColor: buttonLightBlueColor,
+                            Text(
+                              "   ",
+                            ),
+                            // Plus button of seconds
+                            SizedBox(
+                              height: buttonHeight,
+                              child: TextButton(
+                                style: TextButton.styleFrom(
+                                  backgroundColor: buttonLightBlueColor,
+                                ),
+                                onPressed: () => {gameBloc.add(ChangeTime(offset: 1000))},
+                                child: Icon(Icons.add, size: 17, color: Colors.black),
                               ),
-                              // TODO call bloc event here
-                              onPressed: () => changeTime(context, 1000),
-                              child: Icon(Icons.add, size: 17, color: Colors.black),
                             ),
-                          ),
-                        ]),
-                        Row(children: [
-                          // Container with Minutes
-                          StreamBuilder<int>(
-                              stream: stopWatchTimer.rawTime,
-                              initialData: stopWatchTimer.rawTime.value,
-                              builder: (context, snap) {
-                                final value = snap.data!;
-                                String displayTime =
-                                    StopWatchTimer.getDisplayTime(value, hours: false, minute: true, second: false, milliSecond: false);
-                                return Container(
-                                    height: buttonHeight * 1.3,
-                                    width: buttonHeight,
-                                    margin: EdgeInsets.only(left: 5, right: 5),
-                                    padding: const EdgeInsets.all(10.0),
-                                    alignment: Alignment.center,
-                                    color: Colors.white,
-                                    child: TextField(
-                                      // TODO call bloc function here
-                                      onChanged: (text) => setMinutes(context, int.parse(text)),
-                                      textAlign: TextAlign.center,
-                                      decoration: InputDecoration(
-                                        border: InputBorder.none,
-                                        hintText: snap.hasData ? (displayTime) : "",
-                                      ),
-                                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
-                                    ));
-                              }),
-                          // : between mins and secs
-                          Text(
-                            ":",
-                            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 28),
-                          ),
+                          ]),
+                          Row(children: [
+                            // Container with Minutes
+                            StreamBuilder<int>(
+                                stream: stopWatchTimer.rawTime,
+                                initialData: stopWatchTimer.rawTime.value,
+                                builder: (context, snap) {
+                                  final value = snap.data!;
+                                  String displayTime =
+                                      StopWatchTimer.getDisplayTime(value, hours: false, minute: true, second: false, milliSecond: false);
+                                  return Container(
+                                      height: buttonHeight * 1.3,
+                                      width: buttonHeight,
+                                      margin: EdgeInsets.only(left: 5, right: 5),
+                                      padding: const EdgeInsets.all(10.0),
+                                      alignment: Alignment.center,
+                                      color: Colors.white,
+                                      child: TextField(
+                                        onChanged: (text) => {gameBloc.add(SetMinutes(minutes: int.parse(text)))},
+                                        textAlign: TextAlign.center,
+                                        decoration: InputDecoration(
+                                          border: InputBorder.none,
+                                          hintText: snap.hasData ? (displayTime) : "",
+                                        ),
+                                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+                                      ));
+                                }),
+                            // : between mins and secs
+                            Text(
+                              ":",
+                              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 28),
+                            ),
 
-                          // Container with Seconds
-                          StreamBuilder<int>(
-                              stream: stopWatchTimer.rawTime,
-                              initialData: stopWatchTimer.rawTime.value,
-                              builder: (context, snap) {
-                                final value = snap.data!;
-                                String displayTime =
-                                    StopWatchTimer.getDisplayTime(value, hours: false, minute: false, second: true, milliSecond: false);
-                                return Container(
-                                    height: buttonHeight * 1.3,
-                                    width: buttonHeight,
-                                    margin: EdgeInsets.only(left: 5, right: 5),
-                                    padding: const EdgeInsets.all(10.0),
-                                    alignment: Alignment.center,
-                                    color: Colors.white,
-                                    child: TextField(
-                                      // TODO call bloc event here
-                                      onChanged: (text) => setSeconds(context, int.parse(text)),
-                                      textAlign: TextAlign.center,
-                                      decoration: InputDecoration(
-                                        border: InputBorder.none,
-                                        hintText: snap.hasData ? (displayTime) : "",
-                                      ),
-                                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
-                                    ));
-                              }),
-                        ]),
-                        Row(children: [
-                          // Minus buttons of Minutes
-                          SizedBox(
-                            height: buttonHeight,
-                            child: TextButton(
-                              style: TextButton.styleFrom(
-                                backgroundColor: buttonLightBlueColor,
+                            // Container with Seconds
+                            StreamBuilder<int>(
+                                stream: stopWatchTimer.rawTime,
+                                initialData: stopWatchTimer.rawTime.value,
+                                builder: (context, snap) {
+                                  final value = snap.data!;
+                                  String displayTime =
+                                      StopWatchTimer.getDisplayTime(value, hours: false, minute: false, second: true, milliSecond: false);
+                                  return Container(
+                                      height: buttonHeight * 1.3,
+                                      width: buttonHeight,
+                                      margin: EdgeInsets.only(left: 5, right: 5),
+                                      padding: const EdgeInsets.all(10.0),
+                                      alignment: Alignment.center,
+                                      color: Colors.white,
+                                      child: TextField(
+                                        onChanged: (text) => {gameBloc.add(SetSeconds(seconds: int.parse(text)))},
+                                        textAlign: TextAlign.center,
+                                        decoration: InputDecoration(
+                                          border: InputBorder.none,
+                                          hintText: snap.hasData ? (displayTime) : "",
+                                        ),
+                                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+                                      ));
+                                }),
+                          ]),
+                          Row(children: [
+                            // Minus buttons of Minutes
+                            SizedBox(
+                              height: buttonHeight,
+                              child: TextButton(
+                                style: TextButton.styleFrom(
+                                  backgroundColor: buttonLightBlueColor,
+                                ),
+                                onPressed: () => {gameBloc.add(ChangeTime(offset: -1000 * 60))},
+                                child: Icon(Icons.remove, size: 17, color: Colors.black),
                               ),
-                              // TODO call bloc event here
-                              onPressed: () => changeTime(context, -1000 * 60),
-                              child: Icon(Icons.remove, size: 17, color: Colors.black),
                             ),
-                          ),
-                          Text(
-                            "   ",
-                          ),
-                          // minus button of seconds
-                          SizedBox(
-                            height: buttonHeight,
-                            child: TextButton(
-                              style: TextButton.styleFrom(
-                                backgroundColor: buttonLightBlueColor,
+                            Text(
+                              "   ",
+                            ),
+                            // minus button of seconds
+                            SizedBox(
+                              height: buttonHeight,
+                              child: TextButton(
+                                style: TextButton.styleFrom(
+                                  backgroundColor: buttonLightBlueColor,
+                                ),
+                                onPressed: () => {gameBloc.add(ChangeTime(offset: -1000))},
+                                child: Icon(Icons.remove, size: 17, color: Colors.black),
                               ),
-                              // TODO call bloc event here
-                              onPressed: () => changeTime(context, -1000),
-                              child: Icon(Icons.remove, size: 17, color: Colors.black),
-                            ),
-                          )
-                        ]),
-                      ],
-                    ),
-                  ],
-                ),
-              ],
+                            )
+                          ]),
+                        ],
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           );
         });
-  }
-
-  // TODO move these timer methods to bloc
-
-  /// Change time by the given offset
-  void changeTime(context, int offset) async {
-    // final GameBloc gameBloc = context.read<GameBloc>();
-    // StopWatchTimer stopWatchTimer = gameBloc.state.stopWatchTimer;
-    // int currentTime = stopWatchTimer.rawTime.value;
-    // // make sure the timer can't go negative
-    // if (currentTime < -offset && offset < 0) return;
-    // stopWatchTimer.clearPresetTime();
-    // if (stopWatchTimer.isRunning) {
-    //   stopWatchTimer.onExecute.add(StopWatchExecute.reset);
-    //   persistentController.getCurrentGame().stopWatchTimer.setPresetTime(mSec: currentTime + offset);
-    //   stopWatchTimer.onExecute.add(StopWatchExecute.start);
-    // } else {
-    //   stopWatchTimer.onExecute.add(StopWatchExecute.reset);
-    //   persistentController.getCurrentGame().stopWatchTimer.setPresetTime(mSec: currentTime + offset);
-    // }
-  }
-
-  /// set minutes to given value
-  void setMinutes(context, int minutes) async {
-    // final GameBloc gameBloc = context.read<GameBloc>();
-    // StopWatchTimer stopWatchTimer = persistentController.getCurrentGame().stopWatchTimer;
-    // // get current seconds
-    // int currentSecs = getCurrentSecs(context);
-    // // make sure the timer can't go negative
-    // if (minutes < 0) return;
-    // stopWatchTimer.clearPresetTime();
-    // if (stopWatchTimer.isRunning) {
-    //   stopWatchTimer.onExecute.add(StopWatchExecute.reset);
-    //   stopWatchTimer.setPresetSecondTime(minutes * 60 + currentSecs);
-    //   stopWatchTimer.onExecute.add(StopWatchExecute.start);
-    // } else {
-    //   stopWatchTimer.onExecute.add(StopWatchExecute.reset);
-    //   stopWatchTimer.setPresetSecondTime(minutes * 60 + currentSecs);
-    // }
-  }
-
-  /// set seconds to given value
-  void setSeconds(context, int secs) async {
-    // PersistentController persistentController = Get.find<PersistentController>();
-    // StopWatchTimer stopWatchTimer = persistentController.getCurrentGame().stopWatchTimer;
-    // // get current minutes
-    // int currentMins = getCurrentMins(context);
-    // // make sure the timer can't go negative
-    // if (secs < 0) return;
-    // stopWatchTimer.clearPresetTime();
-    // if (stopWatchTimer.isRunning) {
-    //   stopWatchTimer.onExecute.add(StopWatchExecute.reset);
-    //   stopWatchTimer.setPresetSecondTime(currentMins * 60 + secs);
-    //   stopWatchTimer.onExecute.add(StopWatchExecute.start);
-    // } else {
-    //   stopWatchTimer.onExecute.add(StopWatchExecute.reset);
-    //   stopWatchTimer.setPresetSecondTime(currentMins * 60 + secs);
-    // }
-  }
-
-  int getCurrentMins(context) {
-    // PersistentController persistentController = Get.find<PersistentController>();
-    // StopWatchTimer stopWatchTimer = persistentController.getCurrentGame().stopWatchTimer;
-    // int currentTime = stopWatchTimer.rawTime.value;
-    // return (currentTime / 60000).floor();
-
-    // placeholder
-    return -1;
-  }
-
-  int getCurrentSecs(context) {
-    // PersistentController persistentController = Get.find<PersistentController>();
-    // StopWatchTimer stopWatchTimer = persistentController.getCurrentGame().stopWatchTimer;
-    // int currentTime = stopWatchTimer.rawTime.value;
-    // return (currentTime % 60000 / 1000).floor();
-
-    // placeholder
-    return -1;
   }
 }
 
@@ -366,7 +280,6 @@ class SetTimeButtons extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final GameBloc gameBloc = context.watch<GameBloc>();
-    StopWatchTimer stopWatchTimer = gameBloc.state.stopWatchTimer;
     return Column(
       children: [
         Container(
@@ -379,12 +292,7 @@ class SetTimeButtons extends StatelessWidget {
                 primary: Colors.black,
               ),
               onPressed: () {
-                // TODO move these to bloc
-                // stopWatchTimer.onExecute.add(StopWatchExecute.stop);
-                // pauseGame();
-                // stopWatchTimer.onExecute.add(StopWatchExecute.reset);
-                // stopWatchTimer.clearPresetTime();
-                // stopWatchTimer.setPresetTime(mSec: 0);
+                gameBloc.add(SetMinutes(minutes: 0));
               },
               child: Text(
                 "00:00",
@@ -403,12 +311,7 @@ class SetTimeButtons extends StatelessWidget {
                 primary: Colors.black,
               ),
               onPressed: () {
-                // TODO move these to bloc
-                // stopWatchTimer.onExecute.add(StopWatchExecute.stop);
-                // pauseGame();
-                // stopWatchTimer.onExecute.add(StopWatchExecute.reset);
-                // stopWatchTimer.clearPresetTime();
-                // stopWatchTimer.setPresetTime(mSec: 30 * 60000);
+                gameBloc.add(SetMinutes(minutes: 30));
               },
               child: Text("30:00",
                   style: TextStyle(

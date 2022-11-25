@@ -35,6 +35,24 @@ class PauseGame extends GameEvent {}
 
 class UnPauseGame extends GameEvent {}
 
+class ChangeTime extends GameEvent {
+  final int offset;
+
+  ChangeTime({required this.offset});
+}
+
+class SetSeconds extends GameEvent {
+  final int seconds;
+
+  SetSeconds({required this.seconds});
+}
+
+class SetMinutes extends GameEvent {
+  final int minutes;
+
+  SetMinutes({required this.minutes});
+}
+
 class QuitGame extends GameEvent {}
 
 /// Switch from defense to offense

@@ -32,8 +32,77 @@ class GameBloc extends Bloc<GameEvent, GameState> {
       }
     });
 
-    on<SwitchSides>((event, emit) async {
-      emit(state.copyWith(attackIsLeft: !state.attackIsLeft));
+    on<StartGame>((event, emit) {
+      // TODO update game in repository
+      StopWatchTimer stopWatchTimer = state.stopWatchTimer;
+      stopWatchTimer.onExecute.add(StopWatchExecute.start);
+      emit(state.copyWith(status: GameStatus.running, stopWatchTimer: stopWatchTimer));
+    });
+
+    on<PauseGame>((event, emit) {
+      StopWatchTimer stopWatchTimer = state.stopWatchTimer;
+      stopWatchTimer.onExecute.add(StopWatchExecute.stop);
+      emit(state.copyWith(status: GameStatus.paused, stopWatchTimer: stopWatchTimer));
+    });
+
+    on<UnPauseGame>((event, emit) {
+      StopWatchTimer stopWatchTimer = state.stopWatchTimer;
+      stopWatchTimer.onExecute.add(StopWatchExecute.start);
+      emit(state.copyWith(status: GameStatus.running, stopWatchTimer: stopWatchTimer));
+    });
+
+    /// Change time by the given offset
+    on<ChangeTime>((event, emit) {
+      StopWatchTimer stopWatchTimer = state.stopWatchTimer;
+      int currentTime = stopWatchTimer.rawTime.value;
+      // make sure the timer can't go negative
+      if (currentTime < -event.offset && event.offset < 0) return;
+      stopWatchTimer.clearPresetTime();
+      if (stopWatchTimer.isRunning) {
+        stopWatchTimer.onExecute.add(StopWatchExecute.reset);
+        stopWatchTimer.setPresetTime(mSec: currentTime + event.offset);
+        stopWatchTimer.onExecute.add(StopWatchExecute.start);
+      } else {
+        stopWatchTimer.onExecute.add(StopWatchExecute.reset);
+        stopWatchTimer.setPresetTime(mSec: currentTime + event.offset);
+      }
+      emit(state.copyWith(stopWatchTimer: stopWatchTimer));
+    });
+
+    /// Set the seconds of the timer to the given value
+    on<SetSeconds>((event, emit) {
+      StopWatchTimer stopWatchTimer = state.stopWatchTimer;
+      // get current minutes
+      int currentMins = (stopWatchTimer.rawTime.value / 60000).floor();
+      // make sure the timer can't go negative
+      if (event.seconds < 0) return;
+      stopWatchTimer.clearPresetTime();
+      if (stopWatchTimer.isRunning) {
+        stopWatchTimer.onExecute.add(StopWatchExecute.reset);
+        stopWatchTimer.setPresetSecondTime(currentMins * 60 + event.seconds);
+        stopWatchTimer.onExecute.add(StopWatchExecute.start);
+      } else {
+        stopWatchTimer.onExecute.add(StopWatchExecute.reset);
+        stopWatchTimer.setPresetSecondTime(currentMins * 60 + event.seconds);
+      }
+    });
+
+    /// Set the minutes of the timer to the given value
+    on<SetMinutes>((event, emit) {
+      StopWatchTimer stopWatchTimer = state.stopWatchTimer;
+      // get current seconds
+      int currentSecs = (stopWatchTimer.rawTime.value % 60000 / 1000).floor();
+      // make sure the timer can't go negative
+      if (event.minutes < 0) return;
+      stopWatchTimer.clearPresetTime();
+      if (stopWatchTimer.isRunning) {
+        stopWatchTimer.onExecute.add(StopWatchExecute.reset);
+        stopWatchTimer.setPresetSecondTime(event.minutes * 60 + currentSecs);
+        stopWatchTimer.onExecute.add(StopWatchExecute.start);
+      } else {
+        stopWatchTimer.onExecute.add(StopWatchExecute.reset);
+        stopWatchTimer.setPresetSecondTime(event.minutes * 60 + currentSecs);
+      }
     });
   }
 }
