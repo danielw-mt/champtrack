@@ -5,7 +5,7 @@ import 'package:handball_performance_tracker/core/constants/stringsGeneral.dart'
 import 'package:handball_performance_tracker/features/team_management/team_management.dart';
 
 // Bottom Nav Bar for team settings screen
-class TeamManagementTabsBar extends StatelessWidget {
+class TabsBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<TeamManagementCubit, TeamManagementState>(
@@ -13,7 +13,6 @@ class TeamManagementTabsBar extends StatelessWidget {
         return Container(
           color: Color(0xFF3F5AA6),
           child: TabBar(
-            controller: DefaultTabController.of(context),
             labelColor: Colors.white,
             unselectedLabelColor: Colors.white70,
             indicatorSize: TabBarIndicatorSize.tab,

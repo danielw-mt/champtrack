@@ -2,8 +2,6 @@ part of 'team_management_cubit.dart';
 
 enum TeamManagementTab { playersTab, gamesTab, settingsTab }
 
-// TODO look into using Equatable and abstracting properly
-
 class TeamManagementState extends Equatable {
   final TeamManagementTab currentTab;
   final int selectedTeamIndex;
@@ -32,5 +30,5 @@ class TeamManagementState extends Equatable {
   }
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [currentTab, selectedTeamIndex];
 }

@@ -11,7 +11,7 @@ class ScoreKeeping extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final GameState state = context.watch<GameBloc>().state;
+    final GameBloc gameBloc = context.watch<GameBloc>();
     return Container(
       margin: EdgeInsets.only(left: 30),
       decoration: BoxDecoration(
@@ -32,13 +32,15 @@ class ScoreKeeping extends StatelessWidget {
               padding: const EdgeInsets.only(left: 5.0),
               child: Text(
                 // nullable expression here
-                state.selectedTeam == Team() ? 'TODO no team selected' : state.selectedTeam.name,
+                gameBloc.state.selectedTeam == Team() ? 'TODO no team selected' : gameBloc.state.selectedTeam.name,
                 textAlign: TextAlign.center,
               ),
             ),
             // Scores
             TextButton(
-                onPressed: () => callScoreKeeping(context),
+                onPressed: () {
+                  callScoreKeeping(context);
+                },
                 child:
                     // Container with Scores
                     Container(
@@ -46,7 +48,7 @@ class ScoreKeeping extends StatelessWidget {
                         alignment: Alignment.center,
                         color: Colors.white,
                         child: Text(
-                          state.ownScore.toString() + " : " + state.opponentScore.toString(),
+                          gameBloc.state.ownScore.toString() + " : " + gameBloc.state.opponentScore.toString(),
                           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.black),
                         ))),
             // Name of opponent team
@@ -54,7 +56,7 @@ class ScoreKeeping extends StatelessWidget {
                 alignment: Alignment.center,
                 padding: const EdgeInsets.only(right: 5.0),
                 child: Text(
-                  state.opponent,
+                  gameBloc.state.opponent == "" ? 'TODO Unbekannt' : gameBloc.state.opponent,
                   textAlign: TextAlign.center,
                 )),
           ],
@@ -62,14 +64,18 @@ class ScoreKeeping extends StatelessWidget {
       ),
     );
   }
+}
 
-  void callScoreKeeping(context) {
-    double buttonHeight = MediaQuery.of(context).size.height * 0.1;
-    final GameBloc gameBloc = context.read<GameBloc>();
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
+void callScoreKeeping(BuildContext context) {
+  double buttonHeight = MediaQuery.of(context).size.height * 0.1;
+  final GameBloc gameBloc = context.read<GameBloc>();
+  print("got here");
+  showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return BlocProvider.value(
+          value: gameBloc,
+          child: AlertDialog(
             scrollable: true,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(MENU_RADIUS),
@@ -116,7 +122,9 @@ class ScoreKeeping extends StatelessWidget {
                           alignment: Alignment.center,
                           padding: const EdgeInsets.all(5.0),
                           child: Text(
-                            gameBloc.state.selectedTeam == Team() ? 'TODO no team selected' : gameBloc.state.selectedTeam.name,
+                            context.read<GameBloc>().state.selectedTeam == Team()
+                                ? 'TODO no team selected'
+                                : context.read<GameBloc>().state.selectedTeam.name,
                             textAlign: TextAlign.center,
                           )),
                       Column(
@@ -129,7 +137,7 @@ class ScoreKeeping extends StatelessWidget {
                                 backgroundColor: buttonLightBlueColor,
                               ),
                               onPressed: () {
-                                gameBloc.add(ChangeScore(score: gameBloc.state.ownScore + 1, isOwnScore: true));
+                                context.read<GameBloc>().add(ChangeScore(score: context.read<GameBloc>().state.ownScore + 1, isOwnScore: true));
                               },
                               child: Icon(Icons.add, size: 15, color: Colors.black),
                             ),
@@ -146,11 +154,11 @@ class ScoreKeeping extends StatelessWidget {
                                 onChanged: (text) {
                                   // score cannot be negative or bigger than 2 digits for now
                                   if (text != "" && int.parse(text) > 0 && int.parse(text) < 100) {
-                                    gameBloc.add(ChangeScore(score: int.parse(text), isOwnScore: true));
+                                    context.read<GameBloc>().add(ChangeScore(score: int.parse(text), isOwnScore: true));
                                   }
                                 },
                                 textAlign: TextAlign.center,
-                                decoration: InputDecoration(border: InputBorder.none, hintText: gameBloc.state.ownScore.toString()),
+                                decoration: InputDecoration(border: InputBorder.none, hintText: context.read<GameBloc>().state.ownScore.toString()),
                                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 28),
                                 keyboardType: TextInputType.number,
                               )),
@@ -163,8 +171,8 @@ class ScoreKeeping extends StatelessWidget {
                               ),
                               onPressed: () {
                                 // score cannot be negative
-                                if (gameBloc.state.ownScore > 0) {
-                                  gameBloc.add(ChangeScore(score: gameBloc.state.ownScore - 1, isOwnScore: true));
+                                if (context.read<GameBloc>().state.ownScore > 0) {
+                                  context.read<GameBloc>().add(ChangeScore(score: context.read<GameBloc>().state.ownScore - 1, isOwnScore: true));
                                 }
                               },
                               child: Icon(Icons.remove, size: 15, color: Colors.black),
@@ -187,7 +195,7 @@ class ScoreKeeping extends StatelessWidget {
                               backgroundColor: buttonLightBlueColor,
                             ),
                             onPressed: () {
-                              gameBloc.add(ChangeScore(score: gameBloc.state.ownScore + 1, isOwnScore: false));
+                              context.read<GameBloc>().add(ChangeScore(score: context.read<GameBloc>().state.ownScore + 1, isOwnScore: false));
                             },
                             child: Icon(Icons.add, size: 15, color: Colors.black),
                           ),
@@ -205,11 +213,12 @@ class ScoreKeeping extends StatelessWidget {
                               onChanged: (text) {
                                 // score cannot be negative or bigger than 2 digits for now
                                 if (text != "" && int.parse(text) > 0 && int.parse(text) < 100) {
-                                  gameBloc.add(ChangeScore(score: int.parse(text), isOwnScore: false));
+                                  context.read<GameBloc>().add(ChangeScore(score: int.parse(text), isOwnScore: false));
                                 }
                               },
                               textAlign: TextAlign.center,
-                              decoration: InputDecoration(border: InputBorder.none, hintText: gameBloc.state.opponentScore.toString()),
+                              decoration:
+                                  InputDecoration(border: InputBorder.none, hintText: context.read<GameBloc>().state.opponentScore.toString()),
                               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 28),
                               keyboardType: TextInputType.number,
                             )),
@@ -222,8 +231,8 @@ class ScoreKeeping extends StatelessWidget {
                             ),
                             onPressed: () {
                               // score cannot be negative
-                              if (gameBloc.state.opponentScore > 0) {
-                                gameBloc.add(ChangeScore(score: gameBloc.state.opponentScore - 1, isOwnScore: false));
+                              if (context.read<GameBloc>().state.opponentScore > 0) {
+                                context.read<GameBloc>().add(ChangeScore(score: context.read<GameBloc>().state.opponentScore - 1, isOwnScore: false));
                               }
                             },
                             child: Icon(Icons.remove, size: 15, color: Colors.black),
@@ -253,7 +262,7 @@ class ScoreKeeping extends StatelessWidget {
                 ),
               ],
             ),
-          );
-        });
-  }
+          ),
+        );
+      });
 }

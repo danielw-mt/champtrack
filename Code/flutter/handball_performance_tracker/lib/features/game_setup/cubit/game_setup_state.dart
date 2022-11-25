@@ -6,7 +6,7 @@ class GameSetupState extends Equatable {
   final GameSetupStep currentStep;
   final String opponent;
   final String location;
-  DateTime? date = DateTime.now();
+  DateTime date = DateTime.now();
   final int selectedTeamIndex;
   final bool isHomeGame;
   final bool attackIsLeft;
@@ -16,15 +16,18 @@ class GameSetupState extends Equatable {
     this.currentStep = GameSetupStep.gameSettings,
     this.opponent = '',
     this.location = '',
-    this.date,
+    date,
     this.selectedTeamIndex = 0,
     this.isHomeGame = true,
     this.attackIsLeft = true,
     this.onFieldPlayers = const [],
-  }){
+  }) {
     // make sure that the list is growable
-    if (this.onFieldPlayers.isEmpty){
+    if (this.onFieldPlayers.isEmpty) {
       this.onFieldPlayers = [];
+    }
+    if (date != null) {
+      this.date = date;
     }
   }
 
@@ -58,9 +61,11 @@ class GameSetupState extends Equatable {
       selectedTeamIndex: $selectedTeamIndex,
       isHomeGame: $isHomeGame,
       attackIsLeft: $attackIsLeft,
+      onFieldPlayers: $onFieldPlayers,
+      date: $date,
     }''';
   }
 
   @override
-  List<Object> get props => [currentStep, opponent, location, selectedTeamIndex, isHomeGame, attackIsLeft, onFieldPlayers];
+  List<Object> get props => [currentStep, opponent, location, selectedTeamIndex, isHomeGame, attackIsLeft, onFieldPlayers, date];
 }

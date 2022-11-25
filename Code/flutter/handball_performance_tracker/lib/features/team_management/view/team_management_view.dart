@@ -29,7 +29,7 @@ class TeamManagementView extends StatelessWidget {
                     appBar: AppBar(backgroundColor: buttonDarkBlueColor, title: Text("TODO Teams")),
                     key: _scaffoldKey,
                     drawer: SidebarView(),
-                    bottomNavigationBar: TeamManagementTabsBar(),
+                    bottomNavigationBar: TabsBar(),
                     body: Column(
                       children: [
                         Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, crossAxisAlignment: CrossAxisAlignment.start, children: [

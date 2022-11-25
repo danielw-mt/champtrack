@@ -22,12 +22,14 @@ class GameSettings extends StatelessWidget {
   Widget build(BuildContext context) {
     final globalState = context.watch<GlobalBloc>().state;
     final gameSetupState = context.watch<GameSetupCubit>().state;
+    final gameSetupCubit = context.watch<GameSetupCubit>();
     // TODO implement season dropdown
     TextEditingController seasonController = TextEditingController();
     TextEditingController opponentController = TextEditingController(text: gameSetupState.opponent);
     TextEditingController locationController = TextEditingController(text: gameSetupState.location);
+    TextEditingController dateController = TextEditingController(text: "${gameSetupState.date.toLocal()}".split(' ')[0]);
     locationController.text = gameSetupState.location;
-    DateTime selectedDate = gameSetupState.date ?? DateTime.now();
+    DateTime selectedDate = gameSetupState.date;
     int selectedTeamIndex = gameSetupState.selectedTeamIndex;
     bool isAtHome = gameSetupState.isHomeGame;
     bool attackIsLeft = gameSetupState.attackIsLeft;
@@ -96,10 +98,6 @@ class GameSettings extends StatelessWidget {
                                 controller: opponentController,
                                 style: TextStyle(fontSize: 18),
                                 decoration: getDecoration(StringsGeneral.lOpponent),
-                                // TODO probably don't need this
-                                // onChanged: (String? input) {
-                                //   if (input != null) opponentController.text = input;
-                                // },
                               )),
                         ),
                         // Textfield for location
@@ -110,10 +108,6 @@ class GameSettings extends StatelessWidget {
                               child: TextFormField(
                                 controller: locationController,
                                 decoration: getDecoration(StringsGeneral.lLocation),
-                                // TODO probably don't need this with statelesswidget
-                                // onChanged: (String? input) {
-                                //   if (input != null) location = input;
-                                // },
                               )),
                         ),
                       ],
@@ -123,6 +117,19 @@ class GameSettings extends StatelessWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
+                        // Textfield for date
+                        Flexible(
+                          child: SizedBox(
+                              width: width * 0.3,
+                              height: height * 0.15,
+                              child: TextFormField(
+                                  controller: dateController,
+                                  decoration: getDecoration(StringsGameSettings.lSelectDate),
+                                  onTap: () async {
+                                    DateTime? selectedDate = await selectDate(context, gameSetupState.date);
+                                    gameSetupCubit.setDate(selectedDate ?? gameSetupState.date!);
+                                  })),
+                        ),
                         // team dropdown showing all available teams from teams collection
                         Flexible(
                           child: SizedBox(
@@ -147,9 +154,13 @@ class GameSettings extends StatelessWidget {
                                 children: [
                                   Checkbox(
                                       fillColor: MaterialStateProperty.all<Color>(buttonDarkBlueColor),
-                                      value: isAtHome,
+                                      value: gameSetupState.isHomeGame,
                                       onChanged: (bool? value) {
-                                        isAtHome = value!;
+                                        if (value == true) {
+                                          gameSetupCubit.setAtHome(true);
+                                        } else {
+                                          gameSetupCubit.setAtHome(false);
+                                        }
                                       }),
                                   Text(StringsGeneral.lHomeGame),
                                 ],
@@ -159,9 +170,13 @@ class GameSettings extends StatelessWidget {
                                 children: [
                                   Checkbox(
                                       fillColor: MaterialStateProperty.all<Color>(buttonDarkBlueColor),
-                                      value: !isAtHome,
+                                      value: !gameSetupState.isHomeGame,
                                       onChanged: (bool? value) {
-                                        isAtHome = !value!;
+                                        if (value == true) {
+                                          gameSetupCubit.setAtHome(false);
+                                        } else {
+                                          gameSetupCubit.setAtHome(true);
+                                        }
                                       }),
                                   Text(StringsGeneral.lOutwardsGame),
                                 ],
@@ -172,9 +187,9 @@ class GameSettings extends StatelessWidget {
                                     Flexible(
                                       child: Checkbox(
                                           fillColor: MaterialStateProperty.all<Color>(buttonDarkBlueColor),
-                                          value: attackIsLeft,
+                                          value: gameSetupState.attackIsLeft,
                                           onChanged: (bool? value) {
-                                            attackIsLeft = value ?? attackIsLeft;
+                                            gameSetupCubit.setAttackIsLeft(value ?? false);
                                           }),
                                     ),
                                     Flexible(child: Text(StringsGameSettings.lHomeSideIsRight))
@@ -249,6 +264,21 @@ class GameSettings extends StatelessWidget {
     );
   }
 
+  Future<DateTime?> selectDate(BuildContext context, initialDate) async {
+    final DateTime? picked = await showDatePicker(
+        context: context,
+        initialDate: initialDate,
+        firstDate: DateTime(2015, 8),
+        lastDate: DateTime(2101),
+        builder: (context, child) {
+          return Theme(data: ThemeData.light().copyWith(colorScheme: ColorScheme.fromSeed(seedColor: buttonDarkBlueColor)), child: child!);
+        });
+    if (picked != null && picked != initialDate) {
+      return picked;
+    }
+    return null;
+  }
+
   // configure decoration for all input fields
   InputDecoration getDecoration(String labelText) {
     return InputDecoration(
@@ -263,18 +293,4 @@ class GameSettings extends StatelessWidget {
 
   // Daniel. Nov 11 2022. We don't really need this date selector for now. Might be useful later on.
 
-  // Future<void> selectDate(BuildContext context) async {
-  //   final DateTime? picked = await showDatePicker(
-  //       context: context,
-  //       initialDate: selectedDate,
-  //       firstDate: DateTime(2015, 8),
-  //       lastDate: DateTime(2101),
-  //       builder: (context, child) {
-  //         return Theme(data: ThemeData.light().copyWith(colorScheme: ColorScheme.fromSeed(seedColor: buttonDarkBlueColor)), child: child!);
-  //       });
-  //   if (picked != null && picked != selectedDate) {
-  //     selectedDate = picked;
-  //     // dateController.text = "${selectedDate.toLocal()}".split(' ')[0];
-  //   }
-  // }
 }
