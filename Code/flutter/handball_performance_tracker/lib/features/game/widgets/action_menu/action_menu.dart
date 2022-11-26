@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:handball_performance_tracker/core/constants/design_constants.dart';
 import 'package:handball_performance_tracker/core/core.dart';
-import 'package:handball_performance_tracker/core/constants/stringsGameScreen.dart';
+import 'package:handball_performance_tracker/core/constants/strings_game_screen.dart';
 import 'package:handball_performance_tracker/core/constants/game_actions.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:handball_performance_tracker/features/game/game.dart';

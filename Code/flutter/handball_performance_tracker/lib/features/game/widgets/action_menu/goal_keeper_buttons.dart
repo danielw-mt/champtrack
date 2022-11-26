@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:handball_performance_tracker/core/constants/stringsGameScreen.dart';
+import 'package:handball_performance_tracker/core/constants/strings_game_screen.dart';
 import 'package:handball_performance_tracker/core/constants/game_actions.dart';
 import 'action_button.dart';
 
@@ -16,7 +16,6 @@ class GoalKeeperButtons extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               ActionButton(
-                  buildContext: context,
                   actionTag: goalKeeperActionMapping[StringsGameScreen.lYellowCard]!,
                   actionContext: actionContextGoalkeeper,
                   buttonText: StringsGameScreen.lYellowCard,
@@ -24,7 +23,6 @@ class GoalKeeperButtons extends StatelessWidget {
                   sizeFactor: 0,
                   icon: Icon(Icons.style)),
               ActionButton(
-                  buildContext: context,
                   actionTag: goalKeeperActionMapping[StringsGameScreen.lRedCard]!,
                   actionContext: actionContextGoalkeeper,
                   buttonText: StringsGameScreen.lRedCard,
@@ -36,7 +34,6 @@ class GoalKeeperButtons extends StatelessWidget {
         ),
         Flexible(
             child: ActionButton(
-                buildContext: context,
                 actionTag: goalKeeperActionMapping[StringsGameScreen.lTimePenalty]!,
                 actionContext: actionContextGoalkeeper,
                 buttonText: StringsGameScreen.lTimePenalty,
@@ -45,7 +42,6 @@ class GoalKeeperButtons extends StatelessWidget {
                 icon: Icon(Icons.timer))),
         Flexible(
           child: ActionButton(
-            buildContext: context,
             actionTag: goalKeeperActionMapping[StringsGameScreen.lEmptyGoal]!,
             actionContext: actionContextGoalkeeper,
             buttonText: StringsGameScreen.lEmptyGoal,
@@ -55,7 +51,6 @@ class GoalKeeperButtons extends StatelessWidget {
         ),
         Flexible(
             child: ActionButton(
-          buildContext: context,
           actionTag: goalKeeperActionMapping[StringsGameScreen.lErrThrowGoalkeeper]!,
           actionContext: actionContextGoalkeeper,
           buttonText: StringsGameScreen.lErrThrowGoalkeeper,
@@ -67,7 +62,6 @@ class GoalKeeperButtons extends StatelessWidget {
         child: Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
           Flexible(
               child: ActionButton(
-            buildContext: context,
             actionTag: goalKeeperActionMapping[StringsGameScreen.lGoalGoalkeeper]!,
             actionContext: actionContextGoalkeeper,
             buttonText: StringsGameScreen.lGoalGoalkeeper,
@@ -75,7 +69,6 @@ class GoalKeeperButtons extends StatelessWidget {
           )),
           Flexible(
               child: ActionButton(
-            buildContext: context,
             actionTag: goalKeeperActionMapping[StringsGameScreen.lBadPass]!,
             actionContext: actionContextGoalkeeper,
             buttonText: StringsGameScreen.lBadPass,
@@ -89,7 +82,6 @@ class GoalKeeperButtons extends StatelessWidget {
           children: [
             Flexible(
                 child: ActionButton(
-              buildContext: context,
               actionTag: goalKeeperActionMapping[StringsGameScreen.lParade]!,
               actionContext: actionContextGoalkeeper,
               buttonText: StringsGameScreen.lParade,
@@ -97,7 +89,6 @@ class GoalKeeperButtons extends StatelessWidget {
             )),
             Flexible(
                 child: ActionButton(
-              buildContext: context,
               actionTag: goalKeeperActionMapping[StringsGameScreen.lGoalOpponent]!,
               actionContext: actionContextGoalkeeper,
               buttonText: StringsGameScreen.lGoalOpponent,

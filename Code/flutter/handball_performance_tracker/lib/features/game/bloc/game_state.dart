@@ -2,6 +2,8 @@ part of 'game_bloc.dart';
 
 enum GameStatus { initial, running, paused, finished }
 
+enum MenuStatus { closed, actionMenu, playerMenu, sevenMeterMenu }
+
 class GameState extends Equatable {
   // fields set during game creation
   final GameStatus status;
@@ -25,6 +27,7 @@ class GameState extends Equatable {
   String playerMenuHintText = '';
   Player previousClickedPlayer = Player();
   List<Player> penalizedPlayers = [];
+  MenuStatus menuStatus = MenuStatus.closed;
 
   // Some of these fields can only be set in this constructor like date, opponent or location because they get passed from the previous screen
   GameState({
@@ -49,6 +52,7 @@ class GameState extends Equatable {
     this.playerMenuHintText = '',
     previousClickedPlayer,
     this.penalizedPlayers = const [],
+    this.menuStatus = MenuStatus.closed,
   }) {
     // make sure that the list is growable
     if (this.onFieldPlayers.isEmpty) {
@@ -91,6 +95,7 @@ class GameState extends Equatable {
     String? playerMenuHintText,
     Player? previousClickedPlayer,
     List<Player>? penalizedPlayers,
+    MenuStatus? menuStatus,
   }) {
     return GameState(
       // these properties cannot be changed after game initialization so they can only be set in the constructor but not in the copyWith method
@@ -115,6 +120,7 @@ class GameState extends Equatable {
       playerMenuHintText: playerMenuHintText ?? this.playerMenuHintText,
       previousClickedPlayer: previousClickedPlayer ?? this.previousClickedPlayer,
       penalizedPlayers: penalizedPlayers ?? this.penalizedPlayers,
+      menuStatus: menuStatus ?? this.menuStatus,
     );
   }
 
@@ -134,5 +140,6 @@ class GameState extends Equatable {
         this.playerMenuHintText,
         this.previousClickedPlayer,
         this.penalizedPlayers,
+        this.menuStatus,
       ];
 }

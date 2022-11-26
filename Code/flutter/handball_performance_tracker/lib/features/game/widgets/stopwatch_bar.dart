@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:handball_performance_tracker/core/constants/colors.dart';
 import 'package:handball_performance_tracker/core/constants/design_constants.dart';
-import 'package:handball_performance_tracker/core/constants/stringsGeneral.dart';
+import 'package:handball_performance_tracker/core/constants/strings_general.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 import 'package:handball_performance_tracker/features/game/game.dart';
 

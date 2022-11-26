@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:handball_performance_tracker/core/constants/colors.dart';
 import 'package:handball_performance_tracker/data/models/game_model.dart';
 import 'package:handball_performance_tracker/data/models/team_model.dart';
-import 'package:handball_performance_tracker/core/constants/stringsGeneral.dart';
+import 'package:handball_performance_tracker/core/constants/strings_general.dart';
 import 'package:handball_performance_tracker/core/core.dart';
 
 class GameList extends StatelessWidget {

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:handball_performance_tracker/core/constants/colors.dart';
-import 'package:handball_performance_tracker/core/constants/fieldSizeParameter.dart' as fieldSizeParameter;
+import 'package:handball_performance_tracker/core/constants/field_size_parameters.dart' as fieldSizeParameter;
 // TODO do we need this package?
 import 'package:rainbow_color/rainbow_color.dart';
 

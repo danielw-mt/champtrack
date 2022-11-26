@@ -4,7 +4,7 @@ import 'package:pie_chart/pie_chart.dart' as pie;
 import 'dart:math';
 import 'dart:core';
 import '../../old-utils/action_mapping.dart';
-import '../../core/constants/stringsGeneral.dart';
+import '../../core/constants/strings_general.dart';
 
 class LineChartWidget extends StatelessWidget {
   final List<int> timeStamps;

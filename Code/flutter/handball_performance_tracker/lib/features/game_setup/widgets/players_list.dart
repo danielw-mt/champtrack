@@ -4,7 +4,7 @@ import 'package:handball_performance_tracker/features/game_setup/game_setup.dart
 import 'package:handball_performance_tracker/core/constants/colors.dart';
 import 'package:handball_performance_tracker/data/models/player_model.dart';
 import 'package:handball_performance_tracker/data/models/team_model.dart';
-import 'package:handball_performance_tracker/core/constants/stringsGeneral.dart';
+import 'package:handball_performance_tracker/core/constants/strings_general.dart';
 import 'package:handball_performance_tracker/core/core.dart';
 
 class PlayersList extends StatelessWidget {

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:handball_performance_tracker/core/constants/stringsGameScreen.dart';
+import 'package:handball_performance_tracker/core/constants/strings_game_screen.dart';
 import 'package:handball_performance_tracker/core/constants/game_actions.dart';
 import 'action_button.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -20,7 +20,6 @@ class DefenseButtons extends StatelessWidget {
         children: [
           Row(children: [
             ActionButton(
-                buildContext: context,
                 actionTag: defenseActionMapping[StringsGameScreen.lYellowCard]!,
                 actionContext: actionContextDefense,
                 buttonText: StringsGameScreen.lYellowCard,
@@ -28,7 +27,6 @@ class DefenseButtons extends StatelessWidget {
                 sizeFactor: 0,
                 icon: Icon(Icons.style)),
             ActionButton(
-                buildContext: context,
                 actionTag: defenseActionMapping[StringsGameScreen.lRedCard]!,
                 actionContext: actionContextDefense,
                 buttonText: StringsGameScreen.lRedCard,
@@ -38,7 +36,6 @@ class DefenseButtons extends StatelessWidget {
           ]),
           Flexible(
               child: ActionButton(
-            buildContext: context,
             actionTag: defenseActionMapping[StringsGameScreen.lTwoMin]!,
             actionContext: actionContextDefense,
             buttonText: StringsGameScreen.lTwoMin,
@@ -47,7 +44,6 @@ class DefenseButtons extends StatelessWidget {
           )),
           Flexible(
               child: ActionButton(
-                  buildContext: context,
                   actionTag: defenseActionMapping[StringsGameScreen.lTimePenalty]!,
                   actionContext: actionContextDefense,
                   buttonText: StringsGameScreen.lTimePenalty,
@@ -62,7 +58,6 @@ class DefenseButtons extends StatelessWidget {
           children: [
             Flexible(
                 child: ActionButton(
-              buildContext: context,
               actionTag: defenseActionMapping[StringsGameScreen.lFoul7m]!,
               actionContext: actionContextDefense,
               buttonText: StringsGameScreen.lFoul7m,
@@ -70,7 +65,6 @@ class DefenseButtons extends StatelessWidget {
             )),
             Flexible(
                 child: ActionButton(
-              buildContext: context,
               actionTag: defenseActionMapping[StringsGameScreen.lTrf]!,
               actionContext: actionContextDefense,
               buttonText: StringsGameScreen.lTrf,
@@ -85,7 +79,6 @@ class DefenseButtons extends StatelessWidget {
           children: [
             Flexible(
                 child: ActionButton(
-              buildContext: context,
               actionTag: defenseActionMapping[StringsGameScreen.lBlockNoBall]!,
               actionContext: actionContextDefense,
               buttonText: StringsGameScreen.lBlockNoBall,
@@ -93,7 +86,6 @@ class DefenseButtons extends StatelessWidget {
             )),
             Flexible(
                 child: ActionButton(
-              buildContext: context,
               actionTag: defenseActionMapping[StringsGameScreen.lBlockAndSteal]!,
               actionContext: actionContextDefense,
               buttonText: StringsGameScreen.lBlockAndSteal,

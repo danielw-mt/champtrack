@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:handball_performance_tracker/core/constants/colors.dart';
-import 'package:handball_performance_tracker/core/constants/stringsTeamManagement.dart';
+import 'package:handball_performance_tracker/core/constants/strings_team_management.dart';
 import 'package:handball_performance_tracker/core/core.dart';
-import 'package:handball_performance_tracker/core/constants/stringsDashboard.dart';
-import 'package:handball_performance_tracker/core/constants/stringsGameSettings.dart';
-import 'package:handball_performance_tracker/core/constants/stringsGeneral.dart';
+import 'package:handball_performance_tracker/core/constants/strings_dashboard.dart';
+import 'package:handball_performance_tracker/core/constants/strings_game_settings.dart';
+import 'package:handball_performance_tracker/core/constants/strings_general.dart';
 import 'package:handball_performance_tracker/features/game_setup/game_setup.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:handball_performance_tracker/data/models/game_model.dart';

@@ -6,7 +6,7 @@ import 'package:handball_performance_tracker/features/game/game.dart';
 import 'package:handball_performance_tracker/features/sidebar/sidebar.dart';
 
 // TODO this is shit get rid of it
-import 'package:handball_performance_tracker/core/constants/fieldSizeParameter.dart' as fieldSizeParameter;
+import 'package:handball_performance_tracker/core/constants/field_size_parameters.dart' as fieldSizeParameter;
 
 class GameView extends StatelessWidget {
   GameView({super.key});

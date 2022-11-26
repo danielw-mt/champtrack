@@ -5,8 +5,8 @@ import 'package:handball_performance_tracker/old-utils/icons.dart';
 import 'package:handball_performance_tracker/old-utils/player_helper.dart';
 import '../../../../old-widgets/main_screen/ef_score_bar.dart';
 import '../../../../old-widgets/main_screen/seven_meter_menu.dart';
-import 'package:handball_performance_tracker/core/constants/stringsGeneral.dart';
-import 'package:handball_performance_tracker/core/constants/stringsGameScreen.dart';
+import 'package:handball_performance_tracker/core/constants/strings_general.dart';
+import 'package:handball_performance_tracker/core/constants/strings_game_screen.dart';
 import '../../../../old-widgets/main_screen/seven_meter_player_menu.dart';
 import '../../../../old-widgets/main_screen/field.dart';
 import 'dart:math';
@@ -136,7 +136,7 @@ void callPlayerMenu(context) {
       // if just pressed anywhere in screen)
       .then((_) {
     gameBloc.add(UpdatePlayerMenuHintText(hintText: ""));
-    gameBloc.add(RegisterClickOnPlayer(player: Player()));
+    gameBloc.add(RegisterPlayerSelection(player: Player()));
     // (!playerChanged && substitute_menu != null) ? gameBloc.state.playerToChange : null; // delete player to change from list if player menu was closed
     // playerChanged = false;
   });

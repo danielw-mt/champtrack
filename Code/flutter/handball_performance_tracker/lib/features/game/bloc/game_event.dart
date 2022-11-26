@@ -90,15 +90,16 @@ class RegisterClickOnField extends GameEvent {
 /// Click on an action in the action menu
 class RegisterAction extends GameEvent {
   final String actionTag;
+  final String actionContext;
 
-  RegisterAction({required this.actionTag});
+  RegisterAction({required this.actionTag, required this.actionContext});
 }
 
 /// Selecting a player in the player menu
-class RegisterClickOnPlayer extends GameEvent {
+class RegisterPlayerSelection extends GameEvent {
   final Player player;
 
-  RegisterClickOnPlayer({required this.player});
+  RegisterPlayerSelection({required this.player});
 }
 
 /// Clicking on our own goal
@@ -128,4 +129,3 @@ class UpdateActionMenuHintText extends GameEvent {
 
   UpdateActionMenuHintText({required this.hintText});
 }
-

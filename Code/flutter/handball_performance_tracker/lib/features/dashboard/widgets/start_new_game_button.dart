@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:handball_performance_tracker/core/core.dart';
 import 'package:handball_performance_tracker/features/game_setup/game_setup.dart';
-import 'package:handball_performance_tracker/core/constants/stringsDashboard.dart';
+import 'package:handball_performance_tracker/core/constants/strings_dashboard.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class StartNewGameButton extends StatelessWidget {
