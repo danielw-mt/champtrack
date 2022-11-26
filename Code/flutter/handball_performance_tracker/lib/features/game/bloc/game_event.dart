@@ -98,8 +98,9 @@ class RegisterAction extends GameEvent {
 /// Selecting a player in the player menu
 class RegisterPlayerSelection extends GameEvent {
   final Player player;
+  final bool isSubstitute;
 
-  RegisterPlayerSelection({required this.player});
+  RegisterPlayerSelection({required this.player, required this.isSubstitute});
 }
 
 /// Clicking on our own goal
@@ -128,4 +129,10 @@ class UpdateActionMenuHintText extends GameEvent {
   final String hintText;
 
   UpdateActionMenuHintText({required this.hintText});
+}
+
+class ChangeMenuStatus extends GameEvent {
+  final MenuStatus menuStatus;
+
+  ChangeMenuStatus({required this.menuStatus});
 }

@@ -7,7 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:handball_performance_tracker/features/game/game.dart';
 import 'action_panel.dart';
 
-void callActionMenu(BuildContext context) {
+void callActionMenu(BuildContext context) async {
   final GameBloc gameBloc = context.read<GameBloc>();
   String actionContext = "";
 
@@ -39,7 +39,9 @@ void callActionMenu(BuildContext context) {
                 borderRadius: BorderRadius.circular(MENU_RADIUS),
               ),
               content: CustomAlertMessageWidget(StringsGameScreen.lGameStartErrorMessage));
-        });
+        }).then((value) {
+      gameBloc.add(ChangeMenuStatus(menuStatus: MenuStatus.closed));
+    });
     return;
   }
 
@@ -67,5 +69,7 @@ void callActionMenu(BuildContext context) {
                   ] // Column of "Player", horizontal line and Button-Row
                       ))),
         );
-      });
+      }).then((value) {
+    gameBloc.add(ChangeMenuStatus(menuStatus: MenuStatus.closed));
+  });
 }

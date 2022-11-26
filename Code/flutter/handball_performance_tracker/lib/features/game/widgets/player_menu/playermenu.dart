@@ -27,7 +27,7 @@ import 'player_grid.dart';
 // TODO move BL to bloc and only do UI here
 
 /// Substiture menu gets called sometimes then this flag is true
-void callPlayerMenu(context) {
+void callPlayerMenu(BuildContext context) {
   final GameBloc gameBloc = context.read<GameBloc>();
   PageController pageController = PageController();
   bool notOnFieldMenuOpen = false;
@@ -35,16 +35,23 @@ void callPlayerMenu(context) {
   // builds the grid with the players on field and the one with players not on field
   List<PlayersGrid> buildPages() {
     List<PlayersGrid> pages = [];
-    pages.add(PlayersGrid(players: gameBloc.state.onFieldPlayers));
+    pages.add(PlayersGrid(
+      players: gameBloc.state.onFieldPlayers,
+      isSubstitute: false,
+    ));
     // if we have more players in the team than the ones that are on the field we need to add a page
     if (gameBloc.state.selectedTeam.players.length > gameBloc.state.onFieldPlayers.length) {
       List<Player> playersNotOnField = [];
       for (Player player in gameBloc.state.selectedTeam.players) {
         if (!gameBloc.state.onFieldPlayers.contains(player)) {
+          print("player not on field: " + player.id.toString());
           playersNotOnField.add(player);
         }
       }
-      pages.add(PlayersGrid(players: playersNotOnField));
+      pages.add(PlayersGrid(
+        players: playersNotOnField,
+        isSubstitute: true,
+      ));
     }
     return pages;
   }
@@ -52,91 +59,93 @@ void callPlayerMenu(context) {
   showDialog(
           context: context,
           builder: (BuildContext bcontext) {
-            return AlertDialog(
-              scrollable: true,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(MENU_RADIUS),
-              ),
-              // alert contains a list of DialogButton objects
-              content:
-                  // Column of "Player", horizontal line and Button-Row
-                  Column(
-                children: [
-                  // upper row: "Player" Text on left and "Assist" will pop up on right after a goal.
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Align(
-                        alignment: Alignment.topLeft,
-                        child: Text(
-                          StringsGeneral.lPlayer,
-                          textAlign: TextAlign.left,
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 20,
+            return BlocProvider.value(
+              value: gameBloc,
+              child: AlertDialog(
+                scrollable: true,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(MENU_RADIUS),
+                ),
+                // alert contains a list of DialogButton objects
+                content:
+                    // Column of "Player", horizontal line and Button-Row
+                    Column(
+                  children: [
+                    // upper row: "Player" Text on left and "Assist" will pop up on right after a goal.
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Align(
+                          alignment: Alignment.topLeft,
+                          child: Text(
+                            StringsGeneral.lPlayer,
+                            textAlign: TextAlign.left,
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 20,
+                            ),
                           ),
                         ),
-                      ),
-                      Align(
-                        alignment: Alignment.topRight,
-                        // Change from "" to "Assist" after a goal.
-                        child: Text(
-                          notOnFieldMenuOpen ? StringsGameScreen.lSubstitute : gameBloc.state.playerMenuHintText,
-                          textAlign: TextAlign.right,
-                          style: const TextStyle(
-                            color: Colors.purple,
-                            fontSize: 20,
+                        Align(
+                          alignment: Alignment.topRight,
+                          // Change from "" to "Assist" after a goal.
+                          child: Text(
+                            notOnFieldMenuOpen ? StringsGameScreen.lSubstitute : gameBloc.state.playerMenuHintText,
+                            textAlign: TextAlign.right,
+                            style: const TextStyle(
+                              color: Colors.purple,
+                              fontSize: 20,
+                            ),
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                  // horizontal line
-                  const Divider(
-                    thickness: 2,
-                    color: Colors.black,
-                    height: 6,
-                  ),
-                  // Substitute player text
-                  // TODO implement this if substitute menu will be used
-                  // Text(
-                  //   substitute_menu == null
-                  //       ? ""
-                  //       : StringsGameScreen.lSubstitute1 + tempController.getPlayersToChange()[0].lastName + StringsGameScreen.lSubstitute2,
-                  //   style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                  // ),
-
-                  // Button-Row: one Row with four Columns of one or two buttons
-                  Scrollbar(
-                    controller: pageController,
-                    thumbVisibility: true,
-                    child: SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.65,
-                      height: MediaQuery.of(context).size.height * 0.6,
-                      child: Expanded(
-                        child: PageView(
-                          onPageChanged: (value) {
-                            if (value == 1) {
-                              notOnFieldMenuOpen = true;
-                            } else {
-                              notOnFieldMenuOpen = false;
-                            }
-                          },
-                          controller: pageController,
-                          children: buildPages(),
-                        ),
-                      ),
+                      ],
                     ),
-                  )
-                ],
+                    // horizontal line
+                    const Divider(
+                      thickness: 2,
+                      color: Colors.black,
+                      height: 6,
+                    ),
+                    // Substitute player text
+                    // TODO implement this if substitute menu will be used
+                    // Text(
+                    //   substitute_menu == null
+                    //       ? ""
+                    //       : StringsGameScreen.lSubstitute1 + tempController.getPlayersToChange()[0].lastName + StringsGameScreen.lSubstitute2,
+                    //   style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    // ),
+
+                    // Button-Row: one Row with four Columns of one or two buttons
+                    Scrollbar(
+                      controller: pageController,
+                      thumbVisibility: true,
+                      child: SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.65,
+                        height: MediaQuery.of(context).size.height * 0.6,
+                        child: Expanded(
+                          child: PageView(
+                            onPageChanged: (value) {
+                              if (value == 1) {
+                                notOnFieldMenuOpen = true;
+                              } else {
+                                notOnFieldMenuOpen = false;
+                              }
+                            },
+                            controller: pageController,
+                            children: buildPages(),
+                          ),
+                        ),
+                      ),
+                    )
+                  ],
+                ),
               ),
             );
           })
       // When closing set player menu text to ""
       // if just pressed anywhere in screen)
       .then((_) {
-    gameBloc.add(UpdatePlayerMenuHintText(hintText: ""));
-    gameBloc.add(RegisterPlayerSelection(player: Player()));
+    gameBloc.add(ChangeMenuStatus(menuStatus: MenuStatus.closed));
     // (!playerChanged && substitute_menu != null) ? gameBloc.state.playerToChange : null; // delete player to change from list if player menu was closed
     // playerChanged = false;
   });

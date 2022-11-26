@@ -6,7 +6,8 @@ import 'package:handball_performance_tracker/data/models/models.dart';
 
 class PlayersGrid extends StatelessWidget {
   List<Player> players;
-  PlayersGrid({super.key, required this.players});
+  bool isSubstitute;
+  PlayersGrid({super.key, required this.players, required this.isSubstitute});
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +16,12 @@ class PlayersGrid extends StatelessWidget {
       // 4 items max per row
       crossAxisCount: 4,
       padding: const EdgeInsets.all(20),
-      children: gameBloc.state.onFieldPlayers.map((Player player) => PlayerButton(player: player)).toList(),
+      children: players
+          .map((Player player) => PlayerButton(
+                player: player,
+                isSubstitute: isSubstitute,
+              ))
+          .toList(),
     );
   }
 }
