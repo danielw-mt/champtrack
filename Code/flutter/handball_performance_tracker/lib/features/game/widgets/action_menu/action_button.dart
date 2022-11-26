@@ -12,7 +12,9 @@ import 'package:handball_performance_tracker/core/constants/positions.dart';
 //  and updates the game state. Its color and icon can be specified as parameters
 // @params - sizeFactor: 0 for small buttons, 1 for middle big buttons, 2 for long buttons, anything else for big buttons
 //         - otherText: Text to display if it should not equal the text in actionMapping
-class CustomDialogButton extends StatelessWidget {
+
+// TODO move all the BL to bloc
+class ActionButton extends StatelessWidget {
   final BuildContext buildContext;
   final String buttonText;
   final Color buttonColor;
@@ -21,7 +23,7 @@ class CustomDialogButton extends StatelessWidget {
   String? otherText;
   final String actionTag;
   final String actionContext;
-  CustomDialogButton(
+  ActionButton(
       {super.key,
       required this.buildContext,
       required this.actionTag,
@@ -72,12 +74,12 @@ class CustomDialogButton extends StatelessWidget {
         if (goalKeepers.length == 1) {
           // we know the player id so we assign it here. For all other actions it is assigned in the player menu
           action.playerId = goalKeepers[0].id!;
-          gameBloc.add(RegisterAction(action: action));
+          gameBloc.add(RegisterAction(actionTag: actionTag));
           Navigator.pop(context);
           // if there is more than one player with a goalkeeper position on field right now
         } else {
           gameBloc.add(UpdatePlayerMenuHintText(hintText: StringsGameScreen.lChooseGoalkeeper));
-          gameBloc.add(RegisterAction(action: action));
+          gameBloc.add(RegisterAction(actionTag: actionTag));
           Navigator.pop(context);
           // TODO call player menu
           // callPlayerMenu(context);
@@ -94,7 +96,7 @@ class CustomDialogButton extends StatelessWidget {
         gameBloc.add(ChangeScore(score: gameBloc.state.opponentScore + 1, isOwnScore: false));
         // we can add a gameaction here to DB because the player does not need to be selected in the player menu later
         action.playerId = "opponent";
-        gameBloc.add(RegisterAction(action: action));
+        gameBloc.add(RegisterAction(actionTag: actionTag));
         Navigator.pop(context);
       }
       // don't show player menu if a goalkeeper action or opponent action was logged
@@ -103,7 +105,7 @@ class CustomDialogButton extends StatelessWidget {
         Navigator.pop(context);
         // TODO callPlayerMenu
         // callPlayerMenu(context);
-        gameBloc.add(RegisterAction(action: action));
+        gameBloc.add(RegisterAction(actionTag: actionTag));
       }
     }
 
@@ -155,6 +157,8 @@ class CustomDialogButton extends StatelessWidget {
             ),
           ),
         ),
-        onTap: () => handleAction(actionTag));
+        onTap: () {
+          gameBloc.add(RegisterAction(actionTag: actionTag));
+        });
   }
 }

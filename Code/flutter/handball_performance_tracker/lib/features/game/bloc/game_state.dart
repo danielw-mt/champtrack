@@ -23,6 +23,8 @@ class GameState extends Equatable {
   List<String> lastClickedLocation = [];
   String actionMenuHintText = '';
   String playerMenuHintText = '';
+  Player previousClickedPlayer = Player();
+  List<Player> penalizedPlayers = [];
 
   // Some of these fields can only be set in this constructor like date, opponent or location because they get passed from the previous screen
   GameState({
@@ -45,6 +47,8 @@ class GameState extends Equatable {
     this.lastClickedLocation = const [],
     this.actionMenuHintText = '',
     this.playerMenuHintText = '',
+    previousClickedPlayer,
+    this.penalizedPlayers = const [],
   }) {
     // make sure that the list is growable
     if (this.onFieldPlayers.isEmpty) {
@@ -65,6 +69,12 @@ class GameState extends Equatable {
     if (this.lastClickedLocation.isEmpty) {
       this.lastClickedLocation = [];
     }
+    if (previousClickedPlayer != null) {
+      this.previousClickedPlayer = previousClickedPlayer;
+    }
+    if (this.penalizedPlayers.isEmpty) {
+      this.penalizedPlayers = [];
+    }
   }
 
   GameState copyWith({
@@ -79,6 +89,8 @@ class GameState extends Equatable {
     List<String>? lastClickedLocation,
     String? actionMenuHintText,
     String? playerMenuHintText,
+    Player? previousClickedPlayer,
+    List<Player>? penalizedPlayers,
   }) {
     return GameState(
       // these properties cannot be changed after game initialization so they can only be set in the constructor but not in the copyWith method
@@ -101,6 +113,8 @@ class GameState extends Equatable {
       playerToChange: this.playerToChange,
       actionMenuHintText: actionMenuHintText ?? this.actionMenuHintText,
       playerMenuHintText: playerMenuHintText ?? this.playerMenuHintText,
+      previousClickedPlayer: previousClickedPlayer ?? this.previousClickedPlayer,
+      penalizedPlayers: penalizedPlayers ?? this.penalizedPlayers,
     );
   }
 
@@ -118,5 +132,7 @@ class GameState extends Equatable {
         this.playerToChange,
         this.actionMenuHintText,
         this.playerMenuHintText,
+        this.previousClickedPlayer,
+        this.penalizedPlayers,
       ];
 }

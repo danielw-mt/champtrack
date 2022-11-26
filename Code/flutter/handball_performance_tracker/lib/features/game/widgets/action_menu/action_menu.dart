@@ -5,7 +5,7 @@ import 'package:handball_performance_tracker/core/constants/stringsGameScreen.da
 import 'package:handball_performance_tracker/core/constants/game_actions.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:handball_performance_tracker/features/game/game.dart';
-import 'dialog_button_menu.dart';
+import 'action_panel.dart';
 
 void callActionMenu(BuildContext context) {
   final GameBloc gameBloc = context.read<GameBloc>();
@@ -60,7 +60,7 @@ void callActionMenu(BuildContext context) {
                   height: MediaQuery.of(context).size.height * 0.7,
                   child: Column(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
                     Expanded(
-                      child: DialogButtonMenu(
+                      child: ActionPanel(
                         actionContext: actionContext,
                       ),
                     )
