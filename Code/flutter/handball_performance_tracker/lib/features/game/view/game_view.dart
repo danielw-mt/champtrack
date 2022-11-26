@@ -19,11 +19,13 @@ class GameView extends StatelessWidget {
     // see: https://stackoverflow.com/questions/47592301/setstate-or-markneedsbuild-called-during-build
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (gameBloc.state.menuStatus == MenuStatus.forceClose) {
-        Navigator.of(context).pop();
+        Navigator.pop(context);
       }
       // close action menu first and then open player menu to make sure that navigation stack stays clean instead of having a player menu on top of an action menu
       if (gameBloc.state.menuStatus == MenuStatus.loadPlayerMenu) {
-        Navigator.of(context).pop();
+        print("loading player menu");
+        Navigator.pop(context);
+        
         callPlayerMenu(context);
         gameBloc.add(ChangeMenuStatus(menuStatus: MenuStatus.playerMenu));
       }

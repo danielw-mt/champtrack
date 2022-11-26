@@ -26,7 +26,7 @@ class GameState extends Equatable {
   List<String> lastClickedLocation = [];
   String actionMenuHintText = '';
   String playerMenuHintText = '';
-  Player previousClickedPlayer = Player();
+  // Player previousClickedPlayer = Player();
   List<Player> penalizedPlayers = [];
   MenuStatus menuStatus = MenuStatus.closed;
   bool assistAvailable = false;
@@ -52,7 +52,7 @@ class GameState extends Equatable {
     this.lastClickedLocation = const [],
     this.actionMenuHintText = '',
     this.playerMenuHintText = '',
-    previousClickedPlayer,
+    // previousClickedPlayer,
     this.penalizedPlayers = const [],
     this.menuStatus = MenuStatus.closed,
     this.assistAvailable = false,
@@ -76,9 +76,9 @@ class GameState extends Equatable {
     if (this.lastClickedLocation.isEmpty) {
       this.lastClickedLocation = [];
     }
-    if (previousClickedPlayer != null) {
-      this.previousClickedPlayer = previousClickedPlayer;
-    }
+    // if (previousClickedPlayer != null) {
+    //   this.previousClickedPlayer = previousClickedPlayer;
+    // }
     if (this.penalizedPlayers.isEmpty) {
       this.penalizedPlayers = [];
     }
@@ -96,7 +96,7 @@ class GameState extends Equatable {
     List<String>? lastClickedLocation,
     String? actionMenuHintText,
     String? playerMenuHintText,
-    Player? previousClickedPlayer,
+    // Player? previousClickedPlayer,
     List<Player>? penalizedPlayers,
     MenuStatus? menuStatus,
     bool? assistAvailable,
@@ -122,7 +122,7 @@ class GameState extends Equatable {
       playerToChange: this.playerToChange,
       actionMenuHintText: actionMenuHintText ?? this.actionMenuHintText,
       playerMenuHintText: playerMenuHintText ?? this.playerMenuHintText,
-      previousClickedPlayer: previousClickedPlayer ?? this.previousClickedPlayer,
+      // previousClickedPlayer: previousClickedPlayer ?? this.previousClickedPlayer,
       penalizedPlayers: penalizedPlayers ?? this.penalizedPlayers,
       menuStatus: menuStatus ?? this.menuStatus,
       assistAvailable: assistAvailable ?? this.assistAvailable,
@@ -143,8 +143,9 @@ class GameState extends Equatable {
         this.playerToChange,
         this.actionMenuHintText,
         this.playerMenuHintText,
-        this.previousClickedPlayer,
+        // this.previousClickedPlayer,
         this.penalizedPlayers,
         this.menuStatus,
+        this.assistAvailable,
       ];
 }

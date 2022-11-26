@@ -217,9 +217,15 @@ class GameBloc extends Bloc<GameEvent, GameState> {
       GameAction lastAction = state.gameActions.last;
       // if the last action was a goal and assist wasn't selected yet enable the option for an assist
       if (lastAction.tag == goalTag && state.assistAvailable == false) {
-        emit(state.copyWith(assistAvailable: true, menuStatus: MenuStatus.loadPlayerMenu));
+        List<GameAction> newGameActions = state.gameActions;
+        newGameActions.last.playerId = event.player.id!;
+        emit(state.copyWith(assistAvailable: true, menuStatus: MenuStatus.loadPlayerMenu, gameActions: newGameActions));
+      } else if (lastAction.tag == goalTag && state.assistAvailable == true) {
+        // TODO assist action
+        emit(state.copyWith(assistAvailable: false, menuStatus: MenuStatus.forceClose));
+      } else {
+        emit(state.copyWith(menuStatus: MenuStatus.forceClose));
       }
-      emit(state.copyWith(menuStatus: MenuStatus.forceClose));
     });
   }
 }
