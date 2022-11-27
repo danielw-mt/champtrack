@@ -147,6 +147,12 @@ class GameBloc extends Bloc<GameEvent, GameState> {
       emit(state.copyWith(playerMenuHintText: event.hintText));
     });
 
+    on<SubstitutePlayer>((event, emit) {
+      List<Player> onFieldPlayers = state.onFieldPlayers;
+      onFieldPlayers[onFieldPlayers.indexOf(event.toBeSubstitutedPlayer)] = event.substitutionPlayer;
+      emit(state.copyWith(onFieldPlayers: onFieldPlayers, menuStatus: MenuStatus.forceClose, substitutionPlayer: Player()));
+    });
+
     on<RegisterAction>((event, emit) {
       DateTime dateTime = DateTime.now();
       int unixTime = dateTime.toUtc().millisecondsSinceEpoch;
@@ -163,8 +169,8 @@ class GameBloc extends Bloc<GameEvent, GameState> {
           timestamp: unixTime,
           relativeTime: secondsSinceGameStart);
 
-      // for an action from opponent we can switch directly
-      if (event.actionTag == emptyGoalTag || event.actionTag == goalOpponentTag) {
+      // for an action from opponent we can switch directly, or if we get a
+      if (event.actionTag == emptyGoalTag || event.actionTag == goalOpponentTag || event.actionTag == goalOpponent7mTag) {
         // trigger switch field event
         emit(state.copyWith(menuStatus: MenuStatus.forceClose));
         this.add(SwitchField());
@@ -187,9 +193,13 @@ class GameBloc extends Bloc<GameEvent, GameState> {
           // if there is more than one player with a goalkeeper position on field right now open the player menu
         } else {
           state.playerMenuHintText = StringsGameScreen.lChooseGoalkeeper;
-          emit(state.copyWith(menuStatus: MenuStatus.forceClose));
-          emit(state.copyWith(menuStatus: MenuStatus.playerMenu));
+          emit(state.copyWith(menuStatus: MenuStatus.loadPlayerMenu));
         }
+      }
+      // if we received a 
+      if (event.actionTag == oneVOneSevenTag) {
+        state.playerMenuHintText = StringsGameScreen.lChoose7mCause;
+        emit(state.copyWith(menuStatus: MenuStatus.loadPlayerMenu));
       }
       if (event.actionTag == oneVOneSevenTag) {
         state.playerMenuHintText = StringsGameScreen.lChoose7mReceiver;
@@ -292,11 +302,74 @@ class GameBloc extends Bloc<GameEvent, GameState> {
             substitutionPlayer: Player()));
       }
     });
-
-    on<SubstitutePlayer>((event, emit) {
-      List<Player> onFieldPlayers = state.onFieldPlayers;
-      onFieldPlayers[onFieldPlayers.indexOf(event.toBeSubstitutedPlayer)] = event.substitutionPlayer;
-      emit(state.copyWith(onFieldPlayers: onFieldPlayers, menuStatus: MenuStatus.forceClose, substitutionPlayer: Player()));
-    });
   }
 }
+
+// void logAction() async {
+//   // we executed a 7m
+//   if (actionTag == goal7mTag || actionTag == missed7mTag) {
+//     logger.d("our team executed a 7m");
+//     Player sevenMeterExecutor = tempController.getPreviousClickedPlayer();
+//     action.playerId = sevenMeterExecutor.id!;
+//     persistentController.addActionToCache(action);
+//     persistentController.addActionToFirebase(action);
+//     tempController.updatePlayerEfScore(action.playerId, action);
+//     addFeedItem(action);
+//     tempController.setPreviousClickedPlayer(Player());
+//     Navigator.pop(context);
+//     // opponents scored or missed their 7m
+//   } else if (actionTag == goalOpponent7mTag || actionTag == parade7mTag) {
+//     logger.d("opponent executed a 7m");
+//     List<Player> goalKeepers = [];
+//     tempController.getOnFieldPlayers().forEach((Player player) {
+//       if (player.positions.contains(goalkeeperPos)) {
+//         goalKeepers.add(player);
+//       }
+//     });
+//     // if there is only one player with a goalkeeper position on field right now assign the action to him
+//     if (goalKeepers.length == 1) {
+//       // we know the player id so we assign it here. For all other actions it is assigned in the player menu
+//       action.playerId = goalKeepers[0].id!;
+//       persistentController.addActionToCache(action);
+//       persistentController.addActionToFirebase(action);
+//       addFeedItem(action);
+//       Navigator.pop(context);
+//       tempController.updatePlayerEfScore(action.playerId, action);
+//       // if there is more than one player with a goalkeeper position on field right now
+//     } else {
+//       tempController.setPlayerMenuText(StringsGameScreen.lChooseGoalkeeper);
+//       logger.d("More than one goalkeeper on field. Waiting for player selection");
+//       persistentController.addActionToCache(action);
+//       Navigator.pop(context);
+//       callPlayerMenu(context);
+//     }
+//   }
+
+//   // goal
+//   if (actionTag == goal7mTag) {
+//     tempController.incOwnScore();
+//     offensiveFieldSwitch();
+//   }
+//   // missed 7m
+//   if (actionTag == missed7mTag) {
+//     offensiveFieldSwitch();
+//   }
+//   // opponent goal
+//   if (actionTag == goalOpponent7mTag) {
+//     tempController.incOpponentScore();
+//     defensiveFieldSwitch();
+//   }
+//   // opponent missed
+//   if (actionTag == parade7mTag) {
+//     defensiveFieldSwitch();
+//   }
+
+//   // If there were player clicked which are not on field, open substitute player menu
+
+//   // see # 400 swapping out player on bench should not be possible
+//   // if (!tempController.getPlayersToChange().isEmpty) {
+//   //   Navigator.pop(context);
+//   //   callPlayerMenu(context, true);
+//   //   return;
+//   // }
+// }

@@ -74,6 +74,8 @@ class SubstitutionPlayerButton extends StatelessWidget {
         width: MediaQuery.of(context).size.width * 0.14,
       ),
       onTap: () {
+        // make sure the game action gets assigned to the now selected substitution player
+        gameBloc.add(RegisterPlayerSelection(player: substitutionPlayer, isSubstitute: false));
         gameBloc.add(SubstitutePlayer(toBeSubstitutedPlayer: toBeSubstitutedPlayer, substitutionPlayer: substitutionPlayer));
       },
     );
