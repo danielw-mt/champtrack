@@ -1,5 +1,4 @@
-import 'package:handball_performance_tracker/core/constants/strings_game_screen.dart';
-import 'package:handball_performance_tracker/core/constants/strings_general.dart';
+import 'package:handball_performance_tracker/core/core.dart';
 
 // action context
 const String actionContextAttack = "attack";

@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:handball_performance_tracker/old-utils/icons.dart';
-import 'package:handball_performance_tracker/old-utils/player_helper.dart';
 import 'package:handball_performance_tracker/core/constants/design_constants.dart';
 import '../../../../old-widgets/main_screen/seven_meter_menu.dart';
 import 'package:handball_performance_tracker/core/constants/strings_general.dart';

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:handball_performance_tracker/core/constants/colors.dart';
+import 'package:handball_performance_tracker/core/core.dart';
 import 'package:handball_performance_tracker/features/sidebar/sidebar.dart';
 
 // a screen that holds widgets that can be useful for debugging and game control

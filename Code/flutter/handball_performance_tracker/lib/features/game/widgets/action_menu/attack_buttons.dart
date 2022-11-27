@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:handball_performance_tracker/core/constants/strings_game_screen.dart';
-import 'package:handball_performance_tracker/core/constants/game_actions.dart';
+import 'package:handball_performance_tracker/core/core.dart';
 import 'action_button.dart';
 
 class AttackButtons extends StatelessWidget {

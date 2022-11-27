@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:handball_performance_tracker/core/constants/strings_team_management.dart';
 import 'package:handball_performance_tracker/features/team_management/team_management.dart';
-import 'package:handball_performance_tracker/core/constants/colors.dart';
 import 'package:handball_performance_tracker/data/models/player_model.dart';
 import 'package:handball_performance_tracker/data/models/team_model.dart';
-import 'package:handball_performance_tracker/core/constants/strings_general.dart';
 import 'package:handball_performance_tracker/core/core.dart';
 
 class PlayersList extends StatelessWidget {

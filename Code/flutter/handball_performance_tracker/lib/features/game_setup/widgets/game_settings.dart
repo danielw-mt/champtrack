@@ -1,14 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:handball_performance_tracker/core/constants/colors.dart';
-import 'package:handball_performance_tracker/core/constants/strings_team_management.dart';
 import 'package:handball_performance_tracker/core/core.dart';
-import 'package:handball_performance_tracker/core/constants/strings_dashboard.dart';
-import 'package:handball_performance_tracker/core/constants/strings_game_settings.dart';
-import 'package:handball_performance_tracker/core/constants/strings_general.dart';
 import 'package:handball_performance_tracker/features/game_setup/game_setup.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:handball_performance_tracker/data/models/game_model.dart';
-import 'package:handball_performance_tracker/old-screens/player_selection_screen.dart';
+
 class GameSettings extends StatelessWidget {
   // Create a global key that uniquely identifies the Form widget
   // and allows validation of the form.

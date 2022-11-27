@@ -1,5 +1,4 @@
-import 'package:handball_performance_tracker/core/constants/game_actions.dart';
-import 'package:handball_performance_tracker/core/constants/positions.dart';
+import 'package:handball_performance_tracker/core/core.dart';
 import 'package:handball_performance_tracker/data/models/game_action_model.dart';
 import 'dart:developer' as developer;
 

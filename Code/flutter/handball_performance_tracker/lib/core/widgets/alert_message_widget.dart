@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:handball_performance_tracker/core/constants/colors.dart';
+import 'package:handball_performance_tracker/core/core.dart';
 
 class CustomAlertMessageWidget extends StatelessWidget {
   late final String alertMessage;

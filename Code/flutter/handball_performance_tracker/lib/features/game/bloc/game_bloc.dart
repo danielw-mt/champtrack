@@ -4,9 +4,7 @@ import 'package:flutter/gestures.dart';
 import 'package:handball_performance_tracker/data/models/models.dart';
 import 'package:handball_performance_tracker/features/game/widgets/action_menu/action_menu.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
-import 'package:handball_performance_tracker/core/constants/game_actions.dart';
-import 'package:handball_performance_tracker/core/constants/strings_game_screen.dart';
-import 'package:handball_performance_tracker/core/constants/positions.dart';
+import 'package:handball_performance_tracker/core/core.dart';
 import 'game_field_math.dart';
 import 'package:handball_performance_tracker/features/game/game.dart';
 

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:handball_performance_tracker/core/constants/strings_dashboard.dart';
+import 'package:handball_performance_tracker/core/core.dart';
 import 'package:handball_performance_tracker/features/team_management/team_management.dart';
 
 class ManageTeamsButton extends StatelessWidget {

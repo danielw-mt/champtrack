@@ -1,12 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:handball_performance_tracker/core/constants/strings_game_screen.dart';
-import 'package:handball_performance_tracker/core/constants/game_actions.dart';
+import 'package:handball_performance_tracker/core/core.dart';
 import 'action_button.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:handball_performance_tracker/features/game/game.dart';
-import 'goal_keeper_buttons.dart';
-import 'defense_buttons.dart';
-import 'attack_buttons.dart';
 
 class DefenseButtons extends StatelessWidget {
   const DefenseButtons({super.key});
