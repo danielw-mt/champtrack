@@ -3,7 +3,7 @@ part of 'game_bloc.dart';
 enum GameStatus { initial, running, paused, finished }
 
 // we need these Menu Statuses to control the dialogs from the bloc. See game view for how these are used
-enum MenuStatus { closed, actionMenu, playerMenu, sevenMeterMenu, forceClose, loadPlayerMenu, loadSubstitutionMenu }
+enum MenuStatus { closed, actionMenu, playerMenu, sevenMeterMenu, forceClose, loadPlayerMenu, loadSubstitutionMenu, loadSevenMeterPlayerMenu }
 
 class GameState extends Equatable {
   // fields set during game creation

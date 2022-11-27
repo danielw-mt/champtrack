@@ -194,10 +194,9 @@ class GameBloc extends Bloc<GameEvent, GameState> {
           emit(state.copyWith(menuStatus: MenuStatus.loadPlayerMenu));
         }
       }
-      // if we received a 
+      // if we received a
       if (event.actionTag == oneVOneSevenTag) {
         state.playerMenuHintText = StringsGameScreen.lChoose7mCause;
-        emit(state.copyWith(menuStatus: MenuStatus.loadPlayerMenu));
       }
       if (event.actionTag == oneVOneSevenTag) {
         state.playerMenuHintText = StringsGameScreen.lChoose7mReceiver;
@@ -250,12 +249,13 @@ class GameBloc extends Bloc<GameEvent, GameState> {
             gameActions: state.gameActions..add(assistAction),
             playerMenuHintText: "",
             ownScore: state.ownScore + 1));
-      } else if (lastAction.tag == timePenaltyTag) {
-        emit(state.copyWith(menuStatus: MenuStatus.forceClose, playerMenuHintText: "", ownScore: state.ownScore + 1));
-        // if a player was selected from the not on field players in the player menu
+      } else if (lastAction.tag == oneVOneSevenTag) {
+        // if the player that caused the 7m for us was chosen open the sevenmeter player menu to decide who will execute the 7m
+        emit(state.copyWith(menuStatus: MenuStatus.loadSevenMeterPlayerMenu));
       } else if (event.isSubstitute) {
-        // if there is only one player on field with the same position as the substitution player just swap that player with them
+        // if a player was selected from the not on field players in the player menu
         List<Player> playersWithSamePosition = [];
+        // if there is only one player on field with the same position as the substitution player just swap that player with them
         event.player.positions.forEach((String position) {
           state.onFieldPlayers.forEach((Player player) {
             if (player.positions.contains(position)) {
@@ -273,6 +273,8 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         }
       } else {
         print("no special case. Just add the action to the list of actions after the player selection");
+        List<GameAction> newGameActions = state.gameActions;
+        newGameActions.last.playerId = event.player.id!;
         List<Player> penalizedPlayers = state.penalizedPlayers;
         int ownScore = state.ownScore;
         // if we click on a player that is penalized remove him from the list of penalized players
@@ -297,7 +299,8 @@ class GameBloc extends Bloc<GameEvent, GameState> {
             playerMenuHintText: "",
             ownScore: ownScore,
             penalizedPlayers: penalizedPlayers,
-            substitutionPlayer: Player()));
+            substitutionPlayer: Player(),
+            gameActions: newGameActions));
       }
     });
   }

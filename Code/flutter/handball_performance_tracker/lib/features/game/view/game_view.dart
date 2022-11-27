@@ -74,7 +74,7 @@ class GameView extends StatelessWidget {
                 children: [
                   Column(
                     children: [
-                      // ActionFeed(),
+                      ActionFeed(),
                       Row(
                         children: [
                           StopGameButton(),
