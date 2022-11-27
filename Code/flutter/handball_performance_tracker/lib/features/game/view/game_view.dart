@@ -29,6 +29,10 @@ class GameView extends StatelessWidget {
         callPlayerMenu(context);
         gameBloc.add(ChangeMenuStatus(menuStatus: MenuStatus.playerMenu));
       }
+      if (gameBloc.state.menuStatus == MenuStatus.loadSubstitutionMenu) {
+        callSubstitutionPlayerMenu(context);
+        gameBloc.add(ChangeMenuStatus(menuStatus: MenuStatus.actionMenu));
+      }
       if (gameBloc.state.menuStatus == MenuStatus.actionMenu) {
         callActionMenu(context);
       }

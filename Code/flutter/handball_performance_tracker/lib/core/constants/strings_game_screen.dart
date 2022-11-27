@@ -21,6 +21,10 @@ class StringsGameScreen {
   static const String lChoose7mReceiver = "7m Erzieler";
   static const String lChoose7mCause = "7m Verursacher";
 
+  // player menu
+  static const String lChooseAssist = "Assist auswählen";
+  static const String lChooseSubstitutedPlayer = "Neuer Player ausgewählt. Welcher aktive Player soll ausgetauscht werden?";
+
   // Pop ups
   static const String lNoAssist = "Kein Assist";
   static const String lSubstitute1 = "Für wen soll ";

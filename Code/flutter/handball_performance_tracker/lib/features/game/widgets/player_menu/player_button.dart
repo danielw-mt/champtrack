@@ -1,26 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:handball_performance_tracker/core/constants/game_actions.dart';
-import 'package:handball_performance_tracker/old-utils/field_control.dart';
 import 'package:handball_performance_tracker/old-utils/icons.dart';
-import 'package:handball_performance_tracker/old-utils/player_helper.dart';
-import '../../../../old-widgets/main_screen/ef_score_bar.dart';
-import '../../../../old-widgets/main_screen/seven_meter_menu.dart';
-import 'package:handball_performance_tracker/core/constants/strings_general.dart';
 import 'package:handball_performance_tracker/core/constants/strings_game_screen.dart';
-import '../../../../old-widgets/main_screen/seven_meter_player_menu.dart';
-import '../../../../old-widgets/main_screen/field.dart';
 import 'dart:math';
 // import '../../old-utils/feed_logic.dart';
-import 'package:handball_performance_tracker/data/models/game_action_model.dart';
 import 'package:handball_performance_tracker/data/models/player_model.dart';
-import 'package:handball_performance_tracker/core/constants/design_constants.dart';
 import 'package:handball_performance_tracker/features/game/game.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class PlayerButton extends StatelessWidget {
   Player player;
-  bool isSubstitute;
-  PlayerButton({super.key, required this.player, required this.isSubstitute});
+  // if the button is on the second page of the player menu (new players to be substituted)
+  bool isSubstitution;
+  PlayerButton({super.key, required this.player, required this.isSubstitution});
 
   @override
   Widget build(BuildContext context) {
@@ -107,7 +98,7 @@ class PlayerButton extends StatelessWidget {
         width: MediaQuery.of(context).size.width * 0.14,
       ),
       onTap: () {
-        gameBloc.add(RegisterPlayerSelection(player: player, isSubstitute: isSubstitute));
+        gameBloc.add(RegisterPlayerSelection(player: player, isSubstitute: isSubstitution));
       },
     );
   }

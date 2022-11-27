@@ -219,173 +219,84 @@ class GameBloc extends Bloc<GameEvent, GameState> {
       if (lastAction.tag == goalTag && state.assistAvailable == false) {
         List<GameAction> newGameActions = state.gameActions;
         newGameActions.last.playerId = event.player.id!;
-        emit(state.copyWith(assistAvailable: true, menuStatus: MenuStatus.loadPlayerMenu, gameActions: newGameActions));
-      } else if (lastAction.tag == goalTag && state.assistAvailable == true) {
-        // TODO assist action
-        emit(state.copyWith(assistAvailable: false, menuStatus: MenuStatus.forceClose));
+        emit(state.copyWith(
+            assistAvailable: true,
+            menuStatus: MenuStatus.loadPlayerMenu,
+            gameActions: newGameActions,
+            playerMenuHintText: StringsGameScreen.lChooseAssist));
+        // when the button was pressed after an assist was made available and a player different than the player that score the goal was selected
+        // assign the assist to the player that was selected
+      } else if (state.assistAvailable == true && event.player.id != state.gameActions.last.playerId) {
+        GameAction assistAction = GameAction(
+            teamId: state.selectedTeam.id!,
+            gameId: lastAction.gameId,
+            context: state.gameActions.last.context,
+            tag: assistTag,
+            throwLocation: List.from(state.lastClickedLocation.cast<String>()),
+            timestamp: lastAction.timestamp,
+            relativeTime: lastAction.relativeTime,
+            playerId: event.player.id!);
+        emit(state.copyWith(
+            assistAvailable: false,
+            menuStatus: MenuStatus.forceClose,
+            gameActions: state.gameActions..add(assistAction),
+            playerMenuHintText: "",
+            ownScore: state.ownScore + 1));
+      } else if (lastAction.tag == timePenaltyTag) {
+        emit(state.copyWith(menuStatus: MenuStatus.forceClose, playerMenuHintText: "", ownScore: state.ownScore + 1));
+        // if a player was selected from the not on field players in the player menu
+      } else if (event.isSubstitute) {
+        // if there is only one player on field with the same position as the substitution player just swap that player with them
+        List<Player> playersWithSamePosition = [];
+        event.player.positions.forEach((String position) {
+          state.onFieldPlayers.forEach((Player player) {
+            if (player.positions.contains(position)) {
+              playersWithSamePosition.add(player);
+            }
+          });
+        });
+        if (playersWithSamePosition.length == 1) {
+          print("there is one clear player to be substituted. Not calling substitution menu for now");
+          this.add(SubstitutePlayer(substitutionPlayer: event.player, toBeSubstitutedPlayer: playersWithSamePosition[0]));
+        } else {
+          // if there are more than one player on field with the same position as the substitution player open the substituion menu
+          print("there is no clear player to be substituted. Calling substitution menu");
+          emit(state.copyWith(menuStatus: MenuStatus.loadSubstitutionMenu, substitutionPlayer: event.player));
+        }
       } else {
-        emit(state.copyWith(menuStatus: MenuStatus.forceClose));
+        print("no special case. Just add the action to the list of actions after the player selection");
+        List<Player> penalizedPlayers = state.penalizedPlayers;
+        int ownScore = state.ownScore;
+        // if we click on a player that is penalized remove him from the list of penalized players
+        if (state.penalizedPlayers.contains(event.player)) {
+          penalizedPlayers.remove(event.player);
+        }
+
+        // Switch field on goal, block & steal (=stürmerfoul), missed goal attempt and technical mistake on offensive (not trf on defense)
+        String lastTag = state.gameActions.last.tag;
+        if (lastTag == goalTag ||
+            lastTag == blockAndStealTag ||
+            lastTag == missTag ||
+            (lastTag == trfTag && state.gameActions.last.context == actionContextAttack)) {
+          this.add(SwitchField());
+        }
+        // adapt score if we scored a goal
+        if (lastTag == goalTag) {
+          ownScore = ownScore + 1;
+        }
+        emit(state.copyWith(
+            menuStatus: MenuStatus.forceClose,
+            playerMenuHintText: "",
+            ownScore: ownScore,
+            penalizedPlayers: penalizedPlayers,
+            substitutionPlayer: Player()));
       }
+    });
+
+    on<SubstitutePlayer>((event, emit) {
+      List<Player> onFieldPlayers = state.onFieldPlayers;
+      onFieldPlayers[onFieldPlayers.indexOf(event.toBeSubstitutedPlayer)] = event.substitutionPlayer;
+      emit(state.copyWith(onFieldPlayers: onFieldPlayers, menuStatus: MenuStatus.forceClose, substitutionPlayer: Player()));
     });
   }
 }
-
-/// @return "" if action wasn't a goal, "solo" when player scored without
-/// assist and "assist" when player click was assist
-// bool _wasAssist() {
-//   // check if action was a goal
-//   // if it was a goal allow the player to be pressed twice or select and assist player
-//   // if the player is clicked again it is a solo action
-//   if (gameBloc.state.previousClickedPlayer.id == playerFromButton.id) {
-//     return false;
-//   }
-//   if (gameBloc.state.previousClickedPlayer.id != playerFromButton.id) {
-//     return true;
-//   }
-//   return false;
-// }
-
-/// builds a single dialog button that logs its text (=player name) to firestore
-/// and updates the game state
-// Widget buildDialogButton(BuildContext context, Player playerFromButton, [substitute_menu, isNotOnField]) {
-  // Get width and height, so the sizes can be calculated relative to those. So it should look the same on different screen sizes.
-  // final double width = MediaQuery.of(context).size.width;
-  // final double height = MediaQuery.of(context).size.height;
-
-  // TODO implement this in BLOC. Maybe we can just use switch field and switch to the opposite that the field is on right now
-  // void _setFieldBasedOnLastAction(GameAction lastAction) {
-  //   if (lastAction.tag == goalTag || lastAction.tag == missTag || lastAction.tag == trfTag) {
-  //     // offensiveFieldSwitch();
-  //   } else if (lastAction.tag == blockAndStealTag) {
-  //     // defensiveFieldSwitch();
-  //   }
-  // }
-
-  // TODO handle this in BLOC
-  // void handlePlayerSelection() async {
-  //   GameAction lastAction = gameBloc.state.gameActions.last;
-  //   Player previousClickedPlayer = gameBloc.state.previousClickedPlayer;
-  //   // if goal was pressed but no player was selected yet
-  //   //(lastClickedPlayer is default Player Object) do nothing
-  //   if (lastAction.tag == goalTag && previousClickedPlayer.id! == "") {
-  //     gameBloc.add(UpdatePlayerMenuHintText(hintText: "TODO Assist"));
-  //     // update last Clicked player value with the Player from selected team
-  //     // who was clicked
-  //     gameBloc.add(RegisterClickOnPlayer(player: playerFromButton));
-  //     return;
-  //   }
-  //   // if goal was pressed and a player was already clicked once
-  //   if (lastAction.tag == goalTag) {
-  //     // if it was a solo goal the action type has to be updated to "Tor Solo"
-  //     persistentController.setLastActionPlayer(previousClickedPlayer);
-  //     tempController.updatePlayerEfScore(previousClickedPlayer.id!, persistentController.getLastAction());
-  //     addFeedItem(persistentController.getLastAction());
-  //     tempController.incOwnScore();
-  //     // add goal to feed
-  //     // if it was a solo goal the action type has to be updated to "Tor Solo"
-
-  //     if (!_wasAssist()) {
-  //       // don't need to do anything because ID was already set above
-  //     } else {
-  //       // person that scored assist
-  //       // deep clone a new action from the most recent action
-  //       GameAction assistAction = GameAction.clone(lastAction);
-  //       print("assist action: $assistAction");
-  //       assistAction.tag = assistTag;
-  //       persistentController.addActionToCache(assistAction);
-  //       Player assistPlayer = playerFromButton;
-  //       assistAction.playerId = assistPlayer.id!;
-  //       persistentController.setLastActionPlayer(assistPlayer);
-  //       tempController.updatePlayerEfScore(assistPlayer.id!, persistentController.getLastAction());
-
-  //       // add assist first to the feed and then the goal
-  //       addFeedItem(assistAction);
-  //       tempController.setPreviousClickedPlayer(Player());
-  //     }
-  //   } else {
-  //     // if the action was not a goal just update the player id in firebase and gamestate
-  //     persistentController.setLastActionPlayer(playerFromButton);
-  //     tempController.setPreviousClickedPlayer(playerFromButton);
-  //     tempController.updatePlayerEfScore(playerFromButton.id!, persistentController.getLastAction());
-  //     // add action to feed
-  //     lastAction.playerId = playerFromButton.id!;
-  //     addFeedItem(persistentController.getLastAction());
-  //     persistentController.addActionToCache(lastAction);
-  //   }
-
-  //   ///
-  //   // start: time penalty logic
-  //   // if you click on a penalized player the time penalty is removed
-  //   ///
-  //   if (tempController.isPlayerPenalized(playerFromButton)) {
-  //     tempController.removePenalizedPlayer(playerFromButton);
-  //   }
-  //   if (lastAction.tag == timePenaltyTag) {
-  //     Player player = tempController.getPreviousClickedPlayer();
-  //     tempController.addPenalizedPlayer(player);
-  //   }
-
-  //   ///
-  //   // end: time penalty logic
-  //   ///
-
-  //   // Check if associated player or lastClickedPlayer are notOnFieldPlayer. If yes, player menu appears to change the player.
-  //   // We can click on not on field players if we swipe on the player menu and all the player not on field will be shown.
-  //   if (!tempController.getOnFieldPlayers().contains(playerFromButton)) {
-  //     tempController.addPlayerToChange(playerFromButton);
-  //   }
-  //   if (!tempController.getOnFieldPlayers().contains(previousClickedPlayer) && !(previousClickedPlayer.id! == "")) {
-  //     tempController.addPlayerToChange(previousClickedPlayer);
-  //   }
-  //   _setFieldBasedOnLastAction(lastAction);
-  //   // If there are still player to change, open the player menu again but as a substitue player menu (true flag)
-  //   if (!tempController.getPlayersToChange().isEmpty) {
-  //     Navigator.pop(context);
-  //     callPlayerMenu(context, true);
-  //     return;
-  //   }
-
-  //   // if we get a 7m in our favor call the seven meter menu for us
-  //   if (lastAction.tag == oneVOneSevenTag) {
-  //     Navigator.pop(context);
-  //     callSevenMeterPlayerMenu(context);
-  //     return;
-  //   }
-  //   // if we perform a 7m foul call the seven meter menu for the other team
-  //   else if (lastAction.tag == foulSevenMeterTag) {
-  //     Navigator.pop(context);
-  //     callSevenMeterMenu(context, false);
-  //     return;
-  //   }
-  //   // reset last clicked player and player menu hint text
-  //   tempController.setPreviousClickedPlayer(Player());
-  //   tempController.setPlayerMenuText("");
-  //   Navigator.pop(context);
-  // }
-
-  // function which is called is substitute_player param is not null
-  // after a player was chosen for an action who is not on field
-
-  // TODO move this to BLOC and adapt the button to substitute or not
-  // void substitutePlayer() {
-  //   playerChanged = true;
-  //   // get player which was pressed in player menu in tempController.getOnFieldPlayers()
-  //   Player playerToChange = tempController.getLastPlayerToChange();
-
-  //   // Update player bar players
-  //   int l = tempController.getPlayersFromSelectedTeam().indexOf(playerToChange);
-  //   int k = tempController.getPlayersFromSelectedTeam().indexOf(playerFromButton);
-  //   int indexToChange = tempController.getPlayerBarPlayers().indexOf(k);
-  //   tempController.changePlayerBarPlayers(indexToChange, l);
-  //   // Change the player which was pressed in player menu in tempController.getOnFieldPlayers()
-  //   // to the player which was pressed in popup dialog.
-  //   tempController.setOnFieldPlayer(
-  //       tempController.getOnFieldPlayers().indexOf(playerFromButton), playerToChange, Get.find<PersistentController>().getCurrentGame());
-
-  //   tempController.setPlayerMenuText("");
-  //   Navigator.pop(context);
-  // }
-
-  // Button with shirt with buttonNumber inside and buttonText below.
-  // Getbuilder so the color changes if player == goalscorer,
-// }

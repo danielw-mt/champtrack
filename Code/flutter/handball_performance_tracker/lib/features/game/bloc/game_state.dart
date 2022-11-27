@@ -3,7 +3,7 @@ part of 'game_bloc.dart';
 enum GameStatus { initial, running, paused, finished }
 
 // we need these Menu Statuses to control the dialogs from the bloc. See game view for how these are used
-enum MenuStatus { closed, actionMenu, playerMenu, sevenMeterMenu, forceClose, loadPlayerMenu }
+enum MenuStatus { closed, actionMenu, playerMenu, sevenMeterMenu, forceClose, loadPlayerMenu, loadSubstitutionMenu }
 
 class GameState extends Equatable {
   // fields set during game creation
@@ -22,7 +22,6 @@ class GameState extends Equatable {
   final int opponentScore;
   StopWatchTimer stopWatchTimer = StopWatchTimer();
   List<GameAction> gameActions = [];
-  Player playerToChange = Player();
   List<String> lastClickedLocation = [];
   String actionMenuHintText = '';
   String playerMenuHintText = '';
@@ -30,6 +29,7 @@ class GameState extends Equatable {
   List<Player> penalizedPlayers = [];
   MenuStatus menuStatus = MenuStatus.closed;
   bool assistAvailable = false;
+  Player substitutionPlayer = Player();
 
   // Some of these fields can only be set in this constructor like date, opponent or location because they get passed from the previous screen
   GameState({
@@ -48,14 +48,13 @@ class GameState extends Equatable {
     this.opponentScore = 0,
     stopWatchTimer,
     this.gameActions = const [],
-    playerToChange,
     this.lastClickedLocation = const [],
     this.actionMenuHintText = '',
     this.playerMenuHintText = '',
-    // previousClickedPlayer,
     this.penalizedPlayers = const [],
     this.menuStatus = MenuStatus.closed,
     this.assistAvailable = false,
+    substitutionPlayer,
   }) {
     // make sure that the list is growable
     if (this.onFieldPlayers.isEmpty) {
@@ -70,17 +69,14 @@ class GameState extends Equatable {
     if (selectedTeam != null) {
       this.selectedTeam = selectedTeam;
     }
-    if (playerToChange != null) {
-      this.playerToChange = playerToChange;
-    }
     if (this.lastClickedLocation.isEmpty) {
       this.lastClickedLocation = [];
     }
-    // if (previousClickedPlayer != null) {
-    //   this.previousClickedPlayer = previousClickedPlayer;
-    // }
     if (this.penalizedPlayers.isEmpty) {
       this.penalizedPlayers = [];
+    }
+    if (substitutionPlayer != null) {
+      this.substitutionPlayer = substitutionPlayer;
     }
   }
 
@@ -96,10 +92,10 @@ class GameState extends Equatable {
     List<String>? lastClickedLocation,
     String? actionMenuHintText,
     String? playerMenuHintText,
-    // Player? previousClickedPlayer,
     List<Player>? penalizedPlayers,
     MenuStatus? menuStatus,
     bool? assistAvailable,
+    Player? substitutionPlayer,
   }) {
     return GameState(
       // these properties cannot be changed after game initialization so they can only be set in the constructor but not in the copyWith method
@@ -119,13 +115,12 @@ class GameState extends Equatable {
       stopWatchTimer: stopWatchTimer ?? this.stopWatchTimer,
       gameActions: gameActions ?? this.gameActions,
       lastClickedLocation: lastClickedLocation ?? this.lastClickedLocation,
-      playerToChange: this.playerToChange,
       actionMenuHintText: actionMenuHintText ?? this.actionMenuHintText,
       playerMenuHintText: playerMenuHintText ?? this.playerMenuHintText,
-      // previousClickedPlayer: previousClickedPlayer ?? this.previousClickedPlayer,
       penalizedPlayers: penalizedPlayers ?? this.penalizedPlayers,
       menuStatus: menuStatus ?? this.menuStatus,
       assistAvailable: assistAvailable ?? this.assistAvailable,
+      substitutionPlayer: substitutionPlayer ?? this.substitutionPlayer,
     );
   }
 
@@ -140,12 +135,11 @@ class GameState extends Equatable {
         this.stopWatchTimer,
         this.gameActions,
         this.lastClickedLocation,
-        this.playerToChange,
         this.actionMenuHintText,
         this.playerMenuHintText,
-        // this.previousClickedPlayer,
         this.penalizedPlayers,
         this.menuStatus,
         this.assistAvailable,
+        this.substitutionPlayer,
       ];
 }

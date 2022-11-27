@@ -73,10 +73,11 @@ class SwitchField extends GameEvent {
 class SwitchSides extends GameEvent {}
 
 /// Changing a player on the field
-class SwitchPlayer extends GameEvent {
-  final List<Player> newOnFieldPlayers;
+class SubstitutePlayer extends GameEvent {
+  final Player substitutionPlayer;
+  final Player toBeSubstitutedPlayer;
 
-  SwitchPlayer({required this.newOnFieldPlayers});
+  SubstitutePlayer({required this.substitutionPlayer, required this.toBeSubstitutedPlayer});
 }
 
 /// Clicking onto the game field
