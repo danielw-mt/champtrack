@@ -56,7 +56,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     });
 
     on<ChangeScore>((event, emit) {
-      if (event.isOwnScore){
+      if (event.isOwnScore) {
         emit(state.copyWith(ownScore: event.score));
       } else {
         emit(state.copyWith(opponentScore: event.score));
@@ -155,6 +155,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
 
     on<SubstitutePlayer>((event, emit) {
       List<Player> onFieldPlayers = state.onFieldPlayers;
+      print("substituting ${event.oldPlayer.lastName} with ${event.newPlayer.lastName}");
       onFieldPlayers[onFieldPlayers.indexOf(event.oldPlayer)] = event.newPlayer;
       emit(state.copyWith(onFieldPlayers: onFieldPlayers, menuStatus: MenuStatus.forceClose));
     });

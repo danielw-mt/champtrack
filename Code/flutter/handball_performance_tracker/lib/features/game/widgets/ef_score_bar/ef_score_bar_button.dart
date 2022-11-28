@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:handball_performance_tracker/core/constants/colors.dart';
-import 'package:handball_performance_tracker/core/constants/positions.dart';
+import 'package:handball_performance_tracker/core/core.dart';
 import 'package:handball_performance_tracker/data/models/models.dart';
 import 'package:handball_performance_tracker/features/game/bloc/game_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:handball_performance_tracker/core/constants/field_size_parameters.dart' as fieldSizeParameter;
+import 'package:handball_performance_tracker/features/game/widgets/ef_score_bar/ef_score_popup.dart';
+import 'package:handball_performance_tracker/features/game/widgets/ef_score_bar/plus_button.dart';
 import 'package:handball_performance_tracker/old-utils/player_helper.dart';
 import 'dart:math';
 import 'ef_score_bar.dart';
@@ -108,8 +109,28 @@ class EfScoreBarButton extends StatelessWidget {
       ),
       onTap: () {
         if (isPopupButton) {
+          gameBloc.add(SubstitutePlayer(newPlayer: player, oldPlayer: substitutionTarget!));
         } else {
           // show popup
+          List<Player> playersWithSamePosition = [];
+          gameBloc.state.selectedTeam.players.forEach((Player playerFromTeam) {
+            playerFromTeam.positions.forEach((String position) {
+              if (player.positions.contains(position) && !gameBloc.state.onFieldPlayers.contains(playerFromTeam)) {
+                playersWithSamePosition.add(playerFromTeam);
+              }
+            });
+          });
+          List<Widget> popupButtons = [];
+          playersWithSamePosition.forEach((Player playerElement) {
+            popupButtons.add(EfScoreBarButton(
+              player: playerElement,
+              isPopupButton: true,
+              substitutionTarget: player,
+            ));
+          });
+          popupButtons.add(PlusButton());
+          int indexOfPlayer = gameBloc.state.onFieldPlayers.indexOf(player);
+          showPlayerPopup(context, popupButtons, indexOfPlayer);
         }
       },
     );

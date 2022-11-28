@@ -27,12 +27,26 @@ class HandballApp extends StatelessWidget {
           home: StreamBuilder<User?>(
               stream: FirebaseAuth.instance.authStateChanges(),
               builder: (context, snapshot) {
+                final AuthBloc authBloc = BlocProvider.of<AuthBloc>(context);
                 // If the snapshot has user data, then they're already signed in. So Navigating to the Dashboard.
-                if (snapshot.hasData) {
+                if (authBloc.state.authStatus == AuthStatus.Authenticated) {
                   return const DashboardView();
+                } else if (authBloc.state.authStatus == AuthStatus.Loading) {
+                  return const Scaffold(
+                    body: Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                  );
+                } else if (authBloc.state.authStatus == AuthStatus.UnAuthenticated) {
+                  // Otherwise, they're not signed in. Show the sign in page.
+                  return SignIn();
+                } else {
+                  return const Scaffold(
+                    body: Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                  );
                 }
-                // Otherwise, they're not signed in. Show the sign in page.
-                return SignIn();
               }),
         ),
       ),

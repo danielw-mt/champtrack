@@ -52,7 +52,7 @@ class EfScoreBar extends StatelessWidget {
   // TODO implement width and padwith within this class.  Playerbar layout should be self contained
   double width;
   double padWidth;
-  List<EfScoreBarButton> buttons = [];
+  List<Widget> buttons = [];
   EfScoreBar({required this.buttons, required this.width, required this.padWidth});
 
   @override
