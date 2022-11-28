@@ -155,9 +155,17 @@ class GameBloc extends Bloc<GameEvent, GameState> {
 
     on<SubstitutePlayer>((event, emit) {
       List<Player> onFieldPlayers = state.onFieldPlayers;
-      print("substituting ${event.oldPlayer.lastName} with ${event.newPlayer.lastName}");
-      onFieldPlayers[onFieldPlayers.indexOf(event.oldPlayer)] = event.newPlayer;
-      emit(state.copyWith(onFieldPlayers: onFieldPlayers, menuStatus: MenuStatus.forceClose));
+      // if a substitution target was chosen that already is on field it means that we can just swap players in the onfieldplayers
+      if (onFieldPlayers.contains(event.oldPlayer) && onFieldPlayers.contains(event.newPlayer)) {
+        int indexOfNewPlayer = onFieldPlayers.indexOf(event.newPlayer);
+        onFieldPlayers[onFieldPlayers.indexOf(event.oldPlayer)] = event.newPlayer;
+        onFieldPlayers[indexOfNewPlayer] = event.oldPlayer;
+        emit(state.copyWith(onFieldPlayers: onFieldPlayers, menuStatus: MenuStatus.forceClose));
+      } else {
+        print("substituting ${event.oldPlayer.lastName} with ${event.newPlayer.lastName}");
+        onFieldPlayers[onFieldPlayers.indexOf(event.oldPlayer)] = event.newPlayer;
+        emit(state.copyWith(onFieldPlayers: onFieldPlayers, menuStatus: MenuStatus.forceClose));
+      }
     });
 
     on<DeleteGameAction>((event, emit) {

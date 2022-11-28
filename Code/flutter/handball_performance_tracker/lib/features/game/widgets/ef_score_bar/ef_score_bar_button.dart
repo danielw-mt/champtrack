@@ -115,7 +115,7 @@ class EfScoreBarButton extends StatelessWidget {
           List<Player> playersWithSamePosition = [];
           gameBloc.state.selectedTeam.players.forEach((Player playerFromTeam) {
             playerFromTeam.positions.forEach((String position) {
-              if (player.positions.contains(position) && !gameBloc.state.onFieldPlayers.contains(playerFromTeam)) {
+              if (player.positions.contains(position) && playerFromTeam != player) {
                 playersWithSamePosition.add(playerFromTeam);
               }
             });
@@ -128,7 +128,9 @@ class EfScoreBarButton extends StatelessWidget {
               substitutionTarget: player,
             ));
           });
-          popupButtons.add(PlusButton());
+          popupButtons.add(PlusButton(
+            substitutionTarget: player,
+          ));
           int indexOfPlayer = gameBloc.state.onFieldPlayers.indexOf(player);
           showPlayerPopup(context, popupButtons, indexOfPlayer);
         }

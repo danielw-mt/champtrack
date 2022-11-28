@@ -30,8 +30,9 @@ class HandballApp extends StatelessWidget {
                 final AuthBloc authBloc = BlocProvider.of<AuthBloc>(context);
                 // If the snapshot has user data, then they're already signed in. So Navigating to the Dashboard.
                 if (authBloc.state.authStatus == AuthStatus.Authenticated) {
-                  return const DashboardView();
+                  return DashboardView();
                 } else if (authBloc.state.authStatus == AuthStatus.Loading) {
+                  print("loading");
                   return const Scaffold(
                     body: Center(
                       child: CircularProgressIndicator(),
@@ -40,12 +41,10 @@ class HandballApp extends StatelessWidget {
                 } else if (authBloc.state.authStatus == AuthStatus.UnAuthenticated) {
                   // Otherwise, they're not signed in. Show the sign in page.
                   return SignIn();
+                } else if (authBloc.state.authStatus == AuthStatus.AuthError) {
+                  return SignIn();
                 } else {
-                  return const Scaffold(
-                    body: Center(
-                      child: CircularProgressIndicator(),
-                    ),
-                  );
+                  return Text("Something went wrong");
                 }
               }),
         ),

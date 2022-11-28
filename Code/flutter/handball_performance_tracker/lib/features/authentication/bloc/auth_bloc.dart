@@ -65,7 +65,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<SignOutRequested>((event, emit) async {
       emit(state.copyWith(authStatus: AuthStatus.Loading));
       await authRepository.signOut();
-      emit(state.copyWith(authStatus: AuthStatus.UnAuthenticated));
+      emit(state.copyWith(authStatus: AuthStatus.UnAuthenticated, club: null));
     });
   }
 

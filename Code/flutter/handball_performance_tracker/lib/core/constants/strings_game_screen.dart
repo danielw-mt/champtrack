@@ -24,6 +24,7 @@ class StringsGameScreen {
   // player menu
   static const String lChooseAssist = "Assist auswählen";
   static const String lChooseSubstitutedPlayer = "Neuer Player ausgewählt. Welcher aktive Player soll ausgetauscht werden?";
+  static const String lChooseSubstitute = "Welcher Player soll eingewechselt werden?";
 
   // Pop ups
   static const String lNoAssist = "Kein Assist";

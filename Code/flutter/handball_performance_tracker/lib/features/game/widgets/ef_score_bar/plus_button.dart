@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:handball_performance_tracker/core/core.dart';
+import 'package:handball_performance_tracker/data/models/models.dart';
+import 'all_players_menu.dart';
+
 
 class PlusButton extends StatelessWidget {
-  const PlusButton({super.key});
+  Player substitutionTarget;
+  PlusButton({super.key, required this.substitutionTarget});
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +21,7 @@ class PlusButton extends StatelessWidget {
         ),
         onPressed: () {
           Navigator.pop(context);
-          // TODO call allplayers menu here
+          callAllPlayersMenu(context, substitutionTarget);
         },
         style: TextButton.styleFrom(
           backgroundColor: Colors.white,
