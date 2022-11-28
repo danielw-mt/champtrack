@@ -63,9 +63,9 @@ void callSubstitutionPlayerMenu(BuildContext context) {
                     // Substitute player text
                     Text(
                       StringsGameScreen.lSubstitute1 +
-                          gameBloc.state.substitutionPlayer.firstName +
+                          gameBloc.state.substitutionTarget.firstName +
                           " " +
-                          gameBloc.state.substitutionPlayer.lastName +
+                          gameBloc.state.substitutionTarget.lastName +
                           " " +
                           StringsGameScreen.lSubstitute2,
                       style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
@@ -76,7 +76,7 @@ void callSubstitutionPlayerMenu(BuildContext context) {
                       padding: const EdgeInsets.all(20),
                       children: gameBloc.state.onFieldPlayers
                           .map((Player player) => SubstitutionPlayerButton(
-                                substitutionPlayer: gameBloc.state.substitutionPlayer,
+                                substitutionPlayer: gameBloc.state.substitutionTarget,
                                 toBeSubstitutedPlayer: player,
                               ))
                           .toList(),

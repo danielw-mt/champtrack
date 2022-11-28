@@ -82,7 +82,7 @@ class ActionFeed extends StatelessWidget {
                               cursor: SystemMouseCursors.click,
                               child: GestureDetector(
                                 onTap: () async {
-                                  gameBloc.add(DeleteFeedAction(action: feedAction));
+                                  gameBloc.add(DeleteGameAction(action: feedAction));
                                 },
                                 child: Icon(
                                   Icons.delete,

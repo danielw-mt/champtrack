@@ -76,7 +76,7 @@ class SubstitutionPlayerButton extends StatelessWidget {
       onTap: () {
         // make sure the game action gets assigned to the now selected substitution player
         gameBloc.add(RegisterPlayerSelection(player: substitutionPlayer, isSubstitute: false));
-        gameBloc.add(SubstitutePlayer(toBeSubstitutedPlayer: toBeSubstitutedPlayer, substitutionPlayer: substitutionPlayer));
+        gameBloc.add(SubstitutePlayer(oldPlayer: toBeSubstitutedPlayer, newPlayer: substitutionPlayer));
       },
     );
   }

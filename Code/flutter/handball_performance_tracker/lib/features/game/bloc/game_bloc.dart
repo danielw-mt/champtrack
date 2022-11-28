@@ -147,8 +147,12 @@ class GameBloc extends Bloc<GameEvent, GameState> {
 
     on<SubstitutePlayer>((event, emit) {
       List<Player> onFieldPlayers = state.onFieldPlayers;
-      onFieldPlayers[onFieldPlayers.indexOf(event.toBeSubstitutedPlayer)] = event.substitutionPlayer;
-      emit(state.copyWith(onFieldPlayers: onFieldPlayers, menuStatus: MenuStatus.forceClose, substitutionPlayer: Player()));
+      onFieldPlayers[onFieldPlayers.indexOf(event.oldPlayer)] = event.newPlayer;
+      emit(state.copyWith(onFieldPlayers: onFieldPlayers, menuStatus: MenuStatus.forceClose));
+    });
+
+    on<DeleteGameAction>((event, emit) {
+      emit(state.copyWith(gameActions: state.gameActions..remove(event.action)));
     });
 
     on<RegisterAction>((event, emit) {
@@ -265,11 +269,11 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         });
         if (playersWithSamePosition.length == 1) {
           print("there is one clear player to be substituted. Not calling substitution menu for now");
-          this.add(SubstitutePlayer(substitutionPlayer: event.player, toBeSubstitutedPlayer: playersWithSamePosition[0]));
+          this.add(SubstitutePlayer(newPlayer: event.player, oldPlayer: playersWithSamePosition[0]));
         } else {
           // if there are more than one player on field with the same position as the substitution player open the substituion menu
           print("there is no clear player to be substituted. Calling substitution menu");
-          emit(state.copyWith(menuStatus: MenuStatus.loadSubstitutionMenu, substitutionPlayer: event.player));
+          emit(state.copyWith(menuStatus: MenuStatus.loadSubstitutionMenu, substitutionTarget: event.player));
         }
       } else {
         print("no special case. Just add the action to the list of actions after the player selection");
@@ -299,7 +303,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
             playerMenuHintText: "",
             ownScore: ownScore,
             penalizedPlayers: penalizedPlayers,
-            substitutionPlayer: Player(),
+            substitutionTarget: Player(),
             gameActions: newGameActions));
       }
     });

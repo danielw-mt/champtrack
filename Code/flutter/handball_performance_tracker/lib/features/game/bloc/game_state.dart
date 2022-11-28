@@ -29,7 +29,7 @@ class GameState extends Equatable {
   List<Player> penalizedPlayers = [];
   MenuStatus menuStatus = MenuStatus.closed;
   bool assistAvailable = false;
-  Player substitutionPlayer = Player();
+  Player substitutionTarget = Player();
 
   // Some of these fields can only be set in this constructor like date, opponent or location because they get passed from the previous screen
   GameState({
@@ -54,7 +54,7 @@ class GameState extends Equatable {
     this.penalizedPlayers = const [],
     this.menuStatus = MenuStatus.closed,
     this.assistAvailable = false,
-    substitutionPlayer,
+    substitutionTarget,
   }) {
     // make sure that the list is growable
     if (this.onFieldPlayers.isEmpty) {
@@ -75,8 +75,8 @@ class GameState extends Equatable {
     if (this.penalizedPlayers.isEmpty) {
       this.penalizedPlayers = [];
     }
-    if (substitutionPlayer != null) {
-      this.substitutionPlayer = substitutionPlayer;
+    if (substitutionTarget != null) {
+      this.substitutionTarget = substitutionTarget;
     }
   }
 
@@ -95,7 +95,7 @@ class GameState extends Equatable {
     List<Player>? penalizedPlayers,
     MenuStatus? menuStatus,
     bool? assistAvailable,
-    Player? substitutionPlayer,
+    Player? substitutionTarget,
   }) {
     return GameState(
       // these properties cannot be changed after game initialization so they can only be set in the constructor but not in the copyWith method
@@ -120,7 +120,7 @@ class GameState extends Equatable {
       penalizedPlayers: penalizedPlayers ?? this.penalizedPlayers,
       menuStatus: menuStatus ?? this.menuStatus,
       assistAvailable: assistAvailable ?? this.assistAvailable,
-      substitutionPlayer: substitutionPlayer ?? this.substitutionPlayer,
+      substitutionTarget: substitutionTarget ?? this.substitutionTarget,
     );
   }
 
@@ -140,6 +140,6 @@ class GameState extends Equatable {
         this.penalizedPlayers,
         this.menuStatus,
         this.assistAvailable,
-        this.substitutionPlayer,
+        this.substitutionTarget,
       ];
 }

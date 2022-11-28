@@ -74,10 +74,10 @@ class SwitchSides extends GameEvent {}
 
 /// Changing a player on the field
 class SubstitutePlayer extends GameEvent {
-  final Player substitutionPlayer;
-  final Player toBeSubstitutedPlayer;
+  final Player newPlayer;
+  final Player oldPlayer;
 
-  SubstitutePlayer({required this.substitutionPlayer, required this.toBeSubstitutedPlayer});
+  SubstitutePlayer({required this.newPlayer, required this.oldPlayer});
 }
 
 /// Clicking onto the game field
@@ -107,10 +107,11 @@ class RegisterPlayerSelection extends GameEvent {
 /// Clicking on our own goal
 class RegisterClickOnGoal extends GameEvent {}
 
-class DeleteFeedAction extends GameEvent {
+// triggered from feed
+class DeleteGameAction extends GameEvent {
   final GameAction action;
 
-  DeleteFeedAction({required this.action});
+  DeleteGameAction({required this.action});
 }
 
 class ChangeScore extends GameEvent {
