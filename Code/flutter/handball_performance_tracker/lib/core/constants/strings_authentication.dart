@@ -19,4 +19,7 @@ class StringsAuth {
 
   static const String lAppTitle = "- HB Performance App -";
   static const String lClubName = "Vereinsname";
+
+  static const String lMin6Chars = "Mindestens 6 Zeichen";
+  static const String lInvalidEmail = "Ungültige E-Mail";
 }

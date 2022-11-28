@@ -1,5 +1,6 @@
 import 'package:handball_performance_tracker/features/authentication/authentication.dart';
 import 'package:handball_performance_tracker/features/dashboard/dashboard.dart';
+import 'package:handball_performance_tracker/core/core.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -25,21 +26,18 @@ class _SignInState extends State<SignIn> {
 
   @override
   Widget build(BuildContext context) {
+    final double height = MediaQuery.of(context).size.height;
+    final double width = MediaQuery.of(context).size.height;
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("SignIn"),
-      ),
       body: BlocListener<AuthBloc, AuthState>(
         listener: (context, state) {
           if (state is Authenticated) {
             // Navigating to the dashboard screen if the user is authenticated
-            Navigator.pushReplacement(context,
-                MaterialPageRoute(builder: (context) => const DashboardView()));
+            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const DashboardView()));
           }
           if (state is AuthError) {
             // Showing the error message if the user has entered invalid credentials
-            ScaffoldMessenger.of(context)
-                .showSnackBar(SnackBar(content: Text(state.error)));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(state.error)));
           }
         },
         child: BlocBuilder<AuthBloc, AuthState>(
@@ -51,107 +49,141 @@ class _SignInState extends State<SignIn> {
               );
             }
             if (state is UnAuthenticated) {
+              List<Widget> loginHeader = [
+                Container(
+                    alignment: Alignment.center,
+                    padding: const EdgeInsets.all(10),
+                    child: Text(
+                      StringsAuth.lAppTitle,
+                      style: TextStyle(color: buttonDarkBlueColor, fontSize: height / 100 * 3, fontWeight: FontWeight.bold),
+                    )),
+                SizedBox(
+                  height: height * 0.05,
+                ),
+                Container(
+                    alignment: Alignment.center,
+                    padding: const EdgeInsets.all(10),
+                    child: Text(
+                      StringsAuth.lLogInButton,
+                      style: TextStyle(color: buttonDarkBlueColor, fontSize: 30),
+                    )),
+              ];
+              var eMailField = Container(
+                height: height * 0.1,
+                padding: const EdgeInsets.all(10),
+                child: TextFormField(
+                  controller: _emailController,
+                  keyboardType: TextInputType.emailAddress,
+                  textInputAction: TextInputAction.next,
+                  style: TextStyle(color: Colors.grey.shade800),
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  decoration: InputDecoration(
+                      focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: buttonGreyColor)),
+                      enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: buttonGreyColor)),
+                      disabledBorder: OutlineInputBorder(borderSide: BorderSide(color: buttonGreyColor)),
+                      labelStyle: TextStyle(color: Colors.grey.shade800),
+                      labelText: StringsAuth.lEmail,
+                      floatingLabelBehavior: FloatingLabelBehavior.never,
+                      filled: true,
+                      fillColor: buttonGreyColor),
+                  validator: (value) {
+                    return value != null && !EmailValidator.validate(value) ? StringsAuth.lInvalidEmail : null;
+                  },
+                ),
+              );
+              var passwordField = Container(
+                height: height * 0.1,
+                padding: const EdgeInsets.all(10),
+                child: TextFormField(
+                    keyboardType: TextInputType.visiblePassword,
+                    obscureText: true,
+                    controller: _passwordController,
+                    textInputAction: TextInputAction.done,
+                    decoration: InputDecoration(
+                        focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: buttonGreyColor)),
+                        enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: buttonGreyColor)),
+                        disabledBorder: OutlineInputBorder(borderSide: BorderSide(color: buttonGreyColor)),
+                        labelStyle: TextStyle(color: Colors.grey.shade800),
+                        labelText: StringsAuth.lPassword,
+                        floatingLabelBehavior: FloatingLabelBehavior.never,
+                        filled: true,
+                        fillColor: buttonGreyColor),
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    validator: (value) {
+                      return value != null && value.length < 6 ? StringsAuth.lMin6Chars : null;
+                    }),
+              );
+
               // Showing the sign in form if the user is not authenticated
-              return Center(
+              return Form(
+                key: _formKey,
                 child: Padding(
-                  padding: const EdgeInsets.all(18.0),
-                  child: SingleChildScrollView(
-                    reverse: true,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Text(
-                          "Sign In",
-                          style: TextStyle(
-                            fontSize: 38,
-                            fontWeight: FontWeight.bold,
+                    padding: const EdgeInsets.all(10),
+                    child: ListView(
+                      children: <Widget>[
+                        Container(
+                          alignment: Alignment.center,
+                          child: new Image.asset(
+                            "images/champtrack_logo.png",
+                            height: height * 0.2,
+                            fit: BoxFit.cover,
                           ),
                         ),
-                        const SizedBox(
-                          height: 18,
-                        ),
-                        Center(
-                          child: Form(
-                            key: _formKey,
+                        Container(
+                          alignment: Alignment.center,
+                          child: SizedBox(
+                            width: 0.5 * width,
                             child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                TextFormField(
-                                  keyboardType: TextInputType.emailAddress,
-                                  controller: _emailController,
-                                  decoration: const InputDecoration(
-                                    hintText: "Email",
-                                    border: OutlineInputBorder(),
-                                  ),
-                                  autovalidateMode:
-                                      AutovalidateMode.onUserInteraction,
-                                  validator: (value) {
-                                    return value != null &&
-                                            !EmailValidator.validate(value)
-                                        ? 'Enter a valid email'
-                                        : null;
+                                loginHeader[0],
+                                loginHeader[1],
+                                loginHeader[2],
+                                eMailField,
+                                passwordField,
+                                Container(
+                                    width: 0.5 * width,
+                                    height: 70,
+                                    padding: const EdgeInsets.fromLTRB(10, 20, 10, 0),
+                                    child: ElevatedButton(
+                                        style: ButtonStyle(backgroundColor: MaterialStateProperty.all<Color>(buttonLightBlueColor)),
+                                        child: Text(StringsAuth.lSignInButton, style: TextStyle(fontSize: height / 100 * 2, color: Colors.black)),
+                                        onPressed: () {
+                                          _authenticateWithEmailAndPassword(context);
+                                        })),
+                                TextButton(
+                                  onPressed: () {
+                                    // TODO implement reset screen
                                   },
-                                ),
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                                TextFormField(
-                                  keyboardType: TextInputType.text,
-                                  controller: _passwordController,
-                                  decoration: const InputDecoration(
-                                    hintText: "Password",
-                                    border: OutlineInputBorder(),
+                                  child: Text(
+                                    StringsAuth.lForgotPassword,
+                                    style: TextStyle(color: buttonDarkBlueColor),
                                   ),
-                                  autovalidateMode:
-                                      AutovalidateMode.onUserInteraction,
-                                  validator: (value) {
-                                    return value != null && value.length < 6
-                                        ? "Enter min. 6 characters"
-                                        : null;
-                                  },
                                 ),
-                                const SizedBox(
-                                  height: 12,
+                                Row(
+                                  children: <Widget>[
+                                    const Text(StringsAuth.lNoAccount),
+                                    TextButton(
+                                        child: Text(
+                                          StringsAuth.lSignUpButton,
+                                          style: TextStyle(fontSize: height / 100 * 2, color: buttonDarkBlueColor),
+                                        ),
+                                        onPressed: () {
+                                          Navigator.pushReplacement(
+                                            context,
+                                            MaterialPageRoute(builder: (context) => const SignUp()),
+                                          );
+                                        } // switch to sign up mode
+                                        )
+                                  ],
+                                  mainAxisAlignment: MainAxisAlignment.center,
                                 ),
-                                SizedBox(
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.7,
-                                  child: ElevatedButton(
-                                    onPressed: () {
-                                      _authenticateWithEmailAndPassword(
-                                          context);
-                                    },
-                                    child: const Text('Sign In'),
-                                  ),
-                                )
                               ],
                             ),
                           ),
                         ),
-                        // IconButton(
-                        //   onPressed: () {
-                        //     _authenticateWithGoogle(context);
-                        //   },
-                        //   icon: Image.network(
-                        //     "https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/1200px-Google_%22G%22_Logo.svg.png",
-                        //     height: 30,
-                        //     width: 30,
-                        //   ),
-                        // ),
-                        const Text("Don't have an account?"),
-                        OutlinedButton(
-                          onPressed: () {
-                            Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const SignUp()),
-                            );
-                          },
-                          child: const Text("Sign Up"),
-                        )
                       ],
-                    ),
-                  ),
-                ),
+                    )),
               );
             }
             return Container();
@@ -162,16 +194,12 @@ class _SignInState extends State<SignIn> {
   }
 
   void _authenticateWithEmailAndPassword(context) {
+    print("authenticating");
     if (_formKey.currentState!.validate()) {
+      print("form validated");
       BlocProvider.of<AuthBloc>(context).add(
         SignInRequested(_emailController.text, _passwordController.text),
       );
     }
   }
-
-  // void _authenticateWithGoogle(context) {
-  //   BlocProvider.of<AuthBloc>(context).add(
-  //     GoogleSignInRequested(),
-  //   );
-  // }
 }

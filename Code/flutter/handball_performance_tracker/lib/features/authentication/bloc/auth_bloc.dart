@@ -79,4 +79,31 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       throw Exception("User is not authenticated");
     }
   }
+
+  // TODO implement reset password
+  //   void sendPasswordResetEmail() async {
+//     // show an indication that user is signing up
+//     Alert loadingAlert = Alert(
+//         context: context,
+//         buttons: [],
+//         content: CustomAlertWidget(StringsAuth.lLoggingIn));
+//     loadingAlert.show();
+//     try {
+//       await FirebaseAuth.instance
+//           .sendPasswordResetEmail(email: emailController.text.trim());
+//       loadingAlert.dismiss();
+//     } on FirebaseAuthException catch (e) {
+//       loadingAlert.dismiss();
+//       Alert(
+//               context: context,
+//               buttons: [],
+//               content: Text(e.message.toString(),
+//                   style: TextStyle(color: Colors.grey.shade800)),
+//               style: AlertStyle(backgroundColor: buttonLightBlueColor))
+//           .show();
+//     }
+//     onClickedReset();
+//   }
+// }
+
 }
