@@ -50,17 +50,17 @@ var rb = Rainbow(spectrum: [
 */
 class EfScoreBar extends StatelessWidget {
   // TODO implement width and padwith within this class.  Playerbar layout should be self contained
-  // double width;
-  // double padWidth;
+  double width;
+  double padWidth;
   List<EfScoreBarButton> buttons = [];
-  EfScoreBar({required this.buttons});
+  EfScoreBar({required this.buttons, required this.width, required this.padWidth});
 
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.all(PADDING_WIDTH),
-      // width: width.toDouble(),
-      // height: (buttons.length * lineAndButtonHeight + paddingWidth).toDouble(),
+      width: width.toDouble(),
+      height: (buttons.length * lineAndButtonHeight + paddingWidth).toDouble(),
       decoration: BoxDecoration(
           color: backgroundColor,
           // set border so corners can be made round

@@ -91,8 +91,8 @@ class GameView extends StatelessWidget {
                       child: EfScoreBar(
                         buttons:
                             gameBloc.state.onFieldPlayers.map((Player player) => EfScoreBarButton(player: player, isPopupButton: false)).toList(),
-                        // width: ,
-                        // padWidth: PADDING_WIDTH,
+                        width: 300,
+                        padWidth: PADDING_WIDTH,
                       )),
                   // Field
                   Flexible(

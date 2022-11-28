@@ -5,7 +5,7 @@ import 'package:handball_performance_tracker/data/models/models.dart';
 import 'package:handball_performance_tracker/features/game/bloc/game_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:handball_performance_tracker/core/constants/field_size_parameters.dart' as fieldSizeParameter;
-import 'package:handball_performance_tracker/features/game/widgets/ef_score_panel/ef_score_bar_button.dart';
+import 'package:handball_performance_tracker/features/game/widgets/ef_score_bar/ef_score_bar_button.dart';
 import 'package:handball_performance_tracker/old-utils/player_helper.dart';
 import 'dart:math';
 import 'ef_score_bar.dart';
@@ -82,8 +82,8 @@ void showPopup(BuildContext context, List<EfScoreBarButton> buttons, int i) {
                 // show a ButtonBar inside the dialog with given buttons.
                 return EfScoreBar(
                   buttons: buttons,
-                  // width: scorebarWidth,
-                  // padWidth: paddingWidth,
+                  width: scorebarWidth,
+                  padWidth: paddingWidth,
                 );
               },
             ));
