@@ -55,6 +55,14 @@ class GameBloc extends Bloc<GameEvent, GameState> {
       emit(state.copyWith(status: GameStatus.running, stopWatchTimer: stopWatchTimer));
     });
 
+    on<ChangeScore>((event, emit) {
+      if (event.isOwnScore){
+        emit(state.copyWith(ownScore: event.score));
+      } else {
+        emit(state.copyWith(opponentScore: event.score));
+      }
+    });
+
     /// Change time by the given offset
     on<ChangeTime>((event, emit) {
       StopWatchTimer stopWatchTimer = state.stopWatchTimer;
