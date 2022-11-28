@@ -12,13 +12,13 @@ class DashboardContent extends StatelessWidget {
   Widget build(BuildContext context) {
     final authState = context.watch<AuthBloc>().state;
     String clubName = "";
-    if (authState is Loading) {
+    if (authState.authStatus == AuthStatus.Loading) {
       return const Center(
         child: CircularProgressIndicator(),
       );
     }
-    if (authState is Authenticated) {
-      clubName = authState.club.name;
+    if (authState.authStatus == AuthStatus.Authenticated && authState.club != null) {
+      clubName = authState.club!.name;
       final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
       return SafeArea(
           child: Scaffold(

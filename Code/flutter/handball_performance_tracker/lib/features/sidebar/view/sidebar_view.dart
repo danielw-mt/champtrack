@@ -16,8 +16,8 @@ class SidebarView extends StatelessWidget {
     String clubName = "";
     bool gameRunning = false;
     // TODO implement block for gameRunning here
-    if (authState is Authenticated) {
-      clubName = authState.club.name;
+    if (authState.authStatus == AuthStatus.Authenticated && authState.club != null) {
+      clubName = authState.club!.name;
     }
 
     return Drawer(
@@ -68,7 +68,8 @@ class SidebarView extends StatelessWidget {
                         primary: buttonGreyColor,
                       ),
                       onPressed: () {
-                        FirebaseAuth.instance.signOut();
+                        context.read<AuthBloc>().add(SignOutRequested());
+                        // TODO call sign out bloc
                         // Get.to(Home());
                         // Get.deleteAll();
                       },

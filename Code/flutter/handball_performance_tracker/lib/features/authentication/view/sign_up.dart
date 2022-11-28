@@ -1,5 +1,6 @@
 import 'package:handball_performance_tracker/features/authentication/authentication.dart';
 import 'package:handball_performance_tracker/features/dashboard/dashboard.dart';
+import 'package:handball_performance_tracker/core/core.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -26,13 +27,85 @@ class _SignUpState extends State<SignUp> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("TODO SignUp"),
+    final double height = MediaQuery.of(context).size.height;
+    final double width = MediaQuery.of(context).size.height;
+    List<Widget> loginHeader = [
+      Container(
+          alignment: Alignment.center,
+          padding: const EdgeInsets.all(10),
+          child: Text(
+            StringsAuth.lAppTitle,
+            style: TextStyle(color: buttonDarkBlueColor, fontSize: height / 100 * 3, fontWeight: FontWeight.bold),
+          )),
+      SizedBox(
+        height: height * 0.05,
       ),
+      Container(
+          alignment: Alignment.center,
+          padding: const EdgeInsets.all(10),
+          child: Text(
+            StringsAuth.lLogInButton,
+            style: TextStyle(color: buttonDarkBlueColor, fontSize: 30),
+          )),
+    ];
+    var eMailField = Container(
+      height: height * 0.1,
+      padding: const EdgeInsets.all(10),
+      child: TextField(
+        controller: _emailController,
+        textInputAction: TextInputAction.next,
+        style: TextStyle(color: Colors.grey.shade800),
+        decoration: InputDecoration(
+            focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: buttonGreyColor)),
+            enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: buttonGreyColor)),
+            disabledBorder: OutlineInputBorder(borderSide: BorderSide(color: buttonGreyColor)),
+            labelStyle: TextStyle(color: Colors.grey.shade800),
+            labelText: StringsAuth.lEmail,
+            floatingLabelBehavior: FloatingLabelBehavior.never,
+            filled: true,
+            fillColor: buttonGreyColor),
+      ),
+    );
+    var passwordField = Container(
+      height: height * 0.1,
+      padding: const EdgeInsets.all(10),
+      child: TextField(
+        obscureText: true,
+        controller: _passwordController,
+        textInputAction: TextInputAction.done,
+        decoration: InputDecoration(
+            focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: buttonGreyColor)),
+            enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: buttonGreyColor)),
+            disabledBorder: OutlineInputBorder(borderSide: BorderSide(color: buttonGreyColor)),
+            labelStyle: TextStyle(color: Colors.grey.shade800),
+            labelText: StringsAuth.lPassword,
+            floatingLabelBehavior: FloatingLabelBehavior.never,
+            filled: true,
+            fillColor: buttonGreyColor),
+      ),
+    );
+    var clubField = Container(
+      height: height * 0.1,
+      padding: const EdgeInsets.all(10),
+      child: TextField(
+        obscureText: false,
+        controller: _clubNameController,
+        textInputAction: TextInputAction.done,
+        decoration: InputDecoration(
+            focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: buttonGreyColor)),
+            enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: buttonGreyColor)),
+            disabledBorder: OutlineInputBorder(borderSide: BorderSide(color: buttonGreyColor)),
+            labelStyle: TextStyle(color: Colors.grey.shade800),
+            labelText: StringsAuth.lClubName,
+            floatingLabelBehavior: FloatingLabelBehavior.never,
+            filled: true,
+            fillColor: buttonGreyColor),
+      ),
+    );
+    return Scaffold(
       body: BlocConsumer<AuthBloc, AuthState>(
         listener: (context, state) {
-          if (state is Authenticated) {
+          if (state.authStatus == AuthStatus.Authenticated) {
             // Navigating to the dashboard screen if the user is authenticated
             Navigator.of(context).pushReplacement(
               MaterialPageRoute(
@@ -40,18 +113,17 @@ class _SignUpState extends State<SignUp> {
               ),
             );
           }
-          if (state is AuthError) {
+          if (state.authStatus == AuthStatus.AuthError) {
             // Displaying the error message if the user is not authenticated
-            ScaffoldMessenger.of(context)
-                .showSnackBar(SnackBar(content: Text(state.error)));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(state.error!)));
           }
         },
         builder: (context, state) {
-          if (state is Loading) {
+          if (state.authStatus == AuthStatus.Loading) {
             // Displaying the loading indicator while the user is signing up
             return const Center(child: CircularProgressIndicator());
           }
-          if (state is UnAuthenticated) {
+          if (state.authStatus == AuthStatus.UnAuthenticated) {
             // Displaying the sign up form if the user is not authenticated
             return Center(
               child: Padding(
@@ -73,77 +145,70 @@ class _SignUpState extends State<SignUp> {
                       ),
                       Center(
                         child: Form(
-                          key: _formKey,
-                          child: Column(
-                            children: [
-                              TextFormField(
-                                controller: _clubNameController,
-                                decoration: const InputDecoration(
-                                  labelText: "TODO Club Name",
-                                  border: OutlineInputBorder(),
+                            key: _formKey,
+                            child: Padding(
+                              padding: const EdgeInsets.all(10),
+                              child: ListView(children: <Widget>[
+                                Container(
+                                  alignment: Alignment.center,
+                                  child: new Image.asset(
+                                    height: height * 0.2,
+                                    "images/champtrack_logo.png",
+                                    fit: BoxFit.cover,
+                                  ),
                                 ),
-                                validator: (value) {
-                                  if (value == null || value.isEmpty) {
-                                    return "TODO Please enter your club name";
-                                  }
-                                  return null;
-                                },
-                              ),
-                              TextFormField(
-                                controller: _emailController,
-                                decoration: const InputDecoration(
-                                  hintText: "Email",
-                                  border: OutlineInputBorder(),
-                                ),
-                                autovalidateMode:
-                                    AutovalidateMode.onUserInteraction,
-                                validator: (value) {
-                                  return value != null &&
-                                          !EmailValidator.validate(value)
-                                      ? 'TODO Enter a valid email'
-                                      : null;
-                                },
-                              ),
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              TextFormField(
-                                controller: _passwordController,
-                                decoration: const InputDecoration(
-                                  hintText: "Password",
-                                  border: OutlineInputBorder(),
-                                ),
-                                autovalidateMode:
-                                    AutovalidateMode.onUserInteraction,
-                                validator: (value) {
-                                  return value != null && value.length < 6
-                                      ? "TODO Enter min. 6 characters"
-                                      : null;
-                                },
-                              ),
-                              const SizedBox(
-                                height: 12,
-                              ),
-                              SizedBox(
-                                width: MediaQuery.of(context).size.width * 0.7,
-                                child: ElevatedButton(
-                                  onPressed: () {
-                                    _createAccountWithEmailAndPassword(context);
-                                  },
-                                  child: const Text('TODO Sign Up'),
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
+                                Container(
+                                  alignment: Alignment.center,
+                                  child: SizedBox(
+                                    width: 0.5 * width,
+                                    child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
+                                      loginHeader[0],
+                                      loginHeader[1],
+                                      Container(
+                                          alignment: Alignment.center,
+                                          padding: const EdgeInsets.all(10),
+                                          child: Text(
+                                            StringsAuth.lSignUpButton,
+                                            style: TextStyle(color: buttonDarkBlueColor, fontSize: height / 100 * 3),
+                                          )),
+                                      clubField,
+                                      eMailField,
+                                      passwordField,
+                                      Container(
+                                          height: height * 0.1,
+                                          padding: const EdgeInsets.fromLTRB(10, 20, 10, 0),
+                                          child: ElevatedButton(
+                                              style: ButtonStyle(backgroundColor: MaterialStateProperty.all<Color>(buttonLightBlueColor)),
+                                              child:
+                                                  Text(StringsAuth.lSignUpButton, style: TextStyle(fontSize: height / 100 * 2, color: Colors.black)),
+                                              onPressed: () => _createAccountWithEmailAndPassword(context))),
+                                      Row(
+                                        children: <Widget>[
+                                          TextButton(
+                                              child: Text(
+                                                StringsAuth.lBackToSignInButton,
+                                                style: TextStyle(fontSize: height / 100 * 2, color: buttonDarkBlueColor),
+                                              ),
+                                              onPressed: (() => Navigator.pushReplacement(
+                                                        context,
+                                                        MaterialPageRoute(builder: (context) => const SignIn()),
+                                                      ) // switch back to sign in mode
+                                                  ))
+                                        ],
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                      ),
+                                    ]),
+                                  ),
+                                )
+                              ]),
+                            )),
                       ),
                       const Text("TODO Already have an account?"),
                       OutlinedButton(
                         onPressed: () {
                           Navigator.pushReplacement(
                             context,
-                            MaterialPageRoute(
-                                builder: (context) => const SignIn()),
+                            MaterialPageRoute(builder: (context) => const SignIn()),
                           );
                         },
                         child: const Text("TODO Sign In"),

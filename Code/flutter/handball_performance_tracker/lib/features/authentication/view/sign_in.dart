@@ -31,24 +31,24 @@ class _SignInState extends State<SignIn> {
     return Scaffold(
       body: BlocListener<AuthBloc, AuthState>(
         listener: (context, state) {
-          if (state is Authenticated) {
+          if (state.authStatus == AuthStatus.Authenticated) {
             // Navigating to the dashboard screen if the user is authenticated
             Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const DashboardView()));
           }
-          if (state is AuthError) {
+          if (state.authStatus == AuthStatus.AuthError) {
             // Showing the error message if the user has entered invalid credentials
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(state.error)));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(state.error!)));
           }
         },
         child: BlocBuilder<AuthBloc, AuthState>(
           builder: (context, state) {
-            if (state is Loading) {
+            if (state.authStatus == AuthStatus.Loading) {
               // Showing the loading indicator while the user is signing in
               return const Center(
                 child: CircularProgressIndicator(),
               );
             }
-            if (state is UnAuthenticated) {
+            if (state.authStatus == AuthStatus.UnAuthenticated) {
               List<Widget> loginHeader = [
                 Container(
                     alignment: Alignment.center,
