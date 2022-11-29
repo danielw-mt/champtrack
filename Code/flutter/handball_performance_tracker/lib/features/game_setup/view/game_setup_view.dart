@@ -12,7 +12,12 @@ class GameSetupView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(child: Scaffold(resizeToAvoidBottomInset: false, key: _scaffoldKey, drawer: SidebarView(), body: _buildGameSetupStep(context)));
+    return SafeArea(
+        child: Scaffold(
+            resizeToAvoidBottomInset: false,
+            key: _scaffoldKey,
+            drawer: SidebarView(),
+            body: _buildGameSetupStep(context)));
   }
 
   Widget _buildGameSetupStep(BuildContext context) {

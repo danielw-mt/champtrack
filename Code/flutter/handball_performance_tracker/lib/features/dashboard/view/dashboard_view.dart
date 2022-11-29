@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:handball_performance_tracker/features/dashboard/dashboard.dart';
 import 'package:handball_performance_tracker/core/core.dart';
 import 'package:handball_performance_tracker/features/authentication/authentication.dart';
+import 'package:handball_performance_tracker/features/statistics/statistics.dart';
 
 class DashboardView extends StatelessWidget {
   const DashboardView({super.key});

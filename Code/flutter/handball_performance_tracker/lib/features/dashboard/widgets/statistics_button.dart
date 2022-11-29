@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:handball_performance_tracker/core/constants/fieldSizeParameter.dart';
+import 'package:handball_performance_tracker/core/core.dart';
+import 'package:handball_performance_tracker/features/statistics/view/statistics_page.dart';
 import 'package:handball_performance_tracker/old-screens/start_game_screen.dart';
 import 'package:handball_performance_tracker/old-screens/team_selection_screen.dart';
 import 'package:handball_performance_tracker/core/constants/stringsDashboard.dart';
@@ -24,7 +27,19 @@ class StatisticsButton extends StatelessWidget {
           borderRadius: BorderRadius.all(Radius.circular(15))),
       child: TextButton(
           onPressed: () {
-            // Get.to(() => StatisticsScreen());
+            // TODO implement check for old game existing
+            Navigator.push(
+              context,
+              MaterialPageRoute<GlobalBloc>(
+                builder: (context) {
+                  GlobalBloc globalBloc = BlocProvider.of<GlobalBloc>(context);
+                  return BlocProvider.value(
+                    value: globalBloc,
+                    child: StatisticsPage(),
+                  );
+                },
+              ),
+            );
           },
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
