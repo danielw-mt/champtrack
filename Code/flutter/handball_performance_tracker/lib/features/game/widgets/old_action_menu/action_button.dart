@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:handball_performance_tracker/features/game/game.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:handball_performance_tracker/data/models/models.dart';
 import 'dart:math';
 
 /// @return
@@ -80,8 +79,7 @@ class ActionButton extends StatelessWidget {
           ),
         ),
         onTap: () {
-          gameBloc.add(WorkflowEvent(selectedAction: GameAction(tag: actionTag, context: actionContext)));
-          // gameBloc.add(RegisterAction(actionTag: actionTag, actionContext: actionContext));
+          gameBloc.add(RegisterAction(actionTag: actionTag, actionContext: actionContext));
         });
   }
 }

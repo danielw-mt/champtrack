@@ -138,3 +138,10 @@ class ChangeMenuStatus extends GameEvent {
 
   ChangeMenuStatus({required this.menuStatus});
 }
+
+class WorkflowEvent extends GameEvent {
+  final Player? selectedPlayer;
+  final GameAction? selectedAction;
+
+  WorkflowEvent({this.selectedPlayer, this.selectedAction});
+}

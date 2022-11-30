@@ -24,7 +24,8 @@ class PaintedField extends StatelessWidget {
             // handle coordinates on click
             onTapDown: (TapDownDetails details) {
           gameBloc.add(RegisterClickOnField(fieldIsLeft: fieldIsLeft, position: details.localPosition));
-          gameBloc.add(ChangeMenuStatus(menuStatus: MenuStatus.actionMenu));
+          gameBloc.add(WorkflowEvent());
+          openWorkflowPopup(context, gameBloc);
         }),
       ),
       // Painter of dashed 9m

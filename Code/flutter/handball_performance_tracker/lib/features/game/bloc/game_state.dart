@@ -5,6 +5,22 @@ enum GameStatus { initial, running, paused, finished }
 // we need these Menu Statuses to control the dialogs from the bloc. See game view for how these are used
 enum MenuStatus { closed, actionMenu, playerMenu, sevenMeterMenu, forceClose, loadPlayerMenu, loadSubstitutionMenu, loadSevenMeterPlayerMenu }
 
+enum WorkflowStep {
+  closed,
+  actionMenuOffense,
+  actionMenuDefense,
+  actionMenuGoalKeeper,
+  playerSelection,
+  assistSelection,
+  sevenMeterScorerSelection,
+  sevenMeterFoulerSelection,
+  sevenMeterExecutorSelection,
+  substitutionTargetSelection,
+  goalkeeperSelection,
+  sevenMeterDefenseResult,
+  sevenMeterOffenseResult
+}
+
 class GameState extends Equatable {
   // fields set during game creation
   final GameStatus status;
@@ -30,6 +46,7 @@ class GameState extends Equatable {
   MenuStatus menuStatus = MenuStatus.closed;
   bool assistAvailable = false;
   Player substitutionTarget = Player();
+  WorkflowStep workflowStep = WorkflowStep.closed;
 
   // Some of these fields can only be set in this constructor like date, opponent or location because they get passed from the previous screen
   GameState({
@@ -55,6 +72,7 @@ class GameState extends Equatable {
     this.menuStatus = MenuStatus.closed,
     this.assistAvailable = false,
     substitutionTarget,
+    this.workflowStep = WorkflowStep.closed,
   }) {
     // make sure that the list is growable
     if (this.onFieldPlayers.isEmpty) {
@@ -96,6 +114,7 @@ class GameState extends Equatable {
     MenuStatus? menuStatus,
     bool? assistAvailable,
     Player? substitutionTarget,
+    WorkflowStep? workflowStep,
   }) {
     return GameState(
       // these properties cannot be changed after game initialization so they can only be set in the constructor but not in the copyWith method
@@ -121,6 +140,7 @@ class GameState extends Equatable {
       menuStatus: menuStatus ?? this.menuStatus,
       assistAvailable: assistAvailable ?? this.assistAvailable,
       substitutionTarget: substitutionTarget ?? this.substitutionTarget,
+      workflowStep: workflowStep ?? this.workflowStep,
     );
   }
 
@@ -141,5 +161,6 @@ class GameState extends Equatable {
         this.menuStatus,
         this.assistAvailable,
         this.substitutionTarget,
+        this.workflowStep
       ];
 }

@@ -2,7 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/gestures.dart';
 import 'package:handball_performance_tracker/data/models/models.dart';
-import 'package:handball_performance_tracker/features/game/widgets/action_menu/action_menu.dart';
+import 'package:handball_performance_tracker/features/game/widgets/old_action_menu/action_menu.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 import 'package:handball_performance_tracker/core/core.dart';
 import 'game_field_math.dart';
@@ -322,6 +322,73 @@ class GameBloc extends Bloc<GameEvent, GameState> {
             penalizedPlayers: penalizedPlayers,
             substitutionTarget: Player(),
             gameActions: newGameActions));
+      }
+    });
+
+    on<WorkflowEvent>((event, emit) {
+      switch (state.workflowStep) {
+        case WorkflowStep.closed:
+          if (state.attacking) {
+            print("workflow closed => actionMenuOffense");
+            emit(state.copyWith(workflowStep: WorkflowStep.actionMenuOffense));
+          } else {
+            print("workflow closed => actionMenuDefense");
+            emit(state.copyWith(workflowStep: WorkflowStep.actionMenuDefense));
+          }
+          break;
+        case WorkflowStep.actionMenuOffense:
+          if (event.selectedAction!.tag == oneVOneSevenTag) {
+            print("workflow actionMenuOffense => sevenMeterScorerSelection");
+            emit(state.copyWith(workflowStep: WorkflowStep.sevenMeterScorerSelection));
+          } else if (event.selectedAction!.tag == goalTag) {
+            print("workflow actionMenuOffense => assistSelection");
+            emit(state.copyWith(workflowStep: WorkflowStep.assistSelection));
+          } else {
+            print("workflow actionMenuOffense => playerSelection");
+            emit(state.copyWith(workflowStep: WorkflowStep.playerSelection));
+          }
+          break;
+        case WorkflowStep.assistSelection:
+          print("workflow assistSelection => playerSelection");
+          emit(state.copyWith(workflowStep: WorkflowStep.playerSelection));
+          break;
+        case WorkflowStep.sevenMeterScorerSelection:
+          print("workflow sevenMeterScorerSelection => sevenMeterExecutorSelection");
+          emit(state.copyWith(workflowStep: WorkflowStep.sevenMeterExecutorSelection));
+          break;
+        case WorkflowStep.sevenMeterExecutorSelection:
+          print("workflow sevenMeterExecutorSelection => sevenMeterOffenseResult");
+          emit(state.copyWith(workflowStep: WorkflowStep.sevenMeterOffenseResult));
+          break;
+        case WorkflowStep.sevenMeterOffenseResult:
+          print("workflow sevenMeterOffenseResult => closed");
+          emit(state.copyWith(workflowStep: WorkflowStep.closed));
+          break;
+        case WorkflowStep.actionMenuDefense:
+          if (event.selectedAction!.tag == foulSevenMeterTag) {
+            emit(state.copyWith(workflowStep: WorkflowStep.sevenMeterFoulerSelection));
+          } else {
+            emit(state.copyWith(workflowStep: WorkflowStep.playerSelection));
+          }
+          break;
+        case WorkflowStep.sevenMeterFoulerSelection:
+          emit(state.copyWith(workflowStep: WorkflowStep.goalkeeperSelection));
+          break;
+        case WorkflowStep.goalkeeperSelection:
+          emit(state.copyWith(workflowStep: WorkflowStep.sevenMeterOffenseResult));
+          break;
+        case WorkflowStep.sevenMeterOffenseResult:
+          emit(state.copyWith(workflowStep: WorkflowStep.closed));
+          break;
+        case WorkflowStep.playerSelection:
+          emit(state.copyWith(workflowStep: WorkflowStep.closed));
+          break;
+        case WorkflowStep.actionMenuGoalKeeper:
+          emit(state.copyWith(workflowStep: WorkflowStep.closed));
+          break;
+        default:
+          emit(state.copyWith(workflowStep: WorkflowStep.closed));
+          break;
       }
     });
   }
