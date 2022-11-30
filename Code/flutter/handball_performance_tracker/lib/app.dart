@@ -7,6 +7,8 @@ import 'package:handball_performance_tracker/core/core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'dart:ui';
 
+import 'package:handball_performance_tracker/features/statistics/bloc/statistics_bloc.dart';
+
 class HandballApp extends StatelessWidget {
   const HandballApp({Key? key}) : super(key: key);
   @override
@@ -15,11 +17,13 @@ class HandballApp extends StatelessWidget {
       providers: [
         RepositoryProvider<AuthRepository>(create: (context) => AuthRepository()),
         RepositoryProvider<ClubRepository>(create: (context) => ClubFirebaseRepository()),
+        RepositoryProvider<GameFirebaseRepository>(create: (context) => GameFirebaseRepository()),
       ],
       child: MultiBlocProvider(
         providers: [
           BlocProvider<AuthBloc>(create: (context) => AuthBloc(authRepository: RepositoryProvider.of<AuthRepository>(context))..add(StartApp())),
-          BlocProvider<GlobalBloc>(create: (context) => GlobalBloc()..add(LoadGlobalState())),
+          BlocProvider<GlobalBloc>(create: (context) => GlobalBloc(gameRepository: RepositoryProvider.of<GameFirebaseRepository>(context))..add(LoadGlobalState())),
+          BlocProvider<StatisticsBloc>(create: (context) => StatisticsBloc(gameRepository: RepositoryProvider.of<GameFirebaseRepository>(context))..add(InitStatistics())),
         ],
         child: MaterialApp(
           debugShowCheckedModeBanner: false,

@@ -11,8 +11,10 @@ class StatisticsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => StatisticsBloc(),
+    //final statisticsBloc = BlocProvider.of<StatisticsBloc>(context);
+    return BlocProvider.value(
+      // create: (_) => StatisticsBloc(),
+      value: BlocProvider.of<StatisticsBloc>(context),
       child: StatisticsView(),
     );
   }

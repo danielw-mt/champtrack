@@ -1,19 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:handball_performance_tracker/features/sidebar/view/sidebar_view.dart';
-
-
-// import '../core/constants/colors.dart';
-// import '../../old-widgets/statistic_screen/player_statistics.dart';
-// import '../../old-widgets/statistic_screen/team_statistics.dart';
-// import '../../old-widgets/statistic_screen/comp_statistics.dart';
-
-
 import 'package:flutter/material.dart';
 import 'package:handball_performance_tracker/features/statistics/statistics.dart';
-// import 'package:get/get.dart';
-// import 'package:handball_performance_tracker/oldcontrollers/temp_controller.dart';
-// import '../../old-widgets/nav_drawer.dart';
-// import '../../old-widgets/statistic_screen/charts.dart';
 
 // TODO move these to the constant strings
 const String page1 = "Team";
@@ -96,21 +84,22 @@ class StatisticsView extends StatelessWidget {
     );
   }
 }
-Widget _buildStatisticsBody(BuildContext context) {
-    final state = context.watch<StatisticsBloc>().state;
 
-    // if (state.selectedStatScreenIndex == 0) {
-    //   return TeamStatistics();
-    // }
-    // if (state.selectedStatScreenIndex == 1) {
-    //   return PlayerStatistics();
-    // }
-    if (state.selectedStatScreenIndex == 2) {
-      return ComparisonStatistics();
-    } else {
-      return const Center(child: Text("This should not happen [Statistics]"));
-    }
+Widget _buildStatisticsBody(BuildContext context) {
+  final state = context.watch<StatisticsBloc>().state;
+
+  if (state.selectedStatScreenIndex == 0) {
+    return TeamStatistics();
   }
+  if (state.selectedStatScreenIndex == 1) {
+    return PlayerStatistics();
+  }
+  if (state.selectedStatScreenIndex == 2) {
+    return ComparisonStatistics();
+  } else {
+    return const Center(child: Text("This should not happen [Statistics]"));
+  }
+}
 
 
 //   Widget _navigationItemListTitle(String title, int index) {

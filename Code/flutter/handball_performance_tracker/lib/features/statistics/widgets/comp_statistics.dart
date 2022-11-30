@@ -3,15 +3,14 @@ import 'statistic_card_elements.dart';
 import 'charts.dart';
 
 class ComparisonStatistics extends StatelessWidget {
-  const ComparisonStatistics({Key? key})
-      : super(key: key);
+  const ComparisonStatistics({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     // show image statistics3_overlay.jpg from assests folder
-    return Center(child: Image(image: AssetImage('images/statistics3_overlay.jpg')));
+    return Center(
+        child: Image(image: AssetImage('images/statistics3_overlay.jpg')));
 
-    
     /*return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[

@@ -18,3 +18,9 @@ class SelectTeam extends StatisticsEvent {
 
   SelectTeam({required this.team});
 }
+
+class InitStatistics extends StatisticsEvent {
+  //final Team team = context.read<GlobalBloc>().state.selectedTeam;
+
+  InitStatistics();
+}

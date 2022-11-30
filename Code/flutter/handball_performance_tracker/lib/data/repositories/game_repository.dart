@@ -23,6 +23,7 @@ abstract class GameRepository {
 /// Implementation of GameRepository that uses Firebase as the data provider
 class GameFirebaseRepository extends GameRepository {
   final String currentUserUid = FirebaseAuth.instance.currentUser!.uid;
+  List<Game> _games = [];
 
   /// Add game to the games collection of the logged in club and return the game with the updated id
   Future<Game> createGame(Game game) async {
@@ -35,6 +36,9 @@ class GameFirebaseRepository extends GameRepository {
       throw Exception("No club found for user id. Cannot fetch game");
     }
     DocumentReference gameRef = await clubSnapshot.docs[0].reference.collection("games").add(game.toEntity().toDocument());
+    // create new game in _games
+    _games.add(game.copyWith(id: gameRef.id));
+
     return game.copyWith(id: gameRef.id);
   }
 
@@ -58,7 +62,7 @@ class GameFirebaseRepository extends GameRepository {
 
   /// Fetch all games from the games collection of the logged in club
   Future<List<Game>> fetchGames() async {
-    List<Game> games = [];
+    // List<Game> games = [];
     QuerySnapshot clubSnapshot = await FirebaseFirestore.instance
         .collection('clubs')
         .where("roles.${FirebaseAuth.instance.currentUser!.uid}", isEqualTo: "admin")
@@ -69,9 +73,9 @@ class GameFirebaseRepository extends GameRepository {
     }
     QuerySnapshot gamesSnapshot = await clubSnapshot.docs[0].reference.collection("games").get();
     await Future.forEach(gamesSnapshot.docs, (DocumentSnapshot gameSnapshot) {
-      games.add(Game.fromEntity(GameEntity.fromSnapshot(gameSnapshot)));
+      _games.add(Game.fromEntity(GameEntity.fromSnapshot(gameSnapshot)));
     });
-    return games;
+    return _games;
   }
 
   /// Delete the specified game
@@ -86,6 +90,8 @@ class GameFirebaseRepository extends GameRepository {
       throw Exception("No club found for user id. Cannot delete game");
     }
     await clubSnapshot.docs[0].reference.collection("games").doc(game.id).delete();
+    // remove game from _games
+    _games.removeWhere((element) => element.id == game.id);
   }
 
   /// Update the specified game
@@ -100,5 +106,11 @@ class GameFirebaseRepository extends GameRepository {
       throw Exception("No club found for user id. Cannot update game");
     }
     await clubSnapshot.docs[0].reference.collection("games").doc(game.id).update(game.toEntity().toDocument());
+    // update game in _games
+    _games[_games.indexWhere((element) => element.id == game.id)] = game;
   }
+
+  List<Game> get games => _games;
+  
+  set games(List<Game> games) => _games = games;
 }
