@@ -133,12 +133,6 @@ class UpdateActionMenuHintText extends GameEvent {
   UpdateActionMenuHintText({required this.hintText});
 }
 
-class ChangeMenuStatus extends GameEvent {
-  final MenuStatus menuStatus;
-
-  ChangeMenuStatus({required this.menuStatus});
-}
-
 class WorkflowEvent extends GameEvent {
   final Player? selectedPlayer;
   final GameAction? selectedAction;

@@ -39,7 +39,6 @@ void showPlayerPopup(BuildContext context, List<Widget> buttons, int i) {
                   contentPadding: EdgeInsets.zero,
                   content: Builder(
                     builder: (context) {
-                      plusPressed = false;
                       // show a ButtonBar inside the dialog with given buttons.
                       return EfScoreBar(
                         buttons: buttons,
@@ -53,5 +52,5 @@ void showPlayerPopup(BuildContext context, List<Widget> buttons, int i) {
       // TODO not sure when this comes into play but validate
       // When closing check if Popup closes because the plus button was pressed (=> player is still selected on efscore bar)
       // or because of other reasons (chose a player for substitution or just pressed anywhere in screen => player is unselected)
-      .then((_) => plusPressed ? null : gameBloc.add(ChangeMenuStatus(menuStatus: MenuStatus.closed)));
+      .then(((value) => {}));
 }

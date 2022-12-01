@@ -110,6 +110,7 @@ class EfScoreBarButton extends StatelessWidget {
       onTap: () {
         if (isPopupButton) {
           gameBloc.add(SubstitutePlayer(newPlayer: player, oldPlayer: substitutionTarget!));
+          Navigator.pop(context);
         } else {
           // show popup
           List<Player> playersWithSamePosition = [];

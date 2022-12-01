@@ -36,9 +36,7 @@ void callActionMenu(BuildContext context) async {
                 borderRadius: BorderRadius.circular(MENU_RADIUS),
               ),
               content: CustomAlertMessageWidget(StringsGameScreen.lGameStartErrorMessage));
-        }).then((value) {
-      gameBloc.add(ChangeMenuStatus(menuStatus: MenuStatus.closed));
-    });
+        }).then((value) {});
     return;
   }
 
@@ -66,7 +64,5 @@ void callActionMenu(BuildContext context) async {
                   ] // Column of "Player", horizontal line and Button-Row
                       ))),
         );
-      }).then((value) {
-    gameBloc.add(ChangeMenuStatus(menuStatus: MenuStatus.closed));
-  });
+      }).then((value) {});
 }

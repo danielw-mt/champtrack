@@ -89,6 +89,6 @@ void callSubstitutionPlayerMenu(BuildContext context) {
       // When closing set player menu text to ""
       // if just pressed anywhere in screen)
       .then((_) {
-    gameBloc.add(ChangeMenuStatus(menuStatus: MenuStatus.closed));
+    // gameBloc.add(ChangeMenuStatus(menuStatus: MenuStatus.closed));
   });
 }

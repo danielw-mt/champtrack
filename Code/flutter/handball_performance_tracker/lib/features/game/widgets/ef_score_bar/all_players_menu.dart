@@ -8,8 +8,6 @@ import 'package:handball_performance_tracker/data/models/models.dart';
 // Menu for deciding who will execute the seven meter
 void callAllPlayersMenu(BuildContext context, Player substitutionTarget) {
   final GameBloc gameBloc = context.read<GameBloc>();
-
-  print("done building children");
   showDialog(
       context: context,
       builder: (BuildContext bcontext) {

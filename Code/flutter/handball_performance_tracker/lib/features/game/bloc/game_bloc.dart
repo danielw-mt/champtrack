@@ -123,10 +123,6 @@ class GameBloc extends Bloc<GameEvent, GameState> {
       emit(state.copyWith(lastClickedLocation: lastLocation));
     });
 
-    on<ChangeMenuStatus>((event, emit) {
-      emit(state.copyWith(menuStatus: event.menuStatus));
-    });
-
     on<SwitchField>((event, emit) {
       if (GameField.pageController.page == 0) {
         if (state.attackIsLeft) {
@@ -156,15 +152,18 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     on<SubstitutePlayer>((event, emit) {
       List<Player> onFieldPlayers = state.onFieldPlayers;
       // if a substitution target was chosen that already is on field it means that we can just swap players in the onfieldplayers
+      print("substituting ${event.oldPlayer.lastName} with ${event.newPlayer.lastName}");
       if (onFieldPlayers.contains(event.oldPlayer) && onFieldPlayers.contains(event.newPlayer)) {
         int indexOfNewPlayer = onFieldPlayers.indexOf(event.newPlayer);
         onFieldPlayers[onFieldPlayers.indexOf(event.oldPlayer)] = event.newPlayer;
         onFieldPlayers[indexOfNewPlayer] = event.oldPlayer;
-        emit(state.copyWith(onFieldPlayers: onFieldPlayers, menuStatus: MenuStatus.forceClose));
+        print(onFieldPlayers);
+        emit(state.copyWith(onFieldPlayers: onFieldPlayers.toList()));
       } else {
-        print("substituting ${event.oldPlayer.lastName} with ${event.newPlayer.lastName}");
+        
         onFieldPlayers[onFieldPlayers.indexOf(event.oldPlayer)] = event.newPlayer;
-        emit(state.copyWith(onFieldPlayers: onFieldPlayers, menuStatus: MenuStatus.forceClose));
+        print(onFieldPlayers);
+        emit(state.copyWith(onFieldPlayers: onFieldPlayers.toList()));
       }
     });
 
@@ -191,7 +190,6 @@ class GameBloc extends Bloc<GameEvent, GameState> {
       // for an action from opponent we can switch directly, or if we get a
       if (event.actionTag == emptyGoalTag || event.actionTag == goalOpponentTag || event.actionTag == goalOpponent7mTag) {
         // trigger switch field event
-        emit(state.copyWith(menuStatus: MenuStatus.forceClose));
         this.add(SwitchField());
       }
       // if an action inside goalkeeper menu that does not correspond to the opponent was hit try to assign this action directly to the goalkeeper
@@ -207,12 +205,10 @@ class GameBloc extends Bloc<GameEvent, GameState> {
           // we know the player id so we assign it here. For all other actions it is assigned in the player menu
           action.playerId = goalKeepers[0].id!;
           // TODO add action to FB here
-          emit(state.copyWith(menuStatus: MenuStatus.forceClose));
           this.add(SwitchField());
           // if there is more than one player with a goalkeeper position on field right now open the player menu
         } else {
           state.playerMenuHintText = StringsGameScreen.lChooseGoalkeeper;
-          emit(state.copyWith(menuStatus: MenuStatus.loadPlayerMenu));
         }
       }
       // if we received a
@@ -230,15 +226,13 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         action.playerId = "opponent";
         // we can add a gameaction here to DB because the player does not need to be selected in the player menu later
         // TODO add action to firebase here
-        emit(state.copyWith(menuStatus: MenuStatus.forceClose));
       }
       // add the action to the list of actions
       emit(state.copyWith(gameActions: state.gameActions..add(action)));
       // don't show player menu if a goalkeeper action or opponent action was logged
       // for all other actions show player menu
-      if (event.actionContext != actionContextGoalkeeper && event.actionTag != goalOpponentTag) {
-        emit(state.copyWith(menuStatus: MenuStatus.loadPlayerMenu));
-      }
+      if (event.actionContext != actionContextGoalkeeper && event.actionTag != goalOpponentTag) {}
+      this.add(WorkflowEvent(selectedAction: action));
     });
 
     on<RegisterPlayerSelection>((event, emit) {
@@ -247,11 +241,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
       if (lastAction.tag == goalTag && state.assistAvailable == false) {
         List<GameAction> newGameActions = state.gameActions;
         newGameActions.last.playerId = event.player.id!;
-        emit(state.copyWith(
-            assistAvailable: true,
-            menuStatus: MenuStatus.loadPlayerMenu,
-            gameActions: newGameActions,
-            playerMenuHintText: StringsGameScreen.lChooseAssist));
+        emit(state.copyWith(assistAvailable: true, gameActions: newGameActions, playerMenuHintText: StringsGameScreen.lChooseAssist));
         // when the button was pressed after an assist was made available and a player different than the player that score the goal was selected
         // assign the assist to the player that was selected
       } else if (state.assistAvailable == true && event.player.id != state.gameActions.last.playerId) {
@@ -265,14 +255,9 @@ class GameBloc extends Bloc<GameEvent, GameState> {
             relativeTime: lastAction.relativeTime,
             playerId: event.player.id!);
         emit(state.copyWith(
-            assistAvailable: false,
-            menuStatus: MenuStatus.forceClose,
-            gameActions: state.gameActions..add(assistAction),
-            playerMenuHintText: "",
-            ownScore: state.ownScore + 1));
+            assistAvailable: false, gameActions: state.gameActions..add(assistAction), playerMenuHintText: "", ownScore: state.ownScore + 1));
       } else if (lastAction.tag == oneVOneSevenTag) {
         // if the player that caused the 7m for us was chosen open the sevenmeter player menu to decide who will execute the 7m
-        emit(state.copyWith(menuStatus: MenuStatus.loadSevenMeterPlayerMenu));
       } else if (event.isSubstitute) {
         // if a player was selected from the not on field players in the player menu
         List<Player> playersWithSamePosition = [];
@@ -290,7 +275,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         } else {
           // if there are more than one player on field with the same position as the substitution player open the substituion menu
           print("there is no clear player to be substituted. Calling substitution menu");
-          emit(state.copyWith(menuStatus: MenuStatus.loadSubstitutionMenu, substitutionTarget: event.player));
+          emit(state.copyWith(substitutionTarget: event.player));
         }
       } else {
         print("no special case. Just add the action to the list of actions after the player selection");
@@ -316,13 +301,13 @@ class GameBloc extends Bloc<GameEvent, GameState> {
           ownScore = ownScore + 1;
         }
         emit(state.copyWith(
-            menuStatus: MenuStatus.forceClose,
             playerMenuHintText: "",
             ownScore: ownScore,
             penalizedPlayers: penalizedPlayers,
             substitutionTarget: Player(),
             gameActions: newGameActions));
       }
+      this.add(WorkflowEvent(selectedPlayer: event.player));
     });
 
     on<WorkflowEvent>((event, emit) {

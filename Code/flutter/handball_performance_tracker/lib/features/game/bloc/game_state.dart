@@ -2,9 +2,6 @@ part of 'game_bloc.dart';
 
 enum GameStatus { initial, running, paused, finished }
 
-// we need these Menu Statuses to control the dialogs from the bloc. See game view for how these are used
-enum MenuStatus { closed, actionMenu, playerMenu, sevenMeterMenu, forceClose, loadPlayerMenu, loadSubstitutionMenu, loadSevenMeterPlayerMenu }
-
 enum WorkflowStep {
   closed,
   actionMenuOffense,
@@ -43,7 +40,6 @@ class GameState extends Equatable {
   String playerMenuHintText = '';
   // Player previousClickedPlayer = Player();
   List<Player> penalizedPlayers = [];
-  MenuStatus menuStatus = MenuStatus.closed;
   bool assistAvailable = false;
   Player substitutionTarget = Player();
   WorkflowStep workflowStep = WorkflowStep.closed;
@@ -69,7 +65,6 @@ class GameState extends Equatable {
     this.actionMenuHintText = '',
     this.playerMenuHintText = '',
     this.penalizedPlayers = const [],
-    this.menuStatus = MenuStatus.closed,
     this.assistAvailable = false,
     substitutionTarget,
     this.workflowStep = WorkflowStep.closed,
@@ -111,7 +106,6 @@ class GameState extends Equatable {
     String? actionMenuHintText,
     String? playerMenuHintText,
     List<Player>? penalizedPlayers,
-    MenuStatus? menuStatus,
     bool? assistAvailable,
     Player? substitutionTarget,
     WorkflowStep? workflowStep,
@@ -137,7 +131,6 @@ class GameState extends Equatable {
       actionMenuHintText: actionMenuHintText ?? this.actionMenuHintText,
       playerMenuHintText: playerMenuHintText ?? this.playerMenuHintText,
       penalizedPlayers: penalizedPlayers ?? this.penalizedPlayers,
-      menuStatus: menuStatus ?? this.menuStatus,
       assistAvailable: assistAvailable ?? this.assistAvailable,
       substitutionTarget: substitutionTarget ?? this.substitutionTarget,
       workflowStep: workflowStep ?? this.workflowStep,
@@ -149,7 +142,7 @@ class GameState extends Equatable {
         this.status,
         this.attackIsLeft,
         this.attacking,
-        this.onFieldPlayers,
+        this.onFieldPlayers.hashCode,
         this.ownScore,
         this.opponentScore,
         this.stopWatchTimer,
@@ -158,7 +151,6 @@ class GameState extends Equatable {
         this.actionMenuHintText,
         this.playerMenuHintText,
         this.penalizedPlayers,
-        this.menuStatus,
         this.assistAvailable,
         this.substitutionTarget,
         this.workflowStep
