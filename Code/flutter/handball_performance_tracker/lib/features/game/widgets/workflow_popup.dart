@@ -20,6 +20,7 @@ void openWorkflowPopup(BuildContext higherContext, GameBloc gameBloc) {
           style: ActionMenuStyle.offense,
         );
       case WorkflowStep.playerSelection:
+        print('player selection');
         return PlayerMenu(style: PlayerMenuStyle.standard);
       case WorkflowStep.sevenMeterExecutorSelection:
         return PlayerMenu(style: PlayerMenuStyle.sevenMeterExecutor);
@@ -57,12 +58,15 @@ void openWorkflowPopup(BuildContext higherContext, GameBloc gameBloc) {
                     builder: (context, state) {
                       if (state.workflowStep == WorkflowStep.closed) {
                         Navigator.pop(bcontext);
-                        return Visibility(child: Container(), visible: false,);
+                        return Visibility(
+                          child: Container(),
+                          visible: false,
+                        );
                       }
                       return Container(
                           width: MediaQuery.of(higherContext).size.width * 0.72,
                           height: MediaQuery.of(higherContext).size.height * 0.7,
                           child: provideWorkflowMenuContent());
                     })));
-      }).then((value) => higherContext.read<GameBloc>().state.workflowStep = WorkflowStep.closed);
+      }).then((value) => gameBloc.add(CloseWorkflow()));
 }

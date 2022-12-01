@@ -157,12 +157,9 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         int indexOfNewPlayer = onFieldPlayers.indexOf(event.newPlayer);
         onFieldPlayers[onFieldPlayers.indexOf(event.oldPlayer)] = event.newPlayer;
         onFieldPlayers[indexOfNewPlayer] = event.oldPlayer;
-        print(onFieldPlayers);
         emit(state.copyWith(onFieldPlayers: onFieldPlayers.toList()));
       } else {
-        
         onFieldPlayers[onFieldPlayers.indexOf(event.oldPlayer)] = event.newPlayer;
-        print(onFieldPlayers);
         emit(state.copyWith(onFieldPlayers: onFieldPlayers.toList()));
       }
     });
@@ -375,6 +372,10 @@ class GameBloc extends Bloc<GameEvent, GameState> {
           emit(state.copyWith(workflowStep: WorkflowStep.closed));
           break;
       }
+    });
+
+    on<CloseWorkflow>((event, emit) {
+      emit(state.copyWith(workflowStep: WorkflowStep.closed));
     });
   }
 }

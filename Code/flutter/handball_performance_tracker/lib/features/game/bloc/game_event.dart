@@ -139,3 +139,5 @@ class WorkflowEvent extends GameEvent {
 
   WorkflowEvent({this.selectedPlayer, this.selectedAction});
 }
+
+class CloseWorkflow extends GameEvent {}

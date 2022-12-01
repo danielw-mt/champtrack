@@ -80,8 +80,7 @@ class ActionButton extends StatelessWidget {
           ),
         ),
         onTap: () {
-          gameBloc.add(WorkflowEvent(selectedAction: GameAction(tag: actionTag, context: actionContext)));
-          // gameBloc.add(RegisterAction(actionTag: actionTag, actionContext: actionContext));
+          gameBloc.add(RegisterAction(actionTag: actionTag, actionContext: actionContext));
         });
   }
 }
