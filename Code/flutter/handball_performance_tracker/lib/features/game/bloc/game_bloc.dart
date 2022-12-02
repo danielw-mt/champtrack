@@ -239,7 +239,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
             timestamp: lastAction.timestamp,
             relativeTime: lastAction.relativeTime,
             playerId: event.player.id!);
-        emit(state.copyWith(gameActions: state.gameActions..add(assistAction), ownScore: state.ownScore + 1));
+        emit(state.copyWith(gameActions: (state.gameActions..add(assistAction)).toList(), ownScore: state.ownScore + 1));
         this.add(WorkflowEvent(selectedPlayer: event.player));
       } else if (state.workflowStep == WorkflowStep.substitutionTargetSelection) {
         print("player selection: selecting substitution target");
