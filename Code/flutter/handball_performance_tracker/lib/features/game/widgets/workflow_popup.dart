@@ -35,8 +35,6 @@ void openWorkflowPopup(BuildContext higherContext, GameBloc gameBloc) {
       case WorkflowStep.assistSelection:
         return PlayerMenu(style: PlayerMenuStyle.assist);
       case WorkflowStep.forceClose:
-        gameBloc.state.workflowStep = WorkflowStep.closed;
-        Navigator.pop(higherContext);
         return Container();
       default:
         return Container();
@@ -56,7 +54,7 @@ void openWorkflowPopup(BuildContext higherContext, GameBloc gameBloc) {
                 content: BlocBuilder<GameBloc, GameState>(
                     bloc: gameBloc,
                     builder: (context, state) {
-                      if (state.workflowStep == WorkflowStep.closed) {
+                      if (state.workflowStep == WorkflowStep.forceClose) {
                         Navigator.pop(bcontext);
                         return Visibility(
                           child: Container(),
