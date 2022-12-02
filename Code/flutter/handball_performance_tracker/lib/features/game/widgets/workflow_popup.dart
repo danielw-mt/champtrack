@@ -26,7 +26,6 @@ void openWorkflowPopup(BuildContext higherContext, GameBloc gameBloc) {
       case WorkflowStep.sevenMeterDefenseResult:
         return ActionMenu(style: ActionMenuStyle.sevenMeterDefense);
       case WorkflowStep.playerSelection:
-        print('player selection');
         return PlayerMenu(style: PlayerMenuStyle.standard);
       case WorkflowStep.sevenMeterExecutorSelection:
         return PlayerMenu(style: PlayerMenuStyle.sevenMeterExecutor);
@@ -36,7 +35,7 @@ void openWorkflowPopup(BuildContext higherContext, GameBloc gameBloc) {
         return PlayerMenu(style: PlayerMenuStyle.sevenMeterScorer);
       case WorkflowStep.substitutionTargetSelection:
         return PlayerMenu(style: PlayerMenuStyle.substitutionTarget);
-      case WorkflowStep.goalkeeperSelection:
+      case WorkflowStep.sevenMeterGoalkeeperSelection:
         return PlayerMenu(style: PlayerMenuStyle.goalKeeperSelection);
       case WorkflowStep.assistSelection:
         return PlayerMenu(style: PlayerMenuStyle.assist);

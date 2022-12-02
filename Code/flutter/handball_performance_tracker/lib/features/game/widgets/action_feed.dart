@@ -34,7 +34,7 @@ class ActionFeed extends StatelessWidget {
                 shrinkWrap: true,
                 itemCount: feedActions.where((GameAction action) => action.playerId != "").toList().length,
                 itemBuilder: (context, index) {
-                  GameAction feedAction = feedActions.reversed.toList()[index];
+                  GameAction feedAction = feedActions.reversed.toList().where((GameAction action) => action.playerId != "").toList()[index];
                   String actionTag = feedAction.tag;
                   Player relevantPlayer = Player();
                   // get the player object whose id matches the playerId in the action Object

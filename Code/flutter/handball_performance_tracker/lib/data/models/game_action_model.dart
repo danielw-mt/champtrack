@@ -67,4 +67,9 @@ class GameAction {
             throwLocation: action.throwLocation,
             timestamp: action.timestamp,
             context: action.context);
+
+  @override
+  String toString() {
+    return 'GameAction: { id: $id, +\n teamId: $teamId, +\n gameId: $gameId, +\n playerId: $playerId, +\n context: $context, +\n tag: $tag, +\n throwLocation: $throwLocation, +\n timestamp: $timestamp, +\n relativeTime: $relativeTime }';
+  }
 }

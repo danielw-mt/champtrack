@@ -13,7 +13,7 @@ enum WorkflowStep {
   sevenMeterFoulerSelection,
   sevenMeterExecutorSelection,
   substitutionTargetSelection,
-  goalkeeperSelection,
+  sevenMeterGoalkeeperSelection,
   sevenMeterDefenseResult,
   sevenMeterOffenseResult,
   forceClose
@@ -42,6 +42,7 @@ class GameState extends Equatable {
   Player substitutionTarget = Player();
   Player substitutionPlayer = Player();
   Player sevenMeterExecutor = Player();
+  Player sevenMeterGoalkeeper = Player();
   WorkflowStep workflowStep = WorkflowStep.closed;
 
   // Some of these fields can only be set in this constructor like date, opponent or location because they get passed from the previous screen
@@ -66,6 +67,7 @@ class GameState extends Equatable {
     substitutionTarget,
     substitutionPlayer,
     sevenMeterExecutor,
+    sevenMeterGoalkeeper,
     this.workflowStep = WorkflowStep.closed,
   }) {
     // make sure that the list is growable
@@ -96,6 +98,9 @@ class GameState extends Equatable {
     if (sevenMeterExecutor != null) {
       this.sevenMeterExecutor = sevenMeterExecutor;
     }
+    if (sevenMeterGoalkeeper != null) {
+      this.sevenMeterGoalkeeper = sevenMeterGoalkeeper;
+    }
   }
 
   GameState copyWith({
@@ -112,6 +117,7 @@ class GameState extends Equatable {
     Player? substitutionTarget,
     Player? substitutionPlayer,
     Player? sevenMeterExecutor,
+    Player? sevenMeterGoalkeeper,
     WorkflowStep? workflowStep,
   }) {
     return GameState(
@@ -136,6 +142,7 @@ class GameState extends Equatable {
       substitutionTarget: substitutionTarget ?? this.substitutionTarget,
       substitutionPlayer: substitutionPlayer ?? this.substitutionPlayer,
       sevenMeterExecutor: sevenMeterExecutor ?? this.sevenMeterExecutor,
+      sevenMeterGoalkeeper: sevenMeterGoalkeeper ?? this.sevenMeterGoalkeeper,
       workflowStep: workflowStep ?? this.workflowStep,
     );
   }
@@ -155,6 +162,7 @@ class GameState extends Equatable {
         this.substitutionTarget,
         this.substitutionPlayer,
         this.sevenMeterExecutor,
+        this.sevenMeterGoalkeeper,
         this.workflowStep
       ];
 }

@@ -177,13 +177,17 @@ class GameBloc extends Bloc<GameEvent, GameState> {
           timestamp: unixTime,
           relativeTime: secondsSinceGameStart);
 
-      // for an action from opponent we can switch directly, or if we get a
+      // for an action from opponent we can switch directly, we don't need the player menu to choose a player because these actions can be
+      // directly assigned to the opponent
       if (event.actionTag == emptyGoalTag || event.actionTag == goalOpponentTag || event.actionTag == goalOpponent7mTag) {
+        print("logging opponent action");
         // trigger switch field event
         this.add(SwitchField());
-      }
-      // if an action inside goalkeeper menu that does not correspond to the opponent was hit try to assign this action directly to the goalkeeper
-      if (event.actionContext == actionContextGoalkeeper && event.actionTag != goalOpponentTag && event.actionTag != emptyGoalTag) {
+        action.playerId = "opponent";
+        emit(state.copyWith(opponentScore: state.opponentScore + 1, workflowStep: WorkflowStep.forceClose));
+        // if an action inside goalkeeper menu that does not correspond to the opponent was hit try to assign this action directly to the goalkeeper
+      } else if (event.actionContext == actionContextGoalkeeper && event.actionTag != goalOpponentTag && event.actionTag != emptyGoalTag) {
+        print("our own goalkeeper action");
         List<Player> goalKeepers = [];
         state.onFieldPlayers.forEach((Player player) {
           if (player.positions.contains(goalkeeperPos)) {
@@ -196,24 +200,30 @@ class GameBloc extends Bloc<GameEvent, GameState> {
           action.playerId = goalKeepers[0].id!;
           // TODO add action to FB here
           this.add(SwitchField());
-          // if there is more than one player with a goalkeeper position on field right now open the player menu
+          emit(state.copyWith(workflowStep: WorkflowStep.forceClose));
+          // if there is more than one player with a goalkeeper position on field right now open the player menu with goalkeeper selection style
+        } else {
+          // TODO open player menu with goalkeeper selection style
+          this.add(WorkflowEvent(selectedAction: action));
         }
-      }
-      if (event.actionTag == goalOpponentTag || event.actionTag == emptyGoalTag) {
-        emit(state.copyWith(opponentScore: state.opponentScore + 1));
-        action.playerId = "opponent";
-        // we can add a gameaction here to DB because the player does not need to be selected in the player menu later
-        // TODO add action to firebase here
-      }
-      if (state.workflowStep == WorkflowStep.sevenMeterOffenseResult){
+      } else if (state.workflowStep == WorkflowStep.sevenMeterOffenseResult) {
+        print("logging 7m result");
         action.playerId = state.sevenMeterExecutor.id!;
+        this.add(WorkflowEvent(selectedAction: action));
+        this.add(SwitchField());
+      } else if (state.workflowStep == WorkflowStep.sevenMeterDefenseResult) {
+        print("logging 7m result");
+        action.playerId = state.sevenMeterGoalkeeper.id!;
+        this.add(WorkflowEvent(selectedAction: action));
+        this.add(SwitchField());
+      } else {
+        // add the action to the list of actions
+        print("adding normal action");
+        // don't show player menu if a goalkeeper action or opponent action was logged
+        // for all other actions show player menu
+        this.add(WorkflowEvent(selectedAction: action));
       }
-      // add the action to the list of actions
       emit(state.copyWith(gameActions: state.gameActions..add(action)));
-      // don't show player menu if a goalkeeper action or opponent action was logged
-      // for all other actions show player menu
-      if (event.actionContext != actionContextGoalkeeper && event.actionTag != goalOpponentTag) {}
-      this.add(WorkflowEvent(selectedAction: action));
     });
 
     on<RegisterPlayerSelection>((event, emit) {
@@ -232,13 +242,14 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         emit(state.copyWith(gameActions: state.gameActions..add(assistAction), ownScore: state.ownScore + 1));
         this.add(WorkflowEvent(selectedPlayer: event.player));
       } else if (state.workflowStep == WorkflowStep.substitutionTargetSelection) {
+        print("player selection: selecting substitution target");
         this.add(SubstitutePlayer(newPlayer: state.substitutionPlayer, oldPlayer: event.player));
         this.add(WorkflowEvent(selectedPlayer: event.player));
         List<GameAction> gameActions = state.gameActions;
         gameActions.last.playerId = state.substitutionPlayer.id!;
         emit(state.copyWith(gameActions: gameActions));
       } else if (event.isSubstitute) {
-        print("player selection: adding substitute");
+        print("player selection: substitute");
         // if a player was selected from the not on field players in the player menu
         List<Player> playersWithSamePosition = [];
         // if there is only one player on field with the same position as the substitution player just swap that player with them
@@ -262,7 +273,12 @@ class GameBloc extends Bloc<GameEvent, GameState> {
           emit(state.copyWith(substitutionPlayer: event.player, workflowStep: WorkflowStep.substitutionTargetSelection));
         }
       } else if (state.workflowStep == WorkflowStep.sevenMeterExecutorSelection) {
-        state.sevenMeterExecutor = event.player;
+        print("seven meter executor selection");
+        emit(state.copyWith(sevenMeterExecutor: event.player));
+        this.add(WorkflowEvent(selectedPlayer: event.player));
+      } else if (state.workflowStep == WorkflowStep.sevenMeterGoalkeeperSelection) {
+        print("seven meter goalkeeper selection");
+        emit(state.copyWith(sevenMeterGoalkeeper: event.player));
         this.add(WorkflowEvent(selectedPlayer: event.player));
       } else {
         print("no special case. Just add the action to the list of actions after the player selection");
@@ -330,22 +346,32 @@ class GameBloc extends Bloc<GameEvent, GameState> {
           break;
         case WorkflowStep.actionMenuDefense:
           if (event.selectedAction!.tag == foulSevenMeterTag) {
+            print("workflow actionMenuDefense => sevenMeterFoulerSelection");
             emit(state.copyWith(workflowStep: WorkflowStep.sevenMeterFoulerSelection));
           } else {
+            print("workflow actionMenuDefense => playerSelection");
             emit(state.copyWith(workflowStep: WorkflowStep.playerSelection));
           }
           break;
         case WorkflowStep.sevenMeterFoulerSelection:
-          emit(state.copyWith(workflowStep: WorkflowStep.goalkeeperSelection));
+          print("workflow sevenMeterFoulerSelection => sevenMeterGoalkeeperSelection");
+          emit(state.copyWith(workflowStep: WorkflowStep.sevenMeterGoalkeeperSelection));
           break;
-        case WorkflowStep.goalkeeperSelection:
-          emit(state.copyWith(workflowStep: WorkflowStep.sevenMeterOffenseResult));
+        case WorkflowStep.sevenMeterGoalkeeperSelection:
+          print("workflow sevenMeterGoalkeeperSelection => sevenMeterDefenseResult");
+          emit(state.copyWith(workflowStep: WorkflowStep.sevenMeterDefenseResult));
           break;
         case WorkflowStep.sevenMeterOffenseResult:
+          print("workflow sevenMeterOffenseResult => closed");
+          emit(state.copyWith(workflowStep: WorkflowStep.forceClose));
+          break;
+        case WorkflowStep.sevenMeterDefenseResult:
+          print("workflow sevenMeterDefenseResult => closed");
           emit(state.copyWith(workflowStep: WorkflowStep.forceClose));
           break;
         case WorkflowStep.playerSelection:
           if (state.gameActions.last.tag == goalTag) {
+            print("workflow playerSelection => goalAssistSelection");
             emit(state.copyWith(workflowStep: WorkflowStep.assistSelection));
           } else {
             print("workflow playerSelection => closed");
@@ -357,6 +383,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
           emit(state.copyWith(workflowStep: WorkflowStep.forceClose));
           break;
         case WorkflowStep.actionMenuGoalKeeper:
+          print("workflow actionMenuGoalKeeper => force close");
           emit(state.copyWith(workflowStep: WorkflowStep.forceClose));
           break;
         default:
