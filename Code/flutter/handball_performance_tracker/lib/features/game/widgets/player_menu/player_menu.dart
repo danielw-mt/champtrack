@@ -122,9 +122,9 @@ class PlayerMenu extends StatelessWidget {
       case PlayerMenuStyle.assist:
         return 'Select the player who assisted';
       case PlayerMenuStyle.sevenMeterScorer:
-        return 'Select the player who scored';
+        return 'Select the player who scored 7m';
       case PlayerMenuStyle.sevenMeterExecutor:
-        return 'Select the player who executed';
+        return 'Select the player who executed 7m';
       case PlayerMenuStyle.sevenMeterFouler:
         return 'Select the player who fouled';
       case PlayerMenuStyle.substitutionTarget:

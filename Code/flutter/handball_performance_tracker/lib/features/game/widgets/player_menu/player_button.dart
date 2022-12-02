@@ -22,7 +22,7 @@ class PlayerButton extends StatelessWidget {
     Color buttonColor = Color(0);
     Column buttonContent = Column();
     // assist button
-    if (gameBloc.state.assistAvailable && player.id == gameBloc.state.gameActions.last.playerId) {
+    if (gameBloc.state.workflowStep == WorkflowStep.assistSelection && player.id == gameBloc.state.gameActions.last.playerId) {
       buttonColor = Colors.purple;
       buttonContent = Column(
         mainAxisAlignment: MainAxisAlignment.center,

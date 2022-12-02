@@ -15,7 +15,8 @@ enum WorkflowStep {
   substitutionTargetSelection,
   goalkeeperSelection,
   sevenMeterDefenseResult,
-  sevenMeterOffenseResult
+  sevenMeterOffenseResult,
+  forceClose
 }
 
 class GameState extends Equatable {
@@ -36,11 +37,8 @@ class GameState extends Equatable {
   StopWatchTimer stopWatchTimer = StopWatchTimer();
   List<GameAction> gameActions = [];
   List<String> lastClickedLocation = [];
-  String actionMenuHintText = '';
-  String playerMenuHintText = '';
   // Player previousClickedPlayer = Player();
   List<Player> penalizedPlayers = [];
-  bool assistAvailable = false;
   Player substitutionTarget = Player();
   WorkflowStep workflowStep = WorkflowStep.closed;
 
@@ -62,10 +60,7 @@ class GameState extends Equatable {
     stopWatchTimer,
     this.gameActions = const [],
     this.lastClickedLocation = const [],
-    this.actionMenuHintText = '',
-    this.playerMenuHintText = '',
     this.penalizedPlayers = const [],
-    this.assistAvailable = false,
     substitutionTarget,
     this.workflowStep = WorkflowStep.closed,
   }) {
@@ -103,10 +98,7 @@ class GameState extends Equatable {
     StopWatchTimer? stopWatchTimer,
     List<GameAction>? gameActions,
     List<String>? lastClickedLocation,
-    String? actionMenuHintText,
-    String? playerMenuHintText,
     List<Player>? penalizedPlayers,
-    bool? assistAvailable,
     Player? substitutionTarget,
     WorkflowStep? workflowStep,
   }) {
@@ -128,10 +120,7 @@ class GameState extends Equatable {
       stopWatchTimer: stopWatchTimer ?? this.stopWatchTimer,
       gameActions: gameActions ?? this.gameActions,
       lastClickedLocation: lastClickedLocation ?? this.lastClickedLocation,
-      actionMenuHintText: actionMenuHintText ?? this.actionMenuHintText,
-      playerMenuHintText: playerMenuHintText ?? this.playerMenuHintText,
       penalizedPlayers: penalizedPlayers ?? this.penalizedPlayers,
-      assistAvailable: assistAvailable ?? this.assistAvailable,
       substitutionTarget: substitutionTarget ?? this.substitutionTarget,
       workflowStep: workflowStep ?? this.workflowStep,
     );
@@ -148,10 +137,7 @@ class GameState extends Equatable {
         this.stopWatchTimer,
         this.gameActions,
         this.lastClickedLocation,
-        this.actionMenuHintText,
-        this.playerMenuHintText,
         this.penalizedPlayers,
-        this.assistAvailable,
         this.substitutionTarget,
         this.workflowStep
       ];

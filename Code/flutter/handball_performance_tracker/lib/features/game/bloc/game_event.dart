@@ -121,23 +121,9 @@ class ChangeScore extends GameEvent {
   ChangeScore({required this.score, required this.isOwnScore});
 }
 
-class UpdatePlayerMenuHintText extends GameEvent {
-  final String hintText;
-
-  UpdatePlayerMenuHintText({required this.hintText});
-}
-
-class UpdateActionMenuHintText extends GameEvent {
-  final String hintText;
-
-  UpdateActionMenuHintText({required this.hintText});
-}
-
 class WorkflowEvent extends GameEvent {
   final Player? selectedPlayer;
   final GameAction? selectedAction;
 
   WorkflowEvent({this.selectedPlayer, this.selectedAction});
 }
-
-class CloseWorkflow extends GameEvent {}

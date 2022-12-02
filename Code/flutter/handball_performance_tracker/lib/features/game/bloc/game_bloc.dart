@@ -2,7 +2,6 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/gestures.dart';
 import 'package:handball_performance_tracker/data/models/models.dart';
-import 'package:handball_performance_tracker/features/game/widgets/old_action_menu/action_menu.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 import 'package:handball_performance_tracker/core/core.dart';
 import 'game_field_math.dart';
@@ -141,14 +140,6 @@ class GameBloc extends Bloc<GameEvent, GameState> {
       }
     });
 
-    on<UpdateActionMenuHintText>((event, emit) {
-      emit(state.copyWith(actionMenuHintText: event.hintText));
-    });
-
-    on<UpdatePlayerMenuHintText>((event, emit) {
-      emit(state.copyWith(playerMenuHintText: event.hintText));
-    });
-
     on<SubstitutePlayer>((event, emit) {
       List<Player> onFieldPlayers = state.onFieldPlayers;
       // if a substitution target was chosen that already is on field it means that we can just swap players in the onfieldplayers
@@ -204,19 +195,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
           // TODO add action to FB here
           this.add(SwitchField());
           // if there is more than one player with a goalkeeper position on field right now open the player menu
-        } else {
-          state.playerMenuHintText = StringsGameScreen.lChooseGoalkeeper;
         }
-      }
-      // if we received a
-      if (event.actionTag == oneVOneSevenTag) {
-        state.playerMenuHintText = StringsGameScreen.lChoose7mCause;
-      }
-      if (event.actionTag == oneVOneSevenTag) {
-        state.playerMenuHintText = StringsGameScreen.lChoose7mReceiver;
-      }
-      if (event.actionTag == foulSevenMeterTag) {
-        state.playerMenuHintText = StringsGameScreen.lChoose7mCause;
       }
       if (event.actionTag == goalOpponentTag || event.actionTag == emptyGoalTag) {
         emit(state.copyWith(opponentScore: state.opponentScore + 1));
@@ -234,14 +213,8 @@ class GameBloc extends Bloc<GameEvent, GameState> {
 
     on<RegisterPlayerSelection>((event, emit) {
       GameAction lastAction = state.gameActions.last;
-      // if the last action was a goal and assist wasn't selected yet enable the option for an assist
-      if (lastAction.tag == goalTag && state.assistAvailable == false) {
-        List<GameAction> newGameActions = state.gameActions;
-        newGameActions.last.playerId = event.player.id!;
-        emit(state.copyWith(assistAvailable: true, gameActions: newGameActions, playerMenuHintText: StringsGameScreen.lChooseAssist));
-        // when the button was pressed after an assist was made available and a player different than the player that score the goal was selected
-        // assign the assist to the player that was selected
-      } else if (state.assistAvailable == true && event.player.id != state.gameActions.last.playerId) {
+      if (state.workflowStep == WorkflowStep.assistSelection && event.player.id != state.gameActions.last.playerId) {
+        print("player selection: adding assist");
         GameAction assistAction = GameAction(
             teamId: state.selectedTeam.id!,
             gameId: lastAction.gameId,
@@ -251,11 +224,9 @@ class GameBloc extends Bloc<GameEvent, GameState> {
             timestamp: lastAction.timestamp,
             relativeTime: lastAction.relativeTime,
             playerId: event.player.id!);
-        emit(state.copyWith(
-            assistAvailable: false, gameActions: state.gameActions..add(assistAction), playerMenuHintText: "", ownScore: state.ownScore + 1));
-      } else if (lastAction.tag == oneVOneSevenTag) {
-        // if the player that caused the 7m for us was chosen open the sevenmeter player menu to decide who will execute the 7m
+        emit(state.copyWith(gameActions: state.gameActions..add(assistAction), ownScore: state.ownScore + 1));
       } else if (event.isSubstitute) {
+        print("player selection: adding substitute");
         // if a player was selected from the not on field players in the player menu
         List<Player> playersWithSamePosition = [];
         // if there is only one player on field with the same position as the substitution player just swap that player with them
@@ -272,7 +243,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         } else {
           // if there are more than one player on field with the same position as the substitution player open the substituion menu
           print("there is no clear player to be substituted. Calling substitution menu");
-          emit(state.copyWith(substitutionTarget: event.player));
+          emit(state.copyWith(substitutionTarget: event.player, workflowStep: WorkflowStep.substitutionTargetSelection));
         }
       } else {
         print("no special case. Just add the action to the list of actions after the player selection");
@@ -298,7 +269,6 @@ class GameBloc extends Bloc<GameEvent, GameState> {
           ownScore = ownScore + 1;
         }
         emit(state.copyWith(
-            playerMenuHintText: "",
             ownScore: ownScore,
             penalizedPlayers: penalizedPlayers,
             substitutionTarget: Player(),
@@ -322,17 +292,14 @@ class GameBloc extends Bloc<GameEvent, GameState> {
           if (event.selectedAction!.tag == oneVOneSevenTag) {
             print("workflow actionMenuOffense => sevenMeterScorerSelection");
             emit(state.copyWith(workflowStep: WorkflowStep.sevenMeterScorerSelection));
-          } else if (event.selectedAction!.tag == goalTag) {
-            print("workflow actionMenuOffense => assistSelection");
-            emit(state.copyWith(workflowStep: WorkflowStep.assistSelection));
           } else {
             print("workflow actionMenuOffense => playerSelection");
             emit(state.copyWith(workflowStep: WorkflowStep.playerSelection));
           }
           break;
         case WorkflowStep.assistSelection:
-          print("workflow assistSelection => playerSelection");
-          emit(state.copyWith(workflowStep: WorkflowStep.playerSelection));
+          print("workflow assistSelection => force close");
+          emit(state.copyWith(workflowStep: WorkflowStep.forceClose));
           break;
         case WorkflowStep.sevenMeterScorerSelection:
           print("workflow sevenMeterScorerSelection => sevenMeterExecutorSelection");
@@ -344,7 +311,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
           break;
         case WorkflowStep.sevenMeterOffenseResult:
           print("workflow sevenMeterOffenseResult => closed");
-          emit(state.copyWith(workflowStep: WorkflowStep.closed));
+          emit(state.copyWith(workflowStep: WorkflowStep.forceClose));
           break;
         case WorkflowStep.actionMenuDefense:
           if (event.selectedAction!.tag == foulSevenMeterTag) {
@@ -360,22 +327,23 @@ class GameBloc extends Bloc<GameEvent, GameState> {
           emit(state.copyWith(workflowStep: WorkflowStep.sevenMeterOffenseResult));
           break;
         case WorkflowStep.sevenMeterOffenseResult:
-          emit(state.copyWith(workflowStep: WorkflowStep.closed));
+          emit(state.copyWith(workflowStep: WorkflowStep.forceClose));
           break;
         case WorkflowStep.playerSelection:
-          emit(state.copyWith(workflowStep: WorkflowStep.closed));
+          if (state.gameActions.last.tag == goalTag) {
+            emit(state.copyWith(workflowStep: WorkflowStep.assistSelection));
+          } else {
+            print("workflow playerSelection => closed");
+            emit(state.copyWith(workflowStep: WorkflowStep.forceClose));
+          }
           break;
         case WorkflowStep.actionMenuGoalKeeper:
-          emit(state.copyWith(workflowStep: WorkflowStep.closed));
+          emit(state.copyWith(workflowStep: WorkflowStep.forceClose));
           break;
         default:
           emit(state.copyWith(workflowStep: WorkflowStep.closed));
           break;
       }
-    });
-
-    on<CloseWorkflow>((event, emit) {
-      emit(state.copyWith(workflowStep: WorkflowStep.closed));
     });
   }
 }

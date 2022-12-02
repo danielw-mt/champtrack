@@ -34,13 +34,13 @@ void openWorkflowPopup(BuildContext higherContext, GameBloc gameBloc) {
         return PlayerMenu(style: PlayerMenuStyle.goalKeeperSelection);
       case WorkflowStep.assistSelection:
         return PlayerMenu(style: PlayerMenuStyle.assist);
-      case WorkflowStep.closed:
+      case WorkflowStep.forceClose:
+        gameBloc.state.workflowStep = WorkflowStep.closed;
         Navigator.pop(higherContext);
-        break;
+        return Container();
       default:
         return Container();
     }
-    return Text("This should never happen");
   }
 
   showDialog(
@@ -68,5 +68,5 @@ void openWorkflowPopup(BuildContext higherContext, GameBloc gameBloc) {
                           height: MediaQuery.of(higherContext).size.height * 0.7,
                           child: provideWorkflowMenuContent());
                     })));
-      }).then((value) => gameBloc.add(CloseWorkflow()));
+      }).then((value) => gameBloc.state.workflowStep == WorkflowStep.closed);
 }

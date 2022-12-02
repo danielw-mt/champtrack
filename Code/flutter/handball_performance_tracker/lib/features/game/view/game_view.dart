@@ -15,36 +15,6 @@ class GameView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final GameBloc gameBloc = context.watch<GameBloc>();
-    // postframecalback is used to execute this code after the build finished. That way the AlertDialogs from the menus don't interrupt the build
-    // see: https://stackoverflow.com/questions/47592301/setstate-or-markneedsbuild-called-during-build
-    // WidgetsBinding.instance.addPostFrameCallback((_) {
-      // if (gameBloc.state.menuStatus == MenuStatus.forceClose) {
-      //   Navigator.pop(context);
-      // }
-      // // close action menu first and then open player menu to make sure that navigation stack stays clean instead of having a player menu on top of an action menu
-      // if (gameBloc.state.menuStatus == MenuStatus.loadPlayerMenu) {
-      //   print("loading player menu");
-      //   Navigator.pop(context);
-
-      //   callPlayerMenu(context);
-      //   gameBloc.add(ChangeMenuStatus(menuStatus: MenuStatus.playerMenu));
-      // }
-      // if (gameBloc.state.menuStatus == MenuStatus.loadSubstitutionMenu) {
-      //   callSubstitutionPlayerMenu(context);
-      //   gameBloc.add(ChangeMenuStatus(menuStatus: MenuStatus.actionMenu));
-      // }
-      // if (gameBloc.state.menuStatus == MenuStatus.actionMenu) {
-      //   callActionMenu(context);
-      // }
-      // if (gameBloc.state.menuStatus == MenuStatus.playerMenu) {
-      //   callPlayerMenu(context);
-      // }
-      // if (gameBloc.state.menuStatus == MenuStatus.sevenMeterMenu) {
-      //   // TODO implement seven meter menu
-      //   // callSevenMeterMenu(context);
-      // }
-    // });
-
     return SafeArea(
         child: Scaffold(
       resizeToAvoidBottomInset: false,
