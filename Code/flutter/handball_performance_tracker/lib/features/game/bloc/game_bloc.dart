@@ -205,6 +205,9 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         // we can add a gameaction here to DB because the player does not need to be selected in the player menu later
         // TODO add action to firebase here
       }
+      if (state.workflowStep == WorkflowStep.sevenMeterOffenseResult){
+        action.playerId = state.sevenMeterExecutor.id!;
+      }
       // add the action to the list of actions
       emit(state.copyWith(gameActions: state.gameActions..add(action)));
       // don't show player menu if a goalkeeper action or opponent action was logged
@@ -258,6 +261,9 @@ class GameBloc extends Bloc<GameEvent, GameState> {
           print("there is no clear player to be substituted. Calling substitution menu");
           emit(state.copyWith(substitutionPlayer: event.player, workflowStep: WorkflowStep.substitutionTargetSelection));
         }
+      } else if (state.workflowStep == WorkflowStep.sevenMeterExecutorSelection) {
+        state.sevenMeterExecutor = event.player;
+        this.add(WorkflowEvent(selectedPlayer: event.player));
       } else {
         print("no special case. Just add the action to the list of actions after the player selection");
         List<GameAction> newGameActions = state.gameActions;
