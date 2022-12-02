@@ -29,8 +29,10 @@ class GameBloc extends Bloc<GameEvent, GameState> {
 
     on<SwipeField>((event, emit) async {
       if (state.attackIsLeft && event.isLeft || !state.attackIsLeft && !event.isLeft) {
+        print("attacking: true");
         emit(state.copyWith(attacking: true));
       } else {
+        print("attacking: false");
         emit(state.copyWith(attacking: false));
       }
     });
@@ -225,6 +227,13 @@ class GameBloc extends Bloc<GameEvent, GameState> {
             relativeTime: lastAction.relativeTime,
             playerId: event.player.id!);
         emit(state.copyWith(gameActions: state.gameActions..add(assistAction), ownScore: state.ownScore + 1));
+        this.add(WorkflowEvent(selectedPlayer: event.player));
+      } else if (state.workflowStep == WorkflowStep.substitutionTargetSelection) {
+        this.add(SubstitutePlayer(newPlayer: state.substitutionPlayer, oldPlayer: event.player));
+        this.add(WorkflowEvent(selectedPlayer: event.player));
+        List<GameAction> gameActions = state.gameActions;
+        gameActions.last.playerId = state.substitutionPlayer.id!;
+        emit(state.copyWith(gameActions: gameActions));
       } else if (event.isSubstitute) {
         print("player selection: adding substitute");
         // if a player was selected from the not on field players in the player menu
@@ -240,10 +249,14 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         if (playersWithSamePosition.length == 1) {
           print("there is one clear player to be substituted. Not calling substitution menu for now");
           this.add(SubstitutePlayer(newPlayer: event.player, oldPlayer: playersWithSamePosition[0]));
+          this.add(WorkflowEvent(selectedPlayer: event.player));
+          List<GameAction> gameActions = state.gameActions;
+          gameActions.last.playerId = event.player.id!;
+          emit(state.copyWith(gameActions: gameActions));
         } else {
           // if there are more than one player on field with the same position as the substitution player open the substituion menu
           print("there is no clear player to be substituted. Calling substitution menu");
-          emit(state.copyWith(substitutionTarget: event.player, workflowStep: WorkflowStep.substitutionTargetSelection));
+          emit(state.copyWith(substitutionPlayer: event.player, workflowStep: WorkflowStep.substitutionTargetSelection));
         }
       } else {
         print("no special case. Just add the action to the list of actions after the player selection");
@@ -268,13 +281,9 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         if (lastTag == goalTag) {
           ownScore = ownScore + 1;
         }
-        emit(state.copyWith(
-            ownScore: ownScore,
-            penalizedPlayers: penalizedPlayers,
-            substitutionTarget: Player(),
-            gameActions: newGameActions));
+        emit(state.copyWith(ownScore: ownScore, penalizedPlayers: penalizedPlayers, substitutionTarget: Player(), gameActions: newGameActions));
+        this.add(WorkflowEvent(selectedPlayer: event.player));
       }
-      this.add(WorkflowEvent(selectedPlayer: event.player));
     });
 
     on<WorkflowEvent>((event, emit) {
@@ -336,6 +345,10 @@ class GameBloc extends Bloc<GameEvent, GameState> {
             print("workflow playerSelection => closed");
             emit(state.copyWith(workflowStep: WorkflowStep.forceClose));
           }
+          break;
+        case WorkflowStep.substitutionTargetSelection:
+          print("workflow substitutionTargetSelection => force close");
+          emit(state.copyWith(workflowStep: WorkflowStep.forceClose));
           break;
         case WorkflowStep.actionMenuGoalKeeper:
           emit(state.copyWith(workflowStep: WorkflowStep.forceClose));

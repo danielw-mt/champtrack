@@ -22,6 +22,7 @@ class PlayerMenu extends StatelessWidget {
 
     List<Widget> _buildPanel() {
       if (style == PlayerMenuStyle.substitutionTarget) {
+        print("substitution target menu");
         return [
           GridView.count(
               // 4 items max per row
@@ -118,7 +119,7 @@ class PlayerMenu extends StatelessWidget {
   String _getHelpText() {
     switch (style) {
       case PlayerMenuStyle.standard:
-        return 'Select a player';
+        return 'Select player who performed the action';
       case PlayerMenuStyle.assist:
         return 'Select the player who assisted';
       case PlayerMenuStyle.sevenMeterScorer:

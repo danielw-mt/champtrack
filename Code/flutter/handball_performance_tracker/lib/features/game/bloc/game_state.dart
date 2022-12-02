@@ -40,6 +40,7 @@ class GameState extends Equatable {
   // Player previousClickedPlayer = Player();
   List<Player> penalizedPlayers = [];
   Player substitutionTarget = Player();
+  Player substitutionPlayer = Player();
   WorkflowStep workflowStep = WorkflowStep.closed;
 
   // Some of these fields can only be set in this constructor like date, opponent or location because they get passed from the previous screen
@@ -62,6 +63,7 @@ class GameState extends Equatable {
     this.lastClickedLocation = const [],
     this.penalizedPlayers = const [],
     substitutionTarget,
+    substitutionPlayer,
     this.workflowStep = WorkflowStep.closed,
   }) {
     // make sure that the list is growable
@@ -86,6 +88,9 @@ class GameState extends Equatable {
     if (substitutionTarget != null) {
       this.substitutionTarget = substitutionTarget;
     }
+    if (substitutionPlayer != null) {
+      this.substitutionPlayer = substitutionPlayer;
+    }
   }
 
   GameState copyWith({
@@ -100,6 +105,7 @@ class GameState extends Equatable {
     List<String>? lastClickedLocation,
     List<Player>? penalizedPlayers,
     Player? substitutionTarget,
+    Player? substitutionPlayer,
     WorkflowStep? workflowStep,
   }) {
     return GameState(
@@ -122,6 +128,7 @@ class GameState extends Equatable {
       lastClickedLocation: lastClickedLocation ?? this.lastClickedLocation,
       penalizedPlayers: penalizedPlayers ?? this.penalizedPlayers,
       substitutionTarget: substitutionTarget ?? this.substitutionTarget,
+      substitutionPlayer: substitutionPlayer ?? this.substitutionPlayer,
       workflowStep: workflowStep ?? this.workflowStep,
     );
   }
@@ -139,6 +146,7 @@ class GameState extends Equatable {
         this.lastClickedLocation,
         this.penalizedPlayers,
         this.substitutionTarget,
+        this.substitutionPlayer,
         this.workflowStep
       ];
 }

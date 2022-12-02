@@ -4,7 +4,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:handball_performance_tracker/features/game/game.dart';
 
 void openWorkflowPopup(BuildContext higherContext, GameBloc gameBloc) {
+  print("opening workflow popup");
   Widget provideWorkflowMenuContent() {
+    print("providing content");
     WorkflowStep lastStep = higherContext.read<GameBloc>().state.workflowStep;
     switch (lastStep) {
       case WorkflowStep.actionMenuDefense:
@@ -66,5 +68,5 @@ void openWorkflowPopup(BuildContext higherContext, GameBloc gameBloc) {
                           height: MediaQuery.of(higherContext).size.height * 0.7,
                           child: provideWorkflowMenuContent());
                     })));
-      }).then((value) => gameBloc.state.workflowStep == WorkflowStep.closed);
+      }).then((value) => gameBloc.state.workflowStep = WorkflowStep.closed);
 }
