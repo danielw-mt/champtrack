@@ -65,6 +65,11 @@ class GameBloc extends Bloc<GameEvent, GameState> {
       }
     });
 
+    // switch sides for example during halftime
+    on<SwitchSides>((event, emit) {
+      emit(state.copyWith(attackIsLeft: !state.attackIsLeft));
+    });
+
     /// Change time by the given offset
     on<ChangeTime>((event, emit) {
       StopWatchTimer stopWatchTimer = state.stopWatchTimer;
@@ -122,7 +127,13 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     on<RegisterClickOnField>((event, emit) {
       // set last clicked location
       List<String> lastLocation = SectorCalc(event.fieldIsLeft).calculatePosition(event.position);
-      emit(state.copyWith(lastClickedLocation: lastLocation));
+      // if we clicked on our own goal pop up our goalkeeper menu
+      if (lastLocation.contains("goal") && !state.attacking) {
+        emit(state.copyWith(lastClickedLocation: lastLocation, workflowStep: WorkflowStep.actionMenuGoalKeeper));
+      } else {
+        emit(state.copyWith(lastClickedLocation: lastLocation));
+        this.add(WorkflowEvent());
+      }
     });
 
     on<SwitchField>((event, emit) {

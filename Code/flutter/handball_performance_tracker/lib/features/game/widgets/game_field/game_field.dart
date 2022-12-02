@@ -24,7 +24,6 @@ class PaintedField extends StatelessWidget {
             // handle coordinates on click
             onTapDown: (TapDownDetails details) {
           gameBloc.add(RegisterClickOnField(fieldIsLeft: fieldIsLeft, position: details.localPosition));
-          gameBloc.add(WorkflowEvent());
           openWorkflowPopup(context, gameBloc);
         }),
       ),
