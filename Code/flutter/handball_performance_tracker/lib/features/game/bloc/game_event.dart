@@ -127,3 +127,9 @@ class WorkflowEvent extends GameEvent {
 
   WorkflowEvent({this.selectedPlayer, this.selectedAction});
 }
+
+class AddPenalty extends GameEvent {
+  final Player player;
+
+  AddPenalty({required this.player});
+}

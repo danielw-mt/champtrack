@@ -19,8 +19,44 @@ class PlayerButton extends StatelessWidget {
     String buttonText = player.lastName;
     String buttonNumber = player.number.toString();
 
-    Color buttonColor = Color(0);
-    Column buttonContent = Column();
+    Color buttonColor = Color.fromARGB(255, 180, 211, 236);
+    // normal dialog button that has a shirt
+    Column buttonContent = Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Stack(
+          alignment: Alignment.center,
+          children: [
+            // ButtonNumber
+            Text(
+              buttonNumber,
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: (MediaQuery.of(context).size.width * 0.03),
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            // Shirt
+            Center(
+              child: Icon(
+                MyFlutterApp.t_shirt,
+              ),
+            ),
+          ],
+        ),
+        // ButtonName
+        Text(
+          buttonText,
+          overflow: TextOverflow.ellipsis,
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: (MediaQuery.of(context).size.width * 0.02),
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ],
+    );
     // assist button
     if (gameBloc.state.workflowStep == WorkflowStep.assistSelection && player.id == gameBloc.state.gameActions.last.playerId) {
       buttonColor = Colors.purple;
@@ -39,51 +75,9 @@ class PlayerButton extends StatelessWidget {
           // Shirt
         ],
       );
-    } else if (gameBloc.state.penalizedPlayers.contains(player)) {
+    }
+    if (gameBloc.state.penalties.keys.contains(player)) {
       buttonColor = Colors.grey;
-      // normal dialog button that has a shirt
-    } else {
-      buttonColor = Color.fromARGB(255, 180, 211, 236);
-      buttonContent = Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Stack(
-            alignment: Alignment.center,
-            children: [
-              // ButtonNumber
-              Text(
-                buttonNumber,
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: (MediaQuery.of(context).size.width * 0.03),
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              // Shirt
-              Center(
-                child: Icon(
-                  MyFlutterApp.t_shirt,
-                  // make shirt smaller if there are more than 7 player displayed in the substitution grid
-                  //   size: (isSubstitute || gameBloc.state.selectedTeam.players.length > 14)
-                  //       ? (MediaQuery.of(context).size.width * 0.11)
-                  //       : (MediaQuery.of(context).size.width * 0.11 / (gameBloc.state.selectedTeam.players.length - 7) * 7),
-                ),
-              ),
-            ],
-          ),
-          // ButtonName
-          Text(
-            buttonText,
-            overflow: TextOverflow.ellipsis,
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: (MediaQuery.of(context).size.width * 0.02),
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ],
-      );
     }
 
     return GestureDetector(

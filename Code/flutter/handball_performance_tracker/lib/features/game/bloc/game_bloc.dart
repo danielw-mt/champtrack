@@ -6,6 +6,7 @@ import 'package:stop_watch_timer/stop_watch_timer.dart';
 import 'package:handball_performance_tracker/core/core.dart';
 import 'game_field_math.dart';
 import 'package:handball_performance_tracker/features/game/game.dart';
+import 'dart:async';
 
 part 'game_event.dart';
 part 'game_state.dart';
@@ -161,6 +162,24 @@ class GameBloc extends Bloc<GameEvent, GameState> {
       emit(state.copyWith(gameActions: state.gameActions..remove(event.action)));
     });
 
+    on<AddPenalty>((event, emit) {
+      int penaltyStartStopWatchTime = state.stopWatchTimer.rawTime.value;
+      Timer timer = Timer.periodic(Duration(seconds: 5), (Timer t) {
+        if (!state.penalties.containsKey(event.player)) {
+          t.cancel();
+          return;
+        }
+        int stopWatchTime = state.stopWatchTimer.rawTime.value;
+        // 120000 is 2 minutes
+        if (stopWatchTime - penaltyStartStopWatchTime >= 120000) {
+          print("penalty timer is over");
+          t.cancel();
+          state.penalties.remove(event.player);
+        }
+      });
+      state.penalties[event.player] = timer;
+    });
+
     on<RegisterAction>((event, emit) {
       DateTime dateTime = DateTime.now();
       int unixTime = dateTime.toUtc().millisecondsSinceEpoch;
@@ -241,6 +260,13 @@ class GameBloc extends Bloc<GameEvent, GameState> {
             playerId: event.player.id!);
         emit(state.copyWith(gameActions: (state.gameActions..add(assistAction)).toList(), ownScore: state.ownScore + 1));
         this.add(WorkflowEvent(selectedPlayer: event.player));
+      } else if (lastAction.tag == timePenaltyTag) {
+        print("player selection: adding time penalty");
+        List<GameAction> gameActions = state.gameActions;
+        gameActions.last.playerId = event.player.id!;
+        this.add(AddPenalty(player: event.player));
+        emit(state.copyWith(gameActions: gameActions));
+        this.add(WorkflowEvent(selectedPlayer: event.player));
       } else if (state.workflowStep == WorkflowStep.substitutionTargetSelection) {
         print("player selection: selecting substitution target");
         this.add(SubstitutePlayer(newPlayer: state.substitutionPlayer, oldPlayer: event.player));
@@ -284,11 +310,10 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         print("no special case. Just add the action to the list of actions after the player selection");
         List<GameAction> newGameActions = state.gameActions;
         newGameActions.last.playerId = event.player.id!;
-        List<Player> penalizedPlayers = state.penalizedPlayers;
         int ownScore = state.ownScore;
         // if we click on a player that is penalized remove him from the list of penalized players
-        if (state.penalizedPlayers.contains(event.player)) {
-          penalizedPlayers.remove(event.player);
+        if (state.penalties.keys.contains(event.player)) {
+          state.penalties.remove(event.player);
         }
 
         // Switch field on goal, block & steal (=stürmerfoul), missed goal attempt and technical mistake on offensive (not trf on defense)
@@ -303,7 +328,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         if (lastTag == goalTag) {
           ownScore = ownScore + 1;
         }
-        emit(state.copyWith(ownScore: ownScore, penalizedPlayers: penalizedPlayers, substitutionTarget: Player(), gameActions: newGameActions));
+        emit(state.copyWith(ownScore: ownScore, substitutionTarget: Player(), gameActions: newGameActions));
         this.add(WorkflowEvent(selectedPlayer: event.player));
       }
     });

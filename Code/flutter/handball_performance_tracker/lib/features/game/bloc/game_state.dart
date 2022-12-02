@@ -37,8 +37,7 @@ class GameState extends Equatable {
   StopWatchTimer stopWatchTimer = StopWatchTimer();
   List<GameAction> gameActions = [];
   List<String> lastClickedLocation = [];
-  // Player previousClickedPlayer = Player();
-  List<Player> penalizedPlayers = [];
+  Map<Player, Timer> penalties = {};
   Player substitutionTarget = Player();
   Player substitutionPlayer = Player();
   Player sevenMeterExecutor = Player();
@@ -63,7 +62,7 @@ class GameState extends Equatable {
     stopWatchTimer,
     this.gameActions = const [],
     this.lastClickedLocation = const [],
-    this.penalizedPlayers = const [],
+    this.penalties = const {},
     substitutionTarget,
     substitutionPlayer,
     sevenMeterExecutor,
@@ -86,8 +85,8 @@ class GameState extends Equatable {
     if (this.lastClickedLocation.isEmpty) {
       this.lastClickedLocation = [];
     }
-    if (this.penalizedPlayers.isEmpty) {
-      this.penalizedPlayers = [];
+    if (this.penalties.isEmpty) {
+      this.penalties = {};
     }
     if (substitutionTarget != null) {
       this.substitutionTarget = substitutionTarget;
@@ -113,7 +112,7 @@ class GameState extends Equatable {
     StopWatchTimer? stopWatchTimer,
     List<GameAction>? gameActions,
     List<String>? lastClickedLocation,
-    List<Player>? penalizedPlayers,
+    Map<Player, Timer>? penalties,
     Player? substitutionTarget,
     Player? substitutionPlayer,
     Player? sevenMeterExecutor,
@@ -138,7 +137,7 @@ class GameState extends Equatable {
       stopWatchTimer: stopWatchTimer ?? this.stopWatchTimer,
       gameActions: gameActions ?? this.gameActions,
       lastClickedLocation: lastClickedLocation ?? this.lastClickedLocation,
-      penalizedPlayers: penalizedPlayers ?? this.penalizedPlayers,
+      penalties: penalties ?? this.penalties,
       substitutionTarget: substitutionTarget ?? this.substitutionTarget,
       substitutionPlayer: substitutionPlayer ?? this.substitutionPlayer,
       sevenMeterExecutor: sevenMeterExecutor ?? this.sevenMeterExecutor,
@@ -158,7 +157,7 @@ class GameState extends Equatable {
         this.stopWatchTimer,
         this.gameActions,
         this.lastClickedLocation,
-        this.penalizedPlayers,
+        this.penalties,
         this.substitutionTarget,
         this.substitutionPlayer,
         this.sevenMeterExecutor,

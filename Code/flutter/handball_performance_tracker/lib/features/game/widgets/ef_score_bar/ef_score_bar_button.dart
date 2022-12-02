@@ -23,7 +23,7 @@ class EfScoreBarButton extends StatelessWidget {
     final gameBloc = BlocProvider.of<GameBloc>(context);
 
     // deal with penalized players here
-    if (gameBloc.state.penalizedPlayers.contains(player)) {
+    if (gameBloc.state.penalties.keys.contains(player)) {
       buttonColor = Colors.grey;
     } else {
       buttonColor = Colors.white;
