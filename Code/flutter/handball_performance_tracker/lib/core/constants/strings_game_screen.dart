@@ -38,8 +38,8 @@ class StringsGameScreen {
   static const String lTimePenalty = "Zeitstrafe verursacht";
   static const String lGoal = "Tor";
   static const String lOneVsOneAnd7m = "1v1 mit 7m Folge";
-  static const String lTwoMin = "2min ziehen";
-  static const String lErrThrow = "Fehlwurf";
+  static const String lForceTwoMin = "2min ziehen";
+  static const String lMiss = "Fehlwurf";
   static const String lErrThrowGoalkeeper = "Fehlwurf Torwart";
   static const String lTrf = "TRF";
   static const String lFoul7m = "Foul mit 7m Folge";

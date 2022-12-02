@@ -3,6 +3,8 @@ import 'package:handball_performance_tracker/core/core.dart';
 import 'goal_keeper_layout.dart';
 import 'defense_layout.dart';
 import 'attack_layout.dart';
+import 'seven_meter_defense_layout.dart';
+import 'seven_meter_offense_layout.dart';
 
 enum ActionMenuStyle { offense, defense, goalkeeper, sevenMeterOffense, sevenMeterDefense }
 
@@ -95,13 +97,9 @@ class ActionMenu extends StatelessWidget {
           AttackLayout(),
         ];
       case ActionMenuStyle.sevenMeterOffense:
-        // TODO implement from old code
-        return [];
-      // return [SevenMeterOffenseButtons()];
+        return [SevenMeterOffenseLayout()];
       case ActionMenuStyle.sevenMeterDefense:
-        // TODO implement from old code
-        return [];
-      // return [SevenMeterDefenseButtons()];
+        return [SevenMeterDefenseLayout()];
     }
   }
 }

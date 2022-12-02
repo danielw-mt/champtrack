@@ -21,6 +21,10 @@ void openWorkflowPopup(BuildContext higherContext, GameBloc gameBloc) {
         return ActionMenu(
           style: ActionMenuStyle.offense,
         );
+      case WorkflowStep.sevenMeterOffenseResult:
+        return ActionMenu(style: ActionMenuStyle.sevenMeterOffense);
+      case WorkflowStep.sevenMeterDefenseResult:
+        return ActionMenu(style: ActionMenuStyle.sevenMeterDefense);
       case WorkflowStep.playerSelection:
         print('player selection');
         return PlayerMenu(style: PlayerMenuStyle.standard);

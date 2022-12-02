@@ -5,7 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'dart:math';
 
 void callSevenMeterMenu(BuildContext context, bool belongsToHomeTeam) {
-
   showDialog(
       context: context,
       builder: (BuildContext bcontext) {
@@ -33,11 +32,12 @@ Widget buildDialogButtonMenu(BuildContext context, bool belongsToHomeTeam) {
   if (belongsToHomeTeam) {
     dialogButtons = [
       SevenMeterMenuButton(icon: Icon(Icons.style), actionTag: goal7mTag, buttonText: StringsGameScreen.lGoal, buttonColor: Colors.lightBlue),
-      SevenMeterMenuButton(icon: Icon(Icons.style), actionTag: missed7mTag, buttonText: StringsGameScreen.lErrThrow, buttonColor: Colors.deepPurple)
+      SevenMeterMenuButton(icon: Icon(Icons.style), actionTag: missed7mTag, buttonText: StringsGameScreen.lMiss, buttonColor: Colors.deepPurple)
     ];
   } else {
     dialogButtons = [
-      SevenMeterMenuButton(icon: Icon(Icons.style), actionTag: goalOpponent7mTag, buttonText: StringsGameScreen.lGoalOpponent, buttonColor: Colors.red),
+      SevenMeterMenuButton(
+          icon: Icon(Icons.style), actionTag: goalOpponent7mTag, buttonText: StringsGameScreen.lGoalOpponent, buttonColor: Colors.red),
       SevenMeterMenuButton(icon: Icon(Icons.style), actionTag: parade7mTag, buttonText: StringsGeneral.lCaught, buttonColor: Colors.yellow)
     ];
   }
@@ -66,7 +66,7 @@ Widget buildDialogButtonMenu(BuildContext context, bool belongsToHomeTeam) {
       thickness: 2,
       color: Colors.black,
       height: 6,
-    ),    
+    ),
     Row(children: [dialogButtons[0], dialogButtons[1]])
   ]);
 }
@@ -82,16 +82,16 @@ class SevenMeterMenuButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final GameBloc gameBloc = context.read<GameBloc>();
     final double width = MediaQuery.of(context).size.width;
-  final double height = MediaQuery.of(context).size.height;
-  return GestureDetector(
-    child: Container(
+    final double height = MediaQuery.of(context).size.height;
+    return GestureDetector(
+      child: Container(
         margin: EdgeInsets.all(min(height, width) * 0.013),
         decoration: BoxDecoration(
           color: buttonColor,
           // have round edges with same degree as Alert dialog
           borderRadius: BorderRadius.circular(15),
         ),
-        
+
         // set height and width of buttons so the shirt and name are fitting inside
         height: width * 0.15,
         width: width * 0.15,
@@ -107,10 +107,11 @@ class SevenMeterMenuButton extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
           ),
         ),
-    ), onTap:() {
-      gameBloc.add(RegisterAction(actionTag: actionTag, actionContext: actionContextSevenMeter));
-    },
-  );
+      ),
+      onTap: () {
+        gameBloc.add(RegisterAction(actionTag: actionTag, actionContext: actionContextSevenMeter));
+      },
+    );
   }
 }
 

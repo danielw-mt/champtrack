@@ -7,21 +7,20 @@ class DefenseLayout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Map<String, String> defenseActionMapping = actionMapping[actionContextDefense]!;
     return Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
       Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           Row(children: [
             ActionButton(
-                actionTag: defenseActionMapping[StringsGameScreen.lYellowCard]!,
+                actionTag: yellowCardTag,
                 actionContext: actionContextDefense,
                 buttonText: StringsGameScreen.lYellowCard,
                 buttonColor: Colors.yellow,
                 sizeFactor: 0,
                 icon: Icon(Icons.style)),
             ActionButton(
-                actionTag: defenseActionMapping[StringsGameScreen.lRedCard]!,
+                actionTag: redCardTag,
                 actionContext: actionContextDefense,
                 buttonText: StringsGameScreen.lRedCard,
                 buttonColor: Colors.red,
@@ -30,15 +29,15 @@ class DefenseLayout extends StatelessWidget {
           ]),
           Flexible(
               child: ActionButton(
-            actionTag: defenseActionMapping[StringsGameScreen.lTwoMin]!,
+            actionTag: forceTwoMinTag,
             actionContext: actionContextDefense,
-            buttonText: StringsGameScreen.lTwoMin,
+            buttonText: StringsGameScreen.lForceTwoMin,
             buttonColor: Color.fromRGBO(199, 208, 244, 1),
             sizeFactor: 1,
           )),
           Flexible(
               child: ActionButton(
-                  actionTag: defenseActionMapping[StringsGameScreen.lTimePenalty]!,
+                  actionTag: timePenaltyTag,
                   actionContext: actionContextDefense,
                   buttonText: StringsGameScreen.lTimePenalty,
                   buttonColor: Color.fromRGBO(199, 208, 244, 1),
@@ -52,14 +51,14 @@ class DefenseLayout extends StatelessWidget {
           children: [
             Flexible(
                 child: ActionButton(
-              actionTag: defenseActionMapping[StringsGameScreen.lFoul7m]!,
+              actionTag: foulSevenMeterTag,
               actionContext: actionContextDefense,
               buttonText: StringsGameScreen.lFoul7m,
               buttonColor: Color.fromRGBO(203, 206, 227, 1),
             )),
             Flexible(
                 child: ActionButton(
-              actionTag: defenseActionMapping[StringsGameScreen.lTrf]!,
+              actionTag: trfTag,
               actionContext: actionContextDefense,
               buttonText: StringsGameScreen.lTrf,
               buttonColor: Color.fromRGBO(203, 206, 227, 1),
@@ -73,14 +72,14 @@ class DefenseLayout extends StatelessWidget {
           children: [
             Flexible(
                 child: ActionButton(
-              actionTag: defenseActionMapping[StringsGameScreen.lBlockNoBall]!,
+              actionTag: blockNoBallTag,
               actionContext: actionContextDefense,
               buttonText: StringsGameScreen.lBlockNoBall,
               buttonColor: Color.fromRGBO(99, 107, 171, 1),
             )),
             Flexible(
                 child: ActionButton(
-              actionTag: defenseActionMapping[StringsGameScreen.lBlockAndSteal]!,
+              actionTag: blockAndStealTag,
               actionContext: actionContextDefense,
               buttonText: StringsGameScreen.lBlockAndSteal,
               buttonColor: Color.fromRGBO(99, 107, 171, 1),

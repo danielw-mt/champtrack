@@ -18,7 +18,7 @@ const String goalExtNineTag = "goal>9m";
 const String goalChrunchtimeTag = "goal_crunchtime";
 const String assistTag = "assist";
 const String oneVOneSevenTag = "1v1&7";
-const String blockTag = "block";
+const String blockNoBallTag = "block";
 const String blockAndStealTag = "block_steal";
 const String forceTwoMinTag = "2min";
 const String missTag = "miss";
@@ -44,7 +44,6 @@ const String missed7mTag = "missed_7m";
 const String parade7mTag = "parade_7m";
 const String goalOpponent7mTag = "goal_opponent_7m";
 
-
 // TODO this actionmapping is super messy. We could use enum instead or something
 
 Map<String, Map<String, String>> actionMapping = {
@@ -54,8 +53,8 @@ Map<String, Map<String, String>> actionMapping = {
     StringsGameScreen.lTimePenalty: timePenaltyTag,
     StringsGameScreen.lGoal: goalTag,
     StringsGameScreen.lOneVsOneAnd7m: oneVOneSevenTag,
-    StringsGameScreen.lTwoMin: forceTwoMinTag,
-    StringsGameScreen.lErrThrow: missTag,
+    StringsGameScreen.lForceTwoMin: forceTwoMinTag,
+    StringsGameScreen.lMiss: missTag,
     StringsGameScreen.lTrf: trfTag,
   },
   actionContextDefense: {
@@ -63,10 +62,10 @@ Map<String, Map<String, String>> actionMapping = {
     StringsGameScreen.lYellowCard: yellowCardTag,
     StringsGameScreen.lFoul7m: foulSevenMeterTag,
     StringsGameScreen.lTimePenalty: timePenaltyTag,
-    StringsGameScreen.lBlockNoBall: blockTag,
+    StringsGameScreen.lBlockNoBall: blockNoBallTag,
     StringsGameScreen.lBlockAndSteal: blockAndStealTag,
     StringsGameScreen.lTrf: trfTag,
-    StringsGameScreen.lTwoMin: forceTwoMinTag,
+    StringsGameScreen.lForceTwoMin: forceTwoMinTag,
   },
   actionContextGoalkeeper: {
     StringsGameScreen.lRedCard: redCardTag,
@@ -81,11 +80,10 @@ Map<String, Map<String, String>> actionMapping = {
   },
   actionContextSevenMeter: {
     StringsGameScreen.lGoal: goal7mTag,
-    StringsGameScreen.lErrThrow: missed7mTag,
+    StringsGameScreen.lMiss: missed7mTag,
     StringsGameScreen.lGoalOpponent: goalOpponentTag,
     StringsGeneral.lCaught: parade7mTag,
     StringsGameScreen.lOneVsOneAnd7m: oneVOneSevenTag,
-
   },
   actionContextAllActions: {
     StringsGameScreen.lRedCard: redCardTag,
@@ -93,11 +91,11 @@ Map<String, Map<String, String>> actionMapping = {
     StringsGameScreen.lTimePenalty: timePenaltyTag,
     StringsGameScreen.lGoal: goalTag,
     StringsGameScreen.lOneVsOneAnd7m: oneVOneSevenTag,
-    StringsGameScreen.lTwoMin: forceTwoMinTag,
-    StringsGameScreen.lErrThrow: missTag,
+    StringsGameScreen.lForceTwoMin: forceTwoMinTag,
+    StringsGameScreen.lMiss: missTag,
     StringsGameScreen.lTrf: trfTag,
     StringsGameScreen.lFoul7m: foulSevenMeterTag,
-    StringsGameScreen.lBlockNoBall: blockTag,
+    StringsGameScreen.lBlockNoBall: blockNoBallTag,
     StringsGameScreen.lBlockAndSteal: blockAndStealTag,
     StringsGameScreen.lParade: paradeTag,
     StringsGameScreen.lBadPass: badPassTag,
@@ -106,8 +104,8 @@ Map<String, Map<String, String>> actionMapping = {
     StringsGameScreen.lGoalGoalkeeper: goalTag,
     StringsGeneral.lCaught: parade7mTag,
     StringsGameScreen.lErrThrowGoalkeeper: missTag,
-    StringsGameScreen.lGoalSevenMeter:goal7mTag,
-    StringsGameScreen.lMissSevenMeter:missed7mTag,
+    StringsGameScreen.lGoalSevenMeter: goal7mTag,
+    StringsGameScreen.lMissSevenMeter: missed7mTag,
     StringsGameScreen.lAssist: assistTag,
   }
 };
@@ -120,7 +118,7 @@ const Map<String, Map<String, int>> efScoreParameters = {
     goalChrunchtimeTag: 9,
     assistTag: 6,
     oneVOneSevenTag: 6,
-    blockTag: 2,
+    blockNoBallTag: 2,
     blockAndStealTag: 7,
     forceTwoMinTag: 8
   },
