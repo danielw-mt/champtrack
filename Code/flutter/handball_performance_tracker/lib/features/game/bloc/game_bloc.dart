@@ -14,6 +14,9 @@ part 'game_event.dart';
 part 'game_state.dart';
 
 class GameBloc extends Bloc<GameEvent, GameState> {
+  
+  /// Periodically checks if there is a difference between the gameState and what has been synced to the database already.
+  /// If there is a difference, it will sync the gameState to the database.
   void runGameSync() {
     // check if there is a difference compared to the last sync
     List<Player> syncedOnFieldPlayers = [];
@@ -22,12 +25,10 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     List<GameAction> syncedGameActions = [];
 
     Timer.periodic(const Duration(seconds: 10), (timer) async {
-      // if any difference is found in the metadata of the game (onFieldPlayers, scoreHome, scoreOpponent, stopWatchTime) sync the metadata
-      if (state.onFieldPlayers != syncedOnFieldPlayers || state.ownScore != syncedScoreHome || state.opponentScore != syncedScoreOpponent) {
-        print("difference in metadata detected");
-        // sync game metadata
-        if (state.documentReference != null) {
-          print("syncing metadata");
+      if (state.documentReference != null) {
+        // if any difference is found in the metadata of the game (onFieldPlayers, scoreHome, scoreOpponent, stopWatchTime) sync the metadata
+        if (state.onFieldPlayers != syncedOnFieldPlayers || state.ownScore != syncedScoreHome || state.opponentScore != syncedScoreOpponent) {
+          // sync game metadata
           List<String> onFieldPlayerIds = state.onFieldPlayers.map((Player player) => player.id.toString()).toList();
           Game newGame = Game(
             id: state.documentReference!.id,
@@ -41,49 +42,65 @@ class GameBloc extends Bloc<GameEvent, GameState> {
             stopWatchTimer: state.stopWatchTimer,
           );
           await GameFirebaseRepository().updateGame(newGame).then((value) {
-            print("metadata synced");
             // on success update the variables
-            syncedOnFieldPlayers = state.onFieldPlayers;
+            syncedOnFieldPlayers = state.onFieldPlayers.toList();
             syncedScoreHome = state.ownScore;
             syncedScoreOpponent = state.opponentScore;
           }).onError((error, stackTrace) {
             print("Error syncing game metadata: $error");
           });
-        } else {
-          print("document reference is null");
-          print("state: $state");
         }
-      }
 
-      /// function that finds gameActions that were added to the last gameActions since the last sync or gameActions that were deleted since the last sync
-      List<List<GameAction>> difference(List<GameAction> oldActions, List<GameAction> newActions) {
-        List<GameAction> added = [];
-        List<GameAction> removed = [];
-        for (var i = 0; i < oldActions.length; i++) {
-          if (!newActions.contains(oldActions[i])) {
-            removed.add(oldActions[i]);
+        /// function that finds gameActions that were added to the last gameActions since the last sync or gameActions that were deleted since the last sync
+        List<List<GameAction>> difference(List<GameAction> oldActions, List<GameAction> newActions) {
+          List<GameAction> added = [];
+          List<GameAction> removed = [];
+          for (var i = 0; i < oldActions.length; i++) {
+            if (!newActions.contains(oldActions[i])) {
+              removed.add(oldActions[i]);
+            }
           }
-        }
-        for (var i = 0; i < newActions.length; i++) {
-          if (!oldActions.contains(newActions[i])) {
-            added.add(newActions[i]);
+          for (var i = 0; i < newActions.length; i++) {
+            if (!oldActions.contains(newActions[i])) {
+              added.add(newActions[i]);
+            }
           }
+          return [added, removed];
         }
-        return [added, removed];
-      }
 
-      List<List<GameAction>> gameActionsDifference = difference(syncedGameActions, state.gameActions);
-      // if gameActions were added
-      bool gameActionsWereSynced = false;
-      if (!gameActionsDifference[0].isEmpty) {
-        // TODO add the gameActions to the database
-        // TODO on success set gameActionsWereSynced to true
-      } else if (!gameActionsDifference[1].isEmpty) {
-        // TODO remove the gameActions from the database
-        // TODO on success set gameActionsWereSynced to true
-      }
-      if (gameActionsWereSynced) {
-        syncedGameActions = state.gameActions;
+        List<List<GameAction>> gameActionsDifference = difference(syncedGameActions, state.gameActions);
+
+        bool gameActionsWereSynced = false;
+        // if gameActions were added
+        if (!gameActionsDifference[0].isEmpty) {
+          List<GameAction> addedGameActions = gameActionsDifference[0];
+          await Future.forEach(addedGameActions, (GameAction gameAction) async {
+            try {
+              DocumentReference docRef = await GameFirebaseRepository().createAction(gameAction, state.documentReference!.id);
+              state.gameActions[state.gameActions.indexOf(gameAction)].id = docRef.id;
+              state.gameActions[state.gameActions.indexOf(gameAction)].path = docRef.path;
+            } catch (e) {
+              print("Error syncing gameAction: $e");
+            }
+            // on success set gameActionsWereSynced to true
+          }).then((value) => gameActionsWereSynced = true);
+          // if gameActions were removed
+        } else if (!gameActionsDifference[1].isEmpty) {
+          List<GameAction> removedGameActions = gameActionsDifference[1];
+          await Future.forEach(removedGameActions, (GameAction gameAction) {
+            try {
+              GameFirebaseRepository().deleteAction(gameAction, state.documentReference!.id);
+            } catch (e) {
+              print("Error syncing gameAction: $e");
+            }
+            // on success set gameActionsWereSynced to true
+          }).then((value) => gameActionsWereSynced = true);
+        }
+        if (gameActionsWereSynced) {
+          syncedGameActions = state.gameActions.toList();
+        }
+      } else {
+        print("no game created in db yet");
       }
     });
   }

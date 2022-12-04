@@ -80,13 +80,14 @@ class GameActionEntity extends Equatable {
   }
 
   Map<String, Object?> toDocument() {
-    return {
-      'context': context,
-      'playerId': playerId,
-      'tag': tag,
-      'throwLocation': throwLocation,
-      'timestamp': timestamp,
+    Map<String, Object?> document = {
+      'context': context != "" ? context : "",
+      'playerId': playerId != "" ? playerId : "",
+      'tag': tag != "" ? tag : "",
+      'throwLocation': throwLocation != [] ? throwLocation : [],
+      'timestamp': timestamp != 0 ? timestamp : 0,
     };
+    return document;
   }
 
   @override

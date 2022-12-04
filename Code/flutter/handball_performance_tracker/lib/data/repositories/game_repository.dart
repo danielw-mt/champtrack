@@ -104,7 +104,7 @@ class GameFirebaseRepository extends GameRepository {
     await clubSnapshot.docs[0].reference.collection("games").doc(game.id).update(game.toEntity().toDocument());
   }
 
-  Future<void> createAction(GameAction gameAction, String gameId) async {
+  Future<DocumentReference> createAction(GameAction gameAction, String gameId) async {
     QuerySnapshot clubSnapshot = await FirebaseFirestore.instance
         .collection('clubs')
         .where("roles.${FirebaseAuth.instance.currentUser!.uid}", isEqualTo: "admin")
@@ -113,7 +113,9 @@ class GameFirebaseRepository extends GameRepository {
     if (clubSnapshot.docs.length != 1) {
       throw Exception("No club found for user id. Cannot create game action");
     }
-    await clubSnapshot.docs[0].reference.collection("games").doc(gameId).collection("actions").add(gameAction.toEntity().toDocument());
+    DocumentReference docRef =
+        await clubSnapshot.docs[0].reference.collection("games").doc(gameId).collection("actions").add(gameAction.toEntity().toDocument());
+    return docRef;
   }
 
   Future<void> updateAction() {

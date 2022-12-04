@@ -33,14 +33,12 @@ class GameAction {
   bool operator ==(Object other) => identical(this, other) || other is GameAction && runtimeType == other.runtimeType && id == other.id;
 
   GameActionEntity toEntity() {
-    DocumentReference actionReference = FirebaseFirestore.instance.doc(path);
     return GameActionEntity(
-      documentReference: actionReference,
-      playerId: playerId,
-      context: context,
-      tag: tag,
-      throwLocation: throwLocation,
-      timestamp: timestamp,
+      playerId: playerId != "" ? playerId : "",
+      context: context != "" ? context : "",
+      tag: tag != "" ? tag : "",
+      throwLocation: throwLocation != [] ? throwLocation : [],
+      timestamp: timestamp != 0 ? timestamp : 0,
     );
   }
 

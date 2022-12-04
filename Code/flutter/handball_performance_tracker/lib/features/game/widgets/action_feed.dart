@@ -13,8 +13,9 @@ import 'package:handball_performance_tracker/core/constants/design_constants.dar
 class ActionFeed extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    print("feed rebuild");
     final gameBloc = context.watch<GameBloc>();
-    List<GameAction> feedActions = gameBloc.state.gameActions;
+    List<GameAction> feedGameActions = gameBloc.state.gameActions;
     return Container(
       margin: EdgeInsets.only(left: 10),
       padding: EdgeInsets.only(bottom: 5),
@@ -32,9 +33,10 @@ class ActionFeed extends StatelessWidget {
                 physics: ClampingScrollPhysics(),
                 reverse: true,
                 shrinkWrap: true,
-                itemCount: feedActions.where((GameAction action) => action.playerId != "").toList().length,
+                itemCount: feedGameActions.where((GameAction action) => action.playerId != "").toList().length,
                 itemBuilder: (context, index) {
-                  GameAction feedAction = feedActions.reversed.toList().where((GameAction action) => action.playerId != "").toList()[index];
+                  print("building item");
+                  GameAction feedAction = feedGameActions.where((GameAction action) => action.playerId != "").toList()[index];
                   String actionTag = feedAction.tag;
                   Player relevantPlayer = Player();
                   // get the player object whose id matches the playerId in the action Object
@@ -92,7 +94,7 @@ class ActionFeed extends StatelessWidget {
                             )
                           ],
                         ),
-                        if (index != feedActions.length) Divider()
+                        if (index != feedGameActions.length) Divider()
                       ],
                     );
                   }

@@ -178,7 +178,7 @@ class GameState extends Equatable {
         this.ownScore,
         this.opponentScore,
         this.stopWatchTimer,
-        this.gameActions,
+        this.gameActions.hashCode,
         this.lastClickedLocation,
         this.penalties,
         this.substitutionTarget,
