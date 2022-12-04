@@ -14,7 +14,6 @@ part 'game_event.dart';
 part 'game_state.dart';
 
 class GameBloc extends Bloc<GameEvent, GameState> {
-  
   /// Periodically checks if there is a difference between the gameState and what has been synced to the database already.
   /// If there is a difference, it will sync the gameState to the database.
   void runGameSync() {
@@ -27,7 +26,10 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     Timer.periodic(const Duration(seconds: 10), (timer) async {
       if (state.documentReference != null) {
         // if any difference is found in the metadata of the game (onFieldPlayers, scoreHome, scoreOpponent, stopWatchTime) sync the metadata
-        if (state.onFieldPlayers != syncedOnFieldPlayers || state.ownScore != syncedScoreHome || state.opponentScore != syncedScoreOpponent) {
+        if (!state.onFieldPlayers
+                .every((Player player) => syncedOnFieldPlayers.where((Player playerElement) => playerElement.id == player.id).toList().isNotEmpty) ||
+            state.ownScore != syncedScoreHome ||
+            state.opponentScore != syncedScoreOpponent) {
           // sync game metadata
           List<String> onFieldPlayerIds = state.onFieldPlayers.map((Player player) => player.id.toString()).toList();
           Game newGame = Game(
