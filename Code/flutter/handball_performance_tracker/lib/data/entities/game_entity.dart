@@ -4,7 +4,6 @@ import 'package:equatable/equatable.dart';
 /// Representation of a club entry in firebase
 class GameEntity extends Equatable {
   final DocumentReference? documentReference;
-  // final List actions;
   final Timestamp? date;
   final bool? isAtHome;
   final String? lastSync;
@@ -64,7 +63,6 @@ class GameEntity extends Equatable {
   }
 
   static GameEntity fromJson(Map<String, Object> json) {
-    // TODO probably parse actions
     return GameEntity(
       documentReference: json['documentReference'] as DocumentReference?,
       date: json['date'] as Timestamp?,
@@ -86,12 +84,7 @@ class GameEntity extends Equatable {
 
   static GameEntity fromSnapshot(DocumentSnapshot snap) {
     if (snap.exists) {
-      print("Game entity from snapshot " + snap.id);
       Map<String, dynamic> data = snap.data() as Map<String, dynamic>;
-      // List<DocumentSnapshot> actions = [];
-      // data['actions'].forEach((action) {
-      //   // TODO implement this. Might be complicated
-      // });
       List<String> onFieldPlayers = [];
       if (data['onFieldPlayers'] != null) {
         data['onFieldPlayers'].forEach((player) {

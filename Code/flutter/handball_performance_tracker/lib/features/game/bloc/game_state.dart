@@ -129,6 +129,7 @@ class GameState extends Equatable {
       date: this.date,
       selectedTeam: this.selectedTeam,
       isHomeGame: this.isHomeGame,
+      documentReference: this.documentReference,
       // these properties can be changed during the game
       status: status ?? this.status,
       attackIsLeft: attackIsLeft ?? this.attackIsLeft,
@@ -146,6 +147,26 @@ class GameState extends Equatable {
       sevenMeterGoalkeeper: sevenMeterGoalkeeper ?? this.sevenMeterGoalkeeper,
       workflowStep: workflowStep ?? this.workflowStep,
     );
+  }
+
+  @override
+  String toString() {
+    return "GameState {status: $status, +\n " +
+        "attackIsLeft: $attackIsLeft, +\n " +
+        "attacking: $attacking, +\n " +
+        // "onFieldPlayers: $onFieldPlayers, +\n " +
+        "ownScore: $ownScore, +\n " +
+        "opponentScore: $opponentScore, +\n " +
+        "stopWatchTimer: $stopWatchTimer, +\n " +
+        "gameActions: $gameActions, +\n " +
+        "lastClickedLocation: $lastClickedLocation, +\n " +
+        "penalties: $penalties, +\n " +
+        "substitutionTarget: $substitutionTarget, +\n " +
+        "substitutionPlayer: $substitutionPlayer, +\n " +
+        "sevenMeterExecutor: $sevenMeterExecutor, +\n " +
+        "sevenMeterGoalkeeper: $sevenMeterGoalkeeper, +\n " +
+        "workflowStep: $workflowStep, +\n " +
+        "}";
   }
 
   @override

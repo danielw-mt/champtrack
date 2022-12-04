@@ -19,18 +19,15 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     List<Player> syncedOnFieldPlayers = [];
     int syncedScoreHome = 0;
     int syncedScoreOpponent = 0;
-    int syncedStopWatchTime = 0;
     List<GameAction> syncedGameActions = [];
 
     Timer.periodic(const Duration(seconds: 10), (timer) async {
       // if any difference is found in the metadata of the game (onFieldPlayers, scoreHome, scoreOpponent, stopWatchTime) sync the metadata
-      if (state.onFieldPlayers != syncedOnFieldPlayers ||
-          state.ownScore != syncedScoreHome ||
-          state.opponentScore != syncedScoreOpponent ||
-          state.stopWatchTimer.rawTime.value != syncedStopWatchTime ||
-          state.gameActions != syncedGameActions) {
+      if (state.onFieldPlayers != syncedOnFieldPlayers || state.ownScore != syncedScoreHome || state.opponentScore != syncedScoreOpponent) {
+        print("difference in metadata detected");
         // sync game metadata
         if (state.documentReference != null) {
+          print("syncing metadata");
           List<String> onFieldPlayerIds = state.onFieldPlayers.map((Player player) => player.id.toString()).toList();
           Game newGame = Game(
             id: state.documentReference!.id,
@@ -44,14 +41,17 @@ class GameBloc extends Bloc<GameEvent, GameState> {
             stopWatchTimer: state.stopWatchTimer,
           );
           await GameFirebaseRepository().updateGame(newGame).then((value) {
+            print("metadata synced");
             // on success update the variables
             syncedOnFieldPlayers = state.onFieldPlayers;
             syncedScoreHome = state.ownScore;
             syncedScoreOpponent = state.opponentScore;
-            syncedStopWatchTime = state.stopWatchTimer.rawTime.value;
           }).onError((error, stackTrace) {
             print("Error syncing game metadata: $error");
           });
+        } else {
+          print("document reference is null");
+          print("state: $state");
         }
       }
 
