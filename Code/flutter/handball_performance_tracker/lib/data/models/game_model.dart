@@ -37,11 +37,18 @@ class Game {
       this.season = "",
       this.lastSync = "",
       this.onFieldPlayers = const [],
-      this.attackIsLeft = true})
-      : stopWatchTimer = StopWatchTimer(mode: StopWatchMode.countUp);
+      this.attackIsLeft = true,
+      stopWatchTimer}) {
+    if (stopWatchTimer != null) {
+      this.stopWatchTimer = stopWatchTimer;
+    } else {
+      this.stopWatchTimer = StopWatchTimer(mode: StopWatchMode.countUp);
+    }
+  }
 
   Game copyWith(
       {String? id,
+      String? path,
       String? teamId,
       DateTime? date,
       int? startTime,
@@ -58,6 +65,7 @@ class Game {
       bool? attackIsLeft}) {
     Game game = Game(
       id: id ?? this.id,
+      path: path ?? this.path,
       teamId: teamId ?? this.teamId,
       date: date ?? this.date,
       startTime: startTime ?? this.startTime,
@@ -79,6 +87,7 @@ class Game {
   @override
   int get hashCode =>
       id.hashCode ^
+      path.hashCode ^
       teamId.hashCode ^
       date.hashCode ^
       startTime.hashCode ^
@@ -98,6 +107,7 @@ class Game {
   @override
   String toString() {
     return 'Club { id: $id, +\n ' +
+        'path: $path, +\n ' +
         'teamId: $teamId, +\n ' +
         'date: $date, +\n ' +
         'startTime: $startTime, +\n ' +
@@ -116,19 +126,29 @@ class Game {
   }
 
   GameEntity toEntity() {
-    List actions = [];
-    Timestamp? timestamp = Timestamp?.fromDate(this.date!);
-    int stopWatchTimeFromTimer = stopWatchTimer!.rawTime.value;
-    DocumentReference teamReference = FirebaseFirestore.instance.doc(this.path);
-    return GameEntity(teamReference, timestamp, this.isAtHome!, this.lastSync!, this.location!, this.onFieldPlayers, this.opponent!, this.scoreHome!,
-        this.scoreOpponent!, this.season!, this.startTime!, this.stopTime!, stopWatchTimeFromTimer, this.teamId, this.attackIsLeft!);
+    GameEntity gameEntity = GameEntity(
+      date: this.date != null ? Timestamp.fromDate(this.date!) : Timestamp(0, 0),
+      isAtHome: this.isAtHome != null ? this.isAtHome! : true,
+      lastSync: this.lastSync != null ? this.lastSync! : "",
+      location: this.location != null ? this.location! : "",
+      onFieldPlayers: this.onFieldPlayers != null ? this.onFieldPlayers! : [],
+      opponent: this.opponent != null ? this.opponent! : "",
+      scoreHome: this.scoreHome != null ? this.scoreHome! : 0,
+      scoreOpponent: this.scoreOpponent != null ? this.scoreOpponent! : 0,
+      season: this.season != null ? this.season! : "",
+      startTime: this.startTime != null ? this.startTime! : 0,
+      stopTime: this.stopTime != null ? this.stopTime! : 0,
+      stopWatchTime: stopWatchTimer != null ? stopWatchTimer!.rawTime.value : 0,
+      teamId: this.teamId != null ? this.teamId! : "",
+      attackIsLeft: this.attackIsLeft != null ? this.attackIsLeft! : true,
+    );
+    return gameEntity;
   }
 
   static Game fromEntity(GameEntity entity) {
-    print("Game from entity");
     Game game = Game(
-      id: entity.documentReference.id,
-      path: entity.documentReference.path,
+      id: entity.documentReference != null ? entity.documentReference!.id : null,
+      path: entity.documentReference != null ? entity.documentReference!.path : "",
       teamId: entity.teamId,
       date: DateTime.fromMillisecondsSinceEpoch(entity.date!.millisecondsSinceEpoch),
       startTime: entity.startTime,

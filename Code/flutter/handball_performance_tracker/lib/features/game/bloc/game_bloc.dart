@@ -1,7 +1,9 @@
 import 'package:bloc/bloc.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/gestures.dart';
 import 'package:handball_performance_tracker/data/models/models.dart';
+import 'package:handball_performance_tracker/data/repositories/repositories.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 import 'package:handball_performance_tracker/core/core.dart';
 import 'game_field_math.dart';
@@ -12,20 +14,108 @@ part 'game_event.dart';
 part 'game_state.dart';
 
 class GameBloc extends Bloc<GameEvent, GameState> {
+  void runGameSync() {
+    // check if there is a difference compared to the last sync
+    List<Player> syncedOnFieldPlayers = [];
+    int syncedScoreHome = 0;
+    int syncedScoreOpponent = 0;
+    int syncedStopWatchTime = 0;
+    List<GameAction> syncedGameActions = [];
+
+    Timer.periodic(const Duration(seconds: 10), (timer) async {
+      // if any difference is found in the metadata of the game (onFieldPlayers, scoreHome, scoreOpponent, stopWatchTime) sync the metadata
+      if (state.onFieldPlayers != syncedOnFieldPlayers ||
+          state.ownScore != syncedScoreHome ||
+          state.opponentScore != syncedScoreOpponent ||
+          state.stopWatchTimer.rawTime.value != syncedStopWatchTime ||
+          state.gameActions != syncedGameActions) {
+        // sync game metadata
+        if (state.documentReference != null) {
+          List<String> onFieldPlayerIds = state.onFieldPlayers.map((Player player) => player.id.toString()).toList();
+          Game newGame = Game(
+            id: state.documentReference!.id,
+            date: state.date,
+            isAtHome: state.isHomeGame,
+            location: state.location,
+            opponent: state.opponent,
+            onFieldPlayers: onFieldPlayerIds,
+            scoreHome: state.ownScore,
+            scoreOpponent: state.opponentScore,
+            stopWatchTimer: state.stopWatchTimer,
+          );
+          await GameFirebaseRepository().updateGame(newGame).then((value) {
+            // on success update the variables
+            syncedOnFieldPlayers = state.onFieldPlayers;
+            syncedScoreHome = state.ownScore;
+            syncedScoreOpponent = state.opponentScore;
+            syncedStopWatchTime = state.stopWatchTimer.rawTime.value;
+          }).onError((error, stackTrace) {
+            print("Error syncing game metadata: $error");
+          });
+        }
+      }
+
+      /// function that finds gameActions that were added to the last gameActions since the last sync or gameActions that were deleted since the last sync
+      List<List<GameAction>> difference(List<GameAction> oldActions, List<GameAction> newActions) {
+        List<GameAction> added = [];
+        List<GameAction> removed = [];
+        for (var i = 0; i < oldActions.length; i++) {
+          if (!newActions.contains(oldActions[i])) {
+            removed.add(oldActions[i]);
+          }
+        }
+        for (var i = 0; i < newActions.length; i++) {
+          if (!oldActions.contains(newActions[i])) {
+            added.add(newActions[i]);
+          }
+        }
+        return [added, removed];
+      }
+
+      List<List<GameAction>> gameActionsDifference = difference(syncedGameActions, state.gameActions);
+      // if gameActions were added
+      bool gameActionsWereSynced = false;
+      if (!gameActionsDifference[0].isEmpty) {
+        // TODO add the gameActions to the database
+        // TODO on success set gameActionsWereSynced to true
+      } else if (!gameActionsDifference[1].isEmpty) {
+        // TODO remove the gameActions from the database
+        // TODO on success set gameActionsWereSynced to true
+      }
+      if (gameActionsWereSynced) {
+        syncedGameActions = state.gameActions;
+      }
+    });
+  }
+
   GameBloc() : super(GameState()) {
     on<InitializeGame>((event, emit) async {
-      // TODO create game in repository
+      try {
+        Game game = Game(
+            date: event.date,
+            opponent: event.opponent,
+            location: event.location,
+            teamId: event.selectedTeam.id,
+            isAtHome: event.isHomeGame,
+            attackIsLeft: event.attackIsLeft,
+            startTime: DateTime.now().millisecondsSinceEpoch);
+        DocumentReference gameRef = await GameFirebaseRepository().createGame(game);
 
-      // create the initial game state. Only overload the necessary fields that are not already defined as necessary in the constructor
-      emit(GameState(
-        opponent: event.opponent,
-        location: event.location,
-        date: event.date,
-        selectedTeam: event.selectedTeam,
-        isHomeGame: event.isHomeGame,
-        attackIsLeft: event.attackIsLeft,
-        onFieldPlayers: event.onFieldPlayers,
-      ));
+        // create the initial game state. Only overload the necessary fields that are not already defined as necessary in the constructor
+        emit(GameState(
+          documentReference: gameRef,
+          opponent: event.opponent,
+          location: event.location,
+          date: event.date,
+          selectedTeam: event.selectedTeam,
+          isHomeGame: event.isHomeGame,
+          attackIsLeft: event.attackIsLeft,
+          onFieldPlayers: event.onFieldPlayers,
+        ));
+        runGameSync();
+      } catch (error) {
+        print("Error initializing game: $error");
+      }
     });
 
     on<SwipeField>((event, emit) async {
@@ -170,6 +260,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     });
 
     on<DeleteGameAction>((event, emit) {
+      // TODO adapt ef score
       emit(state.copyWith(gameActions: state.gameActions..remove(event.action)));
     });
 
@@ -192,20 +283,13 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     });
 
     on<RegisterAction>((event, emit) {
-      DateTime dateTime = DateTime.now();
-      int unixTime = dateTime.toUtc().millisecondsSinceEpoch;
-      int secondsSinceGameStart = state.stopWatchTimer.secondTime.value;
-      // get most recent game id from game state
-      // TODO: get game id from gameBloc
-      String currentGameId = "";
+      int unixTime = DateTime.now().toUtc().millisecondsSinceEpoch;
       GameAction action = GameAction(
-          teamId: state.selectedTeam.id!,
-          gameId: currentGameId,
-          context: event.actionContext,
-          tag: event.actionTag,
-          throwLocation: List.from(state.lastClickedLocation.cast<String>()),
-          timestamp: unixTime,
-          relativeTime: secondsSinceGameStart);
+        context: event.actionContext,
+        tag: event.actionTag,
+        throwLocation: List.from(state.lastClickedLocation.cast<String>()),
+        timestamp: unixTime,
+      );
 
       // for an action from opponent we can switch directly, we don't need the player menu to choose a player because these actions can be
       // directly assigned to the opponent
@@ -261,13 +345,10 @@ class GameBloc extends Bloc<GameEvent, GameState> {
       if (state.workflowStep == WorkflowStep.assistSelection && event.player.id != state.gameActions.last.playerId) {
         print("player selection: adding assist");
         GameAction assistAction = GameAction(
-            teamId: state.selectedTeam.id!,
-            gameId: lastAction.gameId,
             context: state.gameActions.last.context,
             tag: assistTag,
             throwLocation: List.from(state.lastClickedLocation.cast<String>()),
             timestamp: lastAction.timestamp,
-            relativeTime: lastAction.relativeTime,
             playerId: event.player.id!);
         emit(state.copyWith(gameActions: (state.gameActions..add(assistAction)).toList(), ownScore: state.ownScore + 1));
         this.add(WorkflowEvent(selectedPlayer: event.player));

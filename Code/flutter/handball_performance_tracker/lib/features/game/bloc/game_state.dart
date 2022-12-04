@@ -27,6 +27,7 @@ class GameState extends Equatable {
   DateTime? date = DateTime.now();
   Team selectedTeam = Team();
   final bool isHomeGame;
+  final DocumentReference? documentReference;
 
   // fields set during game
   final bool attackIsLeft;
@@ -52,6 +53,7 @@ class GameState extends Equatable {
     this.date,
     selectedTeam,
     this.isHomeGame = true,
+    this.documentReference = null,
     // constructor fields changed during game
     this.status = GameStatus.initial,
     this.attackIsLeft = true,

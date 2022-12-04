@@ -35,9 +35,10 @@ class EfScore {
     String? actionType = action.tag;
     if (actionType == goalTag) {
       // don't consider position and distance if goal happened after minute 55
-      if (action.relativeTime > lastFiveMinThreshold) {
-        actionType = goalChrunchtimeTag;
-      } else if (_isPosition(positions, action.throwLocation)) {
+      // if (action.relativeTime > lastFiveMinThreshold) {
+      //   actionType = goalChrunchtimeTag;
+      // } else 
+      if (_isPosition(positions, action.throwLocation)) {
         actionType = goalPosTag;
       } else if (_isInNineMeters(action.throwLocation[1])) {
         actionType = goalSubNineTag;
@@ -45,10 +46,11 @@ class EfScore {
         actionType = goalExtNineTag;
       }
     } else if (actionType == missTag) {
-      if (action.relativeTime > lastFiveMinThreshold) {
-        // don't consider position and distance if err happened after minute 55
-        actionType = missCrunchtimeTag;
-      } else if (_isPosition(positions, action.throwLocation)) {
+      // if (action.relativeTime > lastFiveMinThreshold) {
+      //   // don't consider position and distance if err happened after minute 55
+      //   actionType = missCrunchtimeTag;
+      // } else 
+      if (_isPosition(positions, action.throwLocation)) {
         actionType = missPosTag;
       } else if (_isInNineMeters(action.throwLocation[1])) {
         actionType = missSubNineTag;

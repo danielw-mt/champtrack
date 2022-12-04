@@ -6,7 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 /// Defines methods that need to be implemented by data providers. Could also be something other than Firebase
 abstract class GameRepository {
   // add game to storage
-  Future<Game> createGame(Game game);
+  Future<DocumentReference> createGame(Game game);
 
   // reading single game from storage
   Future<Game> fetchGame(String gameId);
@@ -25,7 +25,7 @@ class GameFirebaseRepository extends GameRepository {
   final String currentUserUid = FirebaseAuth.instance.currentUser!.uid;
 
   /// Add game to the games collection of the logged in club and return the game with the updated id
-  Future<Game> createGame(Game game) async {
+  Future<DocumentReference> createGame(Game game) async {
     QuerySnapshot clubSnapshot = await FirebaseFirestore.instance
         .collection('clubs')
         .where("roles.${FirebaseAuth.instance.currentUser!.uid}", isEqualTo: "admin")
@@ -34,8 +34,10 @@ class GameFirebaseRepository extends GameRepository {
     if (clubSnapshot.docs.length != 1) {
       throw Exception("No club found for user id. Cannot fetch game");
     }
+    print("trying to add game");
     DocumentReference gameRef = await clubSnapshot.docs[0].reference.collection("games").add(game.toEntity().toDocument());
-    return game.copyWith(id: gameRef.id);
+    print("added game");
+    return gameRef;
   }
 
   /// Fetch the specified game from the games collection corresponding to the logged in Club
@@ -100,5 +102,33 @@ class GameFirebaseRepository extends GameRepository {
       throw Exception("No club found for user id. Cannot update game");
     }
     await clubSnapshot.docs[0].reference.collection("games").doc(game.id).update(game.toEntity().toDocument());
+  }
+
+  Future<void> createAction(GameAction gameAction, String gameId) async {
+    QuerySnapshot clubSnapshot = await FirebaseFirestore.instance
+        .collection('clubs')
+        .where("roles.${FirebaseAuth.instance.currentUser!.uid}", isEqualTo: "admin")
+        .limit(1)
+        .get();
+    if (clubSnapshot.docs.length != 1) {
+      throw Exception("No club found for user id. Cannot create game action");
+    }
+    await clubSnapshot.docs[0].reference.collection("games").doc(gameId).collection("actions").add(gameAction.toEntity().toDocument());
+  }
+
+  Future<void> updateAction() {
+    throw UnimplementedError();
+  }
+
+  Future<void> deleteAction(GameAction gameAction, String gameId) async {
+    QuerySnapshot clubSnapshot = await FirebaseFirestore.instance
+        .collection('clubs')
+        .where("roles.${FirebaseAuth.instance.currentUser!.uid}", isEqualTo: "admin")
+        .limit(1)
+        .get();
+    if (clubSnapshot.docs.length != 1) {
+      throw Exception("No club found for user id. Cannot delete game action");
+    }
+    await clubSnapshot.docs[0].reference.collection("games").doc(gameId).collection("actions").doc(gameAction.id).delete();
   }
 }
