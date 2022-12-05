@@ -14,5 +14,5 @@ class AuthState extends Equatable {
   }
 
   @override
-  List<Object> get props => [authStatus, error ?? '', club ?? ''];
+  List<Object> get props => [authStatus];
 }
