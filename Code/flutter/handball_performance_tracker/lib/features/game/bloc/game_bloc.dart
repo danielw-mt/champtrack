@@ -93,10 +93,12 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         } else if (!gameActionsDifference[1].isEmpty) {
           List<GameAction> removedGameActions = gameActionsDifference[1];
           await Future.forEach(removedGameActions, (GameAction gameAction) {
-            try {
-              GameFirebaseRepository().deleteAction(gameAction, state.documentReference!.id);
-            } catch (e) {
-              print("Error syncing gameAction: $e");
+            if (gameAction.playerId != "") {
+              try {
+                GameFirebaseRepository().deleteAction(gameAction, state.documentReference!.id);
+              } catch (e) {
+                print("Error syncing gameAction: $e");
+              }
             }
             // on success set gameActionsWereSynced to true
           }).then((value) => gameActionsWereSynced = true);

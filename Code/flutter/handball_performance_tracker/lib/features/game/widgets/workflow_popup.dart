@@ -46,30 +46,44 @@ void openWorkflowPopup(BuildContext higherContext, GameBloc gameBloc) {
     }
   }
 
-  showDialog(
-      context: higherContext,
-      builder: (BuildContext bcontext) {
-        return BlocProvider.value(
-            value: gameBloc,
-            child: AlertDialog(
-                scrollable: true,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(MENU_RADIUS),
-                ),
-                content: BlocBuilder<GameBloc, GameState>(
-                    bloc: gameBloc,
-                    builder: (context, state) {
-                      if (state.workflowStep == WorkflowStep.forceClose) {
-                        Navigator.pop(bcontext);
-                        return Visibility(
-                          child: Container(),
-                          visible: false,
-                        );
-                      }
-                      return Container(
-                          width: MediaQuery.of(higherContext).size.width * 0.72,
-                          height: MediaQuery.of(higherContext).size.height * 0.7,
-                          child: provideWorkflowMenuContent());
-                    })));
-      }).then((value) => gameBloc.state.workflowStep = WorkflowStep.closed);
+  if (gameBloc.state.status == GameStatus.running) {
+    showDialog(
+        context: higherContext,
+        builder: (BuildContext bcontext) {
+          return BlocProvider.value(
+              value: gameBloc,
+              child: AlertDialog(
+                  scrollable: true,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(MENU_RADIUS),
+                  ),
+                  content: BlocBuilder<GameBloc, GameState>(
+                      bloc: gameBloc,
+                      builder: (context, state) {
+                        if (state.workflowStep == WorkflowStep.forceClose) {
+                          Navigator.pop(bcontext);
+                          return Visibility(
+                            child: Container(),
+                            visible: false,
+                          );
+                        }
+                        return Container(
+                            width: MediaQuery.of(higherContext).size.width * 0.72,
+                            height: MediaQuery.of(higherContext).size.height * 0.7,
+                            child: provideWorkflowMenuContent());
+                      })));
+        }).then((value) => gameBloc.state.workflowStep = WorkflowStep.closed);
+  } else {
+    print("showing game not started dialog");
+    showDialog(
+        context: higherContext,
+        builder: (BuildContext bcontext) {
+          return AlertDialog(
+              scrollable: true,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(MENU_RADIUS),
+              ),
+              content: CustomAlertMessageWidget(StringsGameScreen.lGameStartErrorMessage));
+        }).then((value) => gameBloc.state.workflowStep = WorkflowStep.closed);
+  }
 }
