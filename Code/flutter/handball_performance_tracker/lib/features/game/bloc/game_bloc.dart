@@ -77,12 +77,15 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         if (!gameActionsDifference[0].isEmpty) {
           List<GameAction> addedGameActions = gameActionsDifference[0];
           await Future.forEach(addedGameActions, (GameAction gameAction) async {
-            try {
-              DocumentReference docRef = await GameFirebaseRepository().createAction(gameAction, state.documentReference!.id);
-              state.gameActions[state.gameActions.indexOf(gameAction)].id = docRef.id;
-              state.gameActions[state.gameActions.indexOf(gameAction)].path = docRef.path;
-            } catch (e) {
-              print("Error syncing gameAction: $e");
+            // only add actions that have a player Id assigned
+            if (gameAction.playerId != "") {
+              try {
+                DocumentReference docRef = await GameFirebaseRepository().createAction(gameAction, state.documentReference!.id);
+                state.gameActions[state.gameActions.indexOf(gameAction)].id = docRef.id;
+                state.gameActions[state.gameActions.indexOf(gameAction)].path = docRef.path;
+              } catch (e) {
+                print("Error syncing gameAction: $e");
+              }
             }
             // on success set gameActionsWereSynced to true
           }).then((value) => gameActionsWereSynced = true);
@@ -278,12 +281,23 @@ class GameBloc extends Bloc<GameEvent, GameState> {
       }
     });
 
+    on<UpdatePlayerEfScore>((event, emit) {
+      if (event.action.playerId != "") {
+        print("updating player ef score");
+        Player relevantPlayer = state.onFieldPlayers.where((Player player) => player.id == event.action.playerId).first;
+        relevantPlayer.addAction(event.action);
+        List<Player> newOnFieldPlayers = state.onFieldPlayers.toList();
+        newOnFieldPlayers[newOnFieldPlayers.indexOf(relevantPlayer)] = relevantPlayer;
+        emit(state.copyWith(onFieldPlayers: newOnFieldPlayers));
+      }
+    });
+
     on<DeleteGameAction>((event, emit) {
       // TODO adapt ef score
       emit(state.copyWith(gameActions: state.gameActions..remove(event.action)));
     });
 
-    on<AddPenalty>((event, emit) {
+    on<SetPenalty>((event, emit) {
       int penaltyStartStopWatchTime = state.stopWatchTimer.rawTime.value;
       Timer timer = Timer.periodic(Duration(seconds: 5), (Timer t) {
         if (!state.penalties.containsKey(event.player)) {
@@ -369,22 +383,25 @@ class GameBloc extends Bloc<GameEvent, GameState> {
             throwLocation: List.from(state.lastClickedLocation.cast<String>()),
             timestamp: lastAction.timestamp,
             playerId: event.player.id!);
-        emit(state.copyWith(gameActions: (state.gameActions..add(assistAction)).toList(), ownScore: state.ownScore + 1));
+        this.add(UpdatePlayerEfScore(action: assistAction));
+        emit(state.copyWith(ownScore: state.ownScore + 1));
         this.add(WorkflowEvent(selectedPlayer: event.player));
       } else if (lastAction.tag == timePenaltyTag) {
         print("player selection: adding time penalty");
-        List<GameAction> gameActions = state.gameActions;
-        gameActions.last.playerId = event.player.id!;
-        this.add(AddPenalty(player: event.player));
-        emit(state.copyWith(gameActions: gameActions));
+        lastAction.playerId = event.player.id!;
+        this.add(SetPenalty(player: event.player));
+        // replace last action and add it again but this time with the player id and ef score update
+        emit(state.copyWith(gameActions: state.gameActions));
+        this.add(UpdatePlayerEfScore(action: lastAction));
         this.add(WorkflowEvent(selectedPlayer: event.player));
       } else if (state.workflowStep == WorkflowStep.substitutionTargetSelection) {
         print("player selection: selecting substitution target");
         this.add(SubstitutePlayer(newPlayer: state.substitutionPlayer, oldPlayer: event.player));
         this.add(WorkflowEvent(selectedPlayer: event.player));
-        List<GameAction> gameActions = state.gameActions;
-        gameActions.last.playerId = state.substitutionPlayer.id!;
-        emit(state.copyWith(gameActions: gameActions));
+        lastAction.playerId = event.player.id!;
+        emit(state.copyWith(gameActions: state.gameActions));
+
+        this.add(UpdatePlayerEfScore(action: lastAction));
       } else if (event.isSubstitute) {
         print("player selection: substitute");
         // if a player was selected from the not on field players in the player menu
@@ -401,9 +418,9 @@ class GameBloc extends Bloc<GameEvent, GameState> {
           print("there is one clear player to be substituted. Not calling substitution menu for now");
           this.add(SubstitutePlayer(newPlayer: event.player, oldPlayer: playersWithSamePosition[0]));
           this.add(WorkflowEvent(selectedPlayer: event.player));
-          List<GameAction> gameActions = state.gameActions;
-          gameActions.last.playerId = event.player.id!;
-          emit(state.copyWith(gameActions: gameActions));
+          lastAction.playerId = event.player.id!;
+          emit(state.copyWith(gameActions: state.gameActions));
+          this.add(UpdatePlayerEfScore(action: lastAction));
         } else {
           // if there are more than one player on field with the same position as the substitution player open the substituion menu
           print("there is no clear player to be substituted. Calling substitution menu");
@@ -419,8 +436,9 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         this.add(WorkflowEvent(selectedPlayer: event.player));
       } else {
         print("no special case. Just add the action to the list of actions after the player selection");
-        List<GameAction> newGameActions = state.gameActions;
-        newGameActions.last.playerId = event.player.id!;
+        lastAction.playerId = event.player.id!;
+        emit(state.copyWith(gameActions: state.gameActions));
+        this.add(UpdatePlayerEfScore(action: lastAction));
         int ownScore = state.ownScore;
         // if we click on a player that is penalized remove him from the list of penalized players
         if (state.penalties.keys.contains(event.player)) {
@@ -439,7 +457,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         if (lastTag == goalTag) {
           ownScore = ownScore + 1;
         }
-        emit(state.copyWith(ownScore: ownScore, substitutionTarget: Player(), gameActions: newGameActions));
+        emit(state.copyWith(ownScore: ownScore));
         this.add(WorkflowEvent(selectedPlayer: event.player));
       }
     });

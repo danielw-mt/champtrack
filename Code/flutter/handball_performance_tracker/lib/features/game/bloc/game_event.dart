@@ -114,6 +114,12 @@ class DeleteGameAction extends GameEvent {
   DeleteGameAction({required this.action});
 }
 
+class UpdatePlayerEfScore extends GameEvent {
+  final GameAction action;
+
+  UpdatePlayerEfScore({required this.action});
+}
+
 class ChangeScore extends GameEvent {
   final int score;
   final bool isOwnScore;
@@ -128,8 +134,8 @@ class WorkflowEvent extends GameEvent {
   WorkflowEvent({this.selectedPlayer, this.selectedAction});
 }
 
-class AddPenalty extends GameEvent {
+class SetPenalty extends GameEvent {
   final Player player;
 
-  AddPenalty({required this.player});
+  SetPenalty({required this.player});
 }
