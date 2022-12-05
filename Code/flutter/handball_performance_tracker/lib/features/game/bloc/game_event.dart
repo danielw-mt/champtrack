@@ -53,7 +53,7 @@ class SetMinutes extends GameEvent {
   SetMinutes({required this.minutes});
 }
 
-class QuitGame extends GameEvent {}
+class FinishGame extends GameEvent {}
 
 /// Switch from defense to offense
 class SwipeField extends GameEvent {

@@ -6,6 +6,6 @@ export 'player_menu/player_menu.dart';
 export 'action_menu/action_menu.dart';
 export 'score_keeping.dart';
 export 'side_switch.dart';
-export 'stop_game.dart';
+export 'finish_game.dart';
 export 'stopwatch_bar.dart';
 export 'workflow_popup.dart';

@@ -171,6 +171,12 @@ class GameBloc extends Bloc<GameEvent, GameState> {
       emit(state.copyWith(status: GameStatus.running, stopWatchTimer: stopWatchTimer));
     });
 
+    on<FinishGame>((event, emit) {
+      StopWatchTimer stopWatchTimer = state.stopWatchTimer;
+      stopWatchTimer.onExecute.add(StopWatchExecute.stop);
+      emit(state.copyWith(status: GameStatus.finished, stopWatchTimer: stopWatchTimer));
+    });
+
     on<ChangeScore>((event, emit) {
       if (event.isOwnScore) {
         emit(state.copyWith(ownScore: event.score));

@@ -48,7 +48,7 @@ class GameView extends StatelessWidget {
                       ActionFeed(),
                       Row(
                         children: [
-                          StopGameButton(),
+                          FinishGameButton(),
                           SideSwitch(),
                         ],
                       ),
