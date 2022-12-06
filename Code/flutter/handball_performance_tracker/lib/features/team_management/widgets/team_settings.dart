@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:handball_performance_tracker/core/constants/stringsTeamManagement.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:handball_performance_tracker/features/team_management/team_management.dart';
-import 'package:handball_performance_tracker/core/constants/stringsGeneral.dart';
-import 'package:handball_performance_tracker/core/constants/colors.dart';
 import 'package:handball_performance_tracker/data/models/team_model.dart';
-import 'package:handball_performance_tracker/core/constants/team_constants.dart';
 import 'package:handball_performance_tracker/core/core.dart';
 
 // Create a corresponding State class.

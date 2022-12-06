@@ -1,11 +1,11 @@
 export 'action_feed.dart';
-export 'ef_score_panel/ef_score_panel.dart';
+export 'ef_score_bar/ef_score_bar.dart';
+export 'ef_score_bar/ef_score_bar_button.dart';
 export 'game_field/game_field.dart';
-export 'player_menu/playermenu.dart';
+export 'player_menu/player_menu.dart';
 export 'action_menu/action_menu.dart';
 export 'score_keeping.dart';
 export 'side_switch.dart';
-export 'stop_game.dart';
+export 'finish_game.dart';
 export 'stopwatch_bar.dart';
-export 'seven_meter_menu/seven_meter_menu.dart';
-export 'seven_meter_menu/seven_meter_player_menu.dart';
+export 'workflow_popup.dart';

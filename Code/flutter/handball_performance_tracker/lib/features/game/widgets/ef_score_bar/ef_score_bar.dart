@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:handball_performance_tracker/core/constants/colors.dart';
-import 'package:handball_performance_tracker/core/constants/fieldSizeParameter.dart' as fieldSizeParameter;
+import 'package:handball_performance_tracker/core/core.dart';
+import 'package:handball_performance_tracker/core/constants/field_size_parameters.dart' as fieldSizeParameter;
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:handball_performance_tracker/features/game/game.dart';
 // TODO do we need this package?
 import 'package:rainbow_color/rainbow_color.dart';
-
+import 'ef_score_bar_button.dart';
+import 'package:handball_performance_tracker/data/models/models.dart';
 
 // TODO get rid of all these constants here this is a really bad practice
 
@@ -45,20 +48,17 @@ var rb = Rainbow(spectrum: [
 * @param width: Width of column, is bigger for permanent efscore player bar.
 * @return: Container with ListView which shows the entries of the input list.
 */
-class EfScoreButtonBar extends StatelessWidget {
-  List<Container> buttons = [];
-  late double width;
-  late double padWidth;
-  EfScoreButtonBar({required buttons, required width, required padWidth}) {
-    this.buttons = buttons;
-    this.width = width;
-    this.padWidth = padWidth;
-  }
+class EfScoreBar extends StatelessWidget {
+  // TODO implement width and padwith within this class.  Playerbar layout should be self contained
+  double width;
+  double padWidth;
+  List<Widget> buttons = [];
+  EfScoreBar({required this.buttons, required this.width, required this.padWidth});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(padWidth),
+      padding: EdgeInsets.all(PADDING_WIDTH),
       width: width.toDouble(),
       height: (buttons.length * lineAndButtonHeight + paddingWidth).toDouble(),
       decoration: BoxDecoration(

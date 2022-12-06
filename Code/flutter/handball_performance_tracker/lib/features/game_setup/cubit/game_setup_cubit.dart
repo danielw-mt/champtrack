@@ -29,8 +29,28 @@ class GameSetupCubit extends Cubit<GameSetupState> {
     ));
   }
 
+  void setOpponent(String opponent) {
+    emit(state.copyWith(opponent: opponent));
+  }
+
+  void setLocation(String location) {
+    emit(state.copyWith(location: location));
+  }
+
+  void setDate(DateTime date) {
+    emit(state.copyWith(date: date));
+  }
+
   void selectTeam(int selectedTeamIndex) {
     emit(state.copyWith(selectedTeamIndex: selectedTeamIndex));
+  }
+
+  void setAtHome(bool isHomeGame) {
+    emit(state.copyWith(isHomeGame: isHomeGame));
+  }
+
+  void setAttackIsLeft(bool attackIsLeft) {
+    emit(state.copyWith(attackIsLeft: attackIsLeft));
   }
 
   void goToSettings() {

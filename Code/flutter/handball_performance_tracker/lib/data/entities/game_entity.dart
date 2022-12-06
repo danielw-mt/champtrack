@@ -1,11 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
-import 'package:handball_performance_tracker/data/models/game_action_model.dart';
 
 /// Representation of a club entry in firebase
 class GameEntity extends Equatable {
-  final DocumentReference documentReference;
-  // final List actions;
+  final DocumentReference? documentReference;
   final Timestamp? date;
   final bool? isAtHome;
   final String? lastSync;
@@ -21,12 +19,27 @@ class GameEntity extends Equatable {
   final String? teamId;
   final bool? attackIsLeft;
 
-  GameEntity(this.documentReference, this.date, this.isAtHome, this.lastSync, this.location, this.onFieldPlayers, this.opponent, this.scoreHome,
-      this.scoreOpponent, this.season, this.startTime, this.stopTime, this.stopWatchTime, this.teamId, this.attackIsLeft);
+  GameEntity({
+    this.documentReference,
+    this.date,
+    this.isAtHome,
+    this.lastSync,
+    this.location,
+    this.onFieldPlayers,
+    this.opponent,
+    this.scoreHome,
+    this.scoreOpponent,
+    this.season,
+    this.startTime,
+    this.stopTime,
+    this.stopWatchTime,
+    this.teamId,
+    this.attackIsLeft,
+  });
 
   Map<String, Object> toJson() {
     return {
-      'documentReference': documentReference,
+      'documentReference': documentReference ?? Null,
       'date': date ?? Null,
       'isAtHome': isAtHome ?? Null,
       'lastSync': lastSync ?? Null,
@@ -50,34 +63,28 @@ class GameEntity extends Equatable {
   }
 
   static GameEntity fromJson(Map<String, Object> json) {
-    // TODO probably parse actions
     return GameEntity(
-      json['documentReference'] as DocumentReference,
-      json['date'] as Timestamp,
-      json['isAtHome'] as bool,
-      json['lastSync'] as String,
-      json['location'] as String,
-      json['onFieldPlayers'] as List<String>,
-      json['opponent'] as String,
-      json['scoreHome'] as int,
-      json['scoreOpponent'] as int,
-      json['season'] as String,
-      json['startTime'] as int,
-      json['stopTime'] as int,
-      json['stopWatchTime'] as int,
-      json['teamId'] as String,
-      json['attackIsLeft'] as bool,
+      documentReference: json['documentReference'] as DocumentReference?,
+      date: json['date'] as Timestamp?,
+      isAtHome: json['isAtHome'] as bool?,
+      lastSync: json['lastSync'] as String?,
+      location: json['location'] as String?,
+      onFieldPlayers: json['onFieldPlayers'] as List<String>?,
+      opponent: json['opponent'] as String?,
+      scoreHome: json['scoreHome'] as int?,
+      scoreOpponent: json['scoreOpponent'] as int?,
+      season: json['season'] as String?,
+      startTime: json['startTime'] as int?,
+      stopTime: json['stopTime'] as int?,
+      stopWatchTime: json['stopWatchTime'] as int?,
+      teamId: json['teamId'] as String?,
+      attackIsLeft: json['attackIsLeft'] as bool?,
     );
   }
 
   static GameEntity fromSnapshot(DocumentSnapshot snap) {
     if (snap.exists) {
-      print("Game entity from snapshot " + snap.id);
       Map<String, dynamic> data = snap.data() as Map<String, dynamic>;
-      // List<DocumentSnapshot> actions = [];
-      // data['actions'].forEach((action) {
-      //   // TODO implement this. Might be complicated
-      // });
       List<String> onFieldPlayers = [];
       if (data['onFieldPlayers'] != null) {
         data['onFieldPlayers'].forEach((player) {
@@ -85,47 +92,63 @@ class GameEntity extends Equatable {
         });
       }
       return GameEntity(
-        snap.reference,
-        data['date'] ?? null,
-        data['isAtHome'] ?? null,
-        data['lastSync'] ?? null,
-        data['location'] ?? null,
-        onFieldPlayers,
-        data['opponent'] ?? null,
-        data['scoreHome'] ?? null,
-        data['scoreOpponent'] ?? null,
-        data['season'] ?? null,
-        data['startTime'] ?? null,
-        data['stopTime'] ?? null,
-        data['stopWatchTime'] ?? null,
-        data['teamId'] ?? null,
-        data['attackIsLeft'] ?? null,
+        documentReference: snap.reference,
+        date: data['date'],
+        isAtHome: data['isAtHome'],
+        lastSync: data['lastSync'],
+        location: data['location'],
+        onFieldPlayers: onFieldPlayers,
+        opponent: data['opponent'],
+        scoreHome: data['scoreHome'],
+        scoreOpponent: data['scoreOpponent'],
+        season: data['season'],
+        startTime: data['startTime'],
+        stopTime: data['stopTime'],
+        stopWatchTime: data['stopWatchTime'],
+        teamId: data['teamId'],
+        attackIsLeft: data['attackIsLeft'],
       );
     }
     // this is in case that we are trying to access a game that does not exist anymore in the DB or could not be found
-    return GameEntity(snap.reference, null, false, "", "", [], "Deleted / Invalid", -1, -1, "Deleted / Invalid", -1, -1, -1, "", false);
+    return GameEntity();
   }
 
   Map<String, Object?> toDocument() {
-    return {
-      'date': date,
-      'isAtHome': isAtHome,
-      'lastSync': lastSync,
-      'location': location,
-      'onFieldPlayers': onFieldPlayers,
-      'opponent': opponent,
-      'scoreHome': scoreHome,
-      'scoreOpponent': scoreOpponent,
-      'season': season,
-      'startTime': startTime,
-      'stopTime': stopTime,
-      'stopWatchTime': stopWatchTime,
-      'teamId': teamId,
-      'attackIsLeft': attackIsLeft,
+    Map<String, Object?> document = {
+      'date': date != null ? date : "",
+      'isAtHome': isAtHome != null ? isAtHome : true,
+      'lastSync': lastSync != null ? lastSync : "",
+      'location': location != null ? location : "",
+      'onFieldPlayers': onFieldPlayers != null ? onFieldPlayers : [],
+      'opponent': opponent != null ? opponent : "",
+      'scoreHome': scoreHome != null ? scoreHome : 0,
+      'scoreOpponent': scoreOpponent != null ? scoreOpponent : 0,
+      'season': season != null ? season : "",
+      'startTime': startTime != null ? startTime : 0,
+      'stopTime': stopTime != null ? stopTime : 0,
+      'stopWatchTime': stopWatchTime != null ? stopWatchTime : 0,
+      'teamId': teamId != null ? teamId : "",
+      'attackIsLeft': attackIsLeft != null ? attackIsLeft : true,
     };
+    return document;
   }
 
   @override
-  // TODO: implement props
-  List<Object?> get props => throw UnimplementedError();
+  List<Object?> get props => [
+        documentReference,
+        date,
+        isAtHome,
+        lastSync,
+        location,
+        onFieldPlayers,
+        opponent,
+        scoreHome,
+        scoreOpponent,
+        season,
+        startTime,
+        stopTime,
+        stopWatchTime,
+        teamId,
+        attackIsLeft
+      ];
 }

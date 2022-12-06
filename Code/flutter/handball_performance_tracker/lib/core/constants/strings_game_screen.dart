@@ -21,6 +21,11 @@ class StringsGameScreen {
   static const String lChoose7mReceiver = "7m Erzieler";
   static const String lChoose7mCause = "7m Verursacher";
 
+  // player menu
+  static const String lChooseAssist = "Assist auswählen";
+  static const String lChooseSubstitutedPlayer = "Neuer Player ausgewählt. Welcher aktive Player soll ausgetauscht werden?";
+  static const String lChooseSubstitute = "Welcher Player soll eingewechselt werden?";
+
   // Pop ups
   static const String lNoAssist = "Kein Assist";
   static const String lSubstitute1 = "Für wen soll ";
@@ -33,8 +38,8 @@ class StringsGameScreen {
   static const String lTimePenalty = "Zeitstrafe verursacht";
   static const String lGoal = "Tor";
   static const String lOneVsOneAnd7m = "1v1 mit 7m Folge";
-  static const String lTwoMin = "2min ziehen";
-  static const String lErrThrow = "Fehlwurf";
+  static const String lForceTwoMin = "2min ziehen";
+  static const String lMiss = "Fehlwurf";
   static const String lErrThrowGoalkeeper = "Fehlwurf Torwart";
   static const String lTrf = "TRF";
   static const String lFoul7m = "Foul mit 7m Folge";

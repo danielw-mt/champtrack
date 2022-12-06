@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:handball_performance_tracker/core/constants/colors.dart';
-import 'package:handball_performance_tracker/core/constants/stringsGeneral.dart';
-import 'package:handball_performance_tracker/core/constants/stringsTeamManagement.dart';
 import 'package:handball_performance_tracker/features/sidebar/sidebar.dart';
 import 'package:handball_performance_tracker/features/team_management/team_management.dart';
 import 'package:handball_performance_tracker/core/core.dart';
@@ -29,7 +26,7 @@ class TeamManagementView extends StatelessWidget {
                     appBar: AppBar(backgroundColor: buttonDarkBlueColor, title: Text("TODO Teams")),
                     key: _scaffoldKey,
                     drawer: SidebarView(),
-                    bottomNavigationBar: TeamManagementTabsBar(),
+                    bottomNavigationBar: TabsBar(),
                     body: Column(
                       children: [
                         Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, crossAxisAlignment: CrossAxisAlignment.start, children: [

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:handball_performance_tracker/core/constants/design_constants.dart';
 import 'package:handball_performance_tracker/core/core.dart';
 import 'package:handball_performance_tracker/features/game/game.dart';
 import 'package:handball_performance_tracker/features/sidebar/sidebar.dart';
+import 'package:handball_performance_tracker/data/models/models.dart';
 
 // TODO this is shit get rid of it
-import 'package:handball_performance_tracker/core/constants/fieldSizeParameter.dart' as fieldSizeParameter;
+import 'package:handball_performance_tracker/core/constants/field_size_parameters.dart' as fieldSizeParameter;
 
 class GameView extends StatelessWidget {
   GameView({super.key});
@@ -14,6 +14,7 @@ class GameView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final GameBloc gameBloc = context.watch<GameBloc>();
     return SafeArea(
         child: Scaffold(
       resizeToAvoidBottomInset: false,
@@ -47,7 +48,7 @@ class GameView extends StatelessWidget {
                       ActionFeed(),
                       Row(
                         children: [
-                          StopGameButton(),
+                          FinishGameButton(),
                           SideSwitch(),
                         ],
                       ),
@@ -56,10 +57,13 @@ class GameView extends StatelessWidget {
                   ),
                   // Player Bar
                   Container(
-                      width: SCOREBAR_WIDTH + PADDING_WIDTH * 4,
-                      height: fieldSizeParameter.fieldHeight + fieldSizeParameter.toolbarHeight / 4,
                       alignment: Alignment.topCenter,
-                      child: Container()), //EfScoreBar()),
+                      child: EfScoreBar(
+                        buttons:
+                            gameBloc.state.onFieldPlayers.map((Player player) => EfScoreBarButton(player: player, isPopupButton: false)).toList(),
+                        width: 300,
+                        padWidth: PADDING_WIDTH,
+                      )),
                   // Field
                   Flexible(
                     flex: 4,

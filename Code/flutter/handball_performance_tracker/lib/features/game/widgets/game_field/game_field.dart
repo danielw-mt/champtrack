@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:handball_performance_tracker/core/constants/colors.dart';
+import 'package:handball_performance_tracker/core/core.dart';
 import 'field_painters.dart';
-import '../action_menu/action_menu.dart';
 import 'package:handball_performance_tracker/features/game/game.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -25,7 +24,7 @@ class PaintedField extends StatelessWidget {
             // handle coordinates on click
             onTapDown: (TapDownDetails details) {
           gameBloc.add(RegisterClickOnField(fieldIsLeft: fieldIsLeft, position: details.localPosition));
-          callActionMenu(context);
+          openWorkflowPopup(context, gameBloc);
         }),
       ),
       // Painter of dashed 9m

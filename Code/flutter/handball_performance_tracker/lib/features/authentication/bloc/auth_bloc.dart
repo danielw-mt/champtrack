@@ -10,45 +10,43 @@ part 'auth_state.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final AuthRepository authRepository;
-  AuthBloc({required this.authRepository}) : super(UnAuthenticated()) {
+  AuthBloc({required this.authRepository}) : super(AuthState(authStatus: AuthStatus.UnAuthenticated)) {
     on<StartApp>((event, emit) async {
       try {
-        emit(UnAuthenticated());
+        emit(state.copyWith(authStatus: AuthStatus.UnAuthenticated));
         final user = await authRepository.getUser();
         if (user != null) {
           Club club = await authRepository.fetchLoggedInClub();
-          emit(Authenticated(club: club));
+          emit(state.copyWith(authStatus: AuthStatus.Authenticated, club: club));
         } else {
-          emit(UnAuthenticated());
+          emit(state.copyWith(authStatus: AuthStatus.UnAuthenticated));
         }
       } catch (e) {
-        emit(AuthError(e.toString()));
+        emit(state.copyWith(authStatus: AuthStatus.AuthError, error: e.toString()));
       }
     });
 
     /// When User Presses the SignIn Button, we will send the SignInRequested Event to the AuthBloc to handle it and emit the Authenticated State if the user is authenticated
     on<SignInRequested>((event, emit) async {
-      emit(Loading());
+      emit(state.copyWith(authStatus: AuthStatus.Loading));
       try {
         await authRepository.signIn(email: event.email, password: event.password);
         Club club = await authRepository.fetchLoggedInClub();
-        emit(Authenticated(club: club));
+        emit(state.copyWith(authStatus: AuthStatus.Authenticated, club: club));
       } catch (e) {
-        emit(AuthError(e.toString()));
-        emit(UnAuthenticated());
+        emit(state.copyWith(authStatus: AuthStatus.AuthError, error: e.toString()));
       }
     });
 
     /// When User Presses the SignUp Button, we will send the SignUpRequest Event to the AuthBloc to handle it and emit the Authenticated State if the user is authenticated
     on<SignUpRequested>((event, emit) async {
-      emit(Loading());
+      emit(state.copyWith(authStatus: AuthStatus.Loading));
       try {
         await authRepository.signUp(clubName: event.clubName, email: event.email, password: event.password);
         Club club = await authRepository.fetchLoggedInClub();
-        emit(Authenticated(club: club));
+        emit(state.copyWith(authStatus: AuthStatus.Authenticated, club: club));
       } catch (e) {
-        emit(AuthError(e.toString()));
-        emit(UnAuthenticated());
+        emit(state.copyWith(authStatus: AuthStatus.AuthError, error: e.toString()));
       }
     });
     // When User Presses the Google Login Button, we will send the GoogleSignInRequest Event to the AuthBloc to handle it and emit the Authenticated State if the user is authenticated
@@ -65,18 +63,45 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
     /// When User Presses the SignOut Button, we will send the SignOutRequested Event to the AuthBloc to handle it and emit the UnAuthenticated State
     on<SignOutRequested>((event, emit) async {
-      emit(Loading());
+      emit(state.copyWith(authStatus: AuthStatus.Loading));
       await authRepository.signOut();
-      emit(UnAuthenticated());
+      emit(state.copyWith(authStatus: AuthStatus.UnAuthenticated, club: null));
     });
   }
 
   /// Returns a documentreference of the logged in club so that it can be used in later queries within that club
   DocumentReference getClubReference() {
-    if (this.state is Authenticated) {
-      return FirebaseFirestore.instance.collection("clubs").doc((this.state as Authenticated).club.id);
+    if (state.club != null) {
+      return FirebaseFirestore.instance.collection("clubs").doc(state.club!.id);
     } else {
       throw Exception("User is not authenticated");
     }
   }
+
+  // TODO implement reset password
+  //   void sendPasswordResetEmail() async {
+//     // show an indication that user is signing up
+//     Alert loadingAlert = Alert(
+//         context: context,
+//         buttons: [],
+//         content: CustomAlertWidget(StringsAuth.lLoggingIn));
+//     loadingAlert.show();
+//     try {
+//       await FirebaseAuth.instance
+//           .sendPasswordResetEmail(email: emailController.text.trim());
+//       loadingAlert.dismiss();
+//     } on FirebaseAuthException catch (e) {
+//       loadingAlert.dismiss();
+//       Alert(
+//               context: context,
+//               buttons: [],
+//               content: Text(e.message.toString(),
+//                   style: TextStyle(color: Colors.grey.shade800)),
+//               style: AlertStyle(backgroundColor: buttonLightBlueColor))
+//           .show();
+//     }
+//     onClickedReset();
+//   }
+// }
+
 }

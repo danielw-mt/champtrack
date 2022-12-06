@@ -2,6 +2,23 @@ part of 'game_bloc.dart';
 
 enum GameStatus { initial, running, paused, finished }
 
+enum WorkflowStep {
+  closed,
+  actionMenuOffense,
+  actionMenuDefense,
+  actionMenuGoalKeeper,
+  playerSelection,
+  assistSelection,
+  sevenMeterScorerSelection,
+  sevenMeterFoulerSelection,
+  sevenMeterExecutorSelection,
+  substitutionTargetSelection,
+  sevenMeterGoalkeeperSelection,
+  sevenMeterDefenseResult,
+  sevenMeterOffenseResult,
+  forceClose
+}
+
 class GameState extends Equatable {
   // fields set during game creation
   final GameStatus status;
@@ -10,6 +27,7 @@ class GameState extends Equatable {
   DateTime? date = DateTime.now();
   Team selectedTeam = Team();
   final bool isHomeGame;
+  final DocumentReference? documentReference;
 
   // fields set during game
   final bool attackIsLeft;
@@ -19,10 +37,13 @@ class GameState extends Equatable {
   final int opponentScore;
   StopWatchTimer stopWatchTimer = StopWatchTimer();
   List<GameAction> gameActions = [];
-  Player playerToChange = Player();
   List<String> lastClickedLocation = [];
-  String actionMenuHintText = '';
-  String playerMenuHintText = '';
+  Map<Player, Timer> penalties = {};
+  Player substitutionTarget = Player();
+  Player substitutionPlayer = Player();
+  Player sevenMeterExecutor = Player();
+  Player sevenMeterGoalkeeper = Player();
+  WorkflowStep workflowStep = WorkflowStep.closed;
 
   // Some of these fields can only be set in this constructor like date, opponent or location because they get passed from the previous screen
   GameState({
@@ -32,6 +53,7 @@ class GameState extends Equatable {
     this.date,
     selectedTeam,
     this.isHomeGame = true,
+    this.documentReference = null,
     // constructor fields changed during game
     this.status = GameStatus.initial,
     this.attackIsLeft = true,
@@ -41,10 +63,13 @@ class GameState extends Equatable {
     this.opponentScore = 0,
     stopWatchTimer,
     this.gameActions = const [],
-    playerToChange,
     this.lastClickedLocation = const [],
-    this.actionMenuHintText = '',
-    this.playerMenuHintText = '',
+    this.penalties = const {},
+    substitutionTarget,
+    substitutionPlayer,
+    sevenMeterExecutor,
+    sevenMeterGoalkeeper,
+    this.workflowStep = WorkflowStep.closed,
   }) {
     // make sure that the list is growable
     if (this.onFieldPlayers.isEmpty) {
@@ -59,11 +84,23 @@ class GameState extends Equatable {
     if (selectedTeam != null) {
       this.selectedTeam = selectedTeam;
     }
-    if (playerToChange != null) {
-      this.playerToChange = playerToChange;
-    }
     if (this.lastClickedLocation.isEmpty) {
       this.lastClickedLocation = [];
+    }
+    if (this.penalties.isEmpty) {
+      this.penalties = {};
+    }
+    if (substitutionTarget != null) {
+      this.substitutionTarget = substitutionTarget;
+    }
+    if (substitutionPlayer != null) {
+      this.substitutionPlayer = substitutionPlayer;
+    }
+    if (sevenMeterExecutor != null) {
+      this.sevenMeterExecutor = sevenMeterExecutor;
+    }
+    if (sevenMeterGoalkeeper != null) {
+      this.sevenMeterGoalkeeper = sevenMeterGoalkeeper;
     }
   }
 
@@ -77,8 +114,12 @@ class GameState extends Equatable {
     StopWatchTimer? stopWatchTimer,
     List<GameAction>? gameActions,
     List<String>? lastClickedLocation,
-    String? actionMenuHintText,
-    String? playerMenuHintText,
+    Map<Player, Timer>? penalties,
+    Player? substitutionTarget,
+    Player? substitutionPlayer,
+    Player? sevenMeterExecutor,
+    Player? sevenMeterGoalkeeper,
+    WorkflowStep? workflowStep,
   }) {
     return GameState(
       // these properties cannot be changed after game initialization so they can only be set in the constructor but not in the copyWith method
@@ -88,6 +129,7 @@ class GameState extends Equatable {
       date: this.date,
       selectedTeam: this.selectedTeam,
       isHomeGame: this.isHomeGame,
+      documentReference: this.documentReference,
       // these properties can be changed during the game
       status: status ?? this.status,
       attackIsLeft: attackIsLeft ?? this.attackIsLeft,
@@ -98,10 +140,33 @@ class GameState extends Equatable {
       stopWatchTimer: stopWatchTimer ?? this.stopWatchTimer,
       gameActions: gameActions ?? this.gameActions,
       lastClickedLocation: lastClickedLocation ?? this.lastClickedLocation,
-      playerToChange: this.playerToChange,
-      actionMenuHintText: actionMenuHintText ?? this.actionMenuHintText,
-      playerMenuHintText: playerMenuHintText ?? this.playerMenuHintText,
+      penalties: penalties ?? this.penalties,
+      substitutionTarget: substitutionTarget ?? this.substitutionTarget,
+      substitutionPlayer: substitutionPlayer ?? this.substitutionPlayer,
+      sevenMeterExecutor: sevenMeterExecutor ?? this.sevenMeterExecutor,
+      sevenMeterGoalkeeper: sevenMeterGoalkeeper ?? this.sevenMeterGoalkeeper,
+      workflowStep: workflowStep ?? this.workflowStep,
     );
+  }
+
+  @override
+  String toString() {
+    return "GameState {status: $status, +\n " +
+        "attackIsLeft: $attackIsLeft, +\n " +
+        "attacking: $attacking, +\n " +
+        // "onFieldPlayers: $onFieldPlayers, +\n " +
+        "ownScore: $ownScore, +\n " +
+        "opponentScore: $opponentScore, +\n " +
+        "stopWatchTimer: $stopWatchTimer, +\n " +
+        "gameActions: $gameActions, +\n " +
+        "lastClickedLocation: $lastClickedLocation, +\n " +
+        "penalties: $penalties, +\n " +
+        "substitutionTarget: $substitutionTarget, +\n " +
+        "substitutionPlayer: $substitutionPlayer, +\n " +
+        "sevenMeterExecutor: $sevenMeterExecutor, +\n " +
+        "sevenMeterGoalkeeper: $sevenMeterGoalkeeper, +\n " +
+        "workflowStep: $workflowStep, +\n " +
+        "}";
   }
 
   @override
@@ -109,14 +174,17 @@ class GameState extends Equatable {
         this.status,
         this.attackIsLeft,
         this.attacking,
-        this.onFieldPlayers,
+        this.onFieldPlayers.hashCode,
         this.ownScore,
         this.opponentScore,
         this.stopWatchTimer,
-        this.gameActions,
+        this.gameActions.hashCode,
         this.lastClickedLocation,
-        this.playerToChange,
-        this.actionMenuHintText,
-        this.playerMenuHintText,
+        this.penalties,
+        this.substitutionTarget,
+        this.substitutionPlayer,
+        this.sevenMeterExecutor,
+        this.sevenMeterGoalkeeper,
+        this.workflowStep
       ];
 }

@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:handball_performance_tracker/core/constants/colors.dart';
-import 'package:handball_performance_tracker/core/constants/stringsGameScreen.dart';
-import 'package:handball_performance_tracker/core/constants/stringsGameSettings.dart';
+import 'package:handball_performance_tracker/core/core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:handball_performance_tracker/features/game/game.dart';
 
-class StopGameButton extends StatelessWidget {
-  const StopGameButton({Key? key}) : super(key: key);
+class FinishGameButton extends StatelessWidget {
+  const FinishGameButton({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +33,9 @@ class StopGameButton extends StatelessWidget {
                   ),
                   TextButton(
                     onPressed: () {
-                      gameBloc.add(QuitGame());
+                      gameBloc.add(FinishGame());
+                      Navigator.pop(context);
+                      // TODO maybe routing to Dashboard
                       Navigator.pop(context);
                     },
                     child: Text(

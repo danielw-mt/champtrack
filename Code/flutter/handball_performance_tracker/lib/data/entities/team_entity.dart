@@ -68,6 +68,5 @@ class TeamEntity extends Equatable {
   }
 
   @override
-  // TODO: implement props
-  List<Object?> get props => throw UnimplementedError();
+  List<Object?> get props => [documentReference, name, onFieldPlayers, players, type];
 }

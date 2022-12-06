@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:handball_performance_tracker/data/entities/entities.dart';
+import 'package:handball_performance_tracker/data/models/models.dart';
 import '../ef_score.dart';
 
 class Player {
@@ -134,21 +135,10 @@ class Player {
   //       games: games);
   // }
 
-  // Players are considered as identical if they have the same id
-  // @override
-  // bool operator ==(dynamic other) =>
-  //     other != null && other is Player && id == other.id;
+  void addAction(GameAction action) => efScore.addAction(action, positions);
 
-  // void addAction(GameAction action) => efScore.addAction(action, positions);
+  void removeAction(GameAction action) => efScore.removeAction(action, positions);
 
-  // void removeAction(GameAction action) =>
-  //     efScore.removeAction(action, positions);
-
-  // // clear all performed actions e.g. after a game ended
-  // void resetActions() => efScore = LiveEfScore();
-
-  // @override
-  // String toString() {
-  //   return "Player( +\n firstName: ${firstName}, +\n lastName: ${lastName}, +\n nickName: ${nickName} ";
-  // }
+  // clear all performed actions e.g. after a game ended
+  void resetActions() => efScore = LiveEfScore();
 }

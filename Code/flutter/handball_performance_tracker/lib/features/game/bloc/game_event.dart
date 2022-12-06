@@ -53,7 +53,7 @@ class SetMinutes extends GameEvent {
   SetMinutes({required this.minutes});
 }
 
-class QuitGame extends GameEvent {}
+class FinishGame extends GameEvent {}
 
 /// Switch from defense to offense
 class SwipeField extends GameEvent {
@@ -73,10 +73,11 @@ class SwitchField extends GameEvent {
 class SwitchSides extends GameEvent {}
 
 /// Changing a player on the field
-class SwitchPlayer extends GameEvent {
-  final List<Player> newOnFieldPlayers;
+class SubstitutePlayer extends GameEvent {
+  final Player newPlayer;
+  final Player oldPlayer;
 
-  SwitchPlayer({required this.newOnFieldPlayers});
+  SubstitutePlayer({required this.newPlayer, required this.oldPlayer});
 }
 
 /// Clicking onto the game field
@@ -89,25 +90,34 @@ class RegisterClickOnField extends GameEvent {
 
 /// Click on an action in the action menu
 class RegisterAction extends GameEvent {
-  final GameAction action;
+  final String actionTag;
+  final String actionContext;
 
-  RegisterAction({required this.action});
+  RegisterAction({required this.actionTag, required this.actionContext});
 }
 
 /// Selecting a player in the player menu
-class RegisterClickOnPlayer extends GameEvent {
+class RegisterPlayerSelection extends GameEvent {
   final Player player;
+  final bool isSubstitute;
 
-  RegisterClickOnPlayer({required this.player});
+  RegisterPlayerSelection({required this.player, required this.isSubstitute});
 }
 
 /// Clicking on our own goal
 class RegisterClickOnGoal extends GameEvent {}
 
-class DeleteFeedAction extends GameEvent {
+// triggered from feed
+class DeleteGameAction extends GameEvent {
   final GameAction action;
 
-  DeleteFeedAction({required this.action});
+  DeleteGameAction({required this.action});
+}
+
+class UpdatePlayerEfScore extends GameEvent {
+  final GameAction action;
+
+  UpdatePlayerEfScore({required this.action});
 }
 
 class ChangeScore extends GameEvent {
@@ -117,14 +127,15 @@ class ChangeScore extends GameEvent {
   ChangeScore({required this.score, required this.isOwnScore});
 }
 
-class UpdatePlayerMenuHintText extends GameEvent {
-  final String hintText;
+class WorkflowEvent extends GameEvent {
+  final Player? selectedPlayer;
+  final GameAction? selectedAction;
 
-  UpdatePlayerMenuHintText({required this.hintText});
+  WorkflowEvent({this.selectedPlayer, this.selectedAction});
 }
 
-class UpdateActionMenuHintText extends GameEvent {
-  final String hintText;
+class SetPenalty extends GameEvent {
+  final Player player;
 
-  UpdateActionMenuHintText({required this.hintText});
+  SetPenalty({required this.player});
 }

@@ -100,16 +100,16 @@ class GlobalBloc extends Bloc<GlobalEvent, GlobalState> {
       }
     });
 
-    on<CreateGame>((event, emit) async {
-      try {
-        emit(state.copyWith(status: GlobalStatus.loading));
-        Game newGame = await GameFirebaseRepository().createGame(event.game);
-        emit(state.copyWith(allGames: [...state.allGames, newGame], status: GlobalStatus.success));
-      } catch (e) {
-        developer.log('Failure creating game ' + e.toString(), name: this.runtimeType.toString(), error: e);
-        emit(state.copyWith(status: GlobalStatus.failure));
-      }
-    });
+    // on<CreateGame>((event, emit) async {
+    //   try {
+    //     emit(state.copyWith(status: GlobalStatus.loading));
+    //     Game newGame = await GameFirebaseRepository().createGame(event.game);
+    //     emit(state.copyWith(allGames: [...state.allGames, newGame], status: GlobalStatus.success));
+    //   } catch (e) {
+    //     developer.log('Failure creating game ' + e.toString(), name: this.runtimeType.toString(), error: e);
+    //     emit(state.copyWith(status: GlobalStatus.failure));
+    //   }
+    // });
 
     on<UpdateGame>((event, emit) async {
       try {
