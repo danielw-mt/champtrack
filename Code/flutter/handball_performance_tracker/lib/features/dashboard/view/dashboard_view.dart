@@ -12,7 +12,7 @@ class DashboardView extends StatelessWidget {
   Widget build(BuildContext context) {
     final globalState = context.watch<GlobalBloc>().state;
     print("global state: ${globalState.status}");
-    final authState = context.watch<AuthBloc>().state;
+    // final authState = context.watch<AuthBloc>().state;
     if (globalState.status == GlobalStatus.loading) {
       return Column(children: [
         Text("Loading...", style: TextStyle(fontSize: 20, color: Colors.blue)),

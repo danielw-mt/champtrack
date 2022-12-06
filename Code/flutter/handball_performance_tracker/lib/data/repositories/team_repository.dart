@@ -24,6 +24,7 @@ abstract class TeamRepository {
 /// Implementation of TeamRepository that uses Firebase as the data provider
 class TeamFirebaseRepository extends TeamRepository {
   final String currentUserUid = FirebaseAuth.instance.currentUser!.uid;
+  List<Team> _teams = [];
 
   /// Add team to the teams collection of the logged in club and return the team with the updated id
   Future<Team> createTeam(Team team) async {
@@ -36,6 +37,8 @@ class TeamFirebaseRepository extends TeamRepository {
       throw Exception("No club found for user id. Cannot fetch team");
     }
     DocumentReference teamRef = await clubSnapshot.docs[0].reference.collection("teams").add(team.toEntity().toDocument());
+    // create new team in _teams
+    _teams.add(team.copyWith(id: teamRef.id));
     return team.copyWith(id: teamRef.id);
   }
 
@@ -61,7 +64,7 @@ class TeamFirebaseRepository extends TeamRepository {
   /// @param allPlayers: optional list of previously built players used for populating the teams list
   Future<List<Team>> fetchTeams({List<Player>? allPlayers}) async {
     developer.log("fetching teams", name: "TeamFirebaseRepository");
-    List<Team> teams = [];
+    
     QuerySnapshot clubSnapshot = await FirebaseFirestore.instance
         .collection('clubs')
         .where("roles.${FirebaseAuth.instance.currentUser!.uid}", isEqualTo: "admin")
@@ -74,10 +77,10 @@ class TeamFirebaseRepository extends TeamRepository {
     QuerySnapshot teamsSnapshot = await clubSnapshot.docs[0].reference.collection("teams").get();
     await Future.forEach(teamsSnapshot.docs, (DocumentSnapshot teamSnapshot) async {
       Team team = await Team.fromEntity(TeamEntity.fromSnapshot(teamSnapshot), allPlayers: allPlayers ?? []);
-      teams.add(team);
+      _teams.add(team);
       print("added team: " + team.name);
     });
-    return teams;
+    return _teams;
   }
 
   /// Delete the specified team
@@ -92,6 +95,8 @@ class TeamFirebaseRepository extends TeamRepository {
       throw Exception("No club found for user id. Cannot delete team");
     }
     await clubSnapshot.docs[0].reference.collection("teams").doc(team.id).delete();
+    // delete team from _teams
+    _teams.removeWhere((element) => element.id == team.id); // TODO games are not deleted in local variable yet
     // TODO instead of deletion we should mark the team as deleted and show it in the UI that they were deleted
     // delete all games that correspond to a team
     clubSnapshot.docs[0].reference.collection("games").where("teamId", isEqualTo: team.id).get().then((QuerySnapshot gamesSnapshot) {
@@ -123,8 +128,17 @@ class TeamFirebaseRepository extends TeamRepository {
         .get();
     if (clubSnapshot.docs.length == 1) {
       await clubSnapshot.docs[0].reference.collection("teams").doc(team.id).update(team.toEntity().toDocument());
+      // update team in _teams
+      _teams[_teams.indexWhere((element) => element.id == team.id)] = team;
+
     } else {
       throw Exception("No club found for user id. Cannot update team");
     }
+  }
+
+  List<Team> get teams => _teams;
+
+  set teams(List<Team> teams) {
+    _teams = teams;
   }
 }

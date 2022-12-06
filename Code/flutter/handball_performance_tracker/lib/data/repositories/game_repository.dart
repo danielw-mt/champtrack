@@ -62,7 +62,6 @@ class GameFirebaseRepository extends GameRepository {
 
   /// Fetch all games from the games collection of the logged in club
   Future<List<Game>> fetchGames() async {
-    // List<Game> games = [];
     QuerySnapshot clubSnapshot = await FirebaseFirestore.instance
         .collection('clubs')
         .where("roles.${FirebaseAuth.instance.currentUser!.uid}", isEqualTo: "admin")

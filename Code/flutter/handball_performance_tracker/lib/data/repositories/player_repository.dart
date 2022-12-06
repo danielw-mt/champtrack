@@ -24,18 +24,24 @@ abstract class PlayerRepository {
 /// Implementation of PlayerRepository that uses Firebase as the data provider
 class PlayerFirebaseRepository extends PlayerRepository {
   final String currentUserUid = FirebaseAuth.instance.currentUser!.uid;
+  List<Player> _players = [];
 
   /// Add player to players collection @return player with updated id
   Future<Player> createPlayer(Player player) async {
     QuerySnapshot clubSnapshot = await FirebaseFirestore.instance
         .collection('clubs')
-        .where("roles.${FirebaseAuth.instance.currentUser!.uid}", isEqualTo: "admin")
+        .where("roles.${FirebaseAuth.instance.currentUser!.uid}",
+            isEqualTo: "admin")
         .limit(1)
         .get();
     if (clubSnapshot.docs.length != 1) {
       throw Exception("No club found for user id. Cannot fetch team");
     }
-    DocumentReference playerRef = await clubSnapshot.docs[0].reference.collection("players").add(player.toEntity().toDocument());
+    DocumentReference playerRef = await clubSnapshot.docs[0].reference
+        .collection("players")
+        .add(player.toEntity().toDocument());
+    // create new player in _players
+    _players.add(player.copyWith(id: playerRef.id));
     return player.copyWith(id: playerRef.id);
   }
 
@@ -44,13 +50,17 @@ class PlayerFirebaseRepository extends PlayerRepository {
     Player? player = null;
     QuerySnapshot clubSnapshot = await FirebaseFirestore.instance
         .collection('clubs')
-        .where("roles.${FirebaseAuth.instance.currentUser!.uid}", isEqualTo: "admin")
+        .where("roles.${FirebaseAuth.instance.currentUser!.uid}",
+            isEqualTo: "admin")
         .limit(1)
         .get();
     if (clubSnapshot.docs.length != 1) {
       throw Exception("No club found for user id. Cannot fetch player");
     }
-    DocumentSnapshot playerSnapshot = await clubSnapshot.docs[0].reference.collection("players").doc(playerId).get();
+    DocumentSnapshot playerSnapshot = await clubSnapshot.docs[0].reference
+        .collection("players")
+        .doc(playerId)
+        .get();
     if (playerSnapshot.exists) {
       player = Player.fromEntity(PlayerEntity.fromSnapshot(playerSnapshot));
     }
@@ -63,17 +73,21 @@ class PlayerFirebaseRepository extends PlayerRepository {
     List<Player> players = [];
     QuerySnapshot clubSnapshot = await FirebaseFirestore.instance
         .collection('clubs')
-        .where("roles.${FirebaseAuth.instance.currentUser!.uid}", isEqualTo: "admin")
+        .where("roles.${FirebaseAuth.instance.currentUser!.uid}",
+            isEqualTo: "admin")
         .limit(1)
         .get();
     if (clubSnapshot.docs.length != 1) {
       throw Exception("No club found for user id. Cannot fetch players");
     }
-    QuerySnapshot playersSnapshot = await clubSnapshot.docs[0].reference.collection("players").get();
-    await Future.forEach(playersSnapshot.docs, (DocumentSnapshot playerSnapshot) async {
-      players.add(Player.fromEntity(PlayerEntity.fromSnapshot(playerSnapshot)));
+    QuerySnapshot playersSnapshot =
+        await clubSnapshot.docs[0].reference.collection("players").get();
+    await Future.forEach(playersSnapshot.docs,
+        (DocumentSnapshot playerSnapshot) async {
+      _players
+          .add(Player.fromEntity(PlayerEntity.fromSnapshot(playerSnapshot)));
     });
-    return players;
+    return _players;
   }
 
   /// Delete the specified player
@@ -81,13 +95,19 @@ class PlayerFirebaseRepository extends PlayerRepository {
   Future<void> deletePlayer(Player player) async {
     QuerySnapshot clubSnapshot = await FirebaseFirestore.instance
         .collection('clubs')
-        .where("roles.${FirebaseAuth.instance.currentUser!.uid}", isEqualTo: "admin")
+        .where("roles.${FirebaseAuth.instance.currentUser!.uid}",
+            isEqualTo: "admin")
         .limit(1)
         .get();
     if (clubSnapshot.docs.length != 1) {
       throw Exception("No club found for user id. Cannot delete player");
     }
-    await clubSnapshot.docs[0].reference.collection("players").doc(player.id).delete();
+    await clubSnapshot.docs[0].reference
+        .collection("players")
+        .doc(player.id)
+        .delete();
+    // delete player from _players
+    _players.removeWhere((element) => element.id == player.id);
     // TODO implement proper deletion from games and teams
   }
 
@@ -96,12 +116,25 @@ class PlayerFirebaseRepository extends PlayerRepository {
   Future<void> updatePlayer(Player player) async {
     QuerySnapshot clubSnapshot = await FirebaseFirestore.instance
         .collection('clubs')
-        .where("roles.${FirebaseAuth.instance.currentUser!.uid}", isEqualTo: "admin")
+        .where("roles.${FirebaseAuth.instance.currentUser!.uid}",
+            isEqualTo: "admin")
         .limit(1)
         .get();
     if (clubSnapshot.docs.length != 1) {
       throw Exception("No club found for user id. Cannot update player");
     }
-    await clubSnapshot.docs[0].reference.collection("players").doc(player.id).update(player.toEntity().toDocument());
+    await clubSnapshot.docs[0].reference
+        .collection("players")
+        .doc(player.id)
+        .update(player.toEntity().toDocument());
+    // update player in _players
+    _players[_players.indexWhere((element) => player.id == element.id)] =
+        player;
+  }
+
+  List<Player> get players => _players;
+
+  set players(List<Player> players) {
+    _players = players;
   }
 }

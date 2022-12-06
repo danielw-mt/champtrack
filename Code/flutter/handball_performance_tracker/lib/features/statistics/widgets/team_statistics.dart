@@ -35,7 +35,7 @@ class _TeamStatisticsState extends State<TeamStatistics> {
     _statistics = {}; // _persistentController.getStatistics();
     // index access safety
     if (_teams.length > 0) {
-      _selectedTeam = _teams[0];
+      //_selectedTeam = _teams[0];
       // get allGame that are cached in persistentController
       List<Game> allGames = []; // _persistentController.getAllGames(teamId: _selectedTeam.id);
       // only actually show games that are in the statistics map
@@ -59,10 +59,10 @@ class _TeamStatisticsState extends State<TeamStatistics> {
   void onTeamSelected(Team team) {
     setState(() {
       _selectedTeam = team;
-      List<Game> allGames = []; // _persistentController.getAllGames(teamId: _selectedTeam.id);
+      //List<Game> allGames = []; // _persistentController.getAllGames(teamId: _selectedTeam.id);
       // only actually show games that are in the statistics map
-      _games = allGames.where((game) => _statistics.containsKey(game.id)).toList();
-      _selectedGame = _games[0];
+      // _games = allGames.where((game) => _statistics.containsKey(game.id)).toList();
+      // _selectedGame = _games[0];
     });
   }
 
@@ -110,7 +110,7 @@ class _TeamStatisticsState extends State<TeamStatistics> {
       logger.e(e);
     }
     print("#########");
-    print(statisticsBloc.state.allGames);
+    print(statisticsBloc.state.allTeams);
 
     return Scaffold(
         body: Row(
@@ -131,8 +131,8 @@ class _TeamStatisticsState extends State<TeamStatistics> {
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
-                                TeamSelector(teams: _teams, onTeamSelected: onTeamSelected),
-                                GameSelector(games: statisticsBloc.state.allGames, onGameSelected: onGameSelected)
+                                TeamSelector(onTeamSelected: onTeamSelected),
+                                GameSelector()
                               ],
                             ),
                           )),

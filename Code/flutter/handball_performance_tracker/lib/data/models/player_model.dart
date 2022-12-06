@@ -11,6 +11,7 @@ class Player {
   int number;
   List<String> positions;
   List<String> teams;
+  List<String> games;
   LiveEfScore efScore;
 
   Player({
@@ -22,6 +23,7 @@ class Player {
     this.number = 0,
     this.positions = const [],
     this.teams = const [],
+    this.games = const [],
   }) : efScore = LiveEfScore();
 
   Player copyWith(

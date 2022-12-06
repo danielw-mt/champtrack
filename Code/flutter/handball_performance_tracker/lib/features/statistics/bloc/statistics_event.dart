@@ -19,6 +19,18 @@ class SelectTeam extends StatisticsEvent {
   SelectTeam({required this.team});
 }
 
+class SelectGame extends StatisticsEvent {
+  final Game game;
+
+  SelectGame({required this.game});
+}
+
+class SelectPlayer extends StatisticsEvent {
+  final Player player;
+
+  SelectPlayer({required this.player});
+}
+
 class InitStatistics extends StatisticsEvent {
   //final Team team = context.read<GlobalBloc>().state.selectedTeam;
 

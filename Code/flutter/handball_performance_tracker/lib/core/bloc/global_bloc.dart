@@ -9,13 +9,15 @@ part 'global_state.dart';
 
 class GlobalBloc extends Bloc<GlobalEvent, GlobalState> {
   GameFirebaseRepository gameRepository;
+  TeamFirebaseRepository teamRepository;
+  PlayerFirebaseRepository playerRepository;
 
-  GlobalBloc({required GameFirebaseRepository this.gameRepository}) : super(GlobalState().copyWith(status: GlobalStatus.loading)) {
+  GlobalBloc({required GameFirebaseRepository this.gameRepository, required TeamFirebaseRepository this.teamRepository, required PlayerFirebaseRepository this.playerRepository}) : super(GlobalState().copyWith(status: GlobalStatus.loading)) {
     on<LoadGlobalState>((event, emit) async {
       try {
         emit(state.copyWith(status: GlobalStatus.loading));
-        List<Player> fetchedPlayers = await PlayerFirebaseRepository().fetchPlayers();
-        List<Team> fetchedTeams = await TeamFirebaseRepository().fetchTeams(allPlayers: fetchedPlayers);
+        List<Player> fetchedPlayers = await playerRepository.fetchPlayers();
+        List<Team> fetchedTeams = await teamRepository.fetchTeams(allPlayers: fetchedPlayers);
         List<Game> fetchedGames = await gameRepository.fetchGames();
         emit(state.copyWith(status: GlobalStatus.success, allTeams: fetchedTeams, allPlayers: fetchedPlayers, allGames: fetchedGames));
       } catch (e) {

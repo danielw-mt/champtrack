@@ -15,15 +15,42 @@ class HandballApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiRepositoryProvider(
       providers: [
-        RepositoryProvider<AuthRepository>(create: (context) => AuthRepository()),
-        RepositoryProvider<ClubRepository>(create: (context) => ClubFirebaseRepository()),
-        RepositoryProvider<GameFirebaseRepository>(create: (context) => GameFirebaseRepository()),
+        RepositoryProvider<AuthRepository>(
+            create: (context) => AuthRepository()),
+        RepositoryProvider<ClubRepository>(
+            create: (context) => ClubFirebaseRepository()),
+        RepositoryProvider<GameFirebaseRepository>(
+            create: (context) => GameFirebaseRepository()),
+        RepositoryProvider<TeamFirebaseRepository>(
+            create: (context) => TeamFirebaseRepository()),
+        RepositoryProvider<PlayerFirebaseRepository>(
+            create: (context) => PlayerFirebaseRepository()),
       ],
       child: MultiBlocProvider(
         providers: [
-          BlocProvider<AuthBloc>(create: (context) => AuthBloc(authRepository: RepositoryProvider.of<AuthRepository>(context))..add(StartApp())),
-          BlocProvider<GlobalBloc>(create: (context) => GlobalBloc(gameRepository: RepositoryProvider.of<GameFirebaseRepository>(context))..add(LoadGlobalState())),
-          BlocProvider<StatisticsBloc>(create: (context) => StatisticsBloc(gameRepository: RepositoryProvider.of<GameFirebaseRepository>(context))..add(InitStatistics())),
+          BlocProvider<AuthBloc>(
+              create: (context) => AuthBloc(
+                  authRepository:
+                      RepositoryProvider.of<AuthRepository>(context))
+                ..add(StartApp())),
+          BlocProvider<GlobalBloc>(
+              create: (context) => GlobalBloc(
+                  gameRepository:
+                      RepositoryProvider.of<GameFirebaseRepository>(context),
+                  playerRepository:
+                      RepositoryProvider.of<PlayerFirebaseRepository>(context),
+                  teamRepository:
+                      RepositoryProvider.of<TeamFirebaseRepository>(context))
+                ..add(LoadGlobalState())),
+          BlocProvider<StatisticsBloc>(
+              create: (context) => StatisticsBloc(
+                  gameRepository:
+                      RepositoryProvider.of<GameFirebaseRepository>(context),
+                  playerRepository:
+                      RepositoryProvider.of<PlayerFirebaseRepository>(context),
+                  teamRepository:
+                      RepositoryProvider.of<TeamFirebaseRepository>(context))
+                ..add(InitStatistics())),
         ],
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
