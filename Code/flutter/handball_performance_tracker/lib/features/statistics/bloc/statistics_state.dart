@@ -1,8 +1,6 @@
 part of 'statistics_bloc.dart';
 
-
-
-enum StatisticsStatus { loading, loaded, error}
+enum StatisticsStatus { loading, loaded, error }
 
 class StatisticsState extends Equatable {
   StatisticsStatus status = StatisticsStatus.loading;
@@ -17,6 +15,8 @@ class StatisticsState extends Equatable {
   Player selectedPlayer = Player();
   int selectedStatScreenIndex = 0;
   Map<String, dynamic> statistics = {};
+  TeamStatistics selectedTeamStats = TeamStatistics();
+
   //bool statistics_ready = false;
   bool heatmapShowsAttack = true;
   String selectedHeatmapParameter = "goals";
@@ -33,6 +33,7 @@ class StatisticsState extends Equatable {
     selectedPlayer,
     selectedStatScreenIndex,
     statistics,
+    selectedTeamStats,
     heatmapShowsAttack,
     selectedHeatmapParameter,
   }) {
@@ -63,6 +64,9 @@ class StatisticsState extends Equatable {
     if (statistics != null) {
       this.statistics = statistics;
     }
+    if (selectedTeamStats != null) {
+      this.selectedTeamStats = selectedTeamStats;
+    }
     if (heatmapShowsAttack != null) {
       this.heatmapShowsAttack = heatmapShowsAttack;
     }
@@ -84,6 +88,7 @@ class StatisticsState extends Equatable {
         this.selectedPlayer,
         this.selectedStatScreenIndex,
         this.statistics,
+        this.selectedTeamStats,
         this.heatmapShowsAttack,
         this.selectedHeatmapParameter,
       ];
@@ -100,6 +105,7 @@ class StatisticsState extends Equatable {
     Player? selectedPlayer,
     int? selectedStatScreenIndex,
     Map<String, dynamic>? statistics,
+    TeamStatistics? selectedTeamStats,
     bool? heatmapShowsAttack,
     String? selectedHeatmapParameter,
   }) {
@@ -117,6 +123,7 @@ class StatisticsState extends Equatable {
       selectedStatScreenIndex:
           selectedStatScreenIndex ?? this.selectedStatScreenIndex,
       statistics: statistics ?? this.statistics,
+      selectedTeamStats: selectedTeamStats ?? this.selectedTeamStats,
       heatmapShowsAttack: heatmapShowsAttack ?? this.heatmapShowsAttack,
       selectedHeatmapParameter:
           selectedHeatmapParameter ?? this.selectedHeatmapParameter,

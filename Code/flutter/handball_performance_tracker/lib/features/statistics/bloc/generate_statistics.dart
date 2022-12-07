@@ -1,19 +1,9 @@
-import 'dart:js';
 
-import 'package:bloc/bloc.dart';
-import 'package:equatable/equatable.dart';
 import 'package:handball_performance_tracker/core/core.dart';
 import 'package:handball_performance_tracker/core/constants/game_actions.dart';
 import 'package:handball_performance_tracker/data/ef_score.dart';
 import 'package:handball_performance_tracker/data/models/models.dart';
-import 'package:handball_performance_tracker/data/repositories/auth_repository.dart';
-import 'package:handball_performance_tracker/data/repositories/game_repository.dart';
-import 'package:handball_performance_tracker/data/repositories/player_repository.dart';
-import 'package:handball_performance_tracker/data/repositories/team_repository.dart';
 import 'dart:collection';
-
-import 'package:handball_performance_tracker/features/game/game.dart';
-
 
 /// Generate entire statistics map from
   ///
@@ -23,10 +13,18 @@ import 'package:handball_performance_tracker/features/game/game.dart';
   Map<String, dynamic> generateStatistics(List<Game> games, List<Player> players) {
     Map<String, dynamic> _statistics = {};
     //developer.log("generate game statistics");
+    // print length of games
+    print("games length");
+    print(games.length);
     games.forEach((Game game) {
       // quality check that game document contains all the fields it needs and also actions
       // otherwise don't deal with this game
+      // print game object
+      print("game chck");
+      print(game);
       if (game.teamId != null && game.startTime != null && !game.gameActions.isEmpty && game.id != null && game.stopWatchTimer != null) {
+        print("game is valid");
+        print(_statistics);
         List<GameAction> actions = game.gameActions;
         // generate statistics for each player
         Map<String, dynamic> playerStats = _generatePlayerStatistics(actions, players);
@@ -57,6 +55,8 @@ import 'package:handball_performance_tracker/features/game/game.dart';
         //
       }
     });
+    // print done with generate statistics
+    print("done with generate statistics");
     return _statistics;
   }
 

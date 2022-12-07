@@ -213,7 +213,7 @@ class _PlayerStatisticsState extends State<PlayerStatistics> {
                               child: Column(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
-                              TeamSelector(onTeamSelected: onTeamSelected),
+                              TeamSelector(),
                               GameSelector(), //games: _games, onGameSelected: onGameSelected),
                               PlayerSelector()
                             ],

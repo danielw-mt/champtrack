@@ -1,75 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-// import 'package:handball_performance_tracker/core/constants/game_actions.dart';
 import 'package:handball_performance_tracker/features/statistics/statistics.dart';
 import 'package:handball_performance_tracker/core/constants/game_actions.dart';
-// import 'package:handball_performance_tracker/oldcontrollers/persistent_controller.dart';
-// import 'package:handball_performance_tracker/oldcontrollers/temp_controller.dart';
-// import 'statistic_card_elements.dart';
-// import 'package:handball_performance_tracker/data/models/player_model.dart';
 import 'package:handball_performance_tracker/data/models/game_model.dart';
 import 'package:handball_performance_tracker/data/models/team_model.dart';
-// import 'package:handball_performance_tracker/core/constants/game_actions.dart';
-// import 'package:logger/logger.dart';
-// import 'statistic_dropdowns.dart';
 
-class TeamStatistics extends StatefulWidget {
-  const TeamStatistics({Key? key}) : super(key: key);
 
-  @override
-  State<TeamStatistics> createState() => _TeamStatisticsState();
-}
-
-class _TeamStatisticsState extends State<TeamStatistics> {
-  //PersistentController _persistentController = Get.put(PersistentController());
-  // StatisticsBloc _statisticsBloc = ;
-  List<Game> _games = [];
-  List<Team> _teams = [];
-  Map<String, dynamic> _statistics = {};
-  Team _selectedTeam = Team(players: [], onFieldPlayers: []);
-  Game _selectedGame = Game(date: DateTime.fromMicrosecondsSinceEpoch(0));
-
-  @override
-  void initState() {
-    _teams = []; //_persistentController.getAvailableTeams();
-    _statistics = {}; // _persistentController.getStatistics();
-    // index access safety
-    if (_teams.length > 0) {
-      //_selectedTeam = _teams[0];
-      // get allGame that are cached in persistentController
-      List<Game> allGames = []; // _persistentController.getAllGames(teamId: _selectedTeam.id);
-      // only actually show games that are in the statistics map
-      _games = allGames.where((game) => _statistics.containsKey(game.id)).toList();
-      // if there are no teams ofc there are no players and no games
-    } else {
-      _games = [];
-    }
-    if (_games.length > 0) {
-      _selectedGame = _games[0];
-    }
-    super.initState();
-  }
-
-  void onGameSelected(Game game) {
-    setState(() {
-      _selectedGame = game;
-    });
-  }
-
-  void onTeamSelected(Team team) {
-    setState(() {
-      _selectedTeam = team;
-      //List<Game> allGames = []; // _persistentController.getAllGames(teamId: _selectedTeam.id);
-      // only actually show games that are in the statistics map
-      // _games = allGames.where((game) => _statistics.containsKey(game.id)).toList();
-      // _selectedGame = _games[0];
-    });
-  }
+class TeamStatistics extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
     // get statistics bloc
     final statisticsBloc = context.watch<StatisticsBloc>();
+    Map<String, dynamic> _statistics = statisticsBloc.state.statistics;
+    // prnt statistics keys
+    print("statistics keys: ${_statistics.keys}");
+    Team _selectedTeam = statisticsBloc.state.selectedTeam;
+    Game _selectedGame = statisticsBloc.state.selectedGame;
+    // print selected team and game
+    print("selected team: ${_selectedTeam.name}");
+    print("selected game: ${_selectedGame.id}");
     Map<String, int> actionCounts = {};
     Map<String, List<int>> actionSeries = {};
     int startTime = 0;
@@ -83,6 +33,9 @@ class _TeamStatisticsState extends State<TeamStatistics> {
     List<int> timeStamps = [];
     try { 
       Map<String, dynamic> teamStats = _statistics[_selectedGame.id]["team_stats"][_selectedTeam.id];
+      // print team stats keys
+      print("team stats keys: ${teamStats.keys}");
+
       //Map<String, dynamic> teamStats = _statistics[statisticsBloc.state.selectedGame.id]["team_stats"][statisticsBloc.state.selectedTeam.id];
       // try to get action counts for the player
       actionCounts = teamStats["action_counts"];
@@ -131,7 +84,7 @@ class _TeamStatisticsState extends State<TeamStatistics> {
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
-                                TeamSelector(onTeamSelected: onTeamSelected),
+                                TeamSelector(),
                                 GameSelector()
                               ],
                             ),

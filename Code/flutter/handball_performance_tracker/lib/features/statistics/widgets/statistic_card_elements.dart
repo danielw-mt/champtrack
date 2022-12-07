@@ -1,22 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-// import 'package:handball_performance_tracker/core/constants/game_actions.dart';
 import 'package:handball_performance_tracker/features/statistics/statistics.dart';
-// import 'package:handball_performance_tracker/oldcontrollers/persistent_controller.dart';
-// import 'package:handball_performance_tracker/oldcontrollers/temp_controller.dart';
-// import 'statistic_card_elements.dart';
-import 'package:handball_performance_tracker/data/models/player_model.dart';
 import 'package:handball_performance_tracker/core/utils/utils.dart';
-import 'package:handball_performance_tracker/data/models/game_model.dart';
-import 'package:handball_performance_tracker/data/models/team_model.dart';
 import 'package:handball_performance_tracker/core/constants/strings_general.dart';
-import 'package:handball_performance_tracker/oldcontrollers/persistent_controller.dart';
-import '../../../../old-widgets/statistic_screen/bar_chart_example.dart';
-import 'charts.dart';
-// import 'package:get/get.dart';
-// import '../../data/models/player_model.dart';
-// import '../../old-utils/action_mapping.dart';
 
 class PenaltyInfoCard extends StatelessWidget {
   final int redCards;
@@ -94,7 +80,6 @@ class ActionsCard extends StatefulWidget {
 }
 
 class _ActionsCardState extends State<ActionsCard> {
-  // PersistentController persistentController = Get.find<PersistentController>();
   int currentTab = 0;
 
   @override
