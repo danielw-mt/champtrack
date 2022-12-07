@@ -38,7 +38,7 @@ class SwitchField extends StatisticsEvent {
 }
 
 class SelectHeatmapParameter extends StatisticsEvent {
-  final String? parameter;
+  final String parameter;
 
   SelectHeatmapParameter({required this.parameter});
 }

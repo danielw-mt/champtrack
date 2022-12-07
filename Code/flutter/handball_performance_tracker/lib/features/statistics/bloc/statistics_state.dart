@@ -10,7 +10,7 @@ class StatisticsState extends Equatable {
   Game selectedGame =
       Game(date: DateTime.now()); // TODO check if this is needed
   Player selectedPlayer = Player();
-  int selectedStatScreenIndex;
+  int selectedStatScreenIndex = 0;
   Map<String, dynamic> statistics = {};
   //bool statistics_ready = false;
   bool heatmapShowsAttack = true;
@@ -25,7 +25,7 @@ class StatisticsState extends Equatable {
     selectedTeamGamePlayers,
     selectedGame,
     selectedPlayer,
-    this.selectedStatScreenIndex = 2,
+    selectedStatScreenIndex,
     statistics,
     heatmapShowsAttack,
     selectedHeatmapParameter,
