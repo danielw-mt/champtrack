@@ -1,6 +1,11 @@
 part of 'statistics_bloc.dart';
 
+
+
+enum StatisticsStatus { loading, loaded, error}
+
 class StatisticsState extends Equatable {
+  StatisticsStatus status = StatisticsStatus.loading;
   List<Game> allGames = [];
   List<Team> allTeams = [];
   List<Player> allPlayers = [];
@@ -17,6 +22,7 @@ class StatisticsState extends Equatable {
   String selectedHeatmapParameter = "goals";
 
   StatisticsState({
+    this.status = StatisticsStatus.loading,
     allGames,
     allTeams,
     allPlayers,
@@ -67,6 +73,7 @@ class StatisticsState extends Equatable {
 
   @override
   List<Object> get props => [
+        this.status,
         this.allGames,
         this.allTeams,
         this.allPlayers,
@@ -82,6 +89,7 @@ class StatisticsState extends Equatable {
       ];
 
   StatisticsState copyWith({
+    StatisticsStatus? status,
     List<Game>? allGames,
     List<Team>? allTeams,
     List<Player>? allPlayers,
@@ -96,6 +104,7 @@ class StatisticsState extends Equatable {
     String? selectedHeatmapParameter,
   }) {
     return StatisticsState(
+      status: status ?? this.status,
       allGames: allGames ?? this.allGames,
       allTeams: allTeams ?? this.allTeams,
       allPlayers: allPlayers ?? this.allPlayers,
