@@ -12,6 +12,8 @@ import 'package:handball_performance_tracker/data/repositories/player_repository
 import 'package:handball_performance_tracker/data/repositories/team_repository.dart';
 import 'dart:collection';
 
+import 'package:handball_performance_tracker/features/game/game.dart';
+
 part 'statistics_event.dart';
 part 'statistics_state.dart';
 
@@ -59,6 +61,20 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
       print("Select player event");
       print(event.player);
       emit(state.copyWith(selectedPlayer: event.player));
+    });
+
+    on<SwitchField>((event, emit) {
+      
+      if (state.heatmapShowsAttack) {
+        emit(state.copyWith(heatmapShowsAttack: false));
+      } else {
+        emit(state.copyWith(heatmapShowsAttack: true));
+      }
+        
+    });
+
+    on<SelectHeatmapParameter>((event, emit) {
+      emit(state.copyWith(selectedHeatmapParameter: event.parameter));
     });
 
     on<InitStatistics>((event, emit) async {

@@ -31,6 +31,18 @@ class SelectPlayer extends StatisticsEvent {
   SelectPlayer({required this.player});
 }
 
+class SwitchField extends StatisticsEvent {
+  final bool switchField;
+
+  SwitchField({required this.switchField});
+}
+
+class SelectHeatmapParameter extends StatisticsEvent {
+  final String? parameter;
+
+  SelectHeatmapParameter({required this.parameter});
+}
+
 class InitStatistics extends StatisticsEvent {
   //final Team team = context.read<GlobalBloc>().state.selectedTeam;
 

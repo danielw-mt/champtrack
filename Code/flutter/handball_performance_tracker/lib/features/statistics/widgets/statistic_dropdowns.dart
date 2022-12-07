@@ -3,7 +3,7 @@ import 'dart:js';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:handball_performance_tracker/core/constants/game_actions.dart';
-import 'package:handball_performance_tracker/core/constants/stringsGeneral.dart';
+import 'package:handball_performance_tracker/core/constants/strings_general.dart';
 import 'package:handball_performance_tracker/features/statistics/bloc/statistics_bloc.dart';
 import 'package:handball_performance_tracker/oldcontrollers/persistent_controller.dart';
 import 'package:handball_performance_tracker/oldcontrollers/temp_controller.dart';

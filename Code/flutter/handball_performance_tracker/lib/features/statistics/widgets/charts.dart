@@ -4,7 +4,7 @@ import 'package:pie_chart/pie_chart.dart' as pie;
 import 'dart:math';
 import 'dart:core';
 import 'package:handball_performance_tracker/core/core.dart';
-import 'package:handball_performance_tracker/core/constants/stringsGeneral.dart';
+import 'package:handball_performance_tracker/core/constants/strings_general.dart';
 
 class LineChartWidget extends StatelessWidget {
   final List<int> timeStamps;

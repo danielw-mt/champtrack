@@ -40,8 +40,14 @@ class GameFirebaseRepository extends GameRepository {
     DocumentReference gameRef = await clubSnapshot.docs[0].reference
         .collection("games")
         .add(game.toEntity().toDocument());
+    // print length of _games
+    print("create Game games length");
+    print(_games.length);
     // create new game in _games
     _games.add(game.copyWith(id: gameRef.id));
+
+    print("create Game games length after adding");
+    print(_games.length);
 
     //return game.copyWith(id: gameRef.id);
     print("added game");
@@ -126,6 +132,8 @@ class GameFirebaseRepository extends GameRepository {
         .doc(game.id)
         .update(game.toEntity().toDocument());
     // update game in _games
+    print("games length");
+    print(_games.length);
     _games[_games.indexWhere((element) => element.id == game.id)] = game;
   }
 

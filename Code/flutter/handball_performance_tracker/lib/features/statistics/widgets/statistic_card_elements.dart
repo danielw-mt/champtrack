@@ -10,7 +10,7 @@ import 'package:handball_performance_tracker/data/models/player_model.dart';
 import 'package:handball_performance_tracker/core/utils/utils.dart';
 import 'package:handball_performance_tracker/data/models/game_model.dart';
 import 'package:handball_performance_tracker/data/models/team_model.dart';
-import 'package:handball_performance_tracker/core/constants/stringsGeneral.dart';
+import 'package:handball_performance_tracker/core/constants/strings_general.dart';
 import 'package:handball_performance_tracker/oldcontrollers/persistent_controller.dart';
 import '../../../../old-widgets/statistic_screen/bar_chart_example.dart';
 import 'charts.dart';
@@ -485,3 +485,173 @@ class _PlayerListState extends State<PlayerList> {
     ));
   }
 }
+
+// class HeatMapCard extends StatefulWidget {
+//   final Map<String, dynamic> actionCoordinatesWithContext;
+
+//   const HeatMapCard({Key? key, required this.actionCoordinatesWithContext})
+//       : super(key: key);
+//   @override
+//   _HeatMapCardState createState() =>
+//       _HeatMapCardState(actionCoordinatesWithContext);
+// }
+
+class HeatMapCard extends StatelessWidget{
+  //final Map<String, dynamic> actionCoordinatesWithContext;
+  //HeatMapCard({super.key, required this.actionCoordinatesWithContext});
+  //_HeatMapCardState(this.actionCoordinatesWithContext);
+
+  String _selectedDropdownElement = "";
+  List<String> _dropDownElements = [];
+
+  @override
+  // void initState() {
+  //   super.initState();
+
+  //   print("fake action context");
+  //   print(actionContextFake);
+  //   print("fake action coordinates");
+  //   print(actionCoordinatesFake);
+
+  //   // TODO remove here once the real data is available
+  //   for (String action in actionCoordinatesFake.keys) {
+  //     List<dynamic>? coordinates = actionCoordinatesFake[action];
+  //     List<String>? context = actionContextFake[action];
+  //     List<dynamic> coordinatesWithContext = [];
+  //     for (int i = 0; i < coordinates!.length; i++) {
+  //       coordinatesWithContext
+  //           .add({"coordinates": coordinates[i], "context": context![i]});
+  //     }
+  //     actionCoordinatesWithContext[action] = coordinatesWithContext;
+  //   }
+  //   print("coordinates with context");
+  //   print(actionCoordinatesWithContext);
+  // }
+
+  final Map<String, List<dynamic>> actionCoordinatesFake = {
+    "parade": [
+      [3.0, 3.0]
+    ],
+    "goal_goalkeeper": [
+      [3.0, 3.0],
+      [20.0, 180.0]
+    ],
+    "block_steal": [
+      [200.0, 33.0],
+      [31.0, 35.0],
+      [20.0, 30.0]
+    ],
+    "goal": [
+      [33.0, 63.0],
+      [43.0, 34.0],
+      [30.0, 80.0],
+      [140, 280]
+    ]
+  };
+
+  final Map<String, List<String>> actionContextFake = {
+    "parade": ["goalkeeper"],
+    "goal_goalkeeper": ["goalkeeper", "goalkeeper"],
+    "block_steal": ["attack", "defense", "defense"],
+    "goal": [
+      "attack",
+      "attack",
+      "attack",
+      "defense",
+    ]
+  };
+
+  Map<String, dynamic> actionCoordinatesWithContextFake = {};
+
+  
+
+  @override
+  Widget build(BuildContext context) {
+    // get statisticsbloc 
+    final StatisticsBloc statisticsBloc = BlocProvider.of<StatisticsBloc>(context);
+
+    if (actionCoordinatesWithContext.length == 0) {
+      return Center(child: Text(StringsGeneral.lNoDataAvailable));
+    }
+    _dropDownElements = actionCoordinatesWithContext.keys.toList();
+
+    // if (actionCoordinatesWithContext.keys.length > 0) {
+    //   _dropDownElements = actionCoordinatesWithContext.keys.toList();
+    //   //print(_dropDownElements);
+    //   _selectedDropdownElement = _dropDownElements[0];
+    // }
+
+    // if we did not select an element yet, select the first one
+    if (_selectedDropdownElement == "") {
+      _selectedDropdownElement = _dropDownElements[0];
+    }
+
+    // if a dropdown element is selected that is not available. (i.e. remnant from loading another game statistic previously)
+    if (!_dropDownElements.contains(_selectedDropdownElement)) {
+      _selectedDropdownElement = _dropDownElements[0];
+    }
+
+    return Card(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Flexible(
+              flex: 1,
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text("Wurfverteilung"),
+                    buildActionTagDropdown(context)
+                  ])),
+          Expanded(
+            flex: 12,
+            child: Container(),
+            // CardFieldSwitch(
+            //     actionCoordinatesWithContext[_selectedDropdownElement]!),
+          ),
+        ],
+      ),
+    );
+  }
+
+  DropdownButton buildActionTagDropdown(BuildContext context) {
+    return DropdownButton<String>(
+      isExpanded: false,
+      // Initial Value
+      value: _selectedDropdownElement,
+
+      // Down Arrow Icon
+      icon: const Icon(Icons.keyboard_arrow_down),
+
+      // Array list of items
+      items: _dropDownElements.map((String dropdownElement) {
+        if (actionCoordinatesWithContext[dropdownElement] == null) {
+          print("cannot display dropdown element " +
+              dropdownElement +
+              " which has no data");
+          return DropdownMenuItem(
+            child: Text("Cannot display statistic"),
+            value: dropdownElement,
+          );
+        }
+        return DropdownMenuItem(
+          value: dropdownElement,
+          // if the element is Ef-score don't do anything.
+          //If it is one of the action type series then convert the tag to the correct string using realActionType
+          child: Text(realActionTag(dropdownElement)),
+        );
+      }).toList(),
+      // After selecting the desired option,it will
+      // change button value to selected value
+      onChanged: (String? newDropdownElement) {
+        // call SelectHeatMapParameter event from statistics bloc
+        context.read<StatisticsBloc>().add(SelectHeatmapParameter(parameter: newDropdownElement!));
+
+        // setState(() {
+        //   _selectedDropdownElement = newDropdownElement!;
+        // });
+      },
+    );
+  }
+}
+

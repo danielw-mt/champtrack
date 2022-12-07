@@ -72,7 +72,7 @@ class DefenseLayout extends StatelessWidget {
           children: [
             Flexible(
                 child: ActionButton(
-              actionTag: blockNoBallTag,
+              actionTag: blockTag,
               actionContext: actionContextDefense,
               buttonText: StringsGameScreen.lBlockNoBall,
               buttonColor: Color.fromRGBO(99, 107, 171, 1),

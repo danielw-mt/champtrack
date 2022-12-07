@@ -13,6 +13,8 @@ class StatisticsState extends Equatable {
   int selectedStatScreenIndex;
   Map<String, dynamic> statistics = {};
   //bool statistics_ready = false;
+  bool heatmapShowsAttack = true;
+  String selectedHeatmapParameter = "goals";
 
   StatisticsState({
     allGames,
@@ -25,6 +27,8 @@ class StatisticsState extends Equatable {
     selectedPlayer,
     this.selectedStatScreenIndex = 2,
     statistics,
+    heatmapShowsAttack,
+    selectedHeatmapParameter,
   }) {
     if (allGames != null) {
       this.allGames = allGames;
@@ -53,6 +57,12 @@ class StatisticsState extends Equatable {
     if (statistics != null) {
       this.statistics = statistics;
     }
+    if (heatmapShowsAttack != null) {
+      this.heatmapShowsAttack = heatmapShowsAttack;
+    }
+    if (selectedHeatmapParameter != null) {
+      this.selectedHeatmapParameter = selectedHeatmapParameter;
+    }
   }
 
   @override
@@ -67,6 +77,8 @@ class StatisticsState extends Equatable {
         this.selectedPlayer,
         this.selectedStatScreenIndex,
         this.statistics,
+        this.heatmapShowsAttack,
+        this.selectedHeatmapParameter,
       ];
 
   StatisticsState copyWith({
@@ -80,6 +92,8 @@ class StatisticsState extends Equatable {
     Player? selectedPlayer,
     int? selectedStatScreenIndex,
     Map<String, dynamic>? statistics,
+    bool? heatmapShowsAttack,
+    String? selectedHeatmapParameter,
   }) {
     return StatisticsState(
       allGames: allGames ?? this.allGames,
@@ -94,6 +108,9 @@ class StatisticsState extends Equatable {
       selectedStatScreenIndex:
           selectedStatScreenIndex ?? this.selectedStatScreenIndex,
       statistics: statistics ?? this.statistics,
+      heatmapShowsAttack: heatmapShowsAttack ?? this.heatmapShowsAttack,
+      selectedHeatmapParameter:
+          selectedHeatmapParameter ?? this.selectedHeatmapParameter,
     );
   }
 }
