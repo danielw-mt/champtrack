@@ -8,39 +8,8 @@ const String page1 = "Team";
 const String page2 = "Player";
 const String page3 = "Vergleich";
 
-// class StatisticsView extends StatefulWidget {
-//   @override
-//   _StatisticsScreenState createState() => _StatisticsScreenState();
-// }
-
 class StatisticsView extends StatelessWidget {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  //final TempController tempController = Get.put(TempController());
-
-  // late List<Widget> _pages;
-  // late Widget _teamStatistics;
-  // late Widget _playerStatistics;
-  // late Widget _compStatistics;
-  // late int _currentIndex;
-  // late Widget _currentPage;
-
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   _teamStatistics = const TeamStatistics();
-  //   _playerStatistics = const PlayerStatistics();
-  //   _compStatistics = ComparisonStatistics(changePage: _changeTab);
-  // _pages = [_teamStatistics, _playerStatistics, _compStatistics];
-  //   _currentIndex = 0;
-  //   _currentPage = _teamStatistics;
-  // }
-
-  // void _changeTab(int index) {
-  //   setState(() {
-  //     _currentIndex = index;
-  //     _currentPage = _pages[index];
-  //   });
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -54,12 +23,6 @@ class StatisticsView extends StatelessWidget {
         backgroundColor: Colors.white,
         key: _scaffoldKey,
         drawer: SidebarView(),
-        // if drawer is closed notify, so if game is running the back to game button appears on next opening
-        // onDrawerChanged: (isOpened) {
-        //   if (!isOpened) {
-        //     tempController.setMenuIsEllapsed(false);
-        //   }
-        // },
         body: _buildStatisticsBody(context),
         bottomNavigationBar: BottomNavigationBar(
             onTap: (index) {

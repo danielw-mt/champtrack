@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:handball_performance_tracker/data/repositories/repositories.dart';
 import 'package:handball_performance_tracker/features/game/game.dart';
 import 'package:handball_performance_tracker/data/models/models.dart';
 
@@ -28,7 +29,7 @@ class GamePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => GameBloc()
+      create: (_) => GameBloc(gameRepository: context.watch<GameFirebaseRepository>())
         ..add(InitializeGame(
             onFieldPlayers: onFieldPlayers,
             selectedTeam: selectedTeam,
