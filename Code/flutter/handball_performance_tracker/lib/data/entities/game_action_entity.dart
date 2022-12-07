@@ -68,11 +68,11 @@ class GameActionEntity extends Equatable {
       }
       return GameActionEntity(
         documentReference: snap.reference,
-        context: data['context'] as String,
-        playerId: data['playerId'] as String,
-        tag: data['tag'] as String,
+        context: data['context'] != null ? data['context'] as String : "",
+        playerId: data['playerId'] != null ? data['playerId'] as String : "",
+        tag: data['tag'] != null ? data['tag'] as String : "",
         throwLocation: throwLocation,
-        timestamp: data['timestamp'] as int,
+        timestamp: data['timestamp'] != null ? data['timestamp'] as int : -1,
       );
     }
     // this is in case that we are trying to access a game that does not exist anymore in the DB or could not be found
