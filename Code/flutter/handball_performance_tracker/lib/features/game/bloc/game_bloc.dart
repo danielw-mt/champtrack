@@ -14,6 +14,8 @@ part 'game_event.dart';
 part 'game_state.dart';
 
 class GameBloc extends Bloc<GameEvent, GameState> {
+  GameFirebaseRepository gameRepository;
+
   /// Periodically checks if there is a difference between the gameState and what has been synced to the database already.
   /// If there is a difference, it will sync the gameState to the database.
   void runGameSync() {
@@ -24,7 +26,8 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     List<GameAction> syncedGameActions = [];
 
     Timer.periodic(const Duration(seconds: 10), (timer) async {
-      if (state.documentReference != null) {
+      // only sync if the game is running
+      if (state.documentReference != null && state.status != GameStatus.initial && state.status != GameStatus.paused) {
         // if any difference is found in the metadata of the game (onFieldPlayers, scoreHome, scoreOpponent, stopWatchTime) sync the metadata
         if (!state.onFieldPlayers
                 .every((Player player) => syncedOnFieldPlayers.where((Player playerElement) => playerElement.id == player.id).toList().isNotEmpty) ||
@@ -34,16 +37,24 @@ class GameBloc extends Bloc<GameEvent, GameState> {
           List<String> onFieldPlayerIds = state.onFieldPlayers.map((Player player) => player.id.toString()).toList();
           Game newGame = Game(
             id: state.documentReference!.id,
+            path: state.documentReference!.path,
+            teamId: state.selectedTeam.id,
             date: state.date,
+            // TODO add start time here and start time to state
+            // TODO implement stopping game and adding stop time
+            scoreHome: state.ownScore,
+            scoreOpponent: state.opponentScore,
             isAtHome: state.isHomeGame,
             location: state.location,
             opponent: state.opponent,
+            // TODO add season here and season to state
+            lastSync: DateTime.now().millisecondsSinceEpoch.toString(),
             onFieldPlayers: onFieldPlayerIds,
-            scoreHome: state.ownScore,
-            scoreOpponent: state.opponentScore,
+            attackIsLeft: state.attackIsLeft,
             stopWatchTimer: state.stopWatchTimer,
+            gameActions: state.gameActions,
           );
-          await GameFirebaseRepository().updateGame(newGame).then((value) {
+          await this.gameRepository.updateGame(newGame).then((value) {
             // on success update the variables
             syncedOnFieldPlayers = state.onFieldPlayers.toList();
             syncedScoreHome = state.ownScore;
@@ -80,7 +91,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
             // only add actions that have a player Id assigned
             if (gameAction.playerId != "") {
               try {
-                DocumentReference docRef = await GameFirebaseRepository().createAction(gameAction, state.documentReference!.id);
+                DocumentReference docRef = await this.gameRepository.createAction(gameAction, state.documentReference!.id);
                 state.gameActions[state.gameActions.indexOf(gameAction)].id = docRef.id;
                 state.gameActions[state.gameActions.indexOf(gameAction)].path = docRef.path;
               } catch (e) {
@@ -95,7 +106,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
           await Future.forEach(removedGameActions, (GameAction gameAction) {
             if (gameAction.playerId != "") {
               try {
-                GameFirebaseRepository().deleteAction(gameAction, state.documentReference!.id);
+                this.gameRepository.deleteAction(gameAction, state.documentReference!.id);
               } catch (e) {
                 print("Error syncing gameAction: $e");
               }
@@ -112,18 +123,18 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     });
   }
 
-  GameBloc() : super(GameState()) {
+  GameBloc({required GameFirebaseRepository this.gameRepository}) : super(GameState()) {
     on<InitializeGame>((event, emit) async {
       try {
         Game game = Game(
             date: event.date,
             opponent: event.opponent,
             location: event.location,
-            teamId: event.selectedTeam.id,
+            teamId: event.selectedTeam.id!,
             isAtHome: event.isHomeGame,
             attackIsLeft: event.attackIsLeft,
             startTime: DateTime.now().millisecondsSinceEpoch);
-        DocumentReference gameRef = await GameFirebaseRepository().createGame(game);
+        DocumentReference gameRef = await this.gameRepository.createGame(game);
 
         // create the initial game state. Only overload the necessary fields that are not already defined as necessary in the constructor
         emit(GameState(
@@ -153,7 +164,6 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     });
 
     on<StartGame>((event, emit) {
-      // TODO update game in repository
       StopWatchTimer stopWatchTimer = state.stopWatchTimer;
       stopWatchTimer.onExecute.add(StopWatchExecute.start);
       emit(state.copyWith(status: GameStatus.running, stopWatchTimer: stopWatchTimer));

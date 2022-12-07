@@ -29,17 +29,14 @@ class GameFirebaseRepository extends GameRepository {
   Future<DocumentReference> createGame(Game game) async {
     QuerySnapshot clubSnapshot = await FirebaseFirestore.instance
         .collection('clubs')
-        .where("roles.${FirebaseAuth.instance.currentUser!.uid}",
-            isEqualTo: "admin")
+        .where("roles.${FirebaseAuth.instance.currentUser!.uid}", isEqualTo: "admin")
         .limit(1)
         .get();
     if (clubSnapshot.docs.length != 1) {
       throw Exception("No club found for user id. Cannot fetch game");
     }
     print("trying to add game");
-    DocumentReference gameRef = await clubSnapshot.docs[0].reference
-        .collection("games")
-        .add(game.toEntity().toDocument());
+    DocumentReference gameRef = await clubSnapshot.docs[0].reference.collection("games").add(game.toEntity().toDocument());
     // print length of _games
     print("create Game games length");
     print(_games.length);
@@ -59,17 +56,13 @@ class GameFirebaseRepository extends GameRepository {
     Game? game = null;
     QuerySnapshot clubSnapshot = await FirebaseFirestore.instance
         .collection('clubs')
-        .where("roles.${FirebaseAuth.instance.currentUser!.uid}",
-            isEqualTo: "admin")
+        .where("roles.${FirebaseAuth.instance.currentUser!.uid}", isEqualTo: "admin")
         .limit(1)
         .get();
     if (clubSnapshot.docs.length != 1) {
       throw Exception("No club found for user id. Cannot fetch game");
     }
-    DocumentSnapshot gameSnapshot = await clubSnapshot.docs[0].reference
-        .collection("games")
-        .doc(gameId)
-        .get();
+    DocumentSnapshot gameSnapshot = await clubSnapshot.docs[0].reference.collection("games").doc(gameId).get();
     if (gameSnapshot.exists) {
       game = Game.fromEntity(await GameEntity.fromSnapshot(gameSnapshot));
     }
@@ -80,8 +73,7 @@ class GameFirebaseRepository extends GameRepository {
   Future<List<Game>> fetchGames() async {
     QuerySnapshot clubSnapshot = await FirebaseFirestore.instance
         .collection('clubs')
-        .where("roles.${FirebaseAuth.instance.currentUser!.uid}",
-            isEqualTo: "admin")
+        .where("roles.${FirebaseAuth.instance.currentUser!.uid}", isEqualTo: "admin")
         .limit(1)
         .get();
     if (clubSnapshot.docs.length != 1) {
@@ -92,12 +84,9 @@ class GameFirebaseRepository extends GameRepository {
     // await Future.forEach(gamesSnapshot.docs, (DocumentSnapshot gameSnapshot) {
     //   _games.add(Game.fromEntity(GameEntity.fromSnapshot(gameSnapshot)));
 
-    QuerySnapshot gamesSnapshot =
-        await clubSnapshot.docs[0].reference.collection("games").get();
-    await Future.forEach(gamesSnapshot.docs,
-        (DocumentSnapshot gameSnapshot) async {
-      GameEntity.fromSnapshot(gameSnapshot)
-          .then((value) => _games.add(Game.fromEntity(value)));
+    QuerySnapshot gamesSnapshot = await clubSnapshot.docs[0].reference.collection("games").get();
+    await Future.forEach(gamesSnapshot.docs, (DocumentSnapshot gameSnapshot) async {
+      GameEntity.fromSnapshot(gameSnapshot).then((value) => _games.add(Game.fromEntity(value)));
     });
     return _games;
   }
@@ -107,17 +96,13 @@ class GameFirebaseRepository extends GameRepository {
   Future<void> deleteGame(Game game) async {
     QuerySnapshot clubSnapshot = await FirebaseFirestore.instance
         .collection('clubs')
-        .where("roles.${FirebaseAuth.instance.currentUser!.uid}",
-            isEqualTo: "admin")
+        .where("roles.${FirebaseAuth.instance.currentUser!.uid}", isEqualTo: "admin")
         .limit(1)
         .get();
     if (clubSnapshot.docs.length != 1) {
       throw Exception("No club found for user id. Cannot delete game");
     }
-    await clubSnapshot.docs[0].reference
-        .collection("games")
-        .doc(game.id)
-        .delete();
+    await clubSnapshot.docs[0].reference.collection("games").doc(game.id).delete();
     // remove game from _games
     _games.removeWhere((element) => element.id == game.id);
   }
@@ -127,39 +112,33 @@ class GameFirebaseRepository extends GameRepository {
   Future<void> updateGame(Game game) async {
     QuerySnapshot clubSnapshot = await FirebaseFirestore.instance
         .collection('clubs')
-        .where("roles.${FirebaseAuth.instance.currentUser!.uid}",
-            isEqualTo: "admin")
+        .where("roles.${FirebaseAuth.instance.currentUser!.uid}", isEqualTo: "admin")
         .limit(1)
         .get();
     if (clubSnapshot.docs.length != 1) {
       throw Exception("No club found for user id. Cannot update game");
     }
-    await clubSnapshot.docs[0].reference
-        .collection("games")
-        .doc(game.id)
-        .update(game.toEntity().toDocument());
+    await clubSnapshot.docs[0].reference.collection("games").doc(game.id).update(game.toEntity().toDocument());
     // update game in _games
     print("games length");
     print(_games.length);
-    _games[_games.indexWhere((element) => element.id == game.id)] = game;
+    if (_games.where((element) => element.id == game.id).length == 1) {
+      print("updating _games in repository");
+      _games.where((element) => element.id == game.id).toList().first = game;
+    }
   }
 
-  Future<DocumentReference> createAction(
-      GameAction gameAction, String gameId) async {
+  Future<DocumentReference> createAction(GameAction gameAction, String gameId) async {
     QuerySnapshot clubSnapshot = await FirebaseFirestore.instance
         .collection('clubs')
-        .where("roles.${FirebaseAuth.instance.currentUser!.uid}",
-            isEqualTo: "admin")
+        .where("roles.${FirebaseAuth.instance.currentUser!.uid}", isEqualTo: "admin")
         .limit(1)
         .get();
     if (clubSnapshot.docs.length != 1) {
       throw Exception("No club found for user id. Cannot create game action");
     }
-    DocumentReference docRef = await clubSnapshot.docs[0].reference
-        .collection("games")
-        .doc(gameId)
-        .collection("actions")
-        .add(gameAction.toEntity().toDocument());
+    DocumentReference docRef =
+        await clubSnapshot.docs[0].reference.collection("games").doc(gameId).collection("actions").add(gameAction.toEntity().toDocument());
     return docRef;
   }
 
@@ -170,41 +149,28 @@ class GameFirebaseRepository extends GameRepository {
   Future<void> deleteAction(GameAction gameAction, String gameId) async {
     QuerySnapshot clubSnapshot = await FirebaseFirestore.instance
         .collection('clubs')
-        .where("roles.${FirebaseAuth.instance.currentUser!.uid}",
-            isEqualTo: "admin")
+        .where("roles.${FirebaseAuth.instance.currentUser!.uid}", isEqualTo: "admin")
         .limit(1)
         .get();
     if (clubSnapshot.docs.length != 1) {
       throw Exception("No club found for user id. Cannot delete game action");
     }
-    await clubSnapshot.docs[0].reference
-        .collection("games")
-        .doc(gameId)
-        .collection("actions")
-        .doc(gameAction.id)
-        .delete();
+    await clubSnapshot.docs[0].reference.collection("games").doc(gameId).collection("actions").doc(gameAction.id).delete();
   }
 
   Future<List<GameAction>> fetchActions(String gameId) async {
     QuerySnapshot clubSnapshot = await FirebaseFirestore.instance
         .collection('clubs')
-        .where("roles.${FirebaseAuth.instance.currentUser!.uid}",
-            isEqualTo: "admin")
+        .where("roles.${FirebaseAuth.instance.currentUser!.uid}", isEqualTo: "admin")
         .limit(1)
         .get();
     if (clubSnapshot.docs.length != 1) {
       throw Exception("No club found for user id. Cannot fetch game actions");
     }
-    QuerySnapshot actionsSnapshot = await clubSnapshot.docs[0].reference
-        .collection("games")
-        .doc(gameId)
-        .collection("actions")
-        .get();
+    QuerySnapshot actionsSnapshot = await clubSnapshot.docs[0].reference.collection("games").doc(gameId).collection("actions").get();
     List<GameAction> actions = [];
-    await Future.forEach(actionsSnapshot.docs,
-        (DocumentSnapshot actionSnapshot) {
-      actions.add(
-          GameAction.fromEntity(GameActionEntity.fromSnapshot(actionSnapshot)));
+    await Future.forEach(actionsSnapshot.docs, (DocumentSnapshot actionSnapshot) {
+      actions.add(GameAction.fromEntity(GameActionEntity.fromSnapshot(actionSnapshot)));
     });
     return actions;
   }
