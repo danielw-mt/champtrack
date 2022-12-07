@@ -392,7 +392,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
             timestamp: lastAction.timestamp,
             playerId: event.player.id!);
         this.add(UpdatePlayerEfScore(action: assistAction));
-        emit(state.copyWith(ownScore: state.ownScore + 1));
+        // emit(state.copyWith(ownScore: state.ownScore + 1));
         this.add(WorkflowEvent(selectedPlayer: event.player));
       } else if (lastAction.tag == timePenaltyTag) {
         print("player selection: adding time penalty");
@@ -462,7 +462,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
           this.add(SwitchField());
         }
         // adapt score if we scored a goal
-        if (lastTag == goalTag) {
+        if (lastTag == goalTag && state.workflowStep != WorkflowStep.assistSelection) {
           ownScore = ownScore + 1;
         }
         emit(state.copyWith(ownScore: ownScore));

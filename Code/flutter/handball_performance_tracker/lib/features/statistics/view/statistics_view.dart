@@ -87,7 +87,9 @@ class StatisticsView extends StatelessWidget {
 
 Widget _buildStatisticsBody(BuildContext context) {
   final state = context.watch<StatisticsBloc>().state;
-
+  if (state.status != StatisticsStatus.loaded) {
+    return const Center(child: CircularProgressIndicator());
+  }
   if (state.selectedStatScreenIndex == 0) {
     return TeamStatistics();
   }
