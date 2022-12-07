@@ -53,7 +53,7 @@ class GameFirebaseRepository extends GameRepository {
     }
     DocumentSnapshot gameSnapshot = await clubSnapshot.docs[0].reference.collection("games").doc(gameId).get();
     if (gameSnapshot.exists) {
-      game = Game.fromEntity(GameEntity.fromSnapshot(gameSnapshot));
+      game = Game.fromEntity(await GameEntity.fromSnapshot(gameSnapshot));
     }
     return game!;
   }
@@ -70,8 +70,8 @@ class GameFirebaseRepository extends GameRepository {
       throw Exception("No club found for user id. Cannot fetch games");
     }
     QuerySnapshot gamesSnapshot = await clubSnapshot.docs[0].reference.collection("games").get();
-    await Future.forEach(gamesSnapshot.docs, (DocumentSnapshot gameSnapshot) {
-      games.add(Game.fromEntity(GameEntity.fromSnapshot(gameSnapshot)));
+    await Future.forEach(gamesSnapshot.docs, (DocumentSnapshot gameSnapshot) async {
+      GameEntity.fromSnapshot(gameSnapshot).then((value) => games.add(Game.fromEntity(value)));
     });
     return games;
   }
@@ -132,5 +132,22 @@ class GameFirebaseRepository extends GameRepository {
       throw Exception("No club found for user id. Cannot delete game action");
     }
     await clubSnapshot.docs[0].reference.collection("games").doc(gameId).collection("actions").doc(gameAction.id).delete();
+  }
+
+  Future<List<GameAction>> fetchActions(String gameId) async {
+    QuerySnapshot clubSnapshot = await FirebaseFirestore.instance
+        .collection('clubs')
+        .where("roles.${FirebaseAuth.instance.currentUser!.uid}", isEqualTo: "admin")
+        .limit(1)
+        .get();
+    if (clubSnapshot.docs.length != 1) {
+      throw Exception("No club found for user id. Cannot fetch game actions");
+    }
+    QuerySnapshot actionsSnapshot = await clubSnapshot.docs[0].reference.collection("games").doc(gameId).collection("actions").get();
+    List<GameAction> actions = [];
+    await Future.forEach(actionsSnapshot.docs, (DocumentSnapshot actionSnapshot) {
+      actions.add(GameAction.fromEntity(GameActionEntity.fromSnapshot(actionSnapshot)));
+    });
+    return actions;
   }
 }

@@ -42,7 +42,7 @@ class GameAction {
     );
   }
 
-  GameAction fromEntity(GameActionEntity entity) {
+  static GameAction fromEntity(GameActionEntity entity) {
     return GameAction(
       id: entity.documentReference!.id,
       path: entity.documentReference!.path,

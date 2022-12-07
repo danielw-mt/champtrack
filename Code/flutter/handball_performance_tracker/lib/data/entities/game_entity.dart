@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
+import 'package:handball_performance_tracker/data/models/models.dart';
+import 'package:handball_performance_tracker/data/repositories/repositories.dart';
 
 /// Representation of a club entry in firebase
 class GameEntity extends Equatable {
@@ -18,6 +20,7 @@ class GameEntity extends Equatable {
   final int? stopWatchTime;
   final String? teamId;
   final bool? attackIsLeft;
+  final List<GameAction>? gameActions;
 
   GameEntity({
     this.documentReference,
@@ -35,6 +38,7 @@ class GameEntity extends Equatable {
     this.stopWatchTime,
     this.teamId,
     this.attackIsLeft,
+    this.gameActions,
   });
 
   Map<String, Object> toJson() {
@@ -54,6 +58,7 @@ class GameEntity extends Equatable {
       'stopWatchTime': stopWatchTime ?? Null,
       'teamId': teamId ?? Null,
       'attackIsLeft': attackIsLeft ?? Null,
+      'gameActions': gameActions ?? Null,
     };
   }
 
@@ -79,10 +84,11 @@ class GameEntity extends Equatable {
       stopWatchTime: json['stopWatchTime'] as int?,
       teamId: json['teamId'] as String?,
       attackIsLeft: json['attackIsLeft'] as bool?,
+      gameActions: json['gameActions'] as List<GameAction>?,
     );
   }
 
-  static GameEntity fromSnapshot(DocumentSnapshot snap) {
+  static Future<GameEntity> fromSnapshot(DocumentSnapshot snap) async {
     if (snap.exists) {
       Map<String, dynamic> data = snap.data() as Map<String, dynamic>;
       List<String> onFieldPlayers = [];
@@ -91,6 +97,8 @@ class GameEntity extends Equatable {
           onFieldPlayers.add(player);
         });
       }
+      // build all the game actions
+      List<GameAction> gameActions = await GameFirebaseRepository().fetchActions(snap.reference.id);
       return GameEntity(
         documentReference: snap.reference,
         date: data['date'],
@@ -107,12 +115,14 @@ class GameEntity extends Equatable {
         stopWatchTime: data['stopWatchTime'],
         teamId: data['teamId'],
         attackIsLeft: data['attackIsLeft'],
+        gameActions: gameActions,
       );
     }
     // this is in case that we are trying to access a game that does not exist anymore in the DB or could not be found
     return GameEntity();
   }
 
+  // document for game only in firebase (does not include game actions collection)
   Map<String, Object?> toDocument() {
     Map<String, Object?> document = {
       'date': date != null ? date : "",
@@ -149,6 +159,7 @@ class GameEntity extends Equatable {
         stopTime,
         stopWatchTime,
         teamId,
-        attackIsLeft
+        attackIsLeft,
+        gameActions,
       ];
 }
