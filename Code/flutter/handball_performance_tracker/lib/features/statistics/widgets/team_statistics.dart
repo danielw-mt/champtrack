@@ -182,6 +182,7 @@ class _TeamStatisticsState extends State<TeamStatistics> {
                 ),
                 Expanded(
                   flex: 4,
+                  //child: HeatMapCard(),
                   child: Card(child: Image(image: AssetImage('images/statistics2_heatmap.jpg'))),
                 )
               ],

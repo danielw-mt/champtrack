@@ -497,8 +497,8 @@ class _PlayerListState extends State<PlayerList> {
 // }
 
 class HeatMapCard extends StatelessWidget{
-  //final Map<String, dynamic> actionCoordinatesWithContext;
-  //HeatMapCard({super.key, required this.actionCoordinatesWithContext});
+  final Map<String, dynamic> actionCoordinatesWithContext;
+  HeatMapCard({super.key, required this.actionCoordinatesWithContext});
   //_HeatMapCardState(this.actionCoordinatesWithContext);
 
   String _selectedDropdownElement = "";
