@@ -99,7 +99,9 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
         // if selectedTeamGamePlayers is not empty, then set selectedPlayer to the first player in the list
         Player selectedPlayer = selectedTeamGamePlayers.isNotEmpty ? selectedTeamGamePlayers[0] : Player();
 
+        print("before generateStatistics");
         Map<String, dynamic> statistics = generateStatistics(fetchedGames, fetchedPlayers);
+        print("after generateStatistics");
 
         TeamStatistics selectedTeamStats = buildTeamStatistics(statistics, selectedTeam, selectedGame);
 
@@ -163,10 +165,13 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
       teamStatistics.quotas[2][0] = double.parse(teamStats["throw_quota"][0].toString());
       teamStatistics.quotas[2][1] = double.parse(teamStats["throw_quota"][1].toString());
     } on Exception catch (e) {
-      //logger.e(e);
+      developer.log(e.toString());
     } catch (e) {
-      //logger.e(e);
+      developer.log(e.toString());
     }
+    // print selected teamsStats
+    print("selected teamStats: $teamStats");
+
     return teamStatistics;
   }
 

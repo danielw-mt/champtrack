@@ -13,7 +13,7 @@ class TeamStatistics extends StatelessWidget {
     // get statistics bloc
     final statisticsBloc = context.watch<StatisticsBloc>();
     Map<String, dynamic> _statistics = statisticsBloc.state.statistics;
-    // prnt statistics keys
+    // print statistics keys
     print("statistics keys: ${_statistics.keys}");
     Team _selectedTeam = statisticsBloc.state.selectedTeam;
     Game _selectedGame = statisticsBloc.state.selectedGame;

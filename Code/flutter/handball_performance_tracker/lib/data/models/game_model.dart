@@ -131,6 +131,8 @@ class Game {
         'onFieldPlayers: $onFieldPlayers, +\n ' +
         'stopWatchTimer: $stopWatchTimer, +\n ' +
         'attackIsLeft: $attackIsLeft, +\n ' +
+        'gameActions: $gameActions, +\n ' +
+        'gameActionslength: ${gameActions.length}, +\n'
         '}';
   }
 
