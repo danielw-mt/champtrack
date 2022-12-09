@@ -79,14 +79,13 @@ class GameFirebaseRepository extends GameRepository {
     if (clubSnapshot.docs.length != 1) {
       throw Exception("No club found for user id. Cannot fetch games");
     }
-    // QuerySnapshot gamesSnapshot =
-    //     await clubSnapshot.docs[0].reference.collection("games").get();
-    // await Future.forEach(gamesSnapshot.docs, (DocumentSnapshot gameSnapshot) {
-    //   _games.add(Game.fromEntity(GameEntity.fromSnapshot(gameSnapshot)));
 
     QuerySnapshot gamesSnapshot = await clubSnapshot.docs[0].reference.collection("games").get();
     await Future.forEach(gamesSnapshot.docs, (DocumentSnapshot gameSnapshot) async {
-      GameEntity.fromSnapshot(gameSnapshot).then((value) => _games.add(Game.fromEntity(value)));
+      GameEntity.fromSnapshot(gameSnapshot).then((value) {
+        Game game = Game.fromEntity(value);
+        _games.add(game);
+      });
     });
     return _games;
   }
@@ -110,6 +109,7 @@ class GameFirebaseRepository extends GameRepository {
   /// Update the specified game
   @override
   Future<void> updateGame(Game game) async {
+    print("update game");
     QuerySnapshot clubSnapshot = await FirebaseFirestore.instance
         .collection('clubs')
         .where("roles.${FirebaseAuth.instance.currentUser!.uid}", isEqualTo: "admin")
@@ -120,15 +120,13 @@ class GameFirebaseRepository extends GameRepository {
     }
     await clubSnapshot.docs[0].reference.collection("games").doc(game.id).update(game.toEntity().toDocument());
     // update game in _games
-    print("games length");
-    print(_games.length);
     if (_games.where((element) => element.id == game.id).length == 1) {
-      print("updating _games in repository");
       _games.where((element) => element.id == game.id).toList().first = game;
     }
   }
 
   Future<DocumentReference> createAction(GameAction gameAction, String gameId) async {
+    print("create action");
     QuerySnapshot clubSnapshot = await FirebaseFirestore.instance
         .collection('clubs')
         .where("roles.${FirebaseAuth.instance.currentUser!.uid}", isEqualTo: "admin")
@@ -176,6 +174,7 @@ class GameFirebaseRepository extends GameRepository {
   }
 
   List<Game> get games => _games;
+  
 
   set games(List<Game> games) => _games = games;
 }

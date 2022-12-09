@@ -18,7 +18,7 @@ class Game {
   String? season;
   String? lastSync;
   // TODO change this to document reference or actual players
-  List<String>? onFieldPlayers;
+  List<String> onFieldPlayers = [];
   StopWatchTimer? stopWatchTimer;
   bool? attackIsLeft;
   List<GameAction> gameActions = [];
@@ -37,17 +37,20 @@ class Game {
       this.opponent = "",
       this.season = "",
       this.lastSync = "",
-      this.onFieldPlayers = const [],
+      List<String> onFieldPlayers = const [],
       this.attackIsLeft = true,
       stopWatchTimer,
-      gameActions = const []}) {
+      List<GameAction> gameActions = const []}) {
     if (stopWatchTimer != null) {
       this.stopWatchTimer = stopWatchTimer;
     } else {
       this.stopWatchTimer = StopWatchTimer(mode: StopWatchMode.countUp);
     }
-    if (gameActions.isEmpty) {
-      this.gameActions = [];
+    if (!onFieldPlayers.isEmpty){
+      this.onFieldPlayers = onFieldPlayers;
+    }
+    if (!gameActions.isEmpty) {
+      this.gameActions = gameActions;
     }
   }
 
@@ -140,7 +143,7 @@ class Game {
       isAtHome: this.isAtHome != null ? this.isAtHome! : true,
       lastSync: this.lastSync != null ? this.lastSync! : "",
       location: this.location != null ? this.location! : "",
-      onFieldPlayers: this.onFieldPlayers != null ? this.onFieldPlayers! : [],
+      onFieldPlayers: this.onFieldPlayers,
       opponent: this.opponent != null ? this.opponent! : "",
       scoreHome: this.scoreHome != null ? this.scoreHome! : 0,
       scoreOpponent: this.scoreOpponent != null ? this.scoreOpponent! : 0,
@@ -158,20 +161,20 @@ class Game {
     Game game = Game(
         id: entity.documentReference != null ? entity.documentReference!.id : null,
         path: entity.documentReference != null ? entity.documentReference!.path : "",
-        teamId: entity.teamId,
+        teamId: entity.teamId != null ? entity.teamId! : "",
         date: DateTime.fromMillisecondsSinceEpoch(entity.date!.millisecondsSinceEpoch),
-        startTime: entity.startTime,
-        stopTime: entity.stopTime,
-        scoreHome: entity.scoreHome,
-        scoreOpponent: entity.scoreOpponent,
-        isAtHome: entity.isAtHome,
-        location: entity.location,
-        opponent: entity.opponent,
-        season: entity.season,
-        lastSync: entity.lastSync,
-        onFieldPlayers: entity.onFieldPlayers,
-        attackIsLeft: entity.attackIsLeft,
-        gameActions: entity.gameActions);
+        startTime: entity.startTime != null ? entity.startTime! : 0,
+        stopTime: entity.stopTime != null ? entity.stopTime! : 0,
+        scoreHome: entity.scoreHome != null ? entity.scoreHome! : 0,
+        scoreOpponent: entity.scoreOpponent != null ? entity.scoreOpponent! : 0,
+        isAtHome: entity.isAtHome != null ? entity.isAtHome! : true,
+        location: entity.location != null ? entity.location! : "",
+        opponent: entity.opponent != null ? entity.opponent! : "",
+        season: entity.season != null ? entity.season! : "",
+        lastSync: entity.lastSync != null ? entity.lastSync! : "",
+        onFieldPlayers: entity.onFieldPlayers != null ? entity.onFieldPlayers! : [],
+        attackIsLeft: entity.attackIsLeft != null ? entity.attackIsLeft! : true,
+        gameActions: entity.gameActions != null ? entity.gameActions! : []);
     game.stopWatchTimer!.onExecute.add(StopWatchExecute.reset);
     game.stopWatchTimer!.setPresetTime(mSec: entity.stopWatchTime!);
     return game;

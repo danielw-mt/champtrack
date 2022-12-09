@@ -114,7 +114,7 @@ class GlobalBloc extends Bloc<GlobalEvent, GlobalState> {
     on<UpdateGame>((event, emit) async {
       try {
         emit(state.copyWith(status: GlobalStatus.loading));
-        await GameFirebaseRepository().updateGame(event.game);
+        this.gameRepository.updateGame(event.game);
         // updated games is where the game with the same id as the updated game is replaced with the updated game
         List<Game> updatedGames = state.allGames.map((game) => game.id == event.game.id ? event.game : game).toList();
         emit(state.copyWith(allGames: updatedGames, status: GlobalStatus.success));
@@ -127,7 +127,7 @@ class GlobalBloc extends Bloc<GlobalEvent, GlobalState> {
     on<DeleteGame>((event, emit) async {
       try {
         emit(state.copyWith(status: GlobalStatus.loading));
-        await GameFirebaseRepository().deleteGame(event.game);
+        this.gameRepository.deleteGame(event.game);
         // updated games are all games where the id does not match the deleted game
         List<Game> updatedGames = state.allGames.where((game) => game.id != event.game.id).toList();
         emit(state.copyWith(allGames: updatedGames, status: GlobalStatus.success));

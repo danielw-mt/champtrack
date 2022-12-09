@@ -30,6 +30,11 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
       List<Game> fetchedGames = gameRepository.games;
       // build list of games for selected team
       List<Game> selectedTeamGames = fetchedGames.where((game) => game.teamId == event.team.id).toList();
+      // gameActions already not available here
+      // selectedTeamGames.forEach((element) {
+      //   print("select team: " + element.gameActions.toString());
+      // });
+
       // set selected game
       Game selectedGame = selectedTeamGames.isNotEmpty ? selectedTeamGames[0] : Game(date: DateTime.now());
 
@@ -37,16 +42,14 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
     });
 
     on<SelectGame>((event, emit) {
-      // print selected game name
-      print("Select game event");
-      print(event.game);
+      print("gameActions: " + event.game.gameActions.toString());
       emit(state.copyWith(selectedGame: event.game));
     });
 
     on<SelectPlayer>((event, emit) {
       // print selected player name
-      print("Select player event");
-      print(event.player);
+      // print("Select player event");
+      // print(event.player);
       emit(state.copyWith(selectedPlayer: event.player));
     });
 
@@ -63,18 +66,13 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
     });
 
     on<InitStatistics>((event, emit) async {
+      print("init statistics");
       try {
-        // emit(state.copyWith(status: GlobalStatus.loading));
-        // List<Player> fetchedPlayers = await PlayerFirebaseRepository().fetchPlayers();
-        // List<Team> fetchedTeams = await TeamFirebaseRepository().fetchTeams(allPlayers: fetchedPlayers);
+        // game actions already not available here
         List<Game> fetchedGames = gameRepository.games;
 
-        // print("game metadata: " + fetchedGames.first.toString());
-        // print("actions: " + fetchedGames.first.gameActions.toString());
-
-        // print("fetched games: $fetchedGames");
         List<Team> fetchedTeams = teamRepository.teams;
-        //print("fetchedTeams: $fetchedTeams");
+        
         // if fetchedTeams is not empty, then set selectedTeam to the first team in the list
         Team selectedTeam = fetchedTeams.isNotEmpty ? fetchedTeams[0] : Team();
 
@@ -111,7 +109,7 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
             selectedGame: selectedGame,
             statistics: statistics));
       } catch (e) {
-        developer.log('Failure loading teams or players ' + e.toString(), name: this.runtimeType.toString(), error: e);
+        print('Failure loading teams or players ' + e.toString());
         emit(state.copyWith(status: StatisticsStatus.error));
       }
       //emit(state.copyWith());

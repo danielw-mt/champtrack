@@ -101,21 +101,21 @@ class GameEntity extends Equatable {
       List<GameAction> gameActions = await GameFirebaseRepository().fetchActions(snap.reference.id);
       return GameEntity(
         documentReference: snap.reference,
-        date: data['date'],
-        isAtHome: data['isAtHome'],
-        lastSync: data['lastSync'],
-        location: data['location'],
+        date: data['date'] != null ? data['date'] : Timestamp.now(),
+        isAtHome: data['isAtHome'] != null ? data['isAtHome'] : true,
+        lastSync: data['lastSync'] != null ? data['lastSync'] : "",
+        location: data['location'] != null ? data['location'] : "",
         onFieldPlayers: onFieldPlayers,
-        opponent: data['opponent'],
-        scoreHome: data['scoreHome'],
-        scoreOpponent: data['scoreOpponent'],
-        season: data['season'],
-        startTime: data['startTime'],
-        stopTime: data['stopTime'],
-        stopWatchTime: data['stopWatchTime'],
-        teamId: data['teamId'],
-        attackIsLeft: data['attackIsLeft'],
-        gameActions: gameActions,
+        opponent: data['opponent'] != null ? data['opponent'] : "",
+        scoreHome: data['scoreHome'] != null ? data['scoreHome'] : 0,
+        scoreOpponent: data['scoreOpponent'] != null ? data['scoreOpponent'] : 0,
+        season: data['season'] != null ? data['season'] : "",
+        startTime: data['startTime'] != null ? data['startTime'] : 0,
+        stopTime: data['stopTime'] != null ? data['stopTime'] : 0,
+        stopWatchTime: data['stopWatchTime'] != null ? data['stopWatchTime'] : 0,
+        teamId: data['teamId'] != null ? data['teamId'] : "",
+        attackIsLeft: data['attackIsLeft'] != null ? data['attackIsLeft'] : true,
+        gameActions: gameActions
       );
     }
     // this is in case that we are trying to access a game that does not exist anymore in the DB or could not be found
