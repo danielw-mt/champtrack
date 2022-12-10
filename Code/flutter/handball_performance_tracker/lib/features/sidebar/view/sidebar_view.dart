@@ -69,9 +69,6 @@ class SidebarView extends StatelessWidget {
                       ),
                       onPressed: () {
                         context.read<AuthBloc>().add(SignOutRequested());
-                        // TODO call sign out bloc
-                        // Get.to(Home());
-                        // Get.deleteAll();
                       },
                       icon: Icon(
                         Icons.logout,
