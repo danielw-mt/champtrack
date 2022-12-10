@@ -334,6 +334,11 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         timestamp: unixTime,
       );
 
+      // stop time for penalties
+      if (event.actionTag == forceTwoMinTag || event.actionTag == timePenaltyTag || event.actionTag == redCardTag) {
+        this.add(PauseGame());
+      }
+
       // for an action from opponent we can switch directly, we don't need the player menu to choose a player because these actions can be
       // directly assigned to the opponent
       if (event.actionTag == emptyGoalTag || event.actionTag == goalOpponentTag || event.actionTag == goalOpponent7mTag) {
@@ -342,6 +347,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         this.add(SwitchField());
         action.playerId = "opponent";
         emit(state.copyWith(opponentScore: state.opponentScore + 1, workflowStep: WorkflowStep.forceClose));
+
         // if an action inside goalkeeper menu that does not correspond to the opponent was hit try to assign this action directly to the goalkeeper
       } else if (event.actionContext == actionContextGoalkeeper && event.actionTag != goalOpponentTag && event.actionTag != emptyGoalTag) {
         print("our own goalkeeper action");
@@ -363,6 +369,8 @@ class GameBloc extends Bloc<GameEvent, GameState> {
           // TODO open player menu with goalkeeper selection style
           this.add(WorkflowEvent(selectedAction: action));
         }
+
+
       } else if (state.workflowStep == WorkflowStep.sevenMeterOffenseResult) {
         print("logging 7m result");
         action.playerId = state.sevenMeterExecutor.id!;
@@ -373,6 +381,8 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         action.playerId = state.sevenMeterGoalkeeper.id!;
         this.add(WorkflowEvent(selectedAction: action));
         this.add(SwitchField());
+
+
       } else {
         // add the action to the list of actions
         print("adding normal action");
