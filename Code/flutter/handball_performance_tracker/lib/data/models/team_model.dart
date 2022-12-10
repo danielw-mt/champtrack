@@ -104,7 +104,6 @@ class Team {
         onFieldPlayers.add(Player.fromEntity(PlayerEntity.fromSnapshot(playerSnapshot)));
       });
     } else {
-      print("populating using players");
       entity.players.forEach((DocumentReference playerReference) {
         players.add(allPlayers.firstWhere((Player player) => player.path == playerReference.path));
       });

@@ -39,10 +39,8 @@ class PlayerFirebaseRepository extends PlayerRepository {
     DocumentReference playerRef = await clubSnapshot.docs[0].reference.collection("players").add(player.toEntity().toDocument());
     player.path = playerRef.path;
     player.id = playerRef.id;
-    // TODO update team with player id
     Future.forEach(player.teams, (String? teamReference) async {
       print("trying to add playerReference to team $teamReference");
-
       Team team = Team();
       if (teamReference!.contains("club")) {
         team = await TeamFirebaseRepository().fetchTeam(teamReference);
