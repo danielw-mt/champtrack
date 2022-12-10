@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:handball_performance_tracker/old-utils/icons.dart';
+import 'package:handball_performance_tracker/core/utils/icons.dart';
 import 'package:handball_performance_tracker/core/constants/strings_game_screen.dart';
 import 'dart:math';
 // import '../../old-utils/feed_logic.dart';
