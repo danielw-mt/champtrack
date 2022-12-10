@@ -46,7 +46,7 @@ void openWorkflowPopup(BuildContext higherContext, GameBloc gameBloc) {
     }
   }
 
-  if (gameBloc.state.status == GameStatus.running) {
+  if (gameBloc.state.stopWatchTimer.rawTime.value != 0) {
     showDialog(
         context: higherContext,
         builder: (BuildContext bcontext) {
