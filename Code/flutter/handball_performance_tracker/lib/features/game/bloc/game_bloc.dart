@@ -283,7 +283,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         onFieldPlayers[onFieldPlayers.indexOf(event.oldPlayer)] = event.newPlayer;
         onFieldPlayers[indexOfNewPlayer] = event.oldPlayer;
         emit(state.copyWith(onFieldPlayers: onFieldPlayers.toList()));
-      } else {
+      } else if (onFieldPlayers.contains(event.oldPlayer)) {
         onFieldPlayers[onFieldPlayers.indexOf(event.oldPlayer)] = event.newPlayer;
         emit(state.copyWith(onFieldPlayers: onFieldPlayers.toList()));
       }
@@ -369,8 +369,6 @@ class GameBloc extends Bloc<GameEvent, GameState> {
           // TODO open player menu with goalkeeper selection style
           this.add(WorkflowEvent(selectedAction: action));
         }
-
-
       } else if (state.workflowStep == WorkflowStep.sevenMeterOffenseResult) {
         print("logging 7m result");
         action.playerId = state.sevenMeterExecutor.id!;
@@ -381,8 +379,6 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         action.playerId = state.sevenMeterGoalkeeper.id!;
         this.add(WorkflowEvent(selectedAction: action));
         this.add(SwitchField());
-
-
       } else {
         // add the action to the list of actions
         print("adding normal action");
@@ -422,7 +418,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         emit(state.copyWith(gameActions: state.gameActions));
 
         this.add(UpdatePlayerEfScore(action: lastAction));
-      // normal player selection => substitute player
+        // normal player selection => substitute player
       } else if (event.isSubstitute && state.workflowStep == WorkflowStep.playerSelection) {
         print("player selection: substitute");
         // if a player was selected from the not on field players in the player menu

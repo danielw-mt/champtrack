@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:equatable/equatable.dart';
 import 'dart:developer' as developer;
 
@@ -49,16 +50,54 @@ class TeamEntity extends Equatable {
   //   );
   // }
 
-  static TeamEntity fromSnapshot(DocumentSnapshot snap) {
+  static Future<TeamEntity> fromSnapshot(DocumentSnapshot snap) async {
     Map<String, dynamic> data = snap.data() as Map<String, dynamic>;
+
     List<DocumentReference> onFieldPlayerReferences = [];
-    data['onFieldPlayers'].forEach((onFieldPlayerReference) {
-      onFieldPlayerReferences.add(onFieldPlayerReference);
-    });
+    if (data['onFieldPlayers'] != null) {
+      List<DocumentReference> documentReferences= data['onFieldPlayers'].cast<DocumentReference>();
+      await Future.forEach(documentReferences, (DocumentReference onFieldPlayerReference) async {
+        if (!onFieldPlayerReference.path.contains("club")) {
+          QuerySnapshot clubSnapshot = await FirebaseFirestore.instance
+              .collection('clubs')
+              .where("roles.${FirebaseAuth.instance.currentUser!.uid}", isEqualTo: "admin")
+              .limit(1)
+              .get();
+
+          if (clubSnapshot.docs.length != 1) {
+            throw Exception("No club found for user id. Cannot fetch players");
+          }
+          DocumentReference clubReference = clubSnapshot.docs[0].reference;
+          String newPlayerPath = onFieldPlayerReference.path.replaceFirst("players", "clubs/${clubReference.id}/players");
+          onFieldPlayerReferences.add(FirebaseFirestore.instance.doc(newPlayerPath));
+        } else {
+          onFieldPlayerReferences.add(onFieldPlayerReference);
+        }
+      });
+    }
     List<DocumentReference> playerReferences = [];
-    data['players'].forEach((playerReference) {
-      playerReferences.add(playerReference);
-    });
+    if (data['players'] != null) {
+      List<DocumentReference> documentReferences= data['players'].cast<DocumentReference>();
+      await Future.forEach(documentReferences, (DocumentReference playerReference) async {
+        if (!playerReference.path.contains("club")) {
+          print("player reference not ok: ${playerReference.path}");
+          QuerySnapshot clubSnapshot = await FirebaseFirestore.instance
+              .collection('clubs')
+              .where("roles.${FirebaseAuth.instance.currentUser!.uid}", isEqualTo: "admin")
+              .limit(1)
+              .get();
+
+          if (clubSnapshot.docs.length != 1) {
+            throw Exception("No club found for user id. Cannot fetch players");
+          }
+          DocumentReference clubReference = clubSnapshot.docs[0].reference;
+          String newPlayerPath = playerReference.path.replaceFirst("players", "clubs/${clubReference.id}/players");
+          playerReferences.add(FirebaseFirestore.instance.doc(newPlayerPath));
+        } else {
+          playerReferences.add(playerReference);
+        }
+      });
+    }
     developer.log("onFieldPlayers: ${onFieldPlayerReferences.toString()}", name: "TeamEntity");
     developer.log("players: " + playerReferences.toString(), name: "TeamEntity");
     return TeamEntity(
