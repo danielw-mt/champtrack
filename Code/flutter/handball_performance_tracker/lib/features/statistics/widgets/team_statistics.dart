@@ -58,12 +58,12 @@ class TeamStatistics extends StatelessWidget {
       quotas[2][0] = double.parse(teamStats["throw_quota"][0].toString());
       quotas[2][1] = double.parse(teamStats["throw_quota"][1].toString());
     } on Exception catch (e) {
-      logger.e(e);
+      // logger.e(e);
     } catch (e) {
-      logger.e(e);
+      // logger.e(e);
     }
     print("#########");
-    print(statisticsBloc.state.allTeams);
+    // print(statisticsBloc.state.allTeams);
 
     return Scaffold(
         body: Row(

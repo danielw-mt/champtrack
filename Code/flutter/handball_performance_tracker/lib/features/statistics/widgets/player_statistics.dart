@@ -7,8 +7,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 // import 'package:handball_performance_tracker/core/constants/game_actions.dart';
 import 'package:handball_performance_tracker/features/statistics/statistics.dart';
 import 'package:handball_performance_tracker/core/constants/game_actions.dart';
-// import 'package:handball_performance_tracker/oldcontrollers/persistent_controller.dart';
-// import 'package:handball_performance_tracker/oldcontrollers/temp_controller.dart';
 // import 'statistic_card_elements.dart';
 import 'package:handball_performance_tracker/data/models/player_model.dart';
 import 'package:handball_performance_tracker/data/models/game_model.dart';
@@ -16,22 +14,8 @@ import 'package:handball_performance_tracker/data/models/team_model.dart';
 // import '../../data/models/player_model.dart';
 // import '../../data/models/game_model.dart';
 // import '../../data/models/team_model.dart';
-// import '../../oldcontrollers/temp_controller.dart';
-// import 'package:get/get.dart';
-// import 'package:logger/logger.dart';
 // import 'statistic_dropdowns.dart';
 // import '../../core/constants/game_actions.dart';
-
-// var logger = Logger(
-//   printer: PrettyPrinter(
-//       methodCount: 2, // number of method calls to be displayed
-//       errorMethodCount: 8, // number of method calls if stacktrace is provided
-//       lineLength: 120, // width of the output
-//       colors: true, // Colorful log messages
-//       printEmojis: true, // Print an emoji for each log message
-//       printTime: true // Should each log print contain a timestamp
-//       ),
-// );
 
 class PlayerStatistics extends StatefulWidget {
   const PlayerStatistics({Key? key}) : super(key: key);
@@ -107,7 +91,7 @@ class _PlayerStatisticsState extends State<PlayerStatistics> {
       if (_games.length != 0) {
         _selectedGame = _games[0];
         _players = []; //_persistentController.getAllPlayers(teamId: _selectedTeam.id);
-        logger.d(_players);
+        // logger.d(_players);
       } 
       // else {
       //   _players = [];
@@ -189,11 +173,11 @@ class _PlayerStatisticsState extends State<PlayerStatistics> {
       quotas[2][0] = double.parse(playerStats["throw_quota"][0].toString());
       quotas[2][1] = double.parse(playerStats["throw_quota"][1].toString());
     } on Exception catch (e) {
-      logger.e(e);
+      // logger.e(e);
     } catch (e) {
-      logger.e(e);
+      // logger.e(e);
     }
-    logger.d(efScoreSeries);
+    // logger.d(efScoreSeries);
     return Scaffold(
         body: Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,

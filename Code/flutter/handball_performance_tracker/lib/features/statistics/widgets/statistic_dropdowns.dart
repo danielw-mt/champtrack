@@ -19,6 +19,7 @@ var logger = Logger(
       ),
 );
 
+
 class PlayerSelector extends StatelessWidget {
 
   @override
@@ -95,7 +96,7 @@ class TeamSelector extends StatelessWidget {
     // if statisticsState.allTeams list is empty 
 
     if (statisticsState.allTeams.length < 1) {
-      logger.d("Team selector cannot be displayer because there are no teams");
+      // logger.d("Team selector cannot be displayer because there are no teams");
       return Text("No teams found");
     }
 
