@@ -422,7 +422,8 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         emit(state.copyWith(gameActions: state.gameActions));
 
         this.add(UpdatePlayerEfScore(action: lastAction));
-      } else if (event.isSubstitute) {
+      // normal player selection => substitute player
+      } else if (event.isSubstitute && state.workflowStep == WorkflowStep.playerSelection) {
         print("player selection: substitute");
         // if a player was selected from the not on field players in the player menu
         List<Player> playersWithSamePosition = [];

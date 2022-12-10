@@ -4,7 +4,7 @@ import 'package:handball_performance_tracker/features/game/game.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:handball_performance_tracker/data/models/models.dart';
 import 'player_button.dart';
-import 'package:handball_performance_tracker/data/models/models.dart';
+import 'expand_menu_button.dart';
 
 // all of these styles are two page menus with onfieldplayers on the first page and offfieldplayers on the second page
 // in the assist style the goal scoring player is highlighted
@@ -42,11 +42,14 @@ class PlayerMenu extends StatelessWidget {
             crossAxisCount: 4,
             padding: const EdgeInsets.all(20),
             children: gameBloc.state.onFieldPlayers
-                .map((Player player) => PlayerButton(
+                .map<Widget>((Player player) => PlayerButton(
                       player: player,
                       isSubstitution: false,
                     ))
-                .toList()),
+                .toList()
+              ..add(ExpandMenuButton(
+                pageController: pageController,
+              ))),
         GridView.count(
             // 4 items max per row
             crossAxisCount: 4,
