@@ -40,7 +40,7 @@ class Game {
       this.onFieldPlayers = const [],
       this.attackIsLeft = true,
       stopWatchTimer,
-      gameActions = const []}) {
+      List<GameAction> gameActions = const []}) {
     if (stopWatchTimer != null) {
       this.stopWatchTimer = stopWatchTimer;
     } else {
@@ -155,79 +155,31 @@ class Game {
   }
 
   static Game fromEntity(GameEntity entity) {
+    DateTime date;
+    if (entity.date != null) {
+      date = DateTime.fromMillisecondsSinceEpoch(entity.date!.millisecondsSinceEpoch);
+    } else {
+      date = DateTime.now();
+    }
     Game game = Game(
         id: entity.documentReference != null ? entity.documentReference!.id : null,
         path: entity.documentReference != null ? entity.documentReference!.path : "",
-        teamId: entity.teamId,
-        date: DateTime.fromMillisecondsSinceEpoch(entity.date!.millisecondsSinceEpoch),
-        startTime: entity.startTime,
-        stopTime: entity.stopTime,
-        scoreHome: entity.scoreHome,
-        scoreOpponent: entity.scoreOpponent,
-        isAtHome: entity.isAtHome,
-        location: entity.location,
-        opponent: entity.opponent,
-        season: entity.season,
-        lastSync: entity.lastSync,
-        onFieldPlayers: entity.onFieldPlayers,
-        attackIsLeft: entity.attackIsLeft,
-        gameActions: entity.gameActions);
+        teamId: entity.teamId != null ? entity.teamId! : "",
+        date: date,
+        startTime: entity.startTime != null ? entity.startTime! : 0,
+        stopTime: entity.stopTime != null ? entity.stopTime! : 0,
+        scoreHome: entity.scoreHome != null ? entity.scoreHome! : 0,
+        scoreOpponent: entity.scoreOpponent != null ? entity.scoreOpponent! : 0,
+        isAtHome: entity.isAtHome != null ? entity.isAtHome! : true,
+        location: entity.location != null ? entity.location! : "",
+        opponent: entity.opponent != null ? entity.opponent! : "",
+        season: entity.season != null ? entity.season! : "",
+        lastSync: entity.lastSync != null ? entity.lastSync! : "",
+        onFieldPlayers: entity.onFieldPlayers != null ? entity.onFieldPlayers! : [],
+        attackIsLeft: entity.attackIsLeft != null ? entity.attackIsLeft! : true,
+        gameActions: entity.gameActions != null ? entity.gameActions! : []);
     game.stopWatchTimer!.onExecute.add(StopWatchExecute.reset);
     game.stopWatchTimer!.setPresetTime(mSec: entity.stopWatchTime!);
     return game;
   }
-
-  // @return Map<String,dynamic> as representation of Game object that can be saved to firestore
-  // Map<String, dynamic> toMap() {
-  //   return {
-  //     'teamId': teamId,
-  //     'date': date,
-  //     'startTime': startTime,
-  //     'stopTime': stopTime,
-  //     'scoreHome': scoreHome,
-  //     'scoreOpponent': scoreOpponent,
-  //     'isAtHome': isAtHome,
-  //     'location': location,
-  //     'opponent': opponent,
-  //     'season': season,
-  //     'onFieldPlayers': onFieldPlayers,
-  //     'lastSync': lastSync,
-  //     'stopWatchTime': stopWatchTimer.rawTime.value
-  //   };
-  // }
-
-  // @return Game object according to Game data fetched from firestore
-  // factory Game.fromDocumentSnapshot(DocumentSnapshot doc) {
-  //   final newGame = Game.fromMap(doc.data() as Map<String, dynamic>);
-  //   newGame.id = doc.reference.id;
-  //   return newGame;
-  // }
-
-  // @return Game object created from map representation of Game
-  // factory Game.fromMap(Map<String, dynamic> map) {
-  //   int lastStopWatchTime = map['stopWatchTime'];
-  //   StopWatchTimer stopWatchTimer = StopWatchTimer(mode: StopWatchMode.countUp);
-  //   stopWatchTimer.onExecute.add(StopWatchExecute.reset);
-  //   stopWatchTimer.setPresetTime(mSec: lastStopWatchTime);
-  //   // convert date
-  //   Timestamp dateTimestamp = map["date"];
-  //   DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(
-  //       dateTimestamp.millisecondsSinceEpoch);
-  //   Game game = Game(
-  //       teamId: map["teamId"],
-  //       date: dateTime,
-  //       startTime: map["startTime"],
-  //       stopTime: map["stopTime"],
-  //       scoreHome: map["scoreHome"],
-  //       scoreOpponent: map["scoreOpponent"],
-  //       isAtHome: map["isAtHome"],
-  //       location: map["location"],
-  //       opponent: map["opponent"],
-  //       season: map["season"],
-  //       lastSync: map["lastSync"],
-  //       onFieldPlayers: map["onFieldPlayers"].cast<String>());
-  //   game.stopWatchTimer = stopWatchTimer;
-
-  //   return game;
-  // }
 }

@@ -28,27 +28,70 @@ class TeamManagementView extends StatelessWidget {
                     drawer: SidebarView(),
                     bottomNavigationBar: TabsBar(),
                     body: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, crossAxisAlignment: CrossAxisAlignment.start, children: [
-                          Center(child: TeamDropdown()),
-                          Center(
-                              child: Flexible(
-                            child: ElevatedButton(
-                              onPressed: (() => showDialog(
-                                  context: context,
-                                  builder: (context) => BlocProvider<TeamManagementCubit>.value(
-                                        value: teamManagementCubit,
-                                        child: AlertDialog(
-                                          title: Text(StringsGeneral.lAddTeam),
-                                          content: NewTeamForm(),
-                                        ),
-                                      ))),
-                              child: Text(StringsTeamManagement.lAddTeam),
-                            ),
-                          ))
-                        ]),
+                        Expanded(
+                          child: Row(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+                            Flexible(flex: 1, child: Center(child: TeamDropdown())),
+                            Flexible(
+                              flex: 1,
+                              child: Center(
+                                  child: ElevatedButton(
+                                onPressed: (() => showDialog(
+                                    context: context,
+                                    builder: (context) => BlocProvider<TeamManagementCubit>.value(
+                                          value: teamManagementCubit,
+                                          child: AlertDialog(
+                                            title: Text(StringsGeneral.lAddTeam),
+                                            content: NewTeamForm(),
+                                          ),
+                                        ))),
+                                child: Text(StringsTeamManagement.lAddTeam),
+                              )),
+                            )
+                          ]),
+                        ),
                         // players list or games list or team settings depending which tab is selected
-                        if (state.currentTab == TeamManagementTab.playersTab) PlayersList(),
+                        if (state.currentTab == TeamManagementTab.playersTab)
+                          Expanded(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                PlayersList(),
+                                ElevatedButton(
+                                    onPressed: () {
+                                      showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) => AlertDialog(
+                                                title: Text(StringsTeamManagement.lAddPlayer),
+                                                content: SizedBox(
+                                                  width: MediaQuery.of(context).size.width * 0.7,
+                                                  height: MediaQuery.of(context).size.height * 0.8,
+                                                  child: Column(
+                                                    mainAxisAlignment: MainAxisAlignment.center,
+                                                    children: [PlayerForm(editModeEnabled: false)],
+                                                  ),
+                                                ),
+                                                actions: [
+                                                  TextButton(
+                                                    child: Text(StringsGeneral.lCancel),
+                                                    onPressed: () {
+                                                      Navigator.of(context).pop();
+                                                    },
+                                                  ),
+                                                  TextButton(
+                                                    child: Text(StringsGeneral.lSubmitButton),
+                                                    onPressed: () {
+                                                      Navigator.of(context).pop();
+                                                    },
+                                                  ),
+                                                ],
+                                              ));
+                                    },
+                                    child: Text("Add player"))
+                              ],
+                            ),
+                          ),
                         if (state.currentTab == TeamManagementTab.gamesTab) GameList(),
                         if (state.currentTab == TeamManagementTab.settingsTab) TeamSettings(),
                       ],

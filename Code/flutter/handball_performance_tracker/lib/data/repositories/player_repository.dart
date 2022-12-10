@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:handball_performance_tracker/data/models/models.dart';
 import 'package:handball_performance_tracker/data/entities/entities.dart';
+import 'package:handball_performance_tracker/data/repositories/repositories.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'dart:developer' as developer;
 
@@ -36,6 +37,22 @@ class PlayerFirebaseRepository extends PlayerRepository {
       throw Exception("No club found for user id. Cannot fetch team");
     }
     DocumentReference playerRef = await clubSnapshot.docs[0].reference.collection("players").add(player.toEntity().toDocument());
+    player.path = playerRef.path;
+    player.id = playerRef.id;
+    // TODO update team with player id
+    Future.forEach(player.teams, (String? teamReference) async {
+      print("trying to add playerReference to team $teamReference");
+
+      Team team = Team();
+      if (teamReference!.contains("club")) {
+        team = await TeamFirebaseRepository().fetchTeam(teamReference);
+        print("fetched team ${team.path}");
+      } else {
+        // TODO add club reference for backwards compatibility
+      }
+      team.players.add(player);
+      await TeamFirebaseRepository().updateTeam(team);
+    });
     return player.copyWith(id: playerRef.id);
   }
 

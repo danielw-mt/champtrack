@@ -2,17 +2,40 @@ import 'package:flutter/material.dart';
 import 'package:handball_performance_tracker/data/models/models.dart';
 import 'package:handball_performance_tracker/core/core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:handball_performance_tracker/features/authentication/authentication.dart';
+
+// need to have stateful widget to make updating the dropdowns simpler
+// set State can be used for every interaction
+class PlayerForm extends StatefulWidget {
+  late Player player;
+  bool editModeEnabled;
+  PlayerForm({super.key, Player? player, required this.editModeEnabled}) {
+    if (player != null) {
+      this.player = player;
+    } else {
+      this.player = Player();
+    }
+  }
+
+  @override
+  State<PlayerForm> createState() => _PlayerFormState();
+}
 
 // Create a corresponding State class.
 // This class holds data related to the form.
-class PlayerForm extends StatelessWidget {
-  late Player player;
-  bool editModeEnabled;
-  PlayerForm({Key? key, this.editModeEnabled = true, Player? player}) {
-    player ?? Player();
-    this.player = player!;
+class _PlayerFormState extends State<PlayerForm> {
+  late TextEditingController firstNameController;
+  late TextEditingController lastNameController;
+  late TextEditingController nickNameController;
+  late TextEditingController numberController;
+  @override
+  void initState() {
+    firstNameController = TextEditingController(text: widget.player.firstName);
+    lastNameController = TextEditingController(text: widget.player.lastName);
+    nickNameController = TextEditingController(text: widget.player.nickName);
+    numberController = TextEditingController(text: widget.player.number.toString());
+    super.initState();
   }
+
   // Create a global key that uniquely identifies the Form widget
   // and allows validation of the form.
   //
@@ -34,7 +57,6 @@ class PlayerForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final globalBloc = context.watch<GlobalBloc>();
-    final authBloc = context.read<AuthBloc>();
     List<Team> allTeams = globalBloc.state.allTeams;
     ScrollController teamScrollController = ScrollController();
     ScrollController positionScrollController = ScrollController();
@@ -43,11 +65,6 @@ class PlayerForm extends StatelessWidget {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     return Column(children: [
-      Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-        editModeEnabled
-            ? Text(StringsGeneral.lPlayerEditMode, style: TextStyle(fontWeight: FontWeight.bold))
-            : Text(StringsGeneral.lPlayerCreateMode, style: TextStyle(fontWeight: FontWeight.bold)),
-      ]),
       Form(
         key: _formKey,
         child: Column(
@@ -61,8 +78,8 @@ class PlayerForm extends StatelessWidget {
                   child: TextFormField(
                     style: TextStyle(fontSize: 18),
                     decoration: getDecoration(StringsGeneral.lFirstName),
-                    controller: TextEditingController(text: player.firstName),
-                    onChanged: (String value) => player.firstName = value,
+                    controller: firstNameController,
+                    // onFieldSubmitted: (String value) => setState(() => widget.player.firstName = value),
                     // The validator receives the text that the user has entered.
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -75,10 +92,10 @@ class PlayerForm extends StatelessWidget {
                 SizedBox(
                   width: width * 0.25,
                   child: TextFormField(
-                    controller: TextEditingController(text: player.lastName),
+                    controller: lastNameController,
                     style: TextStyle(fontSize: 18),
                     decoration: getDecoration(StringsGeneral.lLastName),
-                    onChanged: (String value) => player.lastName = value,
+                    // onFieldSubmitted: (String value) => setState(() => widget.player.lastName = value),
                     // The validator receives the text that the user has entered.
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -115,11 +132,11 @@ class PlayerForm extends StatelessWidget {
                 SizedBox(
                   width: width * 0.25,
                   child: TextFormField(
-                    controller: TextEditingController(text: player.number.toString()),
+                    controller: numberController,
                     keyboardType: TextInputType.number,
                     style: TextStyle(fontSize: 18),
                     decoration: getDecoration(StringsGeneral.lShirtNumber),
-                    onChanged: (String value) => player.number = int.parse(value),
+                    // onFieldSubmitted: (String value) => setState(() => widget.player.number = int.parse(value)),
                     // The validator receives the text that the user has entered.
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -164,15 +181,15 @@ class PlayerForm extends StatelessWidget {
                                     children: [
                                       Checkbox(
                                           fillColor: MaterialStateProperty.all<Color>(buttonDarkBlueColor),
-                                          value: player.teams.contains(relevantTeam.path),
+                                          value: playerIsPartOfRelevantTeam(widget.player, relevantTeam),
                                           onChanged: (value) {
-                                            String clubId = authBloc.getClubReference().id;
                                             if (value == true) {
                                               // Add team to player
-                                              player.teams.add("clubs/" + clubId + "/" + relevantTeam.id.toString());
+                                              setState(() => widget.player.teams.add(relevantTeam.path));
                                             } else {
                                               // Remove team from player
-                                              player.teams.removeWhere((String teamString) => teamString.contains(relevantTeam.id.toString()));
+                                              setState(() => widget.player.teams
+                                                  .removeWhere((String teamString) => teamString.contains(relevantTeam.id.toString())));
                                             }
                                           }),
                                       Text(relevantTeam.name)
@@ -189,7 +206,7 @@ class PlayerForm extends StatelessWidget {
                     ],
                   ),
                   validator: (value) {
-                    if (player.teams.length == 0) {
+                    if (widget.player.teams.length == 0) {
                       return StringsGeneral.lTeamMissing;
                     }
                     return null;
@@ -225,12 +242,12 @@ class PlayerForm extends StatelessWidget {
                                 children: [
                                   Checkbox(
                                       fillColor: MaterialStateProperty.all<Color>(buttonDarkBlueColor),
-                                      value: player.positions.contains(positionNames[item]),
+                                      value: widget.player.positions.contains(positionNames[item]),
                                       onChanged: (value) {
                                         if (value == true) {
-                                          player.positions.add(positionNames[item]);
+                                          setState(() => widget.player.positions.add(positionNames[item]));
                                         } else {
-                                          player.positions.remove(positionNames[item]);
+                                          setState(() => widget.player.positions.remove(positionNames[item]));
                                         }
                                       }),
                                   Text(positionNames[item])
@@ -249,7 +266,7 @@ class PlayerForm extends StatelessWidget {
                     ],
                   ),
                   validator: (value) {
-                    if (player.positions.length == 0) {
+                    if (widget.player.positions.length == 0) {
                       return StringsGeneral.lPositionMissing;
                     }
                     return null;
@@ -287,12 +304,12 @@ class PlayerForm extends StatelessWidget {
                           style: ButtonStyle(backgroundColor: MaterialStateProperty.all<Color>(buttonGreyColor)),
                           onPressed: () {
                             // remove player from players collection
-                            globalBloc.add(DeletePlayer(player: player));
+                            globalBloc.add(DeletePlayer(player: widget.player));
                             // remove player from teams collection
-                            Team teamWithoutPlayer = allTeams.firstWhere((team) => team.players.contains(player));
-                            teamWithoutPlayer.players.remove(player.id);
-                            if (teamWithoutPlayer.onFieldPlayers.contains(player)) {
-                              teamWithoutPlayer.onFieldPlayers.remove(player.id);
+                            Team teamWithoutPlayer = allTeams.firstWhere((team) => team.players.contains(widget.player));
+                            teamWithoutPlayer.players.remove(widget.player.id);
+                            if (teamWithoutPlayer.onFieldPlayers.contains(widget.player)) {
+                              teamWithoutPlayer.onFieldPlayers.remove(widget.player.id);
                             }
                             globalBloc.add(UpdateTeam(team: teamWithoutPlayer));
                             Navigator.pop(context);
@@ -307,25 +324,29 @@ class PlayerForm extends StatelessWidget {
                         onPressed: () {
                           // Validate returns true if the form is valid, or false otherwise.
                           if (_formKey.currentState!.validate()) {
+                            widget.player.firstName = firstNameController.text;
+                            widget.player.lastName = lastNameController.text;
+                            widget.player.number = int.parse(numberController.text);
+
                             // pop alert
                             Navigator.pop(context);
                             // updating an existing player
-                            if (editModeEnabled) {
+                            if (widget.editModeEnabled) {
                               // update player in players collection
-                              globalBloc.add(UpdatePlayer(player: player));
+                              globalBloc.add(UpdatePlayer(player: widget.player));
                               // go through each team of the club and update the players property
                               for (Team team in allTeams) {
-                                // if player was added to a team where they werent part of before
+                                // if player was added to a team where they weren't part of before
                                 bool teamCorrespondenceUpdated = false;
-                                if (player.teams.contains(team.id) && !team.players.contains(player.id)) {
-                                  team.players.add(player);
+                                if (playerIsPartOfRelevantTeam(widget.player, team) && !team.players.contains(widget.player.id)) {
+                                  team.players.add(widget.player);
                                   teamCorrespondenceUpdated = true;
                                   // if player was removed from a team where they were part of before
-                                } else if (!player.teams.contains(team.id) && team.players.contains(player.id)) {
-                                  team.players.remove(player);
+                                } else if (!playerIsPartOfRelevantTeam(widget.player, team) && team.players.contains(widget.player.id)) {
+                                  team.players.remove(widget.player);
                                   // of course also remove the player from the onFieldPlayers list
-                                  if (team.onFieldPlayers.contains(player)) {
-                                    team.onFieldPlayers.remove(player);
+                                  if (team.onFieldPlayers.contains(widget.player)) {
+                                    team.onFieldPlayers.remove(widget.player);
                                   }
                                   teamCorrespondenceUpdated = true;
                                 }
@@ -337,11 +358,12 @@ class PlayerForm extends StatelessWidget {
                               // new player mode
                             } else {
                               // add player to players collection
-                              globalBloc.add(CreatePlayer(player: player));
+                              globalBloc.add(CreatePlayer(player: widget.player));
+                              print("adding player: ${widget.player}");
                               // add player to players property of each team in the teams collection
-                              player.teams.forEach((String teamString) {
+                              widget.player.teams.forEach((String teamString) {
                                 Team team = allTeams.firstWhere((Team team) => teamString.contains(team.id.toString()));
-                                team.players.add(player);
+                                team.players.add(widget.player);
                                 globalBloc.add(UpdateTeam(team: team));
                               });
                             }
@@ -362,4 +384,14 @@ class PlayerForm extends StatelessWidget {
       )
     ]);
   }
+}
+
+bool playerIsPartOfRelevantTeam(Player player, Team team) {
+  bool playerIsPartOfRelevantTeam = false;
+  player.teams.forEach((element) {
+    if (element.contains(team.id.toString())) {
+      playerIsPartOfRelevantTeam = true;
+    }
+  });
+  return playerIsPartOfRelevantTeam;
 }

@@ -42,15 +42,24 @@ class TeamFirebaseRepository extends TeamRepository {
   /// Fetch the specified team from the teams collection corresponding to the logged in Club
   Future<Team> fetchTeam(String teamId) async {
     Team? team = null;
-    QuerySnapshot clubSnapshot = await FirebaseFirestore.instance
-        .collection('clubs')
-        .where("roles.${FirebaseAuth.instance.currentUser!.uid}", isEqualTo: "admin")
-        .limit(1)
-        .get();
-    if (clubSnapshot.docs.length != 1) {
-      throw Exception("No club found for user id. Cannot fetch team");
+    DocumentSnapshot teamSnapshot;
+    if (!teamId.contains("club") && !teamId.contains("teams")) {
+      QuerySnapshot clubSnapshot = await FirebaseFirestore.instance
+          .collection('clubs')
+          .where("roles.${FirebaseAuth.instance.currentUser!.uid}", isEqualTo: "admin")
+          .limit(1)
+          .get();
+      if (clubSnapshot.docs.length != 1) {
+        throw Exception("No club found for user id. Cannot fetch team");
+      }
+      teamSnapshot = await clubSnapshot.docs[0].reference.collection("teams").doc(teamId).get();
+      // case we passed an entire path
+    } else if (teamId.contains("club") && teamId.contains("teams")) {
+      print("we received an entire path");
+      teamSnapshot = await FirebaseFirestore.instance.doc(teamId).get();
+    } else {
+      throw Exception("Invalid team id");
     }
-    DocumentSnapshot teamSnapshot = await clubSnapshot.docs[0].reference.collection("teams").doc(teamId).get();
     if (teamSnapshot.exists) {
       team = await Team.fromEntity(TeamEntity.fromSnapshot(teamSnapshot));
     }

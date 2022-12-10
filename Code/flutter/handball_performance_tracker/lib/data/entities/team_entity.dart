@@ -6,36 +6,48 @@ import 'dart:developer' as developer;
 class TeamEntity extends Equatable {
   final DocumentReference? documentReference;
   final String name;
-  final List<DocumentReference> onFieldPlayers;
-  final List<DocumentReference>players;
+  List<DocumentReference> onFieldPlayers = [];
+  List<DocumentReference> players = [];
   final String type;
 
-  TeamEntity(this.documentReference, this.name, this.onFieldPlayers, this.players, this.type);
-
-  Map<String, Object> toJson() {
-    return {
-      'documentReference': documentReference!,
-      'name': name,
-      'onFieldPlayers': onFieldPlayers,
-      'players': players,
-      'type': type,
-    };
+  TeamEntity(
+      {this.documentReference,
+      this.name = "",
+      List<DocumentReference> onFieldPlayers = const [],
+      List<DocumentReference> players = const [],
+      this.type = ""}) {
+    if (!onFieldPlayers.isEmpty) {
+      this.onFieldPlayers = onFieldPlayers;
+    }
+    if (!players.isEmpty) {
+      this.players = players;
+    }
   }
+
+  // Map<String, Object> toJson() {
+  //   return {
+  //     'documentReference': documentReference!,
+  //     'name': name,
+  //     'onFieldPlayers': onFieldPlayers,
+  //     'players': players,
+  //     'type': type,
+  //   };
+  // }
 
   @override
   String toString() {
     return 'TeamEntity { name: $name, onFieldPlayers: ${onFieldPlayers.toString()}, players: ${players.toString()}, type: $type}';
   }
 
-  static TeamEntity fromJson(Map<String, Object> json) {
-    return TeamEntity(
-      json['documentReference'] as DocumentReference,
-      json['name'] as String,
-      json['onFieldPlayers'] as List<DocumentReference>,
-      json['players'] as List<DocumentReference>,
-      json['type'] as String,
-    );
-  }
+  // static TeamEntity fromJson(Map<String, Object> json) {
+  //   return TeamEntity(
+  //     json['documentReference'] as DocumentReference,
+  //     json['name'] as String,
+  //     json['onFieldPlayers'] as List<DocumentReference>,
+  //     json['players'] as List<DocumentReference>,
+  //     json['type'] as String,
+  //   );
+  // }
 
   static TeamEntity fromSnapshot(DocumentSnapshot snap) {
     Map<String, dynamic> data = snap.data() as Map<String, dynamic>;
@@ -48,13 +60,13 @@ class TeamEntity extends Equatable {
       playerReferences.add(playerReference);
     });
     developer.log("onFieldPlayers: ${onFieldPlayerReferences.toString()}", name: "TeamEntity");
-    developer.log("players: "+playerReferences.toString(), name: "TeamEntity");
+    developer.log("players: " + playerReferences.toString(), name: "TeamEntity");
     return TeamEntity(
-      snap.reference,
-      data['name'] ?? null,
-      onFieldPlayerReferences,
-      playerReferences,
-      data['type'] ?? null,
+      documentReference: snap.reference,
+      name: data['name'] ?? "",
+      onFieldPlayers: onFieldPlayerReferences,
+      players: playerReferences,
+      type: data['type'] ?? "",
     );
   }
 
