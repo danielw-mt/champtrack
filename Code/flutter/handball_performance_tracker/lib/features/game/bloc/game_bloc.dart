@@ -302,12 +302,13 @@ class GameBloc extends Bloc<GameEvent, GameState> {
 
     on<DeleteGameAction>((event, emit) {
       // TODO adapt ef score
-      emit(state.copyWith(gameActions: state.gameActions..remove(event.action)));
+      emit(state.copyWith(gameActions: (state.gameActions..remove(event.action)).toList()));
     });
 
     on<SetPenalty>((event, emit) {
       int penaltyStartStopWatchTime = state.stopWatchTimer.rawTime.value;
       Timer timer = Timer.periodic(Duration(seconds: 5), (Timer t) {
+        // in case we got rid of the penalty manually
         if (!state.penalties.containsKey(event.player)) {
           t.cancel();
           return;
@@ -317,10 +318,11 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         if (stopWatchTime - penaltyStartStopWatchTime >= 120000) {
           print("penalty timer is over");
           t.cancel();
-          state.penalties.remove(event.player);
+          emit(state.copyWith(penalties: {}));
         }
       });
       state.penalties[event.player] = timer;
+      emit(state.copyWith(penalties: new Map<Player, Timer>.from(state.penalties)));
     });
 
     on<RegisterAction>((event, emit) {

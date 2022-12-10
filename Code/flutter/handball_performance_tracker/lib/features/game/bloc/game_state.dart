@@ -32,13 +32,13 @@ class GameState extends Equatable {
   // fields set during game
   final bool attackIsLeft;
   final bool attacking;
-  List<Player> onFieldPlayers;
+  List<Player> onFieldPlayers = [];
   final int ownScore;
   final int opponentScore;
   StopWatchTimer stopWatchTimer = StopWatchTimer();
   List<GameAction> gameActions = [];
   List<String> lastClickedLocation = [];
-  Map<Player, Timer> penalties = {};
+  Map<Player, Timer> penalties = Map<Player, Timer>();
   Player substitutionTarget = Player();
   Player substitutionPlayer = Player();
   Player sevenMeterExecutor = Player();
@@ -58,13 +58,13 @@ class GameState extends Equatable {
     this.status = GameStatus.initial,
     this.attackIsLeft = true,
     this.attacking = true,
-    this.onFieldPlayers = const [],
+    List<Player> onFieldPlayers = const [],
     this.ownScore = 0,
     this.opponentScore = 0,
     stopWatchTimer,
-    this.gameActions = const [],
-    this.lastClickedLocation = const [],
-    this.penalties = const {},
+    List<GameAction> gameActions = const [],
+    List<String> lastClickedLocation = const [],
+    Map<Player, Timer> penalties = const {},
     substitutionTarget,
     substitutionPlayer,
     sevenMeterExecutor,
@@ -72,10 +72,14 @@ class GameState extends Equatable {
     this.workflowStep = WorkflowStep.closed,
   }) {
     // make sure that the list is growable
-    if (this.onFieldPlayers.isEmpty) {
+    if (!onFieldPlayers.isEmpty) {
+      this.onFieldPlayers = onFieldPlayers;
+    } else {
       this.onFieldPlayers = [];
     }
-    if (this.gameActions.isEmpty) {
+    if (!gameActions.isEmpty) {
+      this.gameActions = gameActions;
+    } else {
       this.gameActions = [];
     }
     if (stopWatchTimer != null) {
@@ -84,11 +88,15 @@ class GameState extends Equatable {
     if (selectedTeam != null) {
       this.selectedTeam = selectedTeam;
     }
-    if (this.lastClickedLocation.isEmpty) {
+    if (!lastClickedLocation.isEmpty) {
+      this.lastClickedLocation = lastClickedLocation;
+    } else {
       this.lastClickedLocation = [];
     }
-    if (this.penalties.isEmpty) {
-      this.penalties = {};
+    if (!penalties.isEmpty) {
+      this.penalties = penalties;
+    } else {
+      this.penalties = Map<Player, Timer>();
     }
     if (substitutionTarget != null) {
       this.substitutionTarget = substitutionTarget;
@@ -180,7 +188,7 @@ class GameState extends Equatable {
         this.stopWatchTimer,
         this.gameActions.hashCode,
         this.lastClickedLocation,
-        this.penalties,
+        this.penalties.hashCode,
         this.substitutionTarget,
         this.substitutionPlayer,
         this.sevenMeterExecutor,
