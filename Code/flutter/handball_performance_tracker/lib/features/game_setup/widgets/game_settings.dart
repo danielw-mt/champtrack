@@ -80,24 +80,41 @@ class GameSettings extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         // Textfield for opponent name
-                        Flexible(
-                          child: SizedBox(
-                              width: width * 0.3,
-                              height: height * 0.15,
-                              child: TextFormField(
-                                controller: opponentController,
-                                style: TextStyle(fontSize: 18),
-                                decoration: getDecoration(StringsGeneral.lOpponent),
-                              )),
+                        MouseRegion(
+                          onExit: (event) => gameSetupCubit.setOpponent(opponentController.text),
+                          child: Flexible(
+                            child: SizedBox(
+                                width: width * 0.3,
+                                height: height * 0.15,
+                                // make sure that the text gets saved to state when the user leaves the textfield
+                                child: Focus(
+                                  onFocusChange: (value) => value == false ? gameSetupCubit.setOpponent(opponentController.text) : {},
+                                  child: TextFormField(
+                                    controller: opponentController,
+                                    style: TextStyle(fontSize: 18),
+                                    decoration: getDecoration(StringsGeneral.lOpponent),
+                                    onEditingComplete: () => gameSetupCubit.setOpponent(opponentController.text),
+                                    onFieldSubmitted: (value) => gameSetupCubit.setOpponent(opponentController.text),
+                                    onSaved: (newValue) => gameSetupCubit.setOpponent(opponentController.text),
+                                  ),
+                                )),
+                          ),
                         ),
                         // Textfield for location
                         Flexible(
                           child: SizedBox(
                               width: width * 0.3,
                               height: height * 0.15,
-                              child: TextFormField(
-                                controller: locationController,
-                                decoration: getDecoration(StringsGeneral.lLocation),
+                              // make sure that the text gets saved to state when the user leaves the textfield
+                              child: Focus(
+                                onFocusChange: (value) => value == false ? gameSetupCubit.setLocation(locationController.text) : {},
+                                child: TextFormField(
+                                  controller: locationController,
+                                  decoration: getDecoration(StringsGeneral.lLocation),
+                                  onEditingComplete: () => gameSetupCubit.setLocation(locationController.text),
+                                  onFieldSubmitted: (value) => gameSetupCubit.setLocation(locationController.text),
+                                  onSaved: (newValue) => gameSetupCubit.setLocation(locationController.text),
+                                ),
                               )),
                         ),
                       ],
