@@ -61,6 +61,9 @@ class StatisticsState extends Equatable {
     if (selectedPlayer != null) {
       this.selectedPlayer = selectedPlayer;
     }
+    if (selectedStatScreenIndex != null) {
+      this.selectedStatScreenIndex = selectedStatScreenIndex;
+    }
     if (statistics != null) {
       this.statistics = statistics;
     }

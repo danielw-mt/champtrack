@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
@@ -104,6 +106,8 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
         print("after generateStatistics");
 
         TeamStatistics selectedTeamStats = buildTeamStatistics(statistics, selectedTeam, selectedGame);
+        // print team statistics
+        print("team statistics: " + selectedTeamStats.toString());
 
         emit(state.copyWith(
             status: StatisticsStatus.loaded,
