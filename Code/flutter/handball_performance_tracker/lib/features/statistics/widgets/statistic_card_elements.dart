@@ -9,7 +9,12 @@ class PenaltyInfoCard extends StatelessWidget {
   final int timePenalties;
 
   //initialize card values by default with 0
-  const PenaltyInfoCard({Key? key, this.redCards = 0, this.yellowCards = 0, this.timePenalties = 0}) : super(key: key);
+  const PenaltyInfoCard(
+      {Key? key,
+      this.redCards = 0,
+      this.yellowCards = 0,
+      this.timePenalties = 0})
+      : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -77,14 +82,16 @@ class PenaltyInfoCard extends StatelessWidget {
 }
 
 class ActionsCard extends StatelessWidget {
-  int currentTab = 0;
+  final Map<String, int> actionCounts;
+
+  const ActionsCard({super.key, required this.actionCounts});
 
   @override
   Widget build(BuildContext context) {
     // get statistics bloc
     final statisticsBloc = context.watch<StatisticsBloc>();
     // print statistics bloc state action counts
-    print(statisticsBloc.state.selectedTeamStats.actionCounts);
+    //print(statisticsBloc.state.selectedTeamStats.actionCounts);
 
     if (statisticsBloc.state.pieChartView) {
       return Card(
@@ -98,9 +105,6 @@ class ActionsCard extends StatelessWidget {
                   children: [
                     ElevatedButton(
                         onPressed: () {
-                          // setState(() {
-                          //   currentTab = 1;
-                          // });
                           // call bloc event to change pie chart view to false
                           statisticsBloc.add(PieChartView(pieChartView: false));
                         },
@@ -109,8 +113,7 @@ class ActionsCard extends StatelessWidget {
                 )),
             Flexible(
               flex: 4,
-              child: PieChartActionsWidget(
-                  statisticsBloc.state.selectedTeamStats.actionCounts),
+              child: PieChartActionsWidget(actionCounts),
             ),
           ],
         ),
@@ -135,7 +138,7 @@ class ActionsCard extends StatelessWidget {
                 )),
             Flexible(
                 flex: 4,
-                child: statisticsBloc.state.selectedTeamStats.actionCounts != {}
+                child: actionCounts != {}
                     ? SingleChildScrollView(
                         controller: ScrollController(),
                         scrollDirection: Axis.vertical,
@@ -149,18 +152,12 @@ class ActionsCard extends StatelessWidget {
                               ),
                             ],
                             rows: List<DataRow>.generate(
-                                statisticsBloc.state.selectedTeamStats
-                                    .actionCounts.length,
+                                actionCounts.length,
                                 (index) => DataRow(cells: [
                                       // convert action tag to the correct string specified in the strings using realActionType
-                                      DataCell(Text(realActionTag(statisticsBloc
-                                          .state
-                                          .selectedTeamStats
-                                          .actionCounts
-                                          .keys
-                                          .elementAt(index)))),
-                                      DataCell(Text(statisticsBloc.state
-                                          .selectedTeamStats.actionCounts.values
+                                      DataCell(Text(realActionTag(
+                                          actionCounts.keys.elementAt(index)))),
+                                      DataCell(Text(actionCounts.values
                                           .elementAt(index)
                                           .toString()))
                                     ]))),

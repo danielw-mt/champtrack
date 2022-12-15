@@ -10,58 +10,6 @@ class TeamStatistics extends StatelessWidget {
   Widget build(BuildContext context) {
     // get statistics bloc
     final statisticsBloc = context.watch<StatisticsBloc>();
-    // Map<String, dynamic> _statistics = statisticsBloc.state.statistics;
-    // // print statistics keys
-    // print("statistics keys: ${_statistics.keys}");
-    // Team _selectedTeam = statisticsBloc.state.selectedTeam;
-    // Game _selectedGame = statisticsBloc.state.selectedGame;
-    // // print selected team and game
-    // print("selected team: ${_selectedTeam.name}");
-    // print("selected game: ${_selectedGame.id}");
-    // Map<String, int> actionCounts = {};
-    // Map<String, List<int>> actionSeries = {};
-    // int startTime = 0;
-    // int stopTime = 0;
-    // List<List<double>> quotas = [
-    //   [0, 0],
-    //   [0, 0],
-    //   [0, 0]
-    // ];
-    // List<double> efScoreSeries = [];
-    // List<int> timeStamps = [];
-    // try {
-    //   Map<String, dynamic> teamStats = _statistics[_selectedGame.id]["team_stats"][_selectedTeam.id];
-    //   // print team stats keys
-    //   print("team stats keys: ${teamStats.keys}");
-
-    //   //Map<String, dynamic> teamStats = _statistics[statisticsBloc.state.selectedGame.id]["team_stats"][statisticsBloc.state.selectedTeam.id];
-    //   // try to get action counts for the player
-    //   actionCounts = teamStats["action_counts"];
-    //   // try to get action_series for player
-    //   actionSeries = teamStats["action_series"];
-
-    //   // try to get ef-score series for player
-    //   efScoreSeries = teamStats["ef_score_series"];
-    //   // try to get all action timestamps for player
-    //   timeStamps = teamStats["all_action_timestamps"];
-    //   // try to get start time for game
-    //   startTime = _statistics[_selectedGame.id]["start_time"];
-    //   stopTime = _statistics[_selectedGame.id]["stop_time"];
-
-    //   // try to get quotas for player
-    //   quotas[0][0] = double.parse(teamStats["seven_meter_quota"][0].toString());
-    //   quotas[0][1] = double.parse(teamStats["seven_meter_quota"][1].toString());
-    //   quotas[1][0] = double.parse(teamStats["position_quota"][0].toString());
-    //   quotas[1][1] = double.parse(teamStats["position_quota"][1].toString());
-    //   quotas[2][0] = double.parse(teamStats["throw_quota"][0].toString());
-    //   quotas[2][1] = double.parse(teamStats["throw_quota"][1].toString());
-    // } on Exception catch (e) {
-    //   // logger.e(e);
-    // } catch (e) {
-    //   // logger.e(e);
-    // }
-    // print("#########");
-    // print(statisticsBloc.state.allTeams);
 
     return Scaffold(
         body: Row(
@@ -86,7 +34,10 @@ class TeamStatistics extends StatelessWidget {
                           )),
                       Expanded(
                         flex: 2,
-                        child: QuotaCard(quotas: statisticsBloc.state.selectedTeamStats.quotas, ring_form: true),
+                        child: QuotaCard(
+                            quotas:
+                                statisticsBloc.state.selectedTeamStats.quotas,
+                            ring_form: true),
                       )
                     ],
                   )),
@@ -109,7 +60,9 @@ class TeamStatistics extends StatelessWidget {
                                 .state.selectedTeamStats.stopTime),
                       ),
                       Expanded(
-                        child: ActionsCard(),
+                        child: ActionsCard(
+                            actionCounts: statisticsBloc
+                                .state.selectedTeamStats.actionCounts),
                       )
                     ],
                   ))
@@ -123,10 +76,16 @@ class TeamStatistics extends StatelessWidget {
                 Expanded(
                   flex: 1,
                   child: PenaltyInfoCard(
-                    redCards: statisticsBloc.state.selectedTeamStats.actionCounts[redCardTag] ?? 0,
-                    yellowCards: statisticsBloc.state.selectedTeamStats.actionCounts[yellowCardTag] ?? 0, 
-                    timePenalties: statisticsBloc.state.selectedTeamStats.actionCounts[timePenaltyTag] ?? 0,
-                     ),
+                    redCards: statisticsBloc
+                            .state.selectedTeamStats.actionCounts[redCardTag] ??
+                        0,
+                    yellowCards: statisticsBloc.state.selectedTeamStats
+                            .actionCounts[yellowCardTag] ??
+                        0,
+                    timePenalties: statisticsBloc.state.selectedTeamStats
+                            .actionCounts[timePenaltyTag] ??
+                        0,
+                  ),
                 ),
                 Expanded(
                   flex: 4,

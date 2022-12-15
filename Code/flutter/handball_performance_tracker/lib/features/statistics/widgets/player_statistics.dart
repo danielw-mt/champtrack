@@ -57,7 +57,7 @@ class PlayerStatistics extends StatelessWidget {
                             stopTime: statisticsBloc.state.selectedPlayerStats.stopTime),
                       ),
                       Expanded(
-                        child: ActionsCard(),
+                        child: ActionsCard(actionCounts: statisticsBloc.state.selectedPlayerStats.actionCounts),
                       )
                     ],
                   ))
