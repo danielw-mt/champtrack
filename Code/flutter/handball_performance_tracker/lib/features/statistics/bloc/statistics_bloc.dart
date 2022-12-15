@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
 import 'package:handball_performance_tracker/data/models/models.dart';
 import 'package:handball_performance_tracker/data/repositories/game_repository.dart';
 import 'package:handball_performance_tracker/data/repositories/player_repository.dart';
@@ -43,14 +42,17 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
       // set selected game
       Game selectedGame = selectedTeamGames.isNotEmpty ? selectedTeamGames[0] : Game(date: DateTime.now());
 
+      TeamStatistics selectedTeamStats = buildTeamStatistics(state.statistics, event.team, selectedGame);
 
 
-      emit(state.copyWith(selectedTeam: event.team, selectedTeamGames: selectedTeamGames, selectedGame: selectedGame));
+
+      emit(state.copyWith(selectedTeam: event.team, selectedTeamGames: selectedTeamGames, selectedGame: selectedGame, selectedTeamStats: selectedTeamStats));
     });
 
     on<SelectGame>((event, emit) {
       print("gameActions: " + event.game.gameActions.toString());
-      emit(state.copyWith(selectedGame: event.game));
+      TeamStatistics selectedTeamStats = buildTeamStatistics(state.statistics, state.selectedTeam, event.game);
+      emit(state.copyWith(selectedGame: event.game, selectedTeamStats: selectedTeamStats));
     });
 
     on<SelectPlayer>((event, emit) {
@@ -106,11 +108,12 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
 
         print("before generateStatistics");
         Map<String, dynamic> statistics = generateStatistics(fetchedGames, fetchedPlayers);
-        print("after generateStatistics");
+        print("after generateStatistics" + statistics.toString());
 
         TeamStatistics selectedTeamStats = buildTeamStatistics(statistics, selectedTeam, selectedGame);
         // print team statistics
         print("team statistics: " + selectedTeamStats.toString());
+        
 
         emit(state.copyWith(
             status: StatisticsStatus.loaded,
@@ -149,10 +152,14 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
 
     try { 
       teamStats = statistics[game.id]["team_stats"][team.id];
+      // print teamStats
+      print("teamStats: " + teamStats.toString());
       teamStatistics.teamStats = teamStats;
       //Map<String, dynamic> teamStats = _statistics[statisticsBloc.state.selectedGame.id]["team_stats"][statisticsBloc.state.selectedTeam.id];
       // try to get action counts for the player
       teamStatistics.actionCounts = teamStats["action_counts"];
+      // print teamstats object action counts
+      print("teamStats object action counts: " + teamStatistics.actionCounts.toString());
       // try to get action_series for player
       teamStatistics.actionSeries = teamStats["action_series"];
 

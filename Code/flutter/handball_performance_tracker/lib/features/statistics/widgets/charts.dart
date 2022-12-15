@@ -118,22 +118,6 @@ class PieChartActionsWidget extends StatelessWidget {
   }
 }
 
-// TODO Not used in code right now => clarify with Vincent
-
-// class PieChartQuotesWidget extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return pie.PieChart(
-//         chartType: pie.ChartType.ring,
-//         legendOptions: pie.LegendOptions(
-//           showLegendsInRow: false,
-//           legendPosition: pie.LegendPosition.right,
-//           showLegends: false,
-//         ),
-//         dataMap: dataMap);
-//   }
-// }
-
 class QuotaPieChart extends StatelessWidget {
   final Map<String, double> dataMap;
   QuotaPieChart({required this.ringForm, required this.dataMap});

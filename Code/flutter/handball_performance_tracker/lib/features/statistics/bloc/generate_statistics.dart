@@ -20,11 +20,11 @@ import 'dart:collection';
       // quality check that game document contains all the fields it needs and also actions
       // otherwise don't deal with this game
       // print game object
-      print("game chck");
-      print(game);
+      // print("game chck");
+      // print(game);
       if (game.teamId != null && game.startTime != null && !game.gameActions.isEmpty && game.id != null && game.stopWatchTimer != null) {
-        print("game is valid");
-        print(_statistics);
+        // print("game is valid");
+        // print(_statistics);
         List<GameAction> actions = game.gameActions;
         // generate statistics for each player
         Map<String, dynamic> playerStats = _generatePlayerStatistics(actions, players);

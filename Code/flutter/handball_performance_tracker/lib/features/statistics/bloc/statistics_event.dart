@@ -13,6 +13,12 @@ class ChangeTabs extends StatisticsEvent {
   ChangeTabs({required this.tabIndex});
 }
 
+class PieChartView extends StatisticsEvent {
+  final bool pieChartView;
+
+  PieChartView({required this.pieChartView});
+}
+
 class SelectTeam extends StatisticsEvent {
   final Team team;
 

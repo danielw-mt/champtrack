@@ -226,8 +226,7 @@ class _PlayerStatisticsState extends State<PlayerStatistics> {
                             stopTime: stopTime),
                       ),
                       Expanded(
-                        // TODO change ActionCards to stateless widget
-                        child: ActionsCard(actionCounts),
+                        child: ActionsCard(),
                       )
                     ],
                   ))
@@ -243,9 +242,9 @@ class _PlayerStatisticsState extends State<PlayerStatistics> {
                   // only pass the penalty values if they can be found in the actionCounts map
                   // if there is no value for that penalty pass 0
                   child: PenaltyInfoCard(
-                    redCards: actionCounts[redCardTag] == null ? 0 : actionCounts[redCardTag]!,
-                    yellowCards: actionCounts[yellowCardTag] == null ? 0 : actionCounts[yellowCardTag]!,
-                    timePenalties: actionCounts[timePenaltyTag] == null ? 0 : actionCounts[timePenaltyTag]!,
+                    // redCards: actionCounts[redCardTag] == null ? 0 : actionCounts[redCardTag]!,
+                    // yellowCards: actionCounts[yellowCardTag] == null ? 0 : actionCounts[yellowCardTag]!,
+                    // timePenalties: actionCounts[timePenaltyTag] == null ? 0 : actionCounts[timePenaltyTag]!,
                   ),
                 ),
                 Expanded(

@@ -16,6 +16,7 @@ class StatisticsState extends Equatable {
   int selectedStatScreenIndex = 0;
   Map<String, dynamic> statistics = {};
   TeamStatistics selectedTeamStats = TeamStatistics();
+  bool pieChartView = true;
 
   //bool statistics_ready = false;
   bool heatmapShowsAttack = true;
@@ -36,6 +37,7 @@ class StatisticsState extends Equatable {
     selectedTeamStats,
     heatmapShowsAttack,
     selectedHeatmapParameter,
+    pieChartView,
   }) {
     if (allGames != null) {
       this.allGames = allGames;
@@ -76,6 +78,9 @@ class StatisticsState extends Equatable {
     if (selectedHeatmapParameter != null) {
       this.selectedHeatmapParameter = selectedHeatmapParameter;
     }
+    if (pieChartView != null) {
+      this.pieChartView = pieChartView;
+    }
   }
 
   @override
@@ -94,6 +99,7 @@ class StatisticsState extends Equatable {
         this.selectedTeamStats,
         this.heatmapShowsAttack,
         this.selectedHeatmapParameter,
+        this.pieChartView,
       ];
 
   StatisticsState copyWith({
@@ -111,6 +117,7 @@ class StatisticsState extends Equatable {
     TeamStatistics? selectedTeamStats,
     bool? heatmapShowsAttack,
     String? selectedHeatmapParameter,
+    bool? pieChartView,
   }) {
     return StatisticsState(
       status: status ?? this.status,
@@ -130,6 +137,7 @@ class StatisticsState extends Equatable {
       heatmapShowsAttack: heatmapShowsAttack ?? this.heatmapShowsAttack,
       selectedHeatmapParameter:
           selectedHeatmapParameter ?? this.selectedHeatmapParameter,
+      pieChartView: pieChartView ?? this.pieChartView,
     );
   }
 }
