@@ -14,9 +14,12 @@ class PenaltyInfoCard extends StatelessWidget {
   Widget build(BuildContext context) {
     // get statistics bloc state
     final statisticsBlocState = context.watch<StatisticsBloc>().state;
-    print("yellows: "+statisticsBlocState
-                      .selectedTeamStats.actionCounts[yellowCardTag]
-                      .toString());
+    int yellowCardText =
+        statisticsBlocState.selectedTeamStats.actionCounts[yellowCardTag] ?? 0;
+    int redCardText =
+        statisticsBlocState.selectedTeamStats.actionCounts[redCardTag] ?? 0;
+    int timePenaltyText =
+        statisticsBlocState.selectedTeamStats.actionCounts[timePenaltyTag] ?? 0;
     return Card(
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -34,9 +37,7 @@ class PenaltyInfoCard extends StatelessWidget {
                 ),
                 Flexible(
                   flex: 1,
-                  child: Text(statisticsBlocState
-                      .selectedTeamStats.actionCounts[yellowCardTag]
-                      .toString()),
+                  child: Text(yellowCardText.toString()),
                 ),
               ],
             ),
@@ -54,9 +55,7 @@ class PenaltyInfoCard extends StatelessWidget {
                 ),
                 Flexible(
                   flex: 1,
-                  child: Text(statisticsBlocState
-                      .selectedTeamStats.actionCounts[redCardTag]
-                      .toString()),
+                  child: Text(redCardText.toString()),
                 ),
               ],
             ),
@@ -74,9 +73,7 @@ class PenaltyInfoCard extends StatelessWidget {
                 ),
                 Flexible(
                   flex: 1,
-                  child: Text(statisticsBlocState
-                      .selectedTeamStats.actionCounts[timePenaltyTag]
-                      .toString()),
+                  child: Text(timePenaltyText.toString()),
                 ),
               ],
             ),
@@ -86,14 +83,6 @@ class PenaltyInfoCard extends StatelessWidget {
     );
   }
 }
-
-// class ActionsCard extends StatefulWidget {
-//   final Map<String, int> actionCounts;
-//   const ActionsCard(this.actionCounts);
-
-//   @override
-//   _ActionsCardState createState() => _ActionsCardState();
-// }
 
 class ActionsCard extends StatelessWidget {
   int currentTab = 0;
@@ -168,13 +157,18 @@ class ActionsCard extends StatelessWidget {
                               ),
                             ],
                             rows: List<DataRow>.generate(
-                                statisticsBloc.state.selectedTeamStats.actionCounts.length,
+                                statisticsBloc.state.selectedTeamStats
+                                    .actionCounts.length,
                                 (index) => DataRow(cells: [
                                       // convert action tag to the correct string specified in the strings using realActionType
-                                      DataCell(Text(realActionTag(statisticsBloc.state.selectedTeamStats
-                                          .actionCounts.keys
+                                      DataCell(Text(realActionTag(statisticsBloc
+                                          .state
+                                          .selectedTeamStats
+                                          .actionCounts
+                                          .keys
                                           .elementAt(index)))),
-                                      DataCell(Text(statisticsBloc.state.selectedTeamStats.actionCounts.values
+                                      DataCell(Text(statisticsBloc.state
+                                          .selectedTeamStats.actionCounts.values
                                           .elementAt(index)
                                           .toString()))
                                     ]))),

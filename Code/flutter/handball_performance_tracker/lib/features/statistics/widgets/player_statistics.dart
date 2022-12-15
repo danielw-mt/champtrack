@@ -41,7 +41,8 @@ class _PlayerStatisticsState extends State<PlayerStatistics> {
     if (_teams.length != 0) {
       _selectedTeam = _teams[0];
       _games = getGamesInStatistics();
-      _players = []; //_persistentController.getAllPlayers(teamId: _selectedTeam.id);
+      _players =
+          []; //_persistentController.getAllPlayers(teamId: _selectedTeam.id);
       // if there are no teams ofc there are no players and no games
     } else {
       _games = [];
@@ -50,14 +51,14 @@ class _PlayerStatisticsState extends State<PlayerStatistics> {
     if (_games.length != 0) {
       _selectedGame = _games[0];
       // if there are no games don't show the player menu
-    } 
+    }
     // else {
     //   _players = [];
     // }
     if (_players.length != 0) {
       _selectedPlayer = _players[0];
       // if there are no players also don't display any games
-    } 
+    }
     // else {
     //   _games = [];
     // }
@@ -66,8 +67,11 @@ class _PlayerStatisticsState extends State<PlayerStatistics> {
 
   /// provide the games that are cached in persistentcontroller that match the selected team and that also match games in the statistics map
   List<Game> getGamesInStatistics() {
-    List<Game> allGames = []; // _persistentController.getAllGames(teamId: _selectedTeam.id);
-    List<Game> matchingGames = allGames.where((Game game) => _statistics.containsKey(game.id)).toList();
+    List<Game> allGames =
+        []; // _persistentController.getAllGames(teamId: _selectedTeam.id);
+    List<Game> matchingGames = allGames
+        .where((Game game) => _statistics.containsKey(game.id))
+        .toList();
     return matchingGames;
   }
 
@@ -90,9 +94,10 @@ class _PlayerStatisticsState extends State<PlayerStatistics> {
       // if there are no games do not display the player dropdown
       if (_games.length != 0) {
         _selectedGame = _games[0];
-        _players = []; //_persistentController.getAllPlayers(teamId: _selectedTeam.id);
+        _players =
+            []; //_persistentController.getAllPlayers(teamId: _selectedTeam.id);
         // logger.d(_players);
-      } 
+      }
       // else {
       //   _players = [];
       // }
@@ -131,13 +136,13 @@ class _PlayerStatisticsState extends State<PlayerStatistics> {
 
   @override
   Widget build(BuildContext context) {
-    if (_selectedTeam == Team(players: [], onFieldPlayers: []) && _teams.isNotEmpty) {
+    if (_selectedTeam == Team(players: [], onFieldPlayers: []) &&
+        _teams.isNotEmpty) {
       _selectedTeam = _teams[0];
       _games = getGamesInStatistics();
-      _players = [];// _persistentController.getAllPlayers(teamId: _selectedTeam.id);
+      _players =
+          []; // _persistentController.getAllPlayers(teamId: _selectedTeam.id);
     }
-
-
 
     Map<String, int> actionCounts = {};
     Map<String, List<int>> actionSeries = {};
@@ -151,7 +156,8 @@ class _PlayerStatisticsState extends State<PlayerStatistics> {
     List<double> efScoreSeries = [];
     List<int> timeStamps = [];
     try {
-      Map<String, dynamic> playerStats = _statistics[_selectedGame.id]["player_stats"][_selectedPlayer.id];
+      Map<String, dynamic> playerStats =
+          _statistics[_selectedGame.id]["player_stats"][_selectedPlayer.id];
       // try to get action counts for the player
       actionCounts = playerStats["action_counts"];
       // try to get action_series for player
@@ -166,8 +172,10 @@ class _PlayerStatisticsState extends State<PlayerStatistics> {
       stopTime = _statistics[_selectedGame.id]["stop_time"];
 
       // try to get quotas for player
-      quotas[0][0] = double.parse(playerStats["seven_meter_quota"][0].toString());
-      quotas[0][1] = double.parse(playerStats["seven_meter_quota"][1].toString());
+      quotas[0][0] =
+          double.parse(playerStats["seven_meter_quota"][0].toString());
+      quotas[0][1] =
+          double.parse(playerStats["seven_meter_quota"][1].toString());
       quotas[1][0] = double.parse(playerStats["position_quota"][0].toString());
       quotas[1][1] = double.parse(playerStats["position_quota"][1].toString());
       quotas[2][0] = double.parse(playerStats["throw_quota"][0].toString());
@@ -239,17 +247,13 @@ class _PlayerStatisticsState extends State<PlayerStatistics> {
               children: [
                 Expanded(
                   flex: 1,
-                  // only pass the penalty values if they can be found in the actionCounts map
-                  // if there is no value for that penalty pass 0
-                  child: PenaltyInfoCard(
-                    // redCards: actionCounts[redCardTag] == null ? 0 : actionCounts[redCardTag]!,
-                    // yellowCards: actionCounts[yellowCardTag] == null ? 0 : actionCounts[yellowCardTag]!,
-                    // timePenalties: actionCounts[timePenaltyTag] == null ? 0 : actionCounts[timePenaltyTag]!,
-                  ),
+                  child: PenaltyInfoCard(),
                 ),
                 Expanded(
                   flex: 4,
-                  child: Card(child: Image(image: AssetImage('images/statistics2_heatmap.jpg'))),
+                  child: Card(
+                      child: Image(
+                          image: AssetImage('images/statistics2_heatmap.jpg'))),
                 )
               ],
             )),

@@ -5,9 +5,7 @@ import 'package:handball_performance_tracker/core/constants/game_actions.dart';
 import 'package:handball_performance_tracker/data/models/game_model.dart';
 import 'package:handball_performance_tracker/data/models/team_model.dart';
 
-
 class TeamStatistics extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     // get statistics bloc
@@ -31,7 +29,7 @@ class TeamStatistics extends StatelessWidget {
     // ];
     // List<double> efScoreSeries = [];
     // List<int> timeStamps = [];
-    // try { 
+    // try {
     //   Map<String, dynamic> teamStats = _statistics[_selectedGame.id]["team_stats"][_selectedTeam.id];
     //   // print team stats keys
     //   print("team stats keys: ${teamStats.keys}");
@@ -83,16 +81,12 @@ class TeamStatistics extends StatelessWidget {
                           child: Card(
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                TeamSelector(),
-                                GameSelector()
-                              ],
+                              children: [TeamSelector(), GameSelector()],
                             ),
                           )),
                       Flexible(
                         flex: 2,
-                        child: 
-                        QuotaCard(
+                        child: QuotaCard(
                           ring_form: true,
                           quotas: statisticsBloc.state.selectedTeamStats.quotas,
                         ),
@@ -107,11 +101,17 @@ class TeamStatistics extends StatelessWidget {
                     children: [
                       Flexible(
                         child: PerformanceCard(
-                            actionSeries: statisticsBloc.state.selectedTeamStats.actionSeries, efScoreSeries: [], allActionTimeStamps: statisticsBloc.state.selectedTeamStats.timeStamps,
-                             startTime: statisticsBloc.state.selectedTeamStats.startTime, stopTime: statisticsBloc.state.selectedTeamStats.stopTime),
+                            actionSeries: statisticsBloc
+                                .state.selectedTeamStats.actionSeries,
+                            efScoreSeries: [],
+                            allActionTimeStamps: statisticsBloc
+                                .state.selectedTeamStats.timeStamps,
+                            startTime: statisticsBloc
+                                .state.selectedTeamStats.startTime,
+                            stopTime: statisticsBloc
+                                .state.selectedTeamStats.stopTime),
                       ),
                       Expanded(
-                        // TODO change ActionCards to stateless widget
                         child: ActionsCard(),
                       )
                     ],
@@ -125,19 +125,14 @@ class TeamStatistics extends StatelessWidget {
               children: [
                 Expanded(
                   flex: 1,
-                  // only pass the penalty values if they can be found in the actionCounts map
-                  // if there is no value for that penalty pass 0
-                  child: 
-                  PenaltyInfoCard(
-                  //   redCards: actionCounts[redCardTag] == null ? 0 : actionCounts[redCardTag]!,
-                  //   yellowCards: actionCounts[yellowCardTag] == null ? 0 : actionCounts[yellowCardTag]!,
-                  //   timePenalties: actionCounts[timePenaltyTag] == null ? 0 : actionCounts[timePenaltyTag]!,
-                  ),
+                  child: PenaltyInfoCard(),
                 ),
                 Expanded(
                   flex: 4,
                   //child: HeatMapCard(),
-                  child: Card(child: Image(image: AssetImage('images/statistics2_heatmap.jpg'))),
+                  child: Card(
+                      child: Image(
+                          image: AssetImage('images/statistics2_heatmap.jpg'))),
                 )
               ],
             )),
