@@ -41,7 +41,7 @@ class PlayerSelector extends StatelessWidget {
         // call event SelectPlayer from StatisticsBloc
         context.read<StatisticsBloc>().add(SelectPlayer(player: newPlayer!));
       },
-      items: statisticsBlocState.allPlayers.map<DropdownMenuItem<Player>>((Player player) {
+      items: statisticsBlocState.selectedTeamGamePlayers.map<DropdownMenuItem<Player>>((Player player) {
         return DropdownMenuItem<Player>(
           value: player,
           child: Text(player.firstName + " " + player.lastName),

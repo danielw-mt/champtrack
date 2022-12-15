@@ -6,6 +6,7 @@ import 'package:handball_performance_tracker/data/models/models.dart';
 import 'package:handball_performance_tracker/data/repositories/game_repository.dart';
 import 'package:handball_performance_tracker/data/repositories/player_repository.dart';
 import 'package:handball_performance_tracker/data/repositories/team_repository.dart';
+// import 'package:handball_performance_tracker/features/statistics/statistics.dart';
 import 'generate_statistics.dart';
 import 'dart:developer' as developer;
 
@@ -40,25 +41,40 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
           ? selectedTeamGames[0]
           : Game(date: DateTime.now());
 
+      List<Player> selectedTeamGamePlayers = event.team.players.toList();
+      Player selectedPlayer = selectedTeamGamePlayers.isNotEmpty
+          ? selectedTeamGamePlayers[0]
+          : Player();
+
+      PlayerStatistics selectedPlayerStats = _buildPlayerStatistics(
+          state.statistics, selectedPlayer, selectedGame);
+
       TeamStatistics selectedTeamStats =
-          buildTeamStatistics(state.statistics, event.team, selectedGame);
+          _buildTeamStatistics(state.statistics, event.team, selectedGame);
 
       emit(state.copyWith(
           selectedTeam: event.team,
           selectedTeamGames: selectedTeamGames,
           selectedGame: selectedGame,
-          selectedTeamStats: selectedTeamStats));
+          selectedTeamStats: selectedTeamStats,
+          selectedTeamGamePlayers: selectedTeamGamePlayers,
+          selectedPlayer: selectedPlayer,
+          selectedPlayerStats: selectedPlayerStats));
     });
 
     on<SelectGame>((event, emit) {
-      TeamStatistics newSelectedTeamStats =
-          buildTeamStatistics(state.statistics, state.selectedTeam, event.game);
+      TeamStatistics newSelectedTeamStats = _buildTeamStatistics(
+          state.statistics, state.selectedTeam, event.game);
       emit(state.copyWith(
           selectedGame: event.game, selectedTeamStats: newSelectedTeamStats));
     });
 
     on<SelectPlayer>((event, emit) {
-      emit(state.copyWith(selectedPlayer: event.player));
+      PlayerStatistics selectedPlayerStats = _buildPlayerStatistics(
+          state.statistics, event.player, state.selectedGame);
+      emit(state.copyWith(
+          selectedPlayer: event.player,
+          selectedPlayerStats: selectedPlayerStats));
     });
 
     on<PieChartView>((event, emit) {
@@ -111,17 +127,7 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
             .toList();
         //print("selectedTeamPlayers: $selectedTeamPlayers");
 
-        // filter selectedTeamPlayers for players who are on the selected game accourding to player.gameslist
-        List<Player> selectedTeamGamePlayers = selectedTeamPlayers
-            .where((player) => player.games
-                .where((element) => element == selectedGame.id)
-                .isNotEmpty)
-            .toList();
-
         // if selectedTeamGamePlayers is not empty, then set selectedPlayer to the first player in the list
-        Player selectedPlayer = selectedTeamGamePlayers.isNotEmpty
-            ? selectedTeamGamePlayers[0]
-            : Player();
 
         print("before generateStatistics");
         Map<String, dynamic> statistics =
@@ -129,9 +135,27 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
         print("after generateStatistics" + statistics.toString());
 
         TeamStatistics selectedTeamStats =
-            buildTeamStatistics(statistics, selectedTeam, selectedGame);
+            _buildTeamStatistics(statistics, selectedTeam, selectedGame);
         // print team statistics
         print("team statistics: " + selectedTeamStats.toString());
+
+        // filter selectedTeamPlayers for players who are on the selected game accourding to player.gameslist
+        // List<Player> selectedTeamGamePlayers = selectedTeamPlayers
+        //     .where((player) => player.games
+        //         .where((element) => element == selectedGame.id)
+        //         .isNotEmpty)
+        //     .toList();
+        List<Player> selectedTeamGamePlayers = selectedTeam.players.toList();
+        // .where((player) => player.games
+        //     .where((element) => element == selectedGame.id)
+        //     .isNotEmpty)
+
+        Player selectedPlayer = selectedTeamGamePlayers.isNotEmpty
+            ? selectedTeamGamePlayers[0]
+            : Player();
+
+        PlayerStatistics selectedPlayerStats =
+            _buildPlayerStatistics(statistics, selectedPlayer, selectedGame);
 
         emit(state.copyWith(
             status: StatisticsStatus.loaded,
@@ -144,7 +168,8 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
             selectedPlayer: selectedPlayer,
             selectedGame: selectedGame,
             statistics: statistics,
-            selectedTeamStats: selectedTeamStats));
+            selectedTeamStats: selectedTeamStats,
+            selectedPlayerStats: selectedPlayerStats));
       } catch (e) {
         print('Failure loading teams or players ' + e.toString());
         emit(state.copyWith(status: StatisticsStatus.error));
@@ -153,7 +178,7 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
     });
   }
 
-  TeamStatistics buildTeamStatistics(
+  TeamStatistics _buildTeamStatistics(
       Map<String, dynamic> statistics, Team team, Game game) {
     TeamStatistics teamStatistics = TeamStatistics();
     Map<String, dynamic> teamStats = {};
@@ -181,11 +206,19 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
       teamStatistics.stopTime = statistics[game.id]["stop_time"];
 
       teamStatistics.quotas = [
-        [double.parse(teamStats["seven_meter_quota"][0].toString()), double.parse(teamStats["seven_meter_quota"][1].toString())],
-        [double.parse(teamStats["position_quota"][0].toString()), double.parse(teamStats["position_quota"][1].toString())],
-        [double.parse(teamStats["throw_quota"][0].toString()), double.parse(teamStats["throw_quota"][1].toString())]
+        [
+          double.parse(teamStats["seven_meter_quota"][0].toString()),
+          double.parse(teamStats["seven_meter_quota"][1].toString())
+        ],
+        [
+          double.parse(teamStats["position_quota"][0].toString()),
+          double.parse(teamStats["position_quota"][1].toString())
+        ],
+        [
+          double.parse(teamStats["throw_quota"][0].toString()),
+          double.parse(teamStats["throw_quota"][1].toString())
+        ]
       ];
-
     } on Exception catch (e) {
       developer.log(e.toString());
     } catch (e) {
@@ -195,5 +228,57 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
     print("selected teamStats: $teamStatistics");
 
     return teamStatistics;
+  }
+
+  PlayerStatistics _buildPlayerStatistics(
+      Map<String, dynamic> statistics, Player player, Game game) {
+    PlayerStatistics playerStatistics = PlayerStatistics();
+    Map<String, dynamic> playerStats = {};
+
+    try {
+      playerStats = statistics[game.id]["player_stats"][player.id];
+      // print playerStats
+      print("playerStats: " + playerStats.toString());
+      playerStatistics.playerStats = playerStats;
+      //Map<String, dynamic> teamStats = _statistics[statisticsBloc.state.selectedGame.id]["team_stats"][statisticsBloc.state.selectedTeam.id];
+      // try to get action counts for the player
+      playerStatistics.actionCounts = playerStats["action_counts"];
+      // print playerstats object action counts
+      print("playerStats object action counts: " +
+          playerStatistics.actionCounts.toString());
+      // try to get action_series for player
+      playerStatistics.actionSeries = playerStats["action_series"];
+
+      // try to get ef-score series for player
+      playerStatistics.efScoreSeries = playerStats["ef_score_series"];
+      // try to get all action timestamps for player
+      playerStatistics.timeStamps = playerStats["all_action_timestamps"];
+      // try to get start time for game
+      playerStatistics.startTime = statistics[game.id]["start_time"];
+      playerStatistics.stopTime = statistics[game.id]["stop_time"];
+
+      playerStatistics.quotas = [
+        [
+          double.parse(playerStats["seven_meter_quota"][0].toString()),
+          double.parse(playerStats["seven_meter_quota"][1].toString())
+        ],
+        [
+          double.parse(playerStats["position_quota"][0].toString()),
+          double.parse(playerStats["position_quota"][1].toString())
+        ],
+        [
+          double.parse(playerStats["throw_quota"][0].toString()),
+          double.parse(playerStats["throw_quota"][1].toString())
+        ]
+      ];
+    } on Exception catch (e) {
+      developer.log(e.toString());
+    } catch (e) {
+      developer.log(e.toString());
+    }
+    // print selected playerStats
+    print("selected playerStats: $playerStatistics");
+
+    return playerStatistics;
   }
 }

@@ -4,22 +4,14 @@ import 'package:handball_performance_tracker/core/core.dart';
 import 'package:handball_performance_tracker/features/statistics/statistics.dart';
 
 class PenaltyInfoCard extends StatelessWidget {
-  // final int redCards;
-  // final int yellowCards;
-  // final int timePenalties;
+  final int redCards;
+  final int yellowCards;
+  final int timePenalties;
 
-  // initialize card values by default with 0
-  // const PenaltyInfoCard({Key? key, this.redCards = 0, this.yellowCards = 0, this.timePenalties = 0}) : super(key: key);
+  //initialize card values by default with 0
+  const PenaltyInfoCard({Key? key, this.redCards = 0, this.yellowCards = 0, this.timePenalties = 0}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    // get statistics bloc state
-    final statisticsBlocState = context.watch<StatisticsBloc>().state;
-    int yellowCardText =
-        statisticsBlocState.selectedTeamStats.actionCounts[yellowCardTag] ?? 0;
-    int redCardText =
-        statisticsBlocState.selectedTeamStats.actionCounts[redCardTag] ?? 0;
-    int timePenaltyText =
-        statisticsBlocState.selectedTeamStats.actionCounts[timePenaltyTag] ?? 0;
     return Card(
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -37,7 +29,7 @@ class PenaltyInfoCard extends StatelessWidget {
                 ),
                 Flexible(
                   flex: 1,
-                  child: Text(yellowCardText.toString()),
+                  child: Text(yellowCards.toString()),
                 ),
               ],
             ),
@@ -55,7 +47,7 @@ class PenaltyInfoCard extends StatelessWidget {
                 ),
                 Flexible(
                   flex: 1,
-                  child: Text(redCardText.toString()),
+                  child: Text(redCards.toString()),
                 ),
               ],
             ),
@@ -73,7 +65,7 @@ class PenaltyInfoCard extends StatelessWidget {
                 ),
                 Flexible(
                   flex: 1,
-                  child: Text(timePenaltyText.toString()),
+                  child: Text(timePenalties.toString()),
                 ),
               ],
             ),

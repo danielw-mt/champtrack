@@ -18,6 +18,7 @@ class StatisticsState extends Equatable {
   int playerQuotaIndex = 0;
   Map<String, dynamic> statistics = {};
   TeamStatistics selectedTeamStats = TeamStatistics();
+  PlayerStatistics selectedPlayerStats = PlayerStatistics();
   bool pieChartView = true;
 
   //bool statistics_ready = false;
@@ -39,6 +40,7 @@ class StatisticsState extends Equatable {
     playerQuotaIndex,
     statistics,
     selectedTeamStats,
+    selectedPlayerStats,
     heatmapShowsAttack,
     selectedHeatmapParameter,
     pieChartView,
@@ -82,6 +84,9 @@ class StatisticsState extends Equatable {
     if (selectedTeamStats != null) {
       this.selectedTeamStats = selectedTeamStats;
     }
+    if (selectedPlayerStats != null) {
+      this.selectedPlayerStats = selectedPlayerStats;
+    }
     if (heatmapShowsAttack != null) {
       this.heatmapShowsAttack = heatmapShowsAttack;
     }
@@ -109,6 +114,7 @@ class StatisticsState extends Equatable {
         this.playerQuotaIndex,
         this.statistics,
         this.selectedTeamStats,
+        this.selectedPlayerStats,
         this.heatmapShowsAttack,
         this.selectedHeatmapParameter,
         this.pieChartView,
@@ -129,6 +135,7 @@ class StatisticsState extends Equatable {
     int? playerQuotaIndex,
     Map<String, dynamic>? statistics,
     TeamStatistics? selectedTeamStats,
+    PlayerStatistics? selectedPlayerStats,
     bool? heatmapShowsAttack,
     String? selectedHeatmapParameter,
     bool? pieChartView,
@@ -150,6 +157,7 @@ class StatisticsState extends Equatable {
       playerQuotaIndex: playerQuotaIndex ?? this.playerQuotaIndex,
       statistics: statistics ?? this.statistics,
       selectedTeamStats: selectedTeamStats ?? this.selectedTeamStats,
+      selectedPlayerStats: selectedPlayerStats ?? this.selectedPlayerStats,
       heatmapShowsAttack: heatmapShowsAttack ?? this.heatmapShowsAttack,
       selectedHeatmapParameter:
           selectedHeatmapParameter ?? this.selectedHeatmapParameter,

@@ -123,8 +123,9 @@ class TeamStatistics extends StatelessWidget {
                 Expanded(
                   flex: 1,
                   child: PenaltyInfoCard(
-                    //statisticsBloc.state.selectedTeamStats
-                     // .actionCounts[GameActions.penalty]
+                    redCards: statisticsBloc.state.selectedTeamStats.actionCounts[redCardTag] ?? 0,
+                    yellowCards: statisticsBloc.state.selectedTeamStats.actionCounts[yellowCardTag] ?? 0, 
+                    timePenalties: statisticsBloc.state.selectedTeamStats.actionCounts[timePenaltyTag] ?? 0,
                      ),
                 ),
                 Expanded(
