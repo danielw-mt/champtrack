@@ -212,10 +212,7 @@ class _PlayerStatisticsState extends State<PlayerStatistics> {
                           ))),
                       Flexible(
                         flex: 2,
-                        child: QuotaCard(
-                          ring_form: true,
-                          quotas: quotas,
-                        ),
+                        child: QuotaCard(quotas: quotas, ring_form: true),
                       )
                     ],
                   )),

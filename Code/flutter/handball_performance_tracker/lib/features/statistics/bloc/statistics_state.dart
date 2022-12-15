@@ -14,6 +14,8 @@ class StatisticsState extends Equatable {
       Game(date: DateTime.now()); // TODO check if this is needed
   Player selectedPlayer = Player();
   int selectedStatScreenIndex = 0;
+  int teamQuotaIndex = 0;
+  int playerQuotaIndex = 0;
   Map<String, dynamic> statistics = {};
   TeamStatistics selectedTeamStats = TeamStatistics();
   bool pieChartView = true;
@@ -33,6 +35,8 @@ class StatisticsState extends Equatable {
     selectedGame,
     selectedPlayer,
     selectedStatScreenIndex,
+    teamQuotaIndex,
+    playerQuotaIndex,
     statistics,
     selectedTeamStats,
     heatmapShowsAttack,
@@ -66,6 +70,12 @@ class StatisticsState extends Equatable {
     if (selectedStatScreenIndex != null) {
       this.selectedStatScreenIndex = selectedStatScreenIndex;
     }
+    if (teamQuotaIndex != null) {
+      this.teamQuotaIndex = teamQuotaIndex;
+    }
+    if (playerQuotaIndex != null) {
+      this.playerQuotaIndex = playerQuotaIndex;
+    }
     if (statistics != null) {
       this.statistics = statistics;
     }
@@ -95,6 +105,8 @@ class StatisticsState extends Equatable {
         this.selectedGame,
         this.selectedPlayer,
         this.selectedStatScreenIndex,
+        this.teamQuotaIndex,
+        this.playerQuotaIndex,
         this.statistics,
         this.selectedTeamStats,
         this.heatmapShowsAttack,
@@ -113,6 +125,8 @@ class StatisticsState extends Equatable {
     Game? selectedGame,
     Player? selectedPlayer,
     int? selectedStatScreenIndex,
+    int? teamQuotaIndex,
+    int? playerQuotaIndex,
     Map<String, dynamic>? statistics,
     TeamStatistics? selectedTeamStats,
     bool? heatmapShowsAttack,
@@ -132,6 +146,8 @@ class StatisticsState extends Equatable {
       selectedPlayer: selectedPlayer ?? this.selectedPlayer,
       selectedStatScreenIndex:
           selectedStatScreenIndex ?? this.selectedStatScreenIndex,
+      teamQuotaIndex: teamQuotaIndex ?? this.teamQuotaIndex,
+      playerQuotaIndex: playerQuotaIndex ?? this.playerQuotaIndex,
       statistics: statistics ?? this.statistics,
       selectedTeamStats: selectedTeamStats ?? this.selectedTeamStats,
       heatmapShowsAttack: heatmapShowsAttack ?? this.heatmapShowsAttack,

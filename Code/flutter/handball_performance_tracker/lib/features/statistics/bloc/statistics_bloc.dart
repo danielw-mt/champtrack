@@ -22,7 +22,6 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
       required PlayerFirebaseRepository this.playerRepository,
       required TeamFirebaseRepository this.teamRepository})
       : super(StatisticsState()) {
-
     on<StatisticsEvent>((event, emit) {});
 
     on<ChangeTabs>((event, emit) {
@@ -33,35 +32,41 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
       // get all games
       List<Game> fetchedGames = gameRepository.games;
       // build list of games for selected team
-      List<Game> selectedTeamGames = fetchedGames.where((game) => game.teamId == event.team.id).toList();
-      // gameActions already not available here
-      // selectedTeamGames.forEach((element) {
-      //   print("select team: " + element.gameActions.toString());
-      // });
+      List<Game> selectedTeamGames =
+          fetchedGames.where((game) => game.teamId == event.team.id).toList();
 
       // set selected game
-      Game selectedGame = selectedTeamGames.isNotEmpty ? selectedTeamGames[0] : Game(date: DateTime.now());
+      Game selectedGame = selectedTeamGames.isNotEmpty
+          ? selectedTeamGames[0]
+          : Game(date: DateTime.now());
 
-      TeamStatistics selectedTeamStats = buildTeamStatistics(state.statistics, event.team, selectedGame);
+      TeamStatistics selectedTeamStats =
+          buildTeamStatistics(state.statistics, event.team, selectedGame);
 
-
-
-      emit(state.copyWith(selectedTeam: event.team, selectedTeamGames: selectedTeamGames, selectedGame: selectedGame, selectedTeamStats: selectedTeamStats));
+      emit(state.copyWith(
+          selectedTeam: event.team,
+          selectedTeamGames: selectedTeamGames,
+          selectedGame: selectedGame,
+          selectedTeamStats: selectedTeamStats));
     });
 
     on<SelectGame>((event, emit) {
-      print("gameActions: " + event.game.gameActions.toString());
-      TeamStatistics selectedTeamStats = buildTeamStatistics(state.statistics, state.selectedTeam, event.game);
-      emit(state.copyWith(selectedGame: event.game, selectedTeamStats: selectedTeamStats));
+      TeamStatistics newSelectedTeamStats =
+          buildTeamStatistics(state.statistics, state.selectedTeam, event.game);
+      emit(state.copyWith(
+          selectedGame: event.game, selectedTeamStats: newSelectedTeamStats));
     });
 
     on<SelectPlayer>((event, emit) {
-      // print selected player name
-      //print("Select player event");
-      //print(event.player);
-      // print("Select player event");
-      // print(event.player);
       emit(state.copyWith(selectedPlayer: event.player));
+    });
+
+    on<PieChartView>((event, emit) {
+      if (state.pieChartView) {
+        emit(state.copyWith(pieChartView: false));
+      } else {
+        emit(state.copyWith(pieChartView: true));
+      }
     });
 
     on<SwitchField>((event, emit) {
@@ -83,37 +88,50 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
         List<Game> fetchedGames = gameRepository.games;
 
         List<Team> fetchedTeams = teamRepository.teams;
-        
+
         // if fetchedTeams is not empty, then set selectedTeam to the first team in the list
         Team selectedTeam = fetchedTeams.isNotEmpty ? fetchedTeams[0] : Team();
 
-        List<Game> selectedTeamGames = fetchedGames.where((game) => game.teamId == selectedTeam.id).toList();
+        List<Game> selectedTeamGames = fetchedGames
+            .where((game) => game.teamId == selectedTeam.id)
+            .toList();
 
-        Game selectedGame = selectedTeamGames.isNotEmpty ? selectedTeamGames[0] : Game(date: DateTime.now());
+        Game selectedGame = selectedTeamGames.isNotEmpty
+            ? selectedTeamGames[0]
+            : Game(date: DateTime.now());
 
         List<Player> fetchedPlayers = playerRepository.players;
         //print("fetchedPlayers: $fetchedPlayers");
 
         // filter for players who are on the selected team
-        List<Player> selectedTeamPlayers =
-            fetchedPlayers.where((player) => player.teams.where((element) => element == selectedTeam.id).isNotEmpty).toList();
+        List<Player> selectedTeamPlayers = fetchedPlayers
+            .where((player) => player.teams
+                .where((element) => element == selectedTeam.id)
+                .isNotEmpty)
+            .toList();
         //print("selectedTeamPlayers: $selectedTeamPlayers");
 
         // filter selectedTeamPlayers for players who are on the selected game accourding to player.gameslist
-        List<Player> selectedTeamGamePlayers =
-            selectedTeamPlayers.where((player) => player.games.where((element) => element == selectedGame.id).isNotEmpty).toList();
+        List<Player> selectedTeamGamePlayers = selectedTeamPlayers
+            .where((player) => player.games
+                .where((element) => element == selectedGame.id)
+                .isNotEmpty)
+            .toList();
 
         // if selectedTeamGamePlayers is not empty, then set selectedPlayer to the first player in the list
-        Player selectedPlayer = selectedTeamGamePlayers.isNotEmpty ? selectedTeamGamePlayers[0] : Player();
+        Player selectedPlayer = selectedTeamGamePlayers.isNotEmpty
+            ? selectedTeamGamePlayers[0]
+            : Player();
 
         print("before generateStatistics");
-        Map<String, dynamic> statistics = generateStatistics(fetchedGames, fetchedPlayers);
+        Map<String, dynamic> statistics =
+            generateStatistics(fetchedGames, fetchedPlayers);
         print("after generateStatistics" + statistics.toString());
 
-        TeamStatistics selectedTeamStats = buildTeamStatistics(statistics, selectedTeam, selectedGame);
+        TeamStatistics selectedTeamStats =
+            buildTeamStatistics(statistics, selectedTeam, selectedGame);
         // print team statistics
         print("team statistics: " + selectedTeamStats.toString());
-        
 
         emit(state.copyWith(
             status: StatisticsStatus.loaded,
@@ -135,22 +153,12 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
     });
   }
 
-  TeamStatistics buildTeamStatistics(Map<String, dynamic> statistics, Team team, Game game){
+  TeamStatistics buildTeamStatistics(
+      Map<String, dynamic> statistics, Team team, Game game) {
     TeamStatistics teamStatistics = TeamStatistics();
     Map<String, dynamic> teamStats = {};
-    Map<String, int> actionCounts = {};
-    Map<String, List<int>> actionSeries = {};
-    int startTime = 0;
-    int stopTime = 0;
-    List<List<double>> quotas = [
-      [0, 0],
-      [0, 0],
-      [0, 0]
-    ];
-    List<double> efScoreSeries = [];
-    List<int> timeStamps = [];
 
-    try { 
+    try {
       teamStats = statistics[game.id]["team_stats"][team.id];
       // print teamStats
       print("teamStats: " + teamStats.toString());
@@ -159,7 +167,8 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
       // try to get action counts for the player
       teamStatistics.actionCounts = teamStats["action_counts"];
       // print teamstats object action counts
-      print("teamStats object action counts: " + teamStatistics.actionCounts.toString());
+      print("teamStats object action counts: " +
+          teamStatistics.actionCounts.toString());
       // try to get action_series for player
       teamStatistics.actionSeries = teamStats["action_series"];
 
@@ -171,22 +180,20 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
       teamStatistics.startTime = statistics[game.id]["start_time"];
       teamStatistics.stopTime = statistics[game.id]["stop_time"];
 
-      // try to get quotas for player
-      teamStatistics.quotas[0][0] = double.parse(teamStats["seven_meter_quota"][0].toString());
-      teamStatistics.quotas[0][1] = double.parse(teamStats["seven_meter_quota"][1].toString());
-      teamStatistics.quotas[1][0] = double.parse(teamStats["position_quota"][0].toString());
-      teamStatistics.quotas[1][1] = double.parse(teamStats["position_quota"][1].toString());
-      teamStatistics.quotas[2][0] = double.parse(teamStats["throw_quota"][0].toString());
-      teamStatistics.quotas[2][1] = double.parse(teamStats["throw_quota"][1].toString());
+      teamStatistics.quotas = [
+        [double.parse(teamStats["seven_meter_quota"][0].toString()), double.parse(teamStats["seven_meter_quota"][1].toString())],
+        [double.parse(teamStats["position_quota"][0].toString()), double.parse(teamStats["position_quota"][1].toString())],
+        [double.parse(teamStats["throw_quota"][0].toString()), double.parse(teamStats["throw_quota"][1].toString())]
+      ];
+
     } on Exception catch (e) {
       developer.log(e.toString());
     } catch (e) {
       developer.log(e.toString());
     }
     // print selected teamsStats
-    print("selected teamStats: $teamStats");
+    print("selected teamStats: $teamStatistics");
 
     return teamStatistics;
   }
-
 }

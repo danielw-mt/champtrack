@@ -84,12 +84,9 @@ class TeamStatistics extends StatelessWidget {
                               children: [TeamSelector(), GameSelector()],
                             ),
                           )),
-                      Flexible(
+                      Expanded(
                         flex: 2,
-                        child: QuotaCard(
-                          ring_form: true,
-                          quotas: statisticsBloc.state.selectedTeamStats.quotas,
-                        ),
+                        child: QuotaCard(quotas: statisticsBloc.state.selectedTeamStats.quotas, ring_form: true),
                       )
                     ],
                   )),
@@ -125,7 +122,10 @@ class TeamStatistics extends StatelessWidget {
               children: [
                 Expanded(
                   flex: 1,
-                  child: PenaltyInfoCard(),
+                  child: PenaltyInfoCard(
+                    //statisticsBloc.state.selectedTeamStats
+                     // .actionCounts[GameActions.penalty]
+                     ),
                 ),
                 Expanded(
                   flex: 4,
