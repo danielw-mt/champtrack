@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:handball_performance_tracker/data/models/models.dart';
 import 'package:handball_performance_tracker/data/entities/entities.dart';
+import 'package:handball_performance_tracker/core/core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 /// Defines methods that need to be implemented by data providers. Could also be something other than Firebase
@@ -26,16 +27,9 @@ class GameFirebaseRepository extends GameRepository {
 
   /// Add game to the games collection of the logged in club and return the game with the updated id
   Future<DocumentReference> createGame(Game game) async {
-    QuerySnapshot clubSnapshot = await FirebaseFirestore.instance
-        .collection('clubs')
-        .where("roles.${FirebaseAuth.instance.currentUser!.uid}", isEqualTo: "admin")
-        .limit(1)
-        .get();
-    if (clubSnapshot.docs.length != 1) {
-      throw Exception("No club found for user id. Cannot fetch game");
-    }
+    DocumentReference clubReference = await getClubReference();
     print("trying to add game");
-    DocumentReference gameRef = await clubSnapshot.docs[0].reference.collection("games").add(game.toEntity().toDocument());
+    DocumentReference gameRef = await clubReference.collection("games").add(game.toEntity().toDocument());
     print("added game");
     return gameRef;
   }
@@ -43,15 +37,8 @@ class GameFirebaseRepository extends GameRepository {
   /// Fetch the specified game from the games collection corresponding to the logged in Club
   Future<Game> fetchGame(String gameId) async {
     Game? game = null;
-    QuerySnapshot clubSnapshot = await FirebaseFirestore.instance
-        .collection('clubs')
-        .where("roles.${FirebaseAuth.instance.currentUser!.uid}", isEqualTo: "admin")
-        .limit(1)
-        .get();
-    if (clubSnapshot.docs.length != 1) {
-      throw Exception("No club found for user id. Cannot fetch game");
-    }
-    DocumentSnapshot gameSnapshot = await clubSnapshot.docs[0].reference.collection("games").doc(gameId).get();
+    DocumentReference clubReference = await getClubReference();
+    DocumentSnapshot gameSnapshot = await clubReference.collection("games").doc(gameId).get();
     if (gameSnapshot.exists) {
       game = Game.fromEntity(await GameEntity.fromSnapshot(gameSnapshot));
     }
@@ -61,15 +48,8 @@ class GameFirebaseRepository extends GameRepository {
   /// Fetch all games from the games collection of the logged in club
   Future<List<Game>> fetchGames() async {
     List<Game> games = [];
-    QuerySnapshot clubSnapshot = await FirebaseFirestore.instance
-        .collection('clubs')
-        .where("roles.${FirebaseAuth.instance.currentUser!.uid}", isEqualTo: "admin")
-        .limit(1)
-        .get();
-    if (clubSnapshot.docs.length != 1) {
-      throw Exception("No club found for user id. Cannot fetch games");
-    }
-    QuerySnapshot gamesSnapshot = await clubSnapshot.docs[0].reference.collection("games").get();
+    DocumentReference clubReference = await getClubReference();
+    QuerySnapshot gamesSnapshot = await clubReference.collection("games").get();
     await Future.forEach(gamesSnapshot.docs, (DocumentSnapshot gameSnapshot) async {
       GameEntity.fromSnapshot(gameSnapshot).then((value) => games.add(Game.fromEntity(value)));
     });
