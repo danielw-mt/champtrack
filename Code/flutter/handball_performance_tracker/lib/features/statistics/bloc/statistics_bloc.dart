@@ -52,14 +52,21 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
       TeamStatistics selectedTeamStats =
           _buildTeamStatistics(state.statistics, event.team, selectedGame);
 
+      String selectedTeamPerformanceParameter =
+          selectedTeamStats.actionSeries.keys.toList()[0];
+      // String selectedPlayerPerformanceParameter =
+      //     selectedPlayerStats.actionSeries.keys.toList()[0];
+
       emit(state.copyWith(
-          selectedTeam: event.team,
-          selectedTeamGames: selectedTeamGames,
-          selectedGame: selectedGame,
-          selectedTeamStats: selectedTeamStats,
-          selectedTeamGamePlayers: selectedTeamGamePlayers,
-          selectedPlayer: selectedPlayer,
-          selectedPlayerStats: selectedPlayerStats));
+        selectedTeam: event.team,
+        selectedTeamGames: selectedTeamGames,
+        selectedGame: selectedGame,
+        selectedTeamStats: selectedTeamStats,
+        selectedTeamGamePlayers: selectedTeamGamePlayers,
+        selectedPlayer: selectedPlayer,
+        selectedPlayerStats: selectedPlayerStats,
+        selectedTeamPerformanceParameter: selectedTeamPerformanceParameter,
+      ));
     });
 
     on<SelectGame>((event, emit) {
@@ -72,9 +79,15 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
     on<SelectPlayer>((event, emit) {
       PlayerStatistics selectedPlayerStats = _buildPlayerStatistics(
           state.statistics, event.player, state.selectedGame);
+
+      String selectedPlayerPerformanceParameter =
+          selectedPlayerStats.actionSeries.keys.toList()[0];
+
       emit(state.copyWith(
           selectedPlayer: event.player,
-          selectedPlayerStats: selectedPlayerStats));
+          selectedPlayerStats: selectedPlayerStats,
+          selectedPlayerPerformanceParameter:
+              selectedPlayerPerformanceParameter));
     });
 
     on<PieChartView>((event, emit) {
@@ -82,6 +95,15 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
         emit(state.copyWith(pieChartView: false));
       } else {
         emit(state.copyWith(pieChartView: true));
+      }
+    });
+
+    on<SelectPerformanceParameter>((event, emit) {
+      if (event.teamParameter) {
+        emit(state.copyWith(selectedTeamPerformanceParameter: event.parameter));
+      } else {
+        emit(state.copyWith(
+            selectedPlayerPerformanceParameter: event.parameter));
       }
     });
 
@@ -157,6 +179,22 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
         PlayerStatistics selectedPlayerStats =
             _buildPlayerStatistics(statistics, selectedPlayer, selectedGame);
 
+        // if actionSeries to list not empty select first parameter otherwise write string no parameter
+        String selectedTeamPerformanceParameter =
+            selectedTeamStats.actionSeries.keys.toList().isNotEmpty
+                ? selectedTeamStats.actionSeries.keys.toList()[0]
+                : "no parameter";
+
+        // String selectedTeamPerformanceParameter =
+        //     selectedTeamStats.actionSeries.keys.toList()[0];
+        // print selectedTeamPerformanceParameter
+        print("selectedTeamPerformanceParameter: " +
+            selectedTeamPerformanceParameter);
+        String selectedPlayerPerformanceParameter =
+            selectedPlayerStats.actionSeries.keys.toList().isNotEmpty
+                ? selectedPlayerStats.actionSeries.keys.toList()[0]
+                : "no parameter";
+
         emit(state.copyWith(
             status: StatisticsStatus.loaded,
             allGames: fetchedGames,
@@ -169,7 +207,10 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
             selectedGame: selectedGame,
             statistics: statistics,
             selectedTeamStats: selectedTeamStats,
-            selectedPlayerStats: selectedPlayerStats));
+            selectedPlayerStats: selectedPlayerStats,
+            selectedTeamPerformanceParameter: selectedTeamPerformanceParameter,
+            selectedPlayerPerformanceParameter:
+                selectedPlayerPerformanceParameter));
       } catch (e) {
         print('Failure loading teams or players ' + e.toString());
         emit(state.copyWith(status: StatisticsStatus.error));

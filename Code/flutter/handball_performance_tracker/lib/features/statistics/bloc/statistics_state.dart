@@ -24,6 +24,8 @@ class StatisticsState extends Equatable {
   //bool statistics_ready = false;
   bool heatmapShowsAttack = true;
   String selectedHeatmapParameter = "goals";
+  String selectedTeamPerformanceParameter = "goals";
+  String selectedPlayerPerformanceParameter = "goals";
 
   StatisticsState({
     this.status = StatisticsStatus.loading,
@@ -43,6 +45,8 @@ class StatisticsState extends Equatable {
     selectedPlayerStats,
     heatmapShowsAttack,
     selectedHeatmapParameter,
+    selectedTeamPerformanceParameter,
+    selectedPlayerPerformanceParameter,
     pieChartView,
   }) {
     if (allGames != null) {
@@ -93,6 +97,13 @@ class StatisticsState extends Equatable {
     if (selectedHeatmapParameter != null) {
       this.selectedHeatmapParameter = selectedHeatmapParameter;
     }
+    if (selectedTeamPerformanceParameter != null) {
+      this.selectedTeamPerformanceParameter = selectedTeamPerformanceParameter;
+    }
+    if (selectedPlayerPerformanceParameter != null) {
+      this.selectedPlayerPerformanceParameter =
+          selectedPlayerPerformanceParameter;
+    }
     if (pieChartView != null) {
       this.pieChartView = pieChartView;
     }
@@ -117,6 +128,8 @@ class StatisticsState extends Equatable {
         this.selectedPlayerStats,
         this.heatmapShowsAttack,
         this.selectedHeatmapParameter,
+        this.selectedTeamPerformanceParameter,
+        this.selectedPlayerPerformanceParameter,
         this.pieChartView,
       ];
 
@@ -138,6 +151,8 @@ class StatisticsState extends Equatable {
     PlayerStatistics? selectedPlayerStats,
     bool? heatmapShowsAttack,
     String? selectedHeatmapParameter,
+    String? selectedTeamPerformanceParameter,
+    String? selectedPlayerPerformanceParameter,
     bool? pieChartView,
   }) {
     return StatisticsState(
@@ -161,6 +176,10 @@ class StatisticsState extends Equatable {
       heatmapShowsAttack: heatmapShowsAttack ?? this.heatmapShowsAttack,
       selectedHeatmapParameter:
           selectedHeatmapParameter ?? this.selectedHeatmapParameter,
+      selectedTeamPerformanceParameter: selectedTeamPerformanceParameter ??
+          this.selectedTeamPerformanceParameter,
+      selectedPlayerPerformanceParameter: selectedPlayerPerformanceParameter ??
+          this.selectedPlayerPerformanceParameter,
       pieChartView: pieChartView ?? this.pieChartView,
     );
   }

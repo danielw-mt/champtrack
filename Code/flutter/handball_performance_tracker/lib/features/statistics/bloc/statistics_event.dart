@@ -19,6 +19,20 @@ class PieChartView extends StatisticsEvent {
   PieChartView({required this.pieChartView});
 }
 
+class SelectTeamPerformanceParameter extends StatisticsEvent {
+  final String parameter;
+
+  SelectTeamPerformanceParameter({required this.parameter});
+}
+
+class SelectPerformanceParameter extends StatisticsEvent {
+  final String parameter;
+  // if true change selectedTeamPerformanceParameter, else change selectedPlayerPerformanceParameter
+  final bool teamParameter; 
+
+  SelectPerformanceParameter({required this.parameter, required this.teamParameter});
+}
+
 class SelectTeam extends StatisticsEvent {
   final Team team;
 

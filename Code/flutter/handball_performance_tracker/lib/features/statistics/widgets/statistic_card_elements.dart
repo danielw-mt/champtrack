@@ -167,77 +167,95 @@ class ActionsCard extends StatelessWidget {
         ),
       );
     }
-    return Container();
   }
 }
 
-class PerformanceCard extends StatefulWidget {
+// class PerformanceCard extends StatefulWidget {
+//   final Map<String, List<int>> actionSeries;
+//   final int startTime;
+//   final int stopTime;
+//   final List<double> efScoreSeries;
+//   final List<int> allActionTimeStamps;
+
+//   const PerformanceCard(
+//       {Key? key,
+//       required this.actionSeries,
+//       required this.startTime,
+//       required this.stopTime,
+//       required this.efScoreSeries,
+//       required this.allActionTimeStamps})
+//       : super(key: key);
+//   @override
+//   _PerformanceCardState createState() => _PerformanceCardState();
+// }
+
+class PerformanceCard extends StatelessWidget {
+  final String selectedDropdownElement;
+  final List<String> dropDownElements;
   final Map<String, List<int>> actionSeries;
   final int startTime;
   final int stopTime;
   final List<double> efScoreSeries;
   final List<int> allActionTimeStamps;
+  final bool
+      teamPerformanceParameter; // if true change selectedTeamPerformanceParameter, else change selectedPlayerPerformanceParameter
 
   const PerformanceCard(
-      {Key? key,
+      {super.key,
+      required this.selectedDropdownElement,
+      required this.dropDownElements,
       required this.actionSeries,
       required this.startTime,
       required this.stopTime,
       required this.efScoreSeries,
-      required this.allActionTimeStamps})
-      : super(key: key);
-  @override
-  _PerformanceCardState createState() => _PerformanceCardState();
-}
-
-class _PerformanceCardState extends State<PerformanceCard> {
-  String _selectedDropdownElement = "";
-  List<String> _dropDownElements = [];
+      required this.allActionTimeStamps,
+      required this.teamPerformanceParameter});
 
   @override
   Widget build(BuildContext context) {
-    _dropDownElements = [];
-    if (widget.actionSeries.length == 0) {
-      return Center(child: Text(StringsGeneral.lNoDataAvailable));
-    }
-    // add the ef-score option to the action series dropdown elements
-    if (widget.efScoreSeries.length > 0) {
-      _dropDownElements.add("Ef-Score");
-    }
-    widget.actionSeries.keys.toList().forEach((String actionTag) {
-      // convert action tag to the correct string specified in the strings using realActionType
-      _dropDownElements.add(actionTag);
-    });
-    // if we did not select an element yet, select the first one
-    if (_selectedDropdownElement == "") {
-      _selectedDropdownElement = _dropDownElements[0];
-    }
-    // if a dropdown element is selected that is not available. (i.e. remnant from loading another game statistic previously)
-    if (!_dropDownElements.contains(_selectedDropdownElement)) {
-      _selectedDropdownElement = _dropDownElements[0];
-    }
+    // _dropDownElements = [];
+    // if (widget.actionSeries.length == 0) {
+    //   return Center(child: Text(StringsGeneral.lNoDataAvailable));
+    // }
+    // // add the ef-score option to the action series dropdown elements
+    // if (widget.efScoreSeries.length > 0) {
+    //   _dropDownElements.add("Ef-Score");
+    // }
+    // widget.actionSeries.keys.toList().forEach((String actionTag) {
+    //   // convert action tag to the correct string specified in the strings using realActionType
+    //   _dropDownElements.add(actionTag);
+    // });
+    // // if we did not select an element yet, select the first one
+    // if (_selectedDropdownElement == "") {
+    //   _selectedDropdownElement = _dropDownElements[0];
+    // }
+    // // if a dropdown element is selected that is not available. (i.e. remnant from loading another game statistic previously)
+    // if (!_dropDownElements.contains(_selectedDropdownElement)) {
+    //   _selectedDropdownElement = _dropDownElements[0];
+    // }
 
     return Card(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Flexible(flex: 1, child: buildActionTagDropdown()),
+          Flexible(
+              flex: 1,
+              child: buildActionTagDropdown(context, teamPerformanceParameter)),
           Flexible(
               flex: 4,
               // when we selected ef-score in the dropdown use the timestamps from all the actions and not the series timestamps
               // also use the values from the ef-score series that lign up with the timestamps for all actions
-              child: _selectedDropdownElement == "Ef-Score"
+              child: selectedDropdownElement == "Ef-Score"
                   ? LineChartWidget(
-                      startTime: widget.startTime,
-                      timeStamps: widget.allActionTimeStamps,
-                      values: widget.efScoreSeries,
-                      stopTime: widget.stopTime,
+                      startTime: startTime,
+                      timeStamps: allActionTimeStamps,
+                      values: efScoreSeries,
+                      stopTime: stopTime,
                     )
                   : LineChartWidget(
-                      startTime: widget.startTime,
-                      timeStamps:
-                          widget.actionSeries[_selectedDropdownElement]!,
-                      stopTime: widget.stopTime,
+                      startTime: startTime,
+                      timeStamps: actionSeries[selectedDropdownElement]!,
+                      stopTime: stopTime,
                       values: [],
                     )),
         ],
@@ -245,18 +263,19 @@ class _PerformanceCardState extends State<PerformanceCard> {
     );
   }
 
-  DropdownButton buildActionTagDropdown() {
+  DropdownButton buildActionTagDropdown(
+      BuildContext context, bool teamPerformanceParameter) {
     return DropdownButton<String>(
       isExpanded: true,
       // Initial Value
-      value: _selectedDropdownElement,
+      value: selectedDropdownElement,
 
       // Down Arrow Icon
       icon: const Icon(Icons.keyboard_arrow_down),
 
       // Array list of items
-      items: _dropDownElements.map((String dropdownElement) {
-        if (widget.actionSeries[dropdownElement] == null &&
+      items: dropDownElements.map((String dropdownElement) {
+        if (actionSeries[dropdownElement] == null &&
             dropdownElement != "Ef-Score") {
           print("cannot display dropdown element" +
               dropdownElement +
@@ -278,9 +297,10 @@ class _PerformanceCardState extends State<PerformanceCard> {
       // After selecting the desired option,it will
       // change button value to selected value
       onChanged: (String? newDropdownElement) {
-        setState(() {
-          _selectedDropdownElement = newDropdownElement!;
-        });
+        // call selectTeamPerformanceParamter from statisticsbloc event
+        context.watch<StatisticsBloc>().add(SelectPerformanceParameter(
+            parameter: newDropdownElement!,
+            teamParameter: teamPerformanceParameter));
       },
     );
   }

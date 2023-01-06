@@ -2,14 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:handball_performance_tracker/features/statistics/statistics.dart';
 import 'package:handball_performance_tracker/core/constants/game_actions.dart';
-import 'package:handball_performance_tracker/data/models/game_model.dart';
-import 'package:handball_performance_tracker/data/models/team_model.dart';
 
 class TeamStatistics extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // get statistics bloc
     final statisticsBloc = context.watch<StatisticsBloc>();
+    List<String> _dropDownElements = [];
+
+    statisticsBloc.state.selectedTeamStats.actionSeries.keys
+        .toList()
+        .forEach((String actionTag) {
+      // convert action tag to the correct string specified in the strings using realActionType
+      _dropDownElements.add(actionTag);
+    });
 
     return Scaffold(
         body: Row(
@@ -49,15 +55,20 @@ class TeamStatistics extends StatelessWidget {
                     children: [
                       Flexible(
                         child: PerformanceCard(
-                            actionSeries: statisticsBloc
-                                .state.selectedTeamStats.actionSeries,
-                            efScoreSeries: [],
-                            allActionTimeStamps: statisticsBloc
-                                .state.selectedTeamStats.timeStamps,
-                            startTime: statisticsBloc
-                                .state.selectedTeamStats.startTime,
-                            stopTime: statisticsBloc
-                                .state.selectedTeamStats.stopTime),
+                          selectedDropdownElement: statisticsBloc
+                              .state.selectedTeamPerformanceParameter,
+                          dropDownElements: _dropDownElements,
+                          actionSeries: statisticsBloc
+                              .state.selectedTeamStats.actionSeries,
+                          efScoreSeries: [],
+                          allActionTimeStamps:
+                              statisticsBloc.state.selectedTeamStats.timeStamps,
+                          startTime:
+                              statisticsBloc.state.selectedTeamStats.startTime,
+                          stopTime:
+                              statisticsBloc.state.selectedTeamStats.stopTime,
+                          teamPerformanceParameter: true,
+                        ),
                       ),
                       Expanded(
                         child: ActionsCard(
