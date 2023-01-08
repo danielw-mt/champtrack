@@ -5,6 +5,7 @@ import 'package:handball_performance_tracker/core/core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:handball_performance_tracker/features/dashboard/dashboard.dart';
 import 'package:handball_performance_tracker/features/authentication/authentication.dart';
+import 'package:handball_performance_tracker/features/statistics/statistics.dart';
 import 'package:handball_performance_tracker/features/team_management/team_management.dart';
 
 class SidebarView extends StatelessWidget {
@@ -40,7 +41,7 @@ class SidebarView extends StatelessWidget {
                     screen: TeamManagementPage(),
                     //children: buildTeamChildren(context),
                   ),
-                  SimpleListEntry(text: "TODO Statistics", screen: DashboardView()),
+                  SimpleListEntry(text: "TODO Statistiken", screen: StatisticsView()),
                   if (gameRunning) SimpleListEntry(text: "TODO Game is running", screen: DashboardView()) else Text(""),
                 ]).toList()),
             // Sign out button at the bottom
