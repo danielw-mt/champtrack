@@ -124,7 +124,7 @@ class _SignInState extends State<SignIn> {
                         Container(
                           alignment: Alignment.center,
                           child: new Image.asset(
-                            "images/champtrack_logo.png",
+                            "files/Intercep_Logo.png",
                             height: height * 0.2,
                             fit: BoxFit.cover,
                           ),

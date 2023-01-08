@@ -16,7 +16,7 @@ class DashboardView extends StatelessWidget {
     if (globalState.status == GlobalStatus.loading) {
       return Column(children: [
         Text("Loading...", style: TextStyle(fontSize: 20, color: Colors.blue)),
-        Image.asset("images/goalee_gif.gif"),
+        Image.asset("files/Intercep_Logo.png"),
         CircularProgressIndicator(
           strokeWidth: 4,
         )

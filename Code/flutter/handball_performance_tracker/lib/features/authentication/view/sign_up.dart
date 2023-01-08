@@ -153,7 +153,7 @@ class _SignUpState extends State<SignUp> {
                                   alignment: Alignment.center,
                                   child: new Image.asset(
                                     height: height * 0.2,
-                                    "images/champtrack_logo.png",
+                                    "files/Intercep_Logo.png",
                                     fit: BoxFit.cover,
                                   ),
                                 ),

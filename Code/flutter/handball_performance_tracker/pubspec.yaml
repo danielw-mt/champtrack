@@ -84,11 +84,12 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - files/champtrack_logo.png
+    - files/Intercep_Logo.png
     - files/launcher_icon.png
     - files/statistic_screen/time_penalty_button.jpg
     - files/statistic_screen/red_card_button.jpg
     - files/statistic_screen/yellow_card_button.jpg
+    
 
 
   # An image asset can refer to one or more resolution-specific "variants", see
