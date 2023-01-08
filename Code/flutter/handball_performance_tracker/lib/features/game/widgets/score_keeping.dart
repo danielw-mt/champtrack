@@ -16,8 +16,8 @@ class ScoreKeeping extends StatelessWidget {
       showDialog(
           context: context,
           builder: (BuildContext context) {
-            TextEditingController _ownScoreController = TextEditingController(text: 0.toString());
-            TextEditingController _opponentScoreController = TextEditingController(text: 0.toString());
+            TextEditingController _ownScoreController = TextEditingController(text: gameBloc.state.ownScore.toString());
+            TextEditingController _opponentScoreController = TextEditingController(text: gameBloc.state.opponentScore.toString());
             return BlocListener<GameBloc, GameState>(
               bloc: gameBloc,
               listener: (context, state) => {

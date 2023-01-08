@@ -4,20 +4,34 @@ import 'dart:developer' as developer;
 
 /// Representation of a club entry in firebase
 class PlayerEntity extends Equatable {
-  final DocumentReference documentReference;
+  final DocumentReference? documentReference;
   final String firstName;
   final String lastName;
   final String nickName;
   final int number;
-  final List<String> positions;
+  List<String> positions = [];
   // TODO change this to document reference
-  final List<String> teams;
+  List<String> teams = [];
 
-  PlayerEntity(this.documentReference, this.firstName, this.lastName, this.nickName, this.number, this.positions, this.teams);
+  PlayerEntity(
+      {this.documentReference,
+      this.firstName = "",
+      this.lastName = "",
+      this.nickName = "",
+      this.number = -1,
+      List<String> positions = const [],
+      List<String> teams = const []}) {
+    if (!positions.isEmpty) {
+      this.positions = positions;
+    }
+    if (!teams.isEmpty) {
+      this.teams = teams;
+    }
+  }
 
   Map<String, Object> toJson() {
     return {
-      "documentReference": documentReference,
+      "documentReference": documentReference ?? Null,
       'firstName': firstName,
       'lastName': lastName,
       'nickName': nickName,
@@ -34,13 +48,13 @@ class PlayerEntity extends Equatable {
 
   static PlayerEntity fromJson(Map<String, Object> json) {
     return PlayerEntity(
-      json['documentReference'] as DocumentReference,
-      json['firstName'] as String,
-      json['lastName'] as String,
-      json['nickName'] as String,
-      json['number'] as int,
-      json['positions'] as List<String>,
-      json['teams'] as List<String>,
+      documentReference: json['documentReference'] as DocumentReference,
+      firstName: json['firstName'] as String,
+      lastName: json['lastName'] as String,
+      nickName: json['nickName'] as String,
+      number: json['number'] as int,
+      positions: json['positions'] as List<String>,
+      teams: json['teams'] as List<String>,
     );
   }
 
@@ -62,17 +76,25 @@ class PlayerEntity extends Equatable {
         });
       }
       return PlayerEntity(
-        snap.reference,
-        data['firstName'] ?? null,
-        data['lastName'] ?? null,
-        data['nickName'] ?? null,
-        data['number'] ?? null,
-        positions,
-        teams,
+        documentReference: snap.reference,
+        firstName: data['firstName'] ?? null,
+        lastName: data['lastName'] ?? null,
+        nickName: data['nickName'] ?? null,
+        number: data['number'] ?? null,
+        positions: positions,
+        teams: teams,
       );
     }
     // if the player snapshot does not exist it most likely means that the player is invalid or was deleted
-    return PlayerEntity(snap.reference, "invalid / deleted", "invalid / deleted", "invalid / deleted", -1, [], []);
+    // return PlayerEntity(snap.reference, "invalid / deleted", "invalid / deleted", "invalid / deleted", -1, [], []);
+    return PlayerEntity(
+        documentReference: snap.reference,
+        firstName: "invalid / deleted",
+        lastName: "invalid / deleted",
+        nickName: "invalid / deleted",
+        number: -1,
+        positions: [],
+        teams: []);
   }
 
   Map<String, Object?> toDocument() {

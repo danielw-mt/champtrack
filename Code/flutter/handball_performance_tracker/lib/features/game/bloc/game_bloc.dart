@@ -293,7 +293,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         onFieldPlayers[onFieldPlayers.indexOf(event.oldPlayer)] = event.newPlayer;
         onFieldPlayers[indexOfNewPlayer] = event.oldPlayer;
         emit(state.copyWith(onFieldPlayers: onFieldPlayers.toList()));
-      } else {
+      } else if (onFieldPlayers.contains(event.oldPlayer)) {
         onFieldPlayers[onFieldPlayers.indexOf(event.oldPlayer)] = event.newPlayer;
         emit(state.copyWith(onFieldPlayers: onFieldPlayers.toList()));
       }
@@ -312,12 +312,13 @@ class GameBloc extends Bloc<GameEvent, GameState> {
 
     on<DeleteGameAction>((event, emit) {
       // TODO adapt ef score
-      emit(state.copyWith(gameActions: state.gameActions..remove(event.action)));
+      emit(state.copyWith(gameActions: (state.gameActions..remove(event.action)).toList()));
     });
 
     on<SetPenalty>((event, emit) {
       int penaltyStartStopWatchTime = state.stopWatchTimer.rawTime.value;
       Timer timer = Timer.periodic(Duration(seconds: 5), (Timer t) {
+        // in case we got rid of the penalty manually
         if (!state.penalties.containsKey(event.player)) {
           t.cancel();
           return;
@@ -327,10 +328,11 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         if (stopWatchTime - penaltyStartStopWatchTime >= 120000) {
           print("penalty timer is over");
           t.cancel();
-          state.penalties.remove(event.player);
+          emit(state.copyWith(penalties: {}));
         }
       });
       state.penalties[event.player] = timer;
+      emit(state.copyWith(penalties: new Map<Player, Timer>.from(state.penalties)));
     });
 
     on<RegisterAction>((event, emit) {
@@ -342,6 +344,11 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         timestamp: unixTime,
       );
 
+      // stop time for penalties
+      if (event.actionTag == forceTwoMinTag || event.actionTag == timePenaltyTag || event.actionTag == redCardTag) {
+        this.add(PauseGame());
+      }
+
       // for an action from opponent we can switch directly, we don't need the player menu to choose a player because these actions can be
       // directly assigned to the opponent
       if (event.actionTag == emptyGoalTag || event.actionTag == goalOpponentTag || event.actionTag == goalOpponent7mTag) {
@@ -350,6 +357,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         this.add(SwitchField());
         action.playerId = "opponent";
         emit(state.copyWith(opponentScore: state.opponentScore + 1, workflowStep: WorkflowStep.forceClose));
+
         // if an action inside goalkeeper menu that does not correspond to the opponent was hit try to assign this action directly to the goalkeeper
       } else if (event.actionContext == actionContextGoalkeeper && event.actionTag != goalOpponentTag && event.actionTag != emptyGoalTag) {
         print("our own goalkeeper action");
@@ -420,7 +428,8 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         emit(state.copyWith(gameActions: state.gameActions));
 
         this.add(UpdatePlayerEfScore(action: lastAction));
-      } else if (event.isSubstitute) {
+        // normal player selection => substitute player
+      } else if (event.isSubstitute && state.workflowStep == WorkflowStep.playerSelection) {
         print("player selection: substitute");
         // if a player was selected from the not on field players in the player menu
         List<Player> playersWithSamePosition = [];

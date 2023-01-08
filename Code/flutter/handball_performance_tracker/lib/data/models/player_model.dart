@@ -10,10 +10,10 @@ class Player {
   String lastName;
   String nickName;
   int number;
-  List<String> positions;
-  List<String> teams;
-  List<String> games;
-  LiveEfScore efScore;
+  List<String> positions = [];
+  List<String> teams = [];
+  List<String> games = [];
+  LiveEfScore efScore = LiveEfScore();
 
   Player({
     this.id = "",
@@ -22,10 +22,21 @@ class Player {
     this.lastName = "",
     this.nickName = "",
     this.number = 0,
-    this.positions = const [],
-    this.teams = const [],
+    positions = const [],
+    teams = const [],
     this.games = const [],
-  }) : efScore = LiveEfScore();
+  }) {
+    if (!positions.isEmpty) {
+      this.positions = positions;
+    }
+    if (!teams.isEmpty) {
+      this.teams = teams;
+    }
+    if (!games.isEmpty) {
+      this.games = games;
+    }
+    efScore = LiveEfScore();
+  }
 
   Player copyWith(
       {String? id,
@@ -77,14 +88,21 @@ class Player {
   }
 
   PlayerEntity toEntity() {
-    DocumentReference documentReference = FirebaseFirestore.instance.doc(path);
-    return PlayerEntity(documentReference, firstName, lastName, nickName, number, positions, teams);
+    return PlayerEntity(
+      documentReference: path == "" ? null : FirebaseFirestore.instance.doc(path),
+      firstName: firstName,
+      lastName: lastName,
+      nickName: nickName,
+      number: number,
+      positions: positions,
+      teams: teams,
+    );
   }
 
   static Player fromEntity(PlayerEntity entity) {
     return Player(
-      id: entity.documentReference.id,
-      path: entity.documentReference.path,
+      id: entity.documentReference == null ? null : entity.documentReference!.id,
+      path: entity.documentReference == null ? "" : entity.documentReference!.path,
       firstName: entity.firstName,
       lastName: entity.lastName,
       nickName: entity.nickName,
@@ -93,47 +111,6 @@ class Player {
       teams: entity.teams,
     );
   }
-
-  // @return Map<String,dynamic> as representation of Player object that can be saved to firestore
-  // Map<String, dynamic> toMap() {
-  //   return {
-  //     'firstName': firstName,
-  //     'lastName': lastName,
-  //     'nickName': nickName,
-  //     'number': number,
-  //     'positions': positions,
-  //     'teams': teams,
-  //     'games': games
-  //   };
-  // }
-
-  // @return Player object according to Player data fetched from firestore
-  // factory Player.fromDocumentSnapshot(DocumentSnapshot doc) {
-  //   logger.d("creating player from document snapshot");
-  //   final newPlayer =
-  //       Player.fromMap(Map.from(doc.data() as Map<String, dynamic>));
-  //   newPlayer.id = doc.reference.id;
-  //   return newPlayer;
-  // }
-
-  // @return Player object created from map representation of Player
-  // factory Player.fromMap(Map<String, dynamic> map) {
-  //   String firstName = map["firstName"];
-  //   String lastName = map["lastName"];
-  //   String nickName = map["nickName"];
-  //   int number = map["number"];
-  //   List<String> positions = map["positions"].cast<String>();
-  //   List<String> teams = map["teams"].cast<String>();
-  //   List<String> games = map["games"].cast<String>();
-  //   return Player(
-  //       firstName: firstName,
-  //       lastName: lastName,
-  //       nickName: nickName,
-  //       number: number,
-  //       positions: positions,
-  //       teams: teams,
-  //       games: games);
-  // }
 
   void addAction(GameAction action) => efScore.addAction(action, positions);
 

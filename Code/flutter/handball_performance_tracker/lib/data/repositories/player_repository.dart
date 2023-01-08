@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:handball_performance_tracker/data/models/models.dart';
 import 'package:handball_performance_tracker/data/entities/entities.dart';
+import 'package:handball_performance_tracker/data/repositories/repositories.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:handball_performance_tracker/core/core.dart';
 import 'dart:developer' as developer;
 
 /// Defines methods that need to be implemented by data providers. Could also be something other than Firebase
@@ -28,39 +30,31 @@ class PlayerFirebaseRepository extends PlayerRepository {
 
   /// Add player to players collection @return player with updated id
   Future<Player> createPlayer(Player player) async {
-    QuerySnapshot clubSnapshot = await FirebaseFirestore.instance
-        .collection('clubs')
-        .where("roles.${FirebaseAuth.instance.currentUser!.uid}",
-            isEqualTo: "admin")
-        .limit(1)
-        .get();
-    if (clubSnapshot.docs.length != 1) {
-      throw Exception("No club found for user id. Cannot fetch team");
-    }
-    DocumentReference playerRef = await clubSnapshot.docs[0].reference
-        .collection("players")
-        .add(player.toEntity().toDocument());
-    // create new player in _players
-    _players.add(player.copyWith(id: playerRef.id));
+    DocumentReference clubRef = await getClubReference();
+    DocumentReference playerRef = await clubRef.collection("players").add(player.toEntity().toDocument());
+    player.path = playerRef.path;
+    player.id = playerRef.id;
+    Future.forEach(player.teams, (String? teamReference) async {
+      print("trying to add playerReference to team $teamReference");
+      Team team = Team();
+      if (teamReference!.contains("club")) {
+        team = await TeamFirebaseRepository().fetchTeam(teamReference);
+        print("fetched team ${team.path}");
+      } else {
+        // TODO add club reference for backwards compatibility
+      }
+      team.players.add(player);
+      _players.add(player.copyWith(id: playerRef.id));
+      await TeamFirebaseRepository().updateTeam(team);
+    });
     return player.copyWith(id: playerRef.id);
   }
 
   /// Fetch the specified player from the players collection corresponding to the logged in Club
   Future<Player> fetchPlayer(String playerId) async {
     Player? player = null;
-    QuerySnapshot clubSnapshot = await FirebaseFirestore.instance
-        .collection('clubs')
-        .where("roles.${FirebaseAuth.instance.currentUser!.uid}",
-            isEqualTo: "admin")
-        .limit(1)
-        .get();
-    if (clubSnapshot.docs.length != 1) {
-      throw Exception("No club found for user id. Cannot fetch player");
-    }
-    DocumentSnapshot playerSnapshot = await clubSnapshot.docs[0].reference
-        .collection("players")
-        .doc(playerId)
-        .get();
+    DocumentReference clubRef = await getClubReference();
+    DocumentSnapshot playerSnapshot = await clubRef.collection("players").doc(playerId).get();
     if (playerSnapshot.exists) {
       player = Player.fromEntity(PlayerEntity.fromSnapshot(playerSnapshot));
     }
@@ -71,21 +65,10 @@ class PlayerFirebaseRepository extends PlayerRepository {
   Future<List<Player>> fetchPlayers() async {
     developer.log("fetchPlayers");
     List<Player> players = [];
-    QuerySnapshot clubSnapshot = await FirebaseFirestore.instance
-        .collection('clubs')
-        .where("roles.${FirebaseAuth.instance.currentUser!.uid}",
-            isEqualTo: "admin")
-        .limit(1)
-        .get();
-    if (clubSnapshot.docs.length != 1) {
-      throw Exception("No club found for user id. Cannot fetch players");
-    }
-    QuerySnapshot playersSnapshot =
-        await clubSnapshot.docs[0].reference.collection("players").get();
-    await Future.forEach(playersSnapshot.docs,
-        (DocumentSnapshot playerSnapshot) async {
-      _players
-          .add(Player.fromEntity(PlayerEntity.fromSnapshot(playerSnapshot)));
+    DocumentReference clubRef = await getClubReference();
+    QuerySnapshot playersSnapshot = await clubRef.collection("players").get();
+    await Future.forEach(playersSnapshot.docs, (DocumentSnapshot playerSnapshot) async {
+      players.add(Player.fromEntity(PlayerEntity.fromSnapshot(playerSnapshot)));
     });
     return _players;
   }

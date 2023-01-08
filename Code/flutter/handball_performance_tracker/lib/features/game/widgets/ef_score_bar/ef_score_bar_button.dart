@@ -6,7 +6,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:handball_performance_tracker/core/constants/field_size_parameters.dart' as fieldSizeParameter;
 import 'package:handball_performance_tracker/features/game/widgets/ef_score_bar/ef_score_popup.dart';
 import 'package:handball_performance_tracker/features/game/widgets/ef_score_bar/plus_button.dart';
-import 'package:handball_performance_tracker/old-utils/player_helper.dart';
 import 'dart:math';
 import 'ef_score_bar.dart';
 // TODO do we need this package?

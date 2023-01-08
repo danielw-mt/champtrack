@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:handball_performance_tracker/core/core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:handball_performance_tracker/features/game/game.dart';
+import 'package:handball_performance_tracker/features/dashboard/dashboard.dart';
 
 class FinishGameButton extends StatelessWidget {
   const FinishGameButton({Key? key}) : super(key: key);
@@ -35,8 +36,8 @@ class FinishGameButton extends StatelessWidget {
                     onPressed: () {
                       gameBloc.add(FinishGame());
                       Navigator.pop(context);
-                      // TODO maybe routing to Dashboard
                       Navigator.pop(context);
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => DashboardView()));
                     },
                     child: Text(
                       'OK',
