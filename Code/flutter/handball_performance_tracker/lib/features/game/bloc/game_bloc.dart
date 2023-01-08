@@ -9,6 +9,7 @@ import 'package:handball_performance_tracker/core/core.dart';
 import 'game_field_math.dart';
 import 'package:handball_performance_tracker/features/game/game.dart';
 import 'dart:async';
+import 'package:handball_performance_tracker/core/constants/field_size_parameters.dart' as fieldSizeParameter;
 
 part 'game_event.dart';
 part 'game_state.dart';
@@ -27,7 +28,11 @@ class GameBloc extends Bloc<GameEvent, GameState> {
 
     Timer.periodic(const Duration(seconds: 10), (timer) async {
       // only sync if the game is running
-      if (state.documentReference != null && state.status != GameStatus.initial && state.status != GameStatus.paused) {
+      // if (state.documentReference != null && state.status != GameStatus.initial && state.status != GameStatus.paused) {
+
+      // for now always sync
+      if (state.documentReference != null) {
+        print("syncing game...");
         // if any difference is found in the metadata of the game (onFieldPlayers, scoreHome, scoreOpponent, stopWatchTime) sync the metadata
         if (!state.onFieldPlayers
                 .every((Player player) => syncedOnFieldPlayers.where((Player playerElement) => playerElement.id == player.id).toList().isNotEmpty) ||
@@ -118,7 +123,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
           syncedGameActions = state.gameActions.toList();
         }
       } else {
-        print("no game created in db yet");
+        print("game sync is not running");
       }
     });
   }
@@ -257,10 +262,18 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     on<RegisterClickOnField>((event, emit) {
       // set last clicked location
       List<String> lastLocation = SectorCalc(event.fieldIsLeft).calculatePosition(event.position);
-      List<double> lastCoordinates = [event.position.dx, event.position.dy];
+      print("event position: ${event.position.toString()}");
+      print("screen size: ${fieldSizeParameter.fieldWidth.toString()}");
+      double relative_x_coordinate = event.position.dx / fieldSizeParameter.fieldWidth;
+      double rounded_x_coordinate = (relative_x_coordinate * 100).round() / 100;
+      double relative_y_coordinate = event.position.dy / fieldSizeParameter.fieldHeight;
+      double rounded_y_coordinate = (relative_y_coordinate * 100).round() / 100;
+      List<double> lastCoordinates = [rounded_x_coordinate, rounded_y_coordinate];
+      print("last coordinates: ${lastCoordinates.toString()}");
       // if we clicked on our own goal pop up our goalkeeper menu
       if (lastLocation.contains("goal") && !state.attacking) {
-        emit(state.copyWith(lastClickedLocation: lastLocation, lastClickedCoordinates: lastCoordinates, workflowStep: WorkflowStep.actionMenuGoalKeeper));
+        emit(state.copyWith(
+            lastClickedLocation: lastLocation, lastClickedCoordinates: lastCoordinates, workflowStep: WorkflowStep.actionMenuGoalKeeper));
       } else {
         emit(state.copyWith(lastClickedLocation: lastLocation, lastClickedCoordinates: lastCoordinates));
         this.add(WorkflowEvent());
@@ -381,6 +394,27 @@ class GameBloc extends Bloc<GameEvent, GameState> {
           // TODO open player menu with goalkeeper selection style
           this.add(WorkflowEvent(selectedAction: action));
         }
+        ////////////////////////////////////
+        /// Seven Meter Stuff
+        ///////////////////////////////////
+      } else if (state.workflowStep == WorkflowStep.sevenMeterPrompt) {
+        if (action.tag == yes7mTag && state.gameActions.last.tag == timePenaltyTag) {
+          print("going to defensive 7m after time penalty");
+          // go to defensive 7m
+          action.tag = foulSevenMeterTag;
+          // emit(state.copyWith(workflowStep: WorkflowStep.sevenMeterGoalkeeperSelection));
+        } else if (action.tag == yes7mTag && state.gameActions.last.tag == forceTwoMinTag) {
+          print("going to offensive 7m after force two minutes");
+          // go to offensive 7m
+          action.tag = oneVOneSevenTag;
+          // emit(state.copyWith(workflowStep: WorkflowStep.sevenMeterExecutorSelection));
+        }
+        print("adding WorkflowEvent: ${action.tag}");
+        this.add(WorkflowEvent(selectedAction: action));
+        if (action.tag == no7mTag) {
+          // close the menu
+          emit(state.copyWith(workflowStep: WorkflowStep.forceClose));
+        }
       } else if (state.workflowStep == WorkflowStep.sevenMeterOffenseResult) {
         print("logging 7m result");
         action.playerId = state.sevenMeterExecutor.id!;
@@ -492,6 +526,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     });
 
     on<WorkflowEvent>((event, emit) {
+      print("workflow event: "+state.workflowStep.toString());
       switch (state.workflowStep) {
         case WorkflowStep.closed:
           if (state.attacking) {
@@ -556,8 +591,28 @@ class GameBloc extends Bloc<GameEvent, GameState> {
           if (state.gameActions.last.tag == goalTag) {
             print("workflow playerSelection => goalAssistSelection");
             emit(state.copyWith(workflowStep: WorkflowStep.assistSelection));
+            // in the case of a time penalty open the seven meter menu
+          } else if (state.gameActions.last.tag == forceTwoMinTag) {
+            print("workflow playerSelection => sevenMeterExecuterSelection");
+            emit(state.copyWith(workflowStep: WorkflowStep.sevenMeterPrompt));
+          } else if (state.gameActions.last.tag == timePenaltyTag) {
+            print("workflow playerSelection => goalKeeperSelection");
+            emit(state.copyWith(workflowStep: WorkflowStep.sevenMeterPrompt));
           } else {
             print("workflow playerSelection => closed");
+            emit(state.copyWith(workflowStep: WorkflowStep.forceClose));
+          }
+          break;
+        case WorkflowStep.sevenMeterPrompt:
+          print("seven meter prompt step");
+          if (state.gameActions.last.tag == forceTwoMinTag) {
+            print("workflow sevenMeterPrompt => sevenMeterExecuterSelection");
+            emit(state.copyWith(workflowStep: WorkflowStep.sevenMeterExecutorSelection));
+          } else if (state.gameActions.last.tag == timePenaltyTag) {
+            print("workflow sevenMeterPrompt => goalKeeperSelection");
+            emit(state.copyWith(workflowStep: WorkflowStep.sevenMeterGoalkeeperSelection));
+          } else {
+            print("workflow sevenMeterPrompt => closed");
             emit(state.copyWith(workflowStep: WorkflowStep.forceClose));
           }
           break;
@@ -576,72 +631,3 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     });
   }
 }
-
-// void logAction() async {
-//   // we executed a 7m
-//   if (actionTag == goal7mTag || actionTag == missed7mTag) {
-//     logger.d("our team executed a 7m");
-//     Player sevenMeterExecutor = tempController.getPreviousClickedPlayer();
-//     action.playerId = sevenMeterExecutor.id!;
-//     persistentController.addActionToCache(action);
-//     persistentController.addActionToFirebase(action);
-//     tempController.updatePlayerEfScore(action.playerId, action);
-//     addFeedItem(action);
-//     tempController.setPreviousClickedPlayer(Player());
-//     Navigator.pop(context);
-//     // opponents scored or missed their 7m
-//   } else if (actionTag == goalOpponent7mTag || actionTag == parade7mTag) {
-//     logger.d("opponent executed a 7m");
-//     List<Player> goalKeepers = [];
-//     tempController.getOnFieldPlayers().forEach((Player player) {
-//       if (player.positions.contains(goalkeeperPos)) {
-//         goalKeepers.add(player);
-//       }
-//     });
-//     // if there is only one player with a goalkeeper position on field right now assign the action to him
-//     if (goalKeepers.length == 1) {
-//       // we know the player id so we assign it here. For all other actions it is assigned in the player menu
-//       action.playerId = goalKeepers[0].id!;
-//       persistentController.addActionToCache(action);
-//       persistentController.addActionToFirebase(action);
-//       addFeedItem(action);
-//       Navigator.pop(context);
-//       tempController.updatePlayerEfScore(action.playerId, action);
-//       // if there is more than one player with a goalkeeper position on field right now
-//     } else {
-//       tempController.setPlayerMenuText(StringsGameScreen.lChooseGoalkeeper);
-//       logger.d("More than one goalkeeper on field. Waiting for player selection");
-//       persistentController.addActionToCache(action);
-//       Navigator.pop(context);
-//       callPlayerMenu(context);
-//     }
-//   }
-
-//   // goal
-//   if (actionTag == goal7mTag) {
-//     tempController.incOwnScore();
-//     offensiveFieldSwitch();
-//   }
-//   // missed 7m
-//   if (actionTag == missed7mTag) {
-//     offensiveFieldSwitch();
-//   }
-//   // opponent goal
-//   if (actionTag == goalOpponent7mTag) {
-//     tempController.incOpponentScore();
-//     defensiveFieldSwitch();
-//   }
-//   // opponent missed
-//   if (actionTag == parade7mTag) {
-//     defensiveFieldSwitch();
-//   }
-
-//   // If there were player clicked which are not on field, open substitute player menu
-
-//   // see # 400 swapping out player on bench should not be possible
-//   // if (!tempController.getPlayersToChange().isEmpty) {
-//   //   Navigator.pop(context);
-//   //   callPlayerMenu(context, true);
-//   //   return;
-//   // }
-// }

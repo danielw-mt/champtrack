@@ -9,6 +9,7 @@ enum WorkflowStep {
   actionMenuGoalKeeper,
   playerSelection,
   assistSelection,
+  sevenMeterPrompt,
   sevenMeterScorerSelection,
   sevenMeterFoulerSelection,
   sevenMeterExecutorSelection,

@@ -12,6 +12,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final AuthRepository authRepository;
   AuthBloc({required this.authRepository}) : super(AuthState(authStatus: AuthStatus.UnAuthenticated)) {
     on<StartApp>((event, emit) async {
+      print("StartApp event received");
       try {
         emit(state.copyWith(authStatus: AuthStatus.UnAuthenticated));
         final user = await authRepository.getUser();
@@ -22,6 +23,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           emit(state.copyWith(authStatus: AuthStatus.UnAuthenticated));
         }
       } catch (e) {
+        print("Error in StartApp event: $e");
         emit(state.copyWith(authStatus: AuthStatus.AuthError, error: e.toString()));
       }
     });
@@ -34,6 +36,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         Club club = await authRepository.fetchLoggedInClub();
         emit(state.copyWith(authStatus: AuthStatus.Authenticated, club: club));
       } catch (e) {
+        print("Error in SignInRequested event: $e");
         emit(state.copyWith(authStatus: AuthStatus.AuthError, error: e.toString()));
       }
     });
@@ -46,6 +49,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         Club club = await authRepository.fetchLoggedInClub();
         emit(state.copyWith(authStatus: AuthStatus.Authenticated, club: club));
       } catch (e) {
+        print("Error in SignUpRequested event: $e");
         emit(state.copyWith(authStatus: AuthStatus.AuthError, error: e.toString()));
       }
     });
