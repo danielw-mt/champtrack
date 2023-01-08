@@ -38,6 +38,7 @@ class GameState extends Equatable {
   StopWatchTimer stopWatchTimer = StopWatchTimer();
   List<GameAction> gameActions = [];
   List<String> lastClickedLocation = [];
+  List<double> lastClickedCoordinates = [];
   Map<Player, Timer> penalties = Map<Player, Timer>();
   Player substitutionTarget = Player();
   Player substitutionPlayer = Player();
@@ -64,6 +65,7 @@ class GameState extends Equatable {
     stopWatchTimer,
     List<GameAction> gameActions = const [],
     List<String> lastClickedLocation = const [],
+    List<double> lastClickedCoordinates = const [],
     Map<Player, Timer> penalties = const {},
     substitutionTarget,
     substitutionPlayer,
@@ -92,6 +94,11 @@ class GameState extends Equatable {
       this.lastClickedLocation = lastClickedLocation;
     } else {
       this.lastClickedLocation = [];
+    }
+    if (!lastClickedCoordinates.isEmpty) {
+      this.lastClickedCoordinates = lastClickedCoordinates;
+    } else {
+      this.lastClickedCoordinates = [];
     }
     if (!penalties.isEmpty) {
       this.penalties = penalties;
@@ -122,6 +129,7 @@ class GameState extends Equatable {
     StopWatchTimer? stopWatchTimer,
     List<GameAction>? gameActions,
     List<String>? lastClickedLocation,
+    List<double>? lastClickedCoordinates,
     Map<Player, Timer>? penalties,
     Player? substitutionTarget,
     Player? substitutionPlayer,
@@ -148,6 +156,7 @@ class GameState extends Equatable {
       stopWatchTimer: stopWatchTimer ?? this.stopWatchTimer,
       gameActions: gameActions ?? this.gameActions,
       lastClickedLocation: lastClickedLocation ?? this.lastClickedLocation,
+      lastClickedCoordinates: lastClickedCoordinates ?? this.lastClickedCoordinates,
       penalties: penalties ?? this.penalties,
       substitutionTarget: substitutionTarget ?? this.substitutionTarget,
       substitutionPlayer: substitutionPlayer ?? this.substitutionPlayer,
@@ -168,6 +177,7 @@ class GameState extends Equatable {
         "stopWatchTimer: $stopWatchTimer, +\n " +
         "gameActions: $gameActions, +\n " +
         "lastClickedLocation: $lastClickedLocation, +\n " +
+        "lastClickedCoordinates: $lastClickedCoordinates, +\n " +
         "penalties: $penalties, +\n " +
         "substitutionTarget: $substitutionTarget, +\n " +
         "substitutionPlayer: $substitutionPlayer, +\n " +
@@ -188,6 +198,7 @@ class GameState extends Equatable {
         this.stopWatchTimer,
         this.gameActions.hashCode,
         this.lastClickedLocation,
+        this.lastClickedCoordinates,
         this.penalties.hashCode,
         this.substitutionTarget,
         this.substitutionPlayer,

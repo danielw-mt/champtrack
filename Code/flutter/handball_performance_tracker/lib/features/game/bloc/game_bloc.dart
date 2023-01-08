@@ -257,11 +257,12 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     on<RegisterClickOnField>((event, emit) {
       // set last clicked location
       List<String> lastLocation = SectorCalc(event.fieldIsLeft).calculatePosition(event.position);
+      List<double> lastCoordinates = [event.position.dx, event.position.dy];
       // if we clicked on our own goal pop up our goalkeeper menu
       if (lastLocation.contains("goal") && !state.attacking) {
-        emit(state.copyWith(lastClickedLocation: lastLocation, workflowStep: WorkflowStep.actionMenuGoalKeeper));
+        emit(state.copyWith(lastClickedLocation: lastLocation, lastClickedCoordinates: lastCoordinates, workflowStep: WorkflowStep.actionMenuGoalKeeper));
       } else {
-        emit(state.copyWith(lastClickedLocation: lastLocation));
+        emit(state.copyWith(lastClickedLocation: lastLocation, lastClickedCoordinates: lastCoordinates));
         this.add(WorkflowEvent());
       }
     });
@@ -341,6 +342,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         context: event.actionContext,
         tag: event.actionTag,
         throwLocation: List.from(state.lastClickedLocation.cast<String>()),
+        coordinates: List.from(state.lastClickedCoordinates.cast<double>()),
         timestamp: unixTime,
       );
 
