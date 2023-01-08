@@ -21,6 +21,7 @@ class GameEntity extends Equatable {
   final String? teamId;
   final bool? attackIsLeft;
   final List<GameAction>? gameActions;
+  final bool? isTestGame;
 
   GameEntity({
     this.documentReference,
@@ -39,6 +40,7 @@ class GameEntity extends Equatable {
     this.teamId,
     this.attackIsLeft,
     this.gameActions,
+    this.isTestGame,
   });
 
   Map<String, Object> toJson() {
@@ -59,12 +61,13 @@ class GameEntity extends Equatable {
       'teamId': teamId ?? Null,
       'attackIsLeft': attackIsLeft ?? Null,
       'gameActions': gameActions ?? Null,
+      'isTestGame': isTestGame ?? Null,
     };
   }
 
   @override
   String toString() {
-    return 'GameEntity { date: $date, isAtHome: $isAtHome, lastSync: $lastSync, location: $location, onFieldPlayers: ${onFieldPlayers.toString()}, opponent: $opponent, scoreHome: $scoreHome, scoreOpponent: $scoreOpponent, season: $season, startTime: $startTime, stopTime: $stopTime, stopWatchTime: $stopWatchTime, teamId: $teamId, attackIsLeft: $attackIsLeft }';
+    return 'GameEntity { date: $date, isAtHome: $isAtHome, lastSync: $lastSync, location: $location, onFieldPlayers: ${onFieldPlayers.toString()}, opponent: $opponent, scoreHome: $scoreHome, scoreOpponent: $scoreOpponent, season: $season, startTime: $startTime, stopTime: $stopTime, stopWatchTime: $stopWatchTime, teamId: $teamId, attackIsLeft: $attackIsLeft, gameActions: ${gameActions.toString()}, isTestGame: $isTestGame }';
   }
 
   static GameEntity fromJson(Map<String, Object> json) {
@@ -85,6 +88,7 @@ class GameEntity extends Equatable {
       teamId: json['teamId'] as String?,
       attackIsLeft: json['attackIsLeft'] as bool?,
       gameActions: json['gameActions'] as List<GameAction>?,
+      isTestGame: json['isTestGame'] as bool?,
     );
   }
 
@@ -115,7 +119,8 @@ class GameEntity extends Equatable {
         stopWatchTime: data['stopWatchTime'] != null ? data['stopWatchTime'] : 0,
         teamId: data['teamId'] != null ? data['teamId'] : "",
         attackIsLeft: data['attackIsLeft'] != null ? data['attackIsLeft'] : true,
-        gameActions: gameActions
+        gameActions: gameActions,
+        isTestGame: data['isTestGame'] != null ? data['isTestGame'] : false,
       );
     }
     // this is in case that we are trying to access a game that does not exist anymore in the DB or could not be found
@@ -139,6 +144,7 @@ class GameEntity extends Equatable {
       'stopWatchTime': stopWatchTime != null ? stopWatchTime : 0,
       'teamId': teamId != null ? teamId : "",
       'attackIsLeft': attackIsLeft != null ? attackIsLeft : true,
+      'isTestGame': isTestGame != null ? isTestGame : false,
     };
     return document;
   }
@@ -161,5 +167,6 @@ class GameEntity extends Equatable {
         teamId,
         attackIsLeft,
         gameActions,
+        isTestGame,
       ];
 }

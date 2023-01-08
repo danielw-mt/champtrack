@@ -79,6 +79,7 @@ class PlayerSelection extends StatelessWidget {
                                     date: gameSetupState.date,
                                     isHomeGame: gameSetupState.isHomeGame,
                                     attackIsLeft: gameSetupState.attackIsLeft,
+                                    isTestGame: gameSetupState.isTestGame,
                                   )));
                       return;
                     }
