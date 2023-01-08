@@ -107,7 +107,7 @@ class PlayerStatistics extends StatelessWidget {
                   flex: 4,
                   child: Card(
                       child: Image(
-                          image: AssetImage('images/statistics2_heatmap.jpg'))),
+                          image: AssetImage('files/statistics2_heatmap.jpg'))),
                 )
               ],
             )),

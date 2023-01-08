@@ -30,7 +30,7 @@ class PenaltyInfoCard extends StatelessWidget {
                   flex: 1,
                   child: Image(
                       image: AssetImage(
-                          'images/statistic_screen/yellow_card_button.jpg')),
+                          'files/statistic_screen/yellow_card_button.jpg')),
                 ),
                 Flexible(
                   flex: 1,
@@ -48,7 +48,7 @@ class PenaltyInfoCard extends StatelessWidget {
                   flex: 1,
                   child: Image(
                       image: AssetImage(
-                          'images/statistic_screen/red_card_button.jpg')),
+                          'files/statistic_screen/red_card_button.jpg')),
                 ),
                 Flexible(
                   flex: 1,
@@ -66,7 +66,7 @@ class PenaltyInfoCard extends StatelessWidget {
                   flex: 1,
                   child: Image(
                       image: AssetImage(
-                          'images/statistic_screen/time_penalty_button.jpg')),
+                          'files/statistic_screen/time_penalty_button.jpg')),
                 ),
                 Flexible(
                   flex: 1,

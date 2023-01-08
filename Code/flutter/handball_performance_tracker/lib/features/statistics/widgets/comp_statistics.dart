@@ -9,7 +9,7 @@ class ComparisonStatistics extends StatelessWidget {
   Widget build(BuildContext context) {
     // show image statistics3_overlay.jpg from assests folder
     return Center(
-        child: Image(image: AssetImage('images/statistics3_overlay.jpg')));
+        child: Image(image: AssetImage('files/statistics3_overlay.jpg')));
 
     /*return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,

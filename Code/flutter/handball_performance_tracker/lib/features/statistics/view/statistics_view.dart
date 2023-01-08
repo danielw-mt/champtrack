@@ -38,10 +38,10 @@ class StatisticsView extends StatelessWidget {
                 label: page2,
                 icon: Icon(Icons.person),
               ),
-              BottomNavigationBarItem(
-                label: page3,
-                icon: Icon(Icons.person_add_sharp),
-              ),
+              // BottomNavigationBarItem(
+              //   label: page3,
+              //   icon: Icon(Icons.person_add_sharp),
+              // ),
             ]),
       ),
     );
