@@ -13,7 +13,11 @@ class LineChartWidget extends StatelessWidget {
   final int stopTime;
 
   /// generate a line chart from @param timeStamps and @param values
-  LineChartWidget({required this.startTime, required this.timeStamps, required this.values, required this.stopTime});
+  LineChartWidget(
+      {required this.startTime,
+      required this.timeStamps,
+      required this.values,
+      required this.stopTime});
 
   final List<Color> gradientColors = [
     const Color(0xff23b6e6),
@@ -25,7 +29,8 @@ class LineChartWidget extends StatelessWidget {
     int end_minutes = 60;
     // if the stop watch time in minutes is larger than 60 then extend the chart to that value
     // for example if the game lasted 70 minutes extend the chart to that value
-    int stop_time_in_minutes = DateTime.fromMillisecondsSinceEpoch(stopTime).minute;
+    int stop_time_in_minutes =
+        DateTime.fromMillisecondsSinceEpoch(stopTime).minute;
     if (stop_time_in_minutes > 60) {
       end_minutes = stop_time_in_minutes;
     }
@@ -48,8 +53,11 @@ class LineChartWidget extends StatelessWidget {
         show: true,
         leftTitles: AxisTitles(
           // if there are no values provided (i.e. ef-score data) then only display Action Count
-          axisNameWidget: values.isEmpty ? Text(StringsGeneral.lActionCount) : Text(StringsGeneral.lValues),
-          sideTitles: SideTitles(interval: 1, showTitles: true, reservedSize: 40),
+          axisNameWidget: values.isEmpty
+              ? Text(StringsGeneral.lActionCount)
+              : Text(StringsGeneral.lValues),
+          sideTitles:
+              SideTitles(interval: 1, showTitles: true, reservedSize: 40),
         ),
         topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
         rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
@@ -81,11 +89,16 @@ class LineChartWidget extends StatelessWidget {
                       // each spot is the difference in minutes from the startTime
                       (index) {
                     int difference_in_minutes =
-                        DateTime.fromMillisecondsSinceEpoch(timeStamps[index]).difference(DateTime.fromMillisecondsSinceEpoch(startTime)).inMinutes;
+                        DateTime.fromMillisecondsSinceEpoch(timeStamps[index])
+                            .difference(
+                                DateTime.fromMillisecondsSinceEpoch(startTime))
+                            .inMinutes;
                     if (values.isEmpty) {
-                      return FlSpot(difference_in_minutes.toDouble(), (index + 1).toDouble());
+                      return FlSpot(difference_in_minutes.toDouble(),
+                          (index + 1).toDouble());
                     } else {
-                      return FlSpot(difference_in_minutes.toDouble(), values[index].toDouble());
+                      return FlSpot(difference_in_minutes.toDouble(),
+                          values[index].toDouble());
                     }
                   }),
                   isCurved: false)
@@ -126,6 +139,7 @@ class QuotaPieChart extends StatelessWidget {
 
   final colorListQuotes = <Color>[
     Colors.greenAccent,
+    Colors.redAccent,
   ];
 
   @override
@@ -134,24 +148,26 @@ class QuotaPieChart extends StatelessWidget {
       return Text("No data provided");
     } else {
       // if numerator and denominator are the same just display numerator because it is 100%
-      if (dataMap.values.toList()[0] == dataMap.values.toList()[1]) {
-        dataMap.remove(dataMap.keys.toList()[1]);
-      }
+      // if (dataMap.values.toList()[0] == dataMap.values.toList()[1]) {
+      //   dataMap.remove(dataMap.keys.toList()[1]);
+      // }
       return pie.PieChart(
         chartType: ringForm ? pie.ChartType.ring : pie.ChartType.disc,
+        initialAngleInDegree: -90,
+        colorList: colorListQuotes,
         legendOptions: pie.LegendOptions(
           showLegendsInRow: ringForm ? false : true,
           legendPosition: pie.LegendPosition.right,
           showLegends: ringForm ? false : true,
         ),
         chartValuesOptions: pie.ChartValuesOptions(
+          decimalPlaces: 0,
           showChartValueBackground: true,
           showChartValues: true,
-          showChartValuesInPercentage: ringForm ? true : false,
+          showChartValuesInPercentage: false,
           showChartValuesOutside: ringForm ? true : false,
-          decimalPlaces: 1,
         ),
-        dataMap: ringForm ? dataMap : dataMap,
+        dataMap: dataMap,
       );
     }
   }

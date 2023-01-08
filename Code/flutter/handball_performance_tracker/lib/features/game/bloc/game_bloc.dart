@@ -27,14 +27,20 @@ class GameBloc extends Bloc<GameEvent, GameState> {
 
     Timer.periodic(const Duration(seconds: 10), (timer) async {
       // only sync if the game is running
-      if (state.documentReference != null && state.status != GameStatus.initial && state.status != GameStatus.paused) {
+      if (state.documentReference != null &&
+          state.status != GameStatus.initial &&
+          state.status != GameStatus.paused) {
         // if any difference is found in the metadata of the game (onFieldPlayers, scoreHome, scoreOpponent, stopWatchTime) sync the metadata
-        if (!state.onFieldPlayers
-                .every((Player player) => syncedOnFieldPlayers.where((Player playerElement) => playerElement.id == player.id).toList().isNotEmpty) ||
+        if (!state.onFieldPlayers.every((Player player) => syncedOnFieldPlayers
+                .where((Player playerElement) => playerElement.id == player.id)
+                .toList()
+                .isNotEmpty) ||
             state.ownScore != syncedScoreHome ||
             state.opponentScore != syncedScoreOpponent) {
           // sync game metadata
-          List<String> onFieldPlayerIds = state.onFieldPlayers.map((Player player) => player.id.toString()).toList();
+          List<String> onFieldPlayerIds = state.onFieldPlayers
+              .map((Player player) => player.id.toString())
+              .toList();
           Game newGame = Game(
             id: state.documentReference!.id,
             path: state.documentReference!.path,
@@ -65,7 +71,8 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         }
 
         /// function that finds gameActions that were added to the last gameActions since the last sync or gameActions that were deleted since the last sync
-        List<List<GameAction>> difference(List<GameAction> oldActions, List<GameAction> newActions) {
+        List<List<GameAction>> difference(
+            List<GameAction> oldActions, List<GameAction> newActions) {
           List<GameAction> added = [];
           List<GameAction> removed = [];
           for (var i = 0; i < oldActions.length; i++) {
@@ -81,7 +88,8 @@ class GameBloc extends Bloc<GameEvent, GameState> {
           return [added, removed];
         }
 
-        List<List<GameAction>> gameActionsDifference = difference(syncedGameActions, state.gameActions);
+        List<List<GameAction>> gameActionsDifference =
+            difference(syncedGameActions, state.gameActions);
 
         bool gameActionsWereSynced = false;
         // if gameActions were added
@@ -91,9 +99,13 @@ class GameBloc extends Bloc<GameEvent, GameState> {
             // only add actions that have a player Id assigned
             if (gameAction.playerId != "") {
               try {
-                DocumentReference docRef = await this.gameRepository.createAction(gameAction, state.documentReference!.id);
-                state.gameActions[state.gameActions.indexOf(gameAction)].id = docRef.id;
-                state.gameActions[state.gameActions.indexOf(gameAction)].path = docRef.path;
+                DocumentReference docRef = await this
+                    .gameRepository
+                    .createAction(gameAction, state.documentReference!.id);
+                state.gameActions[state.gameActions.indexOf(gameAction)].id =
+                    docRef.id;
+                state.gameActions[state.gameActions.indexOf(gameAction)].path =
+                    docRef.path;
               } catch (e) {
                 print("Error syncing gameAction: $e");
               }
@@ -106,7 +118,9 @@ class GameBloc extends Bloc<GameEvent, GameState> {
           await Future.forEach(removedGameActions, (GameAction gameAction) {
             if (gameAction.playerId != "") {
               try {
-                this.gameRepository.deleteAction(gameAction, state.documentReference!.id);
+                this
+                    .gameRepository
+                    .deleteAction(gameAction, state.documentReference!.id);
               } catch (e) {
                 print("Error syncing gameAction: $e");
               }
@@ -123,7 +137,8 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     });
   }
 
-  GameBloc({required GameFirebaseRepository this.gameRepository}) : super(GameState()) {
+  GameBloc({required GameFirebaseRepository this.gameRepository})
+      : super(GameState()) {
     on<InitializeGame>((event, emit) async {
       try {
         Game game = Game(
@@ -154,7 +169,8 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     });
 
     on<SwipeField>((event, emit) async {
-      if (state.attackIsLeft && event.isLeft || !state.attackIsLeft && !event.isLeft) {
+      if (state.attackIsLeft && event.isLeft ||
+          !state.attackIsLeft && !event.isLeft) {
         print("attacking: true");
         emit(state.copyWith(attacking: true));
       } else {
@@ -166,25 +182,29 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     on<StartGame>((event, emit) {
       StopWatchTimer stopWatchTimer = state.stopWatchTimer;
       stopWatchTimer.onExecute.add(StopWatchExecute.start);
-      emit(state.copyWith(status: GameStatus.running, stopWatchTimer: stopWatchTimer));
+      emit(state.copyWith(
+          status: GameStatus.running, stopWatchTimer: stopWatchTimer));
     });
 
     on<PauseGame>((event, emit) {
       StopWatchTimer stopWatchTimer = state.stopWatchTimer;
       stopWatchTimer.onExecute.add(StopWatchExecute.stop);
-      emit(state.copyWith(status: GameStatus.paused, stopWatchTimer: stopWatchTimer));
+      emit(state.copyWith(
+          status: GameStatus.paused, stopWatchTimer: stopWatchTimer));
     });
 
     on<UnPauseGame>((event, emit) {
       StopWatchTimer stopWatchTimer = state.stopWatchTimer;
       stopWatchTimer.onExecute.add(StopWatchExecute.start);
-      emit(state.copyWith(status: GameStatus.running, stopWatchTimer: stopWatchTimer));
+      emit(state.copyWith(
+          status: GameStatus.running, stopWatchTimer: stopWatchTimer));
     });
 
     on<FinishGame>((event, emit) {
       StopWatchTimer stopWatchTimer = state.stopWatchTimer;
       stopWatchTimer.onExecute.add(StopWatchExecute.stop);
-      emit(state.copyWith(status: GameStatus.finished, stopWatchTimer: stopWatchTimer));
+      emit(state.copyWith(
+          status: GameStatus.finished, stopWatchTimer: stopWatchTimer));
     });
 
     on<ChangeScore>((event, emit) {
@@ -256,10 +276,13 @@ class GameBloc extends Bloc<GameEvent, GameState> {
 
     on<RegisterClickOnField>((event, emit) {
       // set last clicked location
-      List<String> lastLocation = SectorCalc(event.fieldIsLeft).calculatePosition(event.position);
+      List<String> lastLocation =
+          SectorCalc(event.fieldIsLeft).calculatePosition(event.position);
       // if we clicked on our own goal pop up our goalkeeper menu
       if (lastLocation.contains("goal") && !state.attacking) {
-        emit(state.copyWith(lastClickedLocation: lastLocation, workflowStep: WorkflowStep.actionMenuGoalKeeper));
+        emit(state.copyWith(
+            lastClickedLocation: lastLocation,
+            workflowStep: WorkflowStep.actionMenuGoalKeeper));
       } else {
         emit(state.copyWith(lastClickedLocation: lastLocation));
         this.add(WorkflowEvent());
@@ -287,14 +310,18 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     on<SubstitutePlayer>((event, emit) {
       List<Player> onFieldPlayers = state.onFieldPlayers;
       // if a substitution target was chosen that already is on field it means that we can just swap players in the onfieldplayers
-      print("substituting ${event.oldPlayer.lastName} with ${event.newPlayer.lastName}");
-      if (onFieldPlayers.contains(event.oldPlayer) && onFieldPlayers.contains(event.newPlayer)) {
+      print(
+          "substituting ${event.oldPlayer.lastName} with ${event.newPlayer.lastName}");
+      if (onFieldPlayers.contains(event.oldPlayer) &&
+          onFieldPlayers.contains(event.newPlayer)) {
         int indexOfNewPlayer = onFieldPlayers.indexOf(event.newPlayer);
-        onFieldPlayers[onFieldPlayers.indexOf(event.oldPlayer)] = event.newPlayer;
+        onFieldPlayers[onFieldPlayers.indexOf(event.oldPlayer)] =
+            event.newPlayer;
         onFieldPlayers[indexOfNewPlayer] = event.oldPlayer;
         emit(state.copyWith(onFieldPlayers: onFieldPlayers.toList()));
       } else if (onFieldPlayers.contains(event.oldPlayer)) {
-        onFieldPlayers[onFieldPlayers.indexOf(event.oldPlayer)] = event.newPlayer;
+        onFieldPlayers[onFieldPlayers.indexOf(event.oldPlayer)] =
+            event.newPlayer;
         emit(state.copyWith(onFieldPlayers: onFieldPlayers.toList()));
       }
     });
@@ -302,17 +329,21 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     on<UpdatePlayerEfScore>((event, emit) {
       if (event.action.playerId != "") {
         print("updating player ef score");
-        Player relevantPlayer = state.onFieldPlayers.where((Player player) => player.id == event.action.playerId).first;
+        Player relevantPlayer = state.onFieldPlayers
+            .where((Player player) => player.id == event.action.playerId)
+            .first;
         relevantPlayer.addAction(event.action);
         List<Player> newOnFieldPlayers = state.onFieldPlayers.toList();
-        newOnFieldPlayers[newOnFieldPlayers.indexOf(relevantPlayer)] = relevantPlayer;
+        newOnFieldPlayers[newOnFieldPlayers.indexOf(relevantPlayer)] =
+            relevantPlayer;
         emit(state.copyWith(onFieldPlayers: newOnFieldPlayers));
       }
     });
 
     on<DeleteGameAction>((event, emit) {
       // TODO adapt ef score
-      emit(state.copyWith(gameActions: (state.gameActions..remove(event.action)).toList()));
+      emit(state.copyWith(
+          gameActions: (state.gameActions..remove(event.action)).toList()));
     });
 
     on<SetPenalty>((event, emit) {
@@ -332,7 +363,8 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         }
       });
       state.penalties[event.player] = timer;
-      emit(state.copyWith(penalties: new Map<Player, Timer>.from(state.penalties)));
+      emit(state.copyWith(
+          penalties: new Map<Player, Timer>.from(state.penalties)));
     });
 
     on<RegisterAction>((event, emit) {
@@ -345,21 +377,33 @@ class GameBloc extends Bloc<GameEvent, GameState> {
       );
 
       // stop time for penalties
-      if (event.actionTag == forceTwoMinTag || event.actionTag == timePenaltyTag || event.actionTag == redCardTag) {
+      if (event.actionTag == forceTwoMinTag ||
+          event.actionTag == timePenaltyTag ||
+          event.actionTag == redCardTag) {
         this.add(PauseGame());
       }
 
       // for an action from opponent we can switch directly, we don't need the player menu to choose a player because these actions can be
       // directly assigned to the opponent
-      if (event.actionTag == emptyGoalTag || event.actionTag == goalOpponentTag || event.actionTag == goalOpponent7mTag) {
+      if (event.actionTag == emptyGoalTag ||
+          event.actionTag == goalOpponentTag ||
+          event.actionTag == goalOpponent7mTag) {
         print("logging opponent action");
         // trigger switch field event
         this.add(SwitchField());
-        action.playerId = "opponent";
-        emit(state.copyWith(opponentScore: state.opponentScore + 1, workflowStep: WorkflowStep.forceClose));
+        if (event.actionTag == emptyGoalTag) {
+          action.playerId = "opponent";
+          emit(state.copyWith(
+              opponentScore: state.opponentScore + 1,
+              workflowStep: WorkflowStep.forceClose));
+        }
+        emit(state.copyWith(
+          opponentScore: state.opponentScore + 1,
+        ));
 
         // if an action inside goalkeeper menu that does not correspond to the opponent was hit try to assign this action directly to the goalkeeper
-      } else if (event.actionContext == actionContextGoalkeeper && event.actionTag != goalOpponentTag && event.actionTag != emptyGoalTag) {
+      }
+      if (event.actionContext == actionContextGoalkeeper) {
         print("our own goalkeeper action");
         List<Player> goalKeepers = [];
         state.onFieldPlayers.forEach((Player player) {
@@ -401,7 +445,8 @@ class GameBloc extends Bloc<GameEvent, GameState> {
 
     on<RegisterPlayerSelection>((event, emit) {
       GameAction lastAction = state.gameActions.last;
-      if (state.workflowStep == WorkflowStep.assistSelection && event.player.id != state.gameActions.last.playerId) {
+      if (state.workflowStep == WorkflowStep.assistSelection &&
+          event.player.id != state.gameActions.last.playerId) {
         print("player selection: adding assist");
         GameAction assistAction = GameAction(
             context: state.gameActions.last.context,
@@ -420,16 +465,19 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         emit(state.copyWith(gameActions: state.gameActions));
         this.add(UpdatePlayerEfScore(action: lastAction));
         this.add(WorkflowEvent(selectedPlayer: event.player));
-      } else if (state.workflowStep == WorkflowStep.substitutionTargetSelection) {
+      } else if (state.workflowStep ==
+          WorkflowStep.substitutionTargetSelection) {
         print("player selection: selecting substitution target");
-        this.add(SubstitutePlayer(newPlayer: state.substitutionPlayer, oldPlayer: event.player));
+        this.add(SubstitutePlayer(
+            newPlayer: state.substitutionPlayer, oldPlayer: event.player));
         this.add(WorkflowEvent(selectedPlayer: event.player));
         lastAction.playerId = event.player.id!;
         emit(state.copyWith(gameActions: state.gameActions));
 
         this.add(UpdatePlayerEfScore(action: lastAction));
         // normal player selection => substitute player
-      } else if (event.isSubstitute && state.workflowStep == WorkflowStep.playerSelection) {
+      } else if (event.isSubstitute &&
+          state.workflowStep == WorkflowStep.playerSelection) {
         print("player selection: substitute");
         // if a player was selected from the not on field players in the player menu
         List<Player> playersWithSamePosition = [];
@@ -442,27 +490,35 @@ class GameBloc extends Bloc<GameEvent, GameState> {
           });
         });
         if (playersWithSamePosition.length == 1) {
-          print("there is one clear player to be substituted. Not calling substitution menu for now");
-          this.add(SubstitutePlayer(newPlayer: event.player, oldPlayer: playersWithSamePosition[0]));
+          print(
+              "there is one clear player to be substituted. Not calling substitution menu for now");
+          this.add(SubstitutePlayer(
+              newPlayer: event.player, oldPlayer: playersWithSamePosition[0]));
           this.add(WorkflowEvent(selectedPlayer: event.player));
           lastAction.playerId = event.player.id!;
           emit(state.copyWith(gameActions: state.gameActions));
           this.add(UpdatePlayerEfScore(action: lastAction));
         } else {
           // if there are more than one player on field with the same position as the substitution player open the substituion menu
-          print("there is no clear player to be substituted. Calling substitution menu");
-          emit(state.copyWith(substitutionPlayer: event.player, workflowStep: WorkflowStep.substitutionTargetSelection));
+          print(
+              "there is no clear player to be substituted. Calling substitution menu");
+          emit(state.copyWith(
+              substitutionPlayer: event.player,
+              workflowStep: WorkflowStep.substitutionTargetSelection));
         }
-      } else if (state.workflowStep == WorkflowStep.sevenMeterExecutorSelection) {
+      } else if (state.workflowStep ==
+          WorkflowStep.sevenMeterExecutorSelection) {
         print("seven meter executor selection");
         emit(state.copyWith(sevenMeterExecutor: event.player));
         this.add(WorkflowEvent(selectedPlayer: event.player));
-      } else if (state.workflowStep == WorkflowStep.sevenMeterGoalkeeperSelection) {
+      } else if (state.workflowStep ==
+          WorkflowStep.sevenMeterGoalkeeperSelection) {
         print("seven meter goalkeeper selection");
         emit(state.copyWith(sevenMeterGoalkeeper: event.player));
         this.add(WorkflowEvent(selectedPlayer: event.player));
       } else {
-        print("no special case. Just add the action to the list of actions after the player selection");
+        print(
+            "no special case. Just add the action to the list of actions after the player selection");
         lastAction.playerId = event.player.id!;
         emit(state.copyWith(gameActions: state.gameActions));
         this.add(UpdatePlayerEfScore(action: lastAction));
@@ -477,11 +533,13 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         if (lastTag == goalTag ||
             lastTag == blockAndStealTag ||
             lastTag == missTag ||
-            (lastTag == trfTag && state.gameActions.last.context == actionContextAttack)) {
+            (lastTag == trfTag &&
+                state.gameActions.last.context == actionContextAttack)) {
           this.add(SwitchField());
         }
         // adapt score if we scored a goal
-        if (lastTag == goalTag && state.workflowStep != WorkflowStep.assistSelection) {
+        if (lastTag == goalTag &&
+            state.workflowStep != WorkflowStep.assistSelection) {
           ownScore = ownScore + 1;
         }
         emit(state.copyWith(ownScore: ownScore));
@@ -503,7 +561,8 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         case WorkflowStep.actionMenuOffense:
           if (event.selectedAction!.tag == oneVOneSevenTag) {
             print("workflow actionMenuOffense => sevenMeterScorerSelection");
-            emit(state.copyWith(workflowStep: WorkflowStep.sevenMeterScorerSelection));
+            emit(state.copyWith(
+                workflowStep: WorkflowStep.sevenMeterScorerSelection));
           } else {
             print("workflow actionMenuOffense => playerSelection");
             emit(state.copyWith(workflowStep: WorkflowStep.playerSelection));
@@ -514,12 +573,16 @@ class GameBloc extends Bloc<GameEvent, GameState> {
           emit(state.copyWith(workflowStep: WorkflowStep.forceClose));
           break;
         case WorkflowStep.sevenMeterScorerSelection:
-          print("workflow sevenMeterScorerSelection => sevenMeterExecutorSelection");
-          emit(state.copyWith(workflowStep: WorkflowStep.sevenMeterExecutorSelection));
+          print(
+              "workflow sevenMeterScorerSelection => sevenMeterExecutorSelection");
+          emit(state.copyWith(
+              workflowStep: WorkflowStep.sevenMeterExecutorSelection));
           break;
         case WorkflowStep.sevenMeterExecutorSelection:
-          print("workflow sevenMeterExecutorSelection => sevenMeterOffenseResult");
-          emit(state.copyWith(workflowStep: WorkflowStep.sevenMeterOffenseResult));
+          print(
+              "workflow sevenMeterExecutorSelection => sevenMeterOffenseResult");
+          emit(state.copyWith(
+              workflowStep: WorkflowStep.sevenMeterOffenseResult));
           break;
         case WorkflowStep.sevenMeterOffenseResult:
           print("workflow sevenMeterOffenseResult => closed");
@@ -528,19 +591,24 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         case WorkflowStep.actionMenuDefense:
           if (event.selectedAction!.tag == foulSevenMeterTag) {
             print("workflow actionMenuDefense => sevenMeterFoulerSelection");
-            emit(state.copyWith(workflowStep: WorkflowStep.sevenMeterFoulerSelection));
+            emit(state.copyWith(
+                workflowStep: WorkflowStep.sevenMeterFoulerSelection));
           } else {
             print("workflow actionMenuDefense => playerSelection");
             emit(state.copyWith(workflowStep: WorkflowStep.playerSelection));
           }
           break;
         case WorkflowStep.sevenMeterFoulerSelection:
-          print("workflow sevenMeterFoulerSelection => sevenMeterGoalkeeperSelection");
-          emit(state.copyWith(workflowStep: WorkflowStep.sevenMeterGoalkeeperSelection));
+          print(
+              "workflow sevenMeterFoulerSelection => sevenMeterGoalkeeperSelection");
+          emit(state.copyWith(
+              workflowStep: WorkflowStep.sevenMeterGoalkeeperSelection));
           break;
         case WorkflowStep.sevenMeterGoalkeeperSelection:
-          print("workflow sevenMeterGoalkeeperSelection => sevenMeterDefenseResult");
-          emit(state.copyWith(workflowStep: WorkflowStep.sevenMeterDefenseResult));
+          print(
+              "workflow sevenMeterGoalkeeperSelection => sevenMeterDefenseResult");
+          emit(state.copyWith(
+              workflowStep: WorkflowStep.sevenMeterDefenseResult));
           break;
         case WorkflowStep.sevenMeterOffenseResult:
           print("workflow sevenMeterOffenseResult => closed");
