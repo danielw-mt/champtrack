@@ -4,7 +4,7 @@
 
 const { initializeFirebaseApp } = require('firestore-export-import')
 const { backups } = require('firestore-export-import')
-const serviceAccount = require('./serviceAccountKey.json')
+const serviceAccount = require('./devServiceAccountKey.json')
 const fs = require('fs');
 // If you want to pass settings for firestore, you can add to the options parameters
 // const options = {
