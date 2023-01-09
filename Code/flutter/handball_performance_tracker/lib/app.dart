@@ -4,6 +4,7 @@ import 'package:handball_performance_tracker/features/dashboard/dashboard.dart';
 import 'package:handball_performance_tracker/data/repositories/repositories.dart';
 import 'package:handball_performance_tracker/features/authentication/authentication.dart';
 import 'package:handball_performance_tracker/core/core.dart';
+import 'package:handball_performance_tracker/features/game/game.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'dart:ui';
 
@@ -51,6 +52,8 @@ class HandballApp extends StatelessWidget {
                   teamRepository:
                       RepositoryProvider.of<TeamFirebaseRepository>(context))
                 ..add(InitStatistics())),
+          BlocProvider<GameBloc>(create: (context) => GameBloc(gameRepository: RepositoryProvider.of<GameFirebaseRepository>(context)))
+          
         ],
         child: MaterialApp(
           debugShowCheckedModeBanner: false,

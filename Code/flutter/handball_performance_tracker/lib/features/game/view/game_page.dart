@@ -28,17 +28,16 @@ class GamePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => GameBloc(gameRepository: context.watch<GameFirebaseRepository>())
-        ..add(InitializeGame(
-            onFieldPlayers: onFieldPlayers,
-            selectedTeam: selectedTeam,
-            opponent: opponent,
-            location: location,
-            date: date,
-            isHomeGame: isHomeGame,
-            attackIsLeft: attackIsLeft)),
-      child: GameView(),
-    );
+    GameBloc gameBloc = BlocProvider.of<GameBloc>(context);
+    gameBloc
+      ..add(InitializeGame(
+          onFieldPlayers: onFieldPlayers,
+          selectedTeam: selectedTeam,
+          opponent: opponent,
+          location: location,
+          date: date,
+          isHomeGame: isHomeGame,
+          attackIsLeft: attackIsLeft));
+    return BlocProvider.value(value: BlocProvider.of<GameBloc>(context), child: GameView());
   }
 }
