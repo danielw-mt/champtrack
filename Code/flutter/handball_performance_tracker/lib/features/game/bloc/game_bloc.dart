@@ -402,16 +402,22 @@ class GameBloc extends Bloc<GameEvent, GameState> {
           print("going to defensive 7m after time penalty");
           // go to defensive 7m
           action.tag = foulSevenMeterTag;
+          action.playerId = state.gameActions.last.playerId;
+          print("adding WorkflowEvent: ${action.tag}");
+          this.add(WorkflowEvent(selectedAction: action));
+          // emit(state.copyWith(gameActions: state.gameActions..add(action)));
           // emit(state.copyWith(workflowStep: WorkflowStep.sevenMeterGoalkeeperSelection));
         } else if (action.tag == yes7mTag && state.gameActions.last.tag == forceTwoMinTag) {
           print("going to offensive 7m after force two minutes");
           // go to offensive 7m
           action.tag = oneVOneSevenTag;
+          action.playerId = state.gameActions.last.playerId;
+          print("adding WorkflowEvent: ${action.tag}");
+          this.add(WorkflowEvent(selectedAction: action));
+          // emit(state.copyWith(gameActions: state.gameActions..add(action)));
           // emit(state.copyWith(workflowStep: WorkflowStep.sevenMeterExecutorSelection));
-        }
-        print("adding WorkflowEvent: ${action.tag}");
-        this.add(WorkflowEvent(selectedAction: action));
-        if (action.tag == no7mTag) {
+        } else if (action.tag == no7mTag) {
+          print("no 7m");
           // close the menu
           emit(state.copyWith(workflowStep: WorkflowStep.forceClose));
         }
@@ -526,7 +532,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     });
 
     on<WorkflowEvent>((event, emit) {
-      print("workflow event: "+state.workflowStep.toString());
+      print("workflow event: " + state.workflowStep.toString());
       switch (state.workflowStep) {
         case WorkflowStep.closed:
           if (state.attacking) {
@@ -605,10 +611,10 @@ class GameBloc extends Bloc<GameEvent, GameState> {
           break;
         case WorkflowStep.sevenMeterPrompt:
           print("seven meter prompt step");
-          if (state.gameActions.last.tag == forceTwoMinTag) {
+          if (state.gameActions.last.tag == oneVOneSevenTag) {
             print("workflow sevenMeterPrompt => sevenMeterExecuterSelection");
             emit(state.copyWith(workflowStep: WorkflowStep.sevenMeterExecutorSelection));
-          } else if (state.gameActions.last.tag == timePenaltyTag) {
+          } else if (state.gameActions.last.tag == foulSevenMeterTag) {
             print("workflow sevenMeterPrompt => goalKeeperSelection");
             emit(state.copyWith(workflowStep: WorkflowStep.sevenMeterGoalkeeperSelection));
           } else {

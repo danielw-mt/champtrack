@@ -10,13 +10,13 @@ class SevenMeterPromptLayout extends StatelessWidget {
     return Row(
       children: [
         ActionButton(
-          actionTag: yes7mTag,
+          actionTag: no7mTag,
           actionContext: actionContextSevenMeter,
           buttonText: StringsGameScreen.lNoSevenMeter,
           buttonColor: Colors.lightBlue,
         ),
         ActionButton(
-          actionTag: no7mTag,
+          actionTag: yes7mTag,
           actionContext: actionContextSevenMeter,
           buttonText: StringsGameScreen.lYesSevenMeter,
           buttonColor: Colors.deepPurple,
