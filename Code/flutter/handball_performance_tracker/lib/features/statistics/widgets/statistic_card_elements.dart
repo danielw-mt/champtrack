@@ -1,6 +1,5 @@
 import 'dart:html';
 
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:handball_performance_tracker/core/core.dart';
@@ -237,34 +236,45 @@ class PerformanceCard extends StatelessWidget {
     // if (!_dropDownElements.contains(_selectedDropdownElement)) {
     //   _selectedDropdownElement = _dropDownElements[0];
     // }
+    print("build performance card");
+    print(selectedDropdownElement);
+    print(actionSeries[selectedDropdownElement]?.length);
 
-    return Card(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Flexible(
-              flex: 1,
-              child: buildActionTagDropdown(context, teamPerformanceParameter)),
-          Flexible(
-              flex: 4,
-              // when we selected ef-score in the dropdown use the timestamps from all the actions and not the series timestamps
-              // also use the values from the ef-score series that lign up with the timestamps for all actions
-              child: selectedDropdownElement == "Ef-Score"
-                  ? LineChartWidget(
-                      startTime: startTime,
-                      timeStamps: allActionTimeStamps,
-                      values: efScoreSeries,
-                      stopTime: stopTime,
-                    )
-                  : LineChartWidget(
-                      startTime: startTime,
-                      timeStamps: actionSeries[selectedDropdownElement]!,
-                      stopTime: stopTime,
-                      values: [],
-                    )),
-        ],
-      ),
-    );
+    // check if data is available, if not display text
+    return selectedDropdownElement == StringsGeneral.lNoDataAvailable
+        ? Card(child: Text(StringsGeneral.lNoDataAvailable))
+        : Card(
+            child: Padding(
+              padding: EdgeInsets.all(6.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Flexible(
+                      flex: 1,
+                      child: buildActionTagDropdown(
+                          context, teamPerformanceParameter)),
+                  Flexible(
+                      flex: 4,
+                      // when we selected ef-score in the dropdown use the timestamps from all the actions and not the series timestamps
+                      // also use the values from the ef-score series that lign up with the timestamps for all actions
+                      child: selectedDropdownElement == "Ef-Score"
+                          ? LineChartWidget(
+                              startTime: startTime,
+                              timeStamps: allActionTimeStamps,
+                              values: efScoreSeries,
+                              stopTime: stopTime,
+                            )
+                          : LineChartWidget(
+                              startTime: startTime,
+                              timeStamps:
+                                  actionSeries[selectedDropdownElement]!,
+                              stopTime: stopTime,
+                              values: [],
+                            )),
+                ],
+              ),
+            ),
+          );
   }
 
   DropdownButton buildActionTagDropdown(

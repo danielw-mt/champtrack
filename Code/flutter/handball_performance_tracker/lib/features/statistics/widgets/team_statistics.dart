@@ -53,7 +53,7 @@ class TeamStatistics extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Flexible(
+                      Expanded(
                         child: PerformanceCard(
                           selectedDropdownElement: statisticsBloc
                               .state.selectedTeamPerformanceParameter,

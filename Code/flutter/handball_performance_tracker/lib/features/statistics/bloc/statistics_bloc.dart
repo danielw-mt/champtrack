@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:handball_performance_tracker/core/core.dart';
 import 'package:handball_performance_tracker/data/models/models.dart';
 import 'package:handball_performance_tracker/data/repositories/game_repository.dart';
 import 'package:handball_performance_tracker/data/repositories/player_repository.dart';
@@ -36,6 +37,12 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
       List<Game> selectedTeamGames =
           fetchedGames.where((game) => game.teamId == event.team.id).toList();
 
+      if (selectedTeamGames.length == 0) {
+        selectedTeamGames = [
+          Game(date: DateTime.now(), opponent: StringsGeneral.lNoTeamStats)
+        ];
+      }
+
       // set selected game
       Game selectedGame = selectedTeamGames.isNotEmpty
           ? selectedTeamGames[0]
@@ -53,7 +60,9 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
           _buildTeamStatistics(state.statistics, event.team, selectedGame);
 
       String selectedTeamPerformanceParameter =
-          selectedTeamStats.actionSeries.keys.toList()[0];
+          selectedTeamStats.actionSeries.keys.toList().isNotEmpty
+              ? selectedTeamStats.actionSeries.keys.toList()[0]
+              : StringsGeneral.lNoTeamStats;
       // String selectedPlayerPerformanceParameter =
       //     selectedPlayerStats.actionSeries.keys.toList()[0];
 
@@ -72,8 +81,14 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
     on<SelectGame>((event, emit) {
       TeamStatistics newSelectedTeamStats = _buildTeamStatistics(
           state.statistics, state.selectedTeam, event.game);
+      String selectedTeamPerformanceParameter =
+          newSelectedTeamStats.actionSeries.keys.toList().isNotEmpty
+              ? newSelectedTeamStats.actionSeries.keys.toList()[0]
+              : StringsGeneral.lNoTeamStats;
       emit(state.copyWith(
-          selectedGame: event.game, selectedTeamStats: newSelectedTeamStats));
+          selectedGame: event.game,
+          selectedTeamStats: newSelectedTeamStats,
+          selectedTeamPerformanceParameter: selectedTeamPerformanceParameter));
     });
 
     on<SelectPlayer>((event, emit) {
@@ -183,7 +198,7 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
         String selectedTeamPerformanceParameter =
             selectedTeamStats.actionSeries.keys.toList().isNotEmpty
                 ? selectedTeamStats.actionSeries.keys.toList()[0]
-                : "no parameter";
+                : StringsGeneral.lNoDataAvailable;
 
         // String selectedTeamPerformanceParameter =
         //     selectedTeamStats.actionSeries.keys.toList()[0];
@@ -193,7 +208,7 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
         String selectedPlayerPerformanceParameter =
             selectedPlayerStats.actionSeries.keys.toList().isNotEmpty
                 ? selectedPlayerStats.actionSeries.keys.toList()[0]
-                : "no parameter";
+                : StringsGeneral.lNoDataAvailable;
 
         emit(state.copyWith(
             status: StatisticsStatus.loaded,
