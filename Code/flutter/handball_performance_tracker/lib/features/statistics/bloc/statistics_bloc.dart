@@ -45,6 +45,12 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
         ];
       }
 
+      if (selectedTeamGames.length == 0) {
+        selectedTeamGames = [
+          Game(date: DateTime.now(), opponent: StringsGeneral.lNoTeamStats)
+        ];
+      }
+
       // set selected game
       Game selectedGame = selectedTeamGames.isNotEmpty ? selectedTeamGames[0] : Game(date: DateTime.now());
 
@@ -184,7 +190,7 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
         String selectedTeamPerformanceParameter =
             selectedTeamStats.actionSeries.keys.toList().isNotEmpty
                 ? selectedTeamStats.actionSeries.keys.toList()[0]
-                : StringsGeneral.lNoTeamStats;
+                : StringsGeneral.lNoDataAvailable;
 
         // String selectedTeamPerformanceParameter =
         //     selectedTeamStats.actionSeries.keys.toList()[0];
@@ -193,7 +199,7 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
         String selectedPlayerPerformanceParameter =
             selectedPlayerStats.actionSeries.keys.toList().isNotEmpty
                 ? selectedPlayerStats.actionSeries.keys.toList()[0]
-                : StringsGeneral.lNoTeamStats;
+                : StringsGeneral.lNoDataAvailable;
 
         emit(state.copyWith(
             status: StatisticsStatus.loaded,
