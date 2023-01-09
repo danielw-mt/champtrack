@@ -68,3 +68,9 @@ class InitStatistics extends StatisticsEvent {
 
   InitStatistics();
 }
+
+class AddCurrentGameStatistics extends StatisticsEvent {
+  final Game game;
+
+  AddCurrentGameStatistics({required this.game});
+}
