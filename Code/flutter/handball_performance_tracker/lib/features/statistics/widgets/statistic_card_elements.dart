@@ -216,29 +216,6 @@ class PerformanceCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // _dropDownElements = [];
-    // if (widget.actionSeries.length == 0) {
-    //   return Center(child: Text(StringsGeneral.lNoDataAvailable));
-    // }
-    // // add the ef-score option to the action series dropdown elements
-    // if (widget.efScoreSeries.length > 0) {
-    //   _dropDownElements.add("Ef-Score");
-    // }
-    // widget.actionSeries.keys.toList().forEach((String actionTag) {
-    //   // convert action tag to the correct string specified in the strings using realActionType
-    //   _dropDownElements.add(actionTag);
-    // });
-    // // if we did not select an element yet, select the first one
-    // if (_selectedDropdownElement == "") {
-    //   _selectedDropdownElement = _dropDownElements[0];
-    // }
-    // // if a dropdown element is selected that is not available. (i.e. remnant from loading another game statistic previously)
-    // if (!_dropDownElements.contains(_selectedDropdownElement)) {
-    //   _selectedDropdownElement = _dropDownElements[0];
-    // }
-    print("build performance card");
-    print(selectedDropdownElement);
-    print(actionSeries[selectedDropdownElement]?.length);
 
     // check if data is available, if not display text
     return selectedDropdownElement == StringsGeneral.lNoDataAvailable
