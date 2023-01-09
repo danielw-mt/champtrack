@@ -258,7 +258,11 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
         [
           double.parse(teamStats["throw_quota"][0].toString()),
           double.parse(teamStats["throw_quota"][1].toString())
-        ]
+        ],
+        [
+          double.parse(teamStats["parade_quota"][0].toString()),
+          double.parse(teamStats["parade_quota"][1].toString())
+        ],
       ];
     } on Exception catch (e) {
       developer.log(e.toString());
@@ -310,7 +314,11 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
         [
           double.parse(playerStats["throw_quota"][0].toString()),
           double.parse(playerStats["throw_quota"][1].toString())
-        ]
+        ],
+        [
+          double.parse(playerStats["parade_quota"][0].toString()),
+          double.parse(playerStats["parade_quota"][1].toString())
+        ],
       ];
     } on Exception catch (e) {
       developer.log(e.toString());

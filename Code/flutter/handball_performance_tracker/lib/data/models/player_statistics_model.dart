@@ -9,6 +9,7 @@ class PlayerStatistics {
   List<List<double>> quotas = [
     [0, 0],
     [0, 0],
+    [0, 0],
     [0, 0]
   ];
   List<double> efScoreSeries = [];
@@ -21,6 +22,7 @@ class PlayerStatistics {
     this.startTime = 0,
     this.stopTime = 0,
     this.quotas = const [
+      [0, 0],
       [0, 0],
       [0, 0],
       [0, 0]

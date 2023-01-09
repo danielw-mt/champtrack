@@ -1,7 +1,11 @@
+import 'dart:html';
+
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:handball_performance_tracker/core/core.dart';
 import 'package:handball_performance_tracker/features/statistics/statistics.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 
 class PenaltyInfoCard extends StatelessWidget {
   final int redCards;
@@ -306,181 +310,134 @@ class PerformanceCard extends StatelessWidget {
   }
 }
 
-class QuotaCard extends StatefulWidget {
+class QuotaCard extends StatelessWidget {
   final List<List<double>> quotas;
   final ring_form;
   const QuotaCard({Key? key, required this.ring_form, required this.quotas})
       : super(key: key);
 
   @override
-  State<QuotaCard> createState() => _QuotaCardState();
-}
-
-class _QuotaCardState extends State<QuotaCard> {
-  int _selectedCarousalIndex = 0;
-
-  @override
   Widget build(BuildContext context) {
-    return Card(
-        child: _buildCarousel(
-            context, _selectedCarousalIndex ~/ 2, widget.ring_form));
-  }
-
-  Widget _buildCarousel(
-      BuildContext context, int carouselIndex, bool ring_form) {
-    return Column(
-      mainAxisSize: MainAxisSize.max,
-      children: <Widget>[
-        Expanded(
-          // you may want to use an aspect ratio here for tablet support
-          //height: 20.0,
-          child: PageView.builder(
-            onPageChanged: (pageIndex) => setState(() {
-              _selectedCarousalIndex = pageIndex;
-            }),
-            // store this controller in a State to save the carousel scroll position
-            controller: PageController(viewportFraction: 0.9),
-            itemBuilder: (BuildContext context, int itemIndex) {
-              if (itemIndex == 0) {
-                return _buildCarouselItemQuotes(
-                    context, carouselIndex, itemIndex, ring_form);
-              } else {
-                return Container(); // TODO this is not ready yet //_buildCarouselItem(context, carouselIndex, itemIndex);
-              }
-            },
-          ),
-        )
-      ],
-    );
-  }
-
-  Widget _buildCarouselItemQuotes(
-      BuildContext context, int carouselIndex, int itemIndex, bool ring_form) {
-    print("7m quota: " + widget.quotas[0].toString());
-    print("position quota: " + widget.quotas[1].toString());
-    print("throw quota: " + widget.quotas[2].toString());
-    // convert quotas to correct datamaps for the piecharts
-    // 7 meter misses are just the total seven meter atempts - the seven meter goals
     Map<String, double> sevenMeterDataMap = {
-      "7m goals": widget.quotas[0][0],
-      "7 meter misses": widget.quotas[0][1] - widget.quotas[0][0]
-    };
-    Map<String, double> positionDataMap = {
-      "Position goals": widget.quotas[1][0],
-      "Position throws": widget.quotas[1][1] - widget.quotas[1][0]
+      "7m goals": quotas[0][0],
+      "7m misses": quotas[0][1] - quotas[0][0]
     };
     Map<String, double> throwDataMap = {
-      "Throw goals": widget.quotas[2][0],
-      "Throw misses": widget.quotas[2][1] - widget.quotas[2][0]
+      "Throw goals": quotas[2][0],
+      "Throw misses": quotas[2][1] - quotas[2][0]
     };
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        Flexible(
-          flex: 1,
-          child: widget.quotas[0][1] != 0
-              ? Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    const Flexible(
-                      flex: 1,
-                      child: Text(StringsGeneral.l7mQuota),
-                    ),
-                    Flexible(
-                      flex: 2,
-                      child: QuotaPieChart(
-                        ringForm: true,
-                        dataMap: sevenMeterDataMap,
-                      ),
-                    ),
-                    Flexible(
-                      flex: 2,
-                      child: Text(widget.quotas[0][1].toString() +
-                          " " +
-                          StringsGeneral.l7mThrowsRecord),
-                    )
-                  ],
-                )
-              : Text(StringsGeneral.lNo7mQuota),
-        ),
-        // TODO implement position quota calculation in statistics engine
-        // Flexible(
-        //   flex: 1,
-        //   child: widget.quotas[1][1] != 0
-        //       ? Column(
-        //           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        //           children: [
-        //             const Flexible(
-        //               flex: 1,
-        //               child: Text(StringsGeneral.lPositionQuota),
-        //             ),
-        //             Flexible(
-        //               flex: 2,
-        //               child: QuotaPieChart(
-        //                 ringForm: true,
-        //                 dataMap: positionDataMap,
-        //               ),
-        //             ),
-        //             Flexible(
-        //               flex: 2,
-        //               child: Text(widget.quotas[1][1].toString() + " "+StringsGeneral.lPositonThrowsRecord),
-        //             )
-        //           ],
-        //         )
-        //       : Text(StringsGeneral.lNoPositionQuota),
-        // ),
-        Flexible(
-          flex: 1,
-          child: widget.quotas[2][1] != 0
-              ? Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    const Flexible(
-                      flex: 1,
-                      child: Text(StringsGeneral.lThrowQuota),
-                    ),
-                    Flexible(
-                      flex: 2,
-                      child:
-                          QuotaPieChart(ringForm: true, dataMap: throwDataMap),
-                    ),
-                    Flexible(
-                      flex: 2,
-                      child: Text(widget.quotas[2][1].toString() +
-                          " " +
-                          StringsGeneral.lThrowsRecord),
-                    )
-                  ],
-                )
-              : Text(StringsGeneral.lNoThrowQuota),
-        ),
-      ],
-    );
-  }
+    Map<String, double> paradeDataMap = {
+      "Parades": quotas[3][0],
+      "Goals opponent": quotas[3][1] - quotas[3][0]
+    };
 
-  Widget _buildCarouselItem(
-      BuildContext context, int carouselIndex, int itemIndex) {
-    return Column(
-      children: [
-        Flexible(
-            child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Text("Quotes"),
-            Text("Würfe"),
-            Text("Position"),
-            Text("7m"),
-          ],
-        )),
-        Expanded(
-            child: LineChartWidget(
-          startTime: 0,
-          stopTime: 0,
-          timeStamps: [],
-          values: [],
-        ))
-      ],
-    );
+    List<Row> quota_charts = [
+      Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          Flexible(
+            flex: 1,
+            child: quotas[0][1] != 0
+                ? Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      const Flexible(
+                        flex: 1,
+                        child: Text(StringsGeneral.l7mThrowsRecord),
+                      ),
+                      Flexible(
+                        flex: 2,
+                        child: QuotaPieChart(
+                          ringForm: true,
+                          dataMap: sevenMeterDataMap,
+                        ),
+                      ),
+                      Flexible(
+                        flex: 2,
+                        child: Text(((quotas[0][0] / quotas[0][1]) * 100)
+                                .toStringAsFixed(0) +
+                            "% " +
+                            StringsGeneral.l7mQuota),
+                      )
+                    ],
+                  )
+                : Text(StringsGeneral.lNo7mQuota),
+          ),
+          Flexible(
+            flex: 1,
+            child: quotas[2][1] != 0
+                ? Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      const Flexible(
+                        flex: 1,
+                        child: Text(StringsGeneral.lThrowsRecord),
+                      ),
+                      Flexible(
+                        flex: 2,
+                        child: QuotaPieChart(
+                            ringForm: true, dataMap: throwDataMap),
+                      ),
+                      Flexible(
+                        flex: 2,
+                        child: Text(((quotas[2][0] / quotas[2][1]) * 100)
+                                .toStringAsFixed(0) +
+                            "% " +
+                            StringsGeneral.lThrowQuota),
+                      )
+                    ],
+                  )
+                : Text(StringsGeneral.lNoThrowQuota),
+          ),
+          Flexible(
+            flex: 1,
+            child: quotas[3][1] != 0
+                ? Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      const Flexible(
+                        flex: 1,
+                        child: Text(StringsGeneral.lThrowsOpponent),
+                      ),
+                      Flexible(
+                        flex: 2,
+                        child: QuotaPieChart(
+                          ringForm: true,
+                          dataMap: paradeDataMap,
+                        ),
+                      ),
+                      Flexible(
+                        flex: 2,
+                        child: Text(((quotas[3][0] / quotas[3][1]) * 100)
+                                .toStringAsFixed(0) +
+                            "% " +
+                            StringsGeneral.lGoalkeeperQuota),
+                      )
+                    ],
+                  )
+                : Text(StringsGeneral.lNoGoalkeeperQuota),
+          )
+        ],
+      )
+    ];
+
+    return Card(
+        child: CarouselSlider(
+      options: CarouselOptions(
+        enlargeCenterPage: true,
+        enableInfiniteScroll: false,
+      ),
+      items: quota_charts.map<Widget>((i) {
+        return Builder(
+          builder: (BuildContext context) {
+            return Container(
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height,
+                child: Flexible(flex: 2, child: i));
+          },
+        );
+      }).toList(),
+    ));
   }
 }
 

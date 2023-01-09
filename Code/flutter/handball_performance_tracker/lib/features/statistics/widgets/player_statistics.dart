@@ -42,7 +42,7 @@ class PlayerStatistics extends StatelessWidget {
                               PlayerSelector()
                             ],
                           ))),
-                      Flexible(
+                      Expanded(
                         flex: 2,
                         child: QuotaCard(
                             quotas:

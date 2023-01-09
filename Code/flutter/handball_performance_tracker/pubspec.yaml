@@ -49,6 +49,7 @@ dependencies:
   equatable: ^2.0.0
   email_validator: ^2.1.17 # TODO try to remove this
   logger: ^1.1.0
+  carousel_slider: ^4.2.1
 
 dev_dependencies:
   flutter_test:

@@ -159,4 +159,7 @@ class StringsGeneral {
   static const String lCount = "Anzahl";
   static const String lNoActionsRecorded = "Keine Aktionen für Auswahl erfasst";
   static const String lNoDataAvailable = "Keine Daten verfügbar";
+  static const String lGoalkeeperQuota = "Torwartquote";
+  static const String lThrowsOpponent = "Würfe von Gegner";
+  static const String lNoGoalkeeperQuota = "Keine Paraden erfasst";
 }
