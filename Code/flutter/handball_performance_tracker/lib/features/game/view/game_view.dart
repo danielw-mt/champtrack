@@ -32,7 +32,7 @@ class GameView extends StatelessWidget {
                     Row(
                       children: [
                         // TODO try to arrange menu button here for the drawer
-                        // MenuButton(_scaffoldKey),
+                        MenuButton(_scaffoldKey),
                         ScoreKeeping(),
                       ],
                     ),
