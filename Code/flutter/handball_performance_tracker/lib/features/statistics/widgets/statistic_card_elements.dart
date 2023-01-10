@@ -216,9 +216,8 @@ class PerformanceCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     // check if data is available, if not display text
-    return selectedDropdownElement == StringsGeneral.lNoDataAvailable
+    return selectedDropdownElement == StringsGeneral.lNoTeamStats
         ? Card(child: Text(StringsGeneral.lNoDataAvailable))
         : Card(
             child: Padding(
@@ -256,6 +255,8 @@ class PerformanceCard extends StatelessWidget {
 
   DropdownButton buildActionTagDropdown(
       BuildContext context, bool teamPerformanceParameter) {
+    // get statistics bloc
+    final statisticsBloc = BlocProvider.of<StatisticsBloc>(context);
     return DropdownButton<String>(
       isExpanded: true,
       // Initial Value
@@ -289,9 +290,20 @@ class PerformanceCard extends StatelessWidget {
       // change button value to selected value
       onChanged: (String? newDropdownElement) {
         // call selectTeamPerformanceParamter from statisticsbloc event
-        context.watch<StatisticsBloc>().add(SelectPerformanceParameter(
+        print(newDropdownElement);
+        if (teamPerformanceParameter) {
+          statisticsBloc.add(SelectTeamPerformanceParameter(
             parameter: newDropdownElement!,
-            teamParameter: teamPerformanceParameter));
+          ));
+        } else {
+          statisticsBloc.add(SelectPlayerPerformanceParameter(
+            parameter: newDropdownElement!,
+          ));
+        }
+        // context.watch<StatisticsBloc>().add(SelectPerformanceParameter(
+
+        //     parameter: newDropdownElement!,
+        //     teamParameter: teamPerformanceParameter));
       },
     );
   }
