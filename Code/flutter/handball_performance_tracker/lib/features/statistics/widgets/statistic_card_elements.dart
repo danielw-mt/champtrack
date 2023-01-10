@@ -216,9 +216,8 @@ class PerformanceCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     // check if data is available, if not display text
-    return selectedDropdownElement == StringsGeneral.lNoDataAvailable
+    return selectedDropdownElement == StringsGeneral.lNoTeamStats
         ? Card(child: Text(StringsGeneral.lNoDataAvailable))
         : Card(
             child: Padding(

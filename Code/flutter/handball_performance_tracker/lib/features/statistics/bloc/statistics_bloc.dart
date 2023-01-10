@@ -190,7 +190,7 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
         String selectedTeamPerformanceParameter =
             selectedTeamStats.actionSeries.keys.toList().isNotEmpty
                 ? selectedTeamStats.actionSeries.keys.toList()[0]
-                : StringsGeneral.lNoDataAvailable;
+                : StringsGeneral.lNoTeamStats;
 
         // String selectedTeamPerformanceParameter =
         //     selectedTeamStats.actionSeries.keys.toList()[0];
@@ -199,7 +199,7 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
         String selectedPlayerPerformanceParameter =
             selectedPlayerStats.actionSeries.keys.toList().isNotEmpty
                 ? selectedPlayerStats.actionSeries.keys.toList()[0]
-                : StringsGeneral.lNoDataAvailable;
+                : StringsGeneral.lNoTeamStats;
 
         emit(state.copyWith(
             status: StatisticsStatus.loaded,
