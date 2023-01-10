@@ -15,23 +15,9 @@ class StopWatchBar extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
         Container(
-          decoration: BoxDecoration(color: buttonGreyColor, borderRadius: BorderRadius.all(Radius.circular(MENU_RADIUS))),
-          height: BUTTON_HEIGHT * 0.8,
-          width: BUTTON_HEIGHT * 0.8,
-          alignment: Alignment.center,
-          margin: const EdgeInsets.only(bottom: 10, top: 4),
-          child: TextButton(
-              onPressed: () => {gameBloc.add(ChangeTime(offset: 1000))},
-              child: Icon(
-                Icons.add,
-                color: Colors.black,
-              )),
-        ),
-
-        // Display stop watch time
-        TimePopoupButton(),
-        Container(
-          decoration: BoxDecoration(color: buttonGreyColor, borderRadius: BorderRadius.all(Radius.circular(MENU_RADIUS))),
+          decoration: BoxDecoration(
+              color: buttonGreyColor,
+              borderRadius: BorderRadius.all(Radius.circular(MENU_RADIUS))),
           height: BUTTON_HEIGHT * 0.8,
           width: BUTTON_HEIGHT * 0.8,
           alignment: Alignment.center,
@@ -40,6 +26,24 @@ class StopWatchBar extends StatelessWidget {
               onPressed: () => {gameBloc.add(ChangeTime(offset: -1000))},
               child: const Icon(
                 Icons.remove,
+                color: Colors.black,
+              )),
+        ),
+
+        // Display stop watch time
+        TimePopoupButton(),
+        Container(
+          decoration: BoxDecoration(
+              color: buttonGreyColor,
+              borderRadius: BorderRadius.all(Radius.circular(MENU_RADIUS))),
+          height: BUTTON_HEIGHT * 0.8,
+          width: BUTTON_HEIGHT * 0.8,
+          alignment: Alignment.center,
+          margin: const EdgeInsets.only(bottom: 10, top: 4),
+          child: TextButton(
+              onPressed: () => {gameBloc.add(ChangeTime(offset: 1000))},
+              child: Icon(
+                Icons.add,
                 color: Colors.black,
               )),
         ),
@@ -61,7 +65,9 @@ class StartStopIcon extends StatelessWidget {
           gameBloc.add(UnPauseGame());
         }
       },
-      child: gameRunning ? Icon(Icons.pause, size: 40, color: buttonDarkBlueColor) : Icon(Icons.play_arrow, size: 40, color: buttonDarkBlueColor),
+      child: gameRunning
+          ? Icon(Icons.pause, size: 40, color: buttonDarkBlueColor)
+          : Icon(Icons.play_arrow, size: 40, color: buttonDarkBlueColor),
     );
   }
 }
@@ -75,7 +81,9 @@ class TimePopoupButton extends StatelessWidget {
     final GameBloc gameBloc = context.watch<GameBloc>();
     StopWatchTimer stopWatchTimer = gameBloc.state.stopWatchTimer;
     return Container(
-        decoration: BoxDecoration(color: buttonGreyColor, borderRadius: BorderRadius.all(Radius.circular(MENU_RADIUS))),
+        decoration: BoxDecoration(
+            color: buttonGreyColor,
+            borderRadius: BorderRadius.all(Radius.circular(MENU_RADIUS))),
         padding: const EdgeInsets.only(right: 4),
         margin: const EdgeInsets.only(top: 4, left: 4, right: 4, bottom: 10),
         height: BUTTON_HEIGHT * 0.8,
@@ -84,13 +92,16 @@ class TimePopoupButton extends StatelessWidget {
             initialData: stopWatchTimer.rawTime.value,
             builder: (context, snap) {
               final value = snap.data!;
-              String displayTime = StopWatchTimer.getDisplayTime(value, hours: false, minute: true, second: true, milliSecond: false);
+              String displayTime = StopWatchTimer.getDisplayTime(value,
+                  hours: false, minute: true, second: true, milliSecond: false);
               return TextButton(
                 onPressed: () => callStopWatchPopup(context),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Container(padding: const EdgeInsets.only(bottom: 1), child: StartStopIcon()),
+                    Container(
+                        padding: const EdgeInsets.only(bottom: 1),
+                        child: StartStopIcon()),
                     Text(
                       snap.hasData ? displayTime : "",
                       style: const TextStyle(fontSize: 25, color: Colors.black),
@@ -156,8 +167,11 @@ class TimePopoupButton extends StatelessWidget {
                                 style: TextButton.styleFrom(
                                   backgroundColor: buttonLightBlueColor,
                                 ),
-                                onPressed: () => {gameBloc.add(ChangeTime(offset: 1000 * 60))},
-                                child: Icon(Icons.add, size: 17, color: Colors.black),
+                                onPressed: () => {
+                                  gameBloc.add(ChangeTime(offset: 1000 * 60))
+                                },
+                                child: Icon(Icons.add,
+                                    size: 17, color: Colors.black),
                               ),
                             ),
                             Text(
@@ -170,8 +184,10 @@ class TimePopoupButton extends StatelessWidget {
                                 style: TextButton.styleFrom(
                                   backgroundColor: buttonLightBlueColor,
                                 ),
-                                onPressed: () => {gameBloc.add(ChangeTime(offset: 1000))},
-                                child: Icon(Icons.add, size: 17, color: Colors.black),
+                                onPressed: () =>
+                                    {gameBloc.add(ChangeTime(offset: 1000))},
+                                child: Icon(Icons.add,
+                                    size: 17, color: Colors.black),
                               ),
                             ),
                           ]),
@@ -183,28 +199,40 @@ class TimePopoupButton extends StatelessWidget {
                                 builder: (context, snap) {
                                   final value = snap.data!;
                                   String displayTime =
-                                      StopWatchTimer.getDisplayTime(value, hours: false, minute: true, second: false, milliSecond: false);
+                                      StopWatchTimer.getDisplayTime(value,
+                                          hours: false,
+                                          minute: true,
+                                          second: false,
+                                          milliSecond: false);
                                   return Container(
                                       height: buttonHeight * 1.3,
                                       width: buttonHeight,
-                                      margin: EdgeInsets.only(left: 5, right: 5),
+                                      margin:
+                                          EdgeInsets.only(left: 5, right: 5),
                                       padding: const EdgeInsets.all(10.0),
                                       alignment: Alignment.center,
                                       color: Colors.white,
                                       child: TextField(
-                                        onChanged: (text) => {gameBloc.add(SetMinutes(minutes: int.parse(text)))},
+                                        onChanged: (text) => {
+                                          gameBloc.add(SetMinutes(
+                                              minutes: int.parse(text)))
+                                        },
                                         textAlign: TextAlign.center,
                                         decoration: InputDecoration(
                                           border: InputBorder.none,
-                                          hintText: snap.hasData ? (displayTime) : "",
+                                          hintText:
+                                              snap.hasData ? (displayTime) : "",
                                         ),
-                                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 24),
                                       ));
                                 }),
                             // : between mins and secs
                             Text(
                               ":",
-                              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 28),
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 28),
                             ),
 
                             // Container with Seconds
@@ -214,22 +242,33 @@ class TimePopoupButton extends StatelessWidget {
                                 builder: (context, snap) {
                                   final value = snap.data!;
                                   String displayTime =
-                                      StopWatchTimer.getDisplayTime(value, hours: false, minute: false, second: true, milliSecond: false);
+                                      StopWatchTimer.getDisplayTime(value,
+                                          hours: false,
+                                          minute: false,
+                                          second: true,
+                                          milliSecond: false);
                                   return Container(
                                       height: buttonHeight * 1.3,
                                       width: buttonHeight,
-                                      margin: EdgeInsets.only(left: 5, right: 5),
+                                      margin:
+                                          EdgeInsets.only(left: 5, right: 5),
                                       padding: const EdgeInsets.all(10.0),
                                       alignment: Alignment.center,
                                       color: Colors.white,
                                       child: TextField(
-                                        onChanged: (text) => {gameBloc.add(SetSeconds(seconds: int.parse(text)))},
+                                        onChanged: (text) => {
+                                          gameBloc.add(SetSeconds(
+                                              seconds: int.parse(text)))
+                                        },
                                         textAlign: TextAlign.center,
                                         decoration: InputDecoration(
                                           border: InputBorder.none,
-                                          hintText: snap.hasData ? (displayTime) : "",
+                                          hintText:
+                                              snap.hasData ? (displayTime) : "",
                                         ),
-                                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 24),
                                       ));
                                 }),
                           ]),
@@ -241,8 +280,11 @@ class TimePopoupButton extends StatelessWidget {
                                 style: TextButton.styleFrom(
                                   backgroundColor: buttonLightBlueColor,
                                 ),
-                                onPressed: () => {gameBloc.add(ChangeTime(offset: -1000 * 60))},
-                                child: Icon(Icons.remove, size: 17, color: Colors.black),
+                                onPressed: () => {
+                                  gameBloc.add(ChangeTime(offset: -1000 * 60))
+                                },
+                                child: Icon(Icons.remove,
+                                    size: 17, color: Colors.black),
                               ),
                             ),
                             Text(
@@ -255,8 +297,10 @@ class TimePopoupButton extends StatelessWidget {
                                 style: TextButton.styleFrom(
                                   backgroundColor: buttonLightBlueColor,
                                 ),
-                                onPressed: () => {gameBloc.add(ChangeTime(offset: -1000))},
-                                child: Icon(Icons.remove, size: 17, color: Colors.black),
+                                onPressed: () =>
+                                    {gameBloc.add(ChangeTime(offset: -1000))},
+                                child: Icon(Icons.remove,
+                                    size: 17, color: Colors.black),
                               ),
                             )
                           ]),
