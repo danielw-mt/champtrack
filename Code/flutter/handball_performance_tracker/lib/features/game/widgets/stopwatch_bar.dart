@@ -327,7 +327,7 @@ class SetTimeButtons extends StatelessWidget {
         Container(
           margin: EdgeInsets.all(20),
           height: BUTTON_HEIGHT * 0.8,
-          width: BUTTON_HEIGHT * 1.2,
+          width: BUTTON_HEIGHT * 1.6,
           child: TextButton(
               style: TextButton.styleFrom(
                 backgroundColor: buttonGreyColor,
@@ -335,6 +335,7 @@ class SetTimeButtons extends StatelessWidget {
               ),
               onPressed: () {
                 gameBloc.add(SetMinutes(minutes: 0));
+                gameBloc.add(SetSeconds(seconds: 0));
               },
               child: Text(
                 "00:00",
@@ -346,7 +347,7 @@ class SetTimeButtons extends StatelessWidget {
         Container(
             margin: EdgeInsets.all(20),
             height: BUTTON_HEIGHT * 0.8,
-            width: BUTTON_HEIGHT * 1.2,
+            width: BUTTON_HEIGHT * 1.6,
             child: TextButton(
               style: TextButton.styleFrom(
                 backgroundColor: buttonGreyColor,
@@ -354,6 +355,7 @@ class SetTimeButtons extends StatelessWidget {
               ),
               onPressed: () {
                 gameBloc.add(SetMinutes(minutes: 30));
+                gameBloc.add(SetSeconds(seconds: 0));
               },
               child: Text("30:00",
                   style: TextStyle(
