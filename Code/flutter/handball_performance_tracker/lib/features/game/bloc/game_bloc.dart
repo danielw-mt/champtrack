@@ -222,7 +222,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
 
     // switch sides for example during halftime
     on<SwitchSides>((event, emit) {
-      emit(state.copyWith(attackIsLeft: !state.attackIsLeft));
+      emit(state.copyWith(attackIsLeft: !state.attackIsLeft, attacking: !state.attacking));
     });
 
     /// Change time by the given offset
