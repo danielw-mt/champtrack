@@ -139,3 +139,9 @@ class SetPenalty extends GameEvent {
 
   SetPenalty({required this.player});
 }
+
+class RemovePenalty extends GameEvent {
+  final Player player;
+
+  RemovePenalty({required this.player});
+}

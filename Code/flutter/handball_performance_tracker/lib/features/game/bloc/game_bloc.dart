@@ -337,7 +337,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
 
     on<DeleteGameAction>((event, emit) {
       // TODO adapt ef score
-       bool decreaseOwnScore = false;
+      bool decreaseOwnScore = false;
       bool decreaseOpponentScore = false;
       switch (event.action.tag) {
         case goal7mTag:
@@ -367,7 +367,17 @@ class GameBloc extends Bloc<GameEvent, GameState> {
 
     on<SetPenalty>((event, emit) {
       int penaltyStartStopWatchTime = state.stopWatchTimer.rawTime.value;
-      Timer timer = Timer.periodic(Duration(seconds: 5), (Timer t) {
+
+      onTimerFinish() async {
+        try {
+          this.add(RemovePenalty(player: event.player));
+        } catch (e) {
+          print("error in penalty timer: $e");
+        }
+        
+      }
+
+      Timer timer = Timer.periodic(Duration(seconds: 5), (Timer t) async {
         // in case we got rid of the penalty manually
         if (!state.penalties.containsKey(event.player)) {
           t.cancel();
@@ -376,13 +386,20 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         int stopWatchTime = state.stopWatchTimer.rawTime.value;
         // 120000 is 2 minutes
         if (stopWatchTime - penaltyStartStopWatchTime >= 120000) {
-          print("penalty timer is over");
-          t.cancel();
-          emit(state.copyWith(penalties: state.penalties..remove(event.player)));
+          onTimerFinish();
         }
       });
       state.penalties[event.player] = timer;
       emit(state.copyWith(penalties: new Map<Player, Timer>.from(state.penalties)));
+      print("got to end of penalty");
+    });
+
+    on<RemovePenalty>((event, emit) {
+      if (state.penalties.containsKey(event.player)) {
+        state.penalties[event.player]!.cancel();
+        state.penalties.remove(event.player);
+        emit(state.copyWith(penalties: new Map<Player, Timer>.from(state.penalties)));
+      }
     });
 
     on<RegisterAction>((event, emit) {
@@ -408,10 +425,11 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         if (event.actionTag == emptyGoalTag) {
           action.playerId = "opponent";
           emit(state.copyWith(opponentScore: state.opponentScore + 1, workflowStep: WorkflowStep.forceClose));
-        }else{
+        } else {
           emit(state.copyWith(
             opponentScore: state.opponentScore + 1,
-        ));}
+          ));
+        }
 
         // if an action inside goalkeeper menu that does not correspond to the opponent was hit try to assign this action directly to the goalkeeper
       }
