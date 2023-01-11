@@ -293,7 +293,6 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         emit(state.copyWith(lastClickedLocation: lastLocation));
         this.add(WorkflowEvent());
       }
-      
     });
 
     on<SwitchField>((event, emit) {
@@ -388,10 +387,11 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         if (event.actionTag == emptyGoalTag) {
           action.playerId = "opponent";
           emit(state.copyWith(opponentScore: state.opponentScore + 1, workflowStep: WorkflowStep.forceClose));
-        }else{
+        } else {
           emit(state.copyWith(
             opponentScore: state.opponentScore + 1,
-        ));}
+          ));
+        }
 
         // if an action inside goalkeeper menu that does not correspond to the opponent was hit try to assign this action directly to the goalkeeper
       }
@@ -509,12 +509,14 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         }
 
         // Switch field on goal, block & steal (=stürmerfoul), missed goal attempt and technical mistake on offensive (not trf on defense)
+        
         String lastTag = state.gameActions.last.tag;
         if (lastTag == goalTag ||
             lastTag == blockAndStealTag ||
             lastTag == missTag ||
             (lastTag == trfTag && state.gameActions.last.context == actionContextAttack)) {
-          this.add(SwitchField());
+              // don't switch if we select assist / no assist
+          if (state.workflowStep != WorkflowStep.assistSelection) this.add(SwitchField());
         }
         // adapt score if we scored a goal
         if (lastTag == goalTag && state.workflowStep != WorkflowStep.assistSelection) {
