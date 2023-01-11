@@ -337,6 +337,31 @@ class GameBloc extends Bloc<GameEvent, GameState> {
 
     on<DeleteGameAction>((event, emit) {
       // TODO adapt ef score
+       bool decreaseOwnScore = false;
+      bool decreaseOpponentScore = false;
+      switch (event.action.tag) {
+        case goal7mTag:
+          decreaseOwnScore = true;
+          break;
+        case goalGoalKeeperTag:
+          decreaseOwnScore = true;
+          break;
+        case goalTag:
+          decreaseOwnScore = true;
+          break;
+        case goalOpponent7mTag:
+          decreaseOpponentScore = true;
+          break;
+        case goalOpponentTag:
+          decreaseOpponentScore = true;
+          break;
+      }
+      if (decreaseOwnScore || state.ownScore > 0) {
+        emit(state.copyWith(ownScore: state.ownScore - 1));
+      }
+      if (decreaseOpponentScore || state.opponentScore > 0) {
+        emit(state.copyWith(opponentScore: state.opponentScore - 1));
+      }
       emit(state.copyWith(gameActions: (state.gameActions..remove(event.action)).toList()));
     });
 
