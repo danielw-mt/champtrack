@@ -336,7 +336,8 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     });
 
     on<DeleteGameAction>((event, emit) {
-      // TODO adapt ef score
+      print("deleting game action: "+event.action.tag.toString()+ " ");
+      
       bool decreaseOwnScore = false;
       bool decreaseOpponentScore = false;
       switch (event.action.tag) {
@@ -362,7 +363,10 @@ class GameBloc extends Bloc<GameEvent, GameState> {
       if (decreaseOpponentScore || state.opponentScore > 0) {
         emit(state.copyWith(opponentScore: state.opponentScore - 1));
       }
-      emit(state.copyWith(gameActions: (state.gameActions..remove(event.action)).toList()));
+      List<GameAction> newGameActions = state.gameActions.toList();
+      int index = newGameActions.indexWhere((element) => element.id == event.action.id && element.tag == event.action.tag);
+      newGameActions.removeAt(index);
+      emit(state.copyWith(gameActions: newGameActions));
     });
 
     on<SetPenalty>((event, emit) {
