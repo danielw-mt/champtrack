@@ -248,6 +248,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
       StopWatchTimer stopWatchTimer = state.stopWatchTimer;
       // get current minutes
       int currentMins = (stopWatchTimer.rawTime.value / 60000).floor();
+      print("current mins: $currentMins");
       // make sure the timer can't go negative
       if (event.seconds < 0) return;
       stopWatchTimer.clearPresetTime();
@@ -259,6 +260,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         stopWatchTimer.onExecute.add(StopWatchExecute.reset);
         stopWatchTimer.setPresetSecondTime(currentMins * 60 + event.seconds);
       }
+      emit(state.copyWith(stopWatchTimer: stopWatchTimer));
     });
 
     /// Set the minutes of the timer to the given value
@@ -271,12 +273,14 @@ class GameBloc extends Bloc<GameEvent, GameState> {
       stopWatchTimer.clearPresetTime();
       if (stopWatchTimer.isRunning) {
         stopWatchTimer.onExecute.add(StopWatchExecute.reset);
-        stopWatchTimer.setPresetSecondTime(event.minutes * 60 + currentSecs);
+        stopWatchTimer.setPresetMinuteTime(event.minutes);
         stopWatchTimer.onExecute.add(StopWatchExecute.start);
       } else {
         stopWatchTimer.onExecute.add(StopWatchExecute.reset);
-        stopWatchTimer.setPresetSecondTime(event.minutes * 60 + currentSecs);
+        stopWatchTimer.setPresetMinuteTime(event.minutes);
+        print(stopWatchTimer.rawTime.value);
       }
+      emit(state.copyWith(stopWatchTimer: stopWatchTimer));
     });
 
     on<RegisterClickOnField>((event, emit) {
@@ -289,6 +293,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         emit(state.copyWith(lastClickedLocation: lastLocation));
         this.add(WorkflowEvent());
       }
+      
     });
 
     on<SwitchField>((event, emit) {
