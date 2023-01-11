@@ -364,7 +364,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         emit(state.copyWith(opponentScore: state.opponentScore - 1));
       }
       List<GameAction> newGameActions = state.gameActions.toList();
-      int index = newGameActions.indexWhere((element) => element.id == event.action.id && element.tag == event.action.tag);
+      int index = newGameActions.indexWhere((element) => element.id == event.action.id);
       newGameActions.removeAt(index);
       emit(state.copyWith(gameActions: newGameActions));
     });
@@ -408,6 +408,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     on<RegisterAction>((event, emit) {
       int unixTime = DateTime.now().toUtc().millisecondsSinceEpoch;
       GameAction action = GameAction(
+        id: unixTime.toString(),
         context: event.actionContext,
         tag: event.actionTag,
         throwLocation: List.from(state.lastClickedLocation.cast<String>()),
@@ -482,7 +483,9 @@ class GameBloc extends Bloc<GameEvent, GameState> {
       GameAction lastAction = state.gameActions.last;
       if (state.workflowStep == WorkflowStep.assistSelection && event.player.id != state.gameActions.last.playerId) {
         print("player selection: adding assist");
+        int unixTime = DateTime.now().toUtc().millisecondsSinceEpoch;
         GameAction assistAction = GameAction(
+            id: unixTime.toString(),
             context: state.gameActions.last.context,
             tag: assistTag,
             throwLocation: List.from(state.lastClickedLocation.cast<String>()),
