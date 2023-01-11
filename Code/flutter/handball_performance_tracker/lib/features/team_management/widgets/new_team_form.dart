@@ -143,7 +143,7 @@ class NewTeamFormState extends State<NewTeamForm> {
                             Navigator.pop(context);
                             // if the added team is the first team to be added select this team right away
                             if (context.read<GlobalBloc>().state.allTeams.length == 1) {
-                              context.read<TeamManagementCubit>().selectTeam(0);
+                              context.read<TeamManagementBloc>().add(SelectTeam(index: 0));
                             }
                           }
                         },

@@ -37,7 +37,7 @@ class SidebarView extends StatelessWidget {
                   SimpleListEntry(text: "TODO Dashboard", screen: DashboardView()),
                   // show game is running button only if game is running.
                   SimpleListEntry(
-                    text: "TODO Teams",
+                    text: StringsGeneral.lTeamManagement,
                     screen: TeamManagementPage(),
                     //children: buildTeamChildren(context),
                   ),

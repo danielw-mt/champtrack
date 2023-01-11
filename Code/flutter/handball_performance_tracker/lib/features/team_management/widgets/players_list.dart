@@ -8,7 +8,7 @@ import 'package:handball_performance_tracker/core/core.dart';
 class PlayersList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final state = context.watch<TeamManagementCubit>().state;
+    final state = context.watch<TeamManagementBloc>().state;
     final globalState = context.watch<GlobalBloc>().state;
 
     List<Player> playersList = globalState.allTeams[state.selectedTeamIndex].players;

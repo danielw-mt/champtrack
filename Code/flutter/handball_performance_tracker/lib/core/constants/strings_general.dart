@@ -135,6 +135,7 @@ class StringsGeneral {
   static const String lTeamMissing = "Bitte Team auswählen";
 
   // team selection screen
+  static const String lTeamManagement = "Team Management";
   static const String lAddTeam = "Team hinzufügen";
   static const String lTeamTypes = "Teamtypen";
   static const String lNoTeamsWarning = "Keine Teams vorhanden. Bitte zuerst anlegen";

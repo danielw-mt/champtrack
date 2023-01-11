@@ -5,3 +5,7 @@ export 'players_list.dart';
 export 'tabs_bar.dart';
 export 'team_settings.dart';
 export 'team_dropdown.dart';
+export 'team_management_players.dart';
+export 'team_management_games.dart';
+export 'team_management_settings.dart';
+export 'team_list.dart';
