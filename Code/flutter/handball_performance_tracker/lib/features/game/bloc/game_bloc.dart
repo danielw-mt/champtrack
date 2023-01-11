@@ -374,7 +374,6 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         } catch (e) {
           print("error in penalty timer: $e");
         }
-        
       }
 
       Timer timer = Timer.periodic(Duration(seconds: 5), (Timer t) async {
@@ -422,7 +421,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         print("logging opponent action");
         // trigger switch field event
         this.add(SwitchField());
-        if (event.actionTag == emptyGoalTag) {
+        if (event.actionTag == emptyGoalTag || event.actionTag == goalOpponentTag) {
           action.playerId = "opponent";
           emit(state.copyWith(opponentScore: state.opponentScore + 1, workflowStep: WorkflowStep.forceClose));
         } else {
@@ -435,6 +434,10 @@ class GameBloc extends Bloc<GameEvent, GameState> {
       }
       if (event.actionContext == actionContextGoalkeeper) {
         print("our own goalkeeper action");
+        if (action.tag == goalGoalKeeperTag) {
+          emit(state.copyWith(ownScore: state.ownScore + 1));
+        }
+        
         List<Player> goalKeepers = [];
         state.onFieldPlayers.forEach((Player player) {
           if (player.positions.contains(goalkeeperPos)) {
@@ -445,8 +448,9 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         if (goalKeepers.length == 1) {
           // we know the player id so we assign it here. For all other actions it is assigned in the player menu
           action.playerId = goalKeepers[0].id!;
-          // TODO add action to FB here
-          this.add(SwitchField());
+          if (action.tag == timePenaltyTag) {
+            this.add(SetPenalty(player: goalKeepers[0]));
+          }
           emit(state.copyWith(workflowStep: WorkflowStep.forceClose));
           // if there is more than one player with a goalkeeper position on field right now open the player menu with goalkeeper selection style
         } else {
@@ -464,12 +468,9 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         this.add(WorkflowEvent(selectedAction: action));
         this.add(SwitchField());
       } else {
-        // add the action to the list of actions
-        print("adding normal action");
-        // don't show player menu if a goalkeeper action or opponent action was logged
-        // for all other actions show player menu
         this.add(WorkflowEvent(selectedAction: action));
       }
+      print("adding action: "+action.tag.toString());
       emit(state.copyWith(gameActions: state.gameActions..add(action)));
     });
 
