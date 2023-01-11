@@ -378,7 +378,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         if (stopWatchTime - penaltyStartStopWatchTime >= 120000) {
           print("penalty timer is over");
           t.cancel();
-          emit(state.copyWith(penalties: {}));
+          emit(state.copyWith(penalties: state.penalties..remove(event.player)));
         }
       });
       state.penalties[event.player] = timer;
@@ -466,8 +466,8 @@ class GameBloc extends Bloc<GameEvent, GameState> {
             timestamp: lastAction.timestamp,
             playerId: event.player.id!);
         this.add(UpdatePlayerEfScore(action: assistAction));
-        // emit(state.copyWith(ownScore: state.ownScore + 1));
         this.add(WorkflowEvent(selectedPlayer: event.player));
+        emit(state.copyWith(gameActions: state.gameActions..add(assistAction)));
       } else if (lastAction.tag == timePenaltyTag) {
         print("player selection: adding time penalty");
         lastAction.playerId = event.player.id!;
