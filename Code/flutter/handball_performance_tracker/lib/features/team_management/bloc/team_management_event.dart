@@ -18,3 +18,9 @@ class SelectTeam extends TeamManagementEvent{
 
   SelectTeam({required this.index});
 }
+
+class DeleteTeam extends TeamManagementEvent {
+  final int index;
+
+  DeleteTeam({required this.index});
+}

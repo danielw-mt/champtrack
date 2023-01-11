@@ -81,7 +81,32 @@ class TeamSettings extends StatelessWidget {
                 ),
               ),
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
+                  //delete button
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 16.0),
+                    child: ElevatedButton(
+                      onPressed: () {
+                        //TODO implement this dialog
+                        // Get.defaultDialog(
+                        //     title: StringsTeamManagement.lDeleteTeam,
+                        //     middleText:
+                        //         StringsTeamManagement.lConfirmDeleteTeam,
+                        //     textConfirm: StringsTeamManagement.lYes,
+                        //     textCancel: StringsTeamManagement.lNo,
+                        //     onConfirm: () {
+                        //       tempController.deleteSelectedTeam();
+                        //       Get.back();
+                        //       Get.back();
+                        //     },
+                        //     onCancel: () {
+                        //       Get.back();
+                        //     });
+                      },
+                      child: const Text(StringsTeamManagement.lDeleteTeam),
+                    ),
+                  ),
                   // submit button
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 16.0),
