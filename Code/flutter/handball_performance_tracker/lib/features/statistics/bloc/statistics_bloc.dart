@@ -9,6 +9,9 @@ import 'package:handball_performance_tracker/data/repositories/team_repository.d
 // import 'package:handball_performance_tracker/features/statistics/statistics.dart';
 import 'generate_statistics.dart';
 import 'dart:developer' as developer;
+// import json package
+import 'dart:convert';
+import 'dart:io';
 
 part 'statistics_event.dart';
 part 'statistics_state.dart';
@@ -187,12 +190,15 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
     });
 
     on<AddCurrentGameStatistics>((event, emit) async {
+      print("add current game statistics");
       List<Player> fetchedPlayers = playerRepository.players;
       // generate the stats for the current game
       Map<String, dynamic> statistics = generateStatistics([event.game], fetchedPlayers);
-      
-      // TODO this way of adding the stats does not work
-      // if current game is already part of the current statistics map, remove this event
+      JsonEncoder encoder = new JsonEncoder.withIndent('  ');
+      String prettyprint = encoder.convert(statistics);
+      print("adding current game to live statisttics");
+      print(prettyprint);
+      // // if current game is already part of the current statistics map, remove this event
       if (state.statistics.containsKey(event.game.id)) {
         print("game already exists in stats. Replacing game with newest stats");
         state.statistics[event.game.id!] = statistics[event.game.id];
