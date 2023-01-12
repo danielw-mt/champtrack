@@ -9,7 +9,6 @@ Future<DocumentReference> getClubReference() async {
         .where("roles.${FirebaseAuth.instance.currentUser!.uid}", isEqualTo: "admin")
         .limit(1)
         .get();
-
     if (clubSnapshot.docs.length != 1) {
       throw Exception("No club found for user id. Cannot fetch players");
     }

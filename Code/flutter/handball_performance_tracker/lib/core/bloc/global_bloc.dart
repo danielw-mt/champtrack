@@ -19,6 +19,7 @@ class GlobalBloc extends Bloc<GlobalEvent, GlobalState> {
       required PlayerFirebaseRepository this.playerRepository})
       : super(GlobalState().copyWith(status: GlobalStatus.loading)) {
     on<LoadGlobalState>((event, emit) async {
+      print("LoadGlobalState event received");
       try {
         emit(state.copyWith(status: GlobalStatus.loading));
         List<Player> fetchedPlayers = await playerRepository.fetchPlayers();

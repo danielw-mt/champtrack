@@ -19,7 +19,12 @@ class PlayerMenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final gameBloc = context.read<GameBloc>();
-
+    List<Player> availableOnFieldPlayers = gameBloc.state.onFieldPlayers;
+    List<Player> availablePlayers = gameBloc.state.selectedTeam.players;
+    if (style == PlayerMenuStyle.goalKeeperSelection) {
+      availableOnFieldPlayers = gameBloc.state.onFieldPlayers.where((Player player) => player.positions.contains("TW")).toList();
+      availablePlayers = gameBloc.state.selectedTeam.players.where((Player player) => player.positions.contains("TW")).toList();
+    }
     List<Widget> _buildPanel() {
       if (style == PlayerMenuStyle.substitutionTarget) {
         print("substitution target menu");
@@ -28,7 +33,7 @@ class PlayerMenu extends StatelessWidget {
               // 4 items max per row
               crossAxisCount: 4,
               padding: const EdgeInsets.all(20),
-              children: gameBloc.state.onFieldPlayers
+              children: availableOnFieldPlayers
                   .map((Player player) => PlayerButton(
                         player: player,
                         isSubstitution: true,
@@ -41,7 +46,7 @@ class PlayerMenu extends StatelessWidget {
             // 4 items max per row
             crossAxisCount: 4,
             padding: const EdgeInsets.all(20),
-            children: gameBloc.state.onFieldPlayers
+            children: availableOnFieldPlayers
                 .map<Widget>((Player player) => PlayerButton(
                       player: player,
                       isSubstitution: false,
@@ -54,7 +59,7 @@ class PlayerMenu extends StatelessWidget {
             // 4 items max per row
             crossAxisCount: 4,
             padding: const EdgeInsets.all(20),
-            children: gameBloc.state.selectedTeam.players
+            children: availablePlayers
                 .where((Player player) => !gameBloc.state.selectedTeam.onFieldPlayers.contains(player))
                 .toList()
                 .map((Player player) => PlayerButton(
