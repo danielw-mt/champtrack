@@ -432,7 +432,7 @@ class QuotaCard extends StatelessWidget {
             return Container(
                 width: MediaQuery.of(context).size.width,
                 height: MediaQuery.of(context).size.height,
-                child: Flexible(flex: 2, child: i));
+                child: i);
           },
         );
       }).toList(),
