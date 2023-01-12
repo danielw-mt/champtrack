@@ -227,7 +227,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
 
     // switch sides for example during halftime
     on<SwitchSides>((event, emit) {
-      emit(state.copyWith(attackIsLeft: !state.attackIsLeft));
+      emit(state.copyWith(attackIsLeft: !state.attackIsLeft, attacking: !state.attacking));
     });
 
     /// Change time by the given offset
@@ -398,10 +398,10 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         if (event.actionTag == emptyGoalTag) {
           action.playerId = "opponent";
           emit(state.copyWith(opponentScore: state.opponentScore + 1, workflowStep: WorkflowStep.forceClose));
-        }
-        emit(state.copyWith(
-          opponentScore: state.opponentScore + 1,
-        ));
+        }else{
+          emit(state.copyWith(
+            opponentScore: state.opponentScore + 1,
+        ));}
 
         // if an action inside goalkeeper menu that does not correspond to the opponent was hit try to assign this action directly to the goalkeeper
       }

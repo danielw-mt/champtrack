@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:handball_performance_tracker/core/core.dart';
 import 'package:handball_performance_tracker/data/models/models.dart';
 import 'package:handball_performance_tracker/data/repositories/game_repository.dart';
 import 'package:handball_performance_tracker/data/repositories/player_repository.dart';
@@ -38,6 +39,12 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
       // build list of games for selected team
       List<Game> selectedTeamGames = fetchedGames.where((game) => game.teamId == event.team.id).toList();
 
+      if (selectedTeamGames.length == 0) {
+        selectedTeamGames = [
+          Game(date: DateTime.now(), opponent: StringsGeneral.lNoTeamStats)
+        ];
+      }
+
       // set selected game
       Game selectedGame = selectedTeamGames.isNotEmpty ? selectedTeamGames[0] : Game(date: DateTime.now());
 
@@ -48,7 +55,10 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
 
       TeamStatistics selectedTeamStats = _buildTeamStatistics(state.statistics, event.team, selectedGame);
 
-      String selectedTeamPerformanceParameter = selectedTeamStats.actionSeries.keys.toList()[0];
+      String selectedTeamPerformanceParameter =
+          selectedTeamStats.actionSeries.keys.toList().isNotEmpty
+              ? selectedTeamStats.actionSeries.keys.toList()[0]
+              : StringsGeneral.lNoTeamStats;
       // String selectedPlayerPerformanceParameter =
       //     selectedPlayerStats.actionSeries.keys.toList()[0];
 
@@ -65,14 +75,24 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
     });
 
     on<SelectGame>((event, emit) {
-      TeamStatistics newSelectedTeamStats = _buildTeamStatistics(state.statistics, state.selectedTeam, event.game);
-      emit(state.copyWith(selectedGame: event.game, selectedTeamStats: newSelectedTeamStats));
+      TeamStatistics newSelectedTeamStats = _buildTeamStatistics(
+          state.statistics, state.selectedTeam, event.game);
+      String selectedTeamPerformanceParameter =
+          newSelectedTeamStats.actionSeries.keys.toList().isNotEmpty
+              ? newSelectedTeamStats.actionSeries.keys.toList()[0]
+              : StringsGeneral.lNoTeamStats;
+      emit(state.copyWith(
+          selectedGame: event.game,
+          selectedTeamStats: newSelectedTeamStats,
+          selectedTeamPerformanceParameter: selectedTeamPerformanceParameter));
     });
 
     on<SelectPlayer>((event, emit) {
       PlayerStatistics selectedPlayerStats = _buildPlayerStatistics(state.statistics, event.player, state.selectedGame);
 
-      String selectedPlayerPerformanceParameter = selectedPlayerStats.actionSeries.keys.toList()[0];
+      String selectedPlayerPerformanceParameter = selectedPlayerStats.actionSeries.keys.toList().isNotEmpty ?
+          selectedPlayerStats.actionSeries.keys.toList()[0]
+          : StringsGeneral.lNoTeamStats;
 
       emit(state.copyWith(
           selectedPlayer: event.player,
@@ -88,12 +108,16 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
       }
     });
 
-    on<SelectPerformanceParameter>((event, emit) {
-      if (event.teamParameter) {
-        emit(state.copyWith(selectedTeamPerformanceParameter: event.parameter));
-      } else {
-        emit(state.copyWith(selectedPlayerPerformanceParameter: event.parameter));
-      }
+    on<SelectTeamPerformanceParameter>((event, emit) {
+      print("teamParam");
+      print(event.parameter);
+      emit(state.copyWith(selectedTeamPerformanceParameter: event.parameter));
+    });
+
+    on<SelectPlayerPerformanceParameter>((event, emit) {
+      print("playerParam");
+      print(event.parameter);
+      emit(state.copyWith(selectedPlayerPerformanceParameter: event.parameter));
     });
 
     on<SwitchField>((event, emit) {
@@ -158,14 +182,18 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
 
         // if actionSeries to list not empty select first parameter otherwise write string no parameter
         String selectedTeamPerformanceParameter =
-            selectedTeamStats.actionSeries.keys.toList().isNotEmpty ? selectedTeamStats.actionSeries.keys.toList()[0] : "no parameter";
+            selectedTeamStats.actionSeries.keys.toList().isNotEmpty
+                ? selectedTeamStats.actionSeries.keys.toList()[0]
+                : StringsGeneral.lNoTeamStats;
 
         // String selectedTeamPerformanceParameter =
         //     selectedTeamStats.actionSeries.keys.toList()[0];
         // print selectedTeamPerformanceParameter
         print("selectedTeamPerformanceParameter: " + selectedTeamPerformanceParameter);
         String selectedPlayerPerformanceParameter =
-            selectedPlayerStats.actionSeries.keys.toList().isNotEmpty ? selectedPlayerStats.actionSeries.keys.toList()[0] : "no parameter";
+            selectedPlayerStats.actionSeries.keys.toList().isNotEmpty
+                ? selectedPlayerStats.actionSeries.keys.toList()[0]
+                : StringsGeneral.lNoTeamStats;
 
         emit(state.copyWith(
             status: StatisticsStatus.loaded,

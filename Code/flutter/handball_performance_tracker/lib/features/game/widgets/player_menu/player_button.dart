@@ -38,11 +38,11 @@ class PlayerButton extends StatelessWidget {
               ),
             ),
             // Shirt
-            Center(
-              child: Icon(
-                MyFlutterApp.t_shirt,
-              ),
-            ),
+            // Center(
+            //   child: Icon(
+            //     MyFlutterApp.t_shirt,
+            //   ),
+            // ),
           ],
         ),
         // ButtonName

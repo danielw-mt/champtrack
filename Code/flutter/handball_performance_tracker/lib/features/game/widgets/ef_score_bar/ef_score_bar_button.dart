@@ -3,7 +3,8 @@ import 'package:handball_performance_tracker/core/core.dart';
 import 'package:handball_performance_tracker/data/models/models.dart';
 import 'package:handball_performance_tracker/features/game/bloc/game_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:handball_performance_tracker/core/constants/field_size_parameters.dart' as fieldSizeParameter;
+import 'package:handball_performance_tracker/core/constants/field_size_parameters.dart'
+    as fieldSizeParameter;
 import 'package:handball_performance_tracker/features/game/widgets/ef_score_bar/ef_score_popup.dart';
 import 'package:handball_performance_tracker/features/game/widgets/ef_score_bar/plus_button.dart';
 import 'dart:math';
@@ -15,7 +16,11 @@ class EfScoreBarButton extends StatelessWidget {
   Player player;
   bool isPopupButton;
   Player? substitutionTarget;
-  EfScoreBarButton({super.key, required this.player, required this.isPopupButton, this.substitutionTarget});
+  EfScoreBarButton(
+      {super.key,
+      required this.player,
+      required this.isPopupButton,
+      this.substitutionTarget});
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +35,11 @@ class EfScoreBarButton extends StatelessWidget {
 
     /// Method that returns true if there are already more than 5 actions for one player, giving the ef-score enough time to calibrate
     bool shouldEfScoreShow() {
-      if (gameBloc.state.gameActions.where((GameAction action) => action.playerId == player.id).toList().length >= 5) {
+      if (gameBloc.state.gameActions
+              .where((GameAction action) => action.playerId == player.id)
+              .toList()
+              .length >=
+          5) {
         return true;
       } else {
         return false;
@@ -48,7 +57,9 @@ class EfScoreBarButton extends StatelessWidget {
             alignment: Alignment.center,
 
             decoration: BoxDecoration(
-                color: gameBloc.state.substitutionTarget == player ? pressedButtonColor : buttonColor,
+                color: gameBloc.state.substitutionTarget == player
+                    ? pressedButtonColor
+                    : buttonColor,
                 // make round edges
                 borderRadius: BorderRadius.only(
                   bottomLeft: Radius.circular(buttonRadius),
@@ -72,7 +83,9 @@ class EfScoreBarButton extends StatelessWidget {
               width: scorebarButtonWidth / 5 * 3,
               height: buttonHeight,
               alignment: Alignment.center,
-              color: gameBloc.state.substitutionTarget == player ? pressedButtonColor : buttonColor,
+              color: gameBloc.state.substitutionTarget == player
+                  ? pressedButtonColor
+                  : buttonColor,
               child: Text(
                 player.lastName,
                 overflow: TextOverflow.ellipsis,
@@ -93,29 +106,33 @@ class EfScoreBarButton extends StatelessWidget {
                   bottomRight: Radius.circular(buttonRadius),
                   topRight: Radius.circular(buttonRadius),
                 )),
-            child: shouldEfScoreShow()
-                ? Text(
-                    player.efScore.score.toStringAsFixed(1),
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: nameFontSize,
-                    ),
-                    textAlign: TextAlign.left,
-                  )
-                : Container(),
+            child:
+                // shouldEfScoreShow()
+                // ? Text(
+                //     player.efScore.score.toStringAsFixed(1),
+                //     style: TextStyle(
+                //       color: Colors.black,
+                //       fontSize: nameFontSize,
+                //     ),
+                //     textAlign: TextAlign.left,
+                //   )
+                // :
+                Container(),
           ),
         ],
       ),
       onTap: () {
         if (isPopupButton) {
-          gameBloc.add(SubstitutePlayer(newPlayer: player, oldPlayer: substitutionTarget!));
+          gameBloc.add(SubstitutePlayer(
+              newPlayer: player, oldPlayer: substitutionTarget!));
           Navigator.pop(context);
         } else {
           // show popup
           List<Player> playersWithSamePosition = [];
           gameBloc.state.selectedTeam.players.forEach((Player playerFromTeam) {
             playerFromTeam.positions.forEach((String position) {
-              if (player.positions.contains(position) && playerFromTeam != player) {
+              if (player.positions.contains(position) &&
+                  playerFromTeam != player) {
                 playersWithSamePosition.add(playerFromTeam);
               }
             });
