@@ -45,11 +45,17 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
         ];
       }
 
-      if (selectedTeamGames.length == 0) {
-        selectedTeamGames = [
-          Game(date: DateTime.now(), opponent: StringsGeneral.lNoTeamStats)
-        ];
-      }
+      // if (selectedTeamGames.length == 0) {
+      //   selectedTeamGames = [
+      //     Game(date: DateTime.now(), opponent: StringsGeneral.lNoTeamStats)
+      //   ];
+      // }
+
+      // if (selectedTeamGames.length == 0) {
+      //   selectedTeamGames = [
+      //     Game(date: DateTime.now(), opponent: StringsGeneral.lNoTeamStats)
+      //   ];
+      // }
 
       // set selected game
       Game selectedGame = selectedTeamGames.isNotEmpty ? selectedTeamGames[0] : Game(date: DateTime.now());
