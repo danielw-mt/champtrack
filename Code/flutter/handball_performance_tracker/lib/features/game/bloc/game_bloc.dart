@@ -153,6 +153,9 @@ class GameBloc extends Bloc<GameEvent, GameState> {
       }
     });
 
+    // just put the game state into an empty gamestate
+    on<ResetGame>(((event, emit) => emit(GameState())));
+
     on<SwipeField>((event, emit) async {
       if (state.attackIsLeft && event.isLeft || !state.attackIsLeft && !event.isLeft) {
         print("attacking: true");

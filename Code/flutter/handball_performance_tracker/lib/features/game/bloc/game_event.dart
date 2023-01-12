@@ -29,6 +29,8 @@ class InitializeGame extends GameEvent {
   }
 }
 
+class ResetGame extends GameEvent {}
+
 class StartGame extends GameEvent {}
 
 class PauseGame extends GameEvent {}

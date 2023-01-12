@@ -10,6 +10,7 @@ class FinishGameButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final gameBloc = context.watch<GameBloc>();
+    final GlobalBloc globalBloc = context.watch<GlobalBloc>();
     return Container(
       margin: EdgeInsets.only(right: 3),
       child: TextButton(
@@ -38,6 +39,8 @@ class FinishGameButton extends StatelessWidget {
                       Navigator.pop(context);
                       Navigator.pop(context);
                       Navigator.push(context, MaterialPageRoute(builder: (context) => DashboardView()));
+                      gameBloc.add(ResetGame());
+                      globalBloc.add(ResetPlayerScores());
                     },
                     child: Text(
                       'OK',
