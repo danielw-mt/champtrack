@@ -69,7 +69,7 @@ class GameActionEntity extends Equatable {
 
       List<String> throwLocation = [];
       if (data['throwLocation'] != null) {
-        data['throwLocation'].forEach((String locationString) {
+        data['throwLocation'].forEach((locationString) {
           throwLocation.add(locationString);
         });
       }
