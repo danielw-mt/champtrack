@@ -25,12 +25,10 @@ class SelectTeamPerformanceParameter extends StatisticsEvent {
   SelectTeamPerformanceParameter({required this.parameter});
 }
 
-class SelectPerformanceParameter extends StatisticsEvent {
+class SelectPlayerPerformanceParameter extends StatisticsEvent {
   final String parameter;
-  // if true change selectedTeamPerformanceParameter, else change selectedPlayerPerformanceParameter
-  final bool teamParameter; 
 
-  SelectPerformanceParameter({required this.parameter, required this.teamParameter});
+  SelectPlayerPerformanceParameter({required this.parameter});
 }
 
 class SelectTeam extends StatisticsEvent {

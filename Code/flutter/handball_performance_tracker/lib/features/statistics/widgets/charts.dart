@@ -53,11 +53,11 @@ class LineChartWidget extends StatelessWidget {
         show: true,
         leftTitles: AxisTitles(
           // if there are no values provided (i.e. ef-score data) then only display Action Count
-          axisNameWidget: values.isEmpty
-              ? Text(StringsGeneral.lActionCount)
-              : Text(StringsGeneral.lValues),
+          // axisNameWidget: values.isEmpty
+          //     ? Text(StringsGeneral.lActionCount)
+          //     : Text(StringsGeneral.lValues),
           sideTitles:
-              SideTitles(interval: 1, showTitles: true, reservedSize: 40),
+              SideTitles(interval: 1, showTitles: true, reservedSize: 15),
         ),
         topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
         rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
@@ -69,7 +69,7 @@ class LineChartWidget extends StatelessWidget {
                 return Text(value.toString());
               },
               // set marker every 5 minutes
-              interval: 5,
+              interval: 10,
             )));
   }
 
@@ -93,6 +93,7 @@ class LineChartWidget extends StatelessWidget {
                             .difference(
                                 DateTime.fromMillisecondsSinceEpoch(startTime))
                             .inMinutes;
+                    print("diff in min" + difference_in_minutes.toString());
                     if (values.isEmpty) {
                       return FlSpot(difference_in_minutes.toDouble(),
                           (index + 1).toDouble());

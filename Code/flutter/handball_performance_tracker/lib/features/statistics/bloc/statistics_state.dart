@@ -24,7 +24,7 @@ class StatisticsState extends Equatable {
   //bool statistics_ready = false;
   bool heatmapShowsAttack = true;
   String selectedHeatmapParameter = "goals";
-  String selectedTeamPerformanceParameter = "goals";
+  String selectedTeamPerformanceParameter = "";
   String selectedPlayerPerformanceParameter = "goals";
 
   StatisticsState({

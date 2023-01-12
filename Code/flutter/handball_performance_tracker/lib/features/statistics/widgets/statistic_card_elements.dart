@@ -1,6 +1,5 @@
 import 'dart:html';
 
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:handball_performance_tracker/core/core.dart';
@@ -217,58 +216,47 @@ class PerformanceCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // _dropDownElements = [];
-    // if (widget.actionSeries.length == 0) {
-    //   return Center(child: Text(StringsGeneral.lNoDataAvailable));
-    // }
-    // // add the ef-score option to the action series dropdown elements
-    // if (widget.efScoreSeries.length > 0) {
-    //   _dropDownElements.add("Ef-Score");
-    // }
-    // widget.actionSeries.keys.toList().forEach((String actionTag) {
-    //   // convert action tag to the correct string specified in the strings using realActionType
-    //   _dropDownElements.add(actionTag);
-    // });
-    // // if we did not select an element yet, select the first one
-    // if (_selectedDropdownElement == "") {
-    //   _selectedDropdownElement = _dropDownElements[0];
-    // }
-    // // if a dropdown element is selected that is not available. (i.e. remnant from loading another game statistic previously)
-    // if (!_dropDownElements.contains(_selectedDropdownElement)) {
-    //   _selectedDropdownElement = _dropDownElements[0];
-    // }
-
-    return Card(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Flexible(
-              flex: 1,
-              child: buildActionTagDropdown(context, teamPerformanceParameter)),
-          Flexible(
-              flex: 4,
-              // when we selected ef-score in the dropdown use the timestamps from all the actions and not the series timestamps
-              // also use the values from the ef-score series that lign up with the timestamps for all actions
-              child: selectedDropdownElement == "Ef-Score"
-                  ? LineChartWidget(
-                      startTime: startTime,
-                      timeStamps: allActionTimeStamps,
-                      values: efScoreSeries,
-                      stopTime: stopTime,
-                    )
-                  : LineChartWidget(
-                      startTime: startTime,
-                      timeStamps: actionSeries[selectedDropdownElement]!,
-                      stopTime: stopTime,
-                      values: [],
-                    )),
-        ],
-      ),
-    );
+    // check if data is available, if not display text
+    return selectedDropdownElement == StringsGeneral.lNoTeamStats
+        ? Card(child: Text(StringsGeneral.lNoDataAvailable))
+        : Card(
+            child: Padding(
+              padding: EdgeInsets.all(6.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Flexible(
+                      flex: 1,
+                      child: buildActionTagDropdown(
+                          context, teamPerformanceParameter)),
+                  Flexible(
+                      flex: 4,
+                      // when we selected ef-score in the dropdown use the timestamps from all the actions and not the series timestamps
+                      // also use the values from the ef-score series that lign up with the timestamps for all actions
+                      child: selectedDropdownElement == "Ef-Score"
+                          ? LineChartWidget(
+                              startTime: startTime,
+                              timeStamps: allActionTimeStamps,
+                              values: efScoreSeries,
+                              stopTime: stopTime,
+                            )
+                          : LineChartWidget(
+                              startTime: startTime,
+                              timeStamps:
+                                  actionSeries[selectedDropdownElement]!,
+                              stopTime: stopTime,
+                              values: [],
+                            )),
+                ],
+              ),
+            ),
+          );
   }
 
   DropdownButton buildActionTagDropdown(
       BuildContext context, bool teamPerformanceParameter) {
+    // get statistics bloc
+    final statisticsBloc = BlocProvider.of<StatisticsBloc>(context);
     return DropdownButton<String>(
       isExpanded: true,
       // Initial Value
@@ -302,9 +290,20 @@ class PerformanceCard extends StatelessWidget {
       // change button value to selected value
       onChanged: (String? newDropdownElement) {
         // call selectTeamPerformanceParamter from statisticsbloc event
-        context.watch<StatisticsBloc>().add(SelectPerformanceParameter(
+        print(newDropdownElement);
+        if (teamPerformanceParameter) {
+          statisticsBloc.add(SelectTeamPerformanceParameter(
             parameter: newDropdownElement!,
-            teamParameter: teamPerformanceParameter));
+          ));
+        } else {
+          statisticsBloc.add(SelectPlayerPerformanceParameter(
+            parameter: newDropdownElement!,
+          ));
+        }
+        // context.watch<StatisticsBloc>().add(SelectPerformanceParameter(
+
+        //     parameter: newDropdownElement!,
+        //     teamParameter: teamPerformanceParameter));
       },
     );
   }
