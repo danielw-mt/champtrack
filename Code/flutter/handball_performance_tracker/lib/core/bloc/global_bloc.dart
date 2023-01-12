@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:handball_performance_tracker/data/ef_score.dart';
 import 'package:handball_performance_tracker/data/repositories/repositories.dart';
 import 'package:handball_performance_tracker/data/models/models.dart';
 import 'dart:developer' as developer;
@@ -12,7 +13,11 @@ class GlobalBloc extends Bloc<GlobalEvent, GlobalState> {
   TeamFirebaseRepository teamRepository;
   PlayerFirebaseRepository playerRepository;
 
-  GlobalBloc({required GameFirebaseRepository this.gameRepository, required TeamFirebaseRepository this.teamRepository, required PlayerFirebaseRepository this.playerRepository}) : super(GlobalState().copyWith(status: GlobalStatus.loading)) {
+  GlobalBloc(
+      {required GameFirebaseRepository this.gameRepository,
+      required TeamFirebaseRepository this.teamRepository,
+      required PlayerFirebaseRepository this.playerRepository})
+      : super(GlobalState().copyWith(status: GlobalStatus.loading)) {
     on<LoadGlobalState>((event, emit) async {
       print("LoadGlobalState event received");
       try {
@@ -100,6 +105,8 @@ class GlobalBloc extends Bloc<GlobalEvent, GlobalState> {
         emit(state.copyWith(status: GlobalStatus.failure));
       }
     });
+
+    on<ResetPlayerScores>((event, emit) => state.allTeams.forEach((team) => team.players.forEach((player) => player.efScore = LiveEfScore())));
 
     // on<CreateGame>((event, emit) async {
     //   try {

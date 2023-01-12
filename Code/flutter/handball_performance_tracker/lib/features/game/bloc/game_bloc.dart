@@ -158,6 +158,9 @@ class GameBloc extends Bloc<GameEvent, GameState> {
       }
     });
 
+    // just put the game state into an empty gamestate
+    on<ResetGame>(((event, emit) => emit(GameState())));
+
     on<SwipeField>((event, emit) async {
       if (state.attackIsLeft && event.isLeft || !state.attackIsLeft && !event.isLeft) {
         print("attacking: true");
@@ -350,33 +353,84 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     });
 
     on<DeleteGameAction>((event, emit) {
-      // TODO adapt ef score
-      emit(state.copyWith(gameActions: (state.gameActions..remove(event.action)).toList()));
+      print("deleting game action: " + event.action.tag.toString() + " ");
+
+      bool decreaseOwnScore = false;
+      bool decreaseOpponentScore = false;
+      switch (event.action.tag) {
+        case goal7mTag:
+          decreaseOwnScore = true;
+          break;
+        case goalGoalKeeperTag:
+          decreaseOwnScore = true;
+          break;
+        case goalTag:
+          decreaseOwnScore = true;
+          break;
+        case goalOpponent7mTag:
+          decreaseOpponentScore = true;
+          break;
+        case goalOpponentTag:
+          decreaseOpponentScore = true;
+          break;
+      }
+      if (decreaseOwnScore || state.ownScore > 0) {
+        emit(state.copyWith(ownScore: state.ownScore - 1));
+      }
+      if (decreaseOpponentScore || state.opponentScore > 0) {
+        emit(state.copyWith(opponentScore: state.opponentScore - 1));
+      }
+      List<GameAction> newGameActions = state.gameActions.toList();
+      int index = newGameActions.indexWhere((element) => element.id == event.action.id);
+      newGameActions.removeAt(index);
+      emit(state.copyWith(gameActions: newGameActions));
     });
 
     on<SetPenalty>((event, emit) {
       int penaltyStartStopWatchTime = state.stopWatchTimer.rawTime.value;
-      Timer timer = Timer.periodic(Duration(seconds: 5), (Timer t) {
-        // in case we got rid of the penalty manually
-        if (!state.penalties.containsKey(event.player)) {
-          t.cancel();
-          return;
+
+      onTimerFinish() async {
+        try {
+          this.add(RemovePenalty(player: event.player));
+        } catch (e) {
+          print("error in penalty timer: $e");
         }
-        int stopWatchTime = state.stopWatchTimer.rawTime.value;
-        // 120000 is 2 minutes
-        if (stopWatchTime - penaltyStartStopWatchTime >= 120000) {
-          print("penalty timer is over");
-          t.cancel();
-          emit(state.copyWith(penalties: {}));
-        }
-      });
+      }
+
+      Timer timer;
+      if (event.limited == true) {
+        timer = Timer.periodic(Duration(seconds: 5), (Timer t) async {
+          // in case we got rid of the penalty manually
+          if (!state.penalties.containsKey(event.player)) {
+            t.cancel();
+            return;
+          }
+          int stopWatchTime = state.stopWatchTimer.rawTime.value;
+          // 120000 is 2 minutes
+          if (stopWatchTime - penaltyStartStopWatchTime >= 120000) {
+            onTimerFinish();
+          }
+        });
+      } else {
+        // this timer is not really needed for red card penalty
+        timer = Timer(Duration(seconds: 1000), () async {});
+      }
       state.penalties[event.player] = timer;
       emit(state.copyWith(penalties: new Map<Player, Timer>.from(state.penalties)));
+    });
+
+    on<RemovePenalty>((event, emit) {
+      if (state.penalties.containsKey(event.player)) {
+        state.penalties[event.player]!.cancel();
+        state.penalties.remove(event.player);
+        emit(state.copyWith(penalties: new Map<Player, Timer>.from(state.penalties)));
+      }
     });
 
     on<RegisterAction>((event, emit) {
       int unixTime = DateTime.now().toUtc().millisecondsSinceEpoch;
       GameAction action = GameAction(
+        id: unixTime.toString(),
         context: event.actionContext,
         tag: event.actionTag,
         throwLocation: List.from(state.lastClickedLocation.cast<String>()),
@@ -395,18 +449,23 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         print("logging opponent action");
         // trigger switch field event
         this.add(SwitchField());
-        if (event.actionTag == emptyGoalTag) {
+        if (event.actionTag == emptyGoalTag || event.actionTag == goalOpponentTag) {
           action.playerId = "opponent";
           emit(state.copyWith(opponentScore: state.opponentScore + 1, workflowStep: WorkflowStep.forceClose));
-        }else{
+        } else {
           emit(state.copyWith(
             opponentScore: state.opponentScore + 1,
-        ));}
+          ));
+        }
 
         // if an action inside goalkeeper menu that does not correspond to the opponent was hit try to assign this action directly to the goalkeeper
       }
       if (event.actionContext == actionContextGoalkeeper) {
         print("our own goalkeeper action");
+        if (action.tag == goalGoalKeeperTag) {
+          emit(state.copyWith(ownScore: state.ownScore + 1));
+        }
+
         List<Player> goalKeepers = [];
         state.onFieldPlayers.forEach((Player player) {
           if (player.positions.contains(goalkeeperPos)) {
@@ -417,8 +476,9 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         if (goalKeepers.length == 1) {
           // we know the player id so we assign it here. For all other actions it is assigned in the player menu
           action.playerId = goalKeepers[0].id!;
-          // TODO add action to FB here
-          this.add(SwitchField());
+          if (action.tag == timePenaltyTag) {
+            this.add(SetPenalty(player: goalKeepers[0]));
+          }
           emit(state.copyWith(workflowStep: WorkflowStep.forceClose));
           // if there is more than one player with a goalkeeper position on field right now open the player menu with goalkeeper selection style
         } else {
@@ -459,12 +519,9 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         this.add(WorkflowEvent(selectedAction: action));
         this.add(SwitchField());
       } else {
-        // add the action to the list of actions
-        print("adding normal action");
-        // don't show player menu if a goalkeeper action or opponent action was logged
-        // for all other actions show player menu
         this.add(WorkflowEvent(selectedAction: action));
       }
+      print("adding action: " + action.tag.toString());
       emit(state.copyWith(gameActions: state.gameActions..add(action)));
     });
 
@@ -472,20 +529,28 @@ class GameBloc extends Bloc<GameEvent, GameState> {
       GameAction lastAction = state.gameActions.last;
       if (state.workflowStep == WorkflowStep.assistSelection && event.player.id != state.gameActions.last.playerId) {
         print("player selection: adding assist");
+        int unixTime = DateTime.now().toUtc().millisecondsSinceEpoch;
         GameAction assistAction = GameAction(
+            id: unixTime.toString(),
             context: state.gameActions.last.context,
             tag: assistTag,
             throwLocation: List.from(state.lastClickedLocation.cast<String>()),
             timestamp: lastAction.timestamp,
             playerId: event.player.id!);
         this.add(UpdatePlayerEfScore(action: assistAction));
-        // emit(state.copyWith(ownScore: state.ownScore + 1));
         this.add(WorkflowEvent(selectedPlayer: event.player));
+        emit(state.copyWith(gameActions: state.gameActions..add(assistAction)));
       } else if (lastAction.tag == timePenaltyTag) {
         print("player selection: adding time penalty");
         lastAction.playerId = event.player.id!;
-        this.add(SetPenalty(player: event.player));
+        this.add(SetPenalty(player: event.player, limited: true));
         // replace last action and add it again but this time with the player id and ef score update
+        emit(state.copyWith(gameActions: state.gameActions));
+        this.add(UpdatePlayerEfScore(action: lastAction));
+        this.add(WorkflowEvent(selectedPlayer: event.player));
+      } else if (lastAction.tag == redCardTag) {
+        print("red card: adding infinite penalty");
+        this.add(SetPenalty(player: event.player, limited: false));
         emit(state.copyWith(gameActions: state.gameActions));
         this.add(UpdatePlayerEfScore(action: lastAction));
         this.add(WorkflowEvent(selectedPlayer: event.player));
