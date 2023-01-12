@@ -138,8 +138,9 @@ class WorkflowEvent extends GameEvent {
 
 class SetPenalty extends GameEvent {
   final Player player;
+  final bool limited;
 
-  SetPenalty({required this.player});
+  SetPenalty({required this.player, this.limited = true});
 }
 
 class RemovePenalty extends GameEvent {

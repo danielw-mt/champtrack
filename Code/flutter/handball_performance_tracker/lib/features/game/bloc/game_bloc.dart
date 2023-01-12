@@ -339,8 +339,8 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     });
 
     on<DeleteGameAction>((event, emit) {
-      print("deleting game action: "+event.action.tag.toString()+ " ");
-      
+      print("deleting game action: " + event.action.tag.toString() + " ");
+
       bool decreaseOwnScore = false;
       bool decreaseOpponentScore = false;
       switch (event.action.tag) {
@@ -383,21 +383,26 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         }
       }
 
-      Timer timer = Timer.periodic(Duration(seconds: 5), (Timer t) async {
-        // in case we got rid of the penalty manually
-        if (!state.penalties.containsKey(event.player)) {
-          t.cancel();
-          return;
-        }
-        int stopWatchTime = state.stopWatchTimer.rawTime.value;
-        // 120000 is 2 minutes
-        if (stopWatchTime - penaltyStartStopWatchTime >= 120000) {
-          onTimerFinish();
-        }
-      });
+      Timer timer;
+      if (event.limited == true) {
+        timer = Timer.periodic(Duration(seconds: 5), (Timer t) async {
+          // in case we got rid of the penalty manually
+          if (!state.penalties.containsKey(event.player)) {
+            t.cancel();
+            return;
+          }
+          int stopWatchTime = state.stopWatchTimer.rawTime.value;
+          // 120000 is 2 minutes
+          if (stopWatchTime - penaltyStartStopWatchTime >= 120000) {
+            onTimerFinish();
+          }
+        });
+      } else {
+        // this timer is not really needed for red card penalty
+        timer = Timer(Duration(seconds: 1000), () async {});
+      }
       state.penalties[event.player] = timer;
       emit(state.copyWith(penalties: new Map<Player, Timer>.from(state.penalties)));
-      print("got to end of penalty");
     });
 
     on<RemovePenalty>((event, emit) {
@@ -445,7 +450,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         if (action.tag == goalGoalKeeperTag) {
           emit(state.copyWith(ownScore: state.ownScore + 1));
         }
-        
+
         List<Player> goalKeepers = [];
         state.onFieldPlayers.forEach((Player player) {
           if (player.positions.contains(goalkeeperPos)) {
@@ -478,7 +483,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
       } else {
         this.add(WorkflowEvent(selectedAction: action));
       }
-      print("adding action: "+action.tag.toString());
+      print("adding action: " + action.tag.toString());
       emit(state.copyWith(gameActions: state.gameActions..add(action)));
     });
 
@@ -500,8 +505,14 @@ class GameBloc extends Bloc<GameEvent, GameState> {
       } else if (lastAction.tag == timePenaltyTag) {
         print("player selection: adding time penalty");
         lastAction.playerId = event.player.id!;
-        this.add(SetPenalty(player: event.player));
+        this.add(SetPenalty(player: event.player, limited: true));
         // replace last action and add it again but this time with the player id and ef score update
+        emit(state.copyWith(gameActions: state.gameActions));
+        this.add(UpdatePlayerEfScore(action: lastAction));
+        this.add(WorkflowEvent(selectedPlayer: event.player));
+      } else if (lastAction.tag == redCardTag) {
+        print("red card: adding infinite penalty");
+        this.add(SetPenalty(player: event.player, limited: false));
         emit(state.copyWith(gameActions: state.gameActions));
         this.add(UpdatePlayerEfScore(action: lastAction));
         this.add(WorkflowEvent(selectedPlayer: event.player));
