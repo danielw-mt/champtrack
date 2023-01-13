@@ -15,9 +15,12 @@ class GameSettings extends StatelessWidget {
     final gameSetupCubit = context.watch<GameSetupCubit>();
     // TODO implement season dropdown
     TextEditingController seasonController = TextEditingController();
-    TextEditingController opponentController = TextEditingController(text: gameSetupState.opponent);
-    TextEditingController locationController = TextEditingController(text: gameSetupState.location);
-    TextEditingController dateController = TextEditingController(text: "${gameSetupState.date.toLocal()}".split(' ')[0]);
+    TextEditingController opponentController =
+        TextEditingController(text: gameSetupState.opponent);
+    TextEditingController locationController =
+        TextEditingController(text: gameSetupState.location);
+    TextEditingController dateController = TextEditingController(
+        text: "${gameSetupState.date.toLocal()}".split(' ')[0]);
     locationController.text = gameSetupState.location;
     DateTime selectedDate = gameSetupState.date;
     int selectedTeamIndex = gameSetupState.selectedTeamIndex;
@@ -27,248 +30,520 @@ class GameSettings extends StatelessWidget {
     // Build a Form widget using the _formKey created above.
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(StringsGeneral.lTrackNewGame),
-        backgroundColor: buttonDarkBlueColor,
-      ),
-      body:
-          // TODO implement season dropdown
-          /*Column(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-          Column(
-            mainAxisAlignment: MainAxisAlignment.start,
+
+    return
+        // Container(
+        //   height: height * 0.9,
+        //   width: width,
+        //   // place Container central
+        //   alignment: Alignment.center,
+        //   color: Colors.red,
+        //   child:
+        Column(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        Flexible(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Padding(
-                padding: const EdgeInsets.all(5.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    MenuButton(scaffoldKey),
-                    Icon(Icons.sports_handball, color: buttonDarkBlueColor),
-                    Expanded(child: Text(StringsGeneral.lTrackNewGame, style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold))),
-                    //SizedBox(width: 0.2 * width, child: SeasonDropdown()),
-                  ],
-                ),
+              // Textfield for opponent name
+              MouseRegion(
+                onExit: (event) =>
+                    gameSetupCubit.setOpponent(opponentController.text),
+                child: SizedBox(
+                    width: width * 0.3,
+                    height: height * 0.15,
+                    // make sure that the text gets saved to state when the user leaves the textfield
+                    child: Focus(
+                      onFocusChange: (value) => value == false
+                          ? gameSetupCubit.setOpponent(opponentController.text)
+                          : {},
+                      child: TextFormField(
+                        controller: opponentController,
+                        style: TextStyle(fontSize: 18),
+                        decoration: getDecoration(StringsGeneral.lOpponent),
+                        onEditingComplete: () =>
+                            gameSetupCubit.setOpponent(opponentController.text),
+                        onFieldSubmitted: (value) =>
+                            gameSetupCubit.setOpponent(opponentController.text),
+                        onSaved: (newValue) =>
+                            gameSetupCubit.setOpponent(opponentController.text),
+                      ),
+                    )),
               ),
-              Divider(),
+              // Textfield for location
+              SizedBox(
+                  width: width * 0.3,
+                  height: height * 0.15,
+                  // make sure that the text gets saved to state when the user leaves the textfield
+                  child: Focus(
+                    onFocusChange: (value) => value == false
+                        ? gameSetupCubit.setLocation(locationController.text)
+                        : {},
+                    child: TextFormField(
+                      controller: locationController,
+                      decoration: getDecoration(StringsGeneral.lLocation),
+                      onEditingComplete: () =>
+                          gameSetupCubit.setLocation(locationController.text),
+                      onFieldSubmitted: (value) =>
+                          gameSetupCubit.setLocation(locationController.text),
+                      onSaved: (newValue) =>
+                          gameSetupCubit.setLocation(locationController.text),
+                    ),
+                  )),
             ],
-          ),*/
-          Form(
-        key: _formKey,
-        child: Column(
-          children: [
-            SizedBox(
-              height: 0.08 * height,
-            ),
-            Container(
-              alignment: Alignment.topCenter,
-              width: width * 0.8,
-              height: height * 0.55,
-              padding: EdgeInsets.all(50),
-              decoration: BoxDecoration(
-                  color: backgroundColor,
-                  border: Border.all(
-                    color: backgroundColor,
-                  ),
-                  // make round edges
-                  borderRadius: BorderRadius.all(Radius.circular(20))),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Flexible(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        // Textfield for opponent name
-                        MouseRegion(
-                          onExit: (event) => gameSetupCubit.setOpponent(opponentController.text),
-                          child: Flexible(
-                            child: SizedBox(
-                                width: width * 0.3,
-                                height: height * 0.15,
-                                // make sure that the text gets saved to state when the user leaves the textfield
-                                child: Focus(
-                                  onFocusChange: (value) => value == false ? gameSetupCubit.setOpponent(opponentController.text) : {},
-                                  child: TextFormField(
-                                    controller: opponentController,
-                                    style: TextStyle(fontSize: 18),
-                                    decoration: getDecoration(StringsGeneral.lOpponent),
-                                    onEditingComplete: () => gameSetupCubit.setOpponent(opponentController.text),
-                                    onFieldSubmitted: (value) => gameSetupCubit.setOpponent(opponentController.text),
-                                    onSaved: (newValue) => gameSetupCubit.setOpponent(opponentController.text),
-                                  ),
-                                )),
-                          ),
-                        ),
-                        // Textfield for location
-                        Flexible(
-                          child: SizedBox(
-                              width: width * 0.3,
-                              height: height * 0.15,
-                              // make sure that the text gets saved to state when the user leaves the textfield
-                              child: Focus(
-                                onFocusChange: (value) => value == false ? gameSetupCubit.setLocation(locationController.text) : {},
-                                child: TextFormField(
-                                  controller: locationController,
-                                  decoration: getDecoration(StringsGeneral.lLocation),
-                                  onEditingComplete: () => gameSetupCubit.setLocation(locationController.text),
-                                  onFieldSubmitted: (value) => gameSetupCubit.setLocation(locationController.text),
-                                  onSaved: (newValue) => gameSetupCubit.setLocation(locationController.text),
-                                ),
-                              )),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Flexible(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        // Textfield for date
-                        Flexible(
-                          child: SizedBox(
-                              width: width * 0.3,
-                              height: height * 0.15,
-                              child: TextFormField(
-                                  controller: dateController,
-                                  decoration: getDecoration(StringsGameSettings.lSelectDate),
-                                  onTap: () async {
-                                    DateTime? selectedDate = await selectDate(context, gameSetupState.date);
-                                    gameSetupCubit.setDate(selectedDate ?? gameSetupState.date);
-                                  })),
-                        ),
-                        // team dropdown showing all available teams from teams collection
-                        Flexible(
-                          child: SizedBox(
-                            width: width * 0.3,
-                            height: height * 0.15,
-                            child: TeamDropdown(),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Flexible(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Flexible(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              Flexible(
-                                  child: Row(
-                                children: [
-                                  Checkbox(
-                                      fillColor: MaterialStateProperty.all<Color>(buttonDarkBlueColor),
-                                      value: gameSetupState.isHomeGame,
-                                      onChanged: (bool? value) {
-                                        if (value == true) {
-                                          gameSetupCubit.setAtHome(true);
-                                        } else {
-                                          gameSetupCubit.setAtHome(false);
-                                        }
-                                      }),
-                                  Text(StringsGeneral.lHomeGame),
-                                ],
-                              )),
-                              Flexible(
-                                  child: Row(
-                                children: [
-                                  Checkbox(
-                                      fillColor: MaterialStateProperty.all<Color>(buttonDarkBlueColor),
-                                      value: !gameSetupState.isHomeGame,
-                                      onChanged: (bool? value) {
-                                        if (value == true) {
-                                          gameSetupCubit.setAtHome(false);
-                                        } else {
-                                          gameSetupCubit.setAtHome(true);
-                                        }
-                                      }),
-                                  Text(StringsGeneral.lOutwardsGame),
-                                ],
-                              )),
-                              Flexible(
-                                child: Row(
-                                  children: [
-                                    Flexible(
-                                      child: Checkbox(
-                                          fillColor: MaterialStateProperty.all<Color>(buttonDarkBlueColor),
-                                          value: gameSetupState.attackIsLeft,
-                                          onChanged: (bool? value) {
-                                            gameSetupCubit.setAttackIsLeft(value ?? false);
-                                          }),
-                                    ),
-                                    Flexible(child: Text(StringsGameSettings.lHomeSideIsRight))
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
+          ),
+        ),
+        Flexible(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              // Textfield for date
+              SizedBox(
+                width: width * 0.3,
+                height: height * 0.15,
+                child: TextFormField(
+                    controller: dateController,
+                    decoration: getDecoration(StringsGameSettings.lSelectDate),
+                    onTap: () async {
+                      DateTime? selectedDate =
+                          await selectDate(context, gameSetupState.date);
+                      gameSetupCubit.setDate(selectedDate ?? gameSetupState.date);
+                    }),
               ),
-            ),
-            SizedBox(
-              height: 0.08 * height,
-            ),
-            Container(
-              alignment: Alignment.bottomCenter,
-              child: Padding(
-                padding: const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 20.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.end,
+              // team dropdown showing all available teams from teams collection
+              TeamDropdown(),
+            ],
+          ),
+        ),
+        Flexible(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Flexible(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Flexible(
-                      child: SizedBox(
-                        width: 0.15 * width,
-                        height: 0.08 * height,
-                        child: ElevatedButton(
-                            style: ButtonStyle(backgroundColor: MaterialStateProperty.all<Color>(buttonGreyColor)),
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            child:
-                                Text(StringsDashboard.lDashboard, style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black))),
-                      ),
+                      child: CheckboxListTile(
+                          title: Text(StringsGeneral.lHomeGame),
+                          controlAffinity: ListTileControlAffinity.leading,
+                          value: gameSetupState.isHomeGame,
+                          onChanged: (bool? value) {
+                            if (value == true) {
+                              gameSetupCubit.setAtHome(true);
+                            } else {
+                              gameSetupCubit.setAtHome(false);
+                            }
+                          }),
                     ),
-                    // player selection button
                     Flexible(
-                      child: SizedBox(
-                        width: 0.15 * width,
-                        height: 0.08 * height,
-                        // if there are no teams don't show the button for player selection
-                        child: globalState.allTeams.isEmpty
-                            ? Container()
-                            : ElevatedButton(
-                                style: ButtonStyle(backgroundColor: MaterialStateProperty.all<Color>(buttonLightBlueColor)),
-                                onPressed: () {
-                                  // store entered data to a new game object that will be used when the game is started at the end of the flow
-                                  context.read<GameSetupCubit>().setSettings(
-                                      opponent: opponentController.text,
-                                      location: locationController.text,
-                                      date: selectedDate,
-                                      selectedTeamIndex: selectedTeamIndex,
-                                      isHomeGame: isAtHome,
-                                      attackIsLeft: attackIsLeft);
-                                },
-                                child: const Text(StringsTeamManagement.lSubmitButton,
-                                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black)),
-                              ),
-                      ),
-                    )
+                      child: CheckboxListTile(
+                          title: Text(StringsGeneral.lOutwardsGame),
+                          controlAffinity: ListTileControlAffinity.leading,
+                          value: !gameSetupState.isHomeGame,
+                          onChanged: (bool? value) {
+                            if (value == true) {
+                              gameSetupCubit.setAtHome(false);
+                            } else {
+                              gameSetupCubit.setAtHome(true);
+                            }
+                          }),
+                    ),
+
+                    //
+                    //     Row(
+                    //       children: [
+                    //         Checkbox(
+                    //             fillColor:
+                    //                 MaterialStateProperty.all<Color>(buttonDarkBlueColor),
+                    //             value: gameSetupState.isHomeGame,
+                    //             onChanged: (bool? value) {
+                    //               if (value == true) {
+                    //                 gameSetupCubit.setAtHome(true);
+                    //               } else {
+                    //                 gameSetupCubit.setAtHome(false);
+                    //               }
+                    //             }),
+                    //         Text(StringsGeneral.lHomeGame),
+                    //       ],
+                    //     ),
+                    //     Row(
+                    //       children: [
+                    //         Checkbox(
+                    //             fillColor:
+                    //                 MaterialStateProperty.all<Color>(buttonDarkBlueColor),
+                    //             value: !gameSetupState.isHomeGame,
+                    //             onChanged: (bool? value) {
+                    //               if (value == true) {
+                    //                 gameSetupCubit.setAtHome(false);
+                    //               } else {
+                    //                 gameSetupCubit.setAtHome(true);
+                    //               }
+                    //             }),
+                    //         Text(StringsGeneral.lOutwardsGame),
+                    //       ],
+                    //     ),
+                    //     Row(
+                    //       children: [
+                    //         Checkbox(
+                    //             fillColor:
+                    //                 MaterialStateProperty.all<Color>(buttonDarkBlueColor),
+                    //             value: gameSetupState.attackIsLeft,
+                    //             onChanged: (bool? value) {
+                    //               gameSetupCubit.setAttackIsLeft(value ?? false);
+                    //             }),
+                    //         Flexible(child: Text(StringsGameSettings.lHomeSideIsRight))
+                    //       ],
+                    //     ),
                   ],
                 ),
               ),
-            ),
-          ],
+              Flexible(
+                child: CheckboxListTile(
+                    title: Text(StringsGameSettings.lHomeSideIsRight),
+                    controlAffinity: ListTileControlAffinity.leading,
+                    value: gameSetupState.attackIsLeft,
+                    onChanged: (bool? value) {
+                      gameSetupCubit.setAttackIsLeft(value ?? false);
+                    }),
+              ),
+            ],
+          ),
         ),
-      ),
+        Flexible(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Flexible(
+                child: ElevatedButton(
+                    style: ButtonStyle(
+                        //padd button on every side
+                        padding: MaterialStateProperty.all<EdgeInsets>(
+                            EdgeInsets.all(20)),
+                        backgroundColor:
+                            MaterialStateProperty.all<Color>(buttonGreyColor)),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: Text(StringsDashboard.lDashboard,
+                        style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black))),
+              ),
+        
+              // player selection button
+              Flexible(
+                // if there are no teams don't show the button for player selection
+                child: globalState.allTeams.isEmpty
+                    ? Container()
+                    : ElevatedButton(
+                        style: ButtonStyle(
+                            padding: MaterialStateProperty.all<EdgeInsets>(
+                                EdgeInsets.all(20)),
+                            backgroundColor: MaterialStateProperty.all<Color>(
+                                buttonLightBlueColor)),
+                        onPressed: () {
+                          // store entered data to a new game object that will be used when the game is started at the end of the flow
+                          context.read<GameSetupCubit>().setSettings(
+                              opponent: opponentController.text,
+                              location: locationController.text,
+                              date: selectedDate,
+                              selectedTeamIndex: selectedTeamIndex,
+                              isHomeGame: isAtHome,
+                              attackIsLeft: attackIsLeft);
+                        },
+                        child: const Text(StringsTeamManagement.lSubmitButton,
+                            style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black)),
+                      ),
+              ),
+            ],
+          ),
+        )
+      ],
     );
+
+    // return Scaffold(
+    //   appBar: AppBar(
+    //     title: Text(StringsGeneral.lTrackNewGame),
+    //     backgroundColor: buttonDarkBlueColor,
+    //   ),
+    //   body:
+    //       // TODO implement season dropdown
+    //       /*Column(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+    //       Column(
+    //         mainAxisAlignment: MainAxisAlignment.start,
+    //         children: [
+    //           Padding(
+    //             padding: const EdgeInsets.all(5.0),
+    //             child: Row(
+    //               mainAxisAlignment: MainAxisAlignment.start,
+    //               children: [
+    //                 MenuButton(scaffoldKey),
+    //                 Icon(Icons.sports_handball, color: buttonDarkBlueColor),
+    //                 Expanded(child: Text(StringsGeneral.lTrackNewGame, style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold))),
+    //                 //SizedBox(width: 0.2 * width, child: SeasonDropdown()),
+    //               ],
+    //             ),
+    //           ),
+    //           Divider(),
+    //         ],
+    //       ),*/
+    //       Column(
+    //     children: [
+    //       // SizedBox(
+    //       //   height: 0.08 * height,
+    //       // ),
+    //       Container(
+    //         alignment: Alignment.center,
+    //         width: width * 0.8,
+    //         height: height * 0.55,
+    //         padding: EdgeInsets.all(50),
+    //         decoration: BoxDecoration(
+    //             color: backgroundColor,
+    //             border: Border.all(
+    //               color: backgroundColor,
+    //             ),
+    //             // make round edges
+    //             borderRadius: BorderRadius.all(Radius.circular(20))),
+    //         child: Column(
+    //           crossAxisAlignment: CrossAxisAlignment.center,
+    //           children: [
+    //             Flexible(
+    //               child: Row(
+    //                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+    //                 children: [
+    //                   // Textfield for opponent name
+    //                   MouseRegion(
+    //                     onExit: (event) =>
+    //                         gameSetupCubit.setOpponent(opponentController.text),
+    //                     child: Flexible(
+    //                       child: SizedBox(
+    //                           width: width * 0.3,
+    //                           height: height * 0.15,
+    //                           // make sure that the text gets saved to state when the user leaves the textfield
+    //                           child: Focus(
+    //                             onFocusChange: (value) => value == false
+    //                                 ? gameSetupCubit
+    //                                     .setOpponent(opponentController.text)
+    //                                 : {},
+    //                             child: TextFormField(
+    //                               controller: opponentController,
+    //                               style: TextStyle(fontSize: 18),
+    //                               decoration:
+    //                                   getDecoration(StringsGeneral.lOpponent),
+    //                               onEditingComplete: () => gameSetupCubit
+    //                                   .setOpponent(opponentController.text),
+    //                               onFieldSubmitted: (value) => gameSetupCubit
+    //                                   .setOpponent(opponentController.text),
+    //                               onSaved: (newValue) => gameSetupCubit
+    //                                   .setOpponent(opponentController.text),
+    //                             ),
+    //                           )),
+    //                     ),
+    //                   ),
+    //                   // Textfield for location
+    //                   Flexible(
+    //                     child: SizedBox(
+    //                         width: width * 0.3,
+    //                         height: height * 0.15,
+    //                         // make sure that the text gets saved to state when the user leaves the textfield
+    //                         child: Focus(
+    //                           onFocusChange: (value) => value == false
+    //                               ? gameSetupCubit
+    //                                   .setLocation(locationController.text)
+    //                               : {},
+    //                           child: TextFormField(
+    //                             controller: locationController,
+    //                             decoration:
+    //                                 getDecoration(StringsGeneral.lLocation),
+    //                             onEditingComplete: () => gameSetupCubit
+    //                                 .setLocation(locationController.text),
+    //                             onFieldSubmitted: (value) => gameSetupCubit
+    //                                 .setLocation(locationController.text),
+    //                             onSaved: (newValue) => gameSetupCubit
+    //                                 .setLocation(locationController.text),
+    //                           ),
+    //                         )),
+    //                   ),
+    //                 ],
+    //               ),
+    //             ),
+    //             Flexible(
+    //               child: Row(
+    //                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+    //                 children: [
+    //                   // Textfield for date
+    //                   Flexible(
+    //                     child: SizedBox(
+    //                         width: width * 0.3,
+    //                         height: height * 0.15,
+    //                         child: TextFormField(
+    //                             controller: dateController,
+    //                             decoration: getDecoration(
+    //                                 StringsGameSettings.lSelectDate),
+    //                             onTap: () async {
+    //                               DateTime? selectedDate = await selectDate(
+    //                                   context, gameSetupState.date);
+    //                               gameSetupCubit.setDate(
+    //                                   selectedDate ?? gameSetupState.date);
+    //                             })),
+    //                   ),
+    //                   // team dropdown showing all available teams from teams collection
+    //                   Flexible(
+    //                     child: SizedBox(
+    //                       width: width * 0.3,
+    //                       height: height * 0.15,
+    //                       child: TeamDropdown(),
+    //                     ),
+    //                   ),
+    //                 ],
+    //               ),
+    //             ),
+    //             Flexible(
+    //               child: Row(
+    //                 mainAxisAlignment: MainAxisAlignment.center,
+    //                 children: [
+    //                   Flexible(
+    //                     child: Row(
+    //                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+    //                       children: [
+    //                         Flexible(
+    //                             child: Row(
+    //                           children: [
+    //                             Checkbox(
+    //                                 fillColor: MaterialStateProperty.all<Color>(
+    //                                     buttonDarkBlueColor),
+    //                                 value: gameSetupState.isHomeGame,
+    //                                 onChanged: (bool? value) {
+    //                                   if (value == true) {
+    //                                     gameSetupCubit.setAtHome(true);
+    //                                   } else {
+    //                                     gameSetupCubit.setAtHome(false);
+    //                                   }
+    //                                 }),
+    //                             Text(StringsGeneral.lHomeGame),
+    //                           ],
+    //                         )),
+    //                         Flexible(
+    //                             child: Row(
+    //                           children: [
+    //                             Checkbox(
+    //                                 fillColor: MaterialStateProperty.all<Color>(
+    //                                     buttonDarkBlueColor),
+    //                                 value: !gameSetupState.isHomeGame,
+    //                                 onChanged: (bool? value) {
+    //                                   if (value == true) {
+    //                                     gameSetupCubit.setAtHome(false);
+    //                                   } else {
+    //                                     gameSetupCubit.setAtHome(true);
+    //                                   }
+    //                                 }),
+    //                             Text(StringsGeneral.lOutwardsGame),
+    //                           ],
+    //                         )),
+    //                         Flexible(
+    //                           child: Row(
+    //                             children: [
+    //                               Flexible(
+    //                                 child: Checkbox(
+    //                                     fillColor:
+    //                                         MaterialStateProperty.all<Color>(
+    //                                             buttonDarkBlueColor),
+    //                                     value: gameSetupState.attackIsLeft,
+    //                                     onChanged: (bool? value) {
+    //                                       gameSetupCubit
+    //                                           .setAttackIsLeft(value ?? false);
+    //                                     }),
+    //                               ),
+    //                               Flexible(
+    //                                   child: Text(
+    //                                       StringsGameSettings.lHomeSideIsRight))
+    //                             ],
+    //                           ),
+    //                         ),
+    //                       ],
+    //                     ),
+    //                   ),
+    //                 ],
+    //               ),
+    //             ),
+    //           ],
+    //         ),
+    //       ),
+    //       // SizedBox(
+    //       //   height: 0.08 * height,
+    //       // ),
+    //       Container(
+    //         alignment: Alignment.bottomCenter,
+    //         child: Padding(
+    //           padding:
+    //               const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 20.0),
+    //           child: Row(
+    //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    //             crossAxisAlignment: CrossAxisAlignment.end,
+    //             children: [
+    //               Flexible(
+    //                 child: SizedBox(
+    //                   width: 0.15 * width,
+    //                   height: 0.08 * height,
+    //                   child: ElevatedButton(
+    //                       style: ButtonStyle(
+    //                           backgroundColor: MaterialStateProperty.all<Color>(
+    //                               buttonGreyColor)),
+    //                       onPressed: () {
+    //                         Navigator.pop(context);
+    //                       },
+    //                       child: Text(StringsDashboard.lDashboard,
+    //                           style: TextStyle(
+    //                               fontSize: 18,
+    //                               fontWeight: FontWeight.bold,
+    //                               color: Colors.black))),
+    //                 ),
+    //               ),
+    //               // player selection button
+    //               Flexible(
+    //                 child: SizedBox(
+    //                   width: 0.15 * width,
+    //                   height: 0.08 * height,
+    //                   // if there are no teams don't show the button for player selection
+    //                   child: globalState.allTeams.isEmpty
+    //                       ? Container()
+    //                       : ElevatedButton(
+    //                           style: ButtonStyle(
+    //                               backgroundColor:
+    //                                   MaterialStateProperty.all<Color>(
+    //                                       buttonLightBlueColor)),
+    //                           onPressed: () {
+    //                             // store entered data to a new game object that will be used when the game is started at the end of the flow
+    //                             context.read<GameSetupCubit>().setSettings(
+    //                                 opponent: opponentController.text,
+    //                                 location: locationController.text,
+    //                                 date: selectedDate,
+    //                                 selectedTeamIndex: selectedTeamIndex,
+    //                                 isHomeGame: isAtHome,
+    //                                 attackIsLeft: attackIsLeft);
+    //                           },
+    //                           child: const Text(
+    //                               StringsTeamManagement.lSubmitButton,
+    //                               style: TextStyle(
+    //                                   fontSize: 18,
+    //                                   fontWeight: FontWeight.bold,
+    //                                   color: Colors.black)),
+    //                         ),
+    //                 ),
+    //               )
+    //             ],
+    //           ),
+    //         ),
+    //       ),
+    //     ],
+    //   ),
+    // );
   }
 
   Future<DateTime?> selectDate(BuildContext context, initialDate) async {
@@ -278,7 +553,11 @@ class GameSettings extends StatelessWidget {
         firstDate: DateTime(2015, 8),
         lastDate: DateTime(2101),
         builder: (context, child) {
-          return Theme(data: ThemeData.light().copyWith(colorScheme: ColorScheme.fromSeed(seedColor: buttonDarkBlueColor)), child: child!);
+          return Theme(
+              data: ThemeData.light().copyWith(
+                  colorScheme:
+                      ColorScheme.fromSeed(seedColor: buttonDarkBlueColor)),
+              child: child!);
         });
     if (picked != null && picked != initialDate) {
       return picked;
@@ -289,9 +568,12 @@ class GameSettings extends StatelessWidget {
   // configure decoration for all input fields
   InputDecoration getDecoration(String labelText) {
     return InputDecoration(
-        focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: buttonDarkBlueColor)),
-        enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: buttonDarkBlueColor)),
-        disabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: buttonDarkBlueColor)),
+        focusedBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: buttonDarkBlueColor)),
+        enabledBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: buttonDarkBlueColor)),
+        disabledBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: buttonDarkBlueColor)),
         labelText: labelText,
         labelStyle: TextStyle(color: buttonDarkBlueColor),
         filled: true,
