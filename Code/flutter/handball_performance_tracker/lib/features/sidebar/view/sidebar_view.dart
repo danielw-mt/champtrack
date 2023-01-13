@@ -42,7 +42,7 @@ class SidebarView extends StatelessWidget {
                     screen: TeamManagementPage(),
                     //children: buildTeamChildren(context),
                   ),
-                  SidebarStatisticsButton(),
+                  SidebarStatisticsButton(text: "TODO Statistiken",),
                   if (gameStarted) SimpleListEntry(text: "TODO Game is running", screen: GameView()) else Text(""),
                 ]).toList()),
             // Sign out button at the bottom
