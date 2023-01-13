@@ -14,6 +14,9 @@ class GameSetupView extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
+            appBar: AppBar(
+              title: Text("Game Setup"),
+            ),
             resizeToAvoidBottomInset: false,
             key: _scaffoldKey,
             drawer: SidebarView(),
