@@ -19,6 +19,7 @@ part 'game_state.dart';
 
 class GameBloc extends Bloc<GameEvent, GameState> {
   GameFirebaseRepository gameRepository;
+  late Timer t;
 
   /// Periodically checks if there is a difference between the gameState and what has been synced to the database already.
   /// If there is a difference, it will sync the gameState to the database.
@@ -29,7 +30,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     int syncedScoreOpponent = 0;
     List<GameAction> syncedGameActions = [];
 
-    Timer.periodic(const Duration(seconds: 10), (timer) async {
+    t = Timer.periodic(const Duration(seconds: 10), (timer) async {
       // only sync if the game is running
       // if (state.documentReference != null && state.status != GameStatus.initial && state.status != GameStatus.paused) {
 
@@ -109,8 +110,9 @@ class GameBloc extends Bloc<GameEvent, GameState> {
             }
             // on success set gameActionsWereSynced to true
           });
-          // if gameActions were removed
-        } else if (!gameActionsDifference[1].isEmpty) {
+        }
+        // if gameActions were removed
+        if (!gameActionsDifference[1].isEmpty) {
           List<GameAction> removedGameActions = gameActionsDifference[1];
           print("removed gameActions: ${removedGameActions.length}");
           await Future.forEach(removedGameActions, (GameAction gameAction) {
@@ -161,7 +163,10 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     });
 
     // just put the game state into an empty gamestate
-    on<ResetGame>(((event, emit) => emit(GameState())));
+    on<ResetGame>(((event, emit) {
+      t.cancel();
+      emit(GameState());
+    }));
 
     on<SwipeField>((event, emit) async {
       if (state.attackIsLeft && event.isLeft || !state.attackIsLeft && !event.isLeft) {
