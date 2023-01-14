@@ -22,21 +22,19 @@ class TeamList extends StatelessWidget {
         padding: const EdgeInsets.all(8),
         itemCount: globalState.allTeams.length,
         itemBuilder: (context, index) {
-          return Flexible(
-            child: GestureDetector(
-              onTap: () {
-                int selectedTeamIndex =
-                    globalState.allTeams.indexOf(globalState.allTeams[index]);
-                    
-                context
-                    .read<TeamManagementBloc>()
-                    .add(SelectTeam(index: selectedTeamIndex));
-              },
-              child: Card(
-                  child: ListTile(
-                      title: Text(globalState.allTeams[index].name),
-                      leading: Icon(Icons.group))),
-            ),
+          return GestureDetector(
+            onTap: () {
+              int selectedTeamIndex =
+                  globalState.allTeams.indexOf(globalState.allTeams[index]);
+
+              context
+                  .read<TeamManagementBloc>()
+                  .add(SelectTeam(index: selectedTeamIndex));
+            },
+            child: Card(
+                child: ListTile(
+                    title: Text(globalState.allTeams[index].name),
+                    leading: Icon(Icons.group))),
           );
         },
       );
