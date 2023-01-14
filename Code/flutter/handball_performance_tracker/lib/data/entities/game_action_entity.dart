@@ -10,6 +10,7 @@ class GameActionEntity extends Equatable {
   final String tag;
   List<String> throwLocation;
   final int timestamp;
+  List<double> coordinates;
 
   GameActionEntity({
     this.documentReference,
@@ -18,9 +19,13 @@ class GameActionEntity extends Equatable {
     this.tag = "",
     this.throwLocation = const [],
     this.timestamp = 0,
+    this.coordinates = const [],
   }) {
     if (this.throwLocation.isEmpty) {
       this.throwLocation = [];
+    }
+    if (this.coordinates.isEmpty) {
+      this.coordinates = [0, 0];
     }
   }
 
@@ -42,6 +47,7 @@ class GameActionEntity extends Equatable {
         'playerId: $playerId,  +\n ' +
         'tag: $tag,  +\n ' +
         'throwLocation: ${throwLocation.toString()},  +\n ' +
+        'coordinates: ${coordinates.toString()},  +\n ' +
         'timestamp: $timestamp }';
   }
 
@@ -52,6 +58,7 @@ class GameActionEntity extends Equatable {
       playerId: json['playerId'] as String,
       tag: json['tag'] as String,
       throwLocation: json['throwLocation'] as List<String>,
+      coordinates: json['coordinates'] as List<double>,
       timestamp: json['timestamp'] as int,
     );
   }
@@ -62,16 +69,18 @@ class GameActionEntity extends Equatable {
 
       List<String> throwLocation = [];
       if (data['throwLocation'] != null) {
-        data['throwLocation'].forEach((player) {
-          throwLocation.add(player);
+        data['throwLocation'].forEach((locationString) {
+          throwLocation.add(locationString);
         });
       }
+      List<double> coordinates = [data['coordinates'][0].toDouble(), data['coordinates'][1].toDouble()];
       return GameActionEntity(
         documentReference: snap.reference,
         context: data['context'] != null ? data['context'] as String : "",
         playerId: data['playerId'] != null ? data['playerId'] as String : "",
         tag: data['tag'] != null ? data['tag'] as String : "",
         throwLocation: throwLocation,
+        coordinates: coordinates,
         timestamp: data['timestamp'] != null ? data['timestamp'] as int : -1,
       );
     }
@@ -85,11 +94,12 @@ class GameActionEntity extends Equatable {
       'playerId': playerId != "" ? playerId : "",
       'tag': tag != "" ? tag : "",
       'throwLocation': throwLocation != [] ? throwLocation : [],
+      'coordinates': coordinates != [] ? coordinates : [],
       'timestamp': timestamp != 0 ? timestamp : 0,
     };
     return document;
   }
 
   @override
-  List<Object?> get props => [documentReference, context, playerId, tag, throwLocation, timestamp];
+  List<Object?> get props => [documentReference, context, playerId, tag, throwLocation, coordinates, timestamp];
 }

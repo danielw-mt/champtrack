@@ -83,3 +83,7 @@ class DeletePlayer extends GlobalEvent {
   @override
   List<Object> get props => [player];
 }
+
+class ResetPlayerScores extends GlobalEvent {
+
+}

@@ -39,6 +39,10 @@ const String emptyGoalTag = "empty_goal";
 const String positiveActionTag = "pos";
 const String negativeActionTag = "neg";
 
+const String no7mTag = "no_7m";
+const String yes7mTag = "yes_7m";
+
+
 const String goal7mTag = "goal_7m";
 const String missed7mTag = "missed_7m";
 const String parade7mTag = "parade_7m";

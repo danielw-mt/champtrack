@@ -29,6 +29,8 @@ class InitializeGame extends GameEvent {
   }
 }
 
+class ResetGame extends GameEvent {}
+
 class StartGame extends GameEvent {}
 
 class PauseGame extends GameEvent {}
@@ -136,6 +138,13 @@ class WorkflowEvent extends GameEvent {
 
 class SetPenalty extends GameEvent {
   final Player player;
+  final bool limited;
 
-  SetPenalty({required this.player});
+  SetPenalty({required this.player, this.limited = true});
+}
+
+class RemovePenalty extends GameEvent {
+  final Player player;
+
+  RemovePenalty({required this.player});
 }
