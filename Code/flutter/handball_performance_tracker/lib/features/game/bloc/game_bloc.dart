@@ -11,6 +11,8 @@ import 'package:handball_performance_tracker/features/game/game.dart';
 import 'dart:async';
 import 'package:handball_performance_tracker/core/constants/field_size_parameters.dart' as fieldSizeParameter;
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'dart:math';
+import 'dart:convert';
 
 part 'game_event.dart';
 part 'game_state.dart';
@@ -58,7 +60,8 @@ class GameBloc extends Bloc<GameEvent, GameState> {
             onFieldPlayers: onFieldPlayerIds,
             attackIsLeft: state.attackIsLeft,
             stopWatchTimer: state.stopWatchTimer,
-            gameActions: state.gameActions,
+            // Don't need gameActions here as it is just the game metadata
+            // gameActions: state.gameActions,
           );
           await this.gameRepository.updateGame(newGame).then((value) {
             // on success update the variables
@@ -93,13 +96,16 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         // if gameActions were added
         if (!gameActionsDifference[0].isEmpty) {
           List<GameAction> addedGameActions = gameActionsDifference[0];
+          print("added gameActions: ${addedGameActions.length}");
           await Future.forEach(addedGameActions, (GameAction gameAction) async {
             // only add actions that have a player Id assigned
             if (gameAction.playerId != "") {
               try {
                 DocumentReference docRef = await this.gameRepository.createAction(gameAction, state.documentReference!.id);
-                state.gameActions[state.gameActions.indexOf(gameAction)].id = docRef.id;
-                state.gameActions[state.gameActions.indexOf(gameAction)].path = docRef.path;
+                List<GameAction> gameActions = state.gameActions.toList();
+                gameActions[state.gameActions.indexOf(gameAction)].id = docRef.id;
+                gameActions[state.gameActions.indexOf(gameAction)].path = docRef.path;
+                this.add(UpdateGameActions(actions: gameActions));
               } catch (e) {
                 print("Error syncing gameAction: $e");
               }
@@ -109,6 +115,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
           // if gameActions were removed
         } else if (!gameActionsDifference[1].isEmpty) {
           List<GameAction> removedGameActions = gameActionsDifference[1];
+          print("removed gameActions: ${removedGameActions.length}");
           await Future.forEach(removedGameActions, (GameAction gameAction) {
             if (gameAction.playerId != "") {
               try {
@@ -214,7 +221,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         onFieldPlayers: onFieldPlayerIds,
         attackIsLeft: state.attackIsLeft,
         stopWatchTimer: state.stopWatchTimer,
-        gameActions: state.gameActions,
+        // gameActions: state.gameActions,
       );
       await this.gameRepository.updateGame(newGame).onError((error, stackTrace) {
         print("Error syncing game metadata: $error");
@@ -358,6 +365,8 @@ class GameBloc extends Bloc<GameEvent, GameState> {
       }
     });
 
+    on<UpdateGameActions>((event, emit) => emit(state.copyWith(gameActions: event.actions)));
+
     on<DeleteGameAction>((event, emit) {
       print("deleting game action: " + event.action.tag.toString() + " ");
 
@@ -380,6 +389,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
           decreaseOpponentScore = true;
           break;
         case emptyGoalTag:
+          decreaseOpponentScore = true;
           break;
       }
       if (decreaseOwnScore && state.ownScore > 0) {
@@ -446,7 +456,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     on<RegisterAction>((event, emit) {
       int unixTime = DateTime.now().toUtc().millisecondsSinceEpoch;
       GameAction action = GameAction(
-        id: unixTime.toString(),
+        id: getRandString(20),
         context: event.actionContext,
         tag: event.actionTag,
         throwLocation: List.from(state.lastClickedLocation.cast<String>()),
@@ -495,12 +505,20 @@ class GameBloc extends Bloc<GameEvent, GameState> {
           if (action.tag == timePenaltyTag) {
             this.add(SetPenalty(player: goalKeepers[0]));
           }
+          if (action.tag == redCardTag) {
+            this.add(SetPenalty(player: goalKeepers[0], limited: false));
+          }
           emit(state.copyWith(workflowStep: WorkflowStep.forceClose));
           // if there is more than one player with a goalkeeper position on field right now open the player menu with goalkeeper selection style
         } else {
           // TODO open player menu with goalkeeper selection style
           this.add(WorkflowEvent(selectedAction: action));
         }
+      } else if (action.tag == goal7mTag) {
+        emit(state.copyWith(ownScore: state.ownScore + 1));
+        this.add(WorkflowEvent(selectedAction: action));
+        this.add(SwitchField());
+
         ////////////////////////////////////
         /// Seven Meter Stuff
         ///////////////////////////////////
@@ -545,9 +563,8 @@ class GameBloc extends Bloc<GameEvent, GameState> {
       GameAction lastAction = state.gameActions.last;
       if (state.workflowStep == WorkflowStep.assistSelection && event.player.id != state.gameActions.last.playerId) {
         print("player selection: adding assist");
-        int unixTime = DateTime.now().toUtc().millisecondsSinceEpoch;
         GameAction assistAction = GameAction(
-            id: unixTime.toString(),
+            id: getRandString(20),
             context: state.gameActions.last.context,
             tag: assistTag,
             throwLocation: List.from(state.lastClickedLocation.cast<String>()),
@@ -567,6 +584,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
       } else if (lastAction.tag == redCardTag) {
         print("red card: adding infinite penalty");
         this.add(SetPenalty(player: event.player, limited: false));
+        lastAction.playerId = event.player.id!;
         emit(state.copyWith(gameActions: state.gameActions));
         this.add(UpdatePlayerEfScore(action: lastAction, actionAdded: true));
         this.add(WorkflowEvent(selectedPlayer: event.player));
@@ -743,5 +761,11 @@ class GameBloc extends Bloc<GameEvent, GameState> {
           break;
       }
     });
+  }
+
+  String getRandString(int len) {
+    var random = Random.secure();
+    var values = List<int>.generate(len, (i) => random.nextInt(255));
+    return base64UrlEncode(values);
   }
 }
