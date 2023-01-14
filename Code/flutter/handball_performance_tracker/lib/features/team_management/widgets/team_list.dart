@@ -24,6 +24,7 @@ class TeamList extends StatelessWidget {
         itemBuilder: (context, index) {
           return GestureDetector(
             onTap: () {
+              context.read<TeamManagementBloc>().add(SelectViewField(viewField: TeamManagementViewField.players));
               int selectedTeamIndex =
                   globalState.allTeams.indexOf(globalState.allTeams[index]);
 

@@ -27,7 +27,7 @@ class PlayersList extends StatelessWidget {
             StringsGeneral.lPlayerStartingOnField,
             softWrap: true,
           )),
-          DataColumn(label: Text(StringsGeneral.lEdit))
+          // DataColumn(label: Text(StringsGeneral.lEdit))
         ],
         rows: List<DataRow>.generate(
           numberOfPlayers,
@@ -72,24 +72,24 @@ class PlayersList extends StatelessWidget {
                       }
                       context.read<GameSetupCubit>().setOnFieldPlayers(newOnFieldPlayers);
                     })),
-                DataCell(GestureDetector(
-                  child: Icon(Icons.edit),
-                  onTap: () {
-                    // TODO replace this alert
-                    // Alert(
-                    //   context: context,
-                    //   buttons: [],
-                    //   content: SizedBox(
-                    //     width: MediaQuery.of(context).size.width * 0.7,
-                    //     height: MediaQuery.of(context).size.height * 0.8,
-                    //     child: Column(
-                    //       mainAxisAlignment: MainAxisAlignment.center,
-                    //       children: [PlayerForm(playersList[index].id.toString())],
-                    //     ),
-                    //   ),
-                    // ).show();
-                  },
-                ))
+                // DataCell(GestureDetector(
+                //   child: Icon(Icons.edit),
+                //   onTap: () {
+                //     // TODO replace this alert
+                //     // Alert(
+                //     //   context: context,
+                //     //   buttons: [],
+                //     //   content: SizedBox(
+                //     //     width: MediaQuery.of(context).size.width * 0.7,
+                //     //     height: MediaQuery.of(context).size.height * 0.8,
+                //     //     child: Column(
+                //     //       mainAxisAlignment: MainAxisAlignment.center,
+                //     //       children: [PlayerForm(playersList[index].id.toString())],
+                //     //     ),
+                //     //   ),
+                //     // ).show();
+                //   },
+                // ))
               ],
             );
           },

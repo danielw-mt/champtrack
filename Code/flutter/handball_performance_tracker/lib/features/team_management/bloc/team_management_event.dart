@@ -42,3 +42,9 @@ class SelectTeamTyp extends TeamManagementEvent {
 
   SelectTeamTyp({required this.teamType});
 }
+
+class SelectViewField extends TeamManagementEvent {
+  final TeamManagementViewField viewField;
+
+  SelectViewField({required this.viewField});
+}
