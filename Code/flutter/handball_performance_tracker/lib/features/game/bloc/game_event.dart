@@ -118,8 +118,10 @@ class DeleteGameAction extends GameEvent {
 
 class UpdatePlayerEfScore extends GameEvent {
   final GameAction action;
+  // if false an action was deleted
+  final bool actionAdded;
 
-  UpdatePlayerEfScore({required this.action});
+  UpdatePlayerEfScore({required this.action, required this.actionAdded});
 }
 
 class ChangeScore extends GameEvent {

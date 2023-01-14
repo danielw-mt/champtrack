@@ -343,9 +343,14 @@ class GameBloc extends Bloc<GameEvent, GameState> {
 
     on<UpdatePlayerEfScore>((event, emit) {
       if (event.action.playerId != "") {
-        print("updating player ef score");
         Player relevantPlayer = state.onFieldPlayers.where((Player player) => player.id == event.action.playerId).first;
-        relevantPlayer.addAction(event.action);
+        if (event.actionAdded) {
+          print("adding action to player ef score");
+          relevantPlayer.addAction(event.action);
+        } else {
+          print("removing action from player ef score");
+          relevantPlayer.removeAction(event.action);
+        }
         List<Player> newOnFieldPlayers = state.onFieldPlayers.toList();
         newOnFieldPlayers[newOnFieldPlayers.indexOf(relevantPlayer)] = relevantPlayer;
         emit(state.copyWith(onFieldPlayers: newOnFieldPlayers));
@@ -380,6 +385,10 @@ class GameBloc extends Bloc<GameEvent, GameState> {
       if (decreaseOpponentScore || state.opponentScore > 0) {
         emit(state.copyWith(opponentScore: state.opponentScore - 1));
       }
+
+      // update player ef score
+      this.add(UpdatePlayerEfScore(action: event.action, actionAdded: false));
+
       List<GameAction> newGameActions = state.gameActions.toList();
       int index = newGameActions.indexWhere((element) => element.id == event.action.id);
       newGameActions.removeAt(index);
@@ -537,7 +546,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
             throwLocation: List.from(state.lastClickedLocation.cast<String>()),
             timestamp: lastAction.timestamp,
             playerId: event.player.id!);
-        this.add(UpdatePlayerEfScore(action: assistAction));
+        this.add(UpdatePlayerEfScore(action: assistAction, actionAdded: true));
         this.add(WorkflowEvent(selectedPlayer: event.player));
         emit(state.copyWith(gameActions: state.gameActions..add(assistAction)));
       } else if (lastAction.tag == timePenaltyTag) {
@@ -546,13 +555,13 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         this.add(SetPenalty(player: event.player, limited: true));
         // replace last action and add it again but this time with the player id and ef score update
         emit(state.copyWith(gameActions: state.gameActions));
-        this.add(UpdatePlayerEfScore(action: lastAction));
+        this.add(UpdatePlayerEfScore(action: lastAction, actionAdded: true));
         this.add(WorkflowEvent(selectedPlayer: event.player));
       } else if (lastAction.tag == redCardTag) {
         print("red card: adding infinite penalty");
         this.add(SetPenalty(player: event.player, limited: false));
         emit(state.copyWith(gameActions: state.gameActions));
-        this.add(UpdatePlayerEfScore(action: lastAction));
+        this.add(UpdatePlayerEfScore(action: lastAction, actionAdded: true));
         this.add(WorkflowEvent(selectedPlayer: event.player));
       } else if (state.workflowStep == WorkflowStep.substitutionTargetSelection) {
         print("player selection: selecting substitution target");
@@ -561,7 +570,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         lastAction.playerId = event.player.id!;
         emit(state.copyWith(gameActions: state.gameActions));
 
-        this.add(UpdatePlayerEfScore(action: lastAction));
+        this.add(UpdatePlayerEfScore(action: lastAction, actionAdded: true));
         // normal player selection => substitute player
       } else if (event.isSubstitute && state.workflowStep == WorkflowStep.playerSelection) {
         print("player selection: substitute");
@@ -581,7 +590,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
           this.add(WorkflowEvent(selectedPlayer: event.player));
           lastAction.playerId = event.player.id!;
           emit(state.copyWith(gameActions: state.gameActions));
-          this.add(UpdatePlayerEfScore(action: lastAction));
+          this.add(UpdatePlayerEfScore(action: lastAction, actionAdded: true));
         } else {
           // if there are more than one player on field with the same position as the substitution player open the substituion menu
           print("there is no clear player to be substituted. Calling substitution menu");
@@ -599,7 +608,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         print("no special case. Just add the action to the list of actions after the player selection");
         lastAction.playerId = event.player.id!;
         emit(state.copyWith(gameActions: state.gameActions));
-        this.add(UpdatePlayerEfScore(action: lastAction));
+        this.add(UpdatePlayerEfScore(action: lastAction, actionAdded: true));
         int ownScore = state.ownScore;
         // if we click on a player that is penalized remove him from the list of penalized players
         if (state.penalties.keys.contains(event.player)) {
