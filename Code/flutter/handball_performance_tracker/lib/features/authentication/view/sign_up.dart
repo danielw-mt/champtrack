@@ -11,19 +11,12 @@ class SignUp extends StatelessWidget {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
-  // @override
-  // void dispose() {
-  //   _emailController.dispose();
-  //   _passwordController.dispose();
-  //   super.dispose();
-  // }
-
   @override
   Widget build(BuildContext context) {
     final double height = MediaQuery.of(context).size.height;
     final double width = MediaQuery.of(context).size.height;
 
-    AuthBloc authBloc = BlocProvider.of<AuthBloc>(context);
+    AuthBloc authBloc = context.watch<AuthBloc>();
     if (authBloc.state.authStatus == AuthStatus.AuthError) {
       // Display error message in a dialog
       WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -44,17 +37,18 @@ class SignUp extends StatelessWidget {
     }
 
     return Scaffold(
-      body: BlocConsumer<AuthBloc, AuthState>(
-        listener: (context, state) {
-          if (state.authStatus == AuthStatus.Authenticated) {
-            // Navigating to the dashboard screen if the user is authenticated
-            Navigator.of(context).pushReplacement(
-              MaterialPageRoute(
-                builder: (context) => const DashboardView(),
-              ),
-            );
-          }
-        },
+        body: BlocListener<AuthBloc, AuthState>(
+      listener: (context, state) {
+        if (state.authStatus == AuthStatus.Authenticated) {
+          // Navigating to the dashboard screen if the user is authenticated
+          Navigator.of(context).pushReplacement(
+            MaterialPageRoute(
+              builder: (context) => const DashboardView(),
+            ),
+          );
+        }
+      },
+      child: BlocBuilder<AuthBloc, AuthState>(
         builder: (context, state) {
           List<Widget> loginHeader = [
             Container(
@@ -78,10 +72,12 @@ class SignUp extends StatelessWidget {
           var eMailField = Container(
             height: height * 0.1,
             padding: const EdgeInsets.all(10),
-            child: TextField(
+            child: TextFormField(
               controller: _emailController,
+              keyboardType: TextInputType.emailAddress,
               textInputAction: TextInputAction.next,
               style: TextStyle(color: Colors.grey.shade800),
+              autovalidateMode: AutovalidateMode.onUserInteraction,
               decoration: InputDecoration(
                   focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: buttonGreyColor)),
                   enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: buttonGreyColor)),
@@ -91,43 +87,53 @@ class SignUp extends StatelessWidget {
                   floatingLabelBehavior: FloatingLabelBehavior.never,
                   filled: true,
                   fillColor: buttonGreyColor),
+              validator: (value) {
+                return value != null && !EmailValidator.validate(value) ? StringsAuth.lInvalidEmail : null;
+              },
             ),
           );
           var passwordField = Container(
             height: height * 0.1,
             padding: const EdgeInsets.all(10),
-            child: TextField(
-              obscureText: true,
-              controller: _passwordController,
-              textInputAction: TextInputAction.done,
-              decoration: InputDecoration(
-                  focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: buttonGreyColor)),
-                  enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: buttonGreyColor)),
-                  disabledBorder: OutlineInputBorder(borderSide: BorderSide(color: buttonGreyColor)),
-                  labelStyle: TextStyle(color: Colors.grey.shade800),
-                  labelText: StringsAuth.lPassword,
-                  floatingLabelBehavior: FloatingLabelBehavior.never,
-                  filled: true,
-                  fillColor: buttonGreyColor),
-            ),
+            child: TextFormField(
+                keyboardType: TextInputType.visiblePassword,
+                obscureText: true,
+                controller: _passwordController,
+                textInputAction: TextInputAction.done,
+                decoration: InputDecoration(
+                    focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: buttonGreyColor)),
+                    enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: buttonGreyColor)),
+                    disabledBorder: OutlineInputBorder(borderSide: BorderSide(color: buttonGreyColor)),
+                    labelStyle: TextStyle(color: Colors.grey.shade800),
+                    labelText: StringsAuth.lPassword,
+                    floatingLabelBehavior: FloatingLabelBehavior.never,
+                    filled: true,
+                    fillColor: buttonGreyColor),
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                validator: (value) {
+                  return value != null && value.length < 6 ? StringsAuth.lMin6Chars : null;
+                }),
           );
           var clubField = Container(
             height: height * 0.1,
             padding: const EdgeInsets.all(10),
-            child: TextField(
-              obscureText: false,
-              controller: _clubNameController,
-              textInputAction: TextInputAction.done,
-              decoration: InputDecoration(
-                  focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: buttonGreyColor)),
-                  enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: buttonGreyColor)),
-                  disabledBorder: OutlineInputBorder(borderSide: BorderSide(color: buttonGreyColor)),
-                  labelStyle: TextStyle(color: Colors.grey.shade800),
-                  labelText: StringsAuth.lClubName,
-                  floatingLabelBehavior: FloatingLabelBehavior.never,
-                  filled: true,
-                  fillColor: buttonGreyColor),
-            ),
+            child: TextFormField(
+                keyboardType: TextInputType.name,
+                controller: _clubNameController,
+                textInputAction: TextInputAction.done,
+                decoration: InputDecoration(
+                    focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: buttonGreyColor)),
+                    enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: buttonGreyColor)),
+                    disabledBorder: OutlineInputBorder(borderSide: BorderSide(color: buttonGreyColor)),
+                    labelStyle: TextStyle(color: Colors.grey.shade800),
+                    labelText: StringsAuth.lClubName,
+                    floatingLabelBehavior: FloatingLabelBehavior.never,
+                    filled: true,
+                    fillColor: buttonGreyColor),
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                validator: (value) {
+                  return value != null && value.length < 4 ? StringsAuth.lMin6Chars : null;
+                }),
           );
           if (state.authStatus == AuthStatus.Loading) {
             // Displaying the loading indicator while the user is signing up
@@ -225,11 +231,12 @@ class SignUp extends StatelessWidget {
           return Container();
         },
       ),
-    );
+    ));
   }
 
   void _createAccountWithEmailAndPassword(BuildContext context) {
     if (_formKey.currentState!.validate()) {
+      print("form validated");
       BlocProvider.of<AuthBloc>(context).add(
         SignUpRequested(
           _clubNameController.text,

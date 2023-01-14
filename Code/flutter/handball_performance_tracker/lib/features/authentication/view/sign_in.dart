@@ -10,18 +10,11 @@ class SignIn extends StatelessWidget {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
-  // @override
-  // void dispose() {
-  //   _emailController.dispose();
-  //   _passwordController.dispose();
-  //   super.dispose();
-  // }
-
   @override
   Widget build(BuildContext context) {
     final double height = MediaQuery.of(context).size.height;
     final double width = MediaQuery.of(context).size.height;
-    AuthBloc authBloc = BlocProvider.of<AuthBloc>(context);
+    AuthBloc authBloc = context.watch<AuthBloc>();
     if (authBloc.state.authStatus == AuthStatus.AuthError) {
       // Display error message in a dialog
       WidgetsBinding.instance.addPostFrameCallback((_) {
