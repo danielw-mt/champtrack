@@ -10,6 +10,7 @@ import 'game_field_math.dart';
 import 'package:handball_performance_tracker/features/game/game.dart';
 import 'dart:async';
 import 'package:handball_performance_tracker/core/constants/field_size_parameters.dart' as fieldSizeParameter;
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 part 'game_event.dart';
 part 'game_state.dart';
@@ -378,12 +379,18 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         case goalOpponentTag:
           decreaseOpponentScore = true;
           break;
+        case emptyGoalTag:
+          break;
       }
-      if (decreaseOwnScore || state.ownScore > 0) {
+      if (decreaseOwnScore && state.ownScore > 0) {
         emit(state.copyWith(ownScore: state.ownScore - 1));
       }
-      if (decreaseOpponentScore || state.opponentScore > 0) {
+      if (decreaseOpponentScore && state.opponentScore > 0) {
         emit(state.copyWith(opponentScore: state.opponentScore - 1));
+      }
+
+      if (event.action.tag == timePenaltyTag) {
+        this.add(RemovePenalty(player: state.selectedTeam.players.where((Player player) => player.id == event.action.playerId).first));
       }
 
       // update player ef score
