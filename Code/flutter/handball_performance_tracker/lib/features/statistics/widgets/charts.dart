@@ -127,7 +127,7 @@ class PieChartActionsWidget extends StatelessWidget {
       actionCountsAsDouble = actionCountsAsDouble.map((key, value) {
         return MapEntry(realActionTag(key), value);
       });
-      return pie.PieChart(dataMap: actionCountsAsDouble);
+      return pie.PieChart(dataMap: actionCountsAsDouble, legendOptions: pie.LegendOptions(showLegendsInRow: true, legendPosition: pie.LegendPosition.bottom));
     }
   }
 }
