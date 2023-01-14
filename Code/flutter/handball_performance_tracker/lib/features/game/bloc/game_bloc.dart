@@ -388,6 +388,8 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         case emptyGoalTag:
           decreaseOpponentScore = true;
           break;
+        default:
+          break;
       }
       if (decreaseOwnScore && state.ownScore > 0) {
         emit(state.copyWith(ownScore: state.ownScore - 1));
@@ -397,6 +399,10 @@ class GameBloc extends Bloc<GameEvent, GameState> {
       }
 
       if (event.action.tag == timePenaltyTag) {
+        this.add(RemovePenalty(player: state.selectedTeam.players.where((Player player) => player.id == event.action.playerId).first));
+      }
+
+      if (event.action.tag == redCardTag) {
         this.add(RemovePenalty(player: state.selectedTeam.players.where((Player player) => player.id == event.action.playerId).first));
       }
 
