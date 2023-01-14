@@ -119,7 +119,10 @@ class GameBloc extends Bloc<GameEvent, GameState> {
           await Future.forEach(removedGameActions, (GameAction gameAction) {
             if (gameAction.playerId != "") {
               try {
+                List<GameAction> gameActions = state.gameActions.toList();
                 this.gameRepository.deleteAction(gameAction, state.documentReference!.id);
+                gameActions.remove(gameAction);
+                this.add(UpdateGameActions(actions: gameActions));
               } catch (e) {
                 print("Error syncing gameAction: $e");
               }
