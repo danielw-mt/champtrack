@@ -133,22 +133,12 @@ class _SignUpState extends State<SignUp> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Text(
-                        "TODO Sign Up",
-                        style: TextStyle(
-                          fontSize: 38,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 18,
-                      ),
                       Center(
                         child: Form(
                             key: _formKey,
                             child: Padding(
                               padding: const EdgeInsets.all(10),
-                              child: ListView(children: <Widget>[
+                              child: ListView(shrinkWrap: true, children: <Widget>[
                                 Container(
                                   alignment: Alignment.center,
                                   child: new Image.asset(
@@ -182,8 +172,10 @@ class _SignUpState extends State<SignUp> {
                                               child:
                                                   Text(StringsAuth.lSignUpButton, style: TextStyle(fontSize: height / 100 * 2, color: Colors.black)),
                                               onPressed: () => _createAccountWithEmailAndPassword(context))),
+                                      
                                       Row(
                                         children: <Widget>[
+                                          const Text(StringsAuth.lAccountExists),
                                           TextButton(
                                               child: Text(
                                                 StringsAuth.lBackToSignInButton,
@@ -203,16 +195,7 @@ class _SignUpState extends State<SignUp> {
                               ]),
                             )),
                       ),
-                      const Text("TODO Already have an account?"),
-                      OutlinedButton(
-                        onPressed: () {
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(builder: (context) => const SignIn()),
-                          );
-                        },
-                        child: const Text("TODO Sign In"),
-                      ),
+
                       // const Text("Or"),
                       // IconButton(
                       //   onPressed: () {

@@ -16,6 +16,7 @@ class StringsAuth {
   static const String lResetPassword = "Passwort zurücksetzen";
   static const String lNoAccount = "Noch keinen Account?";
   static const String lSendingResetMail = "Mail mit weiteren Anweisungen wird gesendet...";
+  static const String lAccountExists = "Account vorhanden?";
 
   static const String lAppTitle = "- HB Performance App -";
   static const String lClubName = "Vereinsname";
