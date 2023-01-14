@@ -48,3 +48,9 @@ class SelectViewField extends TeamManagementEvent {
 
   SelectViewField({required this.viewField});
 }
+
+// class DeletePlayer extends TeamManagementEvent {
+//   final int index;
+
+//   DeletePlayer({required this.index});
+// }

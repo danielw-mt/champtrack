@@ -7,6 +7,7 @@ class TeamManagementPlayers extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final teamManagementBloc = context.watch<TeamManagementBloc>();
+    final globalBloc = context.watch<GlobalBloc>();
 
     Widget buildViewArea() {
       print(teamManagementBloc.state.viewField);
@@ -27,30 +28,30 @@ class TeamManagementPlayers extends StatelessWidget {
     }
 
     return Scaffold(
-      floatingActionButton:
-          teamManagementBloc.state.viewField == TeamManagementViewField.players
-              ? FloatingActionButton(
-                  child: Icon(Icons.person_add),
-                  onPressed: () {
-                    print(TeamManagementViewField.addingPlayers);
-                    // teamManagementBloc.add(SelectViewField(
-                    //     viewField: TeamManagementViewField.addingPlayers));
-                    // print(teamManagementBloc.state.viewField);
-                    showDialog(
-                        context: context,
-                        builder: (BuildContext context) => AlertDialog(
-                              title: Text(StringsTeamManagement.lAddPlayer),
-                              content: SizedBox(
-                                width: MediaQuery.of(context).size.width * 0.7,
-                                height: MediaQuery.of(context).size.height * 0.8,
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [PlayerForm(editModeEnabled: false)],
-                                ),
-                              ),
-                            ));
-                  })
-              : Container(),
+      floatingActionButton: teamManagementBloc.state.viewField ==
+              TeamManagementViewField.players
+          ? FloatingActionButton(
+              child: Icon(Icons.person_add),
+              onPressed: () {
+                print(TeamManagementViewField.addingPlayers);
+                // teamManagementBloc.add(SelectViewField(
+                //     viewField: TeamManagementViewField.addingPlayers));
+                // print(teamManagementBloc.state.viewField);
+                showDialog(
+                    context: context,
+                    builder: (BuildContext context) => AlertDialog(
+                          title: Text(StringsTeamManagement.lAddPlayer),
+                          content: SizedBox(
+                            width: MediaQuery.of(context).size.width * 0.7,
+                            height: MediaQuery.of(context).size.height * 0.8,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [PlayerForm(editModeEnabled: false)],
+                            ),
+                          ),
+                        ));
+              })
+          : Container(),
       body: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
