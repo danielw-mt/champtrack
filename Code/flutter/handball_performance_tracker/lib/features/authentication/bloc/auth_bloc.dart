@@ -67,6 +67,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       await authRepository.signOut();
       emit(state.copyWith(authStatus: AuthStatus.UnAuthenticated, club: null));
     });
+
+    // when error dialog is displayed this event is called
+    on<DisplayError>((event, emit) async {
+      emit(state.copyWith(authStatus: AuthStatus.UnAuthenticated));
+    });
   }
 
   /// Returns a documentreference of the logged in club so that it can be used in later queries within that club

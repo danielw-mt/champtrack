@@ -5,112 +5,33 @@ import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class SignUp extends StatefulWidget {
-  const SignUp({Key? key}) : super(key: key);
-
-  @override
-  State<SignUp> createState() => _SignUpState();
-}
-
-class _SignUpState extends State<SignUp> {
+class SignUp extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
   final _clubNameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
-  @override
-  void dispose() {
-    _emailController.dispose();
-    _passwordController.dispose();
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   _emailController.dispose();
+  //   _passwordController.dispose();
+  //   super.dispose();
+  // }
 
   @override
   Widget build(BuildContext context) {
     final double height = MediaQuery.of(context).size.height;
     final double width = MediaQuery.of(context).size.height;
-    List<Widget> loginHeader = [
-      Container(
-          alignment: Alignment.center,
-          padding: const EdgeInsets.all(10),
-          child: Text(
-            StringsAuth.lAppTitle,
-            style: TextStyle(color: buttonDarkBlueColor, fontSize: height / 100 * 3, fontWeight: FontWeight.bold),
-          )),
-      SizedBox(
-        height: height * 0.05,
-      ),
-      Container(
-          alignment: Alignment.center,
-          padding: const EdgeInsets.all(10),
-          child: Text(
-            StringsAuth.lLogInButton,
-            style: TextStyle(color: buttonDarkBlueColor, fontSize: 30),
-          )),
-    ];
-    var eMailField = Container(
-      height: height * 0.1,
-      padding: const EdgeInsets.all(10),
-      child: TextField(
-        controller: _emailController,
-        textInputAction: TextInputAction.next,
-        style: TextStyle(color: Colors.grey.shade800),
-        decoration: InputDecoration(
-            focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: buttonGreyColor)),
-            enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: buttonGreyColor)),
-            disabledBorder: OutlineInputBorder(borderSide: BorderSide(color: buttonGreyColor)),
-            labelStyle: TextStyle(color: Colors.grey.shade800),
-            labelText: StringsAuth.lEmail,
-            floatingLabelBehavior: FloatingLabelBehavior.never,
-            filled: true,
-            fillColor: buttonGreyColor),
-      ),
-    );
-    var passwordField = Container(
-      height: height * 0.1,
-      padding: const EdgeInsets.all(10),
-      child: TextField(
-        obscureText: true,
-        controller: _passwordController,
-        textInputAction: TextInputAction.done,
-        decoration: InputDecoration(
-            focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: buttonGreyColor)),
-            enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: buttonGreyColor)),
-            disabledBorder: OutlineInputBorder(borderSide: BorderSide(color: buttonGreyColor)),
-            labelStyle: TextStyle(color: Colors.grey.shade800),
-            labelText: StringsAuth.lPassword,
-            floatingLabelBehavior: FloatingLabelBehavior.never,
-            filled: true,
-            fillColor: buttonGreyColor),
-      ),
-    );
-    var clubField = Container(
-      height: height * 0.1,
-      padding: const EdgeInsets.all(10),
-      child: TextField(
-        obscureText: false,
-        controller: _clubNameController,
-        textInputAction: TextInputAction.done,
-        decoration: InputDecoration(
-            focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: buttonGreyColor)),
-            enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: buttonGreyColor)),
-            disabledBorder: OutlineInputBorder(borderSide: BorderSide(color: buttonGreyColor)),
-            labelStyle: TextStyle(color: Colors.grey.shade800),
-            labelText: StringsAuth.lClubName,
-            floatingLabelBehavior: FloatingLabelBehavior.never,
-            filled: true,
-            fillColor: buttonGreyColor),
-      ),
-    );
-    AuthState authState = context.watch<AuthBloc>().state;
-    if (authState.authStatus == AuthStatus.AuthError){
+
+    AuthBloc authBloc = BlocProvider.of<AuthBloc>(context);
+    if (authBloc.state.authStatus == AuthStatus.AuthError) {
       // Display error message in a dialog
       WidgetsBinding.instance.addPostFrameCallback((_) {
         showDialog(
           context: context,
           builder: (context) => AlertDialog(
             title: Text(StringsAuth.lSignUpError),
-            content: Text(authState.error!),
+            content: Text(authBloc.state.error!),
             actions: [
               TextButton(
                 onPressed: () => Navigator.of(context).pop(),
@@ -118,10 +39,9 @@ class _SignUpState extends State<SignUp> {
               ),
             ],
           ),
-        );
+        ).then((value) => authBloc..add(DisplayError()));
       });
     }
-
 
     return Scaffold(
       body: BlocConsumer<AuthBloc, AuthState>(
@@ -134,12 +54,81 @@ class _SignUpState extends State<SignUp> {
               ),
             );
           }
-          if (state.authStatus == AuthStatus.AuthError) {
-            // Displaying the error message if the user is not authenticated
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(state.error!)));
-          }
         },
         builder: (context, state) {
+          List<Widget> loginHeader = [
+            Container(
+                alignment: Alignment.center,
+                padding: const EdgeInsets.all(10),
+                child: Text(
+                  StringsAuth.lAppTitle,
+                  style: TextStyle(color: buttonDarkBlueColor, fontSize: height / 100 * 3, fontWeight: FontWeight.bold),
+                )),
+            SizedBox(
+              height: height * 0.05,
+            ),
+            Container(
+                alignment: Alignment.center,
+                padding: const EdgeInsets.all(10),
+                child: Text(
+                  StringsAuth.lLogInButton,
+                  style: TextStyle(color: buttonDarkBlueColor, fontSize: 30),
+                )),
+          ];
+          var eMailField = Container(
+            height: height * 0.1,
+            padding: const EdgeInsets.all(10),
+            child: TextField(
+              controller: _emailController,
+              textInputAction: TextInputAction.next,
+              style: TextStyle(color: Colors.grey.shade800),
+              decoration: InputDecoration(
+                  focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: buttonGreyColor)),
+                  enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: buttonGreyColor)),
+                  disabledBorder: OutlineInputBorder(borderSide: BorderSide(color: buttonGreyColor)),
+                  labelStyle: TextStyle(color: Colors.grey.shade800),
+                  labelText: StringsAuth.lEmail,
+                  floatingLabelBehavior: FloatingLabelBehavior.never,
+                  filled: true,
+                  fillColor: buttonGreyColor),
+            ),
+          );
+          var passwordField = Container(
+            height: height * 0.1,
+            padding: const EdgeInsets.all(10),
+            child: TextField(
+              obscureText: true,
+              controller: _passwordController,
+              textInputAction: TextInputAction.done,
+              decoration: InputDecoration(
+                  focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: buttonGreyColor)),
+                  enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: buttonGreyColor)),
+                  disabledBorder: OutlineInputBorder(borderSide: BorderSide(color: buttonGreyColor)),
+                  labelStyle: TextStyle(color: Colors.grey.shade800),
+                  labelText: StringsAuth.lPassword,
+                  floatingLabelBehavior: FloatingLabelBehavior.never,
+                  filled: true,
+                  fillColor: buttonGreyColor),
+            ),
+          );
+          var clubField = Container(
+            height: height * 0.1,
+            padding: const EdgeInsets.all(10),
+            child: TextField(
+              obscureText: false,
+              controller: _clubNameController,
+              textInputAction: TextInputAction.done,
+              decoration: InputDecoration(
+                  focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: buttonGreyColor)),
+                  enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: buttonGreyColor)),
+                  disabledBorder: OutlineInputBorder(borderSide: BorderSide(color: buttonGreyColor)),
+                  labelStyle: TextStyle(color: Colors.grey.shade800),
+                  labelText: StringsAuth.lClubName,
+                  floatingLabelBehavior: FloatingLabelBehavior.never,
+                  filled: true,
+                  fillColor: buttonGreyColor),
+            ),
+          );
           if (state.authStatus == AuthStatus.Loading) {
             // Displaying the loading indicator while the user is signing up
             return const Center(child: CircularProgressIndicator());
@@ -193,7 +182,6 @@ class _SignUpState extends State<SignUp> {
                                               child:
                                                   Text(StringsAuth.lSignUpButton, style: TextStyle(fontSize: height / 100 * 2, color: Colors.black)),
                                               onPressed: () => _createAccountWithEmailAndPassword(context))),
-                                      
                                       Row(
                                         children: <Widget>[
                                           const Text(StringsAuth.lAccountExists),
@@ -204,7 +192,7 @@ class _SignUpState extends State<SignUp> {
                                               ),
                                               onPressed: (() => Navigator.pushReplacement(
                                                         context,
-                                                        MaterialPageRoute(builder: (context) => const SignIn()),
+                                                        MaterialPageRoute(builder: (context) => SignIn()),
                                                       ) // switch back to sign in mode
                                                   ))
                                         ],
@@ -233,7 +221,7 @@ class _SignUpState extends State<SignUp> {
                 ),
               ),
             );
-          } 
+          }
           return Container();
         },
       ),

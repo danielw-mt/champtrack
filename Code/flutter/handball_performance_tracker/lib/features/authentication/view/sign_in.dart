@@ -5,38 +5,31 @@ import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class SignIn extends StatefulWidget {
-  const SignIn({Key? key}) : super(key: key);
-
-  @override
-  State<SignIn> createState() => _SignInState();
-}
-
-class _SignInState extends State<SignIn> {
+class SignIn extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
-  @override
-  void dispose() {
-    _emailController.dispose();
-    _passwordController.dispose();
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   _emailController.dispose();
+  //   _passwordController.dispose();
+  //   super.dispose();
+  // }
 
   @override
   Widget build(BuildContext context) {
     final double height = MediaQuery.of(context).size.height;
     final double width = MediaQuery.of(context).size.height;
-    AuthState authState = context.watch<AuthBloc>().state;
-    if (authState.authStatus == AuthStatus.AuthError) {
+    AuthBloc authBloc = BlocProvider.of<AuthBloc>(context);
+    if (authBloc.state.authStatus == AuthStatus.AuthError) {
       // Display error message in a dialog
       WidgetsBinding.instance.addPostFrameCallback((_) {
         showDialog(
           context: context,
           builder: (context) => AlertDialog(
             title: Text(StringsAuth.lSignUpError),
-            content: Text(authState.error!),
+            content: Text(authBloc.state.error!),
             actions: [
               TextButton(
                 onPressed: () => Navigator.of(context).pop(),
@@ -44,7 +37,7 @@ class _SignInState extends State<SignIn> {
               ),
             ],
           ),
-        );
+        ).then((value) => authBloc..add(DisplayError()));
       });
     }
     return Scaffold(
@@ -186,7 +179,7 @@ class _SignInState extends State<SignIn> {
                                         onPressed: () {
                                           Navigator.pushReplacement(
                                             context,
-                                            MaterialPageRoute(builder: (context) => const SignUp()),
+                                            MaterialPageRoute(builder: (context) => SignUp()),
                                           );
                                         } // switch to sign up mode
                                         )
