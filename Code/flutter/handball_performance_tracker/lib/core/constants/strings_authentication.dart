@@ -23,4 +23,7 @@ class StringsAuth {
 
   static const String lMin6Chars = "Mindestens 6 Zeichen";
   static const String lInvalidEmail = "Ungültige E-Mail";
+
+  static const String lSignUpError = "Fehler beim Registrieren";
+  static const String lOk = "OK";
 }

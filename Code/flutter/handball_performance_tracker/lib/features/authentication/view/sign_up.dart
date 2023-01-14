@@ -102,6 +102,27 @@ class _SignUpState extends State<SignUp> {
             fillColor: buttonGreyColor),
       ),
     );
+    AuthState authState = context.watch<AuthBloc>().state;
+    if (authState.authStatus == AuthStatus.AuthError){
+      // Display error message in a dialog
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text(StringsAuth.lSignUpError),
+            content: Text(authState.error!),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(),
+                child: Text(StringsAuth.lOk),
+              ),
+            ],
+          ),
+        );
+      });
+    }
+
+
     return Scaffold(
       body: BlocConsumer<AuthBloc, AuthState>(
         listener: (context, state) {
@@ -123,7 +144,7 @@ class _SignUpState extends State<SignUp> {
             // Displaying the loading indicator while the user is signing up
             return const Center(child: CircularProgressIndicator());
           }
-          if (state.authStatus == AuthStatus.UnAuthenticated) {
+          if (state.authStatus == AuthStatus.UnAuthenticated || state.authStatus == AuthStatus.AuthError) {
             // Displaying the sign up form if the user is not authenticated
             return Center(
               child: Padding(
@@ -212,7 +233,7 @@ class _SignUpState extends State<SignUp> {
                 ),
               ),
             );
-          }
+          } 
           return Container();
         },
       ),

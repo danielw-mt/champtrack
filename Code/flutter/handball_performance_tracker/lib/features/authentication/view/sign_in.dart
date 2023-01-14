@@ -28,6 +28,25 @@ class _SignInState extends State<SignIn> {
   Widget build(BuildContext context) {
     final double height = MediaQuery.of(context).size.height;
     final double width = MediaQuery.of(context).size.height;
+    AuthState authState = context.watch<AuthBloc>().state;
+    if (authState.authStatus == AuthStatus.AuthError) {
+      // Display error message in a dialog
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text(StringsAuth.lSignUpError),
+            content: Text(authState.error!),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(),
+                child: Text(StringsAuth.lOk),
+              ),
+            ],
+          ),
+        );
+      });
+    }
     return Scaffold(
       body: BlocListener<AuthBloc, AuthState>(
         listener: (context, state) {
@@ -48,7 +67,7 @@ class _SignInState extends State<SignIn> {
                 child: CircularProgressIndicator(),
               );
             }
-            if (state.authStatus == AuthStatus.UnAuthenticated) {
+            if (state.authStatus == AuthStatus.UnAuthenticated || state.authStatus == AuthStatus.AuthError) {
               List<Widget> loginHeader = [
                 Container(
                     alignment: Alignment.center,
