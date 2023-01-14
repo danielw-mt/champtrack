@@ -78,12 +78,16 @@ class StringsGeneral {
   static const String lLocation = "Halle";
   static const String lHomeGame = "Heimspiel";
   static const String lOutwardsGame = "Auswärtsspiel";
-  static const String lStartGameFormPrompt = "Bitte ergänze alle fehlenden Felder";
+  static const String lStartGameFormPrompt =
+      "Bitte ergänze alle fehlenden Felder";
   static const String lStartGameTitle = "Neues Spiel tracken";
   static const String lStartGameTeamPrompt = "Bitte wähle ein Team aus";
-  static const String lStartGamePlayerSelectionPrompt = "Bitte wähle alle Player für den Spieltag aus";
-  static const String lStartGamePlayerPositioningPrompt = "Bitte wähle die Startaufstellung aus den nominierten Playern aus";
-  static const String lHotReloadError = "Es scheint ein Problem zu geben. Bitte gehen Sie zurück zum Dashboard";
+  static const String lStartGamePlayerSelectionPrompt =
+      "Bitte wähle alle Player für den Spieltag aus";
+  static const String lStartGamePlayerPositioningPrompt =
+      "Bitte wähle die Startaufstellung aus den nominierten Playern aus";
+  static const String lHotReloadError =
+      "Es scheint ein Problem zu geben. Bitte gehen Sie zurück zum Dashboard";
   static const String lStartGameButton = "Spiel starten";
   static const String lSubmitButton = "Speichern";
 
@@ -96,7 +100,8 @@ class StringsGeneral {
   static const String lDashboard = "Dashboard";
   static const String lManageTeams = "Teams verwalten";
   static const String lTrackNewGame = "Neues Spiel tracken";
-  static const String lNoConnection = "Es konnten keine Daten von unseren Servern geladen werden. Bitte Internet Verbindung überprüfen";
+  static const String lNoConnection =
+      "Es konnten keine Daten von unseren Servern geladen werden. Bitte Internet Verbindung überprüfen";
 
   // team settings screen
   static const String lName = "Name";
@@ -104,7 +109,8 @@ class StringsGeneral {
   static const String lPosition = "Position";
   static const String lGameNotAvailable = "Keine Spiele verfügbar";
   static const String lDeleteGame = "Spiel löschen";
-  static const String lGameDeleteWarning = "Soll das Spiel wirklich gelöscht werden?";
+  static const String lGameDeleteWarning =
+      "Soll das Spiel wirklich gelöscht werden?";
   static const String lCancel = "Abbrechen";
   static const String lConfirm = "Bestätigen";
 
@@ -138,7 +144,12 @@ class StringsGeneral {
   static const String lTeamManagement = "Team Management";
   static const String lAddTeam = "Team hinzufügen";
   static const String lTeamTypes = "Teamtypen";
-  static const String lNoTeamsWarning = "Keine Teams vorhanden. Bitte zuerst anlegen";
+  static const String lNoTeamsWarning =
+      "Keine Teams vorhanden. Bitte zuerst anlegen";
+  static const String lNoPlayersWarning =
+      "Keine Player vorhanden. Bitte zuerst anlegen";
+        static const String lNoGamesWarning =
+      "Keine Games vorhanden. Bitte zuerst tracken";
 
   // statistic screen
   static const String lNoTeamStats = "Keine Spiel-Statistiken verfügbar";

@@ -11,6 +11,11 @@ class PlayersList extends StatelessWidget {
     final teamManBloc = context.watch<TeamManagementBloc>();
     final globalState = context.watch<GlobalBloc>().state;
 
+    if (globalState.allTeams.length == 0) {
+      return Center(
+        child: Text(StringsGeneral.lNoPlayersWarning),
+      );
+    }
     List<Player> playersList = globalState.allTeams[teamManBloc.state.selectedTeamIndex].players;
     int numberOfPlayers = playersList.length;
     if (globalState.status == GlobalStatus.loading) {

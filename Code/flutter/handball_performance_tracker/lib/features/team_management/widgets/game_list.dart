@@ -10,8 +10,15 @@ class GameList extends StatelessWidget {
   Widget build(BuildContext context) {
     final TeamManagementState state = context.watch<TeamManagementBloc>().state;
     final globalState = context.watch<GlobalBloc>().state;
+    if (globalState.allGames.length == 0) {
+      return Center(
+        child: Text(StringsGeneral.lNoPlayersWarning),
+      );
+    }
     final Team selectedTeam = globalState.allTeams[state.selectedTeamIndex];
-    final List<Game> gamesList = globalState.allGames.where((Game game) => game.teamId == selectedTeam.id).toList();
+    final List<Game> gamesList = globalState.allGames
+        .where((Game game) => game.teamId == selectedTeam.id)
+        .toList();
     return SingleChildScrollView(
       controller: ScrollController(),
       child: DataTable(
@@ -29,10 +36,14 @@ class GameList extends StatelessWidget {
           gamesList.length,
           (int index) {
             return DataRow(
-              color: MaterialStateProperty.resolveWith<Color?>((Set<MaterialState> states) {
+              color: MaterialStateProperty.resolveWith<Color?>(
+                  (Set<MaterialState> states) {
                 // All rows will have the same selected color.
                 if (states.contains(MaterialState.selected)) {
-                  return Theme.of(context).colorScheme.primary.withOpacity(0.08);
+                  return Theme.of(context)
+                      .colorScheme
+                      .primary
+                      .withOpacity(0.08);
                 }
                 // Even rows will have a grey color.
                 if (index.isEven) {
@@ -42,7 +53,8 @@ class GameList extends StatelessWidget {
               }),
               cells: <DataCell>[
                 DataCell(Text(gamesList[index].opponent!)),
-                DataCell(Text(gamesList[index].date.toString().substring(0, 10))),
+                DataCell(
+                    Text(gamesList[index].date.toString().substring(0, 10))),
                 DataCell(Text(gamesList[index].location!)),
                 DataCell(GestureDetector(
                   child: Center(child: Icon(Icons.delete)),
