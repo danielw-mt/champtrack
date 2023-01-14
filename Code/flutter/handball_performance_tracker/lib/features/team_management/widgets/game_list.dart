@@ -30,7 +30,7 @@ class GameList extends StatelessWidget {
             label: Text(StringsGeneral.lDate),
           ),
           DataColumn(label: Text(StringsGeneral.lLocation)),
-          DataColumn(label: Text(StringsGeneral.lDeleteGame))
+          DataColumn(label: Text(StringsGeneral.lDeleteGame, softWrap: true))
         ],
         rows: List<DataRow>.generate(
           gamesList.length,

@@ -11,7 +11,7 @@ class TeamManagementSettings extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Flexible(
-            flex: 1,
+            flex: 2,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
@@ -21,7 +21,7 @@ class TeamManagementSettings extends StatelessWidget {
             ),
           ),
           Expanded(
-            flex: 3,
+            flex: 4,
             child: Column(
               children: [
                 Expanded(child: TeamSettings())

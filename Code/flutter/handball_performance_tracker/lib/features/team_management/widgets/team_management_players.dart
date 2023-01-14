@@ -76,7 +76,9 @@ class TeamManagementPlayers extends StatelessWidget {
               ],
             ),
           ),
-          Expanded(flex: 4, child: buildViewArea()),
+          Expanded(
+              flex: 4,
+              child: Column(children: [Expanded(child: buildViewArea())])),
 
           // ElevatedButton(
           //     onPressed: () {

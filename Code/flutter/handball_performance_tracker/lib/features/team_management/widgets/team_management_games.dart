@@ -12,7 +12,7 @@ class TeamManagementGames extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Flexible(
-            flex: 1,
+            flex: 2,
             child: Column(
               children: [
                 Expanded(child: TeamList()),
@@ -20,7 +20,7 @@ class TeamManagementGames extends StatelessWidget {
             ),
           ),
           Expanded(
-            flex: 3,
+            flex: 4,
             child: Column(
               children: [
                 Expanded(child: GameList()),
