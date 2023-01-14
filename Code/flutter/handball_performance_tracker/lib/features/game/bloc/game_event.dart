@@ -150,9 +150,3 @@ class RemovePenalty extends GameEvent {
 
   RemovePenalty({required this.player});
 }
-
-class UpdateGameActions extends GameEvent {
-  final List<GameAction> actions;
-
-  UpdateGameActions({required this.actions});
-}

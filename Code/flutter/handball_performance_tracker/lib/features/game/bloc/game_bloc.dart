@@ -91,8 +91,6 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         }
 
         List<List<GameAction>> gameActionsDifference = difference(syncedGameActions, state.gameActions);
-
-        bool gameActionsWereSynced = false;
         // if gameActions were added
         if (!gameActionsDifference[0].isEmpty) {
           List<GameAction> addedGameActions = gameActionsDifference[0];
@@ -102,16 +100,15 @@ class GameBloc extends Bloc<GameEvent, GameState> {
             if (gameAction.playerId != "") {
               try {
                 DocumentReference docRef = await this.gameRepository.createAction(gameAction, state.documentReference!.id);
-                List<GameAction> gameActions = state.gameActions.toList();
-                gameActions[state.gameActions.indexOf(gameAction)].id = docRef.id;
-                gameActions[state.gameActions.indexOf(gameAction)].path = docRef.path;
-                this.add(UpdateGameActions(actions: gameActions));
+                syncedGameActions.add(gameAction);
+                state.gameActions[state.gameActions.indexOf(gameAction)].id = docRef.id;
+                state.gameActions[state.gameActions.indexOf(gameAction)].path = docRef.path;
               } catch (e) {
                 print("Error syncing gameAction: $e");
               }
             }
             // on success set gameActionsWereSynced to true
-          }).then((value) => gameActionsWereSynced = true);
+          });
           // if gameActions were removed
         } else if (!gameActionsDifference[1].isEmpty) {
           List<GameAction> removedGameActions = gameActionsDifference[1];
@@ -119,19 +116,13 @@ class GameBloc extends Bloc<GameEvent, GameState> {
           await Future.forEach(removedGameActions, (GameAction gameAction) {
             if (gameAction.playerId != "") {
               try {
-                List<GameAction> gameActions = state.gameActions.toList();
-                this.gameRepository.deleteAction(gameAction, state.documentReference!.id);
-                gameActions.remove(gameAction);
-                this.add(UpdateGameActions(actions: gameActions));
+                this.gameRepository.deleteAction(gameAction, state.documentReference!.id).then((value) => syncedGameActions.remove(gameAction));
               } catch (e) {
                 print("Error syncing gameAction: $e");
               }
             }
             // on success set gameActionsWereSynced to true
-          }).then((value) => gameActionsWereSynced = true);
-        }
-        if (gameActionsWereSynced) {
-          syncedGameActions = state.gameActions.toList();
+          });
         }
       } else {
         print("game sync is not running");
@@ -367,8 +358,6 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         emit(state.copyWith(onFieldPlayers: newOnFieldPlayers));
       }
     });
-
-    on<UpdateGameActions>((event, emit) => emit(state.copyWith(gameActions: event.actions)));
 
     on<DeleteGameAction>((event, emit) {
       print("deleting game action: " + event.action.tag.toString() + " ");
