@@ -152,15 +152,15 @@ class SignIn extends StatelessWidget {
                                         onPressed: () {
                                           _authenticateWithEmailAndPassword(context);
                                         })),
-                                TextButton(
-                                  onPressed: () {
-                                    // TODO implement reset screen
-                                  },
-                                  child: Text(
-                                    StringsAuth.lForgotPassword,
-                                    style: TextStyle(color: buttonDarkBlueColor),
-                                  ),
-                                ),
+                                // TextButton(
+                                //   onPressed: () {
+                                //     // TODO implement reset screen
+                                //   },
+                                //   child: Text(
+                                //     StringsAuth.lForgotPassword,
+                                //     style: TextStyle(color: buttonDarkBlueColor),
+                                //   ),
+                                // ),
                                 Row(
                                   children: <Widget>[
                                     const Text(StringsAuth.lNoAccount),
