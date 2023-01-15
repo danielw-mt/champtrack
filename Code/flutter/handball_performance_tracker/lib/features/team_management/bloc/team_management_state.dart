@@ -1,7 +1,8 @@
 part of 'team_management_bloc.dart';
 
 enum TeamManagementStatus { loading, loaded, error }
-enum TeamManagementViewField { players, addingTeams, addingPlayers}
+
+enum TeamManagementViewField { players, addingTeams, addingPlayers }
 
 class TeamManagementState extends Equatable {
   TeamManagementStatus status = TeamManagementStatus.loading;
@@ -11,6 +12,7 @@ class TeamManagementState extends Equatable {
   bool addingTeam = false;
   bool addingPlayer = false;
   int selectedTeamType = 0;
+  String selectedTeamName = "";
 
   TeamManagementState({
     this.status = TeamManagementStatus.loading,
@@ -20,6 +22,7 @@ class TeamManagementState extends Equatable {
     this.addingTeam = false,
     this.addingPlayer = false,
     this.selectedTeamType = 0,
+    this.selectedTeamName = "",
   }) {
     if (status != null) {
       this.status = status;
@@ -42,6 +45,9 @@ class TeamManagementState extends Equatable {
     if (selectedTeamType != null) {
       this.selectedTeamType = selectedTeamType;
     }
+    if (selectedTeamName != null) {
+      this.selectedTeamName = selectedTeamName;
+    }
   }
 
   @override
@@ -52,7 +58,8 @@ class TeamManagementState extends Equatable {
         this.viewField,
         this.addingTeam,
         this.addingPlayer,
-        this.selectedTeamType
+        this.selectedTeamType,
+        this.selectedTeamName
       ];
 
   TeamManagementState copyWith({
@@ -63,6 +70,7 @@ class TeamManagementState extends Equatable {
     bool? addingTeam,
     bool? addingPlayer,
     int? selectedTeamType,
+    String? selectedTeamName,
   }) {
     return TeamManagementState(
       status: status ?? this.status,
@@ -72,6 +80,7 @@ class TeamManagementState extends Equatable {
       addingTeam: addingTeam ?? this.addingTeam,
       addingPlayer: addingPlayer ?? this.addingPlayer,
       selectedTeamType: selectedTeamType ?? this.selectedTeamType,
+      selectedTeamName: selectedTeamName ?? this.selectedTeamName,
     );
   }
 }

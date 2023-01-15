@@ -18,9 +18,9 @@ class TeamSettings extends StatelessWidget {
       StringsGeneral.lWomenTeams,
       StringsGeneral.lYouthTeams
     ];
-    int selectedTeamType = 0;
+    String selectedTeamType = StringsGeneral.lMenTeams;
     bool isTeamTypeSelected(String teamType) {
-      if (teamTypes[selectedTeamType] == teamType) {
+      if (selectedTeamType == teamType) {
         return true;
       }
       return false;
@@ -69,7 +69,7 @@ class TeamSettings extends StatelessWidget {
                                     value: isTeamTypeSelected(relevantTeamType),
                                     onChanged: (value) {
                                       if (value == true) {
-                                        selectedTeamType = index;
+                                        selectedTeamType = relevantTeamType;
                                       }
                                     }),
                                 Text(relevantTeamType)
@@ -114,7 +114,7 @@ class TeamSettings extends StatelessWidget {
                             Team newTeam = globalState.allTeams[
                                 teamManagementState.selectedTeamIndex];
                             newTeam.name = teamNameController.text;
-                            newTeam.type = TEAM_TYPE_MAPPING[selectedTeamType];
+                            newTeam.type = selectedTeamType;
                             context
                                 .read<GlobalBloc>()
                                 .add(UpdateTeam(team: newTeam));

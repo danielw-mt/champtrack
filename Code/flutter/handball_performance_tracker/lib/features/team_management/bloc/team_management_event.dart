@@ -43,11 +43,18 @@ class SelectTeamTyp extends TeamManagementEvent {
   SelectTeamTyp({required this.teamType});
 }
 
+class SelectTeamName extends TeamManagementEvent {
+  final String teamName;
+
+  SelectTeamName({required this.teamName});
+}
+
 class SelectViewField extends TeamManagementEvent {
   final TeamManagementViewField viewField;
 
   SelectViewField({required this.viewField});
 }
+
 
 // class DeletePlayer extends TeamManagementEvent {
 //   final int index;

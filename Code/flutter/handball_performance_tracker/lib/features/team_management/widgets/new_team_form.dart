@@ -6,7 +6,7 @@ import 'package:handball_performance_tracker/core/core.dart';
 
 class AddNewTeam extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
-  final _teamNameController = TextEditingController();
+
   List<String> teamTypes = [
     StringsGeneral.lMenTeams,
     StringsGeneral.lWomenTeams,
@@ -17,6 +17,9 @@ class AddNewTeam extends StatelessWidget {
   Widget build(BuildContext context) {
     final teamManBloc = context.watch<TeamManagementBloc>();
 
+    final _teamNameController =
+        TextEditingController(text: teamManBloc.state.selectedTeamName);
+
     return Scaffold(
         body: SingleChildScrollView(
             controller: ScrollController(),
@@ -26,34 +29,126 @@ class AddNewTeam extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    TextFormField(
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(),
-                        hintText: 'Enter team name',
-                      ),
-                      controller: _teamNameController,
+                    MouseRegion(
+                      // onExit: (event) => teamManBloc.add(
+                      //     SelectTeamName(teamName: _teamNameController.text)),
+                      child: Focus(
+                        onFocusChange: (value) => value == false
+                            ? teamManBloc.add(SelectTeamName(
+                                teamName: _teamNameController.text))
+                            : {},
+                        child: TextFormField(
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(),
+                            hintText: 'Enter team name',
+                          ),
+                          controller: _teamNameController,
+                          onEditingComplete: () {
+                            teamManBloc.add(SelectTeamName(
+                                teamName: _teamNameController.text));
+                          },
+                          onFieldSubmitted: (value) => teamManBloc.add(
+                              SelectTeamName(
+                                  teamName: _teamNameController.text)),
+                          onSaved: (newValue) => teamManBloc.add(SelectTeamName(
+                              teamName: _teamNameController.text)),
 
-                      // The validator receives the text that the user has entered.
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return StringsGeneral.lTextFieldEmpty;
-                        }
-                        return null;
-                      },
+                          // The validator receives the text that the user has entered.
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return StringsGeneral.lTextFieldEmpty;
+                            }
+                            return null;
+                          },
+                        ),
+                      ),
                     ),
-                    DropdownButtonFormField(
-                      value: teamTypes[0],
-                      items: teamTypes
-                          .map((label) => DropdownMenuItem(
-                                child: Text(label),
-                                value: label,
-                              ))
-                          .toList(),
-                      onChanged: (value) {
-                        print(value);
-                      },
-                    ),
-                    
+                    // DropdownButtonFormField(
+                    //   validator: (value) {
+                    //     if (value == null) {
+                    //       return StringsGeneral.lTextFieldEmpty;
+                    //     }
+                    //     return null;
+                    //   },
+                    //   value: teamManBloc.state.se,
+                    //   items: teamTypes
+                    //       .map((label) => DropdownMenuItem(
+                    //             child: Text(label),
+                    //             value: label,
+                    //           ))
+                    //       .toList(),
+                    //   onChanged: (value) {
+                    //     teamManBloc.add(SelectTeamTyp(
+                    //         teamType: TEAM_TYPE_MAPPING[value].toString()));
+                    //   },
+                    // ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        // back button
+                        Flexible(
+                          child: ElevatedButton(
+                            style: ButtonStyle(
+                                backgroundColor:
+                                    MaterialStateProperty.all<Color>(
+                                        buttonGreyColor)),
+                            onPressed: () {
+                              teamManBloc.add(SelectViewField(
+                                  viewField: TeamManagementViewField.players));
+                            },
+                            child: const Text(
+                              StringsGeneral.lBack,
+                              style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black),
+                            ),
+                          ),
+                        ),
+                        // add team button
+                        Flexible(
+                          child: ElevatedButton(
+                            style: ButtonStyle(
+                                backgroundColor:
+                                    MaterialStateProperty.all<Color>(
+                                        buttonGreyColor)),
+                            onPressed: () {
+                              if (_formKey.currentState!.validate()) {
+                                Team newTeam = Team(
+                                  name: _teamNameController.text,
+                                  type:  TEAM_TYPE_MAPPING[0], //teamManBloc.state.selectedTeamType,
+                                );
+                                context
+                                    .read<GlobalBloc>()
+                                    .add(CreateTeam(team: newTeam));
+                                //Navigator.pop(context);
+                                // if the added team is the first team to be added select this team right away
+                                if (context
+                                        .read<GlobalBloc>()
+                                        .state
+                                        .allTeams
+                                        .length ==
+                                    1) {
+                                  context
+                                      .read<TeamManagementBloc>()
+                                      .add(SelectTeam(index: 0));
+                                }
+                                teamManBloc.add(SelectViewField(
+                                    viewField:
+                                        TeamManagementViewField.players));
+                              }
+                            },
+                            child: const Text(
+                              StringsGeneral.lAddTeam,
+                              style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black),
+                            ),
+                          ),
+                        )
+                      ],
+                    )
                   ],
                 ))));
   }

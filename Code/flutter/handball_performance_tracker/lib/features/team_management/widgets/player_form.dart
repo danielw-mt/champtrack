@@ -53,6 +53,7 @@ class _PlayerEditWidgetState extends State<PlayerEditWidget> {
   @override
   Widget build(BuildContext context) {
     final globalBloc = context.watch<GlobalBloc>();
+    final teamManBloc = context.watch<TeamManagementBloc>();
     List<Team> allTeams = globalBloc.state.allTeams;
     ScrollController teamScrollController = ScrollController();
     ScrollController positionScrollController = ScrollController();
@@ -230,7 +231,7 @@ class _PlayerEditWidgetState extends State<PlayerEditWidget> {
                           child: ListView.builder(
                             controller: positionScrollController,
                             itemCount: 8,
-                            shrinkWrap: true,
+                            shrinkWrap: false,
                             itemBuilder: (context, item) {
                               List<String> positionNames = [
                                 StringsGeneral.lGoalkeeper,
@@ -313,32 +314,32 @@ class _PlayerEditWidgetState extends State<PlayerEditWidget> {
                       ),
                     ),
                     // delete button
-                    Flexible(
-                      child: ElevatedButton(
-                          style: ButtonStyle(
-                              backgroundColor: MaterialStateProperty.all<Color>(
-                                  buttonGreyColor)),
-                          onPressed: () {
-                            // remove player from players collection
-                            globalBloc.add(DeletePlayer(player: widget.player));
-                            // remove player from teams collection
-                            Team teamWithoutPlayer = allTeams.firstWhere(
-                                (team) => team.players.contains(widget.player));
-                            teamWithoutPlayer.players.remove(widget.player.id);
-                            if (teamWithoutPlayer.onFieldPlayers
-                                .contains(widget.player)) {
-                              teamWithoutPlayer.onFieldPlayers
-                                  .remove(widget.player.id);
-                            }
-                            globalBloc.add(UpdateTeam(team: teamWithoutPlayer));
-                            Navigator.pop(context);
-                          },
-                          child: Text(StringsGeneral.lDeletePlayer,
-                              style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black))),
-                    ),
+                    // Flexible(
+                    //   child: ElevatedButton(
+                    //       style: ButtonStyle(
+                    //           backgroundColor: MaterialStateProperty.all<Color>(
+                    //               buttonGreyColor)),
+                    //       onPressed: () {
+                    //         // remove player from players collection
+                    //         globalBloc.add(DeletePlayer(player: widget.player));
+                    //         // remove player from teams collection
+                    //         Team teamWithoutPlayer = allTeams.firstWhere(
+                    //             (team) => team.players.contains(widget.player));
+                    //         teamWithoutPlayer.players.remove(widget.player.id);
+                    //         if (teamWithoutPlayer.onFieldPlayers
+                    //             .contains(widget.player)) {
+                    //           teamWithoutPlayer.onFieldPlayers
+                    //               .remove(widget.player.id);
+                    //         }
+                    //         globalBloc.add(UpdateTeam(team: teamWithoutPlayer));
+                    //         Navigator.pop(context);
+                    //       },
+                    //       child: Text(StringsGeneral.lDeletePlayer,
+                    //           style: TextStyle(
+                    //               fontSize: 18,
+                    //               fontWeight: FontWeight.bold,
+                    //               color: Colors.black))),
+                    // ),
                     // Submit button
                     Flexible(
                       child: ElevatedButton(
@@ -354,7 +355,7 @@ class _PlayerEditWidgetState extends State<PlayerEditWidget> {
                                 int.parse(numberController.text);
 
                             // pop alert
-                            Navigator.pop(context);
+                            // Navigator.pop(context);
                             // updating an existing player
                             if (widget.editModeEnabled) {
                               // update player in players collection
@@ -399,6 +400,7 @@ class _PlayerEditWidgetState extends State<PlayerEditWidget> {
                                 team.players.add(widget.player);
                                 globalBloc.add(UpdateTeam(team: team));
                               });
+                              teamManBloc.add(SelectViewField(viewField: TeamManagementViewField.players));
                             }
                           }
                         },

@@ -15,7 +15,7 @@ class TeamManagementPlayers extends StatelessWidget {
         return PlayersList();
       } else if (teamManagementBloc.state.viewField ==
           TeamManagementViewField.addingPlayers) {
-        return PlayerForm(
+        return PlayerEditWidget(
           editModeEnabled: false,
         );
       } else if (teamManagementBloc.state.viewField ==
@@ -33,22 +33,22 @@ class TeamManagementPlayers extends StatelessWidget {
               child: Icon(Icons.person_add),
               onPressed: () {
                 print(TeamManagementViewField.addingPlayers);
-                // teamManagementBloc.add(SelectViewField(
-                //     viewField: TeamManagementViewField.addingPlayers));
-                // print(teamManagementBloc.state.viewField);
-                showDialog(
-                    context: context,
-                    builder: (BuildContext context) => AlertDialog(
-                          title: Text(StringsTeamManagement.lAddPlayer),
-                          content: SizedBox(
-                            width: MediaQuery.of(context).size.width * 0.7,
-                            height: MediaQuery.of(context).size.height * 0.8,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [PlayerForm(editModeEnabled: false)],
-                            ),
-                          ),
-                        ));
+                teamManagementBloc.add(SelectViewField(
+                    viewField: TeamManagementViewField.addingPlayers));
+                print(teamManagementBloc.state.viewField);
+                // showDialog(
+                //     context: context,
+                //     builder: (BuildContext context) => AlertDialog(
+                //           title: Text(StringsTeamManagement.lAddPlayer),
+                //           content: SizedBox(
+                //             width: MediaQuery.of(context).size.width * 0.7,
+                //             height: MediaQuery.of(context).size.height * 0.8,
+                //             child: Column(
+                //               mainAxisAlignment: MainAxisAlignment.center,
+                //               children: [PlayerForm(editModeEnabled: false)],
+                //             ),
+                //           ),
+                //         ));
               })
           : Container(),
       body: Row(
