@@ -50,17 +50,19 @@ class GameField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final gameBloc = context.watch<GameBloc>();
+
     return GestureDetector(
+      behavior: HitTestBehavior.translucent,
       onPanUpdate: (details) {
-        // Swiping in right direction.
-        if (details.delta.dx > 0) {
+        // Swiping in left direction.
+        if (details.delta.dx < 0) {
           if (gameBloc.state.attackIsLeft)
             gameBloc.add(SwipeField(isLeft: false));
           else
             gameBloc.add(SwipeField(isLeft: true));
         }
-        // Swiping in left direction.
-        if (details.delta.dx < 0) {
+        // Swiping in right direction.
+        if (details.delta.dx > 0) {
           if (gameBloc.state.attackIsLeft)
             gameBloc.add(SwipeField(isLeft: true));
           else
