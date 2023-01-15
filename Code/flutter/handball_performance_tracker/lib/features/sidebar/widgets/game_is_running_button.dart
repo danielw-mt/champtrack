@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:handball_performance_tracker/core/core.dart';
+import 'package:handball_performance_tracker/features/game/game.dart';
 
 // Button which takes you back to the game
 class GameIsRunningButton extends StatelessWidget {
@@ -7,7 +8,6 @@ class GameIsRunningButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     // Back to Game Button
     return Container(
       decoration: BoxDecoration(
@@ -44,7 +44,8 @@ class GameIsRunningButton extends StatelessWidget {
         ),
         onPressed: () {
           Navigator.pop(context);
-          // TODO implement back to game
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => GameView()));
         },
       ),
     );

@@ -12,25 +12,32 @@ class PaintedField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final gameBloc = context.watch<GameBloc>();
-    bool displayAttackColor = fieldIsLeft && gameBloc.state.attackIsLeft || !fieldIsLeft && !gameBloc.state.attackIsLeft;
+    bool displayAttackColor = fieldIsLeft && gameBloc.state.attackIsLeft ||
+        !fieldIsLeft && !gameBloc.state.attackIsLeft;
     return Stack(children: [
       // Painter of 7m, 6m and filled 9m
       CustomPaint(
         // Give colors: 9m(middle-dark),6m(dark),background(light)
-        painter: FieldPainter(fieldIsLeft, displayAttackColor ? attackMiddleColor : defenseMiddleColor,
-            displayAttackColor ? attackDarkColor : defenseDarkColor, displayAttackColor ? attackLightColor : defenseLightColor),
+        painter: FieldPainter(
+            fieldIsLeft,
+            displayAttackColor ? attackMiddleColor : defenseMiddleColor,
+            displayAttackColor ? attackDarkColor : defenseDarkColor,
+            displayAttackColor ? attackLightColor : defenseLightColor),
         // GestureDetector to handle on click or swipe
         child: GestureDetector(
             // handle coordinates on click
             onTapDown: (TapDownDetails details) {
-          gameBloc.add(RegisterClickOnField(fieldIsLeft: fieldIsLeft, position: details.localPosition));
+          gameBloc.add(RegisterClickOnField(
+              fieldIsLeft: fieldIsLeft, position: details.localPosition));
           openWorkflowPopup(context, gameBloc);
         }),
       ),
       // Painter of dashed 9m
-      CustomPaint(painter: DashedPathPainter(leftSide: fieldIsLeft, isEllipse: true)),
+      CustomPaint(
+          painter: DashedPathPainter(leftSide: fieldIsLeft, isEllipse: true)),
       // Painter of dashed goal
-      CustomPaint(painter: DashedPathPainter(leftSide: fieldIsLeft, isEllipse: false)),
+      CustomPaint(
+          painter: DashedPathPainter(leftSide: fieldIsLeft, isEllipse: false)),
     ]);
   }
 }
@@ -40,11 +47,26 @@ class PaintedField extends StatelessWidget {
 * @return   Returns a Pageview with left field side and right field side as children.
 */
 class GameField extends StatelessWidget {
-  static final PageController pageController = PageController();
-
   @override
   Widget build(BuildContext context) {
     final gameBloc = context.watch<GameBloc>();
+    PageController pageController = PageController(
+      initialPage: gameBloc.state.attackIsLeft ? 0 : 1,
+    );
+
+    // jump to the right page here
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      print("post build");
+      bool pageShouldBeLeft =
+          (gameBloc.state.attackIsLeft && gameBloc.state.attacking) ||
+              (!gameBloc.state.attackIsLeft && !gameBloc.state.attacking);
+      if (pageShouldBeLeft) {
+        pageController.jumpToPage(0);
+      } else {
+        pageController.jumpToPage(1);
+      }
+    });
+
     return PageView(
       controller: pageController,
       onPageChanged: (value) {

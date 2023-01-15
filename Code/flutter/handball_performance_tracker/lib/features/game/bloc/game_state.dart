@@ -46,6 +46,7 @@ class GameState extends Equatable {
   Player sevenMeterExecutor = Player();
   Player sevenMeterGoalkeeper = Player();
   WorkflowStep workflowStep = WorkflowStep.closed;
+  PageController pageController = PageController();
 
   // Some of these fields can only be set in this constructor like date, opponent or location because they get passed from the previous screen
   GameState({
@@ -73,6 +74,7 @@ class GameState extends Equatable {
     sevenMeterExecutor,
     sevenMeterGoalkeeper,
     this.workflowStep = WorkflowStep.closed,
+    pageController
   }) {
     // make sure that the list is growable
     if (!onFieldPlayers.isEmpty) {
@@ -118,6 +120,9 @@ class GameState extends Equatable {
     if (sevenMeterGoalkeeper != null) {
       this.sevenMeterGoalkeeper = sevenMeterGoalkeeper;
     }
+    if (pageController != null) {
+      this.pageController = pageController;
+    }
   }
 
   GameState copyWith({
@@ -137,6 +142,7 @@ class GameState extends Equatable {
     Player? sevenMeterExecutor,
     Player? sevenMeterGoalkeeper,
     WorkflowStep? workflowStep,
+    PageController? pageController
   }) {
     return GameState(
       // these properties cannot be changed after game initialization so they can only be set in the constructor but not in the copyWith method
@@ -164,6 +170,7 @@ class GameState extends Equatable {
       sevenMeterExecutor: sevenMeterExecutor ?? this.sevenMeterExecutor,
       sevenMeterGoalkeeper: sevenMeterGoalkeeper ?? this.sevenMeterGoalkeeper,
       workflowStep: workflowStep ?? this.workflowStep,
+      pageController: pageController ?? this.pageController
     );
   }
 
@@ -205,6 +212,7 @@ class GameState extends Equatable {
         this.substitutionPlayer,
         this.sevenMeterExecutor,
         this.sevenMeterGoalkeeper,
-        this.workflowStep
+        this.workflowStep,
+        this.pageController
       ];
 }
