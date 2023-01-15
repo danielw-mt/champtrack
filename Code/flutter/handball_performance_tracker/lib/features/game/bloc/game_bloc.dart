@@ -318,21 +318,6 @@ class GameBloc extends Bloc<GameEvent, GameState> {
 
     on<SwitchField>((event, emit) {
       emit(state.copyWith(attacking: !state.attacking));
-      // if (state.pageController.page == 0) {
-      //   if (state.attackIsLeft) {
-      //     emit(state.copyWith(attacking: false));
-      //   } else {
-      //     emit(state.copyWith(attacking: true));
-      //   }
-      //   state.pageController.jumpToPage(1);
-      // } else {
-      //   if (state.attackIsLeft) {
-      //     emit(state.copyWith(attacking: true));
-      //   } else {
-      //     emit(state.copyWith(attacking: false));
-      //   }
-      //   state.pageController.jumpToPage(0);
-      // }
     });
 
     on<SubstitutePlayer>((event, emit) {
