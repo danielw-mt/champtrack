@@ -81,40 +81,44 @@ class PlayersList extends StatelessWidget {
                     DataCell(GestureDetector(
                       child: Icon(Icons.edit),
                       onTap: () {
-                        showDialog(
-                            context: context,
-                            builder: (BuildContext context) => AlertDialog(
-                                  title: Text(StringsGeneral.lEditPlayer),
-                                  content: SizedBox(
-                                    width:
-                                        MediaQuery.of(context).size.width * 0.7,
-                                    height: MediaQuery.of(context).size.height *
-                                        0.8,
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        PlayerForm(
-                                            editModeEnabled: true,
-                                            player: playersList[index])
-                                      ],
-                                    ),
-                                  ),
-                                  actions: [
-                                    TextButton(
-                                      child: Text(StringsGeneral.lCancel),
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
-                                      },
-                                    ),
-                                    TextButton(
-                                      child: Text(StringsGeneral.lSubmitButton),
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
-                                      },
-                                    ),
-                                  ],
-                                ));
+                        teamManBloc
+                            .add(SetSelectedPlayer(player: playersList[index]));
+                        teamManBloc.add(SelectViewField(
+                            viewField: TeamManagementViewField.editPlayer));
+                        // showDialog(
+                        //     context: context,
+                        //     builder: (BuildContext context) => AlertDialog(
+                        //           title: Text(StringsGeneral.lEditPlayer),
+                        //           content: SizedBox(
+                        //             width:
+                        //                 MediaQuery.of(context).size.width * 0.7,
+                        //             height: MediaQuery.of(context).size.height *
+                        //                 0.8,
+                        //             child: Column(
+                        //               mainAxisAlignment:
+                        //                   MainAxisAlignment.center,
+                        //               children: [
+                        //                 PlayerForm(
+                        //                     editModeEnabled: true,
+                        //                     player: playersList[index])
+                        //               ],
+                        //             ),
+                        //           ),
+                        //           actions: [
+                        //             TextButton(
+                        //               child: Text(StringsGeneral.lCancel),
+                        //               onPressed: () {
+                        //                 Navigator.of(context).pop();
+                        //               },
+                        //             ),
+                        //             TextButton(
+                        //               child: Text(StringsGeneral.lSubmitButton),
+                        //               onPressed: () {
+                        //                 Navigator.of(context).pop();
+                        //               },
+                        //             ),
+                        //           ],
+                        //         ));
                       },
                     )),
                     DataCell(GestureDetector(

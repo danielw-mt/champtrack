@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:handball_performance_tracker/core/core.dart';
+import 'package:handball_performance_tracker/data/models/player_model.dart';
 
 part 'team_management_event.dart';
 part 'team_management_state.dart';
@@ -42,6 +43,10 @@ class TeamManagementBloc extends Bloc<TeamManagementEvent, TeamManagementState> 
 
     on<SelectViewField>(((event, emit) {
       emit(state.copyWith(status: TeamManagementStatus.loaded, viewField: event.viewField));
+    }));
+
+    on<SetSelectedPlayer>(((event, emit) {
+      emit(state.copyWith(status: TeamManagementStatus.loaded, selectedPlayer: event.player));
     }));
   }
 }

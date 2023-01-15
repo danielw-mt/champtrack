@@ -2,7 +2,7 @@ part of 'team_management_bloc.dart';
 
 enum TeamManagementStatus { loading, loaded, error }
 
-enum TeamManagementViewField { players, addingTeams, addingPlayers }
+enum TeamManagementViewField { players, addingTeams, addingPlayers, editPlayer }
 
 class TeamManagementState extends Equatable {
   TeamManagementStatus status = TeamManagementStatus.loading;
@@ -13,6 +13,8 @@ class TeamManagementState extends Equatable {
   bool addingPlayer = false;
   int selectedTeamType = 0;
   String selectedTeamName = "";
+  int selectedPlayerIndex = 0;
+  Player selectedPlayer = Player();
 
   TeamManagementState({
     this.status = TeamManagementStatus.loading,
@@ -23,6 +25,8 @@ class TeamManagementState extends Equatable {
     this.addingPlayer = false,
     this.selectedTeamType = 0,
     this.selectedTeamName = "",
+    this.selectedPlayerIndex = 0,
+    selectedPlayer,
   }) {
     if (status != null) {
       this.status = status;
@@ -48,6 +52,12 @@ class TeamManagementState extends Equatable {
     if (selectedTeamName != null) {
       this.selectedTeamName = selectedTeamName;
     }
+    if (selectedPlayerIndex != null) {
+      this.selectedPlayerIndex = selectedPlayerIndex;
+    }
+    if (selectedPlayer != null) {
+      this.selectedPlayer = selectedPlayer;
+    }
   }
 
   @override
@@ -59,7 +69,9 @@ class TeamManagementState extends Equatable {
         this.addingTeam,
         this.addingPlayer,
         this.selectedTeamType,
-        this.selectedTeamName
+        this.selectedTeamName,
+        this.selectedPlayerIndex,
+        this.selectedPlayer,
       ];
 
   TeamManagementState copyWith({
@@ -71,6 +83,8 @@ class TeamManagementState extends Equatable {
     bool? addingPlayer,
     int? selectedTeamType,
     String? selectedTeamName,
+    int? selectedPlayerIndex,
+    Player? selectedPlayer,
   }) {
     return TeamManagementState(
       status: status ?? this.status,
@@ -81,6 +95,8 @@ class TeamManagementState extends Equatable {
       addingPlayer: addingPlayer ?? this.addingPlayer,
       selectedTeamType: selectedTeamType ?? this.selectedTeamType,
       selectedTeamName: selectedTeamName ?? this.selectedTeamName,
+      selectedPlayerIndex: selectedPlayerIndex ?? this.selectedPlayerIndex,
+      selectedPlayer: selectedPlayer ?? this.selectedPlayer,
     );
   }
 }
