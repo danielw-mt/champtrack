@@ -12,143 +12,52 @@ class AddNewTeam extends StatelessWidget {
     StringsGeneral.lWomenTeams,
     StringsGeneral.lYouthTeams
   ];
-  // int selectedTeamType = 0;
-
-  // bool isTeamTypeSelected(String teamType) {
-  //   if (teamTypes[selectedTeamType] == teamType) {
-  //     return true;
-  //   }
-  //   return false;
-  // }
 
   @override
   Widget build(BuildContext context) {
     final teamManBloc = context.watch<TeamManagementBloc>();
 
-    // print(teamTypes);
-    // print(teamManBloc.state.selectedTeamType);
-    // print(selectedTeamType);
     return Scaffold(
         body: SingleChildScrollView(
             controller: ScrollController(),
             scrollDirection: Axis.vertical,
-            child: Column(
-              children: [
-                TextFormField(
-                  style: TextStyle(fontSize: 18),
-                  //decoration: getDecoration(StringsGeneral.lTeam),
-                  controller: _teamNameController,
-                  // The validator receives the text that the user has entered.
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return StringsGeneral.lTextFieldEmpty;
-                    }
-                    return null;
-                  },
-                ),
-                Text(StringsGeneral.lTeamTypes),
-                // add list of checkboxes for team types where checkbox is in front
-                // of each team type
-
-                ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: teamTypes.length,
-                    itemBuilder: (context, index) {
-                      String relevantTeamType = teamTypes[index];
-                      return CheckboxListTile(
-                          // fillColor: MaterialStateProperty.all<Color>(
-                          //     buttonDarkBlueColor),
-                          // value: isTeamTypeSelected(relevantTeamType),
-                          value: index == 0
-                              ? true
-                              : false, // teamTypes[teamManBloc.state.selectedTeamType] == relevantTeamType ? true : false,
-                          title: Text(relevantTeamType),
-                          controlAffinity: ListTileControlAffinity.leading,
-                          onChanged: (value) {
-                            // value = !value!;
-                            // print(teamTypes[index]);
-                            // print(teamManBloc.state.selectedTeamType);
-                            // if (value == true) {
-                            //   print(index);
-                            // context.read<StatisticsBloc>().add(SelectTeam(team: newTeam!));
-
-                            context
-                                .read<TeamManagementBloc>()
-                                .add(SelectTeamTyp(teamType: index));
-                            print(teamManBloc.state.selectedTeamType);
-                            //   //selectedTeamType = index;
-                            // }
-                          });
-                    }),
-// itemBuilder: (context, index) {
-//                             String relevantTeamType = teamTypes[index];
-//                             return Row(
-//                               children: [
-//                                 Checkbox(
-//                                     fillColor: MaterialStateProperty.all<Color>(
-//                                         buttonDarkBlueColor),
-//                                     value: isTeamTypeSelected(relevantTeamType),
-//                                     onChanged: (value) {
-//                                       setState(() {
-//                                         if (value == true) {
-//                                           selectedTeamType = index;
-//                                         }
-//                                       });
-//                                     }),
-//                                 Text(relevantTeamType)
-//                               ],
-//                             );
-//                           }
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            child: Form(
+                key: _formKey,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Flexible(
-                        child: ElevatedButton(
-                            onPressed: () {
-                              teamManBloc.add(PressAddTeam(addingTeam: false));
-                            },
-                            style: ButtonStyle(
-                                backgroundColor:
-                                    MaterialStateProperty.all<Color>(
-                                        buttonGreyColor)),
-                            child: Text(
-                              StringsGeneral.lBack,
-                              style: TextStyle(color: Colors.black),
-                            ))),
-                    Flexible(
-                        child: ElevatedButton(
-                            onPressed: () {
-                              if (_formKey.currentState!.validate()) {
-                                Team newTeam = Team(
-                                  name: _teamNameController.text,
-                                  type: TEAM_TYPE_MAPPING[
-                                      teamManBloc.state.selectedTeamType],
-                                );
-                                context
-                                    .read<GlobalBloc>()
-                                    .add(CreateTeam(team: newTeam));
-                                Navigator.pop(context);
-                                // if the added team is the first team to be added select this team right away
-                                if (context
-                                        .read<GlobalBloc>()
-                                        .state
-                                        .allTeams
-                                        .length ==
-                                    1) {
-                                  context
-                                      .read<TeamManagementBloc>()
-                                      .add(SelectTeam(index: 0));
-                                }
-                              }
-                            },
-                            child: Text(StringsGeneral.lSubmitButton)))
+                    TextFormField(
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        hintText: 'Enter team name',
+                      ),
+                      controller: _teamNameController,
+
+                      // The validator receives the text that the user has entered.
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return StringsGeneral.lTextFieldEmpty;
+                        }
+                        return null;
+                      },
+                    ),
+                    DropdownButtonFormField(
+                      value: teamTypes[0],
+                      items: teamTypes
+                          .map((label) => DropdownMenuItem(
+                                child: Text(label),
+                                value: label,
+                              ))
+                          .toList(),
+                      onChanged: (value) {
+                        print(value);
+                      },
+                    ),
+                    
                   ],
-                )
-              ],
-            )));
+                ))));
   }
 }
-
 
 //TODO make StateLessWidget
 class NewAddTeamWidget extends StatefulWidget {
@@ -260,7 +169,8 @@ class NewAddTeamWidgetState extends State<NewAddTeamWidget> {
                     backgroundColor:
                         MaterialStateProperty.all<Color>(buttonGreyColor)),
                 onPressed: () {
-                  teamManBloc.add(SelectViewField(viewField: TeamManagementViewField.players));
+                  teamManBloc.add(SelectViewField(
+                      viewField: TeamManagementViewField.players));
                 },
                 child: const Text(
                   StringsGeneral.lBack,
@@ -291,7 +201,8 @@ class NewAddTeamWidgetState extends State<NewAddTeamWidget> {
                           .read<TeamManagementBloc>()
                           .add(SelectTeam(index: 0));
                     }
-                    teamManBloc.add(SelectViewField(viewField: TeamManagementViewField.players));
+                    teamManBloc.add(SelectViewField(
+                        viewField: TeamManagementViewField.players));
                   }
                 },
                 child: const Text(

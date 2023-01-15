@@ -7,6 +7,7 @@ class TeamList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final globalState = context.watch<GlobalBloc>().state;
+    final teamManState = context.watch<TeamManagementBloc>().state;
 
     return BlocBuilder<TeamManagementBloc, TeamManagementState>(
         builder: (context, state) {
@@ -24,7 +25,8 @@ class TeamList extends StatelessWidget {
         itemBuilder: (context, index) {
           return GestureDetector(
             onTap: () {
-              context.read<TeamManagementBloc>().add(SelectViewField(viewField: TeamManagementViewField.players));
+              context.read<TeamManagementBloc>().add(
+                  SelectViewField(viewField: TeamManagementViewField.players));
               int selectedTeamIndex =
                   globalState.allTeams.indexOf(globalState.allTeams[index]);
 
@@ -33,6 +35,9 @@ class TeamList extends StatelessWidget {
                   .add(SelectTeam(index: selectedTeamIndex));
             },
             child: Card(
+                color: teamManState.selectedTeamIndex == index
+                    ? Colors.blue[100]
+                    : Colors.white,
                 child: ListTile(
                     title: Text(globalState.allTeams[index].name),
                     leading: Icon(Icons.group))),

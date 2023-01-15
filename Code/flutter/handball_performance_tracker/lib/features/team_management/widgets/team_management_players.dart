@@ -10,7 +10,6 @@ class TeamManagementPlayers extends StatelessWidget {
     final globalBloc = context.watch<GlobalBloc>();
 
     Widget buildViewArea() {
-      print(teamManagementBloc.state.viewField);
       if (teamManagementBloc.state.viewField ==
           TeamManagementViewField.players) {
         return PlayersList();
@@ -21,7 +20,7 @@ class TeamManagementPlayers extends StatelessWidget {
         );
       } else if (teamManagementBloc.state.viewField ==
           TeamManagementViewField.addingTeams) {
-        return NewAddTeamWidget();
+        return AddNewTeam();
       } else {
         return Container(child: Text("This should not happen"));
       }
