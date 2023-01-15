@@ -16,10 +16,14 @@ class StringsAuth {
   static const String lResetPassword = "Passwort zurücksetzen";
   static const String lNoAccount = "Noch keinen Account?";
   static const String lSendingResetMail = "Mail mit weiteren Anweisungen wird gesendet...";
+  static const String lAccountExists = "Account vorhanden?";
 
   static const String lAppTitle = "- HB Performance App -";
   static const String lClubName = "Vereinsname";
 
   static const String lMin6Chars = "Mindestens 6 Zeichen";
   static const String lInvalidEmail = "Ungültige E-Mail";
+
+  static const String lSignUpError = "Fehler beim Registrieren";
+  static const String lOk = "OK";
 }

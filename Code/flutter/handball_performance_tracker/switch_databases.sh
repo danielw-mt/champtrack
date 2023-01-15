@@ -36,19 +36,19 @@ elif [ "$Database" == "live" ]; then
     #sed -i 's/handball-tracker-dev/handball-performance-tracker/' lib/main.dart
     echo "Switched to live"
 elif [ "$Database" == "prod" ]; then
-    echo "Switching to live"
+    echo "Switching to production project"
     flutter clean
     # firebase command
     firebase use intercep-production
     # if windows
     if [ "$OSTYPE"  == "msys" ]; then
-      flutterfire.bat configure --project handball-performance-tracker -y
+      flutterfire.bat configure --project intercep-production -y
     else
-      flutterfire configure --project handball-performance-tracker -y
+      flutterfire configure --project intercep-production -y
     fi
     # replace database name in main.dart
     #sed -i 's/handball-tracker-dev/handball-performance-tracker/' lib/main.dart
-    echo "Switched to live"
+    echo "Switched to production project"
 else
   echo "Invalid database"
 fi

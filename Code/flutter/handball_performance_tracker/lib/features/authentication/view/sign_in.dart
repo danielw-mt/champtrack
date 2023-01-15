@@ -5,39 +5,40 @@ import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class SignIn extends StatefulWidget {
-  const SignIn({Key? key}) : super(key: key);
-
-  @override
-  State<SignIn> createState() => _SignInState();
-}
-
-class _SignInState extends State<SignIn> {
+class SignIn extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
   @override
-  void dispose() {
-    _emailController.dispose();
-    _passwordController.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     final double height = MediaQuery.of(context).size.height;
     final double width = MediaQuery.of(context).size.height;
+    AuthBloc authBloc = context.watch<AuthBloc>();
+    if (authBloc.state.authStatus == AuthStatus.AuthError) {
+      // Display error message in a dialog
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text(StringsAuth.lSignUpError),
+            content: Text(authBloc.state.error!),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(),
+                child: Text(StringsAuth.lOk),
+              ),
+            ],
+          ),
+        ).then((value) => authBloc..add(DisplayError()));
+      });
+    }
     return Scaffold(
       body: BlocListener<AuthBloc, AuthState>(
         listener: (context, state) {
           if (state.authStatus == AuthStatus.Authenticated) {
             // Navigating to the dashboard screen if the user is authenticated
             Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const DashboardView()));
-          }
-          if (state.authStatus == AuthStatus.AuthError) {
-            // Showing the error message if the user has entered invalid credentials
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(state.error!)));
           }
         },
         child: BlocBuilder<AuthBloc, AuthState>(
@@ -48,7 +49,7 @@ class _SignInState extends State<SignIn> {
                 child: CircularProgressIndicator(),
               );
             }
-            if (state.authStatus == AuthStatus.UnAuthenticated) {
+            if (state.authStatus == AuthStatus.UnAuthenticated || state.authStatus == AuthStatus.AuthError) {
               List<Widget> loginHeader = [
                 Container(
                     alignment: Alignment.center,
@@ -151,15 +152,15 @@ class _SignInState extends State<SignIn> {
                                         onPressed: () {
                                           _authenticateWithEmailAndPassword(context);
                                         })),
-                                TextButton(
-                                  onPressed: () {
-                                    // TODO implement reset screen
-                                  },
-                                  child: Text(
-                                    StringsAuth.lForgotPassword,
-                                    style: TextStyle(color: buttonDarkBlueColor),
-                                  ),
-                                ),
+                                // TextButton(
+                                //   onPressed: () {
+                                //     // TODO implement reset screen
+                                //   },
+                                //   child: Text(
+                                //     StringsAuth.lForgotPassword,
+                                //     style: TextStyle(color: buttonDarkBlueColor),
+                                //   ),
+                                // ),
                                 Row(
                                   children: <Widget>[
                                     const Text(StringsAuth.lNoAccount),
@@ -171,7 +172,7 @@ class _SignInState extends State<SignIn> {
                                         onPressed: () {
                                           Navigator.pushReplacement(
                                             context,
-                                            MaterialPageRoute(builder: (context) => const SignUp()),
+                                            MaterialPageRoute(builder: (context) => SignUp()),
                                           );
                                         } // switch to sign up mode
                                         )

@@ -84,9 +84,8 @@ class DashboardContent extends StatelessWidget {
               ])));
     } else {
       print(authState);
-      return const Center(
-        child: Text("This should not happen [Dashboard Content]"),
-      );
+      // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => SignIn()));
+      return SignIn();
     }
   }
 }
