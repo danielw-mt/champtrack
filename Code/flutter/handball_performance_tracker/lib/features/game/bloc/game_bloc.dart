@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:handball_performance_tracker/data/models/models.dart';
 import 'package:handball_performance_tracker/data/repositories/repositories.dart';
@@ -316,21 +317,22 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     });
 
     on<SwitchField>((event, emit) {
-      if (GameField.pageController.page == 0) {
-        if (state.attackIsLeft) {
-          emit(state.copyWith(attacking: false));
-        } else {
-          emit(state.copyWith(attacking: true));
-        }
-        GameField.pageController.jumpToPage(1);
-      } else {
-        if (state.attackIsLeft) {
-          emit(state.copyWith(attacking: true));
-        } else {
-          emit(state.copyWith(attacking: false));
-        }
-        GameField.pageController.jumpToPage(0);
-      }
+      emit(state.copyWith(attacking: !state.attacking));
+      // if (state.pageController.page == 0) {
+      //   if (state.attackIsLeft) {
+      //     emit(state.copyWith(attacking: false));
+      //   } else {
+      //     emit(state.copyWith(attacking: true));
+      //   }
+      //   state.pageController.jumpToPage(1);
+      // } else {
+      //   if (state.attackIsLeft) {
+      //     emit(state.copyWith(attacking: true));
+      //   } else {
+      //     emit(state.copyWith(attacking: false));
+      //   }
+      //   state.pageController.jumpToPage(0);
+      // }
     });
 
     on<SubstitutePlayer>((event, emit) {
