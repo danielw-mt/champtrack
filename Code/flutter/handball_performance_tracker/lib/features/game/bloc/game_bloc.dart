@@ -185,6 +185,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     }));
 
     on<SwipeField>((event, emit) async {
+      print("swipe field");
       if (state.attackIsLeft && event.isLeft ||
           !state.attackIsLeft && !event.isLeft) {
         print("attacking: true");
@@ -708,14 +709,16 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         }
 
         // Switch field on goal, block & steal (=stürmerfoul), missed goal attempt and technical mistake on offensive (not trf on defense)
-        
+
         String lastTag = state.gameActions.last.tag;
         if (lastTag == goalTag ||
             lastTag == blockAndStealTag ||
             lastTag == missTag ||
-            (lastTag == trfTag && state.gameActions.last.context == actionContextAttack)) {
-              // don't switch if we select assist / no assist
-          if (state.workflowStep != WorkflowStep.assistSelection) this.add(SwitchField());
+            (lastTag == trfTag &&
+                state.gameActions.last.context == actionContextAttack)) {
+          // don't switch if we select assist / no assist
+          if (state.workflowStep != WorkflowStep.assistSelection)
+            this.add(SwitchField());
         }
         // adapt score if we scored a goal
         if (lastTag == goalTag &&
