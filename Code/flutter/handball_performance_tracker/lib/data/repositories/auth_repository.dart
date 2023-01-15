@@ -15,13 +15,21 @@ class AuthRepository {
   /// send e-mail and password to [createUserWithEmailAndPassword] method from [FirebaseAuth]
   ///
   /// throw error codes for weak password and email already in use
-  Future<void> signUp({required String clubName, required String email, required String password}) async {
+  Future<void> signUp(
+      {required String clubName,
+      required String email,
+      required String password}) async {
     try {
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(email: email, password: password);
+      await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(email: email, password: password);
       // create the club with the now created user
       User? user = FirebaseAuth.instance.currentUser;
       await FirebaseFirestore.instance.collection("clubs").add({
         "name": clubName,
+        "created": DateTime.now().toString(),
+        "last_active": DateTime.now().toString(),
+        "verified": false,
+        "payment": "free",
         "roles": {user!.uid: "admin"}
       });
     } on FirebaseAuthException catch (e) {
@@ -40,7 +48,8 @@ class AuthRepository {
     required String password,
   }) async {
     try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: password);
+      await FirebaseAuth.instance
+          .signInWithEmailAndPassword(email: email, password: password);
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         throw Exception('No user found for that email.');
@@ -61,10 +70,13 @@ class AuthRepository {
   Future<Club> fetchLoggedInClub() async {
     QuerySnapshot clubSnapshot = await FirebaseFirestore.instance
         .collection('clubs')
-        .where("roles.${FirebaseAuth.instance.currentUser!.uid}", isEqualTo: "admin")
+        .where("roles.${FirebaseAuth.instance.currentUser!.uid}",
+            isEqualTo: "admin")
         .limit(1)
         .get();
-    return clubSnapshot.docs.map((doc) => Club.fromEntity(ClubEntity.fromSnapshot(doc))).first;
+    return clubSnapshot.docs
+        .map((doc) => Club.fromEntity(ClubEntity.fromSnapshot(doc)))
+        .first;
   }
 
   // TODO implement like here: https://dhruvnakum.xyz/flutter-bloc-v8-google-sign-in-and-firebase-authentication-2022-guide#heading-folder-structure
