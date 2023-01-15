@@ -102,7 +102,6 @@ class RegisterAction extends GameEvent {
 class RegisterPlayerSelection extends GameEvent {
   final Player player;
   final bool isSubstitute;
-
   RegisterPlayerSelection({required this.player, required this.isSubstitute});
 }
 
