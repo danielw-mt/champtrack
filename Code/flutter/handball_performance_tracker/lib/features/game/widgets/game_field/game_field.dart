@@ -3,6 +3,7 @@ import 'package:handball_performance_tracker/core/core.dart';
 import 'field_painters.dart';
 import 'package:handball_performance_tracker/features/game/game.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter/scheduler.dart';
 
 // Class that returns a FieldPainter with a GestureDetecture, i.e. the Painted halffield with the possibility to get coordinates on click.
 class PaintedField extends StatelessWidget {
@@ -55,15 +56,14 @@ class GameField extends StatelessWidget {
     );
 
     // jump to the right page here
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      print("post build");
+    SchedulerBinding.instance.addPostFrameCallback((_) {
       bool pageShouldBeLeft =
           (gameBloc.state.attackIsLeft && gameBloc.state.attacking) ||
               (!gameBloc.state.attackIsLeft && !gameBloc.state.attacking);
       if (pageShouldBeLeft) {
-        pageController.jumpToPage(0);
+        if (pageController.hasClients) pageController.jumpToPage(0);
       } else {
-        pageController.jumpToPage(1);
+        if (pageController.hasClients) pageController.jumpToPage(1);
       }
     });
 
