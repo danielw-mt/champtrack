@@ -50,19 +50,6 @@ class GameField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final gameBloc = context.watch<GameBloc>();
-    // after build, check if pageController.page is not the same as gameBloc.state.attackIsLeft
-    // if not, animate to the correct page
-    // WidgetsBinding.instance.addPersistentFrameCallback((_) {
-    //   PageController pageController = gameBloc.state.pageController;
-    //   if (pageController.page == 0 && !gameBloc.state.attacking) {
-    //     pageController.animateToPage(1,
-    //         duration: const Duration(milliseconds: 300), curve: Curves.ease);
-    //   } else if (pageController.page == 1 && gameBloc.state.attacking) {
-    //     pageController.animateToPage(0,
-    //         duration: const Duration(milliseconds: 300), curve: Curves.ease);
-    //   }
-    // });
-
     return GestureDetector(
       onPanUpdate: (details) {
         // Swiping in right direction.
@@ -81,11 +68,6 @@ class GameField extends StatelessWidget {
         }
       },
       child: PageView(
-          physics: NeverScrollableScrollPhysics(),
-          // controller: gameBloc.state.pageController,
-          // onPageChanged: (value) {
-          //   gameBloc.add(SwipeField(isLeft: value == 0));
-          // },
           children: gameBloc.state.attacking
               ? <Widget>[
                   PaintedField(
