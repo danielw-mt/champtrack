@@ -25,12 +25,29 @@ class PaintedField extends StatelessWidget {
             displayAttackColor ? attackLightColor : defenseLightColor),
         // GestureDetector to handle on click or swipe
         child: GestureDetector(
-            // handle coordinates on click
-            onTapDown: (TapDownDetails details) {
-          gameBloc.add(RegisterClickOnField(
-              fieldIsLeft: fieldIsLeft, position: details.localPosition));
-          openWorkflowPopup(context, gameBloc);
-        }),
+          // handle coordinates on click
+          onTapDown: (TapDownDetails details) {
+            gameBloc.add(RegisterClickOnField(
+                fieldIsLeft: fieldIsLeft, position: details.localPosition));
+            openWorkflowPopup(context, gameBloc);
+          },
+          onHorizontalDragUpdate: (details) {
+            // Swiping in left direction.
+            if (details.delta.dx < 0) {
+              if (gameBloc.state.attackIsLeft)
+                gameBloc.add(SwipeField(isLeft: false));
+              else
+                gameBloc.add(SwipeField(isLeft: true));
+            }
+            // Swiping in right direction.
+            if (details.delta.dx > 0) {
+              if (gameBloc.state.attackIsLeft)
+                gameBloc.add(SwipeField(isLeft: true));
+              else
+                gameBloc.add(SwipeField(isLeft: false));
+            }
+          },
+        ),
       ),
       // Painter of dashed 9m
       CustomPaint(
@@ -49,44 +66,31 @@ class PaintedField extends StatelessWidget {
 class GameField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final gameBloc = context.watch<GameBloc>();
-
-    return GestureDetector(
-      behavior: HitTestBehavior.translucent,
-      onPanUpdate: (details) {
-        // Swiping in left direction.
-        if (details.delta.dx < 0) {
-          if (gameBloc.state.attackIsLeft)
-            gameBloc.add(SwipeField(isLeft: false));
-          else
-            gameBloc.add(SwipeField(isLeft: true));
-        }
-        // Swiping in right direction.
-        if (details.delta.dx > 0) {
-          if (gameBloc.state.attackIsLeft)
-            gameBloc.add(SwipeField(isLeft: true));
-          else
-            gameBloc.add(SwipeField(isLeft: false));
-        }
-      },
-      child: PageView(
-          children: gameBloc.state.attacking
-              ? <Widget>[
-                  PaintedField(
-                    fieldIsLeft: true,
-                  ),
-                  PaintedField(
-                    fieldIsLeft: false,
-                  ),
-                ]
-              : <Widget>[
-                  PaintedField(
-                    fieldIsLeft: false,
-                  ),
-                  PaintedField(
-                    fieldIsLeft: true,
-                  ),
-                ]),
-    );
+    return BlocBuilder<GameBloc, GameState>(
+        bloc: context.watch<GameBloc>(),
+        builder: (context, state) {
+          return AnimatedSwitcher(
+              duration: Duration(milliseconds: 350),
+              child: state.attacking
+                  ? PageView(key: ValueKey<int>(0), children: <Widget>[
+                      PaintedField(
+                        fieldIsLeft: true,
+                      ),
+                      PaintedField(
+                        fieldIsLeft: false,
+                      ),
+                    ])
+                  : PageView(
+                      key: ValueKey<int>(1),
+                      reverse: true,
+                      children: <Widget>[
+                          PaintedField(
+                            fieldIsLeft: false,
+                          ),
+                          PaintedField(
+                            fieldIsLeft: true,
+                          ),
+                        ]));
+        });
   }
 }
