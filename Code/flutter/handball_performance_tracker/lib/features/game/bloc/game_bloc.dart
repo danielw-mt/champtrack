@@ -290,6 +290,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
       StopWatchTimer stopWatchTimer = state.stopWatchTimer;
       // get current minutes
       int currentMins = (stopWatchTimer.rawTime.value / 60000).floor();
+      print("current mins: $currentMins");
       // make sure the timer can't go negative
       if (event.seconds < 0) return;
       stopWatchTimer.clearPresetTime();
@@ -301,6 +302,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         stopWatchTimer.onExecute.add(StopWatchExecute.reset);
         stopWatchTimer.setPresetSecondTime(currentMins * 60 + event.seconds);
       }
+      emit(state.copyWith(stopWatchTimer: stopWatchTimer));
     });
 
     /// Set the minutes of the timer to the given value
@@ -313,12 +315,14 @@ class GameBloc extends Bloc<GameEvent, GameState> {
       stopWatchTimer.clearPresetTime();
       if (stopWatchTimer.isRunning) {
         stopWatchTimer.onExecute.add(StopWatchExecute.reset);
-        stopWatchTimer.setPresetSecondTime(event.minutes * 60 + currentSecs);
+        stopWatchTimer.setPresetMinuteTime(event.minutes);
         stopWatchTimer.onExecute.add(StopWatchExecute.start);
       } else {
         stopWatchTimer.onExecute.add(StopWatchExecute.reset);
-        stopWatchTimer.setPresetSecondTime(event.minutes * 60 + currentSecs);
+        stopWatchTimer.setPresetMinuteTime(event.minutes);
+        print(stopWatchTimer.rawTime.value);
       }
+      emit(state.copyWith(stopWatchTimer: stopWatchTimer));
     });
 
     on<RegisterClickOnField>((event, emit) {
@@ -704,13 +708,14 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         }
 
         // Switch field on goal, block & steal (=stürmerfoul), missed goal attempt and technical mistake on offensive (not trf on defense)
+        
         String lastTag = state.gameActions.last.tag;
         if (lastTag == goalTag ||
             lastTag == blockAndStealTag ||
             lastTag == missTag ||
-            (lastTag == trfTag &&
-                state.gameActions.last.context == actionContextAttack)) {
-          this.add(SwitchField());
+            (lastTag == trfTag && state.gameActions.last.context == actionContextAttack)) {
+              // don't switch if we select assist / no assist
+          if (state.workflowStep != WorkflowStep.assistSelection) this.add(SwitchField());
         }
         // adapt score if we scored a goal
         if (lastTag == goalTag &&
