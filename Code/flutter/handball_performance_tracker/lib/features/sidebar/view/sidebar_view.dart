@@ -71,7 +71,7 @@ class SidebarView extends StatelessWidget {
                       ),
                       onPressed: () {
                         context.read<AuthBloc>().add(SignOutRequested());
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => SignIn()));
+                        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => SignIn()));
                       },
                       icon: Icon(
                         Icons.logout,
