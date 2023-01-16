@@ -71,6 +71,8 @@ class SidebarView extends StatelessWidget {
                       ),
                       onPressed: () {
                         context.read<AuthBloc>().add(SignOutRequested());
+                        GameBloc gameBloc = context.read<GameBloc>();
+                        gameBloc.add(ResetGame());
                       },
                       icon: Icon(
                         Icons.logout,
