@@ -56,5 +56,7 @@ class StringsGameScreen {
   static const String lGoalSevenMeter = "Tor 7m";
   static const String lMissSevenMeter = "Fehlwurf 7m";
 
+  static const String lNoSevenMeter = "Kein 7m";
+  static const String lYesSevenMeter = "7m";
   // feed tag
 }

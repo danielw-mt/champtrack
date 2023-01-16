@@ -5,8 +5,8 @@ import 'package:handball_performance_tracker/core/core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:handball_performance_tracker/features/dashboard/dashboard.dart';
 import 'package:handball_performance_tracker/features/authentication/authentication.dart';
-import 'package:handball_performance_tracker/features/statistics/statistics.dart';
 import 'package:handball_performance_tracker/features/team_management/team_management.dart';
+import 'package:handball_performance_tracker/features/game/game.dart';
 
 class SidebarView extends StatelessWidget {
   const SidebarView({super.key});
@@ -14,8 +14,9 @@ class SidebarView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final authState = context.watch<AuthBloc>().state;
+    final gameState = context.watch<GameBloc>().state;
     String clubName = "";
-    bool gameRunning = false;
+    bool gameStarted = gameState.stopWatchTimer.rawTime.value > 0;
     // TODO implement block for gameRunning here
     if (authState.authStatus == AuthStatus.Authenticated && authState.club != null) {
       clubName = authState.club!.name;
@@ -41,8 +42,8 @@ class SidebarView extends StatelessWidget {
                     screen: TeamManagementPage(),
                     //children: buildTeamChildren(context),
                   ),
-                  SimpleListEntry(text: "TODO Statistiken", screen: StatisticsView()),
-                  if (gameRunning) SimpleListEntry(text: "TODO Game is running", screen: DashboardView()) else Text(""),
+                  SidebarStatisticsButton(),
+                  if (gameStarted) SimpleListEntry(text: "TODO Game is running", screen: GameView()) else Text(""),
                 ]).toList()),
             // Sign out button at the bottom
             Center(

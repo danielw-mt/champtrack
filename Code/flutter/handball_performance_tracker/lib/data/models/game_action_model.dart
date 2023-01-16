@@ -8,6 +8,7 @@ class GameAction {
   String context;
   String tag;
   List<String> throwLocation;
+  List<double> coordinates;
   int timestamp;
 
   GameAction({
@@ -17,8 +18,16 @@ class GameAction {
     this.context = "",
     this.tag = "",
     this.throwLocation = const [],
+    this.coordinates = const [],
     this.timestamp = 0,
-  });
+  }){
+    if (this.coordinates.isEmpty) {
+      this.coordinates = [0, 0];
+    }
+    if (this.throwLocation.isEmpty) {
+      this.throwLocation = ["", ""];
+    }
+  }
 
   // @return a new GameAction instance with the exact same properties as @param action
   GameAction.clone(GameAction action)
@@ -26,7 +35,7 @@ class GameAction {
 
   @override
   String toString() {
-    return 'GameAction: { id: $id, +\n playerId: $playerId, +\n context: $context, +\n tag: $tag, +\n throwLocation: $throwLocation, +\n timestamp: $timestamp }';
+    return 'GameAction: { id: $id, +\n playerId: $playerId, +\n context: $context, +\n tag: $tag, +\n throwLocation: $throwLocation, +\n timestamp: $timestamp, +\n coordinates: $coordinates }';
   }
 
   @override
@@ -39,6 +48,7 @@ class GameAction {
       tag: tag != "" ? tag : "",
       throwLocation: throwLocation != [] ? throwLocation : [],
       timestamp: timestamp != 0 ? timestamp : 0,
+      coordinates: coordinates != [] ? coordinates : [],
     );
   }
 

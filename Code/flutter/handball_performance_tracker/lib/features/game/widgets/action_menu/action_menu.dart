@@ -5,8 +5,9 @@ import 'defense_layout.dart';
 import 'attack_layout.dart';
 import 'seven_meter_defense_layout.dart';
 import 'seven_meter_offense_layout.dart';
+import 'seven_meter_prompt_layout.dart';
 
-enum ActionMenuStyle { offense, defense, goalkeeper, sevenMeterOffense, sevenMeterDefense }
+enum ActionMenuStyle { offense, defense, goalkeeper, sevenMeterPrompt, sevenMeterOffense, sevenMeterDefense }
 
 /// A menu of differently arranged buttons depending on whether we are in action, defense or goal keeper mode
 class ActionMenu extends StatelessWidget {
@@ -73,6 +74,8 @@ class ActionMenu extends StatelessWidget {
         return "Select defensive action";
       case ActionMenuStyle.goalkeeper:
         return "Select goal keeper action";
+      case ActionMenuStyle.sevenMeterPrompt:
+        return "Did a 7m take place?";
       case ActionMenuStyle.sevenMeterOffense:
         return "Select offensive seven meter action";
       case ActionMenuStyle.sevenMeterDefense:
@@ -96,6 +99,8 @@ class ActionMenu extends StatelessWidget {
           DefenseLayout(),
           AttackLayout(),
         ];
+      case ActionMenuStyle.sevenMeterPrompt:
+        return [SevenMeterPromptLayout()];
       case ActionMenuStyle.sevenMeterOffense:
         return [SevenMeterOffenseLayout()];
       case ActionMenuStyle.sevenMeterDefense:
