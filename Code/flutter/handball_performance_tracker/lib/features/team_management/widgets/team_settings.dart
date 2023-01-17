@@ -48,85 +48,83 @@ class TeamSettings extends StatelessWidget {
                 return null;
               },
             ),
-            Text(StringsTeamManagement.lTeamType),
-            FormField(
-              builder: (state) => Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  SizedBox(
-                      width: width * 0.25,
-                      height: 200,
-                      child: ListView.builder(
-                          controller: ScrollController(),
-                          itemCount: teamTypes.length,
-                          itemBuilder: (context, index) {
-                            String relevantTeamType = teamTypes[index];
-                            return Row(
-                              children: [
-                                Checkbox(
-                                    fillColor: MaterialStateProperty.all<Color>(
-                                        buttonDarkBlueColor),
-                                    value: isTeamTypeSelected(relevantTeamType),
-                                    onChanged: (value) {
-                                      if (value == true) {
-                                        selectedTeamType = relevantTeamType;
-                                      }
-                                    }),
-                                Text(relevantTeamType)
-                              ],
-                            );
-                          })),
-                  Text(
-                    state.errorText ?? '',
-                    style: TextStyle(
-                      color: Theme.of(context).errorColor,
-                    ),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      //delete button
-                      // ElevatedButton(
-                      //   onPressed: () {
-                      //     //TODO implement this dialog
-                      //     // Get.defaultDialog(
-                      //     //     title: StringsTeamManagement.lDeleteTeam,
-                      //     //     middleText:
-                      //     //         StringsTeamManagement.lConfirmDeleteTeam,
-                      //     //     textConfirm: StringsTeamManagement.lYes,
-                      //     //     textCancel: StringsTeamManagement.lNo,
-                      //     //     onConfirm: () {
-                      //     //       tempController.deleteSelectedTeam();
-                      //     //       Get.back();
-                      //     //       Get.back();
-                      //     //     },
-                      //     //     onCancel: () {
-                      //     //       Get.back();
-                      //     //     });
-                      //   },
-                      //   child: const Text(StringsTeamManagement.lDeleteTeam),
-                      // ),
-                      // submit button
-                      ElevatedButton(
-                        onPressed: () {
-                          // Validate returns true if the form is valid, or false otherwise.
-                          if (_formKey.currentState!.validate()) {
-                            Team newTeam = globalState.allTeams[
-                                teamManagementState.selectedTeamIndex];
-                            newTeam.name = teamNameController.text;
-                            newTeam.type = selectedTeamType;
-                            context
-                                .read<GlobalBloc>()
-                                .add(UpdateTeam(team: newTeam));
-                          }
-                        },
-                        child: const Text(StringsGeneral.lSubmitButton),
-                      ),
-                    ],
-                  )
-                ],
-              ),
-            ),
+            // Text(StringsTeamManagement.lTeamType),
+            // FormField(
+            //   builder: (state) => Column(
+            //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //     children: [
+            //       SizedBox(
+            //           width: width * 0.25,
+            //           height: 200,
+            //           child: ListView.builder(
+            //               controller: ScrollController(),
+            //               itemCount: teamTypes.length,
+            //               itemBuilder: (context, index) {
+            //                 String relevantTeamType = teamTypes[index];
+            //                 return Row(
+            //                   children: [
+            //                     Checkbox(
+            //                         fillColor: MaterialStateProperty.all<Color>(
+            //                             buttonDarkBlueColor),
+            //                         value: isTeamTypeSelected(relevantTeamType),
+            //                         onChanged: (value) {
+            //                           if (value == true) {
+            //                             selectedTeamType = relevantTeamType;
+            //                           }
+            //                         }),
+            //                     Text(relevantTeamType)
+            //                   ],
+            //                 );
+            //               })),
+            //       Text(
+            //         state.errorText ?? '',
+            //         style: TextStyle(
+            //           color: Theme.of(context).errorColor,
+            //         ),
+            //       ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                //delete button
+                // ElevatedButton(
+                //   onPressed: () {
+                //     //TODO implement this dialog
+                //     // Get.defaultDialog(
+                //     //     title: StringsTeamManagement.lDeleteTeam,
+                //     //     middleText:
+                //     //         StringsTeamManagement.lConfirmDeleteTeam,
+                //     //     textConfirm: StringsTeamManagement.lYes,
+                //     //     textCancel: StringsTeamManagement.lNo,
+                //     //     onConfirm: () {
+                //     //       tempController.deleteSelectedTeam();
+                //     //       Get.back();
+                //     //       Get.back();
+                //     //     },
+                //     //     onCancel: () {
+                //     //       Get.back();
+                //     //     });
+                //   },
+                //   child: const Text(StringsTeamManagement.lDeleteTeam),
+                // ),
+                // submit button
+                ElevatedButton(
+                  onPressed: () {
+                    // Validate returns true if the form is valid, or false otherwise.
+                    if (_formKey.currentState!.validate()) {
+                      Team newTeam = globalState
+                          .allTeams[teamManagementState.selectedTeamIndex];
+                      newTeam.name = teamNameController.text;
+                      newTeam.type = selectedTeamType;
+                      context.read<GlobalBloc>().add(UpdateTeam(team: newTeam));
+                    }
+                  },
+                  child: const Text(StringsGeneral.lSubmitButton),
+                ),
+              ],
+            )
+            //   ],
+            // ),
+            // ),
           ],
         ));
   }

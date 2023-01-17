@@ -27,8 +27,8 @@ class TeamManagementPlayers extends StatelessWidget {
     }
 
     return Scaffold(
-      floatingActionButton: teamManagementBloc.state.viewField ==
-              TeamManagementViewField.players
+      floatingActionButton: (teamManagementBloc.state.viewField ==
+              TeamManagementViewField.players && globalBloc.state.allTeams.length != 0)
           ? FloatingActionButton(
               child: Icon(Icons.person_add),
               onPressed: () {

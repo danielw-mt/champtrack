@@ -40,7 +40,7 @@ class AddNewTeam extends StatelessWidget {
                         child: TextFormField(
                           decoration: InputDecoration(
                             border: OutlineInputBorder(),
-                            hintText: 'Enter team name',
+                            hintText: 'Teamnamen eingeben',
                           ),
                           controller: _teamNameController,
                           onEditingComplete: () {
@@ -63,25 +63,6 @@ class AddNewTeam extends StatelessWidget {
                         ),
                       ),
                     ),
-                    // DropdownButtonFormField(
-                    //   validator: (value) {
-                    //     if (value == null) {
-                    //       return StringsGeneral.lTextFieldEmpty;
-                    //     }
-                    //     return null;
-                    //   },
-                    //   value: teamManBloc.state.se,
-                    //   items: teamTypes
-                    //       .map((label) => DropdownMenuItem(
-                    //             child: Text(label),
-                    //             value: label,
-                    //           ))
-                    //       .toList(),
-                    //   onChanged: (value) {
-                    //     teamManBloc.add(SelectTeamTyp(
-                    //         teamType: TEAM_TYPE_MAPPING[value].toString()));
-                    //   },
-                    // ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [

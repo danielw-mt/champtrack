@@ -12,7 +12,7 @@ class GameList extends StatelessWidget {
     final globalState = context.watch<GlobalBloc>().state;
     if (globalState.allGames.length == 0) {
       return Center(
-        child: Text(StringsGeneral.lNoPlayersWarning),
+        child: Text(StringsGeneral.lNoGamesWarning),
       );
     }
     final Team selectedTeam = globalState.allTeams[state.selectedTeamIndex];
