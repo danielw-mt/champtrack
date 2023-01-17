@@ -15,8 +15,9 @@ class InitializeGame extends GameEvent {
   DateTime date = DateTime.now();
   bool isHomeGame = true;
   bool attackIsLeft = true;
+  bool isTestGame = false;
 
-  InitializeGame({onFieldPlayers, selectedTeam, this.opponent = "", this.location = "", date, this.isHomeGame = true, this.attackIsLeft = true}) {
+  InitializeGame({onFieldPlayers, selectedTeam, this.opponent = "", this.location = "", date, this.isHomeGame = true, this.attackIsLeft = true, this.isTestGame = false}) {
     if (onFieldPlayers != null && onFieldPlayers.length > 0) {
       this.onFieldPlayers = onFieldPlayers;
     }

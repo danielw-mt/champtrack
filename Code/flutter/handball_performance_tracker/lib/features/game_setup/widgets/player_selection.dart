@@ -78,27 +78,24 @@ class PlayerSelection extends StatelessWidget {
 
                     // TODO use named routes
 
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => GamePage(
-                                  onFieldPlayers: gameSetupState.onFieldPlayers,
-                                  selectedTeam: globalState.allTeams[
-                                      gameSetupState.selectedTeamIndex],
-                                  opponent: gameSetupState.opponent,
-                                  location: gameSetupState.location,
-                                  date: gameSetupState.date,
-                                  isHomeGame: gameSetupState.isHomeGame,
-                                  attackIsLeft: gameSetupState.attackIsLeft,
-                                )));
-                    return;
-                  }
-                },
-                child: Text(StringsGeneral.lStartGameButton,
-                    style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black)),
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => GamePage(
+                                    onFieldPlayers: gameSetupState.onFieldPlayers,
+                                    selectedTeam: globalState.allTeams[gameSetupState.selectedTeamIndex],
+                                    opponent: gameSetupState.opponent,
+                                    location: gameSetupState.location,
+                                    date: gameSetupState.date,
+                                    isHomeGame: gameSetupState.isHomeGame,
+                                    attackIsLeft: gameSetupState.attackIsLeft,
+                                    isTestGame: gameSetupState.isTestGame,
+                                  )));
+                      return;
+                    }
+                  },
+                  child: Text(StringsGeneral.lStartGameButton, style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black)),
+                ),
               ),
             )
           ],

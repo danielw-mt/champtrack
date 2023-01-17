@@ -22,6 +22,7 @@ class Game {
   StopWatchTimer? stopWatchTimer;
   bool? attackIsLeft;
   List<GameAction> gameActions = [];
+  bool? isTestGame;
 
   Game(
       {this.id,
@@ -40,13 +41,14 @@ class Game {
       List<String> onFieldPlayers = const [],
       this.attackIsLeft = true,
       stopWatchTimer,
-      List<GameAction> gameActions = const []}) {
+      List<GameAction> gameActions = const [],
+      this.isTestGame = false}) {
     if (stopWatchTimer != null) {
       this.stopWatchTimer = stopWatchTimer;
     } else {
       this.stopWatchTimer = StopWatchTimer(mode: StopWatchMode.countUp);
     }
-    if (!onFieldPlayers.isEmpty){
+    if (!onFieldPlayers.isEmpty) {
       this.onFieldPlayers = onFieldPlayers;
     }
     if (!gameActions.isEmpty) {
@@ -71,7 +73,8 @@ class Game {
       List<String>? onFieldPlayers,
       StopWatchTimer? stopWatchTimer,
       bool? attackIsLeft,
-      List<GameAction>? gameActions}) {
+      List<GameAction>? gameActions,
+      bool? isTestGame}) {
     Game game = Game(
       id: id ?? this.id,
       path: path ?? this.path,
@@ -89,6 +92,7 @@ class Game {
       onFieldPlayers: onFieldPlayers ?? this.onFieldPlayers,
       attackIsLeft: attackIsLeft ?? this.attackIsLeft,
       gameActions: gameActions ?? this.gameActions,
+      isTestGame: isTestGame ?? this.isTestGame,
     );
     game.stopWatchTimer = stopWatchTimer ?? this.stopWatchTimer;
     return game;
@@ -105,6 +109,7 @@ class Game {
       scoreHome.hashCode ^
       scoreOpponent.hashCode ^
       isAtHome.hashCode ^
+      isTestGame.hashCode ^
       location.hashCode ^
       opponent.hashCode ^
       season.hashCode ^
@@ -136,6 +141,7 @@ class Game {
         'attackIsLeft: $attackIsLeft, +\n ' +
         'gameActions: $gameActions, +\n ' +
         'gameActionslength: ${gameActions.length}, +\n'
+            'isTestGame: $isTestGame, +\n ' +
         '}';
   }
 
@@ -155,6 +161,7 @@ class Game {
       stopWatchTime: stopWatchTimer != null ? stopWatchTimer!.rawTime.value : 0,
       teamId: this.teamId != null ? this.teamId! : "",
       attackIsLeft: this.attackIsLeft != null ? this.attackIsLeft! : true,
+      isTestGame: this.isTestGame != null ? this.isTestGame! : false,
     );
     return gameEntity;
   }
@@ -182,7 +189,8 @@ class Game {
         lastSync: entity.lastSync != null ? entity.lastSync! : "",
         onFieldPlayers: entity.onFieldPlayers != null ? entity.onFieldPlayers! : [],
         attackIsLeft: entity.attackIsLeft != null ? entity.attackIsLeft! : true,
-        gameActions: entity.gameActions != null ? entity.gameActions! : []);
+        gameActions: entity.gameActions != null ? entity.gameActions! : [],
+        isTestGame: entity.isTestGame != null ? entity.isTestGame! : false);
     game.stopWatchTimer!.onExecute.add(StopWatchExecute.reset);
     game.stopWatchTimer!.setPresetTime(mSec: entity.stopWatchTime!);
     return game;

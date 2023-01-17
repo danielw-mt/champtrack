@@ -26,6 +26,7 @@ class GameSettings extends StatelessWidget {
     int selectedTeamIndex = gameSetupState.selectedTeamIndex;
     bool isAtHome = gameSetupState.isHomeGame;
     bool attackIsLeft = gameSetupState.attackIsLeft;
+    bool isTestGame = gameSetupState.isTestGame;
 
     // Build a Form widget using the _formKey created above.
     double width = MediaQuery.of(context).size.width;
@@ -184,6 +185,21 @@ class GameSettings extends StatelessWidget {
                               gameSetupCubit.setAttackIsLeft(value ?? false);
                             }),
                       ),
+                      Flexible(
+                                child: Row(
+                                  children: [
+                                    Flexible(
+                                      child: Checkbox(
+                                          fillColor: MaterialStateProperty.all<Color>(buttonDarkBlueColor),
+                                          value: gameSetupState.isTestGame,
+                                          onChanged: (bool? value) {
+                                            gameSetupCubit.setTestGame(value ?? false);
+                                          }),
+                                    ),
+                                    Flexible(child: Text(StringsGameSettings.lTestGame))
+                                  ],
+                                ),
+                              ),
                     ],
                   ),
                 ),
@@ -231,7 +247,8 @@ class GameSettings extends StatelessWidget {
                                       date: selectedDate,
                                       selectedTeamIndex: selectedTeamIndex,
                                       isHomeGame: isAtHome,
-                                      attackIsLeft: attackIsLeft);
+                                      attackIsLeft: attackIsLeft,
+                                      isTestGame: isTestGame);
                                 },
                                 child: const Text(
                                     StringsTeamManagement.lSubmitButton,

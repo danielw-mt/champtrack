@@ -15,18 +15,20 @@ class GameSetupCubit extends Cubit<GameSetupState> {
       required DateTime date,
       required int selectedTeamIndex,
       required bool isHomeGame,
-      required bool attackIsLeft}) {
-        print("setSettings");
+      required bool attackIsLeft,
+      required bool isTestGame}) {
+    print("setSettings");
+    print("test game: $isTestGame");
     emit(state.copyWith(
-      currentStep: GameSetupStep.playerSelection,
-      opponent: opponent,
-      location: location,
-      date: date,
-      selectedTeamIndex: selectedTeamIndex,
-      isHomeGame: isHomeGame,
-      attackIsLeft: attackIsLeft,
-      onFieldPlayers: []
-    ));
+        currentStep: GameSetupStep.playerSelection,
+        opponent: opponent,
+        location: location,
+        date: date,
+        selectedTeamIndex: selectedTeamIndex,
+        isHomeGame: isHomeGame,
+        attackIsLeft: attackIsLeft,
+        onFieldPlayers: [],
+        isTestGame: isTestGame));
   }
 
   void setOpponent(String opponent) {
@@ -51,6 +53,10 @@ class GameSetupCubit extends Cubit<GameSetupState> {
 
   void setAttackIsLeft(bool attackIsLeft) {
     emit(state.copyWith(attackIsLeft: attackIsLeft));
+  }
+
+  void setTestGame(bool isTestGame) {
+    emit(state.copyWith(isTestGame: isTestGame));
   }
 
   void goToSettings() {
