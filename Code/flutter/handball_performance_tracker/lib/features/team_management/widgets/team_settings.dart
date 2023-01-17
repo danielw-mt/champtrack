@@ -33,6 +33,7 @@ class TeamSettings extends StatelessWidget {
       key: _formKey,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           Text(StringsTeamManagement.lTeamName),
           TextFormField(
@@ -45,98 +46,88 @@ class TeamSettings extends StatelessWidget {
               return null;
             },
           ),
-          Container(
-            height: 20,
-          ),
-          Text(StringsTeamManagement.lTeamType),
-          FormField(
-            builder: (state) => Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                SizedBox(
-                    width: width * 0.25,
-                    height: 200,
-                    child: ListView.builder(
-                        controller: ScrollController(),
-                        itemCount: teamTypes.length,
-                        itemBuilder: (context, index) {
-                          String relevantTeamType = teamTypes[index];
-                          return Row(
-                            children: [
-                              Checkbox(
-                                  fillColor: MaterialStateProperty.all<Color>(buttonDarkBlueColor),
-                                  value: isTeamTypeSelected(relevantTeamType),
-                                  onChanged: (value) {
-                                    if (value == true) {
-                                      selectedTeamType = index;
-                                    }
-                                  }),
-                              Text(relevantTeamType)
-                            ],
-                          );
-                        })),
-                Text(
-                  state.errorText ?? '',
-                  style: TextStyle(
-                    color: Theme.of(context).errorColor,
-                  ),
-                )
-              ],
-            ),
-          ),
+          // Text(StringsTeamManagement.lTeamType),
+          // FormField(
+          //   builder: (state) => Column(
+          //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //     children: [
+          //       SizedBox(
+          //           width: width * 0.25,
+          //           height: 200,
+          //           child: ListView.builder(
+          //               controller: ScrollController(),
+          //               itemCount: teamTypes.length,
+          //               itemBuilder: (context, index) {
+          //                 String relevantTeamType = teamTypes[index];
+          //                 return Row(
+          //                   children: [
+          //                     Checkbox(
+          //                         fillColor: MaterialStateProperty.all<Color>(buttonDarkBlueColor),
+          //                         value: isTeamTypeSelected(relevantTeamType),
+          //                         onChanged: (value) {
+          //                           if (value == true) {
+          //                             selectedTeamType = index;
+          //                           }
+          //                         }),
+          //                     Text(relevantTeamType)
+          //                   ],
+          //                 );
+          //               })),
+          //       Text(
+          //         state.errorText ?? '',
+          //         style: TextStyle(
+          //           color: Theme.of(context).errorColor,
+          //         ),
+          //       )
+          //     ],
+          //   ),
+          // ),
           // TODO implement a textfield that allows to set the league
-          Container(
-            height: 20,
-          ),
+          // Container(
+          //   height: 20,
+          // ),
           Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               // submit button
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 16.0),
-                child: ElevatedButton(
-                  onPressed: () {
-                    // Validate returns true if the form is valid, or false otherwise.
-                    if (_formKey.currentState!.validate()) {
-                      Team newTeam = globalState.allTeams[state.selectedTeamIndex];
-                      newTeam.name = teamNameController.text;
-                      newTeam.type = TEAM_TYPE_MAPPING[selectedTeamType];
-                      context.read<GlobalBloc>().add(UpdateTeam(team: newTeam));
-                    }
-                  },
-                  child: const Text(StringsGeneral.lSubmitButton),
-                ),
-              ),
-              Container(
-                height: 20,
-                width: 20,
-              ),
+              // Padding(
+              //   padding: const EdgeInsets.symmetric(vertical: 16.0),
+              //   child: ElevatedButton(
+              //     onPressed: () {
+              //       // Validate returns true if the form is valid, or false otherwise.
+              //       if (_formKey.currentState!.validate()) {
+              //         Team newTeam = globalState.allTeams[state.selectedTeamIndex];
+              //         newTeam.name = teamNameController.text;
+              //         newTeam.type = TEAM_TYPE_MAPPING[selectedTeamType];
+              //         context.read<GlobalBloc>().add(UpdateTeam(team: newTeam));
+              //       }
+              //     },
+              //     child: const Text(StringsGeneral.lSubmitButton),
+              //   ),
+              // ),
               // delete button
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 16.0),
-                child: ElevatedButton(
-                  onPressed: () {
-                    // TODO implement this dialog
-                    // Get.defaultDialog(
-                    //     title: StringsTeamManagement.lDeleteTeam,
-                    //     middleText: StringsTeamManagement.lConfirmDeleteTeam,
-                    //     textConfirm: StringsTeamManagement.lYes,
-                    //     textCancel: StringsTeamManagement.lNo,
-                    //     onConfirm: () {
-                    //       tempController.deleteSelectedTeam();
-                    //       Get.back();
-                    //       Get.back();
-                    //     },
-                    //     onCancel: () {
-                    //       Get.back();
-                    //     });
-                  },
-                  child: const Text(StringsTeamManagement.lDeleteTeam),
-                ),
-              ),
-              Container(
-                height: 20,
-                width: 20,
-              ),
+              // Padding(
+              //   padding: const EdgeInsets.symmetric(vertical: 16.0),
+              //   child: ElevatedButton(
+              //     onPressed: () {
+              //       // TODO implement this dialog
+              //       // Get.defaultDialog(
+              //       //     title: StringsTeamManagement.lDeleteTeam,
+              //       //     middleText: StringsTeamManagement.lConfirmDeleteTeam,
+              //       //     textConfirm: StringsTeamManagement.lYes,
+              //       //     textCancel: StringsTeamManagement.lNo,
+              //       //     onConfirm: () {
+              //       //       tempController.deleteSelectedTeam();
+              //       //       Get.back();
+              //       //       Get.back();
+              //       //     },
+              //       //     onCancel: () {
+              //       //       Get.back();
+              //       //     });
+              //     },
+              //     child: const Text(StringsTeamManagement.lDeleteTeam),
+              //   ),
+              // ),
               // submit button
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 16.0),

@@ -29,10 +29,10 @@ class TabsBar extends StatelessWidget {
                 text: StringsGeneral.lGames,
                 icon: Icon(Icons.list_alt),
               ),
-              Tab(
-                text: StringsGeneral.lTeamDetails,
-                icon: Icon(Icons.settings),
-              ),
+              // Tab(
+              //   text: StringsGeneral.lTeamDetails,
+              //   icon: Icon(Icons.settings),
+              // ),
             ],
           ),
         );
