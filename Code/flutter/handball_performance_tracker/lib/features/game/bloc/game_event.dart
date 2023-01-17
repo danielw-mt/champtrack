@@ -15,8 +15,9 @@ class InitializeGame extends GameEvent {
   DateTime date = DateTime.now();
   bool isHomeGame = true;
   bool attackIsLeft = true;
+  bool isTestGame = false;
 
-  InitializeGame({onFieldPlayers, selectedTeam, this.opponent = "", this.location = "", date, this.isHomeGame = true, this.attackIsLeft = true}) {
+  InitializeGame({onFieldPlayers, selectedTeam, this.opponent = "", this.location = "", date, this.isHomeGame = true, this.attackIsLeft = true, this.isTestGame = false}) {
     if (onFieldPlayers != null && onFieldPlayers.length > 0) {
       this.onFieldPlayers = onFieldPlayers;
     }
@@ -102,7 +103,6 @@ class RegisterAction extends GameEvent {
 class RegisterPlayerSelection extends GameEvent {
   final Player player;
   final bool isSubstitute;
-
   RegisterPlayerSelection({required this.player, required this.isSubstitute});
 }
 
@@ -118,8 +118,10 @@ class DeleteGameAction extends GameEvent {
 
 class UpdatePlayerEfScore extends GameEvent {
   final GameAction action;
+  // if false an action was deleted
+  final bool actionAdded;
 
-  UpdatePlayerEfScore({required this.action});
+  UpdatePlayerEfScore({required this.action, required this.actionAdded});
 }
 
 class ChangeScore extends GameEvent {

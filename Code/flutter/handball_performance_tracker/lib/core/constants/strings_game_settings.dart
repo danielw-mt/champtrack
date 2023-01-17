@@ -19,4 +19,6 @@ class StringsGameSettings{
   // start_game_form.dart
   static const String lGameDataSaved = "Spieldaten erfolgreich gespeichert!";
   static const String lSelectDate = "Datum wählen";
+
+  static const String lTestGame = "Testspiel";
 }

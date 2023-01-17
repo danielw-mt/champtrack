@@ -9,7 +9,8 @@ class PlayersList extends StatelessWidget {
   Widget build(BuildContext context) {
     final state = context.watch<GameSetupCubit>().state;
     final globalState = context.watch<GlobalBloc>().state;
-    List<Player> playersList = globalState.allTeams[state.selectedTeamIndex].players;
+    List<Player> playersList =
+        globalState.allTeams[state.selectedTeamIndex].players;
     int numberOfPlayers = playersList.length;
     return SingleChildScrollView(
       controller: ScrollController(),
@@ -32,12 +33,18 @@ class PlayersList extends StatelessWidget {
         rows: List<DataRow>.generate(
           numberOfPlayers,
           (int index) {
-            String positionsString = playersList[index].positions.reduce((value, element) => value + ", " + element);
+            String positionsString = playersList[index]
+                .positions
+                .reduce((value, element) => value + ", " + element);
             return DataRow(
-              color: MaterialStateProperty.resolveWith<Color?>((Set<MaterialState> states) {
+              color: MaterialStateProperty.resolveWith<Color?>(
+                  (Set<MaterialState> states) {
                 // All rows will have the same selected color.
                 if (states.contains(MaterialState.selected)) {
-                  return Theme.of(context).colorScheme.primary.withOpacity(0.08);
+                  return Theme.of(context)
+                      .colorScheme
+                      .primary
+                      .withOpacity(0.08);
                 }
                 // Even rows will have a grey color.
                 if (index.isEven) {
@@ -46,7 +53,8 @@ class PlayersList extends StatelessWidget {
                 return null; // Use default value for other states and odd rows.
               }),
               cells: <DataCell>[
-                DataCell(Text("${playersList[index].firstName} ${playersList[index].lastName}")),
+                DataCell(Text(
+                    "${playersList[index].firstName} ${playersList[index].lastName}")),
                 DataCell(Text(playersList[index].number.toString())),
                 DataCell(Text(
                   positionsString,
@@ -55,11 +63,13 @@ class PlayersList extends StatelessWidget {
                 DataCell(Checkbox(
                     value: state.onFieldPlayers.contains(playersList[index]),
                     onChanged: (bool? value) {
-                      List<Player> newOnFieldPlayers = List.from(state.onFieldPlayers);
+                      List<Player> newOnFieldPlayers =
+                          List.from(state.onFieldPlayers);
                       // if the value was changed from false to true
                       if (value == true) {
                         // if the player is not already in the list and there are not already 7 players on the field add the player to the list
-                        if (!newOnFieldPlayers.contains(playersList[index]) && newOnFieldPlayers.length < 7) {
+                        if (!newOnFieldPlayers.contains(playersList[index]) &&
+                            newOnFieldPlayers.length < 7) {
                           print("adding player to onFieldPlayers");
                           newOnFieldPlayers.add(playersList[index]);
                         }
@@ -70,7 +80,9 @@ class PlayersList extends StatelessWidget {
                           newOnFieldPlayers.remove(playersList[index]);
                         }
                       }
-                      context.read<GameSetupCubit>().setOnFieldPlayers(newOnFieldPlayers);
+                      context
+                          .read<GameSetupCubit>()
+                          .setOnFieldPlayers(newOnFieldPlayers);
                     })),
                 // DataCell(GestureDetector(
                 //   child: Icon(Icons.edit),

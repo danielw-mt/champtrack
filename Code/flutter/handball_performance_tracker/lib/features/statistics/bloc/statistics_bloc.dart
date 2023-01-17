@@ -45,18 +45,6 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
         ];
       }
 
-      // if (selectedTeamGames.length == 0) {
-      //   selectedTeamGames = [
-      //     Game(date: DateTime.now(), opponent: StringsGeneral.lNoTeamStats)
-      //   ];
-      // }
-
-      // if (selectedTeamGames.length == 0) {
-      //   selectedTeamGames = [
-      //     Game(date: DateTime.now(), opponent: StringsGeneral.lNoTeamStats)
-      //   ];
-      // }
-
       // set selected game
       Game selectedGame = selectedTeamGames.isNotEmpty ? selectedTeamGames[0] : Game(date: DateTime.now());
 
@@ -171,11 +159,11 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
 
         print("before generateStatistics");
         Map<String, dynamic> statistics = generateStatistics(fetchedGames, fetchedPlayers);
-        print("after generateStatistics" + statistics.toString());
+        // print("after generateStatistics" + statistics.toString());
 
         TeamStatistics selectedTeamStats = _buildTeamStatistics(statistics, selectedTeam, selectedGame);
         // print team statistics
-        print("team statistics: " + selectedTeamStats.toString());
+        // print("team statistics: " + selectedTeamStats.toString());
 
         // filter selectedTeamPlayers for players who are on the selected game accourding to player.gameslist
         // List<Player> selectedTeamGamePlayers = selectedTeamPlayers
