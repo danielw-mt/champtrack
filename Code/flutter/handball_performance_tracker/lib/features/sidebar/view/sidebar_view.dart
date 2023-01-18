@@ -24,7 +24,7 @@ class SidebarView extends StatelessWidget {
 
     return Drawer(
       child: Container(
-        color: buttonDarkBlueColor,
+        color:  Colors.blue,
         child: Stack(
           children: [
             ListView(
@@ -35,15 +35,15 @@ class SidebarView extends StatelessWidget {
                   ),
 
                   // Dashboard
-                  SimpleListEntry(text: "TODO Dashboard", screen: DashboardView()),
+                  SimpleListEntry(text: "Dashboard", screen: DashboardView()),
                   // show game is running button only if game is running.
                   SimpleListEntry(
                     text: StringsGeneral.lTeamManagement,
                     screen: TeamManagementPage(),
                     //children: buildTeamChildren(context),
                   ),
-                  SidebarStatisticsButton(text: "TODO Statistiken",),
-                  if (gameStarted) SimpleListEntry(text: "TODO Game is running", screen: GameView()) else Text(""),
+                  SidebarStatisticsButton(text: "Statistiken",),
+                  if (gameStarted) SimpleListEntry(text: "Game is running", screen: GameView()) else Text(""),
                 ]).toList()),
             // Sign out button at the bottom
             Center(

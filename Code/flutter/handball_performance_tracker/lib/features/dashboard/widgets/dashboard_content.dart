@@ -26,7 +26,7 @@ class DashboardContent extends StatelessWidget {
               key: _scaffoldKey,
               drawer: SidebarView(),
               appBar: AppBar(
-                  backgroundColor: buttonDarkBlueColor,
+                  backgroundColor:  Colors.blue,
                   title: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
