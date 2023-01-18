@@ -11,7 +11,7 @@ if [ "$Database" == "dev" ]; then
     echo "Switching to dev"
     flutter clean
     # firebase commands
-    firebase use dev
+    firebase use handball-tracker-dev
     # if windows
     if [ "$OSTYPE"  == "msys" ]; then
       flutterfire.bat configure --project handball-tracker-dev -y
@@ -25,7 +25,21 @@ elif [ "$Database" == "live" ]; then
     echo "Switching to live"
     flutter clean
     # firebase command
-    firebase use live
+    firebase use handball-performance-tracker
+    # if windows
+    if [ "$OSTYPE"  == "msys" ]; then
+      flutterfire.bat configure --project handball-performance-tracker -y
+    else
+      flutterfire configure --project handball-performance-tracker -y
+    fi
+    # replace database name in main.dart
+    #sed -i 's/handball-tracker-dev/handball-performance-tracker/' lib/main.dart
+    echo "Switched to live"
+elif [ "$Database" == "prod" ]; then
+    echo "Switching to live"
+    flutter clean
+    # firebase command
+    firebase use intercep-production
     # if windows
     if [ "$OSTYPE"  == "msys" ]; then
       flutterfire.bat configure --project handball-performance-tracker -y

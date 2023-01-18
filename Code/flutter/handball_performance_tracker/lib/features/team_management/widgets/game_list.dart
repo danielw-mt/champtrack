@@ -12,6 +12,11 @@ class GameList extends StatelessWidget {
     final globalState = context.watch<GlobalBloc>().state;
     final Team selectedTeam = globalState.allTeams[state.selectedTeamIndex];
     final List<Game> gamesList = globalState.allGames.where((Game game) => game.teamId == selectedTeam.id).toList();
+    // if gamelist is empty, return empty container
+    if (gamesList.isEmpty) {
+      return Container(child: Text(StringsGeneral.lNoGamesWarning),);
+    }
+
     return SingleChildScrollView(
       controller: ScrollController(),
       child: DataTable(
@@ -23,7 +28,7 @@ class GameList extends StatelessWidget {
             label: Text(StringsGeneral.lDate),
           ),
           DataColumn(label: Text(StringsGeneral.lLocation)),
-          DataColumn(label: Text(StringsGeneral.lDeleteGame))
+          // DataColumn(label: Text(StringsGeneral.lDeleteGame))
         ],
         rows: List<DataRow>.generate(
           gamesList.length,
@@ -44,38 +49,38 @@ class GameList extends StatelessWidget {
                 DataCell(Text(gamesList[index].opponent!)),
                 DataCell(Text(gamesList[index].date.toString().substring(0, 10))),
                 DataCell(Text(gamesList[index].location!)),
-                DataCell(GestureDetector(
-                  child: Center(child: Icon(Icons.delete)),
-                  onTap: () {
-                    // TODO replace alert with flutter dialog
-                    // Alert(
-                    //   context: context,
-                    //   buttons: [],
-                    //   content: Column(
-                    //     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    //     children: [
-                    //       Text(StringsGeneral.lGameDeleteWarning),
-                    //       Row(
-                    //         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    //         children: [
-                    //           ElevatedButton(
-                    //               onPressed: () {
-                    //                 Navigator.pop(context);
-                    //               },
-                    //               child: Text(StringsGeneral.lCancel)),
-                    //           ElevatedButton(
-                    //               onPressed: () {
-                    //                 context.read<TeamManagementCubit>().deleteGame(gamesList[index]);
-                    //                 Navigator.pop(context);
-                    //               },
-                    //               child: Text(StringsGeneral.lConfirm)),
-                    //         ],
-                    //       )
-                    //     ],
-                    //   ),
-                    // ).show();
-                  },
-                ))
+                // DataCell(GestureDetector(
+                //   child: Center(child: Icon(Icons.delete)),
+                //   onTap: () {
+                //     // TODO replace alert with flutter dialog
+                //     // Alert(
+                //     //   context: context,
+                //     //   buttons: [],
+                //     //   content: Column(
+                //     //     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                //     //     children: [
+                //     //       Text(StringsGeneral.lGameDeleteWarning),
+                //     //       Row(
+                //     //         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                //     //         children: [
+                //     //           ElevatedButton(
+                //     //               onPressed: () {
+                //     //                 Navigator.pop(context);
+                //     //               },
+                //     //               child: Text(StringsGeneral.lCancel)),
+                //     //           ElevatedButton(
+                //     //               onPressed: () {
+                //     //                 context.read<TeamManagementCubit>().deleteGame(gamesList[index]);
+                //     //                 Navigator.pop(context);
+                //     //               },
+                //     //               child: Text(StringsGeneral.lConfirm)),
+                //     //         ],
+                //     //       )
+                //     //     ],
+                //     //   ),
+                //     // ).show();
+                //   },
+                // ))
               ],
             );
           },

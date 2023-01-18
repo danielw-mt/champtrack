@@ -12,6 +12,11 @@ class PlayersList extends StatelessWidget {
     final globalState = context.watch<GlobalBloc>().state;
 
     List<Player> playersList = globalState.allTeams[state.selectedTeamIndex].players;
+    // if playerlist is empty, return empty container
+    if (playersList.isEmpty) {
+      return Container(child: Text(StringsGeneral.lNoPlayersWarning));
+    }
+
     int numberOfPlayers = playersList.length;
     if (globalState.status == GlobalStatus.loading) {
       return Center(
@@ -36,7 +41,7 @@ class PlayersList extends StatelessWidget {
           //   softWrap: true,
           // )),
           DataColumn(label: Text(StringsGeneral.lEdit)),
-          DataColumn(label: Text(StringsTeamManagement.lRemovePlayer))
+          // DataColumn(label: Text(StringsTeamManagement.lRemovePlayer))
         ],
         rows: List<DataRow>.generate(
           numberOfPlayers,
@@ -93,51 +98,51 @@ class PlayersList extends StatelessWidget {
                             ));
                   },
                 )),
-                DataCell(GestureDetector(
-                  child: Icon(Icons.delete),
-                  onTap: () {
-                    showDialog(
-                        context: context,
-                        builder: (BuildContext context) => AlertDialog(
-                              title: Text(StringsTeamManagement.lRemovePlayer),
-                              content: SizedBox(
-                                child: Text(StringsTeamManagement.lRemovePlayerConfirmation),
-                              ),
-                              actions: [
-                                TextButton(
-                                  child: Text(StringsGeneral.lCancel),
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                  },
-                                ),
-                                TextButton(
-                                  child: Text(StringsTeamManagement.lConfirm),
-                                  onPressed: () {
-                                    // update the team
-                                    Team updatedTeam = globalState.allTeams[state.selectedTeamIndex];
-                                    updatedTeam.players.remove(playersList[index]);
-                                    if (updatedTeam.onFieldPlayers.contains(playersList[index])) {
-                                      updatedTeam.onFieldPlayers.remove(playersList[index]);
-                                    }
-                                    // update the player references in the rel
-                                    context.read<GlobalBloc>().add(UpdateTeam(team: updatedTeam));
-                                    // if the player was only part of this team then delete this player from the players collection
-                                    if (playersList[index].teams.length == 1) {
-                                      context.read<GlobalBloc>().add(DeletePlayer(player: playersList[index]));
-                                    } else {
-                                      // otherwise update the player
-                                      Player updatedPlayer = playersList[index];
-                                      updatedPlayer.teams.remove(updatedTeam.id);
-                                      context.read<GlobalBloc>().add(UpdatePlayer(player: updatedPlayer));
-                                    }
-                                    playersList.removeAt(index);
-                                    Navigator.of(context).pop();
-                                  },
-                                ),
-                              ],
-                            ));
-                  },
-                )),
+                // DataCell(GestureDetector(
+                //   child: Icon(Icons.delete),
+                //   onTap: () {
+                //     showDialog(
+                //         context: context,
+                //         builder: (BuildContext context) => AlertDialog(
+                //               title: Text(StringsTeamManagement.lRemovePlayer),
+                //               content: SizedBox(
+                //                 child: Text(StringsTeamManagement.lRemovePlayerConfirmation),
+                //               ),
+                //               actions: [
+                //                 TextButton(
+                //                   child: Text(StringsGeneral.lCancel),
+                //                   onPressed: () {
+                //                     Navigator.of(context).pop();
+                //                   },
+                //                 ),
+                //                 TextButton(
+                //                   child: Text(StringsTeamManagement.lConfirm),
+                //                   onPressed: () {
+                //                     // update the team
+                //                     Team updatedTeam = globalState.allTeams[state.selectedTeamIndex];
+                //                     updatedTeam.players.remove(playersList[index]);
+                //                     if (updatedTeam.onFieldPlayers.contains(playersList[index])) {
+                //                       updatedTeam.onFieldPlayers.remove(playersList[index]);
+                //                     }
+                //                     // update the player references in the rel
+                //                     context.read<GlobalBloc>().add(UpdateTeam(team: updatedTeam));
+                //                     // if the player was only part of this team then delete this player from the players collection
+                //                     if (playersList[index].teams.length == 1) {
+                //                       context.read<GlobalBloc>().add(DeletePlayer(player: playersList[index]));
+                //                     } else {
+                //                       // otherwise update the player
+                //                       Player updatedPlayer = playersList[index];
+                //                       updatedPlayer.teams.remove(updatedTeam.id);
+                //                       context.read<GlobalBloc>().add(UpdatePlayer(player: updatedPlayer));
+                //                     }
+                //                     playersList.removeAt(index);
+                //                     Navigator.of(context).pop();
+                //                   },
+                //                 ),
+                //               ],
+                //             ));
+                //   },
+                // )),
               ],
             );
           },
