@@ -25,10 +25,7 @@ class DefaultFirebaseOptions {
       case TargetPlatform.iOS:
         return ios;
       case TargetPlatform.macOS:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for macos - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return macos;
       case TargetPlatform.windows:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for windows - '
@@ -72,5 +69,15 @@ class DefaultFirebaseOptions {
     storageBucket: 'handball-tracker-dev.appspot.com',
     iosClientId: '974814103289-aatra0lucgs28illj3v3ln7fr0phhhot.apps.googleusercontent.com',
     iosBundleId: 'mad.tf.fau.de.HBPerformanceTracker',
+  );
+
+  static const FirebaseOptions macos = FirebaseOptions(
+    apiKey: 'AIzaSyBIopT3JQCid-K1_Ylcmc6Q7tfSVckVjLM',
+    appId: '1:974814103289:ios:f6801b615ba0397206c428',
+    messagingSenderId: '974814103289',
+    projectId: 'handball-tracker-dev',
+    storageBucket: 'handball-tracker-dev.appspot.com',
+    iosClientId: '974814103289-260dj6a7nbb8b7dguabpbgunpv1sosrl.apps.googleusercontent.com',
+    iosBundleId: 'mad.tf.fau.de.handballPerformanceTracker',
   );
 }
