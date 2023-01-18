@@ -302,7 +302,8 @@ class _PlayerEditWidgetState extends State<PlayerEditWidget> {
                             backgroundColor: MaterialStateProperty.all<Color>(
                                 buttonGreyColor)),
                         onPressed: () {
-                          Navigator.of(context).pop();
+                          teamManBloc.add(SelectViewField(viewField: TeamManagementViewField.players));
+                          // Navigator.of(context).pop();
                         },
                         child: const Text(
                           StringsGeneral.lBack,
