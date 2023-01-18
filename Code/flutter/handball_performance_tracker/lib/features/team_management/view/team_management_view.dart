@@ -24,9 +24,9 @@ class TeamManagementView extends StatelessWidget {
     if (state.selectedTabIndex == 1) {
       return TeamManagementGames();
     }
-    if (state.selectedTabIndex == 2) {
-      return TeamManagementSettings();
-    }
+    // if (state.selectedTabIndex == 2) {
+    //   return TeamManagementSettings();
+    // }
     return const Center(child: Text("Error"));
   }
 
@@ -58,10 +58,10 @@ class TeamManagementView extends StatelessWidget {
                 label: page2,
                 icon: Icon(Icons.list),
               ),
-              BottomNavigationBarItem(
-                label: page3,
-                icon: Icon(Icons.settings),
-              ),
+              // BottomNavigationBarItem(
+              //   label: page3,
+              //   icon: Icon(Icons.settings),
+              // ),
             ]),
       ),
     );

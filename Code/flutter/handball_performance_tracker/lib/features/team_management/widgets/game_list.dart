@@ -9,14 +9,14 @@ class GameList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final TeamManagementState state = context.watch<TeamManagementBloc>().state;
-    final globalState = context.watch<GlobalBloc>().state;
-    if (globalState.allGames.length == 0) {
+    final globalBloc = context.watch<GlobalBloc>();
+    if (globalBloc.state.allGames.length == 0) {
       return Center(
         child: Text(StringsGeneral.lNoGamesWarning),
       );
     }
-    final Team selectedTeam = globalState.allTeams[state.selectedTeamIndex];
-    final List<Game> gamesList = globalState.allGames
+    final Team selectedTeam = globalBloc.state.allTeams[state.selectedTeamIndex];
+    final List<Game> gamesList = globalBloc.state.allGames
         .where((Game game) => game.teamId == selectedTeam.id)
         .toList();
     return SingleChildScrollView(
@@ -59,6 +59,33 @@ class GameList extends StatelessWidget {
                 DataCell(GestureDetector(
                   child: Center(child: Icon(Icons.delete)),
                   onTap: () {
+                        showDialog(
+                            context: context,
+                            builder: (BuildContext context) => AlertDialog(
+                                  title:
+                                      Text(StringsTeamManagement.lRemovePlayer),
+                                  content: SizedBox(
+                                    child: Text(StringsTeamManagement
+                                        .lRemoveGameConfirmation),
+                                  ),
+                                  actions: [
+                                    TextButton(
+                                      child: Text(StringsGeneral.lCancel),
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                    ),
+                                    TextButton(
+                                      child:
+                                          Text(StringsTeamManagement.lConfirm),
+                                      
+                                      onPressed: () {
+                                        globalBloc.add(DeleteGame(game: gamesList[index]));
+                                        Navigator.of(context).pop();
+                                      },
+                                    ),
+                                  ],
+                                ));
                     // TODO replace alert with flutter dialog
                     // Alert(
                     //   context: context,
