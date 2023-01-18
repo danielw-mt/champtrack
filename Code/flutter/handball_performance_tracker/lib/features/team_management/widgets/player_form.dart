@@ -356,6 +356,8 @@ class _PlayerEditWidgetState extends State<PlayerEditWidget> {
                             widget.player.number =
                                 int.parse(numberController.text);
 
+                            // = [globalBloc.state.allTeams[teamManBloc.state.selectedTeamIndex].id.toString()];
+
                             // pop alert
                             // Navigator.pop(context);
                             // updating an existing player
@@ -364,34 +366,38 @@ class _PlayerEditWidgetState extends State<PlayerEditWidget> {
                               globalBloc
                                   .add(UpdatePlayer(player: widget.player));
                               // go through each team of the club and update the players property
-                              for (Team team in allTeams) {
-                                // if player was added to a team where they weren't part of before
-                                bool teamCorrespondenceUpdated = false;
-                                if (playerIsPartOfRelevantTeam(
-                                        widget.player, team) &&
-                                    !team.players.contains(widget.player.id)) {
-                                  team.players.add(widget.player);
-                                  teamCorrespondenceUpdated = true;
-                                  // if player was removed from a team where they were part of before
-                                } else if (!playerIsPartOfRelevantTeam(
-                                        widget.player, team) &&
-                                    team.players.contains(widget.player.id)) {
-                                  team.players.remove(widget.player);
-                                  // of course also remove the player from the onFieldPlayers list
-                                  if (team.onFieldPlayers
-                                      .contains(widget.player)) {
-                                    team.onFieldPlayers.remove(widget.player);
-                                  }
-                                  teamCorrespondenceUpdated = true;
-                                }
-                                // if player was added or removed from a team then update the team
-                                if (teamCorrespondenceUpdated) {
-                                  globalBloc.add(UpdateTeam(team: team));
-                                }
-                              }
+                              // for (Team team in allTeams) {
+                              //   // if player was added to a team where they weren't part of before
+                              //   bool teamCorrespondenceUpdated = false;
+                              //   if (playerIsPartOfRelevantTeam(
+                              //           widget.player, team) &&
+                              //       !team.players.contains(widget.player.id)) {
+                              //     team.players.add(widget.player);
+                              //     teamCorrespondenceUpdated = true;
+                              //     // if player was removed from a team where they were part of before
+                              //   } else if (!playerIsPartOfRelevantTeam(
+                              //           widget.player, team) &&
+                              //       team.players.contains(widget.player.id)) {
+                              //     team.players.remove(widget.player);
+                              //     // of course also remove the player from the onFieldPlayers list
+                              //     if (team.onFieldPlayers
+                              //         .contains(widget.player)) {
+                              //       team.onFieldPlayers.remove(widget.player);
+                              //     }
+                              //     teamCorrespondenceUpdated = true;
+                              //   }
+                              //   // if player was added or removed from a team then update the team
+                              //   if (teamCorrespondenceUpdated) {
+                              //     globalBloc.add(UpdateTeam(team: team));
+                              //   }
+                              // }
                               // new player mode
                             } else {
                               // add player to players collection
+                              widget.player.teams.add(globalBloc
+                                  .state
+                                  .allTeams[teamManBloc.state.selectedTeamIndex]
+                                  .path);
                               globalBloc
                                   .add(CreatePlayer(player: widget.player));
                               print("adding player: ${widget.player}");
@@ -401,13 +407,18 @@ class _PlayerEditWidgetState extends State<PlayerEditWidget> {
                               //       teamString.contains(team.id.toString()));
                               //   team.players.add(widget.player);
                               //   globalBloc.add(UpdateTeam(team: team));
-                              globalBloc.state.allTeams[teamManBloc.state.selectedTeamIndex].players.add(widget.player);
-                              globalBloc.add(UpdateTeam(team: globalBloc.state.allTeams[teamManBloc.state.selectedTeamIndex]));
-                              teamManBloc.add(SelectViewField(viewField: TeamManagementViewField.players));
-                              
-                              // teamManBloc.add(SelectViewField(
-                              //     viewField: TeamManagementViewField.players));
+                              globalBloc
+                                  .state
+                                  .allTeams[teamManBloc.state.selectedTeamIndex]
+                                  .players
+                                  .add(widget.player);
+
+                              globalBloc.add(UpdateTeam(
+                                  team: globalBloc.state.allTeams[
+                                      teamManBloc.state.selectedTeamIndex]));
                             }
+                            teamManBloc.add(SelectViewField(
+                                viewField: TeamManagementViewField.players));
                           }
                         },
                         child: const Text(
@@ -429,10 +440,6 @@ class _PlayerEditWidgetState extends State<PlayerEditWidget> {
     ]);
   }
 }
-
-
-
-
 
 // // need to have stateful widget to make updating the dropdowns simpler
 // // set State can be used for every interaction

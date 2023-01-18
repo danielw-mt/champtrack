@@ -21,6 +21,12 @@ class TeamManagementPlayers extends StatelessWidget {
       } else if (teamManagementBloc.state.viewField ==
           TeamManagementViewField.addingTeams) {
         return AddNewTeam();
+      } else if (teamManagementBloc.state.viewField ==
+          TeamManagementViewField.editPlayer) {
+        return PlayerEditWidget(
+          editModeEnabled: true,
+          player: teamManagementBloc.state.selectedPlayer,
+        );
       } else {
         return Container(child: Text("This should not happen"));
       }
@@ -28,27 +34,15 @@ class TeamManagementPlayers extends StatelessWidget {
 
     return Scaffold(
       floatingActionButton: (teamManagementBloc.state.viewField ==
-              TeamManagementViewField.players && globalBloc.state.allTeams.length != 0)
+                  TeamManagementViewField.players &&
+              globalBloc.state.allTeams.length != 0)
           ? FloatingActionButton(
               child: Icon(Icons.person_add),
               onPressed: () {
-                print(TeamManagementViewField.addingPlayers);
+                // print(TeamManagementViewField.addingPlayers);
                 teamManagementBloc.add(SelectViewField(
                     viewField: TeamManagementViewField.addingPlayers));
-                print(teamManagementBloc.state.viewField);
-                // showDialog(
-                //     context: context,
-                //     builder: (BuildContext context) => AlertDialog(
-                //           title: Text(StringsTeamManagement.lAddPlayer),
-                //           content: SizedBox(
-                //             width: MediaQuery.of(context).size.width * 0.7,
-                //             height: MediaQuery.of(context).size.height * 0.8,
-                //             child: Column(
-                //               mainAxisAlignment: MainAxisAlignment.center,
-                //               children: [PlayerForm(editModeEnabled: false)],
-                //             ),
-                //           ),
-                //         ));
+                // print(teamManagementBloc.state.viewField);
               })
           : Container(),
       body: Row(
@@ -78,42 +72,6 @@ class TeamManagementPlayers extends StatelessWidget {
           Expanded(
               flex: 4,
               child: Column(children: [Expanded(child: buildViewArea())])),
-
-          // ElevatedButton(
-          //     onPressed: () {
-          //       showDialog(
-          //           context: context,
-          //           builder: (BuildContext context) => AlertDialog(
-          //                 title: Text(StringsTeamManagement.lAddPlayer),
-          //                 content: SizedBox(
-          //                   width:
-          //                       MediaQuery.of(context).size.width * 0.7,
-          //                   height:
-          //                       MediaQuery.of(context).size.height * 0.8,
-          //                   child: Column(
-          //                     mainAxisAlignment: MainAxisAlignment.center,
-          //                     children: [
-          //                       PlayerForm(editModeEnabled: false)
-          //                     ],
-          //                   ),
-          //                 ),
-          //                 actions: [
-          //                   TextButton(
-          //                     child: Text(StringsGeneral.lCancel),
-          //                     onPressed: () {
-          //                       Navigator.of(context).pop();
-          //                     },
-          //                   ),
-          //                   TextButton(
-          //                     child: Text(StringsGeneral.lSubmitButton),
-          //                     onPressed: () {
-          //                       Navigator.of(context).pop();
-          //                     },
-          //                   ),
-          //                 ],
-          //               ));
-          //     },
-          //     child: Text("Add player"))
         ],
       ),
     );

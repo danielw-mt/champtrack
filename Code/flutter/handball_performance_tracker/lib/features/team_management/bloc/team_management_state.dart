@@ -15,6 +15,7 @@ class TeamManagementState extends Equatable {
   String selectedTeamName = "";
   int selectedPlayerIndex = 0;
   Player selectedPlayer = Player();
+  List<Player> playerList = [];
 
   TeamManagementState({
     this.status = TeamManagementStatus.loading,
@@ -27,6 +28,7 @@ class TeamManagementState extends Equatable {
     this.selectedTeamName = "",
     this.selectedPlayerIndex = 0,
     selectedPlayer,
+    this.playerList = const [],
   }) {
     if (status != null) {
       this.status = status;
@@ -58,6 +60,9 @@ class TeamManagementState extends Equatable {
     if (selectedPlayer != null) {
       this.selectedPlayer = selectedPlayer;
     }
+    if (playerList != null) {
+      this.playerList = playerList;
+    }
   }
 
   @override
@@ -72,6 +77,7 @@ class TeamManagementState extends Equatable {
         this.selectedTeamName,
         this.selectedPlayerIndex,
         this.selectedPlayer,
+        this.playerList,
       ];
 
   TeamManagementState copyWith({
@@ -85,6 +91,7 @@ class TeamManagementState extends Equatable {
     String? selectedTeamName,
     int? selectedPlayerIndex,
     Player? selectedPlayer,
+    List<Player>? playerList,
   }) {
     return TeamManagementState(
       status: status ?? this.status,
@@ -97,6 +104,7 @@ class TeamManagementState extends Equatable {
       selectedTeamName: selectedTeamName ?? this.selectedTeamName,
       selectedPlayerIndex: selectedPlayerIndex ?? this.selectedPlayerIndex,
       selectedPlayer: selectedPlayer ?? this.selectedPlayer,
+      playerList: playerList ?? this.playerList,
     );
   }
 }
