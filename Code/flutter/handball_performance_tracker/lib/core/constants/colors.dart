@@ -24,3 +24,7 @@ Color popupGreyColor = Color(0xffcbcee3);
 Color popupLightBlueColor = Color(0xffc7d0f4);
 Color popupYellowColor = Color(0xfffff389);
 Color popupRedColor = Color(0xfffe7e6d);
+
+
+// intercep colors
+Color intercepHighlightColor = Color(0xff509EAC);

@@ -10,7 +10,7 @@ class TeamDropdown extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final globalState = context.watch<GlobalBloc>().state;
-    return BlocBuilder<TeamManagementCubit, TeamManagementState>(builder: (context, state) {
+    return BlocBuilder<TeamManagementBloc, TeamManagementState>(builder: (context, state) {
       if (globalState.allTeams.isEmpty) {
         // don't show the dropdown if there are no available teams
         return Center(
@@ -38,7 +38,7 @@ class TeamDropdown extends StatelessWidget {
                 fillColor: Colors.white),
             onChanged: (Team? newTeam) {
               int selectedTeamIndex = globalState.allTeams.indexOf(newTeam!);
-              context.read<TeamManagementCubit>().selectTeam(selectedTeamIndex);
+              context.read<TeamManagementBloc>().add(SelectTeam(index: selectedTeamIndex));
             },
             // build dropdown item widgets
             items: globalState.allTeams.map((Team team) {

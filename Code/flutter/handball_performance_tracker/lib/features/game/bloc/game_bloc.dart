@@ -143,7 +143,8 @@ class GameBloc extends Bloc<GameEvent, GameState> {
             teamId: event.selectedTeam.id!,
             isAtHome: event.isHomeGame,
             attackIsLeft: event.attackIsLeft,
-            startTime: DateTime.now().millisecondsSinceEpoch);
+            startTime: DateTime.now().millisecondsSinceEpoch,
+            isTestGame: event.isTestGame);
         DocumentReference gameRef = await this.gameRepository.createGame(game);
 
         // create the initial game state. Only overload the necessary fields that are not already defined as necessary in the constructor

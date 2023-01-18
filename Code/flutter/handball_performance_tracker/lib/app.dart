@@ -73,9 +73,11 @@ class HandballApp extends StatelessWidget {
                     ),
                   );
                 } else if (authBloc.state.authStatus == AuthStatus.UnAuthenticated) {
+                  print("UnAuthenticated");
                   // Otherwise, they're not signed in. Show the sign in page.
                   return SignIn();
                 } else if (authBloc.state.authStatus == AuthStatus.AuthError) {
+                  print("Authentication Error");
                   return SignIn();
                 } else {
                   return Text("Something went wrong");

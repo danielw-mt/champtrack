@@ -38,7 +38,7 @@ class SidebarView extends StatelessWidget {
                   SimpleListEntry(text: "TODO Dashboard", screen: DashboardView()),
                   // show game is running button only if game is running.
                   SimpleListEntry(
-                    text: "TODO Teams",
+                    text: StringsGeneral.lTeamManagement,
                     screen: TeamManagementPage(),
                     //children: buildTeamChildren(context),
                   ),
@@ -73,6 +73,7 @@ class SidebarView extends StatelessWidget {
                         context.read<AuthBloc>().add(SignOutRequested());
                         GameBloc gameBloc = context.read<GameBloc>();
                         gameBloc.add(ResetGame());
+                        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => SignIn()));
                       },
                       icon: Icon(
                         Icons.logout,

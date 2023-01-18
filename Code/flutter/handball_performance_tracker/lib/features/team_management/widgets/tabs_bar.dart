@@ -7,7 +7,7 @@ import 'package:handball_performance_tracker/features/team_management/team_manag
 class TabsBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<TeamManagementCubit, TeamManagementState>(
+    return BlocBuilder<TeamManagementBloc, TeamManagementState>(
       builder: (context, state) {
         return Container(
           color: Color(0xFF3F5AA6),
@@ -18,7 +18,8 @@ class TabsBar extends StatelessWidget {
             indicatorPadding: EdgeInsets.all(5.0),
             indicatorColor: buttonDarkBlueColor,
             onTap: (int tabNumber) {
-              context.read<TeamManagementCubit>().changeTab(TeamManagementTab.values[tabNumber]);
+              context.read<TeamManagementBloc>().add(ChangeTabs(tabIndex: tabNumber));
+              // (TeamManagementTab.values[tabNumber]);
             },
             tabs: [
               Tab(
@@ -29,10 +30,10 @@ class TabsBar extends StatelessWidget {
                 text: StringsGeneral.lGames,
                 icon: Icon(Icons.list_alt),
               ),
-              Tab(
-                text: StringsGeneral.lTeamDetails,
-                icon: Icon(Icons.settings),
-              ),
+              // Tab(
+              //   text: StringsGeneral.lTeamDetails,
+              //   icon: Icon(Icons.settings),
+              // ),
             ],
           ),
         );

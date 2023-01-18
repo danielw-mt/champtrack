@@ -98,9 +98,12 @@ class TeamFirebaseRepository extends TeamRepository {
   @override
   Future<void> updateTeam(Team team) async {
     DocumentReference clubRef = await getClubReference();
+    // print event team
+    print("event team: " + team.toString());
     await clubRef.collection("teams").doc(team.id).update(team.toEntity().toDocument());
     // update team in _teams
-    _teams[_teams.indexWhere((element) => element.id == team.id)] = team;
+    List<Team> updatedTeams = _teams.map((e) => e.id == team.id ? team : e).toList();
+    _teams = updatedTeams;
   }
 
   List<Team> get teams => _teams;

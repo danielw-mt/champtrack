@@ -12,9 +12,18 @@ class GamePage extends StatelessWidget {
   DateTime date = DateTime.now();
   bool isHomeGame = true;
   bool attackIsLeft = true;
+  bool isTestGame = false;
 
   GamePage(
-      {super.key, onFieldPlayers, selectedTeam, this.opponent = "", this.location = "", date, this.isHomeGame = true, this.attackIsLeft = true}) {
+      {super.key,
+      onFieldPlayers,
+      selectedTeam,
+      this.opponent = "",
+      this.location = "",
+      date,
+      this.isHomeGame = true,
+      this.attackIsLeft = true,
+      this.isTestGame = false}) {
     if (onFieldPlayers != null && onFieldPlayers.length > 0) {
       this.onFieldPlayers = onFieldPlayers;
     }
@@ -37,7 +46,8 @@ class GamePage extends StatelessWidget {
           location: location,
           date: date,
           isHomeGame: isHomeGame,
-          attackIsLeft: attackIsLeft));
+          attackIsLeft: attackIsLeft,
+          isTestGame: isTestGame));
     return BlocProvider.value(value: BlocProvider.of<GameBloc>(context), child: GameView());
   }
 }

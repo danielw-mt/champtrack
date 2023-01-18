@@ -36,7 +36,7 @@ elif [ "$Database" == "live" ]; then
     #sed -i 's/handball-tracker-dev/handball-performance-tracker/' lib/main.dart
     echo "Switched to live"
 elif [ "$Database" == "prod" ]; then
-    echo "Switching to live"
+    echo "Switching to prod"
     flutter clean
     # firebase command
     firebase use intercep-production
@@ -48,7 +48,7 @@ elif [ "$Database" == "prod" ]; then
     fi
     # replace database name in main.dart
     #sed -i 's/handball-tracker-dev/handball-performance-tracker/' lib/main.dart
-    echo "Switched to live"
+    echo "Switched to prod"
 else
   echo "Invalid database"
 fi

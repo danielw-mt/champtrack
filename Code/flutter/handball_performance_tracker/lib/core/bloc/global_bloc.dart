@@ -46,9 +46,13 @@ class GlobalBloc extends Bloc<GlobalEvent, GlobalState> {
     on<UpdateTeam>((event, emit) async {
       try {
         emit(state.copyWith(status: GlobalStatus.loading));
+        print("entered update team"+ event.team.toString());
         await TeamFirebaseRepository().updateTeam(event.team);
+        // print("event team" + event.team.name.toString());
+        // print("event team" + event.team.id.toString());
         // updated teams is where the team with the same id as the updated team is replaced with the updated team
         List<Team> updatedTeams = state.allTeams.map((team) => team.id == event.team.id ? event.team : team).toList();
+        print("updated teams" + updatedTeams.toString());
         emit(state.copyWith(allTeams: updatedTeams, status: GlobalStatus.success));
       } catch (e) {
         developer.log('Failure updating team ' + e.toString(), name: this.runtimeType.toString(), error: e);
