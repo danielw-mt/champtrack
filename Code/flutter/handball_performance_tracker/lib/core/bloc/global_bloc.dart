@@ -78,6 +78,7 @@ class GlobalBloc extends Bloc<GlobalEvent, GlobalState> {
         emit(state.copyWith(status: GlobalStatus.loading));
         Player newPlayer = await PlayerFirebaseRepository().createPlayer(event.player);
         emit(state.copyWith(allPlayers: [...state.allPlayers, newPlayer], status: GlobalStatus.success));
+        // TODO update team with new player
       } catch (e) {
         developer.log('Failure creating player ' + e.toString(), name: this.runtimeType.toString(), error: e);
         emit(state.copyWith(status: GlobalStatus.failure));
