@@ -25,10 +25,7 @@ class DefaultFirebaseOptions {
       case TargetPlatform.iOS:
         return ios;
       case TargetPlatform.macOS:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for macos - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return macos;
       case TargetPlatform.windows:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for windows - '
@@ -47,30 +44,40 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyDV7n7FmKrrNeLLiJ02nXGs8pIMLtjzHFs',
-    appId: '1:974814103289:web:851ef360793cebd006c428',
-    messagingSenderId: '974814103289',
-    projectId: 'handball-tracker-dev',
-    authDomain: 'handball-tracker-dev.firebaseapp.com',
-    storageBucket: 'handball-tracker-dev.appspot.com',
-    measurementId: 'G-0BMS52683E',
+    apiKey: 'AIzaSyCvw0AUjf-LXcrWFvhBiYBvaQ2-wC6fQEk',
+    appId: '1:139239443567:web:37f3d1d287ec068ff6d19a',
+    messagingSenderId: '139239443567',
+    projectId: 'intercep-production',
+    authDomain: 'intercep-production.firebaseapp.com',
+    storageBucket: 'intercep-production.appspot.com',
+    measurementId: 'G-GY9VB5TGX3',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyDgjjjDLuQoL5CTGvlAVizQiqFfqdsXMow',
-    appId: '1:974814103289:android:7044af92503d46c606c428',
-    messagingSenderId: '974814103289',
-    projectId: 'handball-tracker-dev',
-    storageBucket: 'handball-tracker-dev.appspot.com',
+    apiKey: 'AIzaSyCKoZZxN3DWbOQaqLT4OYGVzWota47iOBw',
+    appId: '1:139239443567:android:3f9512688890a4a7f6d19a',
+    messagingSenderId: '139239443567',
+    projectId: 'intercep-production',
+    storageBucket: 'intercep-production.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyBIopT3JQCid-K1_Ylcmc6Q7tfSVckVjLM',
-    appId: '1:974814103289:ios:3b8f55c5a58d414306c428',
-    messagingSenderId: '974814103289',
-    projectId: 'handball-tracker-dev',
-    storageBucket: 'handball-tracker-dev.appspot.com',
-    iosClientId: '974814103289-aatra0lucgs28illj3v3ln7fr0phhhot.apps.googleusercontent.com',
+    apiKey: 'AIzaSyCmBR3wt1JnlUngbwLVBkJr1L8f2SG11qo',
+    appId: '1:139239443567:ios:27467655dbd8bfbaf6d19a',
+    messagingSenderId: '139239443567',
+    projectId: 'intercep-production',
+    storageBucket: 'intercep-production.appspot.com',
+    iosClientId: '139239443567-3pru3786f2uojlo3mmen4ai7gmglr5up.apps.googleusercontent.com',
     iosBundleId: 'mad.tf.fau.de.HBPerformanceTracker',
+  );
+
+  static const FirebaseOptions macos = FirebaseOptions(
+    apiKey: 'AIzaSyCmBR3wt1JnlUngbwLVBkJr1L8f2SG11qo',
+    appId: '1:139239443567:ios:eabdd1aede51ccdaf6d19a',
+    messagingSenderId: '139239443567',
+    projectId: 'intercep-production',
+    storageBucket: 'intercep-production.appspot.com',
+    iosClientId: '139239443567-7fajq1j3c497ejtvrlenppgs5difep6t.apps.googleusercontent.com',
+    iosBundleId: 'mad.tf.fau.de.handballPerformanceTracker',
   );
 }

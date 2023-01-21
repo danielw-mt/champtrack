@@ -1,0 +1,13 @@
+export 'colors.dart';
+export 'design_constants.dart';
+export 'game_actions.dart';
+export 'strings_general.dart';
+export 'strings_game_screen.dart';
+export 'field_size_parameters.dart';
+export 'positions.dart';
+export 'settings_config.dart';
+export 'strings_authentication.dart';
+export 'strings_dashboard.dart';
+export 'strings_game_settings.dart';
+export 'strings_team_management.dart';
+export 'team_constants.dart';
