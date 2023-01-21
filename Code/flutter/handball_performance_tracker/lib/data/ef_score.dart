@@ -1,18 +1,6 @@
-import 'package:handball_performance_tracker/constants/game_actions.dart';
-import 'package:handball_performance_tracker/constants/positions.dart';
-import 'package:handball_performance_tracker/data/game_action.dart';
-import 'package:logger/logger.dart';
-
-var logger = Logger(
-  printer: PrettyPrinter(
-      methodCount: 2, // number of method calls to be displayed
-      errorMethodCount: 8, // number of method calls if stacktrace is provided
-      lineLength: 120, // width of the output
-      colors: true, // Colorful log messages
-      printEmojis: true, // Print an emoji for each log message
-      printTime: false // Should each log print contain a timestamp
-      ),
-);
+import 'package:handball_performance_tracker/core/core.dart';
+import 'package:handball_performance_tracker/data/models/game_action_model.dart';
+import 'dart:developer' as developer;
 
 class EfScore {
   double score;
@@ -21,19 +9,17 @@ class EfScore {
 
   EfScore()
       : score = 0,
-        actionStats = {
-          for (var v in efScoreParameters.values.expand((e) => e.keys)) v: 0
-        },
+        actionStats = {for (var v in efScoreParameters.values.expand((e) => e.keys)) v: 0},
         numOfActions = 0;
 
   /// calculates the ef-score using the weights specified in game_actions.dart, updates property `score`
   void calculate() {
     double positiveScore = 0;
     double negativeScore = 0;
-    efScoreParameters[positiveAction]!.forEach((key, value) {
+    efScoreParameters[positiveActionTag]!.forEach((key, value) {
       positiveScore += value * actionStats[key]!;
     });
-    efScoreParameters[negativeAction]!.forEach((key, value) {
+    efScoreParameters[negativeActionTag]!.forEach((key, value) {
       negativeScore += value * actionStats[key]!;
     });
     if (numOfActions > 0) {
@@ -46,29 +32,37 @@ class EfScore {
   /// determine the correct string identifier from `efScoreParameters` for @param action
   /// distinguished between different throw positions and the player's specified @param position for goals and error throws
   String? _getActionType(GameAction action, List<String> positions) {
-    String? actionType = action.actionType;
-    if (actionType == goal) {
+    String? actionType = action.tag;
+    if (actionType == goalTag) {
       // don't consider position and distance if goal happened after minute 55
-      if (action.relativeTime > lastFiveMinThreshold) {
-        actionType = goalLastFive;
-      } else if (_isPosition(positions, action.throwLocation)) {
-        actionType = goalPos;
+      // if (action.relativeTime > lastFiveMinThreshold) {
+      //   actionType = goalChrunchtimeTag;
+      // } else 
+      if (_isPosition(positions, action.throwLocation)) {
+        actionType = goalPosTag;
       } else if (_isInNineMeters(action.throwLocation[1])) {
-        actionType = goalUnderNine;
+        actionType = goalSubNineTag;
       } else {
-        actionType = goalOutsideNine;
+        actionType = goalExtNineTag;
       }
-    } else if (actionType == errThrow) {
-      if (action.relativeTime > lastFiveMinThreshold) {
-        // don't consider position and distance if err happened after minute 55
-        actionType = errThrowLastFive;
-      } else if (_isPosition(positions, action.throwLocation)) {
-        actionType = errThrowPos;
+    } else if (actionType == missTag) {
+      // if (action.relativeTime > lastFiveMinThreshold) {
+      //   // don't consider position and distance if err happened after minute 55
+      //   actionType = missCrunchtimeTag;
+      // } else 
+      if (_isPosition(positions, action.throwLocation)) {
+        actionType = missPosTag;
       } else if (_isInNineMeters(action.throwLocation[1])) {
-        actionType = errThrowUnderNine;
+        actionType = missSubNineTag;
       } else {
-        actionType = errThrowOutsideNine;
+        actionType = missExtNineTag;
       }
+    } else if (actionType == goal7mTag) {
+      // 7m goal is weighted identically to goal under nine
+      actionType = goalSubNineTag;
+    } else if (actionType == missed7mTag) {
+      // 7m error throw is weighted identically to errow throw under nine
+      actionType = goalSubNineTag;
     } else if (!actionStats.containsKey(actionType)) {
       actionType = null;
     }
@@ -82,11 +76,9 @@ class EfScore {
       return true;
     }
     // player has circle position and action was performed in 9m circle
-    if (positions.contains(circle) && _isInNineMeters(sector[1])) {
+    if (positions.contains(circlePos) && _isInNineMeters(sector[1])) {
       // action was performed in backcourt area
-      if ((sector[0] == backcourtLeft) ||
-          (sector[0] == backcourtMiddle) ||
-          (sector[0] == backcourtRight)) {
+      if ((sector[0] == backcourtLeftPos) || (sector[0] == backcourtMiddlePos) || (sector[0] == backcourtRightPos)) {
         return true;
       }
     }
@@ -94,7 +86,7 @@ class EfScore {
   }
 
   /// @return true if the action happened within the 9-m-circle
-  bool _isInNineMeters(String distance) => distance != outsideNine;
+  bool _isInNineMeters(String distance) => distance != extNineThrowPos;
 }
 
 class LiveEfScore extends EfScore {
@@ -103,11 +95,12 @@ class LiveEfScore extends EfScore {
     if (actionType != null) {
       actionStats[actionType] = actionStats[actionType]! + 1;
       numOfActions++;
-      logger.d("Action added: $actionType, old ef-score: $score");
+      
+      developer.log("Action added: $actionType, old ef-score: $score");
       calculate();
-      logger.d("New ef-score: $score");
+      developer.log("New ef-score: $score");
     } else {
-      logger.i("Action type $actionType is unknown. Action ignored.");
+      developer.log("Action type $actionType is unknown. Action ignored.");
     }
   }
 
@@ -117,12 +110,12 @@ class LiveEfScore extends EfScore {
       if (actionStats[actionType]! >= 1) {
         actionStats[actionType] = actionStats[actionType]! - 1;
         numOfActions--;
-        logger.d("Action deleted: $actionType, old ef-score: $score");
+        developer.log("Action deleted: $actionType, old ef-score: $score");
         calculate();
-        logger.d("New ef-score: $score");
+        developer.log("New ef-score: $score");
       }
     } else {
-      logger.i("Action type $actionType is unknown. No delete performed.");
+      developer.log("Action type $actionType is unknown. No delete performed.");
     }
   }
 }
