@@ -1,7 +1,7 @@
 {
   "file_generated_by": "FlutterFire CLI",
   "purpose": "FirebaseAppID & ProjectID for this Firebase app in this directory",
-  "GOOGLE_APP_ID": "1:139239443567:ios:27467655dbd8bfbaf6d19a",
-  "FIREBASE_PROJECT_ID": "intercep-production",
-  "GCM_SENDER_ID": "139239443567"
+  "GOOGLE_APP_ID": "1:974814103289:ios:3b8f55c5a58d414306c428",
+  "FIREBASE_PROJECT_ID": "handball-tracker-dev",
+  "GCM_SENDER_ID": "974814103289"
 }
