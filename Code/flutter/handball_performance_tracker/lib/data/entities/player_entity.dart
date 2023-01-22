@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
+import 'package:handball_performance_tracker/core/core.dart';
 import 'dart:developer' as developer;
 
 /// Representation of a club entry in firebase
@@ -46,12 +47,14 @@ class PlayerEntity extends Equatable {
     return 'PlayerEntity { firstName: $firstName, lastName: $lastName, nickName: $nickName, number: $number, positions: ${positions.toString()}, teams: ${teams.toString()}}';
   }
 
-  static PlayerEntity fromJson(Map<String, Object> json) {
+  static Future<PlayerEntity> fromJson(Map<String, Object> json) async {
+    DocumentReference clubReference = await getClubReference();
+    DocumentReference playerReference = clubReference.collection('players').doc(json['id'] as String);
     return PlayerEntity(
-      documentReference: json['documentReference'] as DocumentReference,
+      documentReference: playerReference,
       firstName: json['firstName'] as String,
       lastName: json['lastName'] as String,
-      nickName: json['nickName'] as String,
+      nickName: "",
       number: json['number'] as int,
       positions: json['positions'] as List<String>,
       teams: json['teams'] as List<String>,

@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
+import 'package:handball_performance_tracker/core/core.dart';
 import 'package:handball_performance_tracker/data/models/game_action_model.dart';
 
 class GameActionEntity extends Equatable {
@@ -51,9 +52,11 @@ class GameActionEntity extends Equatable {
         'timestamp: $timestamp }';
   }
 
-  static GameActionEntity fromJson(Map<String, Object> json) {
+  static Future<GameActionEntity> fromJson(Map<String, Object> json) async {
+     DocumentReference clubReference = await getClubReference();
+    DocumentReference actionReference = await clubReference.collection('games').doc(json['gameId'] as String).collection('actions').doc(json['id'] as String);
     return GameActionEntity(
-      documentReference: json['documentReference'] as DocumentReference,
+      documentReference: actionReference,
       context: json['context'] as String,
       playerId: json['playerId'] as String,
       tag: json['tag'] as String,

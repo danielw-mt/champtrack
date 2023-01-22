@@ -33,7 +33,3 @@ class SignOutRequested extends AuthEvent {}
 class DisplayError extends AuthEvent {
   DisplayError();
 }
-
-class GetTemplateTeam extends AuthEvent {
-  GetTemplateTeam();
-}

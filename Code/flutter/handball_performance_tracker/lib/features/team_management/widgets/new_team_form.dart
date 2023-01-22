@@ -139,9 +139,9 @@ class AddNewTeam extends StatelessWidget {
                                         buttonGreyColor)),
                             onPressed: () {
                               print("trying to load team");
-                              AuthBloc authBloc =
-                                  BlocProvider.of<AuthBloc>(context);
-                              authBloc.add(GetTemplateTeam());
+                              GlobalBloc globalBloc =
+                                  BlocProvider.of<GlobalBloc>(context);
+                              globalBloc.add(GetTemplateTeam());
                             },
                             child: const Text(
                               "Load Team",

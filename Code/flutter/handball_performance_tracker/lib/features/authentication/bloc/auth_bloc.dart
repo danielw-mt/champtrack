@@ -1,12 +1,9 @@
-import 'package:http/http.dart' as http;
 import 'package:bloc/bloc.dart';
 import 'package:handball_performance_tracker/data/repositories/repositories.dart';
 import 'package:handball_performance_tracker/data/models/models.dart';
-import 'package:handball_performance_tracker/data/entities/entities.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'dart:convert';
 
 part 'auth_event.dart';
 part 'auth_state.dart';
@@ -89,29 +86,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       emit(state.copyWith(authStatus: AuthStatus.UnAuthenticated));
     });
 
-    /// Create a template team from json file in firebase storage
-    /// This is called when a new club is created
-    on<GetTemplateTeam>((event, emit) async {
-      String apiLink =
-          "https://firebasestorage.googleapis.com/v0/b/handball-tracker-dev.appspot.com/o/public%2Fsetup_data.json?alt=media&token=15042bee-f2ce-4565-9338-a74acac4f54b";
-      try {
-        var response = await http.get(Uri.parse(apiLink));
-        if (response.statusCode == 200) {
-          // If the server did return a 200 OK response,
-          // then parse the JSON.
-          final Map<String, dynamic> data = json.decode(response.body);
-          Team templateTeam = Team.fromEntity(TeamEntity.(data["example_team"]));
-        } else {
-          // If the server did not return a 200 OK response,
-          // then throw an exception.
-          throw Exception('Failed to load template team');
-        }
-      } catch (e) {
-        print("Error in GetTemplateTeam event: $e");
-        emit(state.copyWith(
-            authStatus: AuthStatus.AuthError, error: e.toString()));
-      }
-    });
+    
   }
 
   /// Returns a documentreference of the logged in club so that it can be used in later queries within that club

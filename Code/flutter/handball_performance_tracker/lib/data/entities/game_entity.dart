@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:handball_performance_tracker/data/models/models.dart';
+import 'package:handball_performance_tracker/data/entities/entities.dart';
 import 'package:handball_performance_tracker/data/repositories/repositories.dart';
+import 'package:handball_performance_tracker/core/core.dart';
 
 /// Representation of a club entry in firebase
 class GameEntity extends Equatable {
@@ -16,7 +18,8 @@ class GameEntity extends Equatable {
   final int? scoreOpponent;
   final String? season;
   final int? startTime;
-  final int? stopTime; // a game could be saved without a stop time (e.g. if the game is still in progress)
+  final int?
+      stopTime; // a game could be saved without a stop time (e.g. if the game is still in progress)
   final int? stopWatchTime;
   final String? teamId;
   final bool? attackIsLeft;
@@ -70,9 +73,22 @@ class GameEntity extends Equatable {
     return 'GameEntity { date: $date, isAtHome: $isAtHome, lastSync: $lastSync, location: $location, onFieldPlayers: ${onFieldPlayers.toString()}, opponent: $opponent, scoreHome: $scoreHome, scoreOpponent: $scoreOpponent, season: $season, startTime: $startTime, stopTime: $stopTime, stopWatchTime: $stopWatchTime, teamId: $teamId, attackIsLeft: $attackIsLeft, gameActions: ${gameActions.toString()}, isTestGame: $isTestGame }';
   }
 
-  static GameEntity fromJson(Map<String, Object> json) {
+  static Future<GameEntity> fromJson(Map<String, Object> json) async {
+    DocumentReference clubReference = await getClubReference();
+    DocumentReference gameReference =
+        await clubReference.collection('games').doc(json['id'] as String);
+    // build game action from game action in the json
+    List<GameAction> gameActions = [];
+    if (json['gameActions'] != null) {
+      Map<String, dynamic> gameActionsJson =
+          json['gameActions'] as Map<String, dynamic>;
+      for (var entry in gameActionsJson.entries) {
+        gameActions.add(GameAction.fromEntity(
+            await GameActionEntity.fromJson(entry.value)));
+      }
+    }
     return GameEntity(
-      documentReference: json['documentReference'] as DocumentReference?,
+      documentReference: gameReference,
       date: json['date'] as Timestamp?,
       isAtHome: json['isAtHome'] as bool?,
       lastSync: json['lastSync'] as String?,
@@ -87,7 +103,7 @@ class GameEntity extends Equatable {
       stopWatchTime: json['stopWatchTime'] as int?,
       teamId: json['teamId'] as String?,
       attackIsLeft: json['attackIsLeft'] as bool?,
-      gameActions: json['gameActions'] as List<GameAction>?,
+      gameActions: gameActions,
       isTestGame: json['isTestGame'] as bool?,
     );
   }
@@ -102,7 +118,8 @@ class GameEntity extends Equatable {
         });
       }
       // build all the game actions
-      List<GameAction> gameActions = await GameFirebaseRepository().fetchActions(snap.reference.id);
+      List<GameAction> gameActions =
+          await GameFirebaseRepository().fetchActions(snap.reference.id);
       return GameEntity(
         documentReference: snap.reference,
         date: data['date'] != null ? data['date'] : Timestamp.now(),
@@ -112,13 +129,16 @@ class GameEntity extends Equatable {
         onFieldPlayers: onFieldPlayers,
         opponent: data['opponent'] != null ? data['opponent'] : "",
         scoreHome: data['scoreHome'] != null ? data['scoreHome'] : 0,
-        scoreOpponent: data['scoreOpponent'] != null ? data['scoreOpponent'] : 0,
+        scoreOpponent:
+            data['scoreOpponent'] != null ? data['scoreOpponent'] : 0,
         season: data['season'] != null ? data['season'] : "",
         startTime: data['startTime'] != null ? data['startTime'] : 0,
         stopTime: data['stopTime'] != null ? data['stopTime'] : 0,
-        stopWatchTime: data['stopWatchTime'] != null ? data['stopWatchTime'] : 0,
+        stopWatchTime:
+            data['stopWatchTime'] != null ? data['stopWatchTime'] : 0,
         teamId: data['teamId'] != null ? data['teamId'] : "",
-        attackIsLeft: data['attackIsLeft'] != null ? data['attackIsLeft'] : true,
+        attackIsLeft:
+            data['attackIsLeft'] != null ? data['attackIsLeft'] : true,
         gameActions: gameActions,
         isTestGame: data['isTestGame'] != null ? data['isTestGame'] : false,
       );
