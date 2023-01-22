@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:handball_performance_tracker/data/models/team_model.dart';
+import 'package:handball_performance_tracker/features/authentication/authentication.dart';
 import 'package:handball_performance_tracker/features/team_management/team_management.dart';
 import 'package:handball_performance_tracker/core/core.dart';
 
@@ -97,7 +98,8 @@ class AddNewTeam extends StatelessWidget {
                               if (_formKey.currentState!.validate()) {
                                 Team newTeam = Team(
                                   name: _teamNameController.text,
-                                  type:  TEAM_TYPE_MAPPING[0], //teamManBloc.state.selectedTeamType,
+                                  type: TEAM_TYPE_MAPPING[
+                                      0], //teamManBloc.state.selectedTeamType,
                                 );
                                 context
                                     .read<GlobalBloc>()
@@ -127,7 +129,29 @@ class AddNewTeam extends StatelessWidget {
                                   color: Colors.black),
                             ),
                           ),
-                        )
+                        ),
+                        // Button for loading a team from firebase storage
+                        Flexible(
+                          child: ElevatedButton(
+                            style: ButtonStyle(
+                                backgroundColor:
+                                    MaterialStateProperty.all<Color>(
+                                        buttonGreyColor)),
+                            onPressed: () {
+                              print("trying to load team");
+                              AuthBloc authBloc =
+                                  BlocProvider.of<AuthBloc>(context);
+                              authBloc.add(GetTemplateTeam());
+                            },
+                            child: const Text(
+                              "Load Team",
+                              style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black),
+                            ),
+                          ),
+                        ),
                       ],
                     )
                   ],

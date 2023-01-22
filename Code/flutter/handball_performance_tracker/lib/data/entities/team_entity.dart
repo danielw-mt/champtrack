@@ -41,15 +41,18 @@ class TeamEntity extends Equatable {
     return 'TeamEntity { name: $name, onFieldPlayers: ${onFieldPlayers.toString()}, players: ${players.toString()}, type: $type}';
   }
 
-  // static TeamEntity fromJson(Map<String, Object> json) {
-  //   return TeamEntity(
-  //     json['documentReference'] as DocumentReference,
-  //     json['name'] as String,
-  //     json['onFieldPlayers'] as List<DocumentReference>,
-  //     json['players'] as List<DocumentReference>,
-  //     json['type'] as String,
-  //   );
-  // }
+  static TeamEntity fromJson(Map<String, Object> json) async {
+    DocumentReference clubReference = await getClubReference();
+    DocumentReference teamReference = clubReference.collection("teams").doc(json['id'].toString());
+    return TeamEntity(
+      documentReference: teamReference,
+      name: json['name'] as String,
+      onFieldPlayers: [],
+      
+      json['players'] as List<DocumentReference>,
+      json['type'] as String,
+    );
+  }
 
   static Future<TeamEntity> fromSnapshot(DocumentSnapshot snap) async {
     Map<String, dynamic> data = snap.data() as Map<String, dynamic>;

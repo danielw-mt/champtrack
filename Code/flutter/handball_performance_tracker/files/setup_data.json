@@ -1,118 +1,182 @@
 {
     "example_team": {
-        "id": 1,
+        "id": "lUl19nvlöeklöasf",
         "name": "THW Kiel",
         "players": [
             {
                 "id": "h1sPrDEpLgkuNgIzzn2M",
                 "first_name": "Niklas Landin",
                 "last_name": "Jacobsen",
-                "positions": "TW",
+                "games": [],
+                "positions": ["TW"],
+                "teams": [
+                    "lUl19nvlöeklöasf"
+                ],
                 "number": 1
             },
             {
                 "id": "MzWDFzwundiPTTr5V13O",
                 "first_name": "Philip",
                 "last_name": "Saggau",
-                "positions": "TW",
+                "games": [],
+                "positions": ["TW"],
+                "teams": [
+                    "lUl19nvlöeklöasf"
+                ],
                 "number": 12
             },
             {
-                "id": 16,
+                "id": "asdfmäasdföus",
                 "first_name": "Tomás",
                 "last_name": "Mrkva",
-                "positions": "TW",
+                "games": [],
+                "positions": ["TW"],
+                "teams": [
+                    "lUl19nvlöeklöasf"
+                ],
                 "number": 16
             },
             {
                 "id": "jbnJeSNfa7IxR1MLSAbO",
                 "first_name": "Domagoj",
                 "last_name": "Duvnjak",
-                "positions": "RM",
+                "games": [],
+                "positions": ["RM"],
+                "teams": [
+                    "lUl19nvlöeklöasf"
+                ],
                 "number": 4
             },
             {
                 "id": "53IHmY4toB5nGlngMDsb",
                 "first_name": "Sander",
                 "last_name": "Sagosen",
-                "positions": "RR",
+                "games": [],
+                "positions": ["RR"],
+                "teams": [
+                    "lUl19nvlöeklöasf"
+                ],
                 "number": 5
             },
             {
                 "id": "50fTmfugZ5SeUkS6PKgN",
                 "first_name": "Harald",
                 "last_name": "Reinkind",
-                "positions": "RL",
+                "games": [],
+                "positions": ["RL"],
+                "teams": [
+                    "lUl19nvlöeklöasf"
+                ],
                 "number": 6
             },
             {
                 "id": "2TBldbJcC02oNbfANusI",
                 "first_name": "Ben Connar",
                 "last_name": "Battermann",
-                "positions": "RR",
+                "games": [],
+                "positions": ["RR"],
+                "teams": [
+                    "lUl19nvlöeklöasf"
+                ],
                 "number": 8
             },
             {
                 "id": "aKbmvDi4owGvlNNA7Ce6",
                 "first_name": "Steffen",
                 "last_name": "Weinhold",
-                "positions": "RM",
+                "games": [],
+                "positions": ["RM"],
+                "teams": [
+                    "lUl19nvlöeklöasf"
+                ],
                 "number": 13
             },
             {
                 "id": 19,
                 "first_name": "Henri",
                 "last_name": "Pabst",
-                "positions": "RL",
+                "games": [],
+                "positions": ["RL"],
+                "teams": [
+                    "lUl19nvlöeklöasf"
+                ],
                 "number": 19
             },
             {
                 "id": "paPtYZVG7yVNEjLlN6vO",
                 "first_name": "Sven",
                 "last_name": "Ehrig",
-                "positions": "LA",
+                "games": [],
+                "positions": ["LA"],
+                "teams": [
+                    "lUl19nvlöeklöasf"
+                ],
                 "number": 3
             },
             {
                 "id": "5EHckj8oJozCxVCIsmBF",
                 "first_name": "Magnus Landin",
                 "last_name": "Jacobsen",
-                "positions": "RA",
+                "games": [],
+                "positions": ["RA"],
+                "teams": [
+                    "lUl19nvlöeklöasf"
+                ],
                 "number": 7
             },
             {
                 "id": 18,
                 "first_name": "Niclas",
                 "last_name": "Ekberg",
-                "positions": "LA",
+                "games": [],
+                "positions": ["LA"],
+                "teams": [
+                    "lUl19nvlöeklöasf"
+                ],
                 "number": 12
             },
             {
                 "id": 20,
                 "first_name": "Yannick",
                 "last_name": "Fraatz",
-                "positions": "RA",
+                "games": [],
+                "positions": ["RA"],
+                "teams": [
+                    "lUl19nvlöeklöasf"
+                ],
                 "number": 20
             },
             {
                 "id": 11,
                 "first_name": "Petter",
                 "last_name": "Overby",
-                "positions": "KL",
+                "games": [],
+                "positions": ["KL"],
+                "teams": [
+                    "lUl19nvlöeklöasf"
+                ],
                 "number": 11
             },
             {
                 "id": "9CAOHoEzOyVRQ6vrSSgf",
                 "first_name": "Patrick",
                 "last_name": "Wiencek",
-                "positions": "KL",
+                "games": [],
+                "positions": ["KL"],
+                "teams": [
+                    "lUl19nvlöeklöasf"
+                ],
                 "number": 17
             },
             {
                 "id": "3JkgEKlpVfqcAJF51EP0",
                 "first_name": "Hendrik",
                 "last_name": "Pekeler",
-                "positions": "KL",
+                "games": [],
+                "positions": ["KL"],
+                "teams": [
+                    "lUl19nvlöeklöasf"
+                ],
                 "number": 61
             }
         ]
