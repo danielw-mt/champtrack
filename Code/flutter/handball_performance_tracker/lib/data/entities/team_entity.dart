@@ -41,20 +41,24 @@ class TeamEntity extends Equatable {
     return 'TeamEntity { name: $name, onFieldPlayers: ${onFieldPlayers.toString()}, players: ${players.toString()}, type: $type}';
   }
 
-  static Future<TeamEntity> fromJson(Map<String, Object> json) async {
+  static Future<TeamEntity> fromJson(json) async {
+    Map<String, dynamic> data = json as Map<String, dynamic>;
     DocumentReference clubReference = await getClubReference();
-    DocumentReference teamReference = clubReference.collection("teams").doc(json['id'].toString());
-    List<String> playerIds = json['onFieldPlayers'] as List<String>;
+    DocumentReference teamReference = clubReference.collection("teams").doc(data['id'].toString());
     List<DocumentReference> playerReferences = [];
-    playerIds.forEach((String playerId) {
-      playerReferences.add(clubReference.collection("players").doc(playerId));
-    });
+    if (data['players'] != null) {
+      List<String> playerIds = data['players'].cast<String>();
+      await Future.forEach(playerIds, (String playerId) async {
+        DocumentReference playerReference = clubReference.collection("players").doc(playerId);
+        playerReferences.add(playerReference);
+      });
+    }
     return TeamEntity(
       documentReference: teamReference,
-      name: json['name'] as String,
+      name: data['name'] as String,
       onFieldPlayers: [],
       players: playerReferences,
-      type: json['type'] as String,
+      type: data['type'] as String,
     );
   }
 

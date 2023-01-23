@@ -47,17 +47,31 @@ class PlayerEntity extends Equatable {
     return 'PlayerEntity { firstName: $firstName, lastName: $lastName, nickName: $nickName, number: $number, positions: ${positions.toString()}, teams: ${teams.toString()}}';
   }
 
-  static Future<PlayerEntity> fromJson(Map<String, Object> json) async {
+  static Future<PlayerEntity> fromJson(json) async {
+    Map<String, dynamic> data = json as Map<String, dynamic>;
     DocumentReference clubReference = await getClubReference();
-    DocumentReference playerReference = clubReference.collection('players').doc(json['id'] as String);
+    DocumentReference playerReference =
+        clubReference.collection('players').doc(data['id'] as String);
+    List<String> positions = [];
+    if (data['positions'] != null) {
+      data['positions'].forEach((position) {
+        positions.add(position);
+      });
+    }
+    List<String> teams = [];
+      if (data['teams'] != null) {
+        data['teams'].forEach((team) {
+          teams.add(team);
+        });
+      }
     return PlayerEntity(
       documentReference: playerReference,
-      firstName: json['firstName'] as String,
-      lastName: json['lastName'] as String,
+      firstName: data['firstName'] ?? "",
+      lastName: data['lastName'] ?? "",
       nickName: "",
-      number: json['number'] as int,
-      positions: json['positions'] as List<String>,
-      teams: json['teams'] as List<String>,
+      number: data['number'] ?? -1,
+      positions: positions,
+      teams: teams,
     );
   }
 
@@ -112,5 +126,13 @@ class PlayerEntity extends Equatable {
   }
 
   @override
-  List<Object?> get props => [documentReference, firstName, lastName, nickName, number, positions, teams];
+  List<Object?> get props => [
+        documentReference,
+        firstName,
+        lastName,
+        nickName,
+        number,
+        positions,
+        teams
+      ];
 }

@@ -52,17 +52,35 @@ class GameActionEntity extends Equatable {
         'timestamp: $timestamp }';
   }
 
-  static Future<GameActionEntity> fromJson(Map<String, Object> json) async {
-     DocumentReference clubReference = await getClubReference();
-    DocumentReference actionReference = await clubReference.collection('games').doc(json['gameId'] as String).collection('actions').doc(json['id'] as String);
+  static Future<GameActionEntity> fromJson(json) async {
+    Map<String, dynamic> data = json as Map<String, dynamic>;
+    DocumentReference clubReference = await getClubReference();
+    DocumentReference actionReference = await clubReference
+        .collection('games')
+        .doc(data['gameId'] as String)
+        .collection('actions')
+        .doc(data['id'] as String);
+    List<String> throwLocation = [];
+    if (data['throwLocation'] != null) {
+      data['throwLocation'].forEach((locationString) {
+        throwLocation.add(locationString);
+      });
+    }
+    List<double> coordinates = [];
+    if (data['coordinates'] != null) {
+      data['coordinates'].forEach((coordinate) {
+        coordinates.add(coordinate[0].toDouble());
+        coordinates.add(coordinate[1].toDouble());
+      });
+    }
     return GameActionEntity(
       documentReference: actionReference,
-      context: json['context'] as String,
-      playerId: json['playerId'] as String,
-      tag: json['tag'] as String,
-      throwLocation: json['throwLocation'] as List<String>,
-      coordinates: json['coordinates'] as List<double>,
-      timestamp: json['timestamp'] as int,
+      context: data['context'] != null ? data['context'] as String : "",
+      playerId: data['playerId'] != null ? data['playerId'] as String : "",
+      tag: data['tag'] != null ? data['tag'] as String : "",
+      throwLocation: throwLocation,
+      coordinates: coordinates,
+      timestamp: data['timestamp'] != null ? data['timestamp'] as int : -1,
     );
   }
 
@@ -76,7 +94,10 @@ class GameActionEntity extends Equatable {
           throwLocation.add(locationString);
         });
       }
-      List<double> coordinates = [data['coordinates'][0].toDouble(), data['coordinates'][1].toDouble()];
+      List<double> coordinates = [
+        data['coordinates'][0].toDouble(),
+        data['coordinates'][1].toDouble()
+      ];
       return GameActionEntity(
         documentReference: snap.reference,
         context: data['context'] != null ? data['context'] as String : "",
@@ -104,5 +125,13 @@ class GameActionEntity extends Equatable {
   }
 
   @override
-  List<Object?> get props => [documentReference, context, playerId, tag, throwLocation, coordinates, timestamp];
+  List<Object?> get props => [
+        documentReference,
+        context,
+        playerId,
+        tag,
+        throwLocation,
+        coordinates,
+        timestamp
+      ];
 }

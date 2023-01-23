@@ -73,38 +73,46 @@ class GameEntity extends Equatable {
     return 'GameEntity { date: $date, isAtHome: $isAtHome, lastSync: $lastSync, location: $location, onFieldPlayers: ${onFieldPlayers.toString()}, opponent: $opponent, scoreHome: $scoreHome, scoreOpponent: $scoreOpponent, season: $season, startTime: $startTime, stopTime: $stopTime, stopWatchTime: $stopWatchTime, teamId: $teamId, attackIsLeft: $attackIsLeft, gameActions: ${gameActions.toString()}, isTestGame: $isTestGame }';
   }
 
-  static Future<GameEntity> fromJson(Map<String, Object> json) async {
+  static Future<GameEntity> fromJson(json) async {
+    Map<String, dynamic> data = json as Map<String, dynamic>;
     DocumentReference clubReference = await getClubReference();
     DocumentReference gameReference =
-        await clubReference.collection('games').doc(json['id'] as String);
+        await clubReference.collection('games').doc(data['id'] as String);
     // build game action from game action in the json
     List<GameAction> gameActions = [];
-    if (json['gameActions'] != null) {
+    if (data['gameActions'] != null) {
       Map<String, dynamic> gameActionsJson =
-          json['gameActions'] as Map<String, dynamic>;
+          data['gameActions'] as Map<String, dynamic>;
       for (var entry in gameActionsJson.entries) {
         gameActions.add(GameAction.fromEntity(
             await GameActionEntity.fromJson(entry.value)));
       }
     }
+    List<String> onFieldPlayers = [];
+    if (data['onFieldPlayers'] != null) {
+      data['onFieldPlayers'].forEach((player) {
+        onFieldPlayers.add(player);
+      });
+    }
     return GameEntity(
       documentReference: gameReference,
-      date: json['date'] as Timestamp?,
-      isAtHome: json['isAtHome'] as bool?,
-      lastSync: json['lastSync'] as String?,
-      location: json['location'] as String?,
-      onFieldPlayers: json['onFieldPlayers'] as List<String>?,
-      opponent: json['opponent'] as String?,
-      scoreHome: json['scoreHome'] as int?,
-      scoreOpponent: json['scoreOpponent'] as int?,
-      season: json['season'] as String?,
-      startTime: json['startTime'] as int?,
-      stopTime: json['stopTime'] as int?,
-      stopWatchTime: json['stopWatchTime'] as int?,
-      teamId: json['teamId'] as String?,
-      attackIsLeft: json['attackIsLeft'] as bool?,
+      // don't know how to cast string to timestamp so just take the current datetime
+      date: Timestamp.now(),
+      isAtHome: data['isAtHome'] != null ? data['isAtHome'] : true,
+      lastSync: data['lastSync'] != null ? data['lastSync'] : "",
+      location: data['location'] != null ? data['location'] : "",
+      onFieldPlayers: onFieldPlayers,
+      opponent: data['opponent'] != null ? data['opponent'] : "",
+      scoreHome: data['scoreHome'] != null ? data['scoreHome'] : 0,
+      scoreOpponent: data['scoreOpponent'] != null ? data['scoreOpponent'] : 0,
+      season: data['season'] != null ? data['season'] : "",
+      startTime: data['startTime'] != null ? data['startTime'] : 0,
+      stopTime: data['stopTime'] != null ? data['stopTime'] : 0,
+      stopWatchTime: data['stopWatchTime'] != null ? data['stopWatchTime'] : 0,
+      teamId: data['teamId'] != null ? data['teamId'] : "",
+      attackIsLeft: data['attackIsLeft'] != null ? data['attackIsLeft'] : true,
       gameActions: gameActions,
-      isTestGame: json['isTestGame'] as bool?,
+      isTestGame: data['isTestGame'] != null ? data['isTestGame'] : false,
     );
   }
 

@@ -56,7 +56,10 @@ class SignUp extends StatelessWidget {
                 padding: const EdgeInsets.all(10),
                 child: Text(
                   StringsAuth.lAppTitle,
-                  style: TextStyle(color: buttonDarkBlueColor, fontSize: height / 100 * 3, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                      color: buttonDarkBlueColor,
+                      fontSize: height / 100 * 3,
+                      fontWeight: FontWeight.bold),
                 )),
             SizedBox(
               height: height * 0.05,
@@ -79,16 +82,21 @@ class SignUp extends StatelessWidget {
               style: TextStyle(color: Colors.grey.shade800),
               autovalidateMode: AutovalidateMode.onUserInteraction,
               decoration: InputDecoration(
-                  focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: buttonGreyColor)),
-                  enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: buttonGreyColor)),
-                  disabledBorder: OutlineInputBorder(borderSide: BorderSide(color: buttonGreyColor)),
+                  focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: buttonGreyColor)),
+                  enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: buttonGreyColor)),
+                  disabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: buttonGreyColor)),
                   labelStyle: TextStyle(color: Colors.grey.shade800),
                   labelText: StringsAuth.lEmail,
                   floatingLabelBehavior: FloatingLabelBehavior.never,
                   filled: true,
                   fillColor: buttonGreyColor),
               validator: (value) {
-                return value != null && !EmailValidator.validate(value) ? StringsAuth.lInvalidEmail : null;
+                return value != null && !EmailValidator.validate(value)
+                    ? StringsAuth.lInvalidEmail
+                    : null;
               },
             ),
           );
@@ -101,9 +109,12 @@ class SignUp extends StatelessWidget {
                 controller: _passwordController,
                 textInputAction: TextInputAction.done,
                 decoration: InputDecoration(
-                    focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: buttonGreyColor)),
-                    enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: buttonGreyColor)),
-                    disabledBorder: OutlineInputBorder(borderSide: BorderSide(color: buttonGreyColor)),
+                    focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: buttonGreyColor)),
+                    enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: buttonGreyColor)),
+                    disabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: buttonGreyColor)),
                     labelStyle: TextStyle(color: Colors.grey.shade800),
                     labelText: StringsAuth.lPassword,
                     floatingLabelBehavior: FloatingLabelBehavior.never,
@@ -111,7 +122,9 @@ class SignUp extends StatelessWidget {
                     fillColor: buttonGreyColor),
                 autovalidateMode: AutovalidateMode.onUserInteraction,
                 validator: (value) {
-                  return value != null && value.length < 6 ? StringsAuth.lMin6Chars : null;
+                  return value != null && value.length < 6
+                      ? StringsAuth.lMin6Chars
+                      : null;
                 }),
           );
           var clubField = Container(
@@ -122,9 +135,12 @@ class SignUp extends StatelessWidget {
                 controller: _clubNameController,
                 textInputAction: TextInputAction.done,
                 decoration: InputDecoration(
-                    focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: buttonGreyColor)),
-                    enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: buttonGreyColor)),
-                    disabledBorder: OutlineInputBorder(borderSide: BorderSide(color: buttonGreyColor)),
+                    focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: buttonGreyColor)),
+                    enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: buttonGreyColor)),
+                    disabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: buttonGreyColor)),
                     labelStyle: TextStyle(color: Colors.grey.shade800),
                     labelText: StringsAuth.lClubName,
                     floatingLabelBehavior: FloatingLabelBehavior.never,
@@ -132,14 +148,17 @@ class SignUp extends StatelessWidget {
                     fillColor: buttonGreyColor),
                 autovalidateMode: AutovalidateMode.onUserInteraction,
                 validator: (value) {
-                  return value != null && value.length < 4 ? StringsAuth.lMin6Chars : null;
+                  return value != null && value.length < 4
+                      ? StringsAuth.lMin6Chars
+                      : null;
                 }),
           );
           if (state.authStatus == AuthStatus.Loading) {
             // Displaying the loading indicator while the user is signing up
             return const Center(child: CircularProgressIndicator());
           }
-          if (state.authStatus == AuthStatus.UnAuthenticated || state.authStatus == AuthStatus.AuthError) {
+          if (state.authStatus == AuthStatus.UnAuthenticated ||
+              state.authStatus == AuthStatus.AuthError) {
             // Displaying the sign up form if the user is not authenticated
             return Center(
               child: Padding(
@@ -154,7 +173,8 @@ class SignUp extends StatelessWidget {
                             key: _formKey,
                             child: Padding(
                               padding: const EdgeInsets.all(10),
-                              child: ListView(shrinkWrap: true, children: <Widget>[
+                              child:
+                                  ListView(shrinkWrap: true, children: <Widget>[
                                 Container(
                                   alignment: Alignment.center,
                                   child: new Image.asset(
@@ -167,44 +187,79 @@ class SignUp extends StatelessWidget {
                                   alignment: Alignment.center,
                                   child: SizedBox(
                                     width: 0.5 * width,
-                                    child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
-                                      loginHeader[0],
-                                      loginHeader[1],
-                                      Container(
-                                          alignment: Alignment.center,
-                                          padding: const EdgeInsets.all(10),
-                                          child: Text(
-                                            StringsAuth.lSignUpButton,
-                                            style: TextStyle(color: buttonDarkBlueColor, fontSize: height / 100 * 3),
-                                          )),
-                                      clubField,
-                                      eMailField,
-                                      passwordField,
-                                      Container(
-                                          height: height * 0.1,
-                                          padding: const EdgeInsets.fromLTRB(10, 20, 10, 0),
-                                          child: ElevatedButton(
-                                              style: ButtonStyle(backgroundColor: MaterialStateProperty.all<Color>(buttonLightBlueColor)),
-                                              child:
-                                                  Text(StringsAuth.lSignUpButton, style: TextStyle(fontSize: height / 100 * 2, color: Colors.black)),
-                                              onPressed: () => _createAccountWithEmailAndPassword(context))),
-                                      Row(
-                                        children: <Widget>[
-                                          const Text(StringsAuth.lAccountExists),
-                                          TextButton(
+                                    child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          loginHeader[0],
+                                          loginHeader[1],
+                                          Container(
+                                              alignment: Alignment.center,
+                                              padding: const EdgeInsets.all(10),
                                               child: Text(
-                                                StringsAuth.lBackToSignInButton,
-                                                style: TextStyle(fontSize: height / 100 * 2, color: buttonDarkBlueColor),
-                                              ),
-                                              onPressed: (() => Navigator.pushReplacement(
-                                                        context,
-                                                        MaterialPageRoute(builder: (context) => SignIn()),
-                                                      ) // switch back to sign in mode
-                                                  ))
-                                        ],
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                      ),
-                                    ]),
+                                                StringsAuth.lSignUpButton,
+                                                style: TextStyle(
+                                                    color: buttonDarkBlueColor,
+                                                    fontSize: height / 100 * 3),
+                                              )),
+                                          clubField,
+                                          eMailField,
+                                          passwordField,
+                                          Container(
+                                              height: height * 0.1,
+                                              padding:
+                                                  const EdgeInsets.fromLTRB(
+                                                      10, 20, 10, 0),
+                                              child: ElevatedButton(
+                                                  style: ButtonStyle(
+                                                      backgroundColor:
+                                                          MaterialStateProperty.all<
+                                                                  Color>(
+                                                              buttonLightBlueColor)),
+                                                  child: Text(
+                                                      StringsAuth.lSignUpButton,
+                                                      style: TextStyle(
+                                                          fontSize:
+                                                              height / 100 * 2,
+                                                          color: Colors.black)),
+                                                  onPressed: () {
+                                                    _createAccountWithEmailAndPassword(
+                                                        context);
+                                                    GlobalBloc globalBloc =
+                                                        BlocProvider.of<
+                                                                GlobalBloc>(
+                                                            context);
+                                                    globalBloc
+                                                        .add(GetTemplateTeam());
+                                                  })),
+                                          Row(
+                                            children: <Widget>[
+                                              const Text(
+                                                  StringsAuth.lAccountExists),
+                                              TextButton(
+                                                  child: Text(
+                                                    StringsAuth
+                                                        .lBackToSignInButton,
+                                                    style: TextStyle(
+                                                        fontSize:
+                                                            height / 100 * 2,
+                                                        color:
+                                                            buttonDarkBlueColor),
+                                                  ),
+                                                  onPressed: (() => Navigator
+                                                              .pushReplacement(
+                                                            context,
+                                                            MaterialPageRoute(
+                                                                builder:
+                                                                    (context) =>
+                                                                        SignIn()),
+                                                          ) // switch back to sign in mode
+                                                      ))
+                                            ],
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                          ),
+                                        ]),
                                   ),
                                 )
                               ]),

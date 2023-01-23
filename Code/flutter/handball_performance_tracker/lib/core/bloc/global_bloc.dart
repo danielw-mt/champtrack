@@ -193,7 +193,7 @@ class GlobalBloc extends Bloc<GlobalEvent, GlobalState> {
     /// This is called only one time when a new club is created first
     on<GetTemplateTeam>((event, emit) async {
       String apiLink =
-          "https://firebasestorage.googleapis.com/v0/b/handball-tracker-dev.appspot.com/o/public%2Fsetup_data.json?alt=media&token=15042bee-f2ce-4565-9338-a74acac4f54b";
+          "https://firebasestorage.googleapis.com/v0/b/handball-tracker-dev.appspot.com/o/public%2Fsetup_data.json?alt=media&token=c48e366d-3b45-4105-8f7d-2a0ba23ed054";
       try {
         var response = await http.get(Uri.parse(apiLink));
         if (response.statusCode == 200) {
@@ -208,15 +208,16 @@ class GlobalBloc extends Bloc<GlobalEvent, GlobalState> {
           }
           Team templateTeam = await Team.fromEntity(
               await TeamEntity.fromJson(data["example_team"]));
+          print("got team");
           Game templateGame = await Game.fromEntity(
               await GameEntity.fromJson(data["example_game"]));
-
+          print("got game");
+          // add template players, template team and template game to the global state
           examplePlayers.forEach((element) {
             this.add(CreatePlayer(player: element));
           });
           this.add(CreateTeam(team: templateTeam));
           this.add(CreateGame(game: templateGame));
-          // add template players, template team and template game to the global state
         } else {
           // If the server did not return a 200 OK response,
           // then throw an exception.
