@@ -134,7 +134,7 @@ class PlayersList extends StatelessWidget {
                             context: context,
                             builder: (BuildContext context) => AlertDialog(
                                   title:
-                                      Text(StringsTeamManagement.lRemovePlayer),
+                                      Text(StringsTeamManagement.lRemovePlayerWarning),
                                   content: SizedBox(
                                     child: Text(StringsTeamManagement
                                         .lRemovePlayerConfirmation),
