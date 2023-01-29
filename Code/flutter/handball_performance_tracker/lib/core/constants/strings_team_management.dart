@@ -22,7 +22,7 @@ class StringsTeamManagement {
   static const String lPlayerStartingOnField = "Player in Startaufstellung";
 
   static const String lDeleteTeam = "Team löschen";
-  static const String lConfirmDeleteTeam = "Soll das Team wirklich gelöscht werden?";
+  static const String lConfirmDeleteTeam = "Achtung! Wenn Sie das gesamte Team löschen werden alle dem Team zugeordneten Player ebenfalls gelöscht. \nDas bedeutet alle Statistiken die diesem Team und Playern zugeordnet sind, werden unwiederbringlich gelöscht. \n\nSoll das Team wirklich gelöscht werden?";
   static const String lYes = "Ja";
   static const String lNo = "Nein";
 

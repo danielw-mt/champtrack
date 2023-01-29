@@ -18,11 +18,7 @@ class PlayersList extends StatelessWidget {
     }
     teamManBloc.state.playerList =
         globalState.allTeams[teamManBloc.state.selectedTeamIndex].players;
-    // if (teamManBloc.state.playerList.length == 0) {
-    //   return Center(
-    //     child: Text(StringsGeneral.lNoPlayersWarning),
-    //   );
-    // }
+
     int numberOfPlayers = teamManBloc.state.playerList.length;
     print("Anzahl Spieler: $numberOfPlayers");
     if (globalState.status == GlobalStatus.loading) {
@@ -46,9 +42,9 @@ class PlayersList extends StatelessWidget {
                       showDialog(
                           context: context,
                           builder: (BuildContext context) => AlertDialog(
-                                title: Text("Team löschen"),
+                                title: Text(StringsTeamManagement.lDeleteTeam),
                                 content: Text(
-                                    "Soll das Team wirklich gelöscht werden?"),
+                                    StringsTeamManagement.lConfirmDeleteTeam),
                                 actions: [
                                   TextButton(
                                       onPressed: () {
@@ -57,14 +53,20 @@ class PlayersList extends StatelessWidget {
                                       child: Text("Nein")),
                                   TextButton(
                                       onPressed: () {
-                                        print("Delete team " +
-                                            globalState
-                                                .allTeams[teamManBloc
-                                                    .state.selectedTeamIndex]
-                                                .name);
-                                        // context.read<GlobalBloc>().add(DeleteTeam(
-                                        //     team: globalState.allTeams[teamManBloc
-                                        //         .state.selectedTeamIndex]));
+                                        // print("Delete team " +
+                                        //     globalState
+                                        //         .allTeams[teamManBloc
+                                        //             .state.selectedTeamIndex]
+                                        //         .name);
+                                        context.read<GlobalBloc>().add(
+                                            DeleteTeam(
+                                                team: globalState.allTeams[
+                                                    teamManBloc.state
+                                                        .selectedTeamIndex]));
+
+                                        // set selected teamindex
+                                        teamManBloc.add(SelectTeam(index: 0));
+
                                         Navigator.of(context).pop();
                                       },
                                       child: Text("Ja")),

@@ -63,6 +63,11 @@ class GlobalBloc extends Bloc<GlobalEvent, GlobalState> {
     on<DeleteTeam>((event, emit) async {
       try {
         emit(state.copyWith(status: GlobalStatus.loading));
+        // first delete all player entities clean from db before deleting team entity
+        event.team.players.forEach((player) async {
+          // print("deleting player: " + player.firstName + "" + player.lastName + " from team: " + event.team.name + "");
+          await PlayerFirebaseRepository().deletePlayer(player);
+        });
         await TeamFirebaseRepository().deleteTeam(event.team);
         // updated teams are all teams where the id does not match the deleted team
         List<Team> updatedTeams = state.allTeams.where((team) => team.id != event.team.id).toList();
