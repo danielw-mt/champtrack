@@ -151,49 +151,30 @@ class PlayersList extends StatelessWidget {
                                           Text(StringsTeamManagement.lConfirm),
                                       
                                       onPressed: () {
-                                        print("index " + index.toString());
-                                        //print selected player
-                                        // print("Player to delete " + teamManBloc.state.playerList[index].firstName + teamManBloc.state.playerList[index].number.toString());
-
+                                        // print("index " + index.toString());
                                         // update the team
                                         Team updatedTeam = globalState.allTeams[
                                             teamManBloc
                                                 .state.selectedTeamIndex];
-                                        print("Team zu updaten: " + updatedTeam.name);
+                                        // print("Team zu updaten: " + updatedTeam.name);
 
                                         Player playerToDelete = teamManBloc.state.playerList[index];
-                                        print("player to delete " + playerToDelete.toString());
+                                        // print("player to delete " + playerToDelete.toString());
                                                 
-
                                         if (updatedTeam.onFieldPlayers.contains(teamManBloc.state.playerList[index])) {
-                                          print("remove player from onFieldPlayers "+teamManBloc.state.playerList[index].lastName);
+                                          // print("remove player from onFieldPlayers "+teamManBloc.state.playerList[index].lastName);
                                           updatedTeam.onFieldPlayers.remove(playerToDelete);
                                         }
                                         updatedTeam.players.remove(playerToDelete);
-                                        print("updated team nb players " + teamManBloc.state.playerList.length.toString());
+                                        // print("updated team nb players " + teamManBloc.state.playerList.length.toString());
 
-                                        print("bloc update team" + updatedTeam.toString());
+                                        // print("bloc update team " + updatedTeam.toString());
                                         // update the player references in the rel
                                         context.read<GlobalBloc>().add(UpdateTeam(team: updatedTeam));
-                                        // if the player was only part of this team then delete this player from the players collection
-                                        // print("next if " + teamManBloc.state.playerList[index].toString());
-                                        // if (teamManBloc.state.playerList[index].teams.length == 1) {
-                                        print("delete player from players collection"+teamManBloc.state.playerList[index].lastName);
+                                        
                                         context.read<GlobalBloc>().add( 
                                             DeletePlayer(player: playerToDelete));
 
-                                        // } //else {
-                                        //   // otherwise update the player
-                                        //   Player updatedPlayer =
-                                        //       playersList[index];
-                                        //   updatedPlayer.teams
-                                        //       .remove(updatedTeam.id);
-                                        //   context.read<GlobalBloc>().add(
-                                        //       UpdatePlayer(
-                                        //           player: updatedPlayer));
-                                        // }
-                                        print("Letzter index zugriff"+ index.toString() + " " + teamManBloc.state.playerList[index].lastName);
-                                        //teamManBloc.state.playerList.removeAt(index);
                                         Navigator.of(context).pop();
                                       },
                                     ),
