@@ -18,78 +18,90 @@ class SidebarView extends StatelessWidget {
     String clubName = "";
     bool gameStarted = gameState.stopWatchTimer.rawTime.value > 0;
     // TODO implement block for gameRunning here
-    if (authState.authStatus == AuthStatus.Authenticated && authState.club != null) {
+    if (authState.authStatus == AuthStatus.Authenticated &&
+        authState.club != null) {
       clubName = authState.club!.name;
     }
 
     return Drawer(
-      child: Container(
-        color:  Colors.blue,
-        child: Stack(
-          children: [
-            ListView(
-                padding: EdgeInsets.zero,
-                children: ListTile.divideTiles(context: context, color: popupDarkBlueColor, tiles: [
-                  MenuHeader(
-                    clubName: clubName,
-                  ),
+      backgroundColor: Colors.blue,
+      child: Stack(
+        children: [
+          ListView(
+              padding: EdgeInsets.zero,
+              children: ListTile.divideTiles(
+                  context: context,
+                  color: popupDarkBlueColor,
+                  tiles: [
+                    MenuHeader(
+                      clubName: clubName,
+                    ),
 
-                  // Dashboard
-                  SimpleListEntry(text: "Dashboard", screen: DashboardView()),
-                  // show game is running button only if game is running.
-                  SimpleListEntry(
-                    text: StringsGeneral.lTeamManagement,
-                    screen: TeamManagementPage(),
-                    //children: buildTeamChildren(context),
+                    // Dashboard
+                    SimpleListEntry(text: "Dashboard", screen: DashboardView()),
+                    // show game is running button only if game is running.
+                    SimpleListEntry(
+                      text: StringsGeneral.lTeamManagement,
+                      screen: TeamManagementPage(),
+                      //children: buildTeamChildren(context),
+                    ),
+                    SidebarStatisticsButton(
+                      text: "Statistiken",
+                    ),
+                    if (gameStarted)
+                      SimpleListEntry(
+                          text: "Laufendes Spiel", screen: GameView())
+                    else
+                      Text(""),
+                  ]).toList()),
+          // Sign out button at the bottom
+          Center(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                RichText(
+                  text: TextSpan(
+                    text: StringsAuth.lSignedInAs,
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                    children: <TextSpan>[
+                      TextSpan(
+                          text: FirebaseAuth.instance.currentUser?.email
+                              .toString(),
+                          style: TextStyle(fontWeight: FontWeight.bold))
+                    ],
                   ),
-                  SidebarStatisticsButton(text: "Statistiken",),
-                  if (gameStarted) SimpleListEntry(text: "Game is running", screen: GameView()) else Text(""),
-                ]).toList()),
-            // Sign out button at the bottom
-            Center(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  RichText(
-                    text: TextSpan(
-                      text: StringsAuth.lSignedInAs,
-                      style: TextStyle(
-                        color: Colors.white,
-                      ),
-                      children: <TextSpan>[
-                        TextSpan(text: FirebaseAuth.instance.currentUser?.email.toString(), style: TextStyle(fontWeight: FontWeight.bold))
-                      ],
+                ),
+                Container(
+                  margin: EdgeInsets.all(5),
+                  child: ElevatedButton.icon(
+                    style: ElevatedButton.styleFrom(
+                      primary: buttonGreyColor,
+                    ),
+                    onPressed: () {
+                      context.read<AuthBloc>().add(SignOutRequested());
+                      GameBloc gameBloc = context.read<GameBloc>();
+                      gameBloc.add(ResetGame());
+                      Navigator.pushReplacement(context,
+                          MaterialPageRoute(builder: (context) => SignIn()));
+                    },
+                    icon: Icon(
+                      Icons.logout,
+                      color: buttonDarkBlueColor,
+                    ),
+                    label: Text(
+                      StringsAuth.lSignOutButton,
+                      style: TextStyle(color: buttonDarkBlueColor),
                     ),
                   ),
-                  Container(
-                    margin: EdgeInsets.all(5),
-                    child: ElevatedButton.icon(
-                      style: ElevatedButton.styleFrom(
-                        primary: buttonGreyColor,
-                      ),
-                      onPressed: () {
-                        context.read<AuthBloc>().add(SignOutRequested());
-                        GameBloc gameBloc = context.read<GameBloc>();
-                        gameBloc.add(ResetGame());
-                        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => SignIn()));
-                      },
-                      icon: Icon(
-                        Icons.logout,
-                        color: buttonDarkBlueColor,
-                      ),
-                      label: Text(
-                        StringsAuth.lSignOutButton,
-                        style: TextStyle(color: buttonDarkBlueColor),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
