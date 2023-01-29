@@ -15,7 +15,8 @@ class GameList extends StatelessWidget {
         child: Text(StringsGeneral.lNoGamesWarning),
       );
     }
-    final Team selectedTeam = globalBloc.state.allTeams[state.selectedTeamIndex];
+    final Team selectedTeam =
+        globalBloc.state.allTeams[state.selectedTeamIndex];
     final List<Game> gamesList = globalBloc.state.allGames
         .where((Game game) => game.teamId == selectedTeam.id)
         .toList();
@@ -59,60 +60,31 @@ class GameList extends StatelessWidget {
                 DataCell(GestureDetector(
                   child: Center(child: Icon(Icons.delete)),
                   onTap: () {
-                        showDialog(
-                            context: context,
-                            builder: (BuildContext context) => AlertDialog(
-                                  title:
-                                      Text(StringsTeamManagement.lRemovePlayer),
-                                  content: SizedBox(
-                                    child: Text(StringsTeamManagement
-                                        .lRemoveGameConfirmation),
-                                  ),
-                                  actions: [
-                                    TextButton(
-                                      child: Text(StringsGeneral.lCancel),
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
-                                      },
-                                    ),
-                                    TextButton(
-                                      child:
-                                          Text(StringsTeamManagement.lConfirm),
-                                      
-                                      onPressed: () {
-                                        globalBloc.add(DeleteGame(game: gamesList[index]));
-                                        Navigator.of(context).pop();
-                                      },
-                                    ),
-                                  ],
-                                ));
-                    // TODO replace alert with flutter dialog
-                    // Alert(
-                    //   context: context,
-                    //   buttons: [],
-                    //   content: Column(
-                    //     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    //     children: [
-                    //       Text(StringsGeneral.lGameDeleteWarning),
-                    //       Row(
-                    //         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    //         children: [
-                    //           ElevatedButton(
-                    //               onPressed: () {
-                    //                 Navigator.pop(context);
-                    //               },
-                    //               child: Text(StringsGeneral.lCancel)),
-                    //           ElevatedButton(
-                    //               onPressed: () {
-                    //                 context.read<TeamManagementCubit>().deleteGame(gamesList[index]);
-                    //                 Navigator.pop(context);
-                    //               },
-                    //               child: Text(StringsGeneral.lConfirm)),
-                    //         ],
-                    //       )
-                    //     ],
-                    //   ),
-                    // ).show();
+                    showDialog(
+                        context: context,
+                        builder: (BuildContext context) => AlertDialog(
+                              title: Text(StringsTeamManagement.lRemovePlayer),
+                              content: SizedBox(
+                                child: Text(StringsTeamManagement
+                                    .lRemoveGameConfirmation),
+                              ),
+                              actions: [
+                                TextButton(
+                                  child: Text(StringsGeneral.lCancel),
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                                TextButton(
+                                  child: Text(StringsTeamManagement.lConfirm),
+                                  onPressed: () {
+                                    globalBloc.add(
+                                        DeleteGame(game: gamesList[index]));
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                              ],
+                            ));
                   },
                 ))
               ],
