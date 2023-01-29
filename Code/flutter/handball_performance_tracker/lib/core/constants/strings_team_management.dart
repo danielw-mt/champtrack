@@ -32,6 +32,6 @@ class StringsTeamManagement {
   static const String lRemovePlayerWarning = "Entfernen Warnung";
   static const String lRemovePlayer = "Entfernen";
   static const String lRemovePlayerConfirmation = "Achtung! Wenn Sie einen Player löschen für den bereits Daten in Games getrackt wurden kann das zu Datenverlusten in diesen Spielen führen. \nSowohl für die Player als auch die Team Statistiken. \n \nSoll der Player wirklich vom Team entfernt werden?";
-    static const String lRemoveGameConfirmation = "Soll das Game wirklich entfernt werden?";
+    static const String lRemoveGameConfirmation = "Achtung! Wenn Sie dieses Game löschen kann das zu Datenverlusten führen. \nSowohl für die Player, Team, als auch Saison-Statistiken. \n\nSoll das Game wirklich entfernt werden?";
   static const String lConfirm = "Bestätigen";
 }
