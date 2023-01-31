@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:handball_performance_tracker/features/feedback/view/view.dart';
 import 'package:handball_performance_tracker/features/sidebar/sidebar.dart';
 import 'package:handball_performance_tracker/core/core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -33,7 +34,6 @@ class SidebarView extends StatelessWidget {
                   MenuHeader(
                     clubName: clubName,
                   ),
-
                   // Dashboard
                   SimpleListEntry(text: "Dashboard", screen: DashboardView()),
                   // show game is running button only if game is running.
@@ -43,6 +43,7 @@ class SidebarView extends StatelessWidget {
                     //children: buildTeamChildren(context),
                   ),
                   SidebarStatisticsButton(text: "Statistiken",),
+                  SimpleListEntry(text: "Feedback", screen: FeedbackView()),
                   if (gameStarted) SimpleListEntry(text: "Game is running", screen: GameView()) else Text(""),
                 ]).toList()),
             // Sign out button at the bottom

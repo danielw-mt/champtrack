@@ -50,6 +50,7 @@ dependencies:
   email_validator: ^2.1.17 # TODO try to remove this
   logger: ^1.1.0
   carousel_slider: ^4.2.1
+  flutter_inappwebview: ^5.7.2+3
 
 dependency_overrides:
   firebase_core_platform_interface: 4.5.1

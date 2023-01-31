@@ -16,6 +16,7 @@ class StringsGeneral {
   static const String lBackToGameButton = "Zurück zum Spiel";
   static const String lStatistics = "Statistiken";
   static const String lGlossary = "Glossar";
+  static const String lFeedback = "Feedback";
 
   // game_actions.dart & action_feed.dart
   static const String lRedCard = "Rote Karte";
@@ -172,4 +173,7 @@ class StringsGeneral {
   static const String lGoalkeeperQuota = "Torwartquote";
   static const String lThrowsOpponent = "Würfe von Gegner";
   static const String lNoGoalkeeperQuota = "Keine Paraden erfasst";
+
+  // feedback screen
+  static const String lPleaseWait = "Einen Moment Geduld bitte... ";
 }
