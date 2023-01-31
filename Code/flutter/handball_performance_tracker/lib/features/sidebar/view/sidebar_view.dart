@@ -57,20 +57,22 @@ class SidebarView extends StatelessWidget {
                 ),
                 // DrawerHeader(child: Text(clubName)),
                 SimpleListEntry(
-                    text: "Dashboard",
+                    text: StringsGeneral.lDashboard,
                     icon: Icons.dashboard,
                     screen: DashboardView()),
                 SidebarStatisticsButton(
-                    text: "Statistiken", icon: Icons.bar_chart),
+                    text: StringsGeneral.lStatistics, icon: Icons.bar_chart),
                 SimpleListEntry(
-                    text: "Team Management",
+                    text: StringsGeneral.lTeamManagement,
                     icon: Icons.person,
                     screen: TeamManagementPage()),
-                    if (gameStarted)
-                      SimpleListEntry(
-                          text: "Laufendes Spiel", icon: Icons.gamepad, screen: GameView())
-                    else
-                      Text(""),
+                if (gameStarted)
+                  SimpleListEntry(
+                      text: StringsGeneral.lBackToGameButton,
+                      icon: Icons.sports_handball,
+                      screen: GameView())
+                else
+                  Text(""),
               ],
             ),
           ),
@@ -106,7 +108,6 @@ class SidebarView extends StatelessWidget {
         ],
       ),
     );
-
 
     // TODO will be removed before merge once approved
 
