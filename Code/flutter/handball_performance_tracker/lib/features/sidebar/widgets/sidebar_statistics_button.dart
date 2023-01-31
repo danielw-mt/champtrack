@@ -7,12 +7,19 @@ import 'package:handball_performance_tracker/data/models/models.dart';
 
 class SidebarStatisticsButton extends StatelessWidget {
   final String text;
-  const SidebarStatisticsButton({Key? key, required this.text}) : super(key: key);
+  final IconData icon;
+  const SidebarStatisticsButton(
+      {Key? key, required this.text, required this.icon})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      title: Text(" " * 2 + text, style: TextStyle(fontSize: 20)),
+      title: Text(text, style: TextStyle(fontSize: 20)),
+      leading: Icon(
+        icon,
+        color: Colors.white,
+      ),
       textColor: Colors.white,
       onTap: () {
         StatisticsBloc statisticsBloc =
