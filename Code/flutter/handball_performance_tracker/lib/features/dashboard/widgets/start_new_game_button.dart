@@ -39,7 +39,7 @@ class StartNewGameButton extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Icon(
-                Icons.add,
+                Icons.sports_handball,
                 color: Colors.black,
                 size: 50,
               ),
