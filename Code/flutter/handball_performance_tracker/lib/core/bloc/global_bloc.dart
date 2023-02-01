@@ -26,8 +26,11 @@ class GlobalBloc extends Bloc<GlobalEvent, GlobalState> {
       try {
         emit(state.copyWith(status: GlobalStatus.loading));
         List<Player> fetchedPlayers = await playerRepository.fetchPlayers();
-        List<Team> fetchedTeams =
-            await teamRepository.fetchTeams(allPlayers: fetchedPlayers);
+        List<Team> fetchedTeams = await teamRepository.fetchTeams(allPlayers: fetchedPlayers);
+        // if no teams exist yet for this account create one from the template via api
+        if (fetchedTeams.length == 0) {
+          this.add(GetTemplateTeam());
+        }
         List<Game> fetchedGames = await gameRepository.fetchGames();
         emit(state.copyWith(
             status: GlobalStatus.success,
@@ -150,16 +153,16 @@ class GlobalBloc extends Bloc<GlobalEvent, GlobalState> {
     on<ResetPlayerScores>((event, emit) => state.allTeams.forEach((team) =>
         team.players.forEach((player) => player.efScore = LiveEfScore())));
 
-    // on<CreateGame>((event, emit) async {
-    //   try {
-    //     emit(state.copyWith(status: GlobalStatus.loading));
-    //     Game newGame = await GameFirebaseRepository().createGame(event.game);
-    //     emit(state.copyWith(allGames: [...state.allGames, newGame], status: GlobalStatus.success));
-    //   } catch (e) {
-    //     developer.log('Failure creating game ' + e.toString(), name: this.runtimeType.toString(), error: e);
-    //     emit(state.copyWith(status: GlobalStatus.failure));
-    //   }
-    // });
+    on<CreateGame>((event, emit) async {
+      try {
+        emit(state.copyWith(status: GlobalStatus.loading));
+        await GameFirebaseRepository().createGame(event.game);
+        emit(state.copyWith(allGames: [...state.allGames, event.game], status: GlobalStatus.success));
+      } catch (e) {
+        developer.log('Failure creating game ' + e.toString(), name: this.runtimeType.toString(), error: e);
+        emit(state.copyWith(status: GlobalStatus.failure));
+      }
+    });
 
     on<UpdateGame>((event, emit) async {
       try {
@@ -211,7 +214,6 @@ class GlobalBloc extends Bloc<GlobalEvent, GlobalState> {
             PlayerEntity playerEntity =
                 await PlayerEntity.fromJson(player_json);
             Player player = await Player.fromEntity(playerEntity);
-            print("Player: ${player.firstName}");
             examplePlayers.add(player);
           }
           Team templateTeam = await Team.fromEntity(
@@ -225,7 +227,7 @@ class GlobalBloc extends Bloc<GlobalEvent, GlobalState> {
             this.add(CreatePlayer(player: element));
           });
           this.add(CreateTeam(team: templateTeam));
-          // this.add(CreateGame(game: templateGame));
+          this.add(CreateGame(game: templateGame));
         } else {
           // If the server did not return a 200 OK response,
           // then throw an exception.
