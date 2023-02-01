@@ -4,201 +4,201 @@
         "name": "THW Kiel",
         "players": [
             "2TBldbJcC02oNbfANusI",
-            "jkfdöklkuineqölöu",
-            "asdfmäasdföus",
+            "jkfdoklkuineqolou",
+            "asdfmaasdfous",
             "MzWDFzwundiPTTr5V13O",
             "paPtYZVG7yVNEjLlN6vO",
             "5EHckj8oJozCxVCIsmBF",
-            "Ulnp8nvcöezubv",
+            "Ulnp8nvcoezubv",
             "aKbmvDi4owGvlNNA7Ce6",
-            "uzerwtö74bnblu2",
-            "ääasdöfin6qweröä",
+            "uzerwto74bnblu2",
+            "aaasdofin6qweroa",
             "3JkgEKlpVfqcAJF51EP0",
-            "ölkjlöuneq95nkl",
-            "jijhnqöpö893hkl0",
+            "olkjlouneq95nkl",
+            "jijhnqopo893hkl0",
             "h1sPrDEpLgkuNgIzzn2M",
-            "kljo83gh0h2öoahf9",
+            "kljo83gh0h2ooahf9",
             "jhnkfsda987n10u02jo"
         ],
         "games": [
-            "lUl19nvlöeklöasf"
+            "7Jxvh8Pm1UsLSt5V9Fwz"
         ],
         "type": "men"
     },
     "example_players": [
         {
             "id": "2TBldbJcC02oNbfANusI",
-            "first_name": "Niklas Landin",
-            "last_name": "Jacobsen",
+            "firstName": "Niklas Landin",
+            "lastName": "Jacobsen",
             "games": ["7Jxvh8Pm1UsLSt5V9Fwz"],
             "positions": ["TW"],
             "teams": [
-                "lUl19nvlöeklöasf"
+                "C8l61yNPQy4KqXxg2fbg"
             ],
             "number": 1
         },
         {
-            "id": "jkfdöklkuineqölöu",
-            "first_name": "Philip",
-            "last_name": "Saggau",
+            "id": "jkfdoklkuineqolou",
+            "firstName": "Philip",
+            "lastName": "Saggau",
             "games": ["7Jxvh8Pm1UsLSt5V9Fwz"],
             "positions": ["TW"],
             "teams": [
-                "lUl19nvlöeklöasf"
+                "C8l61yNPQy4KqXxg2fbg"
             ],
             "number": 12
         },
         {
-            "id": "asdfmäasdföus",
-            "first_name": "Tomás",
-            "last_name": "Mrkva",
+            "id": "asdfmaasdfous",
+            "firstName": "Tomás",
+            "lastName": "Mrkva",
             "games": ["7Jxvh8Pm1UsLSt5V9Fwz"],
             "positions": ["TW"],
             "teams": [
-                "lUl19nvlöeklöasf"
+                "C8l61yNPQy4KqXxg2fbg"
             ],
             "number": 16
         },
         {
             "id": "MzWDFzwundiPTTr5V13O",
-            "first_name": "Domagoj",
-            "last_name": "Duvnjak",
+            "firstName": "Domagoj",
+            "lastName": "Duvnjak",
             "games": ["7Jxvh8Pm1UsLSt5V9Fwz"],
             "positions": ["RM"],
             "teams": [
-                "lUl19nvlöeklöasf"
+                "C8l61yNPQy4KqXxg2fbg"
             ],
             "number": 4
         },
         {
             "id": "paPtYZVG7yVNEjLlN6vO",
-            "first_name": "Sander",
-            "last_name": "Sagosen",
+            "firstName": "Sander",
+            "lastName": "Sagosen",
             "games": ["7Jxvh8Pm1UsLSt5V9Fwz"],
             "positions": ["RR"],
             "teams": [
-                "lUl19nvlöeklöasf"
+                "C8l61yNPQy4KqXxg2fbg"
             ],
             "number": 5
         },
         {
             "id": "5EHckj8oJozCxVCIsmBF",
-            "first_name": "Harald",
-            "last_name": "Reinkind",
+            "firstName": "Harald",
+            "lastName": "Reinkind",
             "games": ["7Jxvh8Pm1UsLSt5V9Fwz"],
             "positions": ["RL"],
             "teams": [
-                "lUl19nvlöeklöasf"
+                "C8l61yNPQy4KqXxg2fbg"
             ],
             "number": 6
         },
         {
-            "id": "Ulnp8nvcöezubv",
-            "first_name": "Ben Connar",
-            "last_name": "Battermann",
+            "id": "Ulnp8nvcoezubv",
+            "firstName": "Ben Connar",
+            "lastName": "Battermann",
             "games": ["7Jxvh8Pm1UsLSt5V9Fwz"],
             "positions": ["RR"],
             "teams": [
-                "lUl19nvlöeklöasf"
+                "C8l61yNPQy4KqXxg2fbg"
             ],
             "number": 8
         },
         {
             "id": "50fTmfugZ5SeUkS6PKgN",
-            "first_name": "Steffen",
-            "last_name": "Weinhold",
+            "firstName": "Steffen",
+            "lastName": "Weinhold",
             "games": ["7Jxvh8Pm1UsLSt5V9Fwz"],
             "positions": ["RM"],
             "teams": [
-                "lUl19nvlöeklöasf"
+                "C8l61yNPQy4KqXxg2fbg"
             ],
             "number": 13
         },
         {
-            "id": "uzerwtö74bnblu2",
-            "first_name": "Henri",
-            "last_name": "Pabst",
+            "id": "uzerwto74bnblu2",
+            "firstName": "Henri",
+            "lastName": "Pabst",
             "games": ["7Jxvh8Pm1UsLSt5V9Fwz"],
             "positions": ["RL"],
             "teams": [
-                "lUl19nvlöeklöasf"
+                "C8l61yNPQy4KqXxg2fbg"
             ],
             "number": 19
         },
         {
             "id": "9CAOHoEzOyVRQ6vrSSgf",
-            "first_name": "Sven",
-            "last_name": "Ehrig",
+            "firstName": "Sven",
+            "lastName": "Ehrig",
             "games": ["7Jxvh8Pm1UsLSt5V9Fwz"],
             "positions": ["LA"],
             "teams": [
-                "lUl19nvlöeklöasf"
+                "C8l61yNPQy4KqXxg2fbg"
             ],
             "number": 3
         },
         {
             "id": "3JkgEKlpVfqcAJF51EP0",
-            "first_name": "Magnus Landin",
-            "last_name": "Jacobsen",
+            "firstName": "Magnus Landin",
+            "lastName": "Jacobsen",
             "games": ["7Jxvh8Pm1UsLSt5V9Fwz"],
             "positions": ["RA"],
             "teams": [
-                "lUl19nvlöeklöasf"
+                "C8l61yNPQy4KqXxg2fbg"
             ],
             "number": 7
         },
         {
-            "id": "ölkjlöuneq95nkl",
-            "first_name": "Niclas",
-            "last_name": "Ekberg",
+            "id": "olkjlouneq95nkl",
+            "firstName": "Niclas",
+            "lastName": "Ekberg",
             "games": ["7Jxvh8Pm1UsLSt5V9Fwz"],
             "positions": ["LA"],
             "teams": [
-                "lUl19nvlöeklöasf"
+                "C8l61yNPQy4KqXxg2fbg"
             ],
             "number": 12
         },
         {
             "id": "aKbmvDi4owGvlNNA7Ce6",
-            "first_name": "Yannick",
-            "last_name": "Fraatz",
+            "firstName": "Yannick",
+            "lastName": "Fraatz",
             "games": ["7Jxvh8Pm1UsLSt5V9Fwz"],
             "positions": ["RA"],
             "teams": [
-                "lUl19nvlöeklöasf"
+                "C8l61yNPQy4KqXxg2fbg"
             ],
             "number": 20
         },
         {
             "id": "h1sPrDEpLgkuNgIzzn2M",
-            "first_name": "Petter",
-            "last_name": "Overby",
+            "firstName": "Petter",
+            "lastName": "Overby",
             "games": ["7Jxvh8Pm1UsLSt5V9Fwz"],
             "positions": ["K"],
             "teams": [
-                "lUl19nvlöeklöasf"
+                "C8l61yNPQy4KqXxg2fbg"
             ],
             "number": 11
         },
         {
             "id": "53IHmY4toB5nGlngMDsb",
-            "first_name": "Patrick",
-            "last_name": "Wiencek",
+            "firstName": "Patrick",
+            "lastName": "Wiencek",
             "games": ["7Jxvh8Pm1UsLSt5V9Fwz"],
             "positions": ["K"],
             "teams": [
-                "lUl19nvlöeklöasf"
+                "C8l61yNPQy4KqXxg2fbg"
             ],
             "number": 17
         },
         {
             "id": "jhnkfsda987n10u02jo",
-            "first_name": "Hendrik",
-            "last_name": "Pekeler",
+            "firstName": "Hendrik",
+            "lastName": "Pekeler",
             "games": ["7Jxvh8Pm1UsLSt5V9Fwz"],
             "positions": ["K"],
             "teams": [
-                "lUl19nvlöeklöasf"
+                "C8l61yNPQy4KqXxg2fbg"
             ],
             "number": 61
         }

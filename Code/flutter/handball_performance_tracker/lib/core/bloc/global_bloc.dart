@@ -202,9 +202,12 @@ class GlobalBloc extends Bloc<GlobalEvent, GlobalState> {
           final Map<String, dynamic> data = json.decode(response.body);
           // get example players
           List<Player> examplePlayers = [];
-          for (var player in data["example_players"]) {
-            examplePlayers.add(
-                await Player.fromEntity(await PlayerEntity.fromJson(player)));
+          for (var player_json in data["example_players"]) {
+            PlayerEntity playerEntity =
+                await PlayerEntity.fromJson(player_json);
+            Player player = await Player.fromEntity(playerEntity);
+            print("Player: ${player.firstName}");
+            examplePlayers.add(player);
           }
           Team templateTeam = await Team.fromEntity(
               await TeamEntity.fromJson(data["example_team"]));
@@ -217,7 +220,7 @@ class GlobalBloc extends Bloc<GlobalEvent, GlobalState> {
             this.add(CreatePlayer(player: element));
           });
           this.add(CreateTeam(team: templateTeam));
-          this.add(CreateGame(game: templateGame));
+          // this.add(CreateGame(game: templateGame));
         } else {
           // If the server did not return a 200 OK response,
           // then throw an exception.

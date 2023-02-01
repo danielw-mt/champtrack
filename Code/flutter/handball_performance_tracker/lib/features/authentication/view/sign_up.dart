@@ -229,8 +229,8 @@ class SignUp extends StatelessWidget {
                                                         BlocProvider.of<
                                                                 GlobalBloc>(
                                                             context);
-                                                    globalBloc
-                                                        .add(GetTemplateTeam());
+                                                    // globalBloc
+                                                    //     .add(GetTemplateTeam());
                                                   })),
                                           Row(
                                             children: <Widget>[

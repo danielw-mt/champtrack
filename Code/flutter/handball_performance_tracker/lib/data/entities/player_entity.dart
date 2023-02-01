@@ -49,6 +49,7 @@ class PlayerEntity extends Equatable {
 
   static Future<PlayerEntity> fromJson(json) async {
     Map<String, dynamic> data = json as Map<String, dynamic>;
+    print("player from Json: $data");
     DocumentReference clubReference = await getClubReference();
     DocumentReference playerReference =
         clubReference.collection('players').doc(data['id'] as String);
@@ -59,11 +60,11 @@ class PlayerEntity extends Equatable {
       });
     }
     List<String> teams = [];
-      if (data['teams'] != null) {
-        data['teams'].forEach((team) {
-          teams.add(team);
-        });
-      }
+    if (data['teams'] != null) {
+      data['teams'].forEach((team) {
+        teams.add(team);
+      });
+    }
     return PlayerEntity(
       documentReference: playerReference,
       firstName: data['firstName'] ?? "",

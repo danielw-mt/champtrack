@@ -31,9 +31,17 @@ class PlayerFirebaseRepository extends PlayerRepository {
   /// Add player to players collection @return player with updated id
   Future<Player> createPlayer(Player player) async {
     DocumentReference clubRef = await getClubReference();
-    DocumentReference playerRef = await clubRef.collection("players").add(player.toEntity().toDocument());
+    DocumentReference playerRef;
+    if (player.id == null){
+      playerRef  = await clubRef.collection("players").add(player.toEntity().toDocument());
+      player.id = playerRef.id;
+    } else {
+      playerRef = clubRef.collection("players").doc(player.id);
+      await playerRef.set(player.toEntity().toDocument());
+    }
     player.path = playerRef.path;
-    player.id = playerRef.id;
+    
+    
     Future.forEach(player.teams, (String? teamReference) async {
       print("trying to add playerReference to team $teamReference");
       Team team = Team();
@@ -44,10 +52,10 @@ class PlayerFirebaseRepository extends PlayerRepository {
         // TODO add club reference for backwards compatibility
       }
       team.players.add(player);
-      _players.add(player.copyWith(id: playerRef.id));
+      _players.add(player);
       await TeamFirebaseRepository().updateTeam(team);
     });
-    return player.copyWith(id: playerRef.id);
+    return player;
   }
 
   /// Fetch the specified player from the players collection corresponding to the logged in Club
