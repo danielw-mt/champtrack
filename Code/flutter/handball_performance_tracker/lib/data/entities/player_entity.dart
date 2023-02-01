@@ -62,7 +62,7 @@ class PlayerEntity extends Equatable {
     List<String> teams = [];
     if (data['teams'] != null) {
       data['teams'].forEach((team) {
-        teams.add(team);
+        teams.add('teams/'+team.toString()); // TODO change this to document reference
       });
     }
     return PlayerEntity(

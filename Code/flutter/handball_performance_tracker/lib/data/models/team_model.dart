@@ -28,9 +28,10 @@ class Team {
     }
   }
 
-  Team copyWith({String? id, String? name, List<Player>? players, List<Player>? onFieldPlayers, String? type}) {
+  Team copyWith({String? id, String? path, String? name, List<Player>? players, List<Player>? onFieldPlayers, String? type}) {
     Team team = Team(
       id: id ?? this.id,
+      path: path ?? this.path,
       name: name ?? this.name,
       type: type ?? this.type,
     );
@@ -40,13 +41,13 @@ class Team {
   }
 
   @override
-  int get hashCode => id.hashCode ^ name.hashCode ^ players.hashCode ^ onFieldPlayers.hashCode ^ type.hashCode;
+  int get hashCode => id.hashCode ^ path.hashCode ^ name.hashCode ^ players.hashCode ^ onFieldPlayers.hashCode ^ type.hashCode;
 
   @override
   bool operator ==(Object other) => identical(this, other) || other is Team && id == other.id;
   @override
   String toString() {
-    return 'Team { id: $id, \n' + 'name: $name, \n' + 'players: $players, \n' + 'onFieldPlayers: $onFieldPlayers, \n' + 'type: $type, \n' + '}';
+    return 'Team { id: $id, \n' + 'path: $path, \n' +  'name: $name, \n' + 'players: $players, \n' + 'onFieldPlayers: $onFieldPlayers, \n' + 'type: $type, \n' + '}';
   }
 
   TeamEntity toEntity() {
