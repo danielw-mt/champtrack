@@ -77,7 +77,7 @@ class Player {
 
   @override
   String toString() {
-    return 'Club { id: $id, +\n ' +
+    return 'Player { id: $id, +\n ' +
         'path: $path, +\n' +
         'firstName: $firstName, +\n ' +
         'lastName: $lastName, +\n ' +
