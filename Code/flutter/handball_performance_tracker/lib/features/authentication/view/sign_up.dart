@@ -225,12 +225,6 @@ class SignUp extends StatelessWidget {
                                                   onPressed: () {
                                                     _createAccountWithEmailAndPassword(
                                                         context);
-                                                    GlobalBloc globalBloc =
-                                                        BlocProvider.of<
-                                                                GlobalBloc>(
-                                                            context);
-                                                    // globalBloc
-                                                    //     .add(GetTemplateTeam());
                                                   })),
                                           Row(
                                             children: <Widget>[
