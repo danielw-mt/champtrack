@@ -52,22 +52,22 @@ class GameActionEntity extends Equatable {
         'timestamp: $timestamp }';
   }
 
-  static Future<GameActionEntity> fromJson(json) async {
-    Map<String, dynamic> data = json as Map<String, dynamic>;
+  static Future<GameActionEntity> fromJson(MapEntry json) async {
+    Map<String, dynamic> data = json.value as Map<String, dynamic>;
     DocumentReference clubReference = await getClubReference();
     DocumentReference actionReference = await clubReference
         .collection('games')
         .doc(data['gameId'] as String)
         .collection('actions')
-        .doc(data['id'] as String);
+        .doc(json.key as String);
     List<String> throwLocation = [];
-    if (data['throwLocation'] != null) {
+    if (data.keys.contains('throwLocation')) {
       data['throwLocation'].forEach((locationString) {
         throwLocation.add(locationString);
       });
     }
     List<double> coordinates = [];
-    if (data['coordinates'] != null) {
+    if (data.keys.contains('coordinates')) {
       data['coordinates'].forEach((coordinate) {
         coordinates.add(coordinate[0].toDouble());
         coordinates.add(coordinate[1].toDouble());

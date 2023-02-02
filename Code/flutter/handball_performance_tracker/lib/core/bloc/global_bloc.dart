@@ -24,19 +24,26 @@ class GlobalBloc extends Bloc<GlobalEvent, GlobalState> {
     on<LoadGlobalState>((event, emit) async {
       print("LoadGlobalState event received");
       try {
+        if (state.status == GlobalStatus.success) {
+          print("already loaded");
+          emit(state.copyWith(status: GlobalStatus.success));
+          return;
+        }
         emit(state.copyWith(status: GlobalStatus.loading));
         List<Player> fetchedPlayers = await playerRepository.fetchPlayers();
-        List<Team> fetchedTeams = await teamRepository.fetchTeams(allPlayers: fetchedPlayers);
+        List<Team> fetchedTeams =
+            await teamRepository.fetchTeams(allPlayers: fetchedPlayers);
         // if no teams exist yet for this account create one from the template via api
         if (fetchedTeams.length == 0) {
           this.add(GetTemplateTeam());
+        } else {
+          List<Game> fetchedGames = await gameRepository.fetchGames();
+          emit(state.copyWith(
+              status: GlobalStatus.success,
+              allTeams: fetchedTeams,
+              allPlayers: fetchedPlayers,
+              allGames: fetchedGames));
         }
-        List<Game> fetchedGames = await gameRepository.fetchGames();
-        emit(state.copyWith(
-            status: GlobalStatus.success,
-            allTeams: fetchedTeams,
-            allPlayers: fetchedPlayers,
-            allGames: fetchedGames));
       } catch (e) {
         developer.log('Failure loading teams or players ' + e.toString(),
             name: this.runtimeType.toString(), error: e);
@@ -45,12 +52,17 @@ class GlobalBloc extends Bloc<GlobalEvent, GlobalState> {
     });
 
     on<CreateTeam>((event, emit) async {
+      if (state.allTeams.contains(event.team)) {
+        print("team already exists");
+        emit(state.copyWith(status: GlobalStatus.success));
+      }
       try {
         emit(state.copyWith(status: GlobalStatus.loading));
         Team newTeam = await TeamFirebaseRepository().createTeam(event.team);
         emit(state.copyWith(
             allTeams: [...state.allTeams, newTeam],
             status: GlobalStatus.success));
+        print("created team");
       } catch (e) {
         developer.log('Failure creating team ' + e.toString(),
             name: this.runtimeType.toString(), error: e);
@@ -59,6 +71,7 @@ class GlobalBloc extends Bloc<GlobalEvent, GlobalState> {
     });
 
     on<UpdateTeam>((event, emit) async {
+      print("trying to update team");
       try {
         emit(state.copyWith(status: GlobalStatus.loading));
         print("entered update team" + event.team.toString());
@@ -101,6 +114,10 @@ class GlobalBloc extends Bloc<GlobalEvent, GlobalState> {
     });
 
     on<CreatePlayer>((event, emit) async {
+      if (state.allPlayers.contains(event.player)) {
+        emit(state.copyWith(status: GlobalStatus.success));
+        print("player already exists");
+      }
       try {
         emit(state.copyWith(status: GlobalStatus.loading));
         Player newPlayer =
@@ -108,6 +125,7 @@ class GlobalBloc extends Bloc<GlobalEvent, GlobalState> {
         emit(state.copyWith(
             allPlayers: [...state.allPlayers, newPlayer],
             status: GlobalStatus.success));
+        print("player created");
       } catch (e) {
         developer.log('Failure creating player ' + e.toString(),
             name: this.runtimeType.toString(), error: e);
@@ -154,12 +172,20 @@ class GlobalBloc extends Bloc<GlobalEvent, GlobalState> {
         team.players.forEach((player) => player.efScore = LiveEfScore())));
 
     on<CreateGame>((event, emit) async {
+      if (state.allGames.contains(event.game)) {
+        print("game already exists");
+        emit(state.copyWith(status: GlobalStatus.success));
+      }
       try {
         emit(state.copyWith(status: GlobalStatus.loading));
         await GameFirebaseRepository().createGame(event.game);
-        emit(state.copyWith(allGames: [...state.allGames, event.game], status: GlobalStatus.success));
+        emit(state.copyWith(
+            allGames: [...state.allGames, event.game],
+            status: GlobalStatus.success));
+        print("game created");
       } catch (e) {
-        developer.log('Failure creating game ' + e.toString(), name: this.runtimeType.toString(), error: e);
+        developer.log('Failure creating game ' + e.toString(),
+            name: this.runtimeType.toString(), error: e);
         emit(state.copyWith(status: GlobalStatus.failure));
       }
     });
@@ -210,18 +236,16 @@ class GlobalBloc extends Bloc<GlobalEvent, GlobalState> {
           final Map<String, dynamic> data = json.decode(response.body);
           // get example players
           List<Player> examplePlayers = [];
-          for (var player_json in data["example_players"]) {
+          await Future.forEach(data["example_players"], (player_json) async {
             PlayerEntity playerEntity =
                 await PlayerEntity.fromJson(player_json);
             Player player = await Player.fromEntity(playerEntity);
             examplePlayers.add(player);
-          }
-          Team templateTeam = await Team.fromEntity(
-              await TeamEntity.fromJson(data["example_team"]));
-          print("got team");
+          });
+          TeamEntity teamEntity = await TeamEntity.fromJson(data["example_team"]);
+          Team templateTeam = await Team.fromEntity(teamEntity, allPlayers: examplePlayers);
           Game templateGame = await Game.fromEntity(
               await GameEntity.fromJson(data["example_game"]));
-          print("got game");
           // add template players, template team and template game to the global state
           examplePlayers.forEach((element) {
             this.add(CreatePlayer(player: element));

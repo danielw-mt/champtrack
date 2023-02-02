@@ -49,7 +49,6 @@ class PlayerEntity extends Equatable {
 
   static Future<PlayerEntity> fromJson(json) async {
     Map<String, dynamic> data = json as Map<String, dynamic>;
-    print("player from Json: $data");
     DocumentReference clubReference = await getClubReference();
     DocumentReference playerReference =
         clubReference.collection('players').doc(data['id'] as String);
@@ -62,7 +61,8 @@ class PlayerEntity extends Equatable {
     List<String> teams = [];
     if (data['teams'] != null) {
       data['teams'].forEach((team) {
-        teams.add('teams/'+team.toString()); // TODO change this to document reference
+        teams.add('teams/' +
+            team.toString()); // TODO change this to document reference
       });
     }
     return PlayerEntity(
@@ -77,6 +77,7 @@ class PlayerEntity extends Equatable {
   }
 
   static PlayerEntity fromSnapshot(DocumentSnapshot snap) {
+    print("player from snapshot");
     if (snap.exists) {
       // developer.log('fromSnapshot ${snap.id}', name: 'PlayerEntity');
       Map<String, dynamic> data = snap.data() as Map<String, dynamic>;

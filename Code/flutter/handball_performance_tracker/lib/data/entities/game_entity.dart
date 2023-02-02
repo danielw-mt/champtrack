@@ -80,12 +80,20 @@ class GameEntity extends Equatable {
         await clubReference.collection('games').doc(data['id'] as String);
     // build game action from game action in the json
     List<GameAction> gameActions = [];
-    if (data['gameActions'] != null) {
+    if (data['actions'] != null) {
       Map<String, dynamic> gameActionsJson =
-          data['gameActions'] as Map<String, dynamic>;
+          data['actions'] as Map<String, dynamic>;
       for (var entry in gameActionsJson.entries) {
-        gameActions.add(GameAction.fromEntity(
-            await GameActionEntity.fromJson(entry.value)));
+        GameActionEntity gameActionEntity =
+            await GameActionEntity.fromJson(entry);
+        GameAction gameAction = GameAction.fromEntity(gameActionEntity);
+        gameAction.id = entry.key;
+        gameAction.path = gameReference.path + '/actions/' + entry.key;
+        gameActions.add(gameAction);
+        gameReference
+            .collection('actions')
+            .doc(entry.key)
+            .set(gameAction.toEntity().toDocument());
       }
     }
     List<String> onFieldPlayers = [];
@@ -96,7 +104,7 @@ class GameEntity extends Equatable {
     }
     return GameEntity(
       documentReference: gameReference,
-      // don't know how to cast string to timestamp so just take the current datetime
+      // TODO don't know how to cast string to timestamp so just take the current datetime
       date: Timestamp.now(),
       isAtHome: data['isAtHome'] != null ? data['isAtHome'] : true,
       lastSync: data['lastSync'] != null ? data['lastSync'] : "",
