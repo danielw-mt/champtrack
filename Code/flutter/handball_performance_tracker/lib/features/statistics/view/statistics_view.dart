@@ -14,6 +14,10 @@ class StatisticsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final statisticsBloc = context.watch<StatisticsBloc>();
+    print("statistics view: ${statisticsBloc.state.status}");
+    if (statisticsBloc.state.status == StatisticsStatus.loading) {
+      return const Center(child: CircularProgressIndicator());
+    }
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(

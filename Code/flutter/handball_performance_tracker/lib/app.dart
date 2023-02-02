@@ -50,10 +50,11 @@ class HandballApp extends StatelessWidget {
                   playerRepository:
                       RepositoryProvider.of<PlayerFirebaseRepository>(context),
                   teamRepository:
-                      RepositoryProvider.of<TeamFirebaseRepository>(context))
-                ..add(InitStatistics())),
-          BlocProvider<GameBloc>(create: (context) => GameBloc(gameRepository: RepositoryProvider.of<GameFirebaseRepository>(context)))
-          
+                      RepositoryProvider.of<TeamFirebaseRepository>(context))),
+          BlocProvider<GameBloc>(
+              create: (context) => GameBloc(
+                  gameRepository:
+                      RepositoryProvider.of<GameFirebaseRepository>(context)))
         ],
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
@@ -72,7 +73,8 @@ class HandballApp extends StatelessWidget {
                       child: CircularProgressIndicator(),
                     ),
                   );
-                } else if (authBloc.state.authStatus == AuthStatus.UnAuthenticated) {
+                } else if (authBloc.state.authStatus ==
+                    AuthStatus.UnAuthenticated) {
                   print("UnAuthenticated");
                   // Otherwise, they're not signed in. Show the sign in page.
                   return SignIn();

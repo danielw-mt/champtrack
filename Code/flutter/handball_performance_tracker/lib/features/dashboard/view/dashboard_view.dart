@@ -10,7 +10,12 @@ class DashboardView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final globalState = context.watch<GlobalBloc>().state;
+    StatisticsBloc statisticsBloc = context.read<StatisticsBloc>();
+    GlobalBloc globalBloc = context.watch<GlobalBloc>();
+    GlobalState globalState = globalBloc.state;
+    if (globalState.status == GlobalStatus.success) {
+      statisticsBloc.add(InitStatistics());
+    }
     print("global state: ${globalState.status}");
     // final authState = context.watch<AuthBloc>().state;
     if (globalState.status == GlobalStatus.loading) {
