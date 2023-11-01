@@ -31,8 +31,8 @@ class DashboardView extends StatelessWidget {
       return const DashboardContent();
     }
     if (globalState.status == GlobalStatus.failure) {
-      return const Center(
-        child: Text("TODO Error"),
+      return Center(
+        child: Container(),
       );
     } else {
       print("dashboard view: this should not happen");
