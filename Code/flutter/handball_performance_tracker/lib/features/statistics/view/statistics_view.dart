@@ -11,11 +11,15 @@ const String page3 = "Vergleich";
 class StatisticsView extends StatelessWidget {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
+  // init statistic bloc on first build
+
   @override
   Widget build(BuildContext context) {
     final statisticsBloc = context.watch<StatisticsBloc>();
+
     print("statistics view: ${statisticsBloc.state.status}");
-    if (statisticsBloc.state.status == StatisticsStatus.loading) {
+    if (statisticsBloc.state.status != StatisticsStatus.loaded) {
+      print("loading");
       return const Center(child: CircularProgressIndicator());
     }
     return SafeArea(
