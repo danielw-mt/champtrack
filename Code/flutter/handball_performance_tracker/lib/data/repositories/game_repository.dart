@@ -29,18 +29,17 @@ class GameFirebaseRepository extends GameRepository {
   /// Add game to the games collection of the logged in club and return the game with the updated id
   Future<DocumentReference> createGame(Game game) async {
     DocumentReference clubReference = await getClubReference();
-    print("trying to add game");
-    DocumentReference gameRef = await clubReference.collection("games").add(game.toEntity().toDocument());
-    // print length of _games
-    print("create Game games length");
-    print(_games.length);
+    DocumentReference gameRef;
+    if (game.id != null) {
+      gameRef = clubReference.collection("games").doc(game.id);
+      await gameRef.set(game.toEntity().toDocument());
+    } else {
+      gameRef = await clubReference.collection("games").add(game.toEntity().toDocument());
+      game.id = gameRef.id;
+    }
+    game.path = gameRef.path;
     // create new game in _games
-    _games.add(game.copyWith(id: gameRef.id));
-
-    print("create Game games length after adding");
-    print(_games.length);
-
-    //return game.copyWith(id: gameRef.id);
+    _games.add(game);
     print("added game");
     return gameRef;
   }

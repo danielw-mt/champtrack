@@ -123,7 +123,7 @@ class Game {
   bool operator ==(Object other) => identical(this, other) || other is Game && id == other.id;
   @override
   String toString() {
-    return 'Club { id: $id, +\n ' +
+    return 'Game { id: $id, +\n ' +
         'path: $path, +\n ' +
         'teamId: $teamId, +\n ' +
         'date: $date, +\n ' +

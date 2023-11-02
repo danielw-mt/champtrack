@@ -30,8 +30,16 @@ class TeamFirebaseRepository extends TeamRepository {
   /// Add team to the teams collection of the logged in club and return the team with the updated id
   Future<Team> createTeam(Team team) async {
     DocumentReference clubRef = await getClubReference();
-    DocumentReference teamRef = await clubRef.collection("teams").add(team.toEntity().toDocument());
-    _teams.add(team.copyWith(id: teamRef.id));
+    DocumentReference teamRef;
+    if (team.id == null) {
+      teamRef = await clubRef.collection("teams").add(team.toEntity().toDocument());
+      team.id = teamRef.id;
+    } else {
+      teamRef = clubRef.collection("teams").doc(team.id);
+      await teamRef.set(team.toEntity().toDocument());
+    }
+    team.path = teamRef.path;
+    _teams.add(team);
     return team.copyWith(id: teamRef.id);
   }
 
@@ -62,8 +70,11 @@ class TeamFirebaseRepository extends TeamRepository {
     //List<Team> teams = [];
     DocumentReference clubRef = await getClubReference();
     QuerySnapshot teamsSnapshot = await clubRef.collection("teams").get();
-    await Future.forEach(teamsSnapshot.docs, (DocumentSnapshot teamSnapshot) async {
-      Team team = await Team.fromEntity(await TeamEntity.fromSnapshot(teamSnapshot), allPlayers: allPlayers ?? []);
+    await Future.forEach(teamsSnapshot.docs,
+        (DocumentSnapshot teamSnapshot) async {
+      Team team = await Team.fromEntity(
+          await TeamEntity.fromSnapshot(teamSnapshot),
+          allPlayers: allPlayers ?? []);
       _teams.add(team);
       print("added team: " + team.name);
     });
@@ -76,18 +87,29 @@ class TeamFirebaseRepository extends TeamRepository {
     DocumentReference clubRef = await getClubReference();
     await clubRef.collection("teams").doc(team.id).delete();
     // delete team from _teams
-    _teams.removeWhere((element) => element.id == team.id); // TODO games are not deleted in local variable yet
+    _teams.removeWhere((element) =>
+        element.id ==
+        team.id); // TODO games are not deleted in local variable yet
     // TODO instead of deletion we should mark the team as deleted and show it in the UI that they were deleted
     // delete all games that correspond to a team
-    clubRef.collection("games").where("teamId", isEqualTo: team.id).get().then((QuerySnapshot gamesSnapshot) {
+    clubRef
+        .collection("games")
+        .where("teamId", isEqualTo: team.id)
+        .get()
+        .then((QuerySnapshot gamesSnapshot) {
       gamesSnapshot.docs.forEach((DocumentSnapshot gameSnapshot) {
         gameSnapshot.reference.delete();
       });
     });
     // remove team from the list of teams the player corresponds to inside the player collection
-    clubRef.collection("players").where("teams", arrayContains: "teams/" + team.id.toString()).get().then((QuerySnapshot playersSnapshot) {
+    clubRef
+        .collection("players")
+        .where("teams", arrayContains: "teams/" + team.id.toString())
+        .get()
+        .then((QuerySnapshot playersSnapshot) {
       playersSnapshot.docs.forEach((DocumentSnapshot playerSnapshot) {
-        Player player = Player.fromEntity(PlayerEntity.fromSnapshot(playerSnapshot));
+        Player player =
+            Player.fromEntity(PlayerEntity.fromSnapshot(playerSnapshot));
         player.teams.remove("teams/" + team.id.toString());
         playerSnapshot.reference.update(player.toEntity().toDocument());
       });
@@ -100,9 +122,13 @@ class TeamFirebaseRepository extends TeamRepository {
     DocumentReference clubRef = await getClubReference();
     // print event team
     print("event team: " + team.toString());
-    await clubRef.collection("teams").doc(team.id).update(team.toEntity().toDocument());
+    await clubRef
+        .collection("teams")
+        .doc(team.id)
+        .update(team.toEntity().toDocument());
     // update team in _teams
-    List<Team> updatedTeams = _teams.map((e) => e.id == team.id ? team : e).toList();
+    List<Team> updatedTeams =
+        _teams.map((e) => e.id == team.id ? team : e).toList();
     _teams = updatedTeams;
   }
 

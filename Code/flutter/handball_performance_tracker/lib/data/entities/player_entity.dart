@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
+import 'package:handball_performance_tracker/core/core.dart';
 import 'dart:developer' as developer;
 
 /// Representation of a club entry in firebase
@@ -46,19 +47,37 @@ class PlayerEntity extends Equatable {
     return 'PlayerEntity { firstName: $firstName, lastName: $lastName, nickName: $nickName, number: $number, positions: ${positions.toString()}, teams: ${teams.toString()}}';
   }
 
-  static PlayerEntity fromJson(Map<String, Object> json) {
+  static Future<PlayerEntity> fromJson(json) async {
+    Map<String, dynamic> data = json as Map<String, dynamic>;
+    DocumentReference clubReference = await getClubReference();
+    DocumentReference playerReference =
+        clubReference.collection('players').doc(data['id'] as String);
+    List<String> positions = [];
+    if (data['positions'] != null) {
+      data['positions'].forEach((position) {
+        positions.add(position);
+      });
+    }
+    List<String> teams = [];
+    if (data['teams'] != null) {
+      data['teams'].forEach((team) {
+        teams.add('teams/' +
+            team.toString()); // TODO change this to document reference
+      });
+    }
     return PlayerEntity(
-      documentReference: json['documentReference'] as DocumentReference,
-      firstName: json['firstName'] as String,
-      lastName: json['lastName'] as String,
-      nickName: json['nickName'] as String,
-      number: json['number'] as int,
-      positions: json['positions'] as List<String>,
-      teams: json['teams'] as List<String>,
+      documentReference: playerReference,
+      firstName: data['firstName'] ?? "",
+      lastName: data['lastName'] ?? "",
+      nickName: "",
+      number: data['number'] ?? -1,
+      positions: positions,
+      teams: teams,
     );
   }
 
   static PlayerEntity fromSnapshot(DocumentSnapshot snap) {
+    print("player from snapshot");
     if (snap.exists) {
       // developer.log('fromSnapshot ${snap.id}', name: 'PlayerEntity');
       Map<String, dynamic> data = snap.data() as Map<String, dynamic>;
@@ -109,5 +128,13 @@ class PlayerEntity extends Equatable {
   }
 
   @override
-  List<Object?> get props => [documentReference, firstName, lastName, nickName, number, positions, teams];
+  List<Object?> get props => [
+        documentReference,
+        firstName,
+        lastName,
+        nickName,
+        number,
+        positions,
+        teams
+      ];
 }

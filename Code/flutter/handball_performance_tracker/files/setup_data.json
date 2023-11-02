@@ -1,2304 +1,2415 @@
 {
     "example_team": {
-        "id": 1,
+        "id": "C8l61yNPQy4KqXxg2fbg",
         "name": "THW Kiel",
         "players": [
-            {
-                "id": "h1sPrDEpLgkuNgIzzn2M",
-                "first_name": "Niklas Landin",
-                "last_name": "Jacobsen",
-                "positions": "TW",
-                "number": 1
-            },
-            {
-                "id": "MzWDFzwundiPTTr5V13O",
-                "first_name": "Philip",
-                "last_name": "Saggau",
-                "positions": "TW",
-                "number": 12
-            },
-            {
-                "id": 16,
-                "first_name": "Tomás",
-                "last_name": "Mrkva",
-                "positions": "TW",
-                "number": 16
-            },
-            {
-                "id": "jbnJeSNfa7IxR1MLSAbO",
-                "first_name": "Domagoj",
-                "last_name": "Duvnjak",
-                "positions": "RM",
-                "number": 4
-            },
-            {
-                "id": "53IHmY4toB5nGlngMDsb",
-                "first_name": "Sander",
-                "last_name": "Sagosen",
-                "positions": "RR",
-                "number": 5
-            },
-            {
-                "id": "50fTmfugZ5SeUkS6PKgN",
-                "first_name": "Harald",
-                "last_name": "Reinkind",
-                "positions": "RL",
-                "number": 6
-            },
-            {
-                "id": "2TBldbJcC02oNbfANusI",
-                "first_name": "Ben Connar",
-                "last_name": "Battermann",
-                "positions": "RR",
-                "number": 8
-            },
-            {
-                "id": "aKbmvDi4owGvlNNA7Ce6",
-                "first_name": "Steffen",
-                "last_name": "Weinhold",
-                "positions": "RM",
-                "number": 13
-            },
-            {
-                "id": 19,
-                "first_name": "Henri",
-                "last_name": "Pabst",
-                "positions": "RL",
-                "number": 19
-            },
-            {
-                "id": "paPtYZVG7yVNEjLlN6vO",
-                "first_name": "Sven",
-                "last_name": "Ehrig",
-                "positions": "LA",
-                "number": 3
-            },
-            {
-                "id": "5EHckj8oJozCxVCIsmBF",
-                "first_name": "Magnus Landin",
-                "last_name": "Jacobsen",
-                "positions": "RA",
-                "number": 7
-            },
-            {
-                "id": 18,
-                "first_name": "Niclas",
-                "last_name": "Ekberg",
-                "positions": "LA",
-                "number": 12
-            },
-            {
-                "id": 20,
-                "first_name": "Yannick",
-                "last_name": "Fraatz",
-                "positions": "RA",
-                "number": 20
-            },
-            {
-                "id": 11,
-                "first_name": "Petter",
-                "last_name": "Overby",
-                "positions": "KL",
-                "number": 11
-            },
-            {
-                "id": "9CAOHoEzOyVRQ6vrSSgf",
-                "first_name": "Patrick",
-                "last_name": "Wiencek",
-                "positions": "KL",
-                "number": 17
-            },
-            {
-                "id": "3JkgEKlpVfqcAJF51EP0",
-                "first_name": "Hendrik",
-                "last_name": "Pekeler",
-                "positions": "KL",
-                "number": 61
-            }
-        ]
+            "2TBldbJcC02oNbfANusI",
+            "jkfdoklkuineqolou",
+            "asdfmaasdfous",
+            "MzWDFzwundiPTTr5V13O",
+            "paPtYZVG7yVNEjLlN6vO",
+            "5EHckj8oJozCxVCIsmBF",
+            "Ulnp8nvcoezubv",
+            "50fTmfugZ5SeUkS6PKgN",
+            "9CAOHoEzOyVRQ6vrSSgf",
+            "aKbmvDi4owGvlNNA7Ce6",
+            "uzerwto74bnblu2",
+            "3JkgEKlpVfqcAJF51EP0",
+            "olkjlouneq95nkl",
+            "h1sPrDEpLgkuNgIzzn2M",
+            "jhnkfsda987n10u02jo",
+            "53IHmY4toB5nGlngMDsb"
+        ],
+        "games": [
+            "7Jxvh8Pm1UsLSt5V9Fwz"
+        ],
+        "type": "men"
     },
-    "example_game": {
-        "actions": {
-            "093ZLFncM8eaNdzJ8Vn1": {
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "context": "attack",
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "timestamp": 1670700340312,
-                "relativeTime": 1310,
-                "tag": "1v1&7",
-                "throwLocation": [
-                    "RM",
-                    "<6"
-                ],
-                "playerId": "h1sPrDEpLgkuNgIzzn2M"
-            },
-            "0B2A7vUJLUcv5f1K0SPt": {
-                "throwLocation": [
-                    "goal"
-                ],
-                "tag": "parade",
-                "context": "goalkeeper",
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "timestamp": 1670699676162,
-                "relativeTime": 769,
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "playerId": "2TBldbJcC02oNbfANusI"
-            },
-            "0QIEFvZ063sol1U5XkXw": {
-                "context": "attack",
-                "timestamp": 1670699858703,
-                "relativeTime": 867,
-                "throwLocation": [
-                    "RR",
-                    "6to9"
-                ],
-                "playerId": "",
-                "tag": "goal",
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz"
-            },
-            "0ZcUcn4Ga0xceMaKgO6J": {
-                "tag": "time_pen",
-                "playerId": "paPtYZVG7yVNEjLlN6vO",
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "relativeTime": 585,
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "context": "defense",
-                "timestamp": 1670699464633,
-                "throwLocation": [
-                    "RR",
-                    ">9"
-                ]
-            },
-            "0e1r3DTVZ6rWVyVc1uPw": {
-                "playerId": "MzWDFzwundiPTTr5V13O",
-                "throwLocation": [
-                    "RM",
-                    "6to9"
-                ],
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "relativeTime": 2610,
-                "tag": "goal",
-                "context": "attack",
-                "timestamp": 1670702659158,
-                "teamId": "C8l61yNPQy4KqXxg2fbg"
-            },
-            "0isDtPKyycyC4D7qc0bn": {
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "tag": "goal_opponent_7m",
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "relativeTime": 2589,
-                "playerId": "2TBldbJcC02oNbfANusI",
-                "timestamp": 1670702560639,
-                "context": "seven_meter",
-                "throwLocation": [
-                    "RL",
-                    "6to9"
-                ]
-            },
-            "0jWhir9Mb3i2aNTUi6H2": {
-                "tag": "assist",
-                "throwLocation": [
-                    "RL",
-                    "6to9"
-                ],
-                "playerId": "5EHckj8oJozCxVCIsmBF",
-                "context": "attack",
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "timestamp": 1670700898968,
-                "relativeTime": 1632
-            },
-            "0nuL1Vk23WxRsfc3WIcw": {
-                "timestamp": 1670700173387,
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "relativeTime": 1182,
-                "tag": "parade",
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "playerId": "2TBldbJcC02oNbfANusI",
-                "throwLocation": [
-                    "goal"
-                ],
-                "context": "goalkeeper"
-            },
-            "13j26GW3XtVTokpb3xVv": {
-                "relativeTime": 1554,
-                "playerId": "",
-                "tag": "parade",
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "context": "goalkeeper",
-                "throwLocation": [
-                    "goal"
-                ],
-                "timestamp": 1670700799218
-            },
-            "1dllzTzBrrj37aCnmmXH": {
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "tag": "goal_opponent",
-                "relativeTime": 532,
-                "throwLocation": [
-                    "goal"
-                ],
-                "context": "goalkeeper",
-                "timestamp": 1670699384145,
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "playerId": "opponent"
-            },
-            "1jFkyydkYOnxk1JJusEY": {
-                "timestamp": 1670703700815,
-                "playerId": "2TBldbJcC02oNbfANusI",
-                "context": "goalkeeper",
-                "relativeTime": 3504,
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "throwLocation": [
-                    "goal"
-                ],
-                "tag": "parade",
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz"
-            },
-            "2eq11J1whFBsnvR4qWW0": {
-                "relativeTime": 3434,
-                "playerId": "opponent",
-                "throwLocation": [
-                    "goal"
-                ],
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "context": "goalkeeper",
-                "tag": "goal_opponent",
-                "timestamp": 1670703630530
-            },
-            "3176dH3pXFzXk66bgpDg": {
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "tag": "foul",
-                "playerId": "",
-                "timestamp": 1670702548133,
-                "throwLocation": [
-                    "RL",
-                    "6to9"
-                ],
-                "relativeTime": 2577,
-                "context": "defense",
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz"
-            },
-            "37OhMRa5zrOwwI0HCEJX": {
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "context": "attack",
-                "timestamp": 1670699450511,
-                "relativeTime": 579,
-                "playerId": "3JkgEKlpVfqcAJF51EP0",
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "throwLocation": [
-                    "RR",
-                    ">9"
-                ],
-                "tag": "miss"
-            },
-            "3mm5Xew8JCeni6qhP76M": {
-                "tag": "trf",
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "relativeTime": 2195,
-                "playerId": "5EHckj8oJozCxVCIsmBF",
-                "timestamp": 1670702101502,
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "throwLocation": [
-                    "RM",
-                    ">9"
-                ],
-                "context": "attack"
-            },
-            "4AN3HZb7pF4QtYrQ5lW1": {
-                "context": "attack",
-                "throwLocation": [
-                    "RL",
-                    "6to9"
-                ],
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "tag": "trf",
-                "relativeTime": 1219,
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "playerId": "3JkgEKlpVfqcAJF51EP0",
-                "timestamp": 1670700210626
-            },
-            "4H1o8fx8xJY8HWp15Prk": {
-                "timestamp": 1670700815570,
-                "relativeTime": 1570,
-                "context": "goalkeeper",
-                "throwLocation": [
-                    "goal"
-                ],
-                "playerId": "2TBldbJcC02oNbfANusI",
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "tag": "parade"
-            },
-            "5DHxxgDGejgs00t12zwV": {
-                "throwLocation": [
-                    "RR",
-                    "6to9"
-                ],
-                "context": "attack",
-                "relativeTime": 2135,
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "timestamp": 1670702042207,
-                "playerId": "3JkgEKlpVfqcAJF51EP0",
-                "tag": "goal"
-            },
-            "5Ixqo0QnO6HMeqibzP1i": {
-                "relativeTime": 1844,
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "timestamp": 1670701743637,
-                "context": "goalkeeper",
-                "tag": "parade",
-                "throwLocation": [
-                    "goal"
-                ],
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "playerId": "2TBldbJcC02oNbfANusI"
-            },
-            "5KMvT2jHqeYEa1qU9hgX": {
-                "relativeTime": 1798,
-                "throwLocation": [
-                    "RR",
-                    "6to9"
-                ],
-                "context": "attack",
-                "tag": "miss",
-                "playerId": "jbnJeSNfa7IxR1MLSAbO",
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "timestamp": 1670701064918
-            },
-            "5Qkb71a5mkOUKwDGxC3w": {
-                "tag": "2min",
-                "timestamp": 1670702469899,
-                "context": "attack",
-                "playerId": "jbnJeSNfa7IxR1MLSAbO",
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "throwLocation": [
-                    "RM",
-                    "6to9"
-                ],
-                "relativeTime": 2515,
-                "teamId": "C8l61yNPQy4KqXxg2fbg"
-            },
-            "5VLO3QNYwvxpdLbeyIjV": {
-                "throwLocation": [
-                    "RM",
-                    "6to9"
-                ],
-                "timestamp": 1670700860536,
-                "context": "defense",
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "playerId": "MzWDFzwundiPTTr5V13O",
-                "relativeTime": 1615,
-                "tag": "2min",
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz"
-            },
-            "5tpiEUhBCJwMJzY51xjS": {
-                "playerId": "",
-                "timestamp": 1670699315126,
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "context": "defense",
-                "relativeTime": 463,
-                "throwLocation": [
-                    "RM",
-                    "<6"
-                ],
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "tag": "foul"
-            },
-            "6HLAzucdwgG5hUlTczk2": {
-                "tag": "goal_opponent_7m",
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "relativeTime": 1703,
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "playerId": "2TBldbJcC02oNbfANusI",
-                "throwLocation": [
-                    "RM",
-                    ">9"
-                ],
-                "timestamp": 1670700970215,
-                "context": "seven_meter"
-            },
-            "6MzenKKMa6bWLw187ppj": {
-                "relativeTime": 527,
-                "tag": "trf",
-                "playerId": "3JkgEKlpVfqcAJF51EP0",
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "timestamp": 1670699379818,
-                "throwLocation": [
-                    "RL",
-                    "6to9"
-                ],
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "context": "attack"
-            },
-            "775vcIJ54iDmkTBF4Dm8": {
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "relativeTime": 2610,
-                "tag": "assist",
-                "context": "attack",
-                "throwLocation": [
-                    "RM",
-                    "6to9"
-                ],
-                "playerId": "5EHckj8oJozCxVCIsmBF",
-                "timestamp": 1670702659158
-            },
-            "7GQwR1wctZ27mh57VSQZ": {
-                "timestamp": 1670702348383,
-                "tag": "goal",
-                "playerId": "",
-                "context": "attack",
-                "throwLocation": [
-                    "RR",
-                    "6to9"
-                ],
-                "relativeTime": 2440,
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "teamId": "C8l61yNPQy4KqXxg2fbg"
-            },
-            "7ydgVzDr3AtIF0UrG7dV": {
-                "timestamp": 1670701813227,
-                "throwLocation": [
-                    "RM",
-                    ">9"
-                ],
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "playerId": "3JkgEKlpVfqcAJF51EP0",
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "tag": "miss",
-                "relativeTime": 1914,
-                "context": "attack"
-            },
-            "87HxqRKAGvYF4x4Ys6zd": {
-                "tag": "goal_opponent",
-                "playerId": "opponent",
-                "relativeTime": 2118,
-                "timestamp": 1670702025246,
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "context": "goalkeeper",
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "throwLocation": [
-                    "goal"
-                ]
-            },
-            "8GdQHtYJQtor9SxOTYNV": {
-                "relativeTime": 477,
-                "playerId": "2TBldbJcC02oNbfANusI",
-                "tag": "goal_opponent_7m",
-                "timestamp": 1670699329309,
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "throwLocation": [
-                    "RM",
-                    "<6"
-                ],
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "context": "seven_meter"
-            },
-            "8KgCDgABZg0NFGrANJY2": {
-                "tag": "block",
-                "relativeTime": 2225,
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "playerId": "5EHckj8oJozCxVCIsmBF",
-                "context": "defense",
-                "throwLocation": [
-                    "RR",
-                    ">9"
-                ],
-                "timestamp": 1670702132095
-            },
-            "8ThHDSRyIrhs5lahyNss": {
-                "throwLocation": [
-                    "RM",
-                    ">9"
-                ],
-                "tag": "parade_7m",
-                "timestamp": 1670700600852,
-                "relativeTime": 1475,
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "context": "seven_meter",
-                "playerId": "2TBldbJcC02oNbfANusI"
-            },
-            "96JuwOM22btamM3ozHxG": {
-                "timestamp": 1670699915453,
-                "playerId": "h1sPrDEpLgkuNgIzzn2M",
-                "relativeTime": 924,
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "throwLocation": [
-                    "RR",
-                    "6to9"
-                ],
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "tag": "miss",
-                "context": "attack"
-            },
-            "97M1rJiNrdMnBL7831ak": {
-                "relativeTime": 667,
-                "throwLocation": [
-                    "RM",
-                    "6to9"
-                ],
-                "context": "defense",
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "playerId": "5EHckj8oJozCxVCIsmBF",
-                "timestamp": 1670699574492,
-                "tag": "trf",
-                "teamId": "C8l61yNPQy4KqXxg2fbg"
-            },
-            "9DkEJx2DB5EZDfjHexHc": {
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "relativeTime": 769,
-                "context": "goalkeeper",
-                "timestamp": 1670699676162,
-                "throwLocation": [
-                    "goal"
-                ],
-                "playerId": "2TBldbJcC02oNbfANusI",
-                "tag": "parade",
-                "teamId": "C8l61yNPQy4KqXxg2fbg"
-            },
-            "9HZEpL3ScofniMxImxYl": {
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "timestamp": 1670702364160,
-                "tag": "time_pen",
-                "context": "defense",
-                "playerId": "MzWDFzwundiPTTr5V13O",
-                "throwLocation": [
-                    "RM",
-                    ">9"
-                ],
-                "relativeTime": 2443,
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz"
-            },
-            "9f3vIlROI1xSCqMCwXgp": {
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "tag": "miss",
-                "relativeTime": 2540,
-                "playerId": "5EHckj8oJozCxVCIsmBF",
-                "timestamp": 1670702510847,
-                "context": "attack",
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "throwLocation": [
-                    "RM",
-                    ">9"
-                ]
-            },
-            "B0zjWrkRk2ErZPuaH68g": {
-                "tag": "miss",
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "throwLocation": [
-                    "RM",
-                    ">9"
-                ],
-                "playerId": "3JkgEKlpVfqcAJF51EP0",
-                "context": "attack",
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "relativeTime": 3409,
-                "timestamp": 1670703606154
-            },
-            "BRi31XckIQXNGEHj5qyc": {
-                "playerId": "3JkgEKlpVfqcAJF51EP0",
-                "tag": "2min",
-                "context": "attack",
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "timestamp": 1670703274726,
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "relativeTime": 3167,
-                "throwLocation": [
-                    "RM",
-                    "6to9"
-                ]
-            },
-            "BlabNsHOaOjpT6dDd8bA": {
-                "tag": "parade",
-                "relativeTime": 955,
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "playerId": "2TBldbJcC02oNbfANusI",
-                "throwLocation": [
-                    "goal"
-                ],
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "context": "goalkeeper",
-                "timestamp": 1670699946308
-            },
-            "C68nqyZoWS2zRauT39Nm": {
-                "context": "goalkeeper",
-                "playerId": "2TBldbJcC02oNbfANusI",
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "throwLocation": [
-                    "goal"
-                ],
-                "timestamp": 1670700017286,
-                "tag": "parade",
-                "relativeTime": 1026
-            },
-            "CA6MvcCwtmGBB4rdqdpZ": {
-                "playerId": "",
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "relativeTime": 2460,
-                "throwLocation": [
-                    "goal"
-                ],
-                "context": "goalkeeper",
-                "timestamp": 1670702408054,
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "tag": "parade"
-            },
-            "CRcuVrEdns2fzdUrzdFp": {
-                "timestamp": 1670700353764,
-                "throwLocation": [
-                    "RM",
-                    "<6"
-                ],
-                "playerId": "MzWDFzwundiPTTr5V13O",
-                "tag": "goal_7m",
-                "relativeTime": 1323,
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "context": "seven_meter"
-            },
-            "CX79Ek2VxCvoTNLiZkX0": {
-                "relativeTime": 759,
-                "context": "attack",
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "timestamp": 1670699666032,
-                "tag": "goal",
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "playerId": "",
-                "throwLocation": [
-                    "RM",
-                    ">9"
-                ]
-            },
-            "CzNeQIRq3BHhngoaXkPM": {
-                "playerId": "5EHckj8oJozCxVCIsmBF",
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "throwLocation": [
-                    "RM",
-                    ">9"
-                ],
-                "timestamp": 1670702510847,
-                "relativeTime": 2540,
-                "context": "attack",
-                "tag": "miss",
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz"
-            },
-            "DF9achuBrFGpaAyRtdM6": {
-                "tag": "miss",
-                "playerId": "3JkgEKlpVfqcAJF51EP0",
-                "context": "attack",
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "relativeTime": 1914,
-                "timestamp": 1670701813227,
-                "throwLocation": [
-                    "RM",
-                    ">9"
-                ]
-            },
-            "DKTLvvZHJ9IYajQMBNvu": {
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "playerId": "",
-                "tag": "parade",
-                "throwLocation": [
-                    "goal"
-                ],
-                "context": "goalkeeper",
-                "relativeTime": 2831,
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "timestamp": 1670702898677
-            },
-            "DLAIdzmQsHXfBPxjyJCl": {
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "context": "attack",
-                "playerId": "3JkgEKlpVfqcAJF51EP0",
-                "timestamp": 1670702199565,
-                "tag": "trf",
-                "relativeTime": 2291,
-                "throwLocation": [
-                    "RR",
-                    ">9"
-                ]
-            },
-            "DOzYEJ6f2LTLUmQsI6hu": {
-                "relativeTime": 1736,
-                "throwLocation": [
-                    "RM",
-                    ">9"
-                ],
-                "context": "attack",
-                "playerId": "5EHckj8oJozCxVCIsmBF",
-                "tag": "miss",
-                "timestamp": 1670701002964,
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "teamId": "C8l61yNPQy4KqXxg2fbg"
-            },
-            "E8imfjP4kddGd6nckO2i": {
-                "throwLocation": [
-                    "goal"
-                ],
-                "playerId": "2TBldbJcC02oNbfANusI",
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "context": "goalkeeper",
-                "timestamp": 1670700173387,
-                "tag": "parade",
-                "relativeTime": 1182
-            },
-            "EgKoulTtnQqgl0FLLLtf": {
-                "relativeTime": 1368,
-                "timestamp": 1670700398317,
-                "playerId": "",
-                "tag": "trf",
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "throwLocation": [
-                    "RM",
-                    "6to9"
-                ],
-                "context": "attack",
-                "teamId": "C8l61yNPQy4KqXxg2fbg"
-            },
-            "FFAD7h48DR5U7rNL3MGd": {
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "context": "attack",
-                "playerId": "jbnJeSNfa7IxR1MLSAbO",
-                "timestamp": 1670702469899,
-                "tag": "2min",
-                "relativeTime": 2515,
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "throwLocation": [
-                    "RM",
-                    "6to9"
-                ]
-            },
-            "FGSb4VXS0M7neZwghScu": {
-                "timestamp": 1670702444220,
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "relativeTime": 2496,
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "throwLocation": [
-                    "goal"
-                ],
-                "context": "goalkeeper",
-                "playerId": "opponent",
-                "tag": "empty_goal"
-            },
-            "FUHlDKOPEZrUpjbYwhLU": {
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "playerId": "h1sPrDEpLgkuNgIzzn2M",
-                "context": "attack",
-                "tag": "miss",
-                "throwLocation": [
-                    "RL",
-                    "6to9"
-                ],
-                "timestamp": 1670701973663,
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "relativeTime": 2064
-            },
-            "FcSVlMRd4bUbCgYVQN9n": {
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "throwLocation": [
-                    "goal"
-                ],
-                "playerId": "2TBldbJcC02oNbfANusI",
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "relativeTime": 891,
-                "timestamp": 1670699882281,
-                "tag": "parade",
-                "context": "goalkeeper"
-            },
-            "FfZ5Ohr5v9DzOwBUlmov": {
-                "tag": "miss",
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "timestamp": 1670701002964,
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "context": "attack",
-                "playerId": "5EHckj8oJozCxVCIsmBF",
-                "relativeTime": 1736,
-                "throwLocation": [
-                    "RM",
-                    ">9"
-                ]
-            },
-            "FqXr5wKe5vfdVEzUf7An": {
-                "timestamp": 1670703042777,
-                "relativeTime": 2942,
-                "playerId": "9CAOHoEzOyVRQ6vrSSgf",
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "throwLocation": [
-                    "RM",
-                    "6to9"
-                ],
-                "tag": "1v1&7",
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "context": "attack"
-            },
-            "G5iPAZgU2xmjhkmL2T45": {
-                "relativeTime": 3222,
-                "playerId": "50fTmfugZ5SeUkS6PKgN",
-                "tag": "miss",
-                "timestamp": 1670703346692,
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "throwLocation": [
-                    "RM",
-                    "6to9"
-                ],
-                "context": "attack"
-            },
-            "GLd9GJSMeoWMjylGdyxf": {
-                "timestamp": 1670702199565,
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "tag": "trf",
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "context": "attack",
-                "relativeTime": 2291,
-                "throwLocation": [
-                    "RR",
-                    ">9"
-                ],
-                "playerId": "3JkgEKlpVfqcAJF51EP0"
-            },
-            "GOtPMXHtZDgBWVCBoSU9": {
-                "context": "seven_meter",
-                "tag": "goal_7m",
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "playerId": "MzWDFzwundiPTTr5V13O",
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "relativeTime": 2949,
-                "timestamp": 1670703049801,
-                "throwLocation": [
-                    "RM",
-                    "6to9"
-                ]
-            },
-            "GiIIGf7ndBmNXrOkV6il": {
-                "relativeTime": 1732,
-                "playerId": "opponent",
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "throwLocation": [
-                    "goal"
-                ],
-                "timestamp": 1670700999587,
-                "tag": "goal_opponent",
-                "context": "goalkeeper"
-            },
-            "GsG1oAOu91vxJPCggJtJ": {
-                "timestamp": 1670702282713,
-                "playerId": "jbnJeSNfa7IxR1MLSAbO",
-                "tag": "goal",
-                "context": "attack",
-                "relativeTime": 2374,
-                "throwLocation": [
-                    "RR",
-                    "6to9"
-                ],
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz"
-            },
-            "GuWPclW6GseSzSKTZa4u": {
-                "relativeTime": 1530,
-                "throwLocation": [
-                    "RL",
-                    "6to9"
-                ],
-                "timestamp": 1670700775148,
-                "tag": "miss",
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "playerId": "h1sPrDEpLgkuNgIzzn2M",
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "context": "attack"
-            },
-            "HeISo2U8FIjIHP4KZRSv": {
-                "tag": "parade",
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "context": "goalkeeper",
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "throwLocation": [
-                    "goal"
-                ],
-                "playerId": "2TBldbJcC02oNbfANusI",
-                "relativeTime": 1570,
-                "timestamp": 1670700815570
-            },
-            "HyBxPAeXJtyV6DqeH4LK": {
-                "tag": "trf",
-                "relativeTime": 1005,
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "timestamp": 1670699996773,
-                "throwLocation": [
-                    "RR",
-                    "6to9"
-                ],
-                "playerId": "MzWDFzwundiPTTr5V13O",
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "context": "attack"
-            },
-            "IgsS5qSuY2iKRSXkrzsU": {
-                "relativeTime": 1115,
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "playerId": "5EHckj8oJozCxVCIsmBF",
-                "throwLocation": [
-                    "RM",
-                    "6to9"
-                ],
-                "timestamp": 1670700106270,
-                "context": "attack",
-                "tag": "yellow"
-            },
-            "IjF6pBz6KgUn76pXWSpj": {
-                "relativeTime": 1310,
-                "context": "attack",
-                "tag": "1v1&7",
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "timestamp": 1670700340312,
-                "throwLocation": [
-                    "RM",
-                    "<6"
-                ],
-                "playerId": "h1sPrDEpLgkuNgIzzn2M",
-                "teamId": "C8l61yNPQy4KqXxg2fbg"
-            },
-            "IsVFxiNVGqMksraZG5lb": {
-                "playerId": "3JkgEKlpVfqcAJF51EP0",
-                "tag": "trf",
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "context": "attack",
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "timestamp": 1670702776152,
-                "relativeTime": 2709,
-                "throwLocation": [
-                    "RR",
-                    ">9"
-                ]
-            },
-            "JTv16WLy5EkDLjE5zDcM": {
-                "throwLocation": [
-                    "RR",
-                    "6to9"
-                ],
-                "tag": "goal",
-                "relativeTime": 1661,
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "context": "attack",
-                "timestamp": 1670700927935,
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "playerId": ""
-            },
-            "JqBMtQhw7OWhvbN2rqWf": {
-                "relativeTime": 2836,
-                "tag": "parade",
-                "context": "goalkeeper",
-                "throwLocation": [
-                    "goal"
-                ],
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "playerId": "2TBldbJcC02oNbfANusI",
-                "timestamp": 1670702903003
-            },
-            "KCvDBh8uW7xgKh6W6wgM": {
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "playerId": "5EHckj8oJozCxVCIsmBF",
-                "throwLocation": [
-                    "RM",
-                    ">9"
-                ],
-                "timestamp": 1670702101502,
-                "relativeTime": 2195,
-                "context": "attack",
-                "tag": "trf",
-                "teamId": "C8l61yNPQy4KqXxg2fbg"
-            },
-            "KU4tzEa3T1fuAXGr87nL": {
-                "tag": "goal_opponent_7m",
-                "throwLocation": [
-                    "RM",
-                    ">9"
-                ],
-                "relativeTime": 1703,
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "playerId": "2TBldbJcC02oNbfANusI",
-                "timestamp": 1670700970215,
-                "context": "seven_meter",
-                "teamId": "C8l61yNPQy4KqXxg2fbg"
-            },
-            "LD3Gga1yliQOGKzgRLga": {
-                "tag": "time_pen",
-                "context": "defense",
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "throwLocation": [
-                    "RR",
-                    ">9"
-                ],
-                "timestamp": 1670699464633,
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "relativeTime": 585,
-                "playerId": "paPtYZVG7yVNEjLlN6vO"
-            },
-            "LKVipXkTzABKlZC8Sq0O": {
-                "tag": "parade",
-                "timestamp": 1670699121723,
-                "relativeTime": 239,
-                "context": "goalkeeper",
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "playerId": "2TBldbJcC02oNbfANusI",
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "throwLocation": [
-                    "goal"
-                ]
-            },
-            "MEZD0Wl52S9JWFCJnZr3": {
-                "tag": "goal",
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "playerId": "",
-                "throwLocation": [
-                    "RM",
-                    "6to9"
-                ],
-                "relativeTime": 3292,
-                "context": "attack",
-                "timestamp": 1670703416976
-            },
-            "MpxyBk6Ae2g1BeidB8fW": {
-                "playerId": "jbnJeSNfa7IxR1MLSAbO",
-                "throwLocation": [
-                    "RM",
-                    "6to9"
-                ],
-                "timestamp": 1670703380201,
-                "relativeTime": 3256,
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "context": "attack",
-                "tag": "goal"
-            },
-            "N0iLGJI5dIBM1BkmEzhm": {
-                "playerId": "5EHckj8oJozCxVCIsmBF",
-                "relativeTime": 946,
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "tag": "miss",
-                "throwLocation": [
-                    "RL",
-                    "<6"
-                ],
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "context": "attack",
-                "timestamp": 1670699936900
-            },
-            "N4W3yFwktts7lVnG5JCV": {
-                "tag": "time_pen",
-                "playerId": "MzWDFzwundiPTTr5V13O",
-                "throwLocation": [
-                    "RM",
-                    ">9"
-                ],
-                "relativeTime": 2443,
-                "timestamp": 1670702364160,
-                "context": "defense",
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz"
-            },
-            "NCMbIFvaGvNjBmWE6gzY": {
-                "relativeTime": 527,
-                "tag": "trf",
-                "throwLocation": [
-                    "RL",
-                    "6to9"
-                ],
-                "context": "attack",
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "playerId": "3JkgEKlpVfqcAJF51EP0",
-                "timestamp": 1670699379818,
-                "teamId": "C8l61yNPQy4KqXxg2fbg"
-            },
-            "NLXr8tLimmYW26YrAVjc": {
-                "timestamp": 1670700017286,
-                "throwLocation": [
-                    "goal"
-                ],
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "context": "goalkeeper",
-                "playerId": "2TBldbJcC02oNbfANusI",
-                "relativeTime": 1026,
-                "tag": "parade"
-            },
-            "Nf6iax68gYMJLcBq7hCl": {
-                "tag": "miss",
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "throwLocation": [
-                    "RR",
-                    "<6"
-                ],
-                "timestamp": 1670699276968,
-                "context": "attack",
-                "relativeTime": 426,
-                "playerId": "h1sPrDEpLgkuNgIzzn2M",
-                "teamId": "C8l61yNPQy4KqXxg2fbg"
-            },
-            "NhP96FEtCRuAe0oThWP6": {
-                "context": "attack",
-                "tag": "miss",
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "relativeTime": 3184,
-                "playerId": "5EHckj8oJozCxVCIsmBF",
-                "throwLocation": [
-                    "RM",
-                    "6to9"
-                ],
-                "timestamp": 1670703308993
-            },
-            "NqOtrd34K1kKRfbLlCZF": {
-                "tag": "parade",
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "timestamp": 1670701821942,
-                "relativeTime": 1922,
-                "context": "goalkeeper",
-                "throwLocation": [
-                    "goal"
-                ],
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "playerId": "2TBldbJcC02oNbfANusI"
-            },
-            "O4mrJz4D4t5mkdSon35k": {
-                "throwLocation": [
-                    "goal"
-                ],
-                "context": "goalkeeper",
-                "playerId": "opponent",
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "tag": "goal_opponent",
-                "timestamp": 1670702692355,
-                "relativeTime": 2637
-            },
-            "OW6Yq0vybI93NNmhx6uS": {
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "tag": "miss",
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "relativeTime": 3222,
-                "playerId": "50fTmfugZ5SeUkS6PKgN",
-                "timestamp": 1670703346692,
-                "throwLocation": [
-                    "RM",
-                    "6to9"
-                ],
-                "context": "attack"
-            },
-            "OkosCQ2KjWKmJoFXUpab": {
-                "relativeTime": 1159,
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "context": "attack",
-                "timestamp": 1670700150790,
-                "playerId": "3JkgEKlpVfqcAJF51EP0",
-                "tag": "goal",
-                "throwLocation": [
-                    "RM",
-                    "6to9"
-                ],
-                "teamId": "C8l61yNPQy4KqXxg2fbg"
-            },
-            "OsY3An5gneQu3EpO00l0": {
-                "context": "goalkeeper",
-                "tag": "goal_opponent",
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "relativeTime": 3568,
-                "timestamp": 1670703765267,
-                "playerId": "opponent",
-                "throwLocation": [
-                    "goal"
-                ]
-            },
-            "QCL7KlYCu7bbSYAPwkVW": {
-                "playerId": "3JkgEKlpVfqcAJF51EP0",
-                "timestamp": 1670699450511,
-                "throwLocation": [
-                    "RR",
-                    ">9"
-                ],
-                "tag": "miss",
-                "relativeTime": 579,
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "context": "attack"
-            },
-            "QOF3Ovwt2I5vyagi1Dof": {
-                "throwLocation": [
-                    "RR",
-                    ">9"
-                ],
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "context": "attack",
-                "timestamp": 1670699821547,
-                "tag": "trf",
-                "playerId": "3JkgEKlpVfqcAJF51EP0",
-                "relativeTime": 830
-            },
-            "QsnJ6j0YXk0YC9WPlVYo": {
-                "tag": "2min",
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "playerId": "MzWDFzwundiPTTr5V13O",
-                "relativeTime": 1615,
-                "throwLocation": [
-                    "RM",
-                    "6to9"
-                ],
-                "timestamp": 1670700860536,
-                "context": "defense",
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz"
-            },
-            "R4mwxN9Sk1HhXQiV9IUa": {
-                "context": "goalkeeper",
-                "relativeTime": 1922,
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "playerId": "2TBldbJcC02oNbfANusI",
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "timestamp": 1670701821942,
-                "tag": "parade",
-                "throwLocation": [
-                    "goal"
-                ]
-            },
-            "S8uXHZr554LrBk2rzJ8f": {
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "context": "defense",
-                "relativeTime": 67,
-                "tag": "block",
-                "throwLocation": [
-                    "RM",
-                    "6to9"
-                ],
-                "playerId": "5EHckj8oJozCxVCIsmBF",
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "timestamp": 1670698950340
-            },
-            "T1kzeLF3vl5wGMXff7IO": {
-                "playerId": "2TBldbJcC02oNbfANusI",
-                "timestamp": 1670700600852,
-                "relativeTime": 1475,
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "tag": "parade_7m",
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "context": "seven_meter",
-                "throwLocation": [
-                    "RM",
-                    ">9"
-                ]
-            },
-            "TBQdr3IVuPmwdGGSl7sm": {
-                "timestamp": 1670702852910,
-                "throwLocation": [
-                    "RM",
-                    ">9"
-                ],
-                "tag": "trf",
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "relativeTime": 2786,
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "context": "attack",
-                "playerId": "MzWDFzwundiPTTr5V13O"
-            },
-            "TKVCzASba0GjR4ULliLF": {
-                "timestamp": 1670703274726,
-                "relativeTime": 3167,
-                "tag": "2min",
-                "playerId": "3JkgEKlpVfqcAJF51EP0",
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "throwLocation": [
-                    "RM",
-                    "6to9"
-                ],
-                "context": "attack"
-            },
-            "UEfRFLVi5drxztn6Vils": {
-                "timestamp": 1670699807401,
-                "relativeTime": 816,
-                "playerId": "2TBldbJcC02oNbfANusI",
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "context": "goalkeeper",
-                "throwLocation": [
-                    "goal"
-                ],
-                "tag": "parade",
-                "teamId": "C8l61yNPQy4KqXxg2fbg"
-            },
-            "V1eHQ4lRtyZ6Z88XSON5": {
-                "relativeTime": 1413,
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "throwLocation": [
-                    "RM",
-                    ">9"
-                ],
-                "timestamp": 1670700478004,
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "playerId": "",
-                "tag": "red",
-                "context": "defense"
-            },
-            "V2F9OMYAVJALKea8hIwH": {
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "playerId": "2TBldbJcC02oNbfANusI",
-                "timestamp": 1670702903003,
-                "throwLocation": [
-                    "goal"
-                ],
-                "context": "goalkeeper",
-                "relativeTime": 2836,
-                "tag": "parade"
-            },
-            "V6lsBOrU3FwWJMmDhilY": {
-                "tag": "miss",
-                "timestamp": 1670703009419,
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "throwLocation": [
-                    "RM",
-                    "6to9"
-                ],
-                "playerId": "3JkgEKlpVfqcAJF51EP0",
-                "context": "attack",
-                "relativeTime": 2908
-            },
-            "VQJ5ed6dqIKzT6dZA8fY": {
-                "playerId": "5EHckj8oJozCxVCIsmBF",
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "context": "defense",
-                "relativeTime": 2225,
-                "timestamp": 1670702132095,
-                "tag": "block",
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "throwLocation": [
-                    "RR",
-                    ">9"
-                ]
-            },
-            "Vsc0alf1MfrtcWgLVEeA": {
-                "timestamp": 1670700586881,
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "relativeTime": 1461,
-                "playerId": "",
-                "tag": "foul",
-                "throwLocation": [
-                    "RM",
-                    ">9"
-                ],
-                "context": "defense"
-            },
-            "WGdHxWUnbWKewvJRRNvk": {
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "context": "goalkeeper",
-                "relativeTime": 3504,
-                "tag": "parade",
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "timestamp": 1670703700815,
-                "playerId": "2TBldbJcC02oNbfANusI",
-                "throwLocation": [
-                    "goal"
-                ]
-            },
-            "WMGpXahFNJxqA13gbFyc": {
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "context": "attack",
-                "playerId": "3JkgEKlpVfqcAJF51EP0",
-                "relativeTime": 2330,
-                "timestamp": 1670702238726,
-                "tag": "miss",
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "throwLocation": [
-                    "RM",
-                    "6to9"
-                ]
-            },
-            "WMLcD8jtb4344mjxWqku": {
-                "playerId": "opponent",
-                "tag": "goal_opponent",
-                "relativeTime": 3342,
-                "context": "goalkeeper",
-                "timestamp": 1670703539300,
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "throwLocation": [
-                    "goal"
-                ]
-            },
-            "XSbXAegE5SjLSOG27qhR": {
-                "throwLocation": [
-                    "RL",
-                    "6to9"
-                ],
-                "relativeTime": 2637,
-                "tag": "2min",
-                "timestamp": 1670702698465,
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "context": "defense",
-                "playerId": "",
-                "teamId": "C8l61yNPQy4KqXxg2fbg"
-            },
-            "XcBvt34u0PyiXzoFXKFM": {
-                "tag": "miss",
-                "timestamp": 1670700837599,
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "relativeTime": 1592,
-                "throwLocation": [
-                    "RR",
-                    "6to9"
-                ],
-                "playerId": "",
-                "context": "attack"
-            },
-            "XeMkEWHXMugovdWqqDuq": {
-                "timestamp": 1670699574492,
-                "tag": "trf",
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "context": "defense",
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "throwLocation": [
-                    "RM",
-                    "6to9"
-                ],
-                "relativeTime": 667,
-                "playerId": "5EHckj8oJozCxVCIsmBF"
-            },
-            "XsAar9Zitp4LCK352BfD": {
-                "throwLocation": [
-                    "goal"
-                ],
-                "context": "goalkeeper",
-                "relativeTime": 2712,
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "timestamp": 1670702779737,
-                "tag": "empty_goal",
-                "playerId": "opponent"
-            },
-            "YFezlPHoNzo5Jnvghxju": {
-                "playerId": "",
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "tag": "bad_pass",
-                "throwLocation": [
-                    "goal"
-                ],
-                "relativeTime": 109,
-                "timestamp": 1670698992505,
-                "context": "goalkeeper"
-            },
-            "YT2s1a3m9LBRqOYi96R7": {
-                "timestamp": 1670702147829,
-                "tag": "goal_opponent",
-                "context": "goalkeeper",
-                "relativeTime": 2241,
-                "playerId": "opponent",
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "throwLocation": [
-                    "goal"
-                ]
-            },
-            "YbQeIzSzF5IHHQCPunPy": {
-                "relativeTime": 300,
-                "throwLocation": [
-                    "RM",
-                    "<6"
-                ],
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "timestamp": 1670699183004,
-                "tag": "1v1&7",
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "playerId": "5EHckj8oJozCxVCIsmBF",
-                "context": "attack"
-            },
-            "YlneFGMUrp9ZtE34qYAY": {
-                "relativeTime": 315,
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "throwLocation": [
-                    "RM",
-                    "<6"
-                ],
-                "playerId": "h1sPrDEpLgkuNgIzzn2M",
-                "tag": "missed_7m",
-                "context": "seven_meter",
-                "timestamp": 1670699198452,
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz"
-            },
-            "Yx5rYsIhPMpwZlAOH9ij": {
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "relativeTime": 3467,
-                "throwLocation": [
-                    "RR",
-                    "6to9"
-                ],
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "playerId": "jbnJeSNfa7IxR1MLSAbO",
-                "tag": "goal",
-                "context": "attack",
-                "timestamp": 1670703663603
-            },
-            "ZFCe952coA5i4xrPn9qF": {
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "tag": "miss",
-                "playerId": "5EHckj8oJozCxVCIsmBF",
-                "context": "attack",
-                "timestamp": 1670699936900,
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "relativeTime": 946,
-                "throwLocation": [
-                    "RL",
-                    "<6"
-                ]
-            },
-            "ZX971ayF2pGrwGuHuZdE": {
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "playerId": "opponent",
-                "context": "goalkeeper",
-                "relativeTime": 2335,
-                "timestamp": 1670702244145,
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "tag": "goal_opponent",
-                "throwLocation": [
-                    "goal"
-                ]
-            },
-            "ZgCdlxZUaFpGfATVUK6N": {
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "tag": "goal_opponent",
-                "playerId": "opponent",
-                "timestamp": 1670701898743,
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "relativeTime": 1999,
-                "context": "goalkeeper",
-                "throwLocation": [
-                    "goal"
-                ]
-            },
-            "aeA9gIMhivMZ6uDWVSJ3": {
-                "relativeTime": 804,
-                "context": "goalkeeper",
-                "timestamp": 1670699795064,
-                "playerId": "2TBldbJcC02oNbfANusI",
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "tag": "parade",
-                "throwLocation": [
-                    "goal"
-                ]
-            },
-            "b3Mip2BesBhpjjamOGCY": {
-                "context": "seven_meter",
-                "playerId": "2TBldbJcC02oNbfANusI",
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "relativeTime": 477,
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "timestamp": 1670699329309,
-                "tag": "goal_opponent_7m",
-                "throwLocation": [
-                    "RM",
-                    "<6"
-                ]
-            },
-            "bmwn9dYQQtErAJ7Dwl0G": {
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "throwLocation": [
-                    "goal"
-                ],
-                "playerId": "2TBldbJcC02oNbfANusI",
-                "tag": "parade",
-                "timestamp": 1670699882281,
-                "context": "goalkeeper",
-                "relativeTime": 891,
-                "teamId": "C8l61yNPQy4KqXxg2fbg"
-            },
-            "cH7eeN1SPNulbkTTibda": {
-                "tag": "assist",
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "relativeTime": 1975,
-                "playerId": "5EHckj8oJozCxVCIsmBF",
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "timestamp": 1670701874905,
-                "context": "attack",
-                "throwLocation": [
-                    "RM",
-                    ">9"
-                ]
-            },
-            "cHNvZ7u8Jh1wVuomamJV": {
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "playerId": "3JkgEKlpVfqcAJF51EP0",
-                "timestamp": 1670703606154,
-                "context": "attack",
-                "tag": "miss",
-                "relativeTime": 3409,
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "throwLocation": [
-                    "RM",
-                    ">9"
-                ]
-            },
-            "cclMjLdugA1tmq8OuUqH": {
-                "playerId": "2TBldbJcC02oNbfANusI",
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "tag": "parade",
-                "context": "goalkeeper",
-                "throwLocation": [
-                    "goal"
-                ],
-                "timestamp": 1670703195791,
-                "relativeTime": 3095
-            },
-            "dKVOafJZqVlnmXTfJQCR": {
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "timestamp": 1670703042777,
-                "throwLocation": [
-                    "RM",
-                    "6to9"
-                ],
-                "relativeTime": 2942,
-                "playerId": "9CAOHoEzOyVRQ6vrSSgf",
-                "context": "attack",
-                "tag": "1v1&7",
-                "teamId": "C8l61yNPQy4KqXxg2fbg"
-            },
-            "dXqeoJBWZCH0aF9tdVgC": {
-                "playerId": "opponent",
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "throwLocation": [
-                    "goal"
-                ],
-                "timestamp": 1670700527061,
-                "relativeTime": 1413,
-                "tag": "goal_opponent",
-                "context": "goalkeeper",
-                "teamId": "C8l61yNPQy4KqXxg2fbg"
-            },
-            "eivpFvHxULCvS2Sy9bXo": {
-                "relativeTime": 2064,
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "timestamp": 1670701973663,
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "throwLocation": [
-                    "RL",
-                    "6to9"
-                ],
-                "playerId": "h1sPrDEpLgkuNgIzzn2M",
-                "tag": "miss",
-                "context": "attack"
-            },
-            "estkrLkli4KvG0yJyVid": {
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "tag": "trf",
-                "context": "attack",
-                "relativeTime": 1219,
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "timestamp": 1670700210626,
-                "throwLocation": [
-                    "RL",
-                    "6to9"
-                ],
-                "playerId": "3JkgEKlpVfqcAJF51EP0"
-            },
-            "fG4SsaCQWO1uPxIy46Yp": {
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "timestamp": 1670699078942,
-                "playerId": "jbnJeSNfa7IxR1MLSAbO",
-                "relativeTime": 196,
-                "tag": "trf",
-                "context": "attack",
-                "throwLocation": [
-                    "RM",
-                    "<6"
-                ]
-            },
-            "fKwcQX0VYbGb3nLLe9Zd": {
-                "timestamp": 1670702238726,
-                "relativeTime": 2330,
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "throwLocation": [
-                    "RM",
-                    "6to9"
-                ],
-                "context": "attack",
-                "playerId": "3JkgEKlpVfqcAJF51EP0",
-                "tag": "miss",
-                "teamId": "C8l61yNPQy4KqXxg2fbg"
-            },
-            "fhkV4nMqLPj93tRtZe3a": {
-                "playerId": "opponent",
-                "relativeTime": 1108,
-                "throwLocation": [
-                    "goal"
-                ],
-                "timestamp": 1670700099122,
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "context": "goalkeeper",
-                "tag": "goal_opponent"
-            },
-            "fiWW5ewsIw7KLfqt3Oei": {
-                "throwLocation": [
-                    "RM",
-                    "6to9"
-                ],
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "context": "defense",
-                "timestamp": 1670698950340,
-                "tag": "block",
-                "playerId": "5EHckj8oJozCxVCIsmBF",
-                "relativeTime": 67,
-                "teamId": "C8l61yNPQy4KqXxg2fbg"
-            },
-            "g4tzeNFDrxnlsLyqDvng": {
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "throwLocation": [
-                    "goal"
-                ],
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "context": "goalkeeper",
-                "tag": "goal_opponent",
-                "playerId": "opponent",
-                "timestamp": 1670700218269,
-                "relativeTime": 1227
-            },
-            "gD4D0KBF9Xbnavr22Vsm": {
-                "timestamp": 1670703406586,
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "playerId": "opponent",
-                "relativeTime": 3282,
-                "tag": "goal_opponent",
-                "context": "goalkeeper",
-                "throwLocation": [
-                    "goal"
-                ]
-            },
-            "gUaYrTzIzUo70KDuvKRz": {
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "playerId": "2TBldbJcC02oNbfANusI",
-                "throwLocation": [
-                    "goal"
-                ],
-                "tag": "parade",
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "timestamp": 1670700381562,
-                "context": "goalkeeper",
-                "relativeTime": 1351
-            },
-            "gqv90fmGxoa9gJaMFAkH": {
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "tag": "yellow",
-                "timestamp": 1670700106270,
-                "context": "attack",
-                "playerId": "5EHckj8oJozCxVCIsmBF",
-                "throwLocation": [
-                    "RM",
-                    "6to9"
-                ],
-                "relativeTime": 1115
-            },
-            "gyCzgp5ydhoRLmlYOM4F": {
-                "relativeTime": 804,
-                "context": "goalkeeper",
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "throwLocation": [
-                    "goal"
-                ],
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "playerId": "2TBldbJcC02oNbfANusI",
-                "timestamp": 1670699795064,
-                "tag": "parade"
-            },
-            "hPCKbMjag6ybdQzcTEoP": {
-                "relativeTime": 2381,
-                "context": "goalkeeper",
-                "timestamp": 1670702290166,
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "tag": "goal_opponent",
-                "throwLocation": [
-                    "goal"
-                ],
-                "playerId": "opponent"
-            },
-            "hkQGTS16ObDxrIC9YQbs": {
-                "playerId": "2TBldbJcC02oNbfANusI",
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "timestamp": 1670700381562,
-                "tag": "parade",
-                "relativeTime": 1351,
-                "context": "goalkeeper",
-                "throwLocation": [
-                    "goal"
-                ],
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz"
-            },
-            "imoBQoEhmyizKLv6zo2y": {
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "throwLocation": [
-                    "goal"
-                ],
-                "playerId": "2TBldbJcC02oNbfANusI",
-                "relativeTime": 1844,
-                "timestamp": 1670701743637,
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "tag": "parade",
-                "context": "goalkeeper"
-            },
-            "jEWRNcMsTBScZIi5tOyx": {
-                "timestamp": 1670703308993,
-                "tag": "miss",
-                "relativeTime": 3184,
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "throwLocation": [
-                    "RM",
-                    "6to9"
-                ],
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "playerId": "5EHckj8oJozCxVCIsmBF",
-                "context": "attack"
-            },
-            "kD7fSKO7D612ICu17wW6": {
-                "tag": "parade",
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "playerId": "2TBldbJcC02oNbfANusI",
-                "timestamp": 1670699946308,
-                "relativeTime": 955,
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "throwLocation": [
-                    "goal"
-                ],
-                "context": "goalkeeper"
-            },
-            "kHKqiDKw9h6ZEXqTbdBV": {
-                "relativeTime": 3522,
-                "context": "attack",
-                "timestamp": 1670703718429,
-                "tag": "miss",
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "playerId": "",
-                "throwLocation": [
-                    "RA",
-                    "6to9"
-                ]
-            },
-            "kia8gGRxWq41Dkk8SVmc": {
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "playerId": "",
-                "tag": "goal",
-                "throwLocation": [
-                    "RM",
-                    ">9"
-                ],
-                "context": "attack",
-                "timestamp": 1670701874905,
-                "relativeTime": 1975
-            },
-            "kq7CXtkQ6S4cEXnus9SH": {
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "relativeTime": 239,
-                "context": "goalkeeper",
-                "tag": "parade",
-                "timestamp": 1670699121723,
-                "playerId": "2TBldbJcC02oNbfANusI",
-                "throwLocation": [
-                    "goal"
-                ],
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz"
-            },
-            "l3ZhzA0ECgvJS7wHix1L": {
-                "timestamp": 1670700775148,
-                "playerId": "h1sPrDEpLgkuNgIzzn2M",
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "context": "attack",
-                "tag": "miss",
-                "throwLocation": [
-                    "RL",
-                    "6to9"
-                ],
-                "relativeTime": 1530
-            },
-            "lGYbShVJNWWSpg09Wiwp": {
-                "playerId": "MzWDFzwundiPTTr5V13O",
-                "tag": "trf",
-                "context": "attack",
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "relativeTime": 1005,
-                "throwLocation": [
-                    "RR",
-                    "6to9"
-                ],
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "timestamp": 1670699996773
-            },
-            "lqzvQOSTFTEmcrZQ2J6t": {
-                "relativeTime": 1798,
-                "timestamp": 1670701064918,
-                "tag": "miss",
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "throwLocation": [
-                    "RR",
-                    "6to9"
-                ],
-                "playerId": "jbnJeSNfa7IxR1MLSAbO",
-                "context": "attack"
-            },
-            "m5XO0mFzbX8D0OMMv9KB": {
-                "playerId": "opponent",
-                "timestamp": 1670699605895,
-                "tag": "goal_opponent",
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "context": "goalkeeper",
-                "relativeTime": 698,
-                "throwLocation": [
-                    "goal"
-                ]
-            },
-            "mLVE7d6RLtLL68YB8MkY": {
-                "playerId": "MzWDFzwundiPTTr5V13O",
-                "timestamp": 1670700898968,
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "relativeTime": 1632,
-                "throwLocation": [
-                    "RL",
-                    "6to9"
-                ],
-                "context": "attack",
-                "tag": "goal"
-            },
-            "nN3nF2Ogh5FdlrCAmj5x": {
-                "timestamp": 1670699078942,
-                "playerId": "jbnJeSNfa7IxR1MLSAbO",
-                "relativeTime": 196,
-                "tag": "trf",
-                "throwLocation": [
-                    "RM",
-                    "<6"
-                ],
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "context": "attack",
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz"
-            },
-            "pJaHcVUCncRgbK1f0NXR": {
-                "tag": "yellow",
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "throwLocation": [
-                    "RM",
-                    ">9"
-                ],
-                "timestamp": 1670699685300,
-                "context": "attack",
-                "playerId": "3JkgEKlpVfqcAJF51EP0",
-                "relativeTime": 778,
-                "teamId": "C8l61yNPQy4KqXxg2fbg"
-            },
-            "pMLRFBeSDl3TqGQirXoB": {
-                "timestamp": 1670699685300,
-                "relativeTime": 778,
-                "context": "attack",
-                "playerId": "3JkgEKlpVfqcAJF51EP0",
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "throwLocation": [
-                    "RM",
-                    ">9"
-                ],
-                "tag": "yellow",
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz"
-            },
-            "pQlK5jrYiKF1P2UrXYdp": {
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "context": "goalkeeper",
-                "throwLocation": [
-                    "goal"
-                ],
-                "playerId": "opponent",
-                "relativeTime": 1374,
-                "timestamp": 1670700404946,
-                "tag": "goal_opponent",
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz"
-            },
-            "q4GBkJEC9Hwr3uZVesSl": {
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "context": "attack",
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "tag": "miss",
-                "throwLocation": [
-                    "RM",
-                    "6to9"
-                ],
-                "timestamp": 1670703009419,
-                "playerId": "3JkgEKlpVfqcAJF51EP0",
-                "relativeTime": 2908
-            },
-            "qamLgLPXBlqkp1VEvRDh": {
-                "playerId": "opponent",
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "throwLocation": [
-                    "goal"
-                ],
-                "timestamp": 1670699924971,
-                "tag": "goal_opponent",
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "relativeTime": 934,
-                "context": "goalkeeper"
-            },
-            "qfJioESWcmuDenY8o9cx": {
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "timestamp": 1670700567616,
-                "tag": "time_pen",
-                "context": "defense",
-                "throwLocation": [
-                    "RL",
-                    ">9"
-                ],
-                "playerId": "",
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "relativeTime": 1413
-            },
-            "r0nRJjrtBByMIJcWvm16": {
-                "throwLocation": [
-                    "RM",
-                    ">9"
-                ],
-                "context": "defense",
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "playerId": "jbnJeSNfa7IxR1MLSAbO",
-                "tag": "foul",
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "timestamp": 1670700957051,
-                "relativeTime": 1690
-            },
-            "rWm0uPzzQXOuqPWiDdws": {
-                "relativeTime": 134,
-                "context": "goalkeeper",
-                "playerId": "",
-                "tag": "bad_pass",
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "timestamp": 1670699016840,
-                "throwLocation": [
-                    "goal"
-                ]
-            },
-            "rXoFOQBjsC8wgt4KypSj": {
-                "context": "attack",
-                "playerId": "3JkgEKlpVfqcAJF51EP0",
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "timestamp": 1670702776152,
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "throwLocation": [
-                    "RR",
-                    ">9"
-                ],
-                "tag": "trf",
-                "relativeTime": 2709
-            },
-            "rjMYeGHbpSQd7j5ECV8a": {
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "context": "attack",
-                "playerId": "jbnJeSNfa7IxR1MLSAbO",
-                "tag": "goal",
-                "relativeTime": 1802,
-                "timestamp": 1670701069375,
-                "throwLocation": [
-                    "RL",
-                    ">9"
-                ]
-            },
-            "sZtotXcaptO8bhVMcnCM": {
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "playerId": "opponent",
-                "context": "goalkeeper",
-                "throwLocation": [
-                    "goal"
-                ],
-                "timestamp": 1670699952920,
-                "tag": "goal_opponent",
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "relativeTime": 962
-            },
-            "tUNcrp7uzPgcJzMtjCV5": {
-                "playerId": "",
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "throwLocation": [
-                    "RM",
-                    "6to9"
-                ],
-                "tag": "miss",
-                "context": "attack",
-                "timestamp": 1670703119578,
-                "relativeTime": 3019
-            },
-            "uhfQqP3ZIA9A5aeCkSRq": {
-                "playerId": "h1sPrDEpLgkuNgIzzn2M",
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "context": "attack",
-                "relativeTime": 426,
-                "timestamp": 1670699276968,
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "throwLocation": [
-                    "RR",
-                    "<6"
-                ],
-                "tag": "miss"
-            },
-            "v749vZiucIRqdg8Qf5NI": {
-                "context": "attack",
-                "playerId": "",
-                "relativeTime": 2047,
-                "tag": "2min",
-                "throwLocation": [
-                    "RM",
-                    ">9"
-                ],
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "timestamp": 1670701943358,
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz"
-            },
-            "v7vDQUlqgrUAfiC2URsu": {
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "playerId": "jbnJeSNfa7IxR1MLSAbO",
-                "tag": "foul",
-                "context": "defense",
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "relativeTime": 1690,
-                "timestamp": 1670700957051,
-                "throwLocation": [
-                    "RM",
-                    ">9"
-                ]
-            },
-            "w4AsvtGrg8LO4cnm6PHU": {
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "tag": "trf",
-                "relativeTime": 2786,
-                "context": "attack",
-                "playerId": "MzWDFzwundiPTTr5V13O",
-                "timestamp": 1670702852910,
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "throwLocation": [
-                    "RM",
-                    ">9"
-                ]
-            },
-            "wqFAhsdWx2FOPHgpshMb": {
-                "timestamp": 1670702560639,
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "context": "seven_meter",
-                "playerId": "2TBldbJcC02oNbfANusI",
-                "throwLocation": [
-                    "RL",
-                    "6to9"
-                ],
-                "tag": "goal_opponent_7m",
-                "relativeTime": 2589,
-                "teamId": "C8l61yNPQy4KqXxg2fbg"
-            },
-            "xglV0CuAJ7BNPZTXCSHI": {
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "playerId": "h1sPrDEpLgkuNgIzzn2M",
-                "timestamp": 1670700090008,
-                "throwLocation": [
-                    "RL",
-                    "6to9"
-                ],
-                "tag": "goal",
-                "relativeTime": 1099,
-                "context": "attack"
-            },
-            "xj2SVsIG7d7TQiXunu6t": {
-                "playerId": "2TBldbJcC02oNbfANusI",
-                "throwLocation": [
-                    "goal"
-                ],
-                "tag": "parade",
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "relativeTime": 816,
-                "context": "goalkeeper",
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "timestamp": 1670699807401
-            },
-            "xkL1CkJ07gvvnDErivTj": {
-                "throwLocation": [
-                    "RR",
-                    "6to9"
-                ],
-                "context": "attack",
-                "timestamp": 1670699915453,
-                "playerId": "h1sPrDEpLgkuNgIzzn2M",
-                "tag": "miss",
-                "relativeTime": 924,
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz"
-            },
-            "xogwjhCJcVm6X1U28RKI": {
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "throwLocation": [
-                    "goal"
-                ],
-                "relativeTime": 3095,
-                "context": "goalkeeper",
-                "timestamp": 1670703195791,
-                "tag": "parade",
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "playerId": "2TBldbJcC02oNbfANusI"
-            },
-            "yBpgdVcluET3sgk3XdFV": {
-                "context": "attack",
-                "playerId": "5EHckj8oJozCxVCIsmBF",
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
-                "throwLocation": [
-                    "RM",
-                    "<6"
-                ],
-                "tag": "1v1&7",
-                "timestamp": 1670699183004,
-                "relativeTime": 300,
-                "teamId": "C8l61yNPQy4KqXxg2fbg"
-            },
-            "yWjPoznfAFWe6aZuzQza": {
-                "relativeTime": 830,
-                "playerId": "3JkgEKlpVfqcAJF51EP0",
-                "tag": "trf",
-                "context": "attack",
-                "teamId": "C8l61yNPQy4KqXxg2fbg",
-                "throwLocation": [
-                    "RR",
-                    ">9"
-                ],
-                "timestamp": 1670699821547,
-                "gameId": "7Jxvh8Pm1UsLSt5V9Fwz"
-            }
+    "example_players": [
+        {
+            "id": "2TBldbJcC02oNbfANusI",
+            "firstName": "Niklas Landin",
+            "lastName": "Jacobsen",
+            "games": ["7Jxvh8Pm1UsLSt5V9Fwz"],
+            "positions": ["TW"],
+            "teams": [
+                "C8l61yNPQy4KqXxg2fbg"
+            ],
+            "number": 1
+        },
+        {
+            "id": "jkfdoklkuineqolou",
+            "firstName": "Philip",
+            "lastName": "Saggau",
+            "games": ["7Jxvh8Pm1UsLSt5V9Fwz"],
+            "positions": ["TW"],
+            "teams": [
+                "C8l61yNPQy4KqXxg2fbg"
+            ],
+            "number": 12
+        },
+        {
+            "id": "asdfmaasdfous",
+            "firstName": "Tomás",
+            "lastName": "Mrkva",
+            "games": ["7Jxvh8Pm1UsLSt5V9Fwz"],
+            "positions": ["TW"],
+            "teams": [
+                "C8l61yNPQy4KqXxg2fbg"
+            ],
+            "number": 16
+        },
+        {
+            "id": "MzWDFzwundiPTTr5V13O",
+            "firstName": "Domagoj",
+            "lastName": "Duvnjak",
+            "games": ["7Jxvh8Pm1UsLSt5V9Fwz"],
+            "positions": ["RM"],
+            "teams": [
+                "C8l61yNPQy4KqXxg2fbg"
+            ],
+            "number": 4
+        },
+        {
+            "id": "paPtYZVG7yVNEjLlN6vO",
+            "firstName": "Sander",
+            "lastName": "Sagosen",
+            "games": ["7Jxvh8Pm1UsLSt5V9Fwz"],
+            "positions": ["RR"],
+            "teams": [
+                "C8l61yNPQy4KqXxg2fbg"
+            ],
+            "number": 5
+        },
+        {
+            "id": "5EHckj8oJozCxVCIsmBF",
+            "firstName": "Harald",
+            "lastName": "Reinkind",
+            "games": ["7Jxvh8Pm1UsLSt5V9Fwz"],
+            "positions": ["RL"],
+            "teams": [
+                "C8l61yNPQy4KqXxg2fbg"
+            ],
+            "number": 6
+        },
+        {
+            "id": "Ulnp8nvcoezubv",
+            "firstName": "Ben Connar",
+            "lastName": "Battermann",
+            "games": ["7Jxvh8Pm1UsLSt5V9Fwz"],
+            "positions": ["RR"],
+            "teams": [
+                "C8l61yNPQy4KqXxg2fbg"
+            ],
+            "number": 8
+        },
+        {
+            "id": "50fTmfugZ5SeUkS6PKgN",
+            "firstName": "Steffen",
+            "lastName": "Weinhold",
+            "games": ["7Jxvh8Pm1UsLSt5V9Fwz"],
+            "positions": ["RM"],
+            "teams": [
+                "C8l61yNPQy4KqXxg2fbg"
+            ],
+            "number": 13
+        },
+        {
+            "id": "uzerwto74bnblu2",
+            "firstName": "Henri",
+            "lastName": "Pabst",
+            "games": ["7Jxvh8Pm1UsLSt5V9Fwz"],
+            "positions": ["RL"],
+            "teams": [
+                "C8l61yNPQy4KqXxg2fbg"
+            ],
+            "number": 19
+        },
+        {
+            "id": "9CAOHoEzOyVRQ6vrSSgf",
+            "firstName": "Sven",
+            "lastName": "Ehrig",
+            "games": ["7Jxvh8Pm1UsLSt5V9Fwz"],
+            "positions": ["LA"],
+            "teams": [
+                "C8l61yNPQy4KqXxg2fbg"
+            ],
+            "number": 3
+        },
+        {
+            "id": "3JkgEKlpVfqcAJF51EP0",
+            "firstName": "Magnus Landin",
+            "lastName": "Jacobsen",
+            "games": ["7Jxvh8Pm1UsLSt5V9Fwz"],
+            "positions": ["RA"],
+            "teams": [
+                "C8l61yNPQy4KqXxg2fbg"
+            ],
+            "number": 7
+        },
+        {
+            "id": "olkjlouneq95nkl",
+            "firstName": "Niclas",
+            "lastName": "Ekberg",
+            "games": ["7Jxvh8Pm1UsLSt5V9Fwz"],
+            "positions": ["LA"],
+            "teams": [
+                "C8l61yNPQy4KqXxg2fbg"
+            ],
+            "number": 12
+        },
+        {
+            "id": "aKbmvDi4owGvlNNA7Ce6",
+            "firstName": "Yannick",
+            "lastName": "Fraatz",
+            "games": ["7Jxvh8Pm1UsLSt5V9Fwz"],
+            "positions": ["RA"],
+            "teams": [
+                "C8l61yNPQy4KqXxg2fbg"
+            ],
+            "number": 20
+        },
+        {
+            "id": "h1sPrDEpLgkuNgIzzn2M",
+            "firstName": "Petter",
+            "lastName": "Overby",
+            "games": ["7Jxvh8Pm1UsLSt5V9Fwz"],
+            "positions": ["K"],
+            "teams": [
+                "C8l61yNPQy4KqXxg2fbg"
+            ],
+            "number": 11
+        },
+        {
+            "id": "53IHmY4toB5nGlngMDsb",
+            "firstName": "Patrick",
+            "lastName": "Wiencek",
+            "games": ["7Jxvh8Pm1UsLSt5V9Fwz"],
+            "positions": ["K"],
+            "teams": [
+                "C8l61yNPQy4KqXxg2fbg"
+            ],
+            "number": 17
+        },
+        {
+            "id": "jhnkfsda987n10u02jo",
+            "firstName": "Hendrik",
+            "lastName": "Pekeler",
+            "games": ["7Jxvh8Pm1UsLSt5V9Fwz"],
+            "positions": ["K"],
+            "teams": [
+                "C8l61yNPQy4KqXxg2fbg"
+            ],
+            "number": 61
         }
+    ],
+    "example_game": {
+        "id": "7Jxvh8Pm1UsLSt5V9Fwz",
+        "date": "2022-01-01T00:00:00.000Z",
+        "isAtHome": true,
+        "lastSync": "1670700340312",
+        "location": "Erlangen (Halle)",
+        "onFieldPlayers": [
+            "h1sPrDEpLgkuNgIzzn2M",
+            "jbnJeSNfa7IxR1MLSAbO",
+            "53IHmY4toB5nGlngMDsb",
+            "50fTmfugZ5SeUkS6PKgN",
+            "paPtYZVG7yVNEjLlN6vO",
+            "5EHckj8oJozCxVCIsmBF",
+            "9CAOHoEzOyVRQ6vrSSgf",
+            "3JkgEKlpVfqcAJF51EP0",
+            "MzWDFzwundiPTTr5V13O",
+            "aKbmvDi4owGvlNNA7Ce6"
+    ],
+    "opponent": "HC Erlangen",
+    "scoreHome": 18,
+    "scoreOpponent": 23,
+    "season": "2021/22",
+    "startTime": 1670698879038,
+    "stopTime": 1670703801984,
+    "stopWatchTime": 3601965,
+    "teamId": "C8l61yNPQy4KqXxg2fbg",
+    "actions": {
+        "093ZLFncM8eaNdzJ8Vn1": {
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "context": "attack",
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "timestamp": 1670700340312,
+            "relativeTime": 1310,
+            "tag": "1v1&7",
+            "throwLocation": [
+                "RM",
+                "<6"
+            ],
+            "playerId": "h1sPrDEpLgkuNgIzzn2M"
+        },
+        "0B2A7vUJLUcv5f1K0SPt": {
+            "throwLocation": [
+                "goal"
+            ],
+            "tag": "parade",
+            "context": "goalkeeper",
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "timestamp": 1670699676162,
+            "relativeTime": 769,
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "playerId": "2TBldbJcC02oNbfANusI"
+        },
+        "0QIEFvZ063sol1U5XkXw": {
+            "context": "attack",
+            "timestamp": 1670699858703,
+            "relativeTime": 867,
+            "throwLocation": [
+                "RR",
+                "6to9"
+            ],
+            "playerId": "",
+            "tag": "goal",
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz"
+        },
+        "0ZcUcn4Ga0xceMaKgO6J": {
+            "tag": "time_pen",
+            "playerId": "paPtYZVG7yVNEjLlN6vO",
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "relativeTime": 585,
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "context": "defense",
+            "timestamp": 1670699464633,
+            "throwLocation": [
+                "RR",
+                ">9"
+            ]
+        },
+        "0e1r3DTVZ6rWVyVc1uPw": {
+            "playerId": "MzWDFzwundiPTTr5V13O",
+            "throwLocation": [
+                "RM",
+                "6to9"
+            ],
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "relativeTime": 2610,
+            "tag": "goal",
+            "context": "attack",
+            "timestamp": 1670702659158,
+            "teamId": "C8l61yNPQy4KqXxg2fbg"
+        },
+        "0isDtPKyycyC4D7qc0bn": {
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "tag": "goal_opponent_7m",
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "relativeTime": 2589,
+            "playerId": "2TBldbJcC02oNbfANusI",
+            "timestamp": 1670702560639,
+            "context": "seven_meter",
+            "throwLocation": [
+                "RL",
+                "6to9"
+            ]
+        },
+        "0jWhir9Mb3i2aNTUi6H2": {
+            "tag": "assist",
+            "throwLocation": [
+                "RL",
+                "6to9"
+            ],
+            "playerId": "5EHckj8oJozCxVCIsmBF",
+            "context": "attack",
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "timestamp": 1670700898968,
+            "relativeTime": 1632
+        },
+        "0nuL1Vk23WxRsfc3WIcw": {
+            "timestamp": 1670700173387,
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "relativeTime": 1182,
+            "tag": "parade",
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "playerId": "2TBldbJcC02oNbfANusI",
+            "throwLocation": [
+                "goal"
+            ],
+            "context": "goalkeeper"
+        },
+        "13j26GW3XtVTokpb3xVv": {
+            "relativeTime": 1554,
+            "playerId": "",
+            "tag": "parade",
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "context": "goalkeeper",
+            "throwLocation": [
+                "goal"
+            ],
+            "timestamp": 1670700799218
+        },
+        "1dllzTzBrrj37aCnmmXH": {
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "tag": "goal_opponent",
+            "relativeTime": 532,
+            "throwLocation": [
+                "goal"
+            ],
+            "context": "goalkeeper",
+            "timestamp": 1670699384145,
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "playerId": "opponent"
+        },
+        "1jFkyydkYOnxk1JJusEY": {
+            "timestamp": 1670703700815,
+            "playerId": "2TBldbJcC02oNbfANusI",
+            "context": "goalkeeper",
+            "relativeTime": 3504,
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "throwLocation": [
+                "goal"
+            ],
+            "tag": "parade",
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz"
+        },
+        "2eq11J1whFBsnvR4qWW0": {
+            "relativeTime": 3434,
+            "playerId": "opponent",
+            "throwLocation": [
+                "goal"
+            ],
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "context": "goalkeeper",
+            "tag": "goal_opponent",
+            "timestamp": 1670703630530
+        },
+        "3176dH3pXFzXk66bgpDg": {
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "tag": "foul",
+            "playerId": "",
+            "timestamp": 1670702548133,
+            "throwLocation": [
+                "RL",
+                "6to9"
+            ],
+            "relativeTime": 2577,
+            "context": "defense",
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz"
+        },
+        "37OhMRa5zrOwwI0HCEJX": {
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "context": "attack",
+            "timestamp": 1670699450511,
+            "relativeTime": 579,
+            "playerId": "3JkgEKlpVfqcAJF51EP0",
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "throwLocation": [
+                "RR",
+                ">9"
+            ],
+            "tag": "miss"
+        },
+        "3mm5Xew8JCeni6qhP76M": {
+            "tag": "trf",
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "relativeTime": 2195,
+            "playerId": "5EHckj8oJozCxVCIsmBF",
+            "timestamp": 1670702101502,
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "throwLocation": [
+                "RM",
+                ">9"
+            ],
+            "context": "attack"
+        },
+        "4AN3HZb7pF4QtYrQ5lW1": {
+            "context": "attack",
+            "throwLocation": [
+                "RL",
+                "6to9"
+            ],
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "tag": "trf",
+            "relativeTime": 1219,
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "playerId": "3JkgEKlpVfqcAJF51EP0",
+            "timestamp": 1670700210626
+        },
+        "4H1o8fx8xJY8HWp15Prk": {
+            "timestamp": 1670700815570,
+            "relativeTime": 1570,
+            "context": "goalkeeper",
+            "throwLocation": [
+                "goal"
+            ],
+            "playerId": "2TBldbJcC02oNbfANusI",
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "tag": "parade"
+        },
+        "5DHxxgDGejgs00t12zwV": {
+            "throwLocation": [
+                "RR",
+                "6to9"
+            ],
+            "context": "attack",
+            "relativeTime": 2135,
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "timestamp": 1670702042207,
+            "playerId": "3JkgEKlpVfqcAJF51EP0",
+            "tag": "goal"
+        },
+        "5Ixqo0QnO6HMeqibzP1i": {
+            "relativeTime": 1844,
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "timestamp": 1670701743637,
+            "context": "goalkeeper",
+            "tag": "parade",
+            "throwLocation": [
+                "goal"
+            ],
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "playerId": "2TBldbJcC02oNbfANusI"
+        },
+        "5KMvT2jHqeYEa1qU9hgX": {
+            "relativeTime": 1798,
+            "throwLocation": [
+                "RR",
+                "6to9"
+            ],
+            "context": "attack",
+            "tag": "miss",
+            "playerId": "jbnJeSNfa7IxR1MLSAbO",
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "timestamp": 1670701064918
+        },
+        "5Qkb71a5mkOUKwDGxC3w": {
+            "tag": "2min",
+            "timestamp": 1670702469899,
+            "context": "attack",
+            "playerId": "jbnJeSNfa7IxR1MLSAbO",
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "throwLocation": [
+                "RM",
+                "6to9"
+            ],
+            "relativeTime": 2515,
+            "teamId": "C8l61yNPQy4KqXxg2fbg"
+        },
+        "5VLO3QNYwvxpdLbeyIjV": {
+            "throwLocation": [
+                "RM",
+                "6to9"
+            ],
+            "timestamp": 1670700860536,
+            "context": "defense",
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "playerId": "MzWDFzwundiPTTr5V13O",
+            "relativeTime": 1615,
+            "tag": "2min",
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz"
+        },
+        "5tpiEUhBCJwMJzY51xjS": {
+            "playerId": "",
+            "timestamp": 1670699315126,
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "context": "defense",
+            "relativeTime": 463,
+            "throwLocation": [
+                "RM",
+                "<6"
+            ],
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "tag": "foul"
+        },
+        "6HLAzucdwgG5hUlTczk2": {
+            "tag": "goal_opponent_7m",
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "relativeTime": 1703,
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "playerId": "2TBldbJcC02oNbfANusI",
+            "throwLocation": [
+                "RM",
+                ">9"
+            ],
+            "timestamp": 1670700970215,
+            "context": "seven_meter"
+        },
+        "6MzenKKMa6bWLw187ppj": {
+            "relativeTime": 527,
+            "tag": "trf",
+            "playerId": "3JkgEKlpVfqcAJF51EP0",
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "timestamp": 1670699379818,
+            "throwLocation": [
+                "RL",
+                "6to9"
+            ],
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "context": "attack"
+        },
+        "775vcIJ54iDmkTBF4Dm8": {
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "relativeTime": 2610,
+            "tag": "assist",
+            "context": "attack",
+            "throwLocation": [
+                "RM",
+                "6to9"
+            ],
+            "playerId": "5EHckj8oJozCxVCIsmBF",
+            "timestamp": 1670702659158
+        },
+        "7GQwR1wctZ27mh57VSQZ": {
+            "timestamp": 1670702348383,
+            "tag": "goal",
+            "playerId": "",
+            "context": "attack",
+            "throwLocation": [
+                "RR",
+                "6to9"
+            ],
+            "relativeTime": 2440,
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "teamId": "C8l61yNPQy4KqXxg2fbg"
+        },
+        "7ydgVzDr3AtIF0UrG7dV": {
+            "timestamp": 1670701813227,
+            "throwLocation": [
+                "RM",
+                ">9"
+            ],
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "playerId": "3JkgEKlpVfqcAJF51EP0",
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "tag": "miss",
+            "relativeTime": 1914,
+            "context": "attack"
+        },
+        "87HxqRKAGvYF4x4Ys6zd": {
+            "tag": "goal_opponent",
+            "playerId": "opponent",
+            "relativeTime": 2118,
+            "timestamp": 1670702025246,
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "context": "goalkeeper",
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "throwLocation": [
+                "goal"
+            ]
+        },
+        "8GdQHtYJQtor9SxOTYNV": {
+            "relativeTime": 477,
+            "playerId": "2TBldbJcC02oNbfANusI",
+            "tag": "goal_opponent_7m",
+            "timestamp": 1670699329309,
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "throwLocation": [
+                "RM",
+                "<6"
+            ],
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "context": "seven_meter"
+        },
+        "8KgCDgABZg0NFGrANJY2": {
+            "tag": "block",
+            "relativeTime": 2225,
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "playerId": "5EHckj8oJozCxVCIsmBF",
+            "context": "defense",
+            "throwLocation": [
+                "RR",
+                ">9"
+            ],
+            "timestamp": 1670702132095
+        },
+        "8ThHDSRyIrhs5lahyNss": {
+            "throwLocation": [
+                "RM",
+                ">9"
+            ],
+            "tag": "parade_7m",
+            "timestamp": 1670700600852,
+            "relativeTime": 1475,
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "context": "seven_meter",
+            "playerId": "2TBldbJcC02oNbfANusI"
+        },
+        "96JuwOM22btamM3ozHxG": {
+            "timestamp": 1670699915453,
+            "playerId": "h1sPrDEpLgkuNgIzzn2M",
+            "relativeTime": 924,
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "throwLocation": [
+                "RR",
+                "6to9"
+            ],
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "tag": "miss",
+            "context": "attack"
+        },
+        "97M1rJiNrdMnBL7831ak": {
+            "relativeTime": 667,
+            "throwLocation": [
+                "RM",
+                "6to9"
+            ],
+            "context": "defense",
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "playerId": "5EHckj8oJozCxVCIsmBF",
+            "timestamp": 1670699574492,
+            "tag": "trf",
+            "teamId": "C8l61yNPQy4KqXxg2fbg"
+        },
+        "9DkEJx2DB5EZDfjHexHc": {
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "relativeTime": 769,
+            "context": "goalkeeper",
+            "timestamp": 1670699676162,
+            "throwLocation": [
+                "goal"
+            ],
+            "playerId": "2TBldbJcC02oNbfANusI",
+            "tag": "parade",
+            "teamId": "C8l61yNPQy4KqXxg2fbg"
+        },
+        "9HZEpL3ScofniMxImxYl": {
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "timestamp": 1670702364160,
+            "tag": "time_pen",
+            "context": "defense",
+            "playerId": "MzWDFzwundiPTTr5V13O",
+            "throwLocation": [
+                "RM",
+                ">9"
+            ],
+            "relativeTime": 2443,
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz"
+        },
+        "9f3vIlROI1xSCqMCwXgp": {
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "tag": "miss",
+            "relativeTime": 2540,
+            "playerId": "5EHckj8oJozCxVCIsmBF",
+            "timestamp": 1670702510847,
+            "context": "attack",
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "throwLocation": [
+                "RM",
+                ">9"
+            ]
+        },
+        "B0zjWrkRk2ErZPuaH68g": {
+            "tag": "miss",
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "throwLocation": [
+                "RM",
+                ">9"
+            ],
+            "playerId": "3JkgEKlpVfqcAJF51EP0",
+            "context": "attack",
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "relativeTime": 3409,
+            "timestamp": 1670703606154
+        },
+        "BRi31XckIQXNGEHj5qyc": {
+            "playerId": "3JkgEKlpVfqcAJF51EP0",
+            "tag": "2min",
+            "context": "attack",
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "timestamp": 1670703274726,
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "relativeTime": 3167,
+            "throwLocation": [
+                "RM",
+                "6to9"
+            ]
+        },
+        "BlabNsHOaOjpT6dDd8bA": {
+            "tag": "parade",
+            "relativeTime": 955,
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "playerId": "2TBldbJcC02oNbfANusI",
+            "throwLocation": [
+                "goal"
+            ],
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "context": "goalkeeper",
+            "timestamp": 1670699946308
+        },
+        "C68nqyZoWS2zRauT39Nm": {
+            "context": "goalkeeper",
+            "playerId": "2TBldbJcC02oNbfANusI",
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "throwLocation": [
+                "goal"
+            ],
+            "timestamp": 1670700017286,
+            "tag": "parade",
+            "relativeTime": 1026
+        },
+        "CA6MvcCwtmGBB4rdqdpZ": {
+            "playerId": "",
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "relativeTime": 2460,
+            "throwLocation": [
+                "goal"
+            ],
+            "context": "goalkeeper",
+            "timestamp": 1670702408054,
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "tag": "parade"
+        },
+        "CRcuVrEdns2fzdUrzdFp": {
+            "timestamp": 1670700353764,
+            "throwLocation": [
+                "RM",
+                "<6"
+            ],
+            "playerId": "MzWDFzwundiPTTr5V13O",
+            "tag": "goal_7m",
+            "relativeTime": 1323,
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "context": "seven_meter"
+        },
+        "CX79Ek2VxCvoTNLiZkX0": {
+            "relativeTime": 759,
+            "context": "attack",
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "timestamp": 1670699666032,
+            "tag": "goal",
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "playerId": "",
+            "throwLocation": [
+                "RM",
+                ">9"
+            ]
+        },
+        "CzNeQIRq3BHhngoaXkPM": {
+            "playerId": "5EHckj8oJozCxVCIsmBF",
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "throwLocation": [
+                "RM",
+                ">9"
+            ],
+            "timestamp": 1670702510847,
+            "relativeTime": 2540,
+            "context": "attack",
+            "tag": "miss",
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz"
+        },
+        "DF9achuBrFGpaAyRtdM6": {
+            "tag": "miss",
+            "playerId": "3JkgEKlpVfqcAJF51EP0",
+            "context": "attack",
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "relativeTime": 1914,
+            "timestamp": 1670701813227,
+            "throwLocation": [
+                "RM",
+                ">9"
+            ]
+        },
+        "DKTLvvZHJ9IYajQMBNvu": {
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "playerId": "",
+            "tag": "parade",
+            "throwLocation": [
+                "goal"
+            ],
+            "context": "goalkeeper",
+            "relativeTime": 2831,
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "timestamp": 1670702898677
+        },
+        "DLAIdzmQsHXfBPxjyJCl": {
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "context": "attack",
+            "playerId": "3JkgEKlpVfqcAJF51EP0",
+            "timestamp": 1670702199565,
+            "tag": "trf",
+            "relativeTime": 2291,
+            "throwLocation": [
+                "RR",
+                ">9"
+            ]
+        },
+        "DOzYEJ6f2LTLUmQsI6hu": {
+            "relativeTime": 1736,
+            "throwLocation": [
+                "RM",
+                ">9"
+            ],
+            "context": "attack",
+            "playerId": "5EHckj8oJozCxVCIsmBF",
+            "tag": "miss",
+            "timestamp": 1670701002964,
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "teamId": "C8l61yNPQy4KqXxg2fbg"
+        },
+        "E8imfjP4kddGd6nckO2i": {
+            "throwLocation": [
+                "goal"
+            ],
+            "playerId": "2TBldbJcC02oNbfANusI",
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "context": "goalkeeper",
+            "timestamp": 1670700173387,
+            "tag": "parade",
+            "relativeTime": 1182
+        },
+        "EgKoulTtnQqgl0FLLLtf": {
+            "relativeTime": 1368,
+            "timestamp": 1670700398317,
+            "playerId": "",
+            "tag": "trf",
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "throwLocation": [
+                "RM",
+                "6to9"
+            ],
+            "context": "attack",
+            "teamId": "C8l61yNPQy4KqXxg2fbg"
+        },
+        "FFAD7h48DR5U7rNL3MGd": {
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "context": "attack",
+            "playerId": "jbnJeSNfa7IxR1MLSAbO",
+            "timestamp": 1670702469899,
+            "tag": "2min",
+            "relativeTime": 2515,
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "throwLocation": [
+                "RM",
+                "6to9"
+            ]
+        },
+        "FGSb4VXS0M7neZwghScu": {
+            "timestamp": 1670702444220,
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "relativeTime": 2496,
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "throwLocation": [
+                "goal"
+            ],
+            "context": "goalkeeper",
+            "playerId": "opponent",
+            "tag": "empty_goal"
+        },
+        "FUHlDKOPEZrUpjbYwhLU": {
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "playerId": "h1sPrDEpLgkuNgIzzn2M",
+            "context": "attack",
+            "tag": "miss",
+            "throwLocation": [
+                "RL",
+                "6to9"
+            ],
+            "timestamp": 1670701973663,
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "relativeTime": 2064
+        },
+        "FcSVlMRd4bUbCgYVQN9n": {
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "throwLocation": [
+                "goal"
+            ],
+            "playerId": "2TBldbJcC02oNbfANusI",
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "relativeTime": 891,
+            "timestamp": 1670699882281,
+            "tag": "parade",
+            "context": "goalkeeper"
+        },
+        "FfZ5Ohr5v9DzOwBUlmov": {
+            "tag": "miss",
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "timestamp": 1670701002964,
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "context": "attack",
+            "playerId": "5EHckj8oJozCxVCIsmBF",
+            "relativeTime": 1736,
+            "throwLocation": [
+                "RM",
+                ">9"
+            ]
+        },
+        "FqXr5wKe5vfdVEzUf7An": {
+            "timestamp": 1670703042777,
+            "relativeTime": 2942,
+            "playerId": "9CAOHoEzOyVRQ6vrSSgf",
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "throwLocation": [
+                "RM",
+                "6to9"
+            ],
+            "tag": "1v1&7",
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "context": "attack"
+        },
+        "G5iPAZgU2xmjhkmL2T45": {
+            "relativeTime": 3222,
+            "playerId": "50fTmfugZ5SeUkS6PKgN",
+            "tag": "miss",
+            "timestamp": 1670703346692,
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "throwLocation": [
+                "RM",
+                "6to9"
+            ],
+            "context": "attack"
+        },
+        "GLd9GJSMeoWMjylGdyxf": {
+            "timestamp": 1670702199565,
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "tag": "trf",
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "context": "attack",
+            "relativeTime": 2291,
+            "throwLocation": [
+                "RR",
+                ">9"
+            ],
+            "playerId": "3JkgEKlpVfqcAJF51EP0"
+        },
+        "GOtPMXHtZDgBWVCBoSU9": {
+            "context": "seven_meter",
+            "tag": "goal_7m",
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "playerId": "MzWDFzwundiPTTr5V13O",
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "relativeTime": 2949,
+            "timestamp": 1670703049801,
+            "throwLocation": [
+                "RM",
+                "6to9"
+            ]
+        },
+        "GiIIGf7ndBmNXrOkV6il": {
+            "relativeTime": 1732,
+            "playerId": "opponent",
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "throwLocation": [
+                "goal"
+            ],
+            "timestamp": 1670700999587,
+            "tag": "goal_opponent",
+            "context": "goalkeeper"
+        },
+        "GsG1oAOu91vxJPCggJtJ": {
+            "timestamp": 1670702282713,
+            "playerId": "jbnJeSNfa7IxR1MLSAbO",
+            "tag": "goal",
+            "context": "attack",
+            "relativeTime": 2374,
+            "throwLocation": [
+                "RR",
+                "6to9"
+            ],
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz"
+        },
+        "GuWPclW6GseSzSKTZa4u": {
+            "relativeTime": 1530,
+            "throwLocation": [
+                "RL",
+                "6to9"
+            ],
+            "timestamp": 1670700775148,
+            "tag": "miss",
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "playerId": "h1sPrDEpLgkuNgIzzn2M",
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "context": "attack"
+        },
+        "HeISo2U8FIjIHP4KZRSv": {
+            "tag": "parade",
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "context": "goalkeeper",
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "throwLocation": [
+                "goal"
+            ],
+            "playerId": "2TBldbJcC02oNbfANusI",
+            "relativeTime": 1570,
+            "timestamp": 1670700815570
+        },
+        "HyBxPAeXJtyV6DqeH4LK": {
+            "tag": "trf",
+            "relativeTime": 1005,
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "timestamp": 1670699996773,
+            "throwLocation": [
+                "RR",
+                "6to9"
+            ],
+            "playerId": "MzWDFzwundiPTTr5V13O",
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "context": "attack"
+        },
+        "IgsS5qSuY2iKRSXkrzsU": {
+            "relativeTime": 1115,
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "playerId": "5EHckj8oJozCxVCIsmBF",
+            "throwLocation": [
+                "RM",
+                "6to9"
+            ],
+            "timestamp": 1670700106270,
+            "context": "attack",
+            "tag": "yellow"
+        },
+        "IjF6pBz6KgUn76pXWSpj": {
+            "relativeTime": 1310,
+            "context": "attack",
+            "tag": "1v1&7",
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "timestamp": 1670700340312,
+            "throwLocation": [
+                "RM",
+                "<6"
+            ],
+            "playerId": "h1sPrDEpLgkuNgIzzn2M",
+            "teamId": "C8l61yNPQy4KqXxg2fbg"
+        },
+        "IsVFxiNVGqMksraZG5lb": {
+            "playerId": "3JkgEKlpVfqcAJF51EP0",
+            "tag": "trf",
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "context": "attack",
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "timestamp": 1670702776152,
+            "relativeTime": 2709,
+            "throwLocation": [
+                "RR",
+                ">9"
+            ]
+        },
+        "JTv16WLy5EkDLjE5zDcM": {
+            "throwLocation": [
+                "RR",
+                "6to9"
+            ],
+            "tag": "goal",
+            "relativeTime": 1661,
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "context": "attack",
+            "timestamp": 1670700927935,
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "playerId": ""
+        },
+        "JqBMtQhw7OWhvbN2rqWf": {
+            "relativeTime": 2836,
+            "tag": "parade",
+            "context": "goalkeeper",
+            "throwLocation": [
+                "goal"
+            ],
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "playerId": "2TBldbJcC02oNbfANusI",
+            "timestamp": 1670702903003
+        },
+        "KCvDBh8uW7xgKh6W6wgM": {
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "playerId": "5EHckj8oJozCxVCIsmBF",
+            "throwLocation": [
+                "RM",
+                ">9"
+            ],
+            "timestamp": 1670702101502,
+            "relativeTime": 2195,
+            "context": "attack",
+            "tag": "trf",
+            "teamId": "C8l61yNPQy4KqXxg2fbg"
+        },
+        "KU4tzEa3T1fuAXGr87nL": {
+            "tag": "goal_opponent_7m",
+            "throwLocation": [
+                "RM",
+                ">9"
+            ],
+            "relativeTime": 1703,
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "playerId": "2TBldbJcC02oNbfANusI",
+            "timestamp": 1670700970215,
+            "context": "seven_meter",
+            "teamId": "C8l61yNPQy4KqXxg2fbg"
+        },
+        "LD3Gga1yliQOGKzgRLga": {
+            "tag": "time_pen",
+            "context": "defense",
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "throwLocation": [
+                "RR",
+                ">9"
+            ],
+            "timestamp": 1670699464633,
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "relativeTime": 585,
+            "playerId": "paPtYZVG7yVNEjLlN6vO"
+        },
+        "LKVipXkTzABKlZC8Sq0O": {
+            "tag": "parade",
+            "timestamp": 1670699121723,
+            "relativeTime": 239,
+            "context": "goalkeeper",
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "playerId": "2TBldbJcC02oNbfANusI",
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "throwLocation": [
+                "goal"
+            ]
+        },
+        "MEZD0Wl52S9JWFCJnZr3": {
+            "tag": "goal",
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "playerId": "",
+            "throwLocation": [
+                "RM",
+                "6to9"
+            ],
+            "relativeTime": 3292,
+            "context": "attack",
+            "timestamp": 1670703416976
+        },
+        "MpxyBk6Ae2g1BeidB8fW": {
+            "playerId": "jbnJeSNfa7IxR1MLSAbO",
+            "throwLocation": [
+                "RM",
+                "6to9"
+            ],
+            "timestamp": 1670703380201,
+            "relativeTime": 3256,
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "context": "attack",
+            "tag": "goal"
+        },
+        "N0iLGJI5dIBM1BkmEzhm": {
+            "playerId": "5EHckj8oJozCxVCIsmBF",
+            "relativeTime": 946,
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "tag": "miss",
+            "throwLocation": [
+                "RL",
+                "<6"
+            ],
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "context": "attack",
+            "timestamp": 1670699936900
+        },
+        "N4W3yFwktts7lVnG5JCV": {
+            "tag": "time_pen",
+            "playerId": "MzWDFzwundiPTTr5V13O",
+            "throwLocation": [
+                "RM",
+                ">9"
+            ],
+            "relativeTime": 2443,
+            "timestamp": 1670702364160,
+            "context": "defense",
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz"
+        },
+        "NCMbIFvaGvNjBmWE6gzY": {
+            "relativeTime": 527,
+            "tag": "trf",
+            "throwLocation": [
+                "RL",
+                "6to9"
+            ],
+            "context": "attack",
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "playerId": "3JkgEKlpVfqcAJF51EP0",
+            "timestamp": 1670699379818,
+            "teamId": "C8l61yNPQy4KqXxg2fbg"
+        },
+        "NLXr8tLimmYW26YrAVjc": {
+            "timestamp": 1670700017286,
+            "throwLocation": [
+                "goal"
+            ],
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "context": "goalkeeper",
+            "playerId": "2TBldbJcC02oNbfANusI",
+            "relativeTime": 1026,
+            "tag": "parade"
+        },
+        "Nf6iax68gYMJLcBq7hCl": {
+            "tag": "miss",
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "throwLocation": [
+                "RR",
+                "<6"
+            ],
+            "timestamp": 1670699276968,
+            "context": "attack",
+            "relativeTime": 426,
+            "playerId": "h1sPrDEpLgkuNgIzzn2M",
+            "teamId": "C8l61yNPQy4KqXxg2fbg"
+        },
+        "NhP96FEtCRuAe0oThWP6": {
+            "context": "attack",
+            "tag": "miss",
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "relativeTime": 3184,
+            "playerId": "5EHckj8oJozCxVCIsmBF",
+            "throwLocation": [
+                "RM",
+                "6to9"
+            ],
+            "timestamp": 1670703308993
+        },
+        "NqOtrd34K1kKRfbLlCZF": {
+            "tag": "parade",
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "timestamp": 1670701821942,
+            "relativeTime": 1922,
+            "context": "goalkeeper",
+            "throwLocation": [
+                "goal"
+            ],
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "playerId": "2TBldbJcC02oNbfANusI"
+        },
+        "O4mrJz4D4t5mkdSon35k": {
+            "throwLocation": [
+                "goal"
+            ],
+            "context": "goalkeeper",
+            "playerId": "opponent",
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "tag": "goal_opponent",
+            "timestamp": 1670702692355,
+            "relativeTime": 2637
+        },
+        "OW6Yq0vybI93NNmhx6uS": {
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "tag": "miss",
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "relativeTime": 3222,
+            "playerId": "50fTmfugZ5SeUkS6PKgN",
+            "timestamp": 1670703346692,
+            "throwLocation": [
+                "RM",
+                "6to9"
+            ],
+            "context": "attack"
+        },
+        "OkosCQ2KjWKmJoFXUpab": {
+            "relativeTime": 1159,
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "context": "attack",
+            "timestamp": 1670700150790,
+            "playerId": "3JkgEKlpVfqcAJF51EP0",
+            "tag": "goal",
+            "throwLocation": [
+                "RM",
+                "6to9"
+            ],
+            "teamId": "C8l61yNPQy4KqXxg2fbg"
+        },
+        "OsY3An5gneQu3EpO00l0": {
+            "context": "goalkeeper",
+            "tag": "goal_opponent",
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "relativeTime": 3568,
+            "timestamp": 1670703765267,
+            "playerId": "opponent",
+            "throwLocation": [
+                "goal"
+            ]
+        },
+        "QCL7KlYCu7bbSYAPwkVW": {
+            "playerId": "3JkgEKlpVfqcAJF51EP0",
+            "timestamp": 1670699450511,
+            "throwLocation": [
+                "RR",
+                ">9"
+            ],
+            "tag": "miss",
+            "relativeTime": 579,
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "context": "attack"
+        },
+        "QOF3Ovwt2I5vyagi1Dof": {
+            "throwLocation": [
+                "RR",
+                ">9"
+            ],
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "context": "attack",
+            "timestamp": 1670699821547,
+            "tag": "trf",
+            "playerId": "3JkgEKlpVfqcAJF51EP0",
+            "relativeTime": 830
+        },
+        "QsnJ6j0YXk0YC9WPlVYo": {
+            "tag": "2min",
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "playerId": "MzWDFzwundiPTTr5V13O",
+            "relativeTime": 1615,
+            "throwLocation": [
+                "RM",
+                "6to9"
+            ],
+            "timestamp": 1670700860536,
+            "context": "defense",
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz"
+        },
+        "R4mwxN9Sk1HhXQiV9IUa": {
+            "context": "goalkeeper",
+            "relativeTime": 1922,
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "playerId": "2TBldbJcC02oNbfANusI",
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "timestamp": 1670701821942,
+            "tag": "parade",
+            "throwLocation": [
+                "goal"
+            ]
+        },
+        "S8uXHZr554LrBk2rzJ8f": {
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "context": "defense",
+            "relativeTime": 67,
+            "tag": "block",
+            "throwLocation": [
+                "RM",
+                "6to9"
+            ],
+            "playerId": "5EHckj8oJozCxVCIsmBF",
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "timestamp": 1670698950340
+        },
+        "T1kzeLF3vl5wGMXff7IO": {
+            "playerId": "2TBldbJcC02oNbfANusI",
+            "timestamp": 1670700600852,
+            "relativeTime": 1475,
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "tag": "parade_7m",
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "context": "seven_meter",
+            "throwLocation": [
+                "RM",
+                ">9"
+            ]
+        },
+        "TBQdr3IVuPmwdGGSl7sm": {
+            "timestamp": 1670702852910,
+            "throwLocation": [
+                "RM",
+                ">9"
+            ],
+            "tag": "trf",
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "relativeTime": 2786,
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "context": "attack",
+            "playerId": "MzWDFzwundiPTTr5V13O"
+        },
+        "TKVCzASba0GjR4ULliLF": {
+            "timestamp": 1670703274726,
+            "relativeTime": 3167,
+            "tag": "2min",
+            "playerId": "3JkgEKlpVfqcAJF51EP0",
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "throwLocation": [
+                "RM",
+                "6to9"
+            ],
+            "context": "attack"
+        },
+        "UEfRFLVi5drxztn6Vils": {
+            "timestamp": 1670699807401,
+            "relativeTime": 816,
+            "playerId": "2TBldbJcC02oNbfANusI",
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "context": "goalkeeper",
+            "throwLocation": [
+                "goal"
+            ],
+            "tag": "parade",
+            "teamId": "C8l61yNPQy4KqXxg2fbg"
+        },
+        "V1eHQ4lRtyZ6Z88XSON5": {
+            "relativeTime": 1413,
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "throwLocation": [
+                "RM",
+                ">9"
+            ],
+            "timestamp": 1670700478004,
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "playerId": "",
+            "tag": "red",
+            "context": "defense"
+        },
+        "V2F9OMYAVJALKea8hIwH": {
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "playerId": "2TBldbJcC02oNbfANusI",
+            "timestamp": 1670702903003,
+            "throwLocation": [
+                "goal"
+            ],
+            "context": "goalkeeper",
+            "relativeTime": 2836,
+            "tag": "parade"
+        },
+        "V6lsBOrU3FwWJMmDhilY": {
+            "tag": "miss",
+            "timestamp": 1670703009419,
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "throwLocation": [
+                "RM",
+                "6to9"
+            ],
+            "playerId": "3JkgEKlpVfqcAJF51EP0",
+            "context": "attack",
+            "relativeTime": 2908
+        },
+        "VQJ5ed6dqIKzT6dZA8fY": {
+            "playerId": "5EHckj8oJozCxVCIsmBF",
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "context": "defense",
+            "relativeTime": 2225,
+            "timestamp": 1670702132095,
+            "tag": "block",
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "throwLocation": [
+                "RR",
+                ">9"
+            ]
+        },
+        "Vsc0alf1MfrtcWgLVEeA": {
+            "timestamp": 1670700586881,
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "relativeTime": 1461,
+            "playerId": "",
+            "tag": "foul",
+            "throwLocation": [
+                "RM",
+                ">9"
+            ],
+            "context": "defense"
+        },
+        "WGdHxWUnbWKewvJRRNvk": {
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "context": "goalkeeper",
+            "relativeTime": 3504,
+            "tag": "parade",
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "timestamp": 1670703700815,
+            "playerId": "2TBldbJcC02oNbfANusI",
+            "throwLocation": [
+                "goal"
+            ]
+        },
+        "WMGpXahFNJxqA13gbFyc": {
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "context": "attack",
+            "playerId": "3JkgEKlpVfqcAJF51EP0",
+            "relativeTime": 2330,
+            "timestamp": 1670702238726,
+            "tag": "miss",
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "throwLocation": [
+                "RM",
+                "6to9"
+            ]
+        },
+        "WMLcD8jtb4344mjxWqku": {
+            "playerId": "opponent",
+            "tag": "goal_opponent",
+            "relativeTime": 3342,
+            "context": "goalkeeper",
+            "timestamp": 1670703539300,
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "throwLocation": [
+                "goal"
+            ]
+        },
+        "XSbXAegE5SjLSOG27qhR": {
+            "throwLocation": [
+                "RL",
+                "6to9"
+            ],
+            "relativeTime": 2637,
+            "tag": "2min",
+            "timestamp": 1670702698465,
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "context": "defense",
+            "playerId": "",
+            "teamId": "C8l61yNPQy4KqXxg2fbg"
+        },
+        "XcBvt34u0PyiXzoFXKFM": {
+            "tag": "miss",
+            "timestamp": 1670700837599,
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "relativeTime": 1592,
+            "throwLocation": [
+                "RR",
+                "6to9"
+            ],
+            "playerId": "",
+            "context": "attack"
+        },
+        "XeMkEWHXMugovdWqqDuq": {
+            "timestamp": 1670699574492,
+            "tag": "trf",
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "context": "defense",
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "throwLocation": [
+                "RM",
+                "6to9"
+            ],
+            "relativeTime": 667,
+            "playerId": "5EHckj8oJozCxVCIsmBF"
+        },
+        "XsAar9Zitp4LCK352BfD": {
+            "throwLocation": [
+                "goal"
+            ],
+            "context": "goalkeeper",
+            "relativeTime": 2712,
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "timestamp": 1670702779737,
+            "tag": "empty_goal",
+            "playerId": "opponent"
+        },
+        "YFezlPHoNzo5Jnvghxju": {
+            "playerId": "",
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "tag": "bad_pass",
+            "throwLocation": [
+                "goal"
+            ],
+            "relativeTime": 109,
+            "timestamp": 1670698992505,
+            "context": "goalkeeper"
+        },
+        "YT2s1a3m9LBRqOYi96R7": {
+            "timestamp": 1670702147829,
+            "tag": "goal_opponent",
+            "context": "goalkeeper",
+            "relativeTime": 2241,
+            "playerId": "opponent",
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "throwLocation": [
+                "goal"
+            ]
+        },
+        "YbQeIzSzF5IHHQCPunPy": {
+            "relativeTime": 300,
+            "throwLocation": [
+                "RM",
+                "<6"
+            ],
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "timestamp": 1670699183004,
+            "tag": "1v1&7",
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "playerId": "5EHckj8oJozCxVCIsmBF",
+            "context": "attack"
+        },
+        "YlneFGMUrp9ZtE34qYAY": {
+            "relativeTime": 315,
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "throwLocation": [
+                "RM",
+                "<6"
+            ],
+            "playerId": "h1sPrDEpLgkuNgIzzn2M",
+            "tag": "missed_7m",
+            "context": "seven_meter",
+            "timestamp": 1670699198452,
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz"
+        },
+        "Yx5rYsIhPMpwZlAOH9ij": {
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "relativeTime": 3467,
+            "throwLocation": [
+                "RR",
+                "6to9"
+            ],
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "playerId": "jbnJeSNfa7IxR1MLSAbO",
+            "tag": "goal",
+            "context": "attack",
+            "timestamp": 1670703663603
+        },
+        "ZFCe952coA5i4xrPn9qF": {
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "tag": "miss",
+            "playerId": "5EHckj8oJozCxVCIsmBF",
+            "context": "attack",
+            "timestamp": 1670699936900,
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "relativeTime": 946,
+            "throwLocation": [
+                "RL",
+                "<6"
+            ]
+        },
+        "ZX971ayF2pGrwGuHuZdE": {
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "playerId": "opponent",
+            "context": "goalkeeper",
+            "relativeTime": 2335,
+            "timestamp": 1670702244145,
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "tag": "goal_opponent",
+            "throwLocation": [
+                "goal"
+            ]
+        },
+        "ZgCdlxZUaFpGfATVUK6N": {
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "tag": "goal_opponent",
+            "playerId": "opponent",
+            "timestamp": 1670701898743,
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "relativeTime": 1999,
+            "context": "goalkeeper",
+            "throwLocation": [
+                "goal"
+            ]
+        },
+        "aeA9gIMhivMZ6uDWVSJ3": {
+            "relativeTime": 804,
+            "context": "goalkeeper",
+            "timestamp": 1670699795064,
+            "playerId": "2TBldbJcC02oNbfANusI",
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "tag": "parade",
+            "throwLocation": [
+                "goal"
+            ]
+        },
+        "b3Mip2BesBhpjjamOGCY": {
+            "context": "seven_meter",
+            "playerId": "2TBldbJcC02oNbfANusI",
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "relativeTime": 477,
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "timestamp": 1670699329309,
+            "tag": "goal_opponent_7m",
+            "throwLocation": [
+                "RM",
+                "<6"
+            ]
+        },
+        "bmwn9dYQQtErAJ7Dwl0G": {
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "throwLocation": [
+                "goal"
+            ],
+            "playerId": "2TBldbJcC02oNbfANusI",
+            "tag": "parade",
+            "timestamp": 1670699882281,
+            "context": "goalkeeper",
+            "relativeTime": 891,
+            "teamId": "C8l61yNPQy4KqXxg2fbg"
+        },
+        "cH7eeN1SPNulbkTTibda": {
+            "tag": "assist",
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "relativeTime": 1975,
+            "playerId": "5EHckj8oJozCxVCIsmBF",
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "timestamp": 1670701874905,
+            "context": "attack",
+            "throwLocation": [
+                "RM",
+                ">9"
+            ]
+        },
+        "cHNvZ7u8Jh1wVuomamJV": {
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "playerId": "3JkgEKlpVfqcAJF51EP0",
+            "timestamp": 1670703606154,
+            "context": "attack",
+            "tag": "miss",
+            "relativeTime": 3409,
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "throwLocation": [
+                "RM",
+                ">9"
+            ]
+        },
+        "cclMjLdugA1tmq8OuUqH": {
+            "playerId": "2TBldbJcC02oNbfANusI",
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "tag": "parade",
+            "context": "goalkeeper",
+            "throwLocation": [
+                "goal"
+            ],
+            "timestamp": 1670703195791,
+            "relativeTime": 3095
+        },
+        "dKVOafJZqVlnmXTfJQCR": {
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "timestamp": 1670703042777,
+            "throwLocation": [
+                "RM",
+                "6to9"
+            ],
+            "relativeTime": 2942,
+            "playerId": "9CAOHoEzOyVRQ6vrSSgf",
+            "context": "attack",
+            "tag": "1v1&7",
+            "teamId": "C8l61yNPQy4KqXxg2fbg"
+        },
+        "dXqeoJBWZCH0aF9tdVgC": {
+            "playerId": "opponent",
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "throwLocation": [
+                "goal"
+            ],
+            "timestamp": 1670700527061,
+            "relativeTime": 1413,
+            "tag": "goal_opponent",
+            "context": "goalkeeper",
+            "teamId": "C8l61yNPQy4KqXxg2fbg"
+        },
+        "eivpFvHxULCvS2Sy9bXo": {
+            "relativeTime": 2064,
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "timestamp": 1670701973663,
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "throwLocation": [
+                "RL",
+                "6to9"
+            ],
+            "playerId": "h1sPrDEpLgkuNgIzzn2M",
+            "tag": "miss",
+            "context": "attack"
+        },
+        "estkrLkli4KvG0yJyVid": {
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "tag": "trf",
+            "context": "attack",
+            "relativeTime": 1219,
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "timestamp": 1670700210626,
+            "throwLocation": [
+                "RL",
+                "6to9"
+            ],
+            "playerId": "3JkgEKlpVfqcAJF51EP0"
+        },
+        "fG4SsaCQWO1uPxIy46Yp": {
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "timestamp": 1670699078942,
+            "playerId": "jbnJeSNfa7IxR1MLSAbO",
+            "relativeTime": 196,
+            "tag": "trf",
+            "context": "attack",
+            "throwLocation": [
+                "RM",
+                "<6"
+            ]
+        },
+        "fKwcQX0VYbGb3nLLe9Zd": {
+            "timestamp": 1670702238726,
+            "relativeTime": 2330,
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "throwLocation": [
+                "RM",
+                "6to9"
+            ],
+            "context": "attack",
+            "playerId": "3JkgEKlpVfqcAJF51EP0",
+            "tag": "miss",
+            "teamId": "C8l61yNPQy4KqXxg2fbg"
+        },
+        "fhkV4nMqLPj93tRtZe3a": {
+            "playerId": "opponent",
+            "relativeTime": 1108,
+            "throwLocation": [
+                "goal"
+            ],
+            "timestamp": 1670700099122,
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "context": "goalkeeper",
+            "tag": "goal_opponent"
+        },
+        "fiWW5ewsIw7KLfqt3Oei": {
+            "throwLocation": [
+                "RM",
+                "6to9"
+            ],
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "context": "defense",
+            "timestamp": 1670698950340,
+            "tag": "block",
+            "playerId": "5EHckj8oJozCxVCIsmBF",
+            "relativeTime": 67,
+            "teamId": "C8l61yNPQy4KqXxg2fbg"
+        },
+        "g4tzeNFDrxnlsLyqDvng": {
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "throwLocation": [
+                "goal"
+            ],
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "context": "goalkeeper",
+            "tag": "goal_opponent",
+            "playerId": "opponent",
+            "timestamp": 1670700218269,
+            "relativeTime": 1227
+        },
+        "gD4D0KBF9Xbnavr22Vsm": {
+            "timestamp": 1670703406586,
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "playerId": "opponent",
+            "relativeTime": 3282,
+            "tag": "goal_opponent",
+            "context": "goalkeeper",
+            "throwLocation": [
+                "goal"
+            ]
+        },
+        "gUaYrTzIzUo70KDuvKRz": {
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "playerId": "2TBldbJcC02oNbfANusI",
+            "throwLocation": [
+                "goal"
+            ],
+            "tag": "parade",
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "timestamp": 1670700381562,
+            "context": "goalkeeper",
+            "relativeTime": 1351
+        },
+        "gqv90fmGxoa9gJaMFAkH": {
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "tag": "yellow",
+            "timestamp": 1670700106270,
+            "context": "attack",
+            "playerId": "5EHckj8oJozCxVCIsmBF",
+            "throwLocation": [
+                "RM",
+                "6to9"
+            ],
+            "relativeTime": 1115
+        },
+        "gyCzgp5ydhoRLmlYOM4F": {
+            "relativeTime": 804,
+            "context": "goalkeeper",
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "throwLocation": [
+                "goal"
+            ],
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "playerId": "2TBldbJcC02oNbfANusI",
+            "timestamp": 1670699795064,
+            "tag": "parade"
+        },
+        "hPCKbMjag6ybdQzcTEoP": {
+            "relativeTime": 2381,
+            "context": "goalkeeper",
+            "timestamp": 1670702290166,
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "tag": "goal_opponent",
+            "throwLocation": [
+                "goal"
+            ],
+            "playerId": "opponent"
+        },
+        "hkQGTS16ObDxrIC9YQbs": {
+            "playerId": "2TBldbJcC02oNbfANusI",
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "timestamp": 1670700381562,
+            "tag": "parade",
+            "relativeTime": 1351,
+            "context": "goalkeeper",
+            "throwLocation": [
+                "goal"
+            ],
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz"
+        },
+        "imoBQoEhmyizKLv6zo2y": {
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "throwLocation": [
+                "goal"
+            ],
+            "playerId": "2TBldbJcC02oNbfANusI",
+            "relativeTime": 1844,
+            "timestamp": 1670701743637,
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "tag": "parade",
+            "context": "goalkeeper"
+        },
+        "jEWRNcMsTBScZIi5tOyx": {
+            "timestamp": 1670703308993,
+            "tag": "miss",
+            "relativeTime": 3184,
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "throwLocation": [
+                "RM",
+                "6to9"
+            ],
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "playerId": "5EHckj8oJozCxVCIsmBF",
+            "context": "attack"
+        },
+        "kD7fSKO7D612ICu17wW6": {
+            "tag": "parade",
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "playerId": "2TBldbJcC02oNbfANusI",
+            "timestamp": 1670699946308,
+            "relativeTime": 955,
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "throwLocation": [
+                "goal"
+            ],
+            "context": "goalkeeper"
+        },
+        "kHKqiDKw9h6ZEXqTbdBV": {
+            "relativeTime": 3522,
+            "context": "attack",
+            "timestamp": 1670703718429,
+            "tag": "miss",
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "playerId": "",
+            "throwLocation": [
+                "RA",
+                "6to9"
+            ]
+        },
+        "kia8gGRxWq41Dkk8SVmc": {
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "playerId": "",
+            "tag": "goal",
+            "throwLocation": [
+                "RM",
+                ">9"
+            ],
+            "context": "attack",
+            "timestamp": 1670701874905,
+            "relativeTime": 1975
+        },
+        "kq7CXtkQ6S4cEXnus9SH": {
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "relativeTime": 239,
+            "context": "goalkeeper",
+            "tag": "parade",
+            "timestamp": 1670699121723,
+            "playerId": "2TBldbJcC02oNbfANusI",
+            "throwLocation": [
+                "goal"
+            ],
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz"
+        },
+        "l3ZhzA0ECgvJS7wHix1L": {
+            "timestamp": 1670700775148,
+            "playerId": "h1sPrDEpLgkuNgIzzn2M",
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "context": "attack",
+            "tag": "miss",
+            "throwLocation": [
+                "RL",
+                "6to9"
+            ],
+            "relativeTime": 1530
+        },
+        "lGYbShVJNWWSpg09Wiwp": {
+            "playerId": "MzWDFzwundiPTTr5V13O",
+            "tag": "trf",
+            "context": "attack",
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "relativeTime": 1005,
+            "throwLocation": [
+                "RR",
+                "6to9"
+            ],
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "timestamp": 1670699996773
+        },
+        "lqzvQOSTFTEmcrZQ2J6t": {
+            "relativeTime": 1798,
+            "timestamp": 1670701064918,
+            "tag": "miss",
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "throwLocation": [
+                "RR",
+                "6to9"
+            ],
+            "playerId": "jbnJeSNfa7IxR1MLSAbO",
+            "context": "attack"
+        },
+        "m5XO0mFzbX8D0OMMv9KB": {
+            "playerId": "opponent",
+            "timestamp": 1670699605895,
+            "tag": "goal_opponent",
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "context": "goalkeeper",
+            "relativeTime": 698,
+            "throwLocation": [
+                "goal"
+            ]
+        },
+        "mLVE7d6RLtLL68YB8MkY": {
+            "playerId": "MzWDFzwundiPTTr5V13O",
+            "timestamp": 1670700898968,
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "relativeTime": 1632,
+            "throwLocation": [
+                "RL",
+                "6to9"
+            ],
+            "context": "attack",
+            "tag": "goal"
+        },
+        "nN3nF2Ogh5FdlrCAmj5x": {
+            "timestamp": 1670699078942,
+            "playerId": "jbnJeSNfa7IxR1MLSAbO",
+            "relativeTime": 196,
+            "tag": "trf",
+            "throwLocation": [
+                "RM",
+                "<6"
+            ],
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "context": "attack",
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz"
+        },
+        "pJaHcVUCncRgbK1f0NXR": {
+            "tag": "yellow",
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "throwLocation": [
+                "RM",
+                ">9"
+            ],
+            "timestamp": 1670699685300,
+            "context": "attack",
+            "playerId": "3JkgEKlpVfqcAJF51EP0",
+            "relativeTime": 778,
+            "teamId": "C8l61yNPQy4KqXxg2fbg"
+        },
+        "pMLRFBeSDl3TqGQirXoB": {
+            "timestamp": 1670699685300,
+            "relativeTime": 778,
+            "context": "attack",
+            "playerId": "3JkgEKlpVfqcAJF51EP0",
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "throwLocation": [
+                "RM",
+                ">9"
+            ],
+            "tag": "yellow",
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz"
+        },
+        "pQlK5jrYiKF1P2UrXYdp": {
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "context": "goalkeeper",
+            "throwLocation": [
+                "goal"
+            ],
+            "playerId": "opponent",
+            "relativeTime": 1374,
+            "timestamp": 1670700404946,
+            "tag": "goal_opponent",
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz"
+        },
+        "q4GBkJEC9Hwr3uZVesSl": {
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "context": "attack",
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "tag": "miss",
+            "throwLocation": [
+                "RM",
+                "6to9"
+            ],
+            "timestamp": 1670703009419,
+            "playerId": "3JkgEKlpVfqcAJF51EP0",
+            "relativeTime": 2908
+        },
+        "qamLgLPXBlqkp1VEvRDh": {
+            "playerId": "opponent",
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "throwLocation": [
+                "goal"
+            ],
+            "timestamp": 1670699924971,
+            "tag": "goal_opponent",
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "relativeTime": 934,
+            "context": "goalkeeper"
+        },
+        "qfJioESWcmuDenY8o9cx": {
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "timestamp": 1670700567616,
+            "tag": "time_pen",
+            "context": "defense",
+            "throwLocation": [
+                "RL",
+                ">9"
+            ],
+            "playerId": "",
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "relativeTime": 1413
+        },
+        "r0nRJjrtBByMIJcWvm16": {
+            "throwLocation": [
+                "RM",
+                ">9"
+            ],
+            "context": "defense",
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "playerId": "jbnJeSNfa7IxR1MLSAbO",
+            "tag": "foul",
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "timestamp": 1670700957051,
+            "relativeTime": 1690
+        },
+        "rWm0uPzzQXOuqPWiDdws": {
+            "relativeTime": 134,
+            "context": "goalkeeper",
+            "playerId": "",
+            "tag": "bad_pass",
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "timestamp": 1670699016840,
+            "throwLocation": [
+                "goal"
+            ]
+        },
+        "rXoFOQBjsC8wgt4KypSj": {
+            "context": "attack",
+            "playerId": "3JkgEKlpVfqcAJF51EP0",
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "timestamp": 1670702776152,
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "throwLocation": [
+                "RR",
+                ">9"
+            ],
+            "tag": "trf",
+            "relativeTime": 2709
+        },
+        "rjMYeGHbpSQd7j5ECV8a": {
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "context": "attack",
+            "playerId": "jbnJeSNfa7IxR1MLSAbO",
+            "tag": "goal",
+            "relativeTime": 1802,
+            "timestamp": 1670701069375,
+            "throwLocation": [
+                "RL",
+                ">9"
+            ]
+        },
+        "sZtotXcaptO8bhVMcnCM": {
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "playerId": "opponent",
+            "context": "goalkeeper",
+            "throwLocation": [
+                "goal"
+            ],
+            "timestamp": 1670699952920,
+            "tag": "goal_opponent",
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "relativeTime": 962
+        },
+        "tUNcrp7uzPgcJzMtjCV5": {
+            "playerId": "",
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "throwLocation": [
+                "RM",
+                "6to9"
+            ],
+            "tag": "miss",
+            "context": "attack",
+            "timestamp": 1670703119578,
+            "relativeTime": 3019
+        },
+        "uhfQqP3ZIA9A5aeCkSRq": {
+            "playerId": "h1sPrDEpLgkuNgIzzn2M",
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "context": "attack",
+            "relativeTime": 426,
+            "timestamp": 1670699276968,
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "throwLocation": [
+                "RR",
+                "<6"
+            ],
+            "tag": "miss"
+        },
+        "v749vZiucIRqdg8Qf5NI": {
+            "context": "attack",
+            "playerId": "",
+            "relativeTime": 2047,
+            "tag": "2min",
+            "throwLocation": [
+                "RM",
+                ">9"
+            ],
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "timestamp": 1670701943358,
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz"
+        },
+        "v7vDQUlqgrUAfiC2URsu": {
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "playerId": "jbnJeSNfa7IxR1MLSAbO",
+            "tag": "foul",
+            "context": "defense",
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "relativeTime": 1690,
+            "timestamp": 1670700957051,
+            "throwLocation": [
+                "RM",
+                ">9"
+            ]
+        },
+        "w4AsvtGrg8LO4cnm6PHU": {
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "tag": "trf",
+            "relativeTime": 2786,
+            "context": "attack",
+            "playerId": "MzWDFzwundiPTTr5V13O",
+            "timestamp": 1670702852910,
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "throwLocation": [
+                "RM",
+                ">9"
+            ]
+        },
+        "wqFAhsdWx2FOPHgpshMb": {
+            "timestamp": 1670702560639,
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "context": "seven_meter",
+            "playerId": "2TBldbJcC02oNbfANusI",
+            "throwLocation": [
+                "RL",
+                "6to9"
+            ],
+            "tag": "goal_opponent_7m",
+            "relativeTime": 2589,
+            "teamId": "C8l61yNPQy4KqXxg2fbg"
+        },
+        "xglV0CuAJ7BNPZTXCSHI": {
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "playerId": "h1sPrDEpLgkuNgIzzn2M",
+            "timestamp": 1670700090008,
+            "throwLocation": [
+                "RL",
+                "6to9"
+            ],
+            "tag": "goal",
+            "relativeTime": 1099,
+            "context": "attack"
+        },
+        "xj2SVsIG7d7TQiXunu6t": {
+            "playerId": "2TBldbJcC02oNbfANusI",
+            "throwLocation": [
+                "goal"
+            ],
+            "tag": "parade",
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "relativeTime": 816,
+            "context": "goalkeeper",
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "timestamp": 1670699807401
+        },
+        "xkL1CkJ07gvvnDErivTj": {
+            "throwLocation": [
+                "RR",
+                "6to9"
+            ],
+            "context": "attack",
+            "timestamp": 1670699915453,
+            "playerId": "h1sPrDEpLgkuNgIzzn2M",
+            "tag": "miss",
+            "relativeTime": 924,
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz"
+        },
+        "xogwjhCJcVm6X1U28RKI": {
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "throwLocation": [
+                "goal"
+            ],
+            "relativeTime": 3095,
+            "context": "goalkeeper",
+            "timestamp": 1670703195791,
+            "tag": "parade",
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "playerId": "2TBldbJcC02oNbfANusI"
+        },
+        "yBpgdVcluET3sgk3XdFV": {
+            "context": "attack",
+            "playerId": "5EHckj8oJozCxVCIsmBF",
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz",
+            "throwLocation": [
+                "RM",
+                "<6"
+            ],
+            "tag": "1v1&7",
+            "timestamp": 1670699183004,
+            "relativeTime": 300,
+            "teamId": "C8l61yNPQy4KqXxg2fbg"
+        },
+        "yWjPoznfAFWe6aZuzQza": {
+            "relativeTime": 830,
+            "playerId": "3JkgEKlpVfqcAJF51EP0",
+            "tag": "trf",
+            "context": "attack",
+            "teamId": "C8l61yNPQy4KqXxg2fbg",
+            "throwLocation": [
+                "RR",
+                ">9"
+            ],
+            "timestamp": 1670699821547,
+            "gameId": "7Jxvh8Pm1UsLSt5V9Fwz"
+        }
+    }
     }
 }

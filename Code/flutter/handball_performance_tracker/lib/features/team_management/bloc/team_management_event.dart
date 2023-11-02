@@ -19,11 +19,11 @@ class SelectTeam extends TeamManagementEvent {
   SelectTeam({required this.index});
 }
 
-class DeleteTeam extends TeamManagementEvent {
-  final int index;
+// class DeleteTeam extends TeamManagementEvent {
+//   final int index;
 
-  DeleteTeam({required this.index});
-}
+//   DeleteTeam({required this.index});
+// }
 
 class PressAddTeam extends TeamManagementEvent {
   final bool addingTeam;

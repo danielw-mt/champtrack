@@ -1,9 +1,9 @@
 part of 'statistics_bloc.dart';
 
-enum StatisticsStatus { loading, loaded, error }
+enum StatisticsStatus {initial, loading, loaded, error }
 
 class StatisticsState extends Equatable {
-  StatisticsStatus status = StatisticsStatus.loading;
+  StatisticsStatus status = StatisticsStatus.initial;
   List<Game> allGames = [];
   List<Team> allTeams = [];
   List<Player> allPlayers = [];
@@ -28,7 +28,7 @@ class StatisticsState extends Equatable {
   String selectedPlayerPerformanceParameter = "goals";
 
   StatisticsState({
-    this.status = StatisticsStatus.loading,
+    this.status = StatisticsStatus.initial,
     allGames,
     allTeams,
     allPlayers,

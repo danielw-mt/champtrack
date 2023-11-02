@@ -87,3 +87,7 @@ class DeletePlayer extends GlobalEvent {
 class ResetPlayerScores extends GlobalEvent {
 
 }
+
+class GetTemplateTeam extends GlobalEvent {
+  
+}

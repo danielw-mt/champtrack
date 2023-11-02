@@ -20,9 +20,9 @@ class TeamManagementBloc extends Bloc<TeamManagementEvent, TeamManagementState> 
       emit(state.copyWith(status: TeamManagementStatus.loaded, selectedTeamIndex: event.index));
     }));
 
-    on<DeleteTeam>(((event, emit) {
-      emit(state.copyWith(status: TeamManagementStatus.loaded, selectedTeamIndex: event.index));
-    }));
+    // on<DeleteTeam>(((event, emit) {
+    //   emit(state.copyWith(status: TeamManagementStatus.loaded, selectedTeamIndex: event.index));
+    // }));
 
     on<PressAddTeam>(((event, emit) {
       print(event.addingTeam);
